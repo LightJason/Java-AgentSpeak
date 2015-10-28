@@ -2,7 +2,7 @@ grammar jason;
 
 
 
-program :
+agent :
     initial_beliefs
     initial_goals
     plans
@@ -75,8 +75,8 @@ body_formula :
 
 atomic_formula :
     ( atom | variable )
-    ( OPENROUNDBRACKET termlist CLOSROUNDEBRACKET )?
-    ( OPENANGULARBRACKET termlist CLOSANGULARBRACKET )?
+    ( LROUNDBRACKET termlist RROUNDEBRACKET )?
+    ( LANGULARBRACKET termlist RANGULARBRACKET )?
     ;
 
 
@@ -86,7 +86,7 @@ atomic_formula :
 logical_expression :
     simple_logical_expression |
     ( ( NEGOTATION )? simple_logical_expression ) |
-    ( OPENROUNDBRACKET logical_expression CLOSROUNDEBRACKET ) |
+    ( LROUNDBRACKET logical_expression RROUNDEBRACKET ) |
     (logical_expression ( AND | OR ) logical_expression)
     ;
 
@@ -117,9 +117,9 @@ termlist :
     ;
 
 list :
-    OPENANGULARBRACKET
+    LANGULARBRACKET
     ( term ( COMMA term )*  ( OR ( list | variable ) )  )
-    CLOSANGULARBRACKET
+    RANGULARBRACKET
     ;
 
 relation_term :
@@ -129,7 +129,7 @@ relation_term :
 arithmetic_term :
     number | variable |
     MINUS arithmetic_term |
-    OPENROUNDBRACKET arithmetic_expression CLOSROUNDEBRACKET
+    LROUNDBRACKET arithmetic_expression RROUNDEBRACKET
     ;
 
 
@@ -167,10 +167,10 @@ fragment ARROW                  : ('<-');
 fragment AT                     : ('@');
 fragment COLON                  : (':');
 fragment SEMICOLON              : (';');
-fragment OPENROUNDBRACKET       : ('(');
-fragment CLOSROUNDEBRACKET      : (')');
-fragment OPENANGULARBRACKET     : ('[');
-fragment CLOSANGULARBRACKET     : (']');
+fragment LROUNDBRACKET          : ('(');
+fragment RROUNDEBRACKET         : (')');
+fragment LANGULARBRACKET        : ('[');
+fragment RANGULARBRACKET        : (']');
 fragment LESS                   : ('<');
 fragment LESSEQUAL              : ('<=');
 fragment GREATER                : ('>');
