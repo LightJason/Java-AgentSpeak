@@ -75,7 +75,7 @@ logical_condition :
     ;
 
 simple_logical_expression :
-    literal | relation | variable
+    literal | relation_expression | variable
     ;
 
 body :
@@ -83,13 +83,40 @@ body :
     ( SEMICOLON body_formula )* | TRUE
     ;
 
+
+
+
 body_formula :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK | QUESTIONMARK | PLUS | MINUS | MINUSPLUS )
     literal
     variable
-    relation
+    relation_expression
     ;
 
+atomic_formula :
+    ( atom | variable )
+    ( OPENROUNDBRACKET termlist CLOSROUNDEBRACKET )?
+    ( OPENANGULARBRACKET termlist CLOSANGULARBRACKET )?
+    ;
+
+termlist :
+    term ( COMMA term )*
+    ;
+
+term :
+    literal | list | arithmetic_expression | variable | string
+    ;
+
+list :
+    OPENANGULARBRACKET
+    ( term ( COMMA term )*  ( OR ( list | variable ) )  )
+    CLOSANGULARBRACKET
+    ;
+
+relation_expression :
+    relation_term
+    ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL | EQUAL | NOTEQUAL | UNIFY | DECONSTRUCT ) relation_term )+
+    ;
 
 
 
@@ -106,8 +133,21 @@ fragment NEGOTATION             : ('not');
 fragment TRUE                   : ('true');
 fragment AND                    : ('&');
 fragment OR                     : ('|');
+fragment COMMA                  : (',');
 fragment END                    : ('.');
 fragment BEGIN                  : ('<-');
 fragment AT                     : ('@');
 fragment COLON                  : (':');
 fragment SEMICOLON              : (';');
+fragment OPENROUNDBRACKET       : ('(');
+fragment CLOSROUNDEBRACKET      : (')');
+fragment OPENANGULARBRACKET     : ('[');
+fragment CLOSANGULARBRACKET     : (']');
+fragment LESS                   : ('<');
+fragment LESSEQUAL              : ('<=');
+fragment GREATER                : ('>');
+fragment GREATEREQUAL           : ('>=');
+fragment EQUAL                  : ('==');
+fragment NOTEQUAL               : ('\\==');
+fragment UNIFY                  : ('=');
+fragment DECONSTRUCT            : ('=..');
