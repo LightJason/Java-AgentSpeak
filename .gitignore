@@ -3,3 +3,4 @@
 !.gitignore
 !*.java
 !*.g4
+!pom.xml
