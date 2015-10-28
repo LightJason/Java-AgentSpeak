@@ -58,16 +58,18 @@ literal :
     ;
 
 context :
-    logical_expression | TRUE
+    logical_expression
+    | TRUE
     ;
 
 body :
     body_formula
-    ( SEMICOLON body_formula )* | TRUE
+    ( SEMICOLON body_formula )*
+    | TRUE
     ;
 
 body_formula :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK | QUESTIONMARK | PLUS | MINUS | MINUSPLUS )
+    actionoperator
     literal
     variable
     relation_expression
@@ -84,24 +86,25 @@ atomic_formula :
 
 
 logical_expression :
-    simple_logical_expression |
-    ( ( NEGOTATION )? simple_logical_expression ) |
-    ( LROUNDBRACKET logical_expression RROUNDEBRACKET ) |
-    (logical_expression ( AND | OR ) logical_expression)
+    simple_logical_expression
+    | ( ( NEGOTATION )? simple_logical_expression )
+    | ( LROUNDBRACKET logical_expression RROUNDEBRACKET )
     ;
 
 simple_logical_expression :
-    literal | relation_expression | variable
+    literal
+    | relation_expression
+    | variable
     ;
 
 relation_expression :
     relation_term
-    ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL | EQUAL | NOTEQUAL | UNIFY | DECONSTRUCT ) relation_term )+
+    ( comparator relation_term )+
     ;
 
 arithmetic_expression :
     arithmetic_term
-    ( ( PLUS | MINUS | MULTIPLY | POW | DIVIDE | DIVIDEINT | MODULO ) arithmetic_term )*
+    ( ( dashoperator | pointoperator ) arithmetic_term )*
     ;
 
 
@@ -109,7 +112,11 @@ arithmetic_expression :
 
 
 term :
-    literal | list | arithmetic_expression | variable | string
+    literal
+    | list
+    | arithmetic_expression
+    | variable
+    | string
     ;
 
 termlist :
@@ -123,14 +130,53 @@ list :
     ;
 
 relation_term :
-    literal | arithmetic_expression
+    literal
+    | arithmetic_expression
     ;
 
 arithmetic_term :
-    number | variable |
-    MINUS arithmetic_term |
-    LROUNDBRACKET arithmetic_expression RROUNDEBRACKET
+    number
+    | variable
+    | MINUS arithmetic_term
+    | LROUNDBRACKET arithmetic_expression RROUNDEBRACKET
     ;
+
+
+
+
+comparator :
+    LESS
+    | LESSEQUAL
+    | EQUAL
+    | NOTEQUAL
+    | GREATER
+    | GREATEREQUAL
+    | UNIFY
+    | DECONSTRUCT
+    ;
+
+dashoperator :
+    PLUS
+    | MINUS
+    ;
+
+pointoperator :
+    POW
+    | MULTIPLY
+    | DIVIDE
+    | DIVIDEINT
+    | MODULO
+    ;
+
+actionoperator :
+    EXCLAMATIONMARK
+    | DOUBLEEXCLAMATIONMARK
+    | QUESTIONMARK
+    | PLUS
+    | MINUS
+    | MINUSPLUS
+    ;
+
 
 
 
