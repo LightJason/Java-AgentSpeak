@@ -61,30 +61,10 @@ context :
     logical_expression | TRUE
     ;
 
-
-
-
-
-
-logical_expression :
-    ( ( NEGOTATION )? simple_logical_expression ) | logical_condition
-    ;
-
-logical_condition :
-    logical_expression | ( logical_expression ( AND | OR ) logical_expression )
-    ;
-
-simple_logical_expression :
-    literal | relation_expression | variable
-    ;
-
 body :
     body_formula
     ( SEMICOLON body_formula )* | TRUE
     ;
-
-
-
 
 body_formula :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK | QUESTIONMARK | PLUS | MINUS | MINUSPLUS )
@@ -99,12 +79,41 @@ atomic_formula :
     ( OPENANGULARBRACKET termlist CLOSANGULARBRACKET )?
     ;
 
-termlist :
-    term ( COMMA term )*
+
+
+
+
+logical_expression :
+    simple_logical_expression |
+    ( ( NEGOTATION )? simple_logical_expression ) |
+    ( OPENROUNDBRACKET logical_expression CLOSROUNDEBRACKET ) |
+    (logical_expression ( AND | OR ) logical_expression)
     ;
+
+simple_logical_expression :
+    literal | relation_expression | variable
+    ;
+
+relation_expression :
+    relation_term
+    ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL | EQUAL | NOTEQUAL | UNIFY | DECONSTRUCT ) relation_term )+
+    ;
+
+arithmetic_expression :
+    arithmetic_term
+    ( ( PLUS | MINUS | MULTIPLY | POW | DIVIDE | DIVIDEINT | MODULO ) arithmetic_term )*
+    ;
+
+
+
+
 
 term :
     literal | list | arithmetic_expression | variable | string
+    ;
+
+termlist :
+    term ( COMMA term )*
     ;
 
 list :
@@ -113,18 +122,26 @@ list :
     CLOSANGULARBRACKET
     ;
 
-relation_expression :
-    relation_term
-    ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL | EQUAL | NOTEQUAL | UNIFY | DECONSTRUCT ) relation_term )+
-    ;
-
 relation_term :
+    literal | arithmetic_expression
     ;
 
-arithmetic_expression :
+arithmetic_term :
+    number | variable |
+    MINUS arithmetic_term |
+    OPENROUNDBRACKET arithmetic_expression CLOSROUNDEBRACKET
+    ;
+
+
+
+
+number :
     ;
 
 variable :
+    ;
+
+atom :
     ;
 
 string :
@@ -134,7 +151,7 @@ string :
 
 
 fragment PLUS                   : ('+');
-fragment MINUX                  : ('-');
+fragment MINUS                  : ('-');
 fragment MINUSPLUS              : ('-+');
 fragment EXCLAMATIONMARK        : ('!');
 fragment DOUBLEEXCLAMATIONMARK  : ('!!');
@@ -165,4 +182,5 @@ fragment DECONSTRUCT            : ('=..');
 fragment POW                    : ('**');
 fragment MULTIPLY               : ('*');
 fragment DIVIDE                 : ('/');
+fragment DIVIDEINT              : ('//' | 'div');
 fragment MODULO                 : ('%' | 'mod');
