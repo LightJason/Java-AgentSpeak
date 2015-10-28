@@ -89,6 +89,15 @@ logical_expression :
     simple_logical_expression
     | ( ( NEGOTATION )? simple_logical_expression )
     | ( LROUNDBRACKET logical_expression RROUNDEBRACKET )
+    | logical_or_expression
+    ;
+
+logical_or_expression :
+    logical_and_expression ( OR logical_and_expression )*
+    ;
+
+logical_and_expression :
+    simple_logical_expression ( AND logical_expression )*
     ;
 
 simple_logical_expression :
@@ -230,3 +239,9 @@ fragment MULTIPLY               : ('*');
 fragment DIVIDE                 : ('/');
 fragment DIVIDEINT              : ('//' | 'div');
 fragment MODULO                 : ('%' | 'mod');
+
+fragment LOWERCASELETTER        : ('a..z');
+fragment UPPERCASELETTER        : ('A..Z');
+fragment SPACE                  : (' ');
+fragment UNDERLINE              : ('_');
+fragment DIGIT                  : ('0'..'9');
