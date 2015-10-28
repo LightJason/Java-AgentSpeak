@@ -16,17 +16,17 @@ initial_beliefs :
     ;
 
 initial_goals :
-    ( EXCLAMATIONMARK literal END )*
+    ( EXCLAMATIONMARK literal DOT )*
     ;
 
 
 
 beliefs :
-    ( literal END )*
+    ( literal DOT )*
     ;
 
 rules :
-    ( literal BEGIN logical_expression END )*
+    ( literal ARROW logical_expression DOT )*
     ;
 
 plans :
@@ -37,7 +37,7 @@ plan :
     ( AT atomic_formula )?
     trigger_event
     COLON context
-    BEGIN body END
+    ARROW body DOT
     ;
 
 
@@ -118,6 +118,17 @@ relation_expression :
     ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL | EQUAL | NOTEQUAL | UNIFY | DECONSTRUCT ) relation_term )+
     ;
 
+relation_term :
+    ;
+
+arithmetic_expression :
+    ;
+
+variable :
+    ;
+
+string :
+    ;
 
 
 
@@ -134,8 +145,8 @@ fragment TRUE                   : ('true');
 fragment AND                    : ('&');
 fragment OR                     : ('|');
 fragment COMMA                  : (',');
-fragment END                    : ('.');
-fragment BEGIN                  : ('<-');
+fragment DOT                    : ('.');
+fragment ARROW                  : ('<-');
 fragment AT                     : ('@');
 fragment COLON                  : (':');
 fragment SEMICOLON              : (';');
@@ -151,3 +162,7 @@ fragment EQUAL                  : ('==');
 fragment NOTEQUAL               : ('\\==');
 fragment UNIFY                  : ('=');
 fragment DECONSTRUCT            : ('=..');
+fragment POW                    : ('**');
+fragment MULTIPLY               : ('*');
+fragment DIVIDE                 : ('/');
+fragment MODULO                 : ('%' | 'mod');
