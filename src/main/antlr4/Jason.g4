@@ -15,7 +15,7 @@ initial_beliefs :
     ;
 
 initial_goals :
-    ( EXCLAMATIONMARK literal DOT )*
+    EXCLAMATIONMARK literal DOT
     ;
 
 
@@ -254,6 +254,6 @@ DIGIT                  : [0..9];
 QUOTE                  : '"' | '\'';
 ANYCHAR                : .*;
 
-WHITESPACE             : (' ' | '\\t' | '\\n' | '\\r' )+ ->skip;
 COMMENT_1              : ('/*' .* '*/') -> skip;
 COMMENT_2              : '//' .* '\\n' -> skip;
+WHITESPACE             : (' ' | '\\t' | '\\n' | '\\r' )+ ->skip;
