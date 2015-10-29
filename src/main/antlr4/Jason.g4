@@ -289,8 +289,8 @@ UpperCaseLetter        : [A-Z];
 Digit                  : [0-9];
 AnyChar                : .+?;
 
-Whitespace             : [\n\r\t]+      -> skip;
-Newline                : ('\r' | '\n'?) -> skip;
-BlockComment           : '/*' .*? '*/'  -> skip;
-LineComment            : '//' ~[\r\n]*  -> skip;
+Whitespace             : [' ' | \t]+     -> skip;
+Newline                : ('\r'? | '\n')+ -> skip;
+BlockComment           : '/*' .*? '*/'   -> skip;
+LineComment            : '//' ~[\r\n]*   -> skip;
 // ---------------------------------------------------------------------------------------
