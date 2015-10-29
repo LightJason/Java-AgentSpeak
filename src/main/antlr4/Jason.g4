@@ -1,13 +1,37 @@
+/**
+ * @cond LICENSE
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
+ * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
 grammar Jason;
 
 
+// --- agent-base structure -------------------------------------------------------------
 agent :
     initial_beliefs
     initial_goals
     plans
     EOF
     ;
-
 
 initial_beliefs :
     beliefs
@@ -19,9 +43,11 @@ initial_goals :
     literal
     Dot
     ;
+// ---------------------------------------------------------------------------------------
 
 
 
+// --- agent-behaviour structure ---------------------------------------------------------
 beliefs :
     ( literal Dot )*
     ;
@@ -43,11 +69,11 @@ plan :
     body
     Dot
     ;
+// ---------------------------------------------------------------------------------------
 
 
 
-
-
+// --- agent-expression-context ----------------------------------------------------------
 trigger_event :
     ( Plus | Minus )
     ( Exclamationmark | Questionmark )?
@@ -62,6 +88,7 @@ literal :
 context :
     logical_expression
     | True
+    | False
     ;
 
 body :
@@ -71,10 +98,10 @@ body :
     ;
 
 body_formula :
-    actionoperator
-    literal
-    variable
-    relation_expression
+    actionoperator literal
+    | atomic_formula
+    | variable
+    | relation_expression
     ;
 
 atomic_formula :
@@ -117,9 +144,11 @@ arithmetic_expression :
     arithmetic_term
     ( ( dashoperator | pointoperator ) arithmetic_term )*
     ;
+// ---------------------------------------------------------------------------------------
 
 
 
+// --- complex-data-types ----------------------------------------------------------------
 term :
     literal
     | list
@@ -191,13 +220,11 @@ number :
     ;
 
 floatnumber :
-    (Plus | Minus)?
-    Digit Dot Digit+
+    (Plus | Minus)? Digit Dot Digit+
     ;
 
 integernumber :
-    (Plus | Minus)?
-    Digit+
+    (Plus | Minus)? Digit+
     ;
 
 variable :
@@ -214,10 +241,11 @@ string :
     ( Quote Quote )
     | ( Quote AnyChar Quote )
     ;
+// ---------------------------------------------------------------------------------------
 
 
 
-
+// --- character structures --------------------------------------------------------------
 Exclamationmark        : '!';
 StrongNegotation       : '~';
 LRoundBracket          : '(';
@@ -261,8 +289,8 @@ UpperCaseLetter        : [A-Z];
 Digit                  : [0-9];
 AnyChar                : .+?;
 
-
-Whitespace      : [\n\r\t]+      -> skip;
-Newline         : ('\r' | '\n'?) -> skip;
-BlockComment    : '/*' .*? '*/'  -> skip;
-LineComment     : '//' ~[\r\n]*  -> skip;
+Whitespace             : [\n\r\t]+      -> skip;
+Newline                : ('\r' | '\n'?) -> skip;
+BlockComment           : '/*' .*? '*/'  -> skip;
+LineComment            : '//' ~[\r\n]*  -> skip;
+// ---------------------------------------------------------------------------------------
