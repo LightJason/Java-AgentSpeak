@@ -1,7 +1,6 @@
 grammar jason;
 
 
-
 agent :
     initial_beliefs
     initial_goals
@@ -101,7 +100,9 @@ logical_and_expression :
     ;
 
 simple_logical_expression :
-    literal
+    TRUE
+    | FALSE
+    | literal
     | relation_expression
     | variable
     ;
@@ -205,43 +206,45 @@ string :
 
 
 
-fragment PLUS                   : ('+');
-fragment MINUS                  : ('-');
-fragment MINUSPLUS              : ('-+');
-fragment EXCLAMATIONMARK        : ('!');
-fragment DOUBLEEXCLAMATIONMARK  : ('!!');
-fragment QUESTIONMARK           : ('?');
-fragment STRONGNEGOTATION       : ('~');
-fragment NEGOTATION             : ('not');
-fragment TRUE                   : ('true');
-fragment AND                    : ('&');
-fragment OR                     : ('|');
-fragment COMMA                  : (',');
-fragment DOT                    : ('.');
-fragment ARROW                  : ('<-');
-fragment AT                     : ('@');
-fragment COLON                  : (':');
-fragment SEMICOLON              : (';');
-fragment LROUNDBRACKET          : ('(');
-fragment RROUNDEBRACKET         : (')');
-fragment LANGULARBRACKET        : ('[');
-fragment RANGULARBRACKET        : (']');
-fragment LESS                   : ('<');
-fragment LESSEQUAL              : ('<=');
-fragment GREATER                : ('>');
-fragment GREATEREQUAL           : ('>=');
-fragment EQUAL                  : ('==');
-fragment NOTEQUAL               : ('\\==');
-fragment UNIFY                  : ('=');
-fragment DECONSTRUCT            : ('=..');
-fragment POW                    : ('**');
-fragment MULTIPLY               : ('*');
-fragment DIVIDE                 : ('/');
-fragment DIVIDEINT              : ('//' | 'div');
-fragment MODULO                 : ('%' | 'mod');
 
-fragment LOWERCASELETTER        : ('a..z');
-fragment UPPERCASELETTER        : ('A..Z');
-fragment SPACE                  : (' ');
-fragment UNDERLINE              : ('_');
-fragment DIGIT                  : ('0'..'9');
+PLUS                   : '+';
+MINUS                  : '-';
+MINUSPLUS              : '-+';
+EXCLAMATIONMARK        : '!';
+DOUBLEEXCLAMATIONMARK  : '!!';
+QUESTIONMARK           : '?';
+STRONGNEGOTATION       : '~';
+NEGOTATION             : 'not';
+TRUE                   : 'true';
+FALSE                  : 'false';
+AND                    : '&';
+OR                     : '|';
+COMMA                  : ',';
+DOT                    : '.';
+ARROW                  : '<-';
+AT                     : '@';
+COLON                  : ':';
+SEMICOLON              : ';';
+LROUNDBRACKET          : '(';
+RROUNDEBRACKET         : ')';
+LANGULARBRACKET        : '[';
+RANGULARBRACKET        : ']';
+LESS                   : '<';
+LESSEQUAL              : '<=';
+GREATER                : '>';
+GREATEREQUAL           : '>=';
+EQUAL                  : '==';
+NOTEQUAL               : '\\==';
+UNIFY                  : '=';
+DECONSTRUCT            : '=..';
+POW                    : '**';
+MULTIPLY               : '*';
+DIVIDE                 : '/';
+DIVIDEINT              : '//' | 'div';
+MODULO                 : '%' | 'mod';
+
+LOWERCASELETTER        : [a..z];
+UPPERCASELETTER        : [A..Z];
+SPACE                  : ' ';
+UNDERSCORE             : '_';
+DIGIT                  : [0..9];
