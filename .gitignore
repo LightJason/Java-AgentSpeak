@@ -5,3 +5,5 @@
 !*.g4
 !*.asl
 !pom.xml
+
+gen/**

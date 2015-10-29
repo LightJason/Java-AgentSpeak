@@ -5,8 +5,8 @@ agent :
     initial_beliefs
     initial_goals
     plans
+    EOF
     ;
-
 
 
 initial_beliefs :
@@ -15,56 +15,59 @@ initial_beliefs :
     ;
 
 initial_goals :
-    EXCLAMATIONMARK literal DOT
+    Exclamationmark
+    literal
+    Dot
     ;
 
 
 
 beliefs :
-    ( literal DOT )*
+    ( literal Dot )*
     ;
 
 rules :
-    ( literal ARROW logical_expression DOT )*
+    ( literal Arrow logical_expression Dot )*
     ;
 
 plans :
-    ( plan )*
+    plan*
     ;
 
 plan :
-    ( AT atomic_formula )?
+    ( At atomic_formula )?
     trigger_event
-    COLON context
-    ARROW body DOT
+    Colon
+    context
+    Arrow
+    body
+    Dot
     ;
-
-
 
 
 
 
 
 trigger_event :
-    ( PLUS | MINUS )
-    ( EXCLAMATIONMARK | QUESTIONMARK )?
+    ( Plus | Minus )
+    ( Exclamationmark | Questionmark )?
     literal
     ;
 
 literal :
-    ( STRONGNEGOTATION )?
+    StrongNegotation?
     atomic_formula
     ;
 
 context :
     logical_expression
-    | TRUE
+    | True
     ;
 
 body :
     body_formula
-    ( SEMICOLON body_formula )*
-    | TRUE
+    ( Semicolon body_formula )*
+    | True
     ;
 
 body_formula :
@@ -76,32 +79,30 @@ body_formula :
 
 atomic_formula :
     ( atom | variable )
-    ( LROUNDBRACKET termlist RROUNDEBRACKET )?
-    ( LANGULARBRACKET termlist RANGULARBRACKET )?
+    ( LRoundBracket list_term RRoundBracket )?
+    ( LAngularBracket list_term RAngularBracket )?
     ;
-
-
-
-
 
 logical_expression :
     simple_logical_expression
-    | ( ( NEGOTATION )? simple_logical_expression )
-    | ( LROUNDBRACKET logical_expression RROUNDEBRACKET )
+    | ( Negotation? simple_logical_expression )
+    | ( LRoundBracket logical_expression RRoundBracket )
     | logical_or_expression
     ;
 
 logical_or_expression :
-    logical_and_expression ( OR logical_and_expression )*
+    logical_and_expression
+    ( Or logical_and_expression )*
     ;
 
 logical_and_expression :
-    simple_logical_expression ( AND logical_expression )*
+    simple_logical_expression
+    ( And logical_expression )*
     ;
 
 simple_logical_expression :
-    TRUE
-    | FALSE
+    True
+    | False
     | literal
     | relation_expression
     | variable
@@ -119,8 +120,6 @@ arithmetic_expression :
 
 
 
-
-
 term :
     literal
     | list
@@ -129,14 +128,15 @@ term :
     | string
     ;
 
-termlist :
-    term ( COMMA term )*
+list_term :
+    term
+    ( Comma term )*
     ;
 
 list :
-    LANGULARBRACKET
-    ( term ( COMMA term )*  ( OR ( list | variable ) )  )
-    RANGULARBRACKET
+    LAngularBracket
+    ( term ( Comma term )*  ( Or ( list | variable ) )  )
+    RAngularBracket
     ;
 
 relation_term :
@@ -147,113 +147,122 @@ relation_term :
 arithmetic_term :
     number
     | variable
-    | MINUS arithmetic_term
-    | LROUNDBRACKET arithmetic_expression RROUNDEBRACKET
+    | Minus arithmetic_term
+    | LRoundBracket arithmetic_expression RRoundBracket
     ;
 
-
-
-
 comparator :
-    LESS
-    | LESSEQUAL
-    | EQUAL
-    | NOTEQUAL
-    | GREATER
-    | GREATEREQUAL
-    | UNIFY
-    | DECONSTRUCT
+    Less
+    | LessEqual
+    | Equal
+    | NotEqual
+    | Greater
+    | GreaterEqual
+    | Unify
+    | Deconstruct
     ;
 
 dashoperator :
-    PLUS
-    | MINUS
+    Plus
+    | Minus
     ;
 
 pointoperator :
-    POW
-    | MULTIPLY
-    | DIVIDE
-    | DIVIDEINT
-    | MODULO
+    Pow
+    | Multiply
+    | Divide
+    | DivideInt
+    | Modulo
     ;
 
 actionoperator :
-    EXCLAMATIONMARK
-    | DOUBLEEXCLAMATIONMARK
-    | QUESTIONMARK
-    | PLUS
-    | MINUS
-    | MINUSPLUS
+    Exclamationmark
+    | DoubleExclamationmark
+    | Questionmark
+    | Plus
+    | Minus
+    | MinusPlus
     ;
-
-
-
 
 
 number :
-    (PLUS | MINUS)? DIGIT ( DOT DIGIT+ )?
+    floatnumber
+    | integernumber
+    ;
+
+floatnumber :
+    (Plus | Minus)?
+    Digit Dot Digit+
+    ;
+
+integernumber :
+    (Plus | Minus)?
+    Digit+
     ;
 
 variable :
-    UPPERCASELETTER ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
+    UpperCaseLetter
+    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
     ;
 
 atom :
-    LOWERCASELETTER ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
+    LowerCaseLetter
+    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
     ;
 
 string :
-    QUOTE ANYCHAR QUOTE
+    ( Quote Quote )
+    | ( Quote AnyChar Quote )
     ;
 
 
 
 
+Exclamationmark        : '!';
+StrongNegotation       : '~';
+LRoundBracket          : '(';
+RRoundBracket          : ')';
+LAngularBracket        : '[';
+RAngularBracket        : ']';
+Comma                  : ',';
+Plus                   : '+';
+Minus                  : '-';
+MinusPlus              : '-+';
+DoubleExclamationmark  : '!!';
+Questionmark           : '?';
+Negotation             : 'not';
+True                   : 'true';
+False                  : 'false';
+And                    : '&';
+Or                     : '|';
+Arrow                  : '<-';
+At                     : '@';
+Colon                  : ':';
+Semicolon              : ';';
+Less                   : '<';
+LessEqual              : '<=';
+Greater                : '>';
+GreaterEqual           : '>=';
+Equal                  : '==';
+NotEqual               : '\\==';
+Unify                  : '=';
+Deconstruct            : '=..';
+Pow                    : '**';
+Multiply               : '*';
+Divide                 : '/';
+DivideInt              : 'div';
+Modulo                 : '%' | 'mod';
+Dot                    : '.';
+Underscore             : '_';
+Quote                  : '"' | '\'';
 
-PLUS                   : '+';
-MINUS                  : '-';
-MINUSPLUS              : '-+';
-EXCLAMATIONMARK        : '!';
-DOUBLEEXCLAMATIONMARK  : '!!';
-QUESTIONMARK           : '?';
-STRONGNEGOTATION       : '~';
-NEGOTATION             : 'not';
-TRUE                   : 'true';
-FALSE                  : 'false';
-AND                    : '&';
-OR                     : '|';
-COMMA                  : ',';
-DOT                    : '.';
-ARROW                  : '<-';
-AT                     : '@';
-COLON                  : ':';
-SEMICOLON              : ';';
-LROUNDBRACKET          : '(';
-RROUNDEBRACKET         : ')';
-LANGULARBRACKET        : '[';
-RANGULARBRACKET        : ']';
-LESS                   : '<';
-LESSEQUAL              : '<=';
-GREATER                : '>';
-GREATEREQUAL           : '>=';
-EQUAL                  : '==';
-NOTEQUAL               : '\\==';
-UNIFY                  : '=';
-DECONSTRUCT            : '=..';
-POW                    : '**';
-MULTIPLY               : '*';
-DIVIDE                 : '/';
-DIVIDEINT              : 'div';
-MODULO                 : '%' | 'mod';
+LowerCaseLetter        : [a-z];
+UpperCaseLetter        : [A-Z];
+Digit                  : [0-9];
+AnyChar                : .+?;
 
-LOWERCASELETTER        : [a..z];
-UPPERCASELETTER        : [A..Z];
-UNDERSCORE             : '_';
-DIGIT                  : [0..9];
-QUOTE                  : '"' | '\'';
-ANYCHAR                : .*;
 
-COMMENT_1              : ('/*' .* '*/') -> skip;
-COMMENT_2              : '//' .* '\\n' -> skip;
-WHITESPACE             : (' ' | '\\t' | '\\n' | '\\r' )+ ->skip;
+Whitespace      : [\n\r\t]+      -> skip;
+Newline         : ('\r' | '\n'?) -> skip;
+BlockComment    : '/*' .*? '*/'  -> skip;
+LineComment     : '//' ~[\r\n]*  -> skip;
