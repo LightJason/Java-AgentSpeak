@@ -1,4 +1,4 @@
-grammar jason;
+grammar Jason;
 
 
 agent :
@@ -192,15 +192,19 @@ actionoperator :
 
 
 number :
+    (PLUS | MINUS)? DIGIT ( DOT DIGIT+ )?
     ;
 
 variable :
+    UPPERCASELETTER ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
 atom :
+    LOWERCASELETTER ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
 string :
+    QUOTE ANYCHAR QUOTE
     ;
 
 
@@ -240,11 +244,16 @@ DECONSTRUCT            : '=..';
 POW                    : '**';
 MULTIPLY               : '*';
 DIVIDE                 : '/';
-DIVIDEINT              : '//' | 'div';
+DIVIDEINT              : 'div';
 MODULO                 : '%' | 'mod';
 
 LOWERCASELETTER        : [a..z];
 UPPERCASELETTER        : [A..Z];
-SPACE                  : ' ';
 UNDERSCORE             : '_';
 DIGIT                  : [0..9];
+QUOTE                  : '"' | '\'';
+ANYCHAR                : .*;
+
+WHITESPACE             : (' ' | '\\t' | '\\n' | '\\r' )+ ->skip;
+COMMENT_1              : ('/*' .* '*/') -> skip;
+COMMENT_2              : '//' .* '\\n' -> skip;

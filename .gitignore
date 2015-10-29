@@ -3,4 +3,5 @@
 !.gitignore
 !*.java
 !*.g4
+!*.asl
 !pom.xml
