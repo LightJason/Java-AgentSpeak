@@ -64,10 +64,10 @@
                 <version>4.5.1-1</version>
                 <executions>
                     <execution>
-                        <id>run antlr</id>
+                        <id>antlr</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>antlr</goal>
+                            <goal>antlr4</goal>
                         </goals>
                     </execution>
                 </executions>
