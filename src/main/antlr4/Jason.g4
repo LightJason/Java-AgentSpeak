@@ -217,6 +217,11 @@ actionoperator :
     ;
 
 
+/**
+ * default behaviour in Jason is only a floating-point number (double)
+ * but here exists the difference between floating and integral number
+ * types within the grammar, the div-operator (integer division) is removed
+ **/
 number :
     floatnumber
     | integernumber
@@ -281,7 +286,6 @@ Deconstruct            : '=..';
 Pow                    : '**';
 Multiply               : '*';
 Divide                 : '/';
-DivideInt              : 'div';
 Modulo                 : '%' | 'mod';
 Dot                    : '.';
 Underscore             : '_';
@@ -293,6 +297,10 @@ Digit                  : [0-9];
 AnyChar                : .+?;
 
 Whitespace             : [' ' | \t | \r | \n]+     -> skip;
-BlockComment           : '/*' .*? '*/'   -> skip;
 LineComment            : '//' ~[\r\n]*   -> skip;
+/**
+ * block comment allowed within the grammar
+ * default behaviour does not allow block comments
+ **/
+BlockComment           : '/*' .*? '*/'   -> skip;
 // ---------------------------------------------------------------------------------------
