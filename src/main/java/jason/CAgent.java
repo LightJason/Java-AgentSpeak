@@ -114,7 +114,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public void run()
+    public IAgent call() throws Exception
     {
         // update beliefbase
         m_beliefbase.update();
@@ -122,5 +122,7 @@ public class CAgent implements IAgent
 
         // increment cycle
         m_cycle++;
+
+        return this;
     }
 }

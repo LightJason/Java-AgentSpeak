@@ -23,10 +23,12 @@
 
 package jason;
 
+import java.util.concurrent.Callable;
+
 /**
  * agent interface
  */
-public interface IAgent extends Runnable
+public interface IAgent extends Callable<IAgent>
 {
     /**
      * returns the current cycle
