@@ -104,6 +104,35 @@ body_formula :
     | atomic_formula
     | variable
     | relation_expression
+    | if_else
+    | while_loop
+    ;
+
+block_formula :
+    LAngularBracket
+    body_formula*
+    RAngularBracket
+    ;
+
+if_else :
+    If LRoundBracket logical_expression LRoundBracket
+    block_formula
+    ( Else block_formula )?
+    ;
+
+while_loop :
+    While LRoundBracket logical_expression RRoundBracket
+    block_formula
+    ;
+
+for_loop :
+    For LRoundBracket body_formula? Semicolon logical_expression Semicolon body_formula? RRoundBracket
+    block_formula
+    ;
+
+foreach_loop :
+    For LRoundBracket body_formula RRoundBracket
+    block_formula
     ;
 
 atomic_formula :
@@ -289,13 +318,18 @@ Modulo                 : '%' | 'mod';
 Dot                    : '.';
 Underscore             : '_';
 Quote                  : '"' | '\'';
+If                     : 'if';
+Else                   : 'else';
+While                  : 'while';
+For                    : 'for';
 
 LowerCaseLetter        : [a-z];
 UpperCaseLetter        : [A-Z];
 Digit                  : [0-9];
 AnyChar                : .+?;
 
-Whitespace             : [' ' | \t | \r | \n]+     -> skip;
+
+Whitespace             : [\t | \r | \n]+     -> skip;
 LineComment            : '//' ~[\r\n]*   -> skip;
 /**
  * block comment allowed within the grammar
