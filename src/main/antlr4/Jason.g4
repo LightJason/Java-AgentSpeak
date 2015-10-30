@@ -303,7 +303,12 @@ Minus                  : '-';
 MinusPlus              : '-+';
 DoubleExclamationmark  : '!!';
 Questionmark           : '?';
-Arrow                  : '<-';
+/**
+ * the arrow (plan begin)  is
+ * defined like in Prolog and
+ * the Jason format
+ **/
+Arrow                  : '<-' | ':-';
 At                     : '@';
 Colon                  : ':';
 Semicolon              : ';';
