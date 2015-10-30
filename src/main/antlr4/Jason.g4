@@ -311,8 +311,16 @@ RAngularBracket        : ']';
 Negotation             : 'not';
 True                   : 'true';
 False                  : 'false';
-And                    : '&';
-Or                     : '|';
+/**
+ * allow on logical and-concationation
+ * also c- and pascal-style-based & / and
+ **/
+And                    : '&' | '&&' | 'and';
+/**
+ * allow on logical or-concationation
+ * also c- and pascal-style-based | / or
+ **/
+Or                     : '|' | '||' | 'or';
 
 Less                   : '<';
 LessEqual              : '<=';
@@ -322,9 +330,18 @@ Equal                  : '==';
 NotEqual               : '\\==';
 Unify                  : '=';
 Deconstruct            : '=..';
-Pow                    : '**';
-Multiply               : '*';
-Divide                 : '/';
+/**
+ * allow on pow also the key-word represenation
+ **/
+Pow                    : '**' | 'pow';
+/**
+ * allow on multiply the key-word representation
+ **/
+Multiply               : '*' | 'mul';
+/**
+ * allow on divide the key-word definition
+ **/
+Divide                 : '/' | 'div';
 Modulo                 : '%' | 'mod';
 
 LowerCaseLetter        : [a-z];
@@ -333,11 +350,21 @@ Digit                  : [0-9];
 AnyChar                : .+?;
 
 
-Whitespace             : [' ' | \t | \r | \n]+     -> skip;
-LineComment            : '//' ~[\r\n]*   -> skip;
+
+
+Whitespace             :
+    [ \t\r\n\u000C]+ -> skip
+    ;
+
+LineComment :
+    '//' ~[\r\n]* -> skip
+    ;
+
 /**
  * block comment allowed within the grammar
  * default behaviour does not allow block comments
  **/
-BlockComment           : '/*' .*? '*/'   -> skip;
+COMMENT
+    :   '/*' .*? '*/' -> skip
+    ;
 // ---------------------------------------------------------------------------------------
