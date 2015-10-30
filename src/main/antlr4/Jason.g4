@@ -271,7 +271,14 @@ variable :
     ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
     ;
 
+/**
+ * to create compatibility to Jason syntax, an atom can begin
+ * with a dot, it represents an internal Jason action in the structure
+ * jason.stdlib.<atom name>
+ * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
+ **/
 atom :
+    Dot?
     LowerCaseLetter
     ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
     ;
@@ -306,7 +313,7 @@ Else                   : 'else';
 While                  : 'while';
 For                    : 'for';
 Pi                     : 'pi';
-EulerNumber            : 'eulernumber';
+EulerNumber            : 'euler';
 
 LRoundBracket          : '(';
 RRoundBracket          : ')';
