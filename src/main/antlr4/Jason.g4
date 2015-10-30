@@ -248,7 +248,8 @@ actionoperator :
 /**
  * default behaviour in Jason is only a floating-point number (double)
  * but here exists the difference between floating and integral number
- * types within the grammar, the div-operator (integer division) is removed
+ * types within the grammar, the div-operator (integer division) is removed,
+ * also definied constants are used
  **/
 number :
     floatnumber
@@ -257,6 +258,8 @@ number :
 
 floatnumber :
     (Plus | Minus)? Digit Dot Digit+
+    | Pi
+    | EulerNumber
     ;
 
 integernumber :
@@ -302,6 +305,8 @@ If                     : 'if';
 Else                   : 'else';
 While                  : 'while';
 For                    : 'for';
+Pi                     : 'pi';
+EulerNumber            : 'eulernumber';
 
 LRoundBracket          : '(';
 RRoundBracket          : ')';
