@@ -29,7 +29,6 @@ agent :
     initial_beliefs
     initial_goals
     plans
-    EOF
     ;
 
 initial_beliefs :
@@ -185,7 +184,7 @@ term :
     | list
     | arithmetic_expression
     | variable
-    | string
+    | String
     ;
 
 term_list :
@@ -292,11 +291,6 @@ atom :
     LowerCaseLetter
     ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
     ;
-
-string :
-    ( Quote Quote )
-    | ( Quote AnyChar Quote )
-    ;
 // ---------------------------------------------------------------------------------------
 
 
@@ -316,7 +310,6 @@ Colon                  : ':';
 Semicolon              : ';';
 Dot                    : '.';
 Underscore             : '_';
-Quote                  : '"' | '\'';
 
 If                     : 'if';
 Else                   : 'else';
@@ -383,24 +376,22 @@ Modulo                 : '%' | 'mod';
 LowerCaseLetter        : [a-z];
 UpperCaseLetter        : [A-Z];
 Digit                  : [0-9];
-AnyChar                : .+?;
+/**
+ * string can be definied in single- and double-quotes
+ **/
+String                 : ( '\'' ('\'\'' | ~('\''))* '\'' ) | ( '"' ('""' | ~('"'))* '"' );
+// ---------------------------------------------------------------------------------------
 
 
-
-
-Whitespace             :
-    [ \t\r\n\u000C]+ -> skip
-    ;
-
-LineComment :
-    '//' ~[\r\n]* -> skip
-    ;
-
+// --- skip items ------------------------------------------------------------------------
+Whitespace             : (' ' | '\n' | '\t' | '\r')+ -> skip;
+/**
+ * add for line-comment also #
+ **/
+LineComment            : ('//' | '#') ~[\r\n]* -> skip;
 /**
  * block comment allowed within the grammar
  * default behaviour does not allow block comments
  **/
-COMMENT
-    :   '/*' .*? '*/' -> skip
-    ;
+Comment                :   '/*' .*? '*/' -> skip;
 // ---------------------------------------------------------------------------------------
