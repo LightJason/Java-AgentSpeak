@@ -21,24 +21,29 @@
  * @endcond
  */
 
-import jason.CAgent;
+package jason;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 
-public final class CMain
+/**
+ * action interface
+ */
+public interface IAction
 {
+    /**
+     * returns the name of the action
+     *
+     * @return name
+     */
+    public String getName();
 
-    public static void main( final String[] p_args )
-    {
-        try (
-                final InputStream l_stream = new FileInputStream( p_args[0] );
-        ) {
-            new CAgent( l_stream );
-        } catch ( final IOException l_exception ) {
-            l_exception.printStackTrace();
-        }
-    }
+    /**
+     * runs the action
+     *
+     * @param p_agent agent that runs the action
+     * @param p_parameter parameter of the action
+     * @return boolean flag if the action is success or fail
+     */
+    public boolean execute( final IAgent p_agent, final List<Object> p_parameter );
 
 }

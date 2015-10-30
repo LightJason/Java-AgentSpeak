@@ -21,24 +21,17 @@
  * @endcond
  */
 
-import jason.CAgent;
+package jason;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-public final class CMain
+/**
+ * beliefbase interface
+ */
+public interface IBeliefBase
 {
 
-    public static void main( final String[] p_args )
-    {
-        try (
-                final InputStream l_stream = new FileInputStream( p_args[0] );
-        ) {
-            new CAgent( l_stream );
-        } catch ( final IOException l_exception ) {
-            l_exception.printStackTrace();
-        }
-    }
+    /**
+     * update internal beliefbase data
+     */
+    public void update();
 
 }
