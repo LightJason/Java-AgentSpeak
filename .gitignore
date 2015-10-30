@@ -4,6 +4,7 @@
 !*.java
 !*.g4
 !*.asl
+!*.md
 !pom.xml
 
 gen/**
