@@ -142,7 +142,7 @@ atomic_formula :
 
 logical_expression :
     Negotation? simple_logical_expression
-    | Negotation? ( LRoundBracket logical_expression RRoundBracket )
+    | Negotation? LRoundBracket logical_expression RRoundBracket
     | logical_or_expression
     ;
 
