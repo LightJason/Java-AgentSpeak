@@ -141,9 +141,8 @@ atomic_formula :
     ;
 
 logical_expression :
-    simple_logical_expression
-    | ( Negotation? simple_logical_expression )
-    | ( LRoundBracket logical_expression RRoundBracket )
+    Negotation? simple_logical_expression
+    | Negotation? ( LRoundBracket logical_expression RRoundBracket )
     | logical_or_expression
     ;
 
@@ -276,8 +275,8 @@ integernumber :
     ;
 
 variable :
-    UpperCaseLetter
-    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    UpperCaseLetter ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    | Underscore
     ;
 
 /**
@@ -324,8 +323,8 @@ LAngularBracket        : '[';
 RAngularBracket        : ']';
 
 Negotation             : 'not';
-True                   : 'true';
-False                  : 'false';
+True                   : 'true' | 'success';
+False                  : 'false' | 'fail';
 /**
  * allow on logical and-concationation
  * also c- and pascal-style-based & / and
