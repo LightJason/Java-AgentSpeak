@@ -136,9 +136,9 @@ foreach_loop :
     ;
 
 atomic_formula :
-    ( atom | variable )
-    ( LRoundBracket list_term RRoundBracket )?
-    ( LAngularBracket list_term RAngularBracket )?
+    ( atom | variable | variable unaryoperator | variable binaryoperator arithmetic_term )
+    ( LRoundBracket term_list RRoundBracket )?
+    ( LAngularBracket term_list RAngularBracket )?
     ;
 
 logical_expression :
@@ -155,7 +155,7 @@ logical_or_expression :
 
 logical_and_expression :
     simple_logical_expression
-    ( And logical_expression )*
+    ( (And | Xor) logical_expression )*
     ;
 
 simple_logical_expression :
@@ -188,7 +188,7 @@ term :
     | string
     ;
 
-list_term :
+term_list :
     term
     ( Comma term )*
     ;
@@ -231,7 +231,6 @@ pointoperator :
     Pow
     | Multiply
     | Divide
-    | DivideInt
     | Modulo
     ;
 
@@ -244,6 +243,17 @@ actionoperator :
     | MinusPlus
     ;
 
+unaryoperator :
+    Increment
+    | Decrement
+    ;
+
+binaryoperator :
+    AssignIncrement
+    | AssignDecrement
+    | AssignMultiply
+    | AssignDivide
+    ;
 
 /**
  * default behaviour in Jason is only a floating-point number (double)
@@ -333,6 +343,20 @@ And                    : '&' | '&&' | 'and';
  * also c- and pascal-style-based | / or
  **/
 Or                     : '|' | '||' | 'or';
+/**
+ * define an logical xor-definition
+ **/
+Xor                    : '^' | 'xor';
+
+/**
+ * variable operators
+ **/
+Increment              : '++';
+Decrement              : '--';
+AssignIncrement        : '+=';
+AssignDecrement        : '-=';
+AssignMultiply         : '*=';
+AssignDivide           : '/=';
 
 Less                   : '<';
 LessEqual              : '<=';
