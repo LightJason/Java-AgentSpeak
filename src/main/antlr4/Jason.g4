@@ -60,13 +60,16 @@ plans :
     plan*
     ;
 
+/**
+ * plan modified against the original Jason grammar,
+ * so a context is optional (on default true) and the
+ * plan body is also optional
+ */
 plan :
     ( At atomic_formula )?
     trigger_event
-    Colon
-    context
-    Arrow
-    body
+    ( Colon context )?
+    ( Arrow body )?
     Dot
     ;
 // ---------------------------------------------------------------------------------------
@@ -289,8 +292,7 @@ UpperCaseLetter        : [A-Z];
 Digit                  : [0-9];
 AnyChar                : .+?;
 
-Whitespace             : [' ' | \t]+     -> skip;
-Newline                : ('\r'? | '\n')+ -> skip;
+Whitespace             : [' ' | \t | \r | \n]+     -> skip;
 BlockComment           : '/*' .*? '*/'   -> skip;
 LineComment            : '//' ~[\r\n]*   -> skip;
 // ---------------------------------------------------------------------------------------
