@@ -284,25 +284,36 @@ string :
 // --- character structures --------------------------------------------------------------
 Exclamationmark        : '!';
 StrongNegotation       : '~';
-LRoundBracket          : '(';
-RRoundBracket          : ')';
-LAngularBracket        : '[';
-RAngularBracket        : ']';
 Comma                  : ',';
 Plus                   : '+';
 Minus                  : '-';
 MinusPlus              : '-+';
 DoubleExclamationmark  : '!!';
 Questionmark           : '?';
+Arrow                  : '<-';
+At                     : '@';
+Colon                  : ':';
+Semicolon              : ';';
+Dot                    : '.';
+Underscore             : '_';
+Quote                  : '"' | '\'';
+
+If                     : 'if';
+Else                   : 'else';
+While                  : 'while';
+For                    : 'for';
+
+LRoundBracket          : '(';
+RRoundBracket          : ')';
+LAngularBracket        : '[';
+RAngularBracket        : ']';
+
 Negotation             : 'not';
 True                   : 'true';
 False                  : 'false';
 And                    : '&';
 Or                     : '|';
-Arrow                  : '<-';
-At                     : '@';
-Colon                  : ':';
-Semicolon              : ';';
+
 Less                   : '<';
 LessEqual              : '<=';
 Greater                : '>';
@@ -315,13 +326,6 @@ Pow                    : '**';
 Multiply               : '*';
 Divide                 : '/';
 Modulo                 : '%' | 'mod';
-Dot                    : '.';
-Underscore             : '_';
-Quote                  : '"' | '\'';
-If                     : 'if';
-Else                   : 'else';
-While                  : 'while';
-For                    : 'for';
 
 LowerCaseLetter        : [a-z];
 UpperCaseLetter        : [A-Z];
@@ -329,7 +333,7 @@ Digit                  : [0-9];
 AnyChar                : .+?;
 
 
-Whitespace             : [\t | \r | \n]+     -> skip;
+Whitespace             : [' ' | \t | \r | \n]+     -> skip;
 LineComment            : '//' ~[\r\n]*   -> skip;
 /**
  * block comment allowed within the grammar
