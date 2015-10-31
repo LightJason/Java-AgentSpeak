@@ -24,21 +24,19 @@
 package jason;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * action interface
+ * map with actions
  */
-public interface IAction
+public interface IMultiAction extends IAction, Map<String, IAction>
 {
 
     /**
-     * runs the action
+     * returns a list with names which can handle
      *
-     * @param p_agent agent that runs the action
-     * @param p_name name of the action
-     * @param p_parameter parameter of the action
-     * @return boolean flag if the action is success or fail
+     * @return list with names
      */
-    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
+    public List<String> getNames();
 
 }
