@@ -51,11 +51,19 @@ beliefs :
     ;
 
 rules :
-    ( literal RuleOperator logical_expression Dot )*
+    rule*
     ;
 
 plans :
     plan*
+    ;
+
+/**
+ * rules can be used an annotation
+ **/
+rule :
+    ( At atomic_formula )?
+    literal RuleOperator logical_expression Dot
     ;
 
 /**

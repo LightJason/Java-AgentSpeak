@@ -21,9 +21,8 @@ a Java 8 implementation has been created. The version defines an additional Agen
 
 ### Rules
 
-* Rules are similar to actions on the _calling semantik_ (will be full executed)
-* Rules are equal to plans on the _running semantik_ (can call in parallel)
-* Rules has got a constraint for execution
+* Rules are logical expression
+* Each logical condition is run in parrallel (default) all results will be collected
 * Rules return a boolean value which defines fail (false) and success (true)
 
 ### Plans
