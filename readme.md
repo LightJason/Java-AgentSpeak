@@ -11,7 +11,7 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Beliefs describe implicit the current state of the agent
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
 * Messages and Percepts are beliefs
-* Beliefs must be exists iif a plan condition is computed (beliefs can be exist on-fly)
+* Beliefs must be exists iif a expression is computed (beliefs can be exist on-fly)
 
 ### Actions
 
