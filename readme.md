@@ -19,9 +19,16 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Actions can fail
 * Actions return a boolean value which defines fail (false) and success (true)
 
+### Rules
+
+* Rules are similar to actions on the _calling semantik_ (will be full executed)
+* Rules are equal to plans on the _running semantik_ (can call in parallel)
+* Rules has got a constraint for execution
+* Rules return a boolean value which defines fail (false) and success (true)
+
 ### Plans
 
-* Plans are _sequences of actions_
+* Plans are _sequences of actions and rules_
 * Plan can be used a condition to define a constraint for execution
 * Plans fail iif an action fails
 * _Atomic Plans_ cannot be fail, only the actions of the plans can fail

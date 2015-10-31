@@ -51,7 +51,7 @@ beliefs :
     ;
 
 rules :
-    ( literal Arrow logical_expression Dot )*
+    ( literal RuleOperator logical_expression Dot )*
     ;
 
 plans :
@@ -303,12 +303,9 @@ Minus                  : '-';
 MinusPlus              : '-+';
 DoubleExclamationmark  : '!!';
 Questionmark           : '?';
-/**
- * the arrow (plan begin)  is
- * defined like in Prolog and
- * the Jason format
- **/
-Arrow                  : '<-' | ':-';
+
+Arrow                  : '<-';
+RuleOperator           : ':-';
 At                     : '@';
 Colon                  : ':';
 Semicolon              : ';';
