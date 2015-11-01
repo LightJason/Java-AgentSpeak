@@ -22,7 +22,7 @@ a Java 8 implementation has been created. The version defines an additional Agen
 
 ### Rules
 
-* Rules are logical or arithmetic expression
+* Rules are _sequences of logical or arithmetic expression_
 * Rule expressions are run sequentially (default), but can be run in parallel
 * Arithmetic expression will be return true iif they can unified
 * Logic expression return their result
