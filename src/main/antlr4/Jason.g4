@@ -60,10 +60,11 @@ plans :
 
 /**
  * rules can be used an annotation
+ * and can use arithmetic expression
  **/
 rule :
     ( At atomic_formula )?
-    literal RuleOperator logical_expression Dot
+    literal RuleOperator (logical_expression | arithmetic_expression) Dot
     ;
 
 /**
@@ -179,7 +180,7 @@ relation_expression :
 
 arithmetic_expression :
     arithmetic_term
-    ( ( dashoperator | pointoperator ) arithmetic_term )*
+    ( ( dashoperator | pointoperator | Assign ) arithmetic_term )*
     ;
 // ---------------------------------------------------------------------------------------
 
@@ -355,6 +356,7 @@ Xor                    : '^' | 'xor';
  **/
 Increment              : '++';
 Decrement              : '--';
+Assign                 : '=';
 AssignIncrement        : '+=';
 AssignDecrement        : '-=';
 AssignMultiply         : '*=';
