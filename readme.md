@@ -37,11 +37,11 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Plans returns a boolean value which defines fail (false) and success (true)
 * On each cycle a plan will be full executed
  
-### Goals
+### Intentions
  
-* Goals are a _sequences of planes_
-* Each agent can track _more than one goal_
-* On each cycle all _current plans_ within the _current goals_ are run in parallel
-* If a plan fails a _repair plan_ is searched and will be the current plan in the next cycle
-* After a plan is finished the goal will be checked if it can be achieved
+* Intentions are a _sequences of planes_
+* Each agent can track _more than one intention_
+* On each cycle all _current plans_ within the _current intention list_ are run in parallel
+* If a plan fails a _repair plan_ is searched and will be the _current plan_ in the next cycle
+* After a plan is finished the intention will be checked if it can be achieved
 
