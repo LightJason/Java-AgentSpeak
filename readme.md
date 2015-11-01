@@ -42,9 +42,16 @@ a Java 8 implementation has been created. The version defines an additional Agen
  
 ### Intentions
  
-* Intentions are a _sequences of planes_
+* Intentions are a _sequences of plans_
 * Each agent can track _more than one intention_
 * On each cycle all _current plans_ within the _current intention list_ are run in parallel
 * If a plan fails a _repair plan_ is searched and will be the _current plan_ in the next cycle for the intention
 * After a plan is finished the intention will be checked if it can be achieved otherwise it fails
 
+## Todos
+
+* define _fixed_ annotions like:
+    * _expires_ to remove a plan / belief / rule
+    * _fuzzy_ to define a fuzziness value of a plan / belief / rule
+    * _parallel_ to run a plan / intention / rule in parallel
+    * _atomic_ to run a plan / intention / rule always with return value true
