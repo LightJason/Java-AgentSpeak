@@ -44,4 +44,25 @@ public interface IAgent extends Callable<IAgent>
      */
     public String getName();
 
+    /**
+     * sets the agent to a suspend state
+     * @note only the beliefbase update is called
+     * but the agent cycle is not run
+     */
+    public void suspend();
+
+    /**
+     * returns a boolean if the agent is suspending
+     *
+     * @return boolean for suspending
+     */
+    public boolean isSuspending();
+
+    /**
+     * wakes-up the agent from the suspend state
+     */
+    public void resume();
+
+
+
 }

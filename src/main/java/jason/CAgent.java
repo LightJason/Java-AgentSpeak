@@ -28,10 +28,18 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CAgent implements IAgent
 {
+    /**
+     * suspending state
+     */
+    private volatile boolean m_suspend = false;
     /**
      * curent agent cycle
      */
@@ -102,23 +110,43 @@ public class CAgent implements IAgent
 
 
     @Override
-    public int getCycle()
+    public final int getCycle()
     {
         return m_cycle;
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return m_name;
     }
 
     @Override
+    public final synchronized void suspend()
+    {
+        m_suspend = true;
+    }
+
+    @Override
+    public final boolean isSuspending()
+    {
+        return m_suspend;
+    }
+
+    @Override
+    public final synchronized void resume()
+    {
+        m_suspend = false;
+    }
+
+    @Override
     public IAgent call() throws Exception
     {
-        // update beliefbase
+        // run beliefbase update, because
+        // environment can be changed
         m_beliefbase.update();
-
+        if (m_suspend)
+            return this;
 
         // increment cycle
         m_cycle++;

@@ -55,3 +55,25 @@ a Java 8 implementation has been created. The version defines an additional Agen
     * _fuzzy_ to define a fuzziness value of a plan / belief / rule
     * _parallel_ to run a plan / intention / rule in parallel
     * _atomic_ to run a plan / intention / rule always with return value true
+* define agent cycle    
+
+```java
+
+@Override
+public IAgent call() throws Exception
+{
+    // run beliefbase update, because
+    // environment can be changed
+    m_beliefbase.update();
+    if (m_suspend)
+        return this;
+        
+    // run agent-cycle
+    m_intentions.parallelStream().map( i -> i.execute( m_cycle ) );
+    m_cycle++;
+
+    // return changed agent
+    return this;
+}
+
+```
