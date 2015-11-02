@@ -331,12 +331,12 @@ False                  : 'false' | 'fail';
  * allow on logical and-concationation
  * also c- and pascal-style-based & / and
  **/
-And                    : '&' | '&&' | 'and';
+And                    : '&' | '&&';
 /**
  * allow on logical or-concationation
  * also c- and pascal-style-based | / or
  **/
-Or                     : '|' | '||' | 'or';
+Or                     : '|' | '||';
 /**
  * define an logical xor-definition
  **/

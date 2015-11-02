@@ -71,3 +71,4 @@ true otherwise it returns false
     * _fuzzy_ to define a fuzziness value of a plan / belief
     * _parallel_ to run a plan / parallel
     * _atomic_ to run a plan always with return value true
+* semantic definition of ``!!`` must be defined
