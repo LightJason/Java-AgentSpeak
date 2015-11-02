@@ -27,7 +27,7 @@ grammar Jason;
 // --- agent-base structure -------------------------------------------------------------
 agent :
     initial_beliefs
-    initial_goals
+    initial_plan
     plans
     ;
 
@@ -35,7 +35,7 @@ initial_beliefs :
     beliefs
     ;
 
-initial_goals :
+initial_plan :
     Exclamationmark
     literal
     Dot
@@ -102,6 +102,7 @@ body_formula :
     | while_loop
     | logical_expression
     | arithmetic_expression
+    | assignment_expression
     ;
 
 block_formula :
@@ -170,6 +171,12 @@ arithmetic_expression :
     arithmetic_term
     ( ( dashoperator | pointoperator | Assign ) arithmetic_term )*
     ;
+
+assignment_expression :
+    variable
+    Equal
+    term
+    ;
 // ---------------------------------------------------------------------------------------
 
 
@@ -179,6 +186,7 @@ term :
     literal
     | list
     | arithmetic_expression
+    | relation_expression
     | variable
     | String
     ;
