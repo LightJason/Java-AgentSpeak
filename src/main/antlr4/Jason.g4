@@ -100,6 +100,8 @@ body_formula :
     | relation_expression
     | if_else
     | while_loop
+    | for_loop
+    | foreach_loop
     | logical_expression
     | arithmetic_expression
     | assignment_expression
@@ -123,12 +125,12 @@ while_loop :
     ;
 
 for_loop :
-    For LRoundBracket body_formula? Semicolon logical_expression Semicolon body_formula? RRoundBracket
+    For LRoundBracket assignment_expression? Semicolon logical_expression Semicolon assignment_expression? RRoundBracket
     block_formula
     ;
 
 foreach_loop :
-    For LRoundBracket body_formula RRoundBracket
+    For LRoundBracket term RRoundBracket
     block_formula
     ;
 
