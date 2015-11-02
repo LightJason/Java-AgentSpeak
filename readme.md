@@ -18,27 +18,22 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Actions will be run immediatly
 * Actions can fail (false) or success (true)
 * There is no difference between internal and external actions
-* Actions return a boolean value which defines fail (false) and success (true)
+* Actions can be also an logical expression (assignments are logical expression that are always true)
 
-### Rules
-
-* Rules are _sequences of logical or arithmetic expression_
-* Rule expressions are run sequentially (default), but can be run in parallel
-* Arithmetic expression will be return true iif they can unified
-* Logic expression return their result
-* Rules return a boolean value which defines fail (false) and success (true)
 
 ### Plans
 
-* Plans are _sequences of actions and/or rules_
-* Plans can be used a condition to define a constraint for execution
-* Plans fail iif an action or rule fail
-* _Atomic Plans_ cannot be fail, only the actions or rules within can fail
-* Plans are run actions and rules sequentially
-* _Parallel Plans_ run actions and rules in parallel
-* All action results will be concatinate with a logical __and__ to calculate the plan result value
+* Everything is a plan
+* Plans are _sequences of actions and/or plans_
+* Plans has got an optional context, that defines a constraint for execution (default is true and matchs always)
+* Plans fail iif an item of the plan fail
 * Plans returns a boolean value which defines fail (false) and success (true)
-* On each cycle a plan will be full executed
+* _Atomic Plans_ cannot be fail, only the items within can fail
+* Plans are run items sequentially
+* _Parallel Plans_ run actions and rules in parallel
+* All items results will be concatinate with a logical __and__ to calculate the plan result value
+* On each cycle a plan will be full executed with all subplans
+
  
 ### Intentions
  
@@ -47,6 +42,7 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * On each cycle all _current plans_ within the _current intention list_ are run in parallel
 * If a plan fails a _repair plan_ is searched and will be the _current plan_ in the next cycle for the intention
 * After a plan is finished the intention will be checked if it can be achieved otherwise it fails
+
 
 ## Todos
 

@@ -33,7 +33,6 @@ agent :
 
 initial_beliefs :
     beliefs
-    rules
     ;
 
 initial_goals :
@@ -50,21 +49,8 @@ beliefs :
     ( literal Dot )*
     ;
 
-rules :
-    rule*
-    ;
-
 plans :
     plan*
-    ;
-
-/**
- * rules can be used an annotation
- * and can use arithmetic expression
- **/
-rule :
-    ( At atomic_formula )?
-    literal RuleOperator (logical_expression | arithmetic_expression) Dot
     ;
 
 /**
@@ -76,7 +62,7 @@ plan :
     ( At atomic_formula )?
     trigger_event
     ( Colon context )?
-    ( Arrow body )?
+    ( (Arrow | RuleOperator) body )?
     Dot
     ;
 // ---------------------------------------------------------------------------------------
@@ -114,6 +100,8 @@ body_formula :
     | relation_expression
     | if_else
     | while_loop
+    | logical_expression
+    | arithmetic_expression
     ;
 
 block_formula :
