@@ -154,11 +154,11 @@ simple_logical_expression :
     True
     | False
     | literal
-    | relation_expression
+    | ( Negotation? relation_expression )
     ;
 
 relation_expression :
-    relation_term
+    ( relation_term | arithmetic_expression )
     ( comparator relation_term )+
     ;
 
@@ -199,6 +199,7 @@ list :
 
 relation_term :
     literal
+    | arithmetic_term
     | LRoundBracket arithmetic_expression RRoundBracket
     ;
 
