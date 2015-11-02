@@ -112,7 +112,7 @@ block_formula :
     ;
 
 if_else :
-    If LRoundBracket logical_expression LRoundBracket
+    If LRoundBracket logical_expression RRoundBracket
     block_formula
     ( Else block_formula )?
     ;
@@ -197,7 +197,7 @@ list :
 
 relation_term :
     literal
-    | arithmetic_expression
+    | LRoundBracket arithmetic_expression RRoundBracket
     ;
 
 arithmetic_term :
