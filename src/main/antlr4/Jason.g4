@@ -27,7 +27,7 @@ grammar Jason;
 // --- agent-base structure -------------------------------------------------------------
 agent :
     initial_beliefs
-    initial_plan
+    initial_goal?
     plans
     ;
 
@@ -35,7 +35,7 @@ initial_beliefs :
     beliefs
     ;
 
-initial_plan :
+initial_goal :
     Exclamationmark
     literal
     Dot

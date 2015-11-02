@@ -12,6 +12,9 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
 * Messages and Percepts are beliefs
 * Beliefs must be exists iif a expression is computed (beliefs can be exist on-fly)
+* Belief addition triggers an plan with the structure ```+belief```
+* Belief deletion triggers an plan with the structure ```-belief```
+
 
 ### Actions
 
@@ -31,25 +34,34 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * _Atomic Plans_ cannot be fail, only the items within can fail
 * Plans are run items sequentially
 * _Parallel Plans_ run actions in parallel
-* All items results will be concatinate with a logical __and__ to calculate the plan result value
-* On each cycle a plan will be full executed with all subplans
+* If the plan calls an _achievment goal addition_, the goal is added to the global goal list and the current plan is
+paused until the goal is reached
+* If the plan calls an _achievment goal deletion_, the goal is removed from the global goal list iif exists and returns
+true otherwise it returns false
+* If the plan calls an _test goal_ than the plan calls the test goal immediatly
+* All items results will be concatinate with a logical _and_ to calculate the plan result value
 
 ### Rules
 
 * Rules are plans with a context, that uses the default value true
 
+ 
 ### Goals
 
-* Goals are Rules or plans which are executed by matching the context constraint on the unification process
+* Goals are a _sequences of plans_
+* On agent start, there can exists one _initial goal_
+* Each agent can track _more than one goal_ otherwise the agent suspends
+* Goals are triggering by external events which will match by the goal name
+* Goals will be resolved into plans with equal name (and allowed context)
+* Goals are run in parallel independed from other goals
 
- 
-### Intentions
- 
-* Intentions are a _sequences of plans_
-* Each agent can track _more than one intention_
-* On each cycle all _current plans_ within the _current intention list_ are run in parallel
-* If a plan fails a _repair plan_ is searched and will be the _current plan_ in the next cycle for the intention
-* After a plan is finished the intention will be checked if it can be achieved otherwise it fails
+## Running Semantics
+
+1. run update beliefbase with creating belief addition / deletion events
+2. run agent cycle
+    2.1 trigger plan, which match the belief-events
+    2.2 trigger plan, which match the goal-events
+3. increment cycle value
 
 
 ## Todos
@@ -59,25 +71,3 @@ a Java 8 implementation has been created. The version defines an additional Agen
     * _fuzzy_ to define a fuzziness value of a plan / belief
     * _parallel_ to run a plan / parallel
     * _atomic_ to run a plan always with return value true
-* define agent cycle    
-
-```java
-
-@Override
-public IAgent call() throws Exception
-{
-    // run beliefbase update, because
-    // environment can be changed
-    m_beliefbase.update();
-    if (m_suspend)
-        return this;
-        
-    // run agent-cycle
-    m_intentions.parallelStream().map( i -> i.execute( m_cycle ) );
-    m_cycle++;
-
-    // return changed agent
-    return this;
-}
-
-```
