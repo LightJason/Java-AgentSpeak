@@ -198,7 +198,7 @@ term_list :
 
 list :
     LAngularBracket
-    ( term ( Comma term )*  ( Or ( list | variable ) )  )
+    term ( Comma term )*
     RAngularBracket
     ;
 

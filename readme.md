@@ -30,9 +30,17 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Plans returns a boolean value which defines fail (false) and success (true)
 * _Atomic Plans_ cannot be fail, only the items within can fail
 * Plans are run items sequentially
-* _Parallel Plans_ run actions and rules in parallel
+* _Parallel Plans_ run actions in parallel
 * All items results will be concatinate with a logical __and__ to calculate the plan result value
 * On each cycle a plan will be full executed with all subplans
+
+### Rules
+
+* Rules are plans with a context, that uses the default value true
+
+### Goals
+
+* Goals are Rules or plans which are executed by matching the context constraint on the unification process
 
  
 ### Intentions
@@ -47,10 +55,10 @@ a Java 8 implementation has been created. The version defines an additional Agen
 ## Todos
 
 * define _fixed_ annotions like:
-    * _expires_ to remove a plan / belief / rule
-    * _fuzzy_ to define a fuzziness value of a plan / belief / rule
-    * _parallel_ to run a plan / intention / rule in parallel
-    * _atomic_ to run a plan / intention / rule always with return value true
+    * _expires_ to remove a plan / belief automatically 
+    * _fuzzy_ to define a fuzziness value of a plan / belief
+    * _parallel_ to run a plan / parallel
+    * _atomic_ to run a plan always with return value true
 * define agent cycle    
 
 ```java
