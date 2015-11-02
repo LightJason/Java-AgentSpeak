@@ -106,9 +106,9 @@ body_formula :
     ;
 
 block_formula :
-    LAngularBracket
+    LCurvedBracket
     body_formula*
-    RAngularBracket
+    RCurvedBracket
     ;
 
 if_else :
@@ -328,6 +328,8 @@ LRoundBracket          : '(';
 RRoundBracket          : ')';
 LAngularBracket        : '[';
 RAngularBracket        : ']';
+LCurvedBracket         : '{';
+RCurvedBracket         : '}';
 
 Negotation             : 'not';
 True                   : 'true' | 'success';
