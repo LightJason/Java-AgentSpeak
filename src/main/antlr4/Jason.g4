@@ -139,19 +139,13 @@ atomic_formula :
     ;
 
 logical_expression :
-    Negotation? simple_logical_expression
-    | Negotation? LRoundBracket logical_expression RRoundBracket
-    | logical_or_expression
-    ;
-
-logical_or_expression :
     logical_and_expression
-    ( Or logical_and_expression )*
+    ( Or logical_and_expression )?
     ;
 
 logical_and_expression :
     simple_logical_expression
-    ( (And | Xor) logical_expression )*
+    ( And logical_expression )?
     ;
 
 simple_logical_expression :
@@ -159,7 +153,6 @@ simple_logical_expression :
     | False
     | literal
     | relation_expression
-    | variable
     ;
 
 relation_expression :
