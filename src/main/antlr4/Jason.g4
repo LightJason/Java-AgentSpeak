@@ -92,8 +92,10 @@ rule :
 // --- agent-expression-context ----------------------------------------------------------
 plan_trigger :
     ( Plus | Minus )
+    // @todo is the exclamationmark definition corrent?
     Exclamationmark?
-    atomic_formula
+    atom
+    ( LRoundBracket term_list RRoundBracket )?
     ;
 
 literal :
@@ -110,11 +112,10 @@ context :
 body :
     body_formula
     ( Semicolon body_formula )*
-    | True
     ;
 
 body_formula :
-    actionoperator literal
+    (belief_actionoperator | plan_actionoperator) literal
     | atomic_formula
     | variable
     | relation_expression
@@ -253,11 +254,14 @@ pointoperator :
     | Modulo
     ;
 
-actionoperator :
+plan_actionoperator :
     Exclamationmark
     | DoubleExclamationmark
     | Questionmark
-    | Plus
+    ;
+
+belief_actionoperator :
+    Plus
     | Minus
     | MinusPlus
     ;

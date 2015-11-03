@@ -80,3 +80,9 @@ true otherwise it returns false and the plan can fail
     * _atomic_ to run a plan always with return value true
     * _priority_ value to define the matching priority
 * semantic definition of ``!!`` must be defined
+* atomic_formula arithmetic term fix
+* body_formula check literal / atomic_forumla rule
+* plan / beliefname did not be equal
+* arithmetic expression operator priority
+* Prolog list ```[H|T]``` structure
+* fix repair plan definition only for goals
