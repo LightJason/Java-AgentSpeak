@@ -61,13 +61,15 @@ rules :
 /**
  * plan modified against the original Jason grammar,
  * so a context is optional (on default true) and the
- * plan body is also optional
+ * plan body is also optional and after the body
+ * can be setup a repair plan
  */
 plan :
     ( At atomic_formula )?
-    trigger_event
+    plan_trigger
     ( Colon context )?
     ( Arrow body )?
+    ( Arrow literal )?
     Dot
     ;
 
@@ -78,7 +80,8 @@ plan :
 rule :
     ( At atomic_formula )?
     atom
-    ( RuleOperator body )?
+    RuleOperator
+    body
     Dot
     ;
 
@@ -87,10 +90,10 @@ rule :
 
 
 // --- agent-expression-context ----------------------------------------------------------
-trigger_event :
+plan_trigger :
     ( Plus | Minus )
-    ( Exclamationmark | Questionmark )?
-    literal
+    Exclamationmark?
+    atomic_formula
     ;
 
 literal :
@@ -164,7 +167,7 @@ logical_expression :
 
 logical_and_expression :
     simple_logical_expression
-    ( And logical_expression )?
+    ( (And | Xor) logical_expression )?
     ;
 
 simple_logical_expression :
