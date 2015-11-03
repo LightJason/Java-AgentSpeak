@@ -294,7 +294,6 @@ integernumber :
 
 variable :
     UpperCaseLetter ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
-    | Underscore
     ;
 
 /**
