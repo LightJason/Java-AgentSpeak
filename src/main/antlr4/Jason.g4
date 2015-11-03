@@ -28,6 +28,7 @@ grammar Jason;
 agent :
     initial_beliefs
     initial_goal?
+    rules
     plans
     ;
 
@@ -53,6 +54,10 @@ plans :
     plan*
     ;
 
+rules :
+    rule*
+    ;
+
 /**
  * plan modified against the original Jason grammar,
  * so a context is optional (on default true) and the
@@ -62,9 +67,21 @@ plan :
     ( At atomic_formula )?
     trigger_event
     ( Colon context )?
-    ( (Arrow | RuleOperator) body )?
+    ( Arrow body )?
     Dot
     ;
+
+/**
+ * rules are similar to plans
+ * but without context and trigger event
+ **/
+rule :
+    ( At atomic_formula )?
+    atom
+    ( RuleOperator body )?
+    Dot
+    ;
+
 // ---------------------------------------------------------------------------------------
 
 

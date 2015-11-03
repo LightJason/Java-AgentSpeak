@@ -26,24 +26,30 @@ a Java 8 implementation has been created. The version defines an additional Agen
 
 ### Plans
 
-* Everything is a plan
-* Plans are _sequences of actions and/or plans_
+* Plans are _sequences of actions and/or rules_
 * Plans has got an optional context, that defines a constraint for execution (default is true and matchs always)
 * Plans fail iif an item of the plan fail
 * Plans returns a boolean value which defines fail (false) and success (true)
 * _Atomic Plans_ cannot be fail, only the items within can fail
 * Plans are run items sequentially
-* _Parallel Plans_ run actions in parallel
+* _Parallel Plans_ run items in parallel
 * If the plan calls an _achievment goal addition_, the goal is added to the global goal list and the current plan is
 paused until the goal is reached
 * If the plan calls an _achievment goal deletion_, the goal is removed from the global goal list iif exists and returns
-true otherwise it returns false
+true otherwise it returns false and the plan can fail
 * If the plan calls an _test goal_ than the plan calls the test goal immediatly
 * All items results will be concatinate with a logical _and_ to calculate the plan result value
 
 ### Rules
 
-* Rules are plans with a context, that uses the default value true
+* Rules are similar to plans with a context, that uses the default value true
+* Rules cannot be triggered by a goal, so they must be called from a plan
+* Rules run immediatly
+* Rules run sequentially
+* _Parallel Rules_ run items in parallel
+* _Atomic Rules_ cannot be fail, only the items within can fail
+* Rules returns a boolean value which defines fail (false) and success (true)
+* All items results will be concatinate with a logical _and_ to calculate the plan result value
 
  
 ### Goals
@@ -71,4 +77,5 @@ true otherwise it returns false
     * _fuzzy_ to define a fuzziness value of a plan / belief
     * _parallel_ to run a plan / parallel
     * _atomic_ to run a plan always with return value true
+    * _priority_ value to define the matching priority
 * semantic definition of ``!!`` must be defined
