@@ -122,6 +122,18 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public IBeliefBase getBeliefBase()
+    {
+        return m_beliefbase;
+    }
+
+    @Override
+    public void triggerGoal( final String p_goal )
+    {
+
+    }
+
+    @Override
     public final synchronized void suspend()
     {
         m_suspend = true;

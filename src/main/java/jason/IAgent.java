@@ -45,6 +45,18 @@ public interface IAgent extends Callable<IAgent>
     public String getName();
 
     /**
+     * returns the beliefbase
+     */
+    public IBeliefBase getBeliefBase();
+
+    /**
+     * trigger a goal
+     *
+     * @param p_goal name as string
+     */
+    public void triggerGoal( final String p_goal );
+
+    /**
      * sets the agent to a suspend state
      * @note only the beliefbase update is called
      * but the agent cycle is not run
