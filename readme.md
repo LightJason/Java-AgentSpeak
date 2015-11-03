@@ -42,7 +42,7 @@ true otherwise it returns false and the plan can fail
 
 ### Rules
 
-* Rules are similar to plans with a context, that uses the default value true
+* Rules are similar to plans without the context condition
 * Rules cannot be triggered by a goal, so they must be called from a plan
 * Rules run immediatly
 * Rules run sequentially
@@ -65,8 +65,9 @@ true otherwise it returns false and the plan can fail
 
 1. run update beliefbase with creating belief addition / deletion events
 2. run agent cycle
-    2.1 trigger plan, which match the belief-events
-    2.2 trigger plan, which match the goal-events
+    2.1 collect plan, which match the belief-events
+    2.2 collect plan, which match the goal-events
+    2.4 run collected plans in parallel
 3. increment cycle value
 
 
