@@ -75,6 +75,18 @@ public interface IAgent extends Callable<IAgent>
      */
     public void resume();
 
+    /**
+     * clones the current agent
+     *
+     * @return new agent instance
+     */
+    public IAgent clone();
 
+    /**
+     * clones the agent and adds a new beliefbase
+     *
+     * @return new agent instance with an own beliefbase
+     */
+    public IAgent clone( final IBeliefBase p_beliefbase );
 
 }

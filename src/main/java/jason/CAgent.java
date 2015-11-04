@@ -161,6 +161,16 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public IAgent clone() {
+        return null;
+    }
+
+    @Override
+    public IAgent clone(IBeliefBase p_beliefbase) {
+        return null;
+    }
+
+    @Override
     public IAgent call() throws Exception
     {
         // run beliefbase update, because
