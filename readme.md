@@ -72,7 +72,7 @@ true otherwise it returns false and the plan can fail
     1. collect plans, which match the belief-events
     2. collect plans, which match the goal-events
     3. create plan execution list of _earmarked executing plans_ and _collected plans_
-    4. execute collected plans in parallel and apply the following rules 
+    4. execute collected plans in parallel and apply the following rules for each body formula
 
         1. if an item is a _action_ or _rule_ execute it immediatly
         2. if an item is a _test goal_ try to find within the current context a
@@ -84,6 +84,7 @@ true otherwise it returns false and the plan can fail
             * begins with ```!!``` the plan which is mached by the goal is executated immediatly
 
     5. if a plan is finished check plan towards the _waiting state plan list_ and move waiting plans to the _earmarked executing plans list_
+        * if the plan fails add if exists the _repair plan_ to the _earmarked executing plans list_
 
 4. increment cycle value
 
