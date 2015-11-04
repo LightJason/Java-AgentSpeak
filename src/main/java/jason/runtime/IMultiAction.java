@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package jason;
+package jason.runtime;
 
 import java.util.List;
 import java.util.Map;

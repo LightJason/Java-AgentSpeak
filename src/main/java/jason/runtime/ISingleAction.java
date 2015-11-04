@@ -21,24 +21,19 @@
  * @endcond
  */
 
-package jason;
-
-import java.util.List;
+package jason.runtime;
 
 /**
- * action interface
+ * Created by pkraus on 31.10.15.
  */
-public interface IAction
+public interface ISingleAction
 {
 
     /**
-     * runs the action
+     * returns the name of the action
      *
-     * @param p_agent agent that runs the action
-     * @param p_name name of the action
-     * @param p_parameter parameter of the action
-     * @return boolean flag if the action is success or fail
+     * @return name
      */
-    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
+    public String getName();
 
 }

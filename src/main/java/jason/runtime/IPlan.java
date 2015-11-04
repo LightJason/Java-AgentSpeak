@@ -21,7 +21,9 @@
  * @endcond
  */
 
-package jason;
+package jason.runtime;
+
+import java.util.Set;
 
 /**
  * interface of plan
@@ -29,17 +31,36 @@ package jason;
 public interface IPlan
 {
 
+    /**
+     * returns the name of the plan
+     * which matchs also the goal
+     * definition
+     *
+     * @return name
+     */
     public String getName();
 
+    /**
+     * checks the context of the plan
+     * and return if the plan can be
+     * executed
+     *
+     * @return true iif the plan can be executed
+     */
+    public boolean isExecutable();
 
-    public EExecution getExecutionBehaviour();
+    /**
+     * runs the plan and returns the result
+     *
+     * @return execution state
+     */
+    public EExecutionState execute();
 
-    public boolean execute();
-
-
-    public enum EExecution
-    {
-        Parallel, Sequential;
-    }
+    /**
+     * returns the current state of the plan
+     *
+     * @return current / last execution state
+     */
+    public EExecutionState getState();
 
 }

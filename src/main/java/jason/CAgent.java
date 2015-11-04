@@ -49,9 +49,9 @@ public class CAgent implements IAgent
      */
     protected final String m_name;
     /**
-     * thread-safe map with plans
+     * thread-safe map with all existing plans
      */
-    protected final Map<String, List<Plan>> m_plans = new ConcurrentHashMap<>();
+    protected final Map<String, Set<Plan>> m_plans = new ConcurrentHashMap<>();
     /**
      * beliefbase of the agent
      */
