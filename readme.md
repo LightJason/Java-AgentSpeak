@@ -68,16 +68,22 @@ true otherwise it returns false and the plan can fail
 1. run update beliefbase with creating belief addition / deletion events
 2. if agent is in suspend, stop execution
 3. run agent cycle
-    3.1 collect plans, which match the belief-events
-    3.2 collect plans, which match the goal-events
-    3.3 create plan execution list of _earmarked executing plans_ and _collected plans_
-    3.4 execute collected plans in parallel
+
+    1. collect plans, which match the belief-events
+    2. collect plans, which match the goal-events
+    3. create plan execution list of _earmarked executing plans_ and _collected plans_
+    4. execute collected plans in parallel
+
         3.4.1 if an item is a _action_ or _rule_ execute it immediatly
         3.4.2 if an item is a _test goal_ try to find within the current context a
+
             3.4.2.1 rule, if found execute rule immediatly, result is passed for the test
             3.4.2.1 plan, if found set current plan to _waiting state_ and execute found plan within the next cycle
+
         3.4.3 if an item is an _achievment goal_ add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
-    3.5 if a plan is finished set the plan to the _earmarked executing plans list_
+
+    5. if a plan is finished set the plan to the _earmarked executing plans list_
+
 4. increment cycle value
 
 ### Static-Beliefs
