@@ -80,7 +80,9 @@ true otherwise it returns false and the plan can fail
             1. rule, if found execute rule immediatly, result is passed for the test
             2. plan, if found set current plan to _waiting state_ and execute found plan within the next cycle
 
-        3. if an item is an _achievment goal_ add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
+        3. if an item is an _achievment goal_
+            * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
+            * begins with ```!!``` the plan which is mached by the goal is executated immediatly
 
     5. if a plan is finished set the plan to the _earmarked executing plans list_
 
@@ -109,7 +111,6 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
     * _parallel_ to run a plan / parallel
     * _atomic_ to run a plan always with return value true
     * _priority_ value to define the matching priority
-* semantic definition of ``!!`` must be defined
 * atomic_formula arithmetic term fix
 * body_formula check literal / atomic_forumla rule
 * plan / beliefname did not be equal
