@@ -23,15 +23,13 @@
 
 package jason;
 
+import jason.runtime.IAction;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CAgent implements IAgent
@@ -50,6 +48,8 @@ public class CAgent implements IAgent
     protected final String m_name;
     /**
      * thread-safe map with all existing plans
+     * @note plan list ust be a linked-hashset
+     * to store the execution order of the plans
      */
     protected final Map<String, Set<Plan>> m_plans = new ConcurrentHashMap<>();
     /**
@@ -60,44 +60,53 @@ public class CAgent implements IAgent
 
     /**
      * ctor
+     *
+     * @param p_action map with all usable actions
+     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
      * @throws IOException is throwing on parsing error
      */
-    public CAgent(final InputStream p_stream ) throws IOException
+    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream ) throws IOException
     {
-        this( p_stream, null, null );
+        this( p_action, p_stream, null, null );
     }
 
     /**
      * ctor
+     *
+     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
      * @param p_beliefbase beliefbase
      * @throws IOException is throwing on parsing error
      */
-    public CAgent(final InputStream p_stream, final IBeliefBase p_beliefbase ) throws IOException
+    public CAgent( final Map<String, IAction> p_action,final InputStream p_stream, final IBeliefBase p_beliefbase ) throws IOException
     {
-        this(p_stream, p_beliefbase, null);
+        this( p_action, p_stream, p_beliefbase, null );
     }
 
     /**
      * ctor
+     *
+     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
      * @param p_name agent name
      * @throws IOException is throwing on parsing error
      */
-    public CAgent(final InputStream p_stream, final String p_name ) throws IOException
+    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream, final String p_name ) throws IOException
     {
-        this( p_stream, null, p_name);
+        this( p_action, p_stream, null, p_name );
     }
 
     /**
      * ctor
+     *
+     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
      * @param p_beliefbase beliefbase
      * @param p_name agent name
      * @throws IOException is throwing on parsing error
      */
-    public CAgent(final InputStream p_stream, final IBeliefBase p_beliefbase, final String p_name ) throws IOException
+    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream, final IBeliefBase p_beliefbase, final String p_name ) throws IOException
     {
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;

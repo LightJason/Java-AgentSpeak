@@ -82,7 +82,7 @@ true otherwise it returns false and the plan can fail
         1. if an item is an _action_ or _rule_ execute it immediatly
         2. if an item is a _test goal_ try to find within the current context a
             * rule, if found execute rule immediatly, result is passed for the test
-            * plan, if found set current plan to _waiting state_ and and found plan to the _earmarked executing plans list_
+            * plan, if found set current plan to _waiting state_ and add found plan to the _earmarked executing plans list_
 
         3. if an item is an _achievment goal_ and
             * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
