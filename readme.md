@@ -64,11 +64,16 @@ true otherwise it returns false and the plan can fail
 ## Running Semantics
 
 1. run update beliefbase with creating belief addition / deletion events
-2. run agent cycle
-    2.1 collect plan, which match the belief-events
-    2.2 collect plan, which match the goal-events
-    2.4 run collected plans in parallel
-3. increment cycle value
+2. if agent is in suspend, stop execution
+3. run agent cycle
+    3.1 collect plan, which match the belief-events
+    3.2 collect plan, which match the goal-events
+    3.4 run collected plans in parallel
+        3.4.1 if an item is a _action_ or _rule_ execute it immediatly
+        3.4.2 if an item is a _test goal_, try to find a matching plan (first plan which context is true, will be used)
+        3.4.3 if an item is an _achievment goal_ add it to the goal-event list and set the current plan to wait
+    3.5 if a plan is finished notify waiting plans to process
+4. increment cycle value
 
 
 ## Todos
