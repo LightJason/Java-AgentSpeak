@@ -72,18 +72,18 @@ true otherwise it returns false and the plan can fail
     1. collect plans, which match the belief-events
     2. collect plans, which match the goal-events
     3. create plan execution list of _earmarked executing plans_ and _collected plans_
-    4. execute collected plans in parallel
+    4. execute collected plans in parallel and apply the following rules 
 
         1. if an item is a _action_ or _rule_ execute it immediatly
         2. if an item is a _test goal_ try to find within the current context a
             * rule, if found execute rule immediatly, result is passed for the test
             * plan, if found set current plan to _waiting state_ and execute found plan within the next cycle
 
-        3. if an item is an _achievment goal_
+        3. if an item is an _achievment goal_ and
             * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
             * begins with ```!!``` the plan which is mached by the goal is executated immediatly
 
-    5. if a plan is finished set the plan to the _earmarked executing plans list_
+    5. if a plan is finished check plan towards the _waiting state plan list_ and move waiting plans to the _earmarked executing plans list_
 
 4. increment cycle value
 
