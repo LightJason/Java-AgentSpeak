@@ -63,17 +63,32 @@ true otherwise it returns false and the plan can fail
 
 ## Running Semantics
 
+### Agent-Cycle
+
 1. run update beliefbase with creating belief addition / deletion events
 2. if agent is in suspend, stop execution
 3. run agent cycle
-    3.1 collect plan, which match the belief-events
-    3.2 collect plan, which match the goal-events
-    3.4 run collected plans in parallel
+    3.1 collect plans, which match the belief-events
+    3.2 collect plans, which match the goal-events
+    3.3 create plan execution list of _earmarked executing plans_ and _collected plans_
+    3.4 execute collected plans in parallel
         3.4.1 if an item is a _action_ or _rule_ execute it immediatly
-        3.4.2 if an item is a _test goal_, try to find a matching plan (first plan which context is true, will be used)
-        3.4.3 if an item is an _achievment goal_ add it to the goal-event list and set the current plan to wait
-    3.5 if a plan is finished notify waiting plans to process
+        3.4.2 if an item is a _test goal_ try to find within the current context a
+            3.4.2.1 rule, if found execute rule immediatly, result is passed for the test
+            3.4.2.1 plan, if found set current plan to _waiting state_ and execute found plan within the next cycle
+        3.4.3 if an item is an _achievment goal_ add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
+    3.5 if a plan is finished set the plan to the _earmarked executing plans list_
 4. increment cycle value
+
+### Static-Beliefs
+
+default _unchangeable / unmodifiable_ beliefs which are exist always within the beliefbase
+
+* _myname_ agent name
+* _mycycle_ current agent cylce which generates always -+ event
+* _mysuspend_ number of the suspending cycles, generate + and -+ event
+* _myawake_ exists when the agent is resumed from suspending, generate + event in cycle t and - event in cycle t+1
+
 
 
 ## Todos
