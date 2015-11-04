@@ -79,16 +79,16 @@ true otherwise it returns false and the plan can fail
     3. create plan execution list of _earmarked executing plans_ and _collected plans_
     4. execute collected plans in parallel and apply the following rules for each body formula
 
-        1. if an item is a _action_ or _rule_ execute it immediatly
+        1. if an item is an _action_ or _rule_ execute it immediatly
         2. if an item is a _test goal_ try to find within the current context a
             * rule, if found execute rule immediatly, result is passed for the test
-            * plan, if found set current plan to _waiting state_ and execute found plan within the next cycle
+            * plan, if found set current plan to _waiting state_ and and found plan to the _earmarked executing plans list_
 
         3. if an item is an _achievment goal_ and
             * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
             * begins with ```!!``` the plan which is mached by the goal is executated immediatly
             
-        4. if an item is a belief
+        4. if an item is a belief-
             * addition, mark the literal for adding into the beliefbase
             * deletion, mark the literal for removing from beliefbase
             * changing, mark the literal with changes for update within the beliefbase
