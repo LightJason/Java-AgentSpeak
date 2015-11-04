@@ -65,7 +65,9 @@ true otherwise it returns false and the plan can fail
 
 ### Agent-Cycle
 
-1. run update beliefbase with creating belief addition / deletion events
+1. run update beliefbase
+    * write waiting / marked beliefs into the beliefbase
+    * generate beliefbase events
 
 2. if agent is in suspend
     * check wakup goal iif match, wake-up agent otherwise stop execution
@@ -85,6 +87,11 @@ true otherwise it returns false and the plan can fail
         3. if an item is an _achievment goal_ and
             * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
             * begins with ```!!``` the plan which is mached by the goal is executated immediatly
+            
+        4. if an item is a belief
+            * addition, mark the literal for adding into the beliefbase
+            * deletion, mark the literal for removing from beliefbase
+            * changing, mark the literal with changes for update within the beliefbase
 
     5. if a plan is finished check plan towards the _waiting state plan list_ and move waiting plans to the _earmarked executing plans list_
         * if the plan fails add if exists the _repair plan_ to the _earmarked executing plans list_
