@@ -54,7 +54,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @param p_goal name as string
      */
-    public void triggerGoal( final String p_goal );
+    public void trigger(final String p_goal );
 
     /**
      * sets the agent to a suspend state

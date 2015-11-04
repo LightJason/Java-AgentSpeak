@@ -34,4 +34,21 @@ public interface IBeliefBase
      */
     public void update();
 
+    /**
+     * returns a list of literals that are new added
+     * to the beliefbase
+     */
+    public List<Literal> getNewBeliefs();
+
+    /**
+     * returns a list of literals that are deleted from
+     * the beliefbase
+     */
+    public List<Literal> getRemovedBeliefs();
+
+    /**
+     * returns a list of literals that are changed since
+     */
+    public List<Literal> getChangedBeliefs();
+
 }
