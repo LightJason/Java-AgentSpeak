@@ -69,7 +69,7 @@ true otherwise it returns false and the plan can fail
     * write waiting / marked beliefs into the beliefbase
     * generate beliefbase events
 
-2. if agent is in suspend
+2. if agent is in suspend state
     * check wakup goal iif match, wake-up agent otherwise stop execution
     
 3. run agent cycle
