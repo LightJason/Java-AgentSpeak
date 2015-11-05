@@ -27,5 +27,5 @@ package jason.runtime;
  * execution type
  */
 public enum EExecutionAnnotation {
-    Parallel, Sequential, Atomic
+    Parallel, Sequential, Atomic, Only
 }

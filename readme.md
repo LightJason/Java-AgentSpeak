@@ -134,6 +134,7 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
     * _parallel_ to run a plan / parallel
     * _atomic_ to run a plan always with return value true
     * _priority_ value to define the matching priority
+    * _only_ value that set all current running plans to the waiting state, execute this plan only and reactivate the other plans after the execution is finished
 * atomic_formula arithmetic term fix
 * body_formula check literal / atomic_forumla rule
 * plan / beliefname did not be equal
