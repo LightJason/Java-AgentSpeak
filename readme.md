@@ -63,6 +63,24 @@ true otherwise it returns false and the plan can fail
 
 ## Running Semantics
 
+### Definitions
+
+| BDI-Convention    | Jason             | Light-Jason       |
+| ----------------- | ----------------- | ----------------- |
+| Action            | Internal-Action   | Action            |
+|                   | External-Action   |                   |
+| ----------------- | ----------------- | ----------------- |
+| Goal              | Goal              | Event (Planname)  |
+| ----------------- | ----------------- | ----------------- |
+| Intention         | Intention         | //                |
+| ----------------- | ----------------- | ----------------- |
+| Plan              | Plan              | Plan              |
+| ----------------- | ----------------- | ----------------- |
+|                   | Rule              | Rule              |
+| ----------------- | ----------------- | ----------------- |
+
+
+
 ### Agent-Cycle
 
 1. run update beliefbase
