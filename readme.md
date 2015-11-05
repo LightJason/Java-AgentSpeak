@@ -68,11 +68,12 @@ true otherwise it returns false and the plan can fail
 | BDI-Convention    | Jason             | Light-Jason       |
 | ----------------- | ----------------- | ----------------- |
 | Action            | Internal-Action   | Action            |
-|                   | External-Action   |                   |
+| Action            | External-Action   | Action            |
 | Goal              | Goal              | Event (Planname)  |
 | Intention         | Intention         | //                |
 | Plan              | Plan              | Plan              |
 |                   | Rule              | Rule              |
+|                   |                   | Repair-Plan       |
 
 
 ### Agent-Cycle
