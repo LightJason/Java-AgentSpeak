@@ -139,4 +139,4 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * plan / beliefname did not be equal
 * arithmetic expression operator priority
 * Prolog list ```[H|T]``` structure
-* fix repair plan definition only for goals
+* fix repair plan definition only for goals / syntax format and event handling must be discussed
