@@ -70,7 +70,7 @@ true otherwise it returns false and the plan can fail
 | Action            | Internal-Action   | Action            |
 | Action            | External-Action   | Action            |
 | Goal              | Goal              | Event (Planname)  |
-| Intention         | Intention         | //                |
+| Intention         | Intention         |                   |
 | Plan              | Plan              | Plan              |
 |                   | Rule              | Rule              |
 |                   |                   | Repair-Plan       |
