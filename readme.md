@@ -19,26 +19,26 @@ a Java 8 implementation has been created. The version defines an additional Agen
 ### Actions
 
 * Actions will be run immediatly
-* Actions can fail (false) or success (true)
+* Actions can fail (false) or succede (true)
 * There is no difference between internal and external actions
 * Actions can be also an logical expression (assignments are logical expression that are always true)
 
 
 ### Plans
 
-* Plans are _sequences of actions and/or rules_
+* Plans are _sequences of actions, rules and/or achievement goals_
 * Plans has got an optional context, that defines a constraint for execution (default is true and matchs always)
-* Plans fail iif an item of the plan fail
+* Plans fail iif an item of the plan fails
 * Plans returns a boolean value which defines fail (false) and success (true)
-* _Atomic Plans_ cannot be fail, only the items within can fail
-* Plans are run items sequentially
+* _Atomic Plans_ cannot fail, only the items within can fail
+* Plans run items in sequential order
 * _Parallel Plans_ run items in parallel
-* If the plan calls an _achievment goal addition_, the goal is added to the global goal list and the current plan is
-paused until the goal is reached
-* If the plan calls an _achievment goal deletion_, the goal is removed from the global goal list iif exists and returns
-true otherwise it returns false and the plan can fail
-* If the plan calls an _test goal_ than the plan calls the test goal immediatly
-* All items results will be concatinate with a logical _and_ to calculate the plan result value
+* If the plan calls an _achievment goal addition_, the goal is added to the global goal list and the current plan is paused until the goal is reached
+* If the plan calls an _achievment goal deletion_, the goal is removed from the global goal list iif exists and returns true otherwise it returns false and the plan can fail
+* If the plan calls an _test goal_ then the plan calls the test goal immediatly
+* All items results will be concatinated with a logical _and_ to calculate the plan result value
+* Each plan denotes its success/failure of execution in form of a ```(succeeds,fails)``` score, attached to its name in the static belief list _myplanscore_ (initialized at agent's birth with ```(0,0)```).
+  * After successful or failed execution of the whole plan, the corresponding value gets incremented
 
 ### Rules
 
@@ -54,7 +54,8 @@ true otherwise it returns false and the plan can fail
  
 ### Goals
 
-* Goals are a _sequences of plans_
+* Semantically a goal marks a certain state of the world an agent _whishes to bring about_ [AgentSpeak, p.40]
+* New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition/deletion_ which leads to the execution of a corresponding _plan_
 * On agent start, there can exists one _initial goal_
 * Each agent can track _more than one goal_ otherwise the agent suspends
 * Goals are triggering by external events which will match by the goal name
@@ -65,15 +66,16 @@ true otherwise it returns false and the plan can fail
 
 ### Definitions
 
-| BDI-Convention    | Jason             | Light-Jason       |
-| ----------------- | ----------------- | ----------------- |
-| Action            | Internal-Action   | Action            |
-| Action            | External-Action   | Action            |
-| Goal              | Goal              | Event (Planname)  |
-| Intention         | Intention         |                   |
-| Plan              | Plan              | Plan              |
-|                   | Rule              | Rule              |
-|                   |                   | Repair-Plan       |
+| BDI-Convention    | Jason                    | Light-Jason       |
+| ----------------- | ------------------------ | ----------------- |
+| Action            | Internal-Action          | Action            |
+| Action            | External-Action          | Action            |
+| Goal              | Goal                     | (?)               |
+| ?                 | Achievement Goal add/del | Event (Planname)  | 
+| Intention         | Intention                |                   |
+| Plan              | Plan                     | Plan              |
+|                   | Rule                     | Rule              |
+|                   |                          | Repair-Plan       |
 
 
 ### Agent-Cycle
