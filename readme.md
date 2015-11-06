@@ -125,6 +125,7 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * _myplanbasesize_ number of plans, generates no event
 * _myexecutionplans_ string list with current execution plan names, generates no event
 * _mywaitingplans_ string list with current waiting plan names, generates no event
+* _myplanscore_ string list with plan list and score value for defining successful finished
 
 
 
@@ -143,3 +144,5 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * arithmetic expression operator priority
 * Prolog list ```[H|T]``` structure
 * fix repair plan definition only for goals / syntax format and event handling must be discussed
+* callback for actions to create concurrent calls after the action is finished
+* communication definition / drop equal messages / each message triggers only one event
