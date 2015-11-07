@@ -116,7 +116,6 @@ body_formula :
     (belief_actionoperator | plan_actionoperator) literal
     | atomic_formula
     | variable
-    | relation_expression
     | if_else
     | while_loop
     | for_loop
@@ -154,37 +153,32 @@ foreach_loop :
     ;
 
 atomic_formula :
-    ( atom | variable | variable unaryoperator | variable binaryoperator arithmetic_term )
+    ( atom | variable | variable unaryoperator | variable binaryoperator arithmetic_expression )
     ( LRoundBracket term_list RRoundBracket )?
     ( LAngularBracket term_list RAngularBracket )?
     ;
 
 logical_expression :
-    logical_and_expression
-    ( Or logical_and_expression )?
+    logical_expression (And | Xor) logical_expression
+    | logical_expression Or logical_expression
+    | comparison_expression
+    | LRoundBracket logical_expression RRoundBracket
+    | boolean
     ;
 
-logical_and_expression :
-    simple_logical_expression
-    ( (And | Xor) logical_expression )?
-    ;
-
-simple_logical_expression :
-    True
-    | False
-    | literal
-    | ( Negotation? relation_expression )
-    ;
-
-relation_expression :
-    ( relation_term | arithmetic_expression )
-    ( comparator relation_term )+
+comparison_expression :
+    arithmetic_expression comparator arithmetic_expression
+    | LRoundBracket comparison_expression RRoundBracket
     ;
 
 arithmetic_expression :
-    arithmetic_term
-    ( ( dashoperator | pointoperator | Assign ) arithmetic_term )*
+    arithmetic_expression pointoperator arithmetic_expression
+    | arithmetic_expression dashoperator arithmetic_expression
+    | (Minus | Plus) arithmetic_expression
+    | LRoundBracket arithmetic_expression RRoundBracket
+    | number
     ;
+
 
 assignment_expression :
     variable
@@ -199,8 +193,6 @@ assignment_expression :
 term :
     literal
     | list
-    | arithmetic_expression
-    | relation_expression
     | variable
     | String
     ;
@@ -216,18 +208,7 @@ list :
     RAngularBracket
     ;
 
-relation_term :
-    literal
-    | arithmetic_term
-    | LRoundBracket arithmetic_expression RRoundBracket
-    ;
 
-arithmetic_term :
-    number
-    | variable
-    | Minus arithmetic_term
-    | LRoundBracket arithmetic_expression RRoundBracket
-    ;
 
 comparator :
     Less
@@ -295,6 +276,12 @@ floatnumber :
 
 integernumber :
     (Plus | Minus)? Digit+
+    ;
+
+boolean :
+    True
+    | False
+    | literal
     ;
 
 variable :
