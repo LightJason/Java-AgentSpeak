@@ -26,9 +26,9 @@ grammar Jason;
 
 // --- agent-base structure -------------------------------------------------------------
 agent :
-    initial_beliefs
+    initial_beliefs?
     initial_goal?
-    rules
+    rules?
     plans
     ;
 
@@ -47,15 +47,15 @@ initial_goal :
 
 // --- agent-behaviour structure ---------------------------------------------------------
 beliefs :
-    ( literal Dot )*
+    ( literal Dot )+
     ;
 
 plans :
-    plan*
+    plan+
     ;
 
 rules :
-    rule*
+    rule+
     ;
 
 /**
@@ -105,8 +105,6 @@ literal :
 
 context :
     logical_expression
-    | True
-    | False
     ;
 
 body :
@@ -130,7 +128,7 @@ body_formula :
 
 block_formula :
     LCurvedBracket
-    body_formula*
+    body
     RCurvedBracket
     ;
 
