@@ -171,7 +171,6 @@ arithmetic_expression :
     | variable
     ;
 
-
 assignment_expression :
     variable
     Equal
@@ -260,7 +259,14 @@ number :
 floatnumber :
     (Plus | Minus)? Digit Dot Digit+
     | Pi
-    | EulerNumber
+    | Euler
+    | Gravity
+    | Avogadro
+    | Boltzmann
+    | Electron
+    | Proton
+    | Neutron
+    | Lightspeed
     ;
 
 integernumber :
@@ -314,8 +320,16 @@ If                     : 'if';
 Else                   : 'else';
 While                  : 'while';
 For                    : 'for';
+
 Pi                     : 'pi';
-EulerNumber            : 'euler';
+Euler                  : 'euler';
+Gravity                : 'gravity';
+Avogadro               : 'avogadro';
+Boltzmann              : 'boltzmann';
+Electron               : 'electron';
+Proton                 : 'proton';
+Neutron                : 'neutron';
+Lightspeed             : 'lightspeed';
 
 LRoundBracket          : '(';
 RRoundBracket          : ')';
