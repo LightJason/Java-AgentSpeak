@@ -95,7 +95,7 @@ plan_trigger :
     // @todo is the exclamationmark definition corrent?
     Exclamationmark?
     atom
-    ( LRoundBracket term_list RRoundBracket )?
+    ( LRoundBracket list RRoundBracket )?
     ;
 
 literal :
@@ -115,7 +115,6 @@ body :
 body_formula :
     (belief_actionoperator | plan_actionoperator) literal
     | atomic_formula
-    | variable
     | if_else
     | while_loop
     | for_loop
@@ -153,9 +152,9 @@ foreach_loop :
     ;
 
 atomic_formula :
-    ( atom | variable | variable unaryoperator | variable binaryoperator arithmetic_expression )
-    ( LRoundBracket term_list RRoundBracket )?
-    ( LAngularBracket term_list RAngularBracket )?
+    atom
+    ( LRoundBracket list RRoundBracket )?
+    ( LAngularBracket list RAngularBracket )?
     ;
 
 logical_expression :
@@ -177,6 +176,7 @@ arithmetic_expression :
     | (Minus | Plus) arithmetic_expression
     | LRoundBracket arithmetic_expression RRoundBracket
     | number
+    | variable
     ;
 
 
@@ -192,23 +192,15 @@ assignment_expression :
 // --- complex-data-types ----------------------------------------------------------------
 term :
     literal
-    | list
+    | LAngularBracket list RAngularBracket
     | variable
     | String
     ;
 
-term_list :
+list :
     term
     ( Comma term )*
     ;
-
-list :
-    LAngularBracket
-    term ( Comma term )*
-    RAngularBracket
-    ;
-
-
 
 comparator :
     Less
