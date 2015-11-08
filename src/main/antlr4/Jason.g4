@@ -67,7 +67,7 @@ rules :
 plan :
     ( At atomic_formula )?
     plan_trigger
-    ( Colon context )?
+    ( Colon plan_context )?
     ( Arrow body )?
     ( Arrow literal )?
     Dot
@@ -85,25 +85,13 @@ rule :
     Dot
     ;
 
-// ---------------------------------------------------------------------------------------
-
-
-
-// --- agent-expression-context ----------------------------------------------------------
 plan_trigger :
     ( Plus | Minus )
-    // @todo is the exclamationmark definition corrent?
-    Exclamationmark?
     atom
     ( LRoundBracket list RRoundBracket )?
     ;
 
-literal :
-    StrongNegotation?
-    atomic_formula
-    ;
-
-context :
+plan_context :
     logical_expression
     ;
 
@@ -111,7 +99,11 @@ body :
     body_formula
     ( Semicolon body_formula )*
     ;
+// ---------------------------------------------------------------------------------------
 
+
+
+// --- agent-expression-context ----------------------------------------------------------
 body_formula :
     (belief_actionoperator | plan_actionoperator) literal
     | atomic_formula
@@ -190,6 +182,11 @@ assignment_expression :
 
 
 // --- complex-data-types ----------------------------------------------------------------
+literal :
+    StrongNegotation?
+    atomic_formula
+    ;
+
 term :
     literal
     | LAngularBracket list RAngularBracket
