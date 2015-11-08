@@ -321,15 +321,15 @@ Else                   : 'else';
 While                  : 'while';
 For                    : 'for';
 
-Pi                     : 'PI';
-Euler                  : 'EULER';
-Gravity                : 'GRAVITY';
-Avogadro               : 'AVOGADRO';
-Boltzmann              : 'BOLTZMANN';
-Electron               : 'ELECTRON';
-Proton                 : 'PROTON';
-Neutron                : 'NEUTRON';
-Lightspeed             : 'LIGHTSPEED';
+Pi                     : 'pi';
+Euler                  : 'euler';
+Gravity                : 'gravity';
+Avogadro               : 'avogadro';
+Boltzmann              : 'boltzmann';
+Electron               : 'electron';
+Proton                 : 'proton';
+Neutron                : 'neutron';
+Lightspeed             : 'lightspeed';
 
 LRoundBracket          : '(';
 RRoundBracket          : ')';
