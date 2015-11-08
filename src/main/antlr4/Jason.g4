@@ -258,15 +258,7 @@ number :
 
 floatnumber :
     (Plus | Minus)? Digit Dot Digit+
-    | Pi
-    | Euler
-    | Gravity
-    | Avogadro
-    | Boltzmann
-    | Electron
-    | Proton
-    | Neutron
-    | Lightspeed
+    | constant
     ;
 
 integernumber :
@@ -281,6 +273,18 @@ boolean :
 
 variable :
     UpperCaseLetter ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    ;
+
+constant :
+    Pi
+    | Euler
+    | Gravity
+    | Avogadro
+    | Boltzmann
+    | Electron
+    | Proton
+    | Neutron
+    | Lightspeed
     ;
 
 /**
