@@ -145,8 +145,7 @@ foreach_loop :
     ;
 
 logical_expression :
-    logical_expression (And | Xor) logical_expression
-    | logical_expression Or logical_expression
+    logical_expression (Xor | And | Or) logical_expression
     | comparison_expression
     | LRoundBracket logical_expression RRoundBracket
     | boolean
