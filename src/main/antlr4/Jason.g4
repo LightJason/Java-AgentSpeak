@@ -47,7 +47,7 @@ initial_goal :
 
 // --- agent-behaviour structure ---------------------------------------------------------
 belief :
-    STRONGNEGOTATION atom DOT
+    STRONGNEGOTATION clause DOT
     ;
 
 plans :
@@ -65,7 +65,7 @@ rules :
  * can be setup a repair plan
  */
 plan :
-    ( AT atomic_formula )?
+    ( AT clause )?
     plan_trigger
     ( COLON plan_context )?
     ( ARROW body )?
@@ -78,8 +78,8 @@ plan :
  * but without context and trigger event
  **/
 rule :
-    ( AT atomic_formula )?
-    atom
+    ( AT clause )?
+    clause
     RULEOPERATOR
     body
     DOT
@@ -107,11 +107,11 @@ body :
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
     (belief_actionoperator | plan_actionoperator) atom
-    | atomic_formula
+    | clause
     | if_else
-    //| while_loop
-    //| for_loop
-    //| foreach_loop
+    | while_loop
+    | for_loop
+    | foreach_loop
     | logical_expression
     | arithmetic_expression
     | assignment_expression
@@ -149,6 +149,7 @@ logical_expression :
     | comparison_expression
     | LROUNDBRACKET logical_expression RROUNDBRACKET
     | boolean
+    | clause
     ;
 
 comparison_expression :
@@ -175,22 +176,24 @@ assignment_expression :
 
 
 // --- complex-data-types ----------------------------------------------------------------
-atomic_formula :
-    atom
-    ( LROUNDBRACKET list RROUNDBRACKET )?
-    ( LANGULARBRACKET list RANGULARBRACKET )?
-    ;
-
 term :
     | LANGULARBRACKET list RANGULARBRACKET
     | atom
     | variable
     | string
+    | number
+    | clause
     ;
 
 list :
     term
     ( COMMA term )*
+    ;
+
+clause :
+    atom
+    ( LROUNDBRACKET list RROUNDBRACKET )?
+    ( LANGULARBRACKET list RANGULARBRACKET )?
     ;
 
 /**
@@ -274,12 +277,12 @@ number :
     ;
 
 floatnumber :
-    (PLUS | MINUS)? Digit DOT Digit+
+    (PLUS | MINUS)? DIGIT DOT DIGIT+
     | constant
     ;
 
 integernumber :
-    (PLUS | MINUS)? Digit+
+    (PLUS | MINUS)? DIGIT+
     ;
 
 boolean :
