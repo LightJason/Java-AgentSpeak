@@ -37,9 +37,9 @@ initial_beliefs :
     ;
 
 initial_goal :
-    Exclamationmark
+    EXCLAMATIONMARK
     atom
-    Dot
+    DOT
     ;
 // ---------------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ initial_goal :
 
 // --- agent-behaviour structure ---------------------------------------------------------
 beliefs :
-    ( StrongNegotation atom Dot )+
+    ( STRONGNEGOTATION atom DOT )+
     ;
 
 plans :
@@ -65,12 +65,12 @@ rules :
  * can be setup a repair plan
  */
 plan :
-    ( At atomic_formula )?
+    ( AT atomic_formula )?
     plan_trigger
-    ( Colon plan_context )?
-    ( Arrow body )?
-    ( Arrow atom )?
-    Dot
+    ( COLON plan_context )?
+    ( ARROW body )?
+    ( ARROW atom )?
+    DOT
     ;
 
 /**
@@ -78,18 +78,18 @@ plan :
  * but without context and trigger event
  **/
 rule :
-    ( At atomic_formula )?
+    ( AT atomic_formula )?
     atom
-    RuleOperator
+    RULEOPERATOR
     body
-    Dot
+    DOT
     ;
 
 plan_trigger :
-    ( Plus | Minus )
-    Exclamationmark
+    ( PLUS | MINUS )
+    EXCLAMATIONMARK
     atom
-    ( LRoundBracket list RRoundBracket )?
+    ( LROUNDBRACKET list RROUNDBRACKET )?
     ;
 
 plan_context :
@@ -98,7 +98,7 @@ plan_context :
 
 body :
     body_formula
-    ( Semicolon body_formula )*
+    ( SEMICOLON body_formula )*
     ;
 // ---------------------------------------------------------------------------------------
 
@@ -118,56 +118,56 @@ body_formula :
     ;
 
 block_formula :
-    LCurvedBracket
+    LCURVEDBRACKET
     body
-    RCurvedBracket
+    RCURVEDBRACKET
     ;
 
 if_else :
-    If LRoundBracket logical_expression RRoundBracket
+    IF LROUNDBRACKET logical_expression RROUNDBRACKET
     block_formula
-    ( Else block_formula )?
+    ( ELSE block_formula )?
     ;
 
 while_loop :
-    While LRoundBracket logical_expression RRoundBracket
+    WHILE LROUNDBRACKET logical_expression RROUNDBRACKET
     block_formula
     ;
 
 for_loop :
-    For LRoundBracket assignment_expression? Semicolon logical_expression Semicolon assignment_expression? RRoundBracket
+    FOR LROUNDBRACKET assignment_expression? SEMICOLON logical_expression SEMICOLON assignment_expression? RROUNDBRACKET
     block_formula
     ;
 
 foreach_loop :
-    For LRoundBracket term RRoundBracket
+    FOR LROUNDBRACKET term RROUNDBRACKET
     block_formula
     ;
 
 logical_expression :
-    logical_expression (Xor | And | Or) logical_expression
+    logical_expression (XOR | AND | OR) logical_expression
     | comparison_expression
-    | LRoundBracket logical_expression RRoundBracket
+    | LROUNDBRACKET logical_expression RROUNDBRACKET
     | boolean
     ;
 
 comparison_expression :
     arithmetic_expression comparator arithmetic_expression
-    | LRoundBracket comparison_expression RRoundBracket
+    | LROUNDBRACKET comparison_expression RROUNDBRACKET
     ;
 
 arithmetic_expression :
     arithmetic_expression pointoperator arithmetic_expression
     | arithmetic_expression dashoperator arithmetic_expression
-    | Minus arithmetic_expression
-    | LRoundBracket arithmetic_expression RRoundBracket
+    | MINUS arithmetic_expression
+    | LROUNDBRACKET arithmetic_expression RROUNDBRACKET
     | number
     | variable
     ;
 
 assignment_expression :
     variable
-    Equal
+    EQUAL
     term
     ;
 // ---------------------------------------------------------------------------------------
@@ -177,20 +177,20 @@ assignment_expression :
 // --- complex-data-types ----------------------------------------------------------------
 atomic_formula :
     atom
-    ( LRoundBracket list RRoundBracket )?
-    ( LAngularBracket list RAngularBracket )?
+    ( LROUNDBRACKET list RROUNDBRACKET )?
+    ( LANGULARBRACKET list RANGULARBRACKET )?
     ;
 
 term :
-    | LAngularBracket list RAngularBracket
+    | LANGULARBRACKET list RANGULARBRACKET
     | atom
     | variable
-    | String
+    | string
     ;
 
 list :
     term
-    ( Comma term )*
+    ( COMMA term )*
     ;
 
 /**
@@ -200,66 +200,66 @@ list :
  * will ignored always
  **/
 atom :
-    Dot?
+    DOT?
     LowerCaseLetter
-    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
 /**
  * variables are defined like Prolog variables
  **/
 variable :
-    ( UpperCaseLetter | Underscore )
-    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    ( UPPERCASELETTER | UNDERSCORE )
+    ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
 
 
 plan_actionoperator :
-    Exclamationmark
-    | DoubleExclamationmark
-    | Questionmark
+    EXCLAMATIONMARK
+    | DOUBLEEXCLAMATIONMARK
+    | QUESTIONMARK
     ;
 
 belief_actionoperator :
-    Plus
-    | Minus
-    | MinusPlus
+    PLUS
+    | MINUS
+    | MINUSPLUS
     ;
 
 comparator :
-    Less
-    | LessEqual
-    | Equal
-    | NotEqual
-    | Greater
-    | GreaterEqual
-    | Unify
-    | Deconstruct
+    LESS
+    | LESSEQUAL
+    | EQUAL
+    | NOTEQUAL
+    | GREATER
+    | GREATEREQUAL
+    | UNIFY
+    | DECONSTRUCT
     ;
 
 dashoperator :
-    Plus
-    | Minus
+    PLUS
+    | MINUS
     ;
 
 pointoperator :
-    Pow
-    | Multiply
-    | Divide
-    | Modulo
+    POW
+    | MULTIPLY
+    | DIVIDE
+    | MODULO
     ;
 
 unaryoperator :
-    Increment
-    | Decrement
+    INCREMENT
+    | DECREMENT
     ;
 
 binaryoperator :
-    AssignIncrement
-    | AssignDecrement
-    | AssignMultiply
-    | AssignDivide
+    ASSIGNINCREMENT
+    | ASSIGNDECREMENT
+    | ASSIGNMULTIPLY
+    | ASSIGNDIVIDE
     ;
 
 /**
@@ -274,144 +274,150 @@ number :
     ;
 
 floatnumber :
-    (Plus | Minus)? Digit Dot Digit+
+    (PLUS | MINUS)? Digit DOT Digit+
     | constant
     ;
 
 integernumber :
-    (Plus | Minus)? Digit+
+    (PLUS | MINUS)? Digit+
     ;
 
 boolean :
-    True
-    | False
+    TRUE
+    | FALSE
     ;
 
 constant :
-    Pi
-    | Euler
-    | Gravity
-    | Avogadro
-    | Boltzmann
-    | Electron
-    | Proton
-    | Neutron
-    | Lightspeed
+    PI
+    | EULER
+    | GRAVITY
+    | AVOGADRO
+    | BOLTZMANN
+    | ELECTRON
+    | PROTON
+    | NEUTRON
+    | LIGHTSPEED
+    ;
+
+string :
+    SINGLEQUOTESTRING
+    | DOUBLEQUOTESTRING
     ;
 // ---------------------------------------------------------------------------------------
 
 
 
 // --- character structures --------------------------------------------------------------
-Exclamationmark            : '!';
-StrongNegotation           : '~';
-Comma                      : ',';
-Plus                       : '+';
-Minus                      : '-';
-MinusPlus                  : '-+';
-DoubleExclamationmark      : '!!';
-Questionmark               : '?';
+EXCLAMATIONMARK            : '!';
+STRONGNEGOTATION           : '~';
+COMMA                      : ',';
+PLUS                       : '+';
+MINUS                      : '-';
+MINUSPLUS                  : '-+';
+DOUBLEEXCLAMATIONMARK      : '!!';
+QUESTIONMARK               : '?';
 
-Arrow                      : '<-';
-RuleOperator               : ':-';
-At                         : '@';
-Colon                      : ':';
-Semicolon                  : ';';
-Dot                        : '.';
-Underscore                 : '_';
+ARROW                      : '<-';
+RULEOPERATOR               : ':-';
+AT                         : '@';
+COLON                      : ':';
+SEMICOLON                  : ';';
+DOT                        : '.';
+UNDERSCORE                 : '_';
 
-If                         : 'if';
-Else                       : 'else';
-While                      : 'while';
-For                        : 'for';
+IF                         : 'if';
+ELSE                       : 'else';
+WHILE                      : 'while';
+FOR                        : 'for';
 
-Pi                         : 'pi';
-Euler                      : 'euler';
-Gravity                    : 'gravity';
-Avogadro                   : 'avogadro';
-Boltzmann                  : 'boltzmann';
-Electron                   : 'electron';
-Proton                     : 'proton';
-Neutron                    : 'neutron';
-Lightspeed                 : 'lightspeed';
+PI                         : 'pi';
+EULER                      : 'euler';
+GRAVITY                    : 'gravity';
+AVOGADRO                   : 'avogadro';
+BOLTZMANN                  : 'boltzmann';
+ELECTRON                   : 'electron';
+PROTON                     : 'proton';
+NEUTRON                    : 'neutron';
+LIGHTSPEED                 : 'lightspeed';
 
-LRoundBracket              : '(';
-RRoundBracket              : ')';
-LAngularBracket            : '[';
-RAngularBracket            : ']';
-LCurvedBracket             : '{';
-RCurvedBracket             : '}';
+LROUNDBRACKET              : '(';
+RROUNDBRACKET              : ')';
+LANGULARBRACKET            : '[';
+RANGULARBRACKET            : ']';
+LCURVEDBRACKET             : '{';
+RCURVEDBRACKET             : '}';
 
-Negotation                 : 'not';
-True                       : 'true' | 'success';
-False                      : 'false' | 'fail';
+NEGOTATION                 : 'not';
+TRUE                       : 'true' | 'success';
+FALSE                      : 'false' | 'fail';
 /**
  * allow on logical and-concationation
  * also c- and pascal-style-based & / and
  **/
-And                        : '&' | '&&';
+AND                        : '&' | '&&';
 /**
  * allow on logical or-concationation
  * also c- and pascal-style-based | / or
  **/
-Or                         : '|' | '||';
+OR                         : '|' | '||';
 /**
  * define an logical xor-definition
  **/
-Xor                        : '^' | 'xor';
+XOR                        : '^' | 'xor';
 
 /**
  * variable operators
  **/
-Increment                  : '++';
-Decrement                  : '--';
-Assign                     : '=';
-AssignIncrement            : '+=';
-AssignDecrement            : '-=';
-AssignMultiply             : '*=';
-AssignDivide               : '/=';
+INCREMENT                  : '++';
+DECREMENT                  : '--';
+ASSIGN                     : '=';
+ASSIGNINCREMENT            : '+=';
+ASSIGNDECREMENT            : '-=';
+ASSIGNMULTIPLY             : '*=';
+ASSIGNDIVIDE               : '/=';
 
-Less                       : '<';
-LessEqual                  : '<=';
-Greater                    : '>';
-GreaterEqual               : '>=';
-Equal                      : '==';
-NotEqual                   : '\\==';
-Unify                      : '=';
-Deconstruct                : '=..';
+LESS                       : '<';
+LESSEQUAL                  : '<=';
+GREATER                    : '>';
+GREATEREQUAL               : '>=';
+EQUAL                      : '==';
+NOTEQUAL                   : '\\==';
+UNIFY                      : '=';
+DECONSTRUCT                : '=..';
 /**
  * allow on pow also the key-word represenation
  **/
-Pow                        : '**' | 'pow';
+POW                        : '**' | 'pow';
 /**
  * allow on multiply the key-word representation
  **/
-Multiply                   : '*' | 'mul';
+MULTIPLY                   : '*' | 'mul';
 /**
  * allow on divide the key-word definition
  **/
-Divide                     : '/' | 'div';
-Modulo                     : '%' | 'mod';
+DIVIDE                     : '/' | 'div';
+MODULO                     : '%' | 'mod';
 
-fragment LowerCaseLetter   : [a-z];
-fragment UpperCaseLetter   : [A-Z];
-fragment Digit             : [0-9];
+fragment LOWERCASELETTER   : [a-z];
+fragment UPPERCASELETTER   : [A-Z];
+fragment DIGIT             : [0-9];
 /**
  * string can be definied in single- and double-quotes
  **/
-String                     : ( '\'' ('\'\'' | ~('\''))* '\'' ) | ( '"' ('""' | ~('"'))* '"' );
+SINGLEQUOTESTRING          : '\'' ('\'\'' | ~('\''))* '\'';
+DOUBLEQUOTESTRING          : '"' ('""' | ~('"'))* '"';
 // ---------------------------------------------------------------------------------------
 
 
 // --- skip items ------------------------------------------------------------------------
-Whitespace                 : (' ' | '\n' | '\t' | '\r')+ -> skip;
+WHITESPACE                 : (' ' | '\n' | '\t' | '\r')+ -> skip;
 /**
  * add for line-comment also #
  **/
-LineComment                : ('//' | '#') ~[\r\n]* -> skip;
+LINECOMMENT                : ('//' | '#') ~[\r\n]* -> skip;
 /**
  * block comment allowed within the grammar
  * default behaviour does not allow block comments
  **/
-Comment                    :   '/*' .*? '*/' -> skip;
+BLOCKCOMMENT                    :   '/*' .*? '*/' -> skip;
 // ---------------------------------------------------------------------------------------
