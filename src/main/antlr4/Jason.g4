@@ -329,7 +329,7 @@ For                        : 'for';
 
 Pi                         : 'pi';
 Euler                      : 'euler';
-Gravity                    : ' gravity';
+Gravity                    : 'gravity';
 Avogadro                   : 'avogadro';
 Boltzmann                  : 'boltzmann';
 Electron                   : 'electron';
