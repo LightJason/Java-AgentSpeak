@@ -286,7 +286,6 @@ integernumber :
 boolean :
     True
     | False
-    | literal
     ;
 
 constant :
