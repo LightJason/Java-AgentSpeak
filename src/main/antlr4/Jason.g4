@@ -159,7 +159,7 @@ comparison_expression :
 arithmetic_expression :
     arithmetic_expression pointoperator arithmetic_expression
     | arithmetic_expression dashoperator arithmetic_expression
-    | (Minus | Plus) arithmetic_expression
+    | Minus arithmetic_expression
     | LRoundBracket arithmetic_expression RRoundBracket
     | number
     | variable
