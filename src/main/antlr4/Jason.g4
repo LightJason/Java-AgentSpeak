@@ -305,115 +305,115 @@ constant :
 
 
 // --- character structures --------------------------------------------------------------
-Exclamationmark        : '!';
-StrongNegotation       : '~';
-Comma                  : ',';
-Plus                   : '+';
-Minus                  : '-';
-MinusPlus              : '-+';
-DoubleExclamationmark  : '!!';
-Questionmark           : '?';
+Exclamationmark            : '!';
+StrongNegotation           : '~';
+Comma                      : ',';
+Plus                       : '+';
+Minus                      : '-';
+MinusPlus                  : '-+';
+DoubleExclamationmark      : '!!';
+Questionmark               : '?';
 
-Arrow                  : '<-';
-RuleOperator           : ':-';
-At                     : '@';
-Colon                  : ':';
-Semicolon              : ';';
-Dot                    : '.';
-Underscore             : '_';
+Arrow                      : '<-';
+RuleOperator               : ':-';
+At                         : '@';
+Colon                      : ':';
+Semicolon                  : ';';
+Dot                        : '.';
+Underscore                 : '_';
 
-If                     : 'if';
-Else                   : 'else';
-While                  : 'while';
-For                    : 'for';
+If                         : 'if';
+Else                       : 'else';
+While                      : 'while';
+For                        : 'for';
 
-Pi                     : 'pi';
-Euler                  : 'euler';
-Gravity                : 'gravity';
-Avogadro               : 'avogadro';
-Boltzmann              : 'boltzmann';
-Electron               : 'electron';
-Proton                 : 'proton';
-Neutron                : 'neutron';
-Lightspeed             : 'lightspeed';
+Pi                         : 'pi';
+Euler                      : 'euler';
+Gravity                    : ' gravity';
+Avogadro                   : 'avogadro';
+Boltzmann                  : 'boltzmann';
+Electron                   : 'electron';
+Proton                     : 'proton';
+Neutron                    : 'neutron';
+Lightspeed                 : 'lightspeed';
 
-LRoundBracket          : '(';
-RRoundBracket          : ')';
-LAngularBracket        : '[';
-RAngularBracket        : ']';
-LCurvedBracket         : '{';
-RCurvedBracket         : '}';
+LRoundBracket              : '(';
+RRoundBracket              : ')';
+LAngularBracket            : '[';
+RAngularBracket            : ']';
+LCurvedBracket             : '{';
+RCurvedBracket             : '}';
 
-Negotation             : 'not';
-True                   : 'true' | 'success';
-False                  : 'false' | 'fail';
+Negotation                 : 'not';
+True                       : 'true' | 'success';
+False                      : 'false' | 'fail';
 /**
  * allow on logical and-concationation
  * also c- and pascal-style-based & / and
  **/
-And                    : '&' | '&&';
+And                        : '&' | '&&';
 /**
  * allow on logical or-concationation
  * also c- and pascal-style-based | / or
  **/
-Or                     : '|' | '||';
+Or                         : '|' | '||';
 /**
  * define an logical xor-definition
  **/
-Xor                    : '^' | 'xor';
+Xor                        : '^' | 'xor';
 
 /**
  * variable operators
  **/
-Increment              : '++';
-Decrement              : '--';
-Assign                 : '=';
-AssignIncrement        : '+=';
-AssignDecrement        : '-=';
-AssignMultiply         : '*=';
-AssignDivide           : '/=';
+Increment                  : '++';
+Decrement                  : '--';
+Assign                     : '=';
+AssignIncrement            : '+=';
+AssignDecrement            : '-=';
+AssignMultiply             : '*=';
+AssignDivide               : '/=';
 
-Less                   : '<';
-LessEqual              : '<=';
-Greater                : '>';
-GreaterEqual           : '>=';
-Equal                  : '==';
-NotEqual               : '\\==';
-Unify                  : '=';
-Deconstruct            : '=..';
+Less                       : '<';
+LessEqual                  : '<=';
+Greater                    : '>';
+GreaterEqual               : '>=';
+Equal                      : '==';
+NotEqual                   : '\\==';
+Unify                      : '=';
+Deconstruct                : '=..';
 /**
  * allow on pow also the key-word represenation
  **/
-Pow                    : '**' | 'pow';
+Pow                        : '**' | 'pow';
 /**
  * allow on multiply the key-word representation
  **/
-Multiply               : '*' | 'mul';
+Multiply                   : '*' | 'mul';
 /**
  * allow on divide the key-word definition
  **/
-Divide                 : '/' | 'div';
-Modulo                 : '%' | 'mod';
+Divide                     : '/' | 'div';
+Modulo                     : '%' | 'mod';
 
-LowerCaseLetter        : [a-z];
-UpperCaseLetter        : [A-Z];
-Digit                  : [0-9];
+fragment LowerCaseLetter   : [a-z];
+fragment UpperCaseLetter   : [A-Z];
+fragment Digit             : [0-9];
 /**
  * string can be definied in single- and double-quotes
  **/
-String                 : ( '\'' ('\'\'' | ~('\''))* '\'' ) | ( '"' ('""' | ~('"'))* '"' );
+String                     : ( '\'' ('\'\'' | ~('\''))* '\'' ) | ( '"' ('""' | ~('"'))* '"' );
 // ---------------------------------------------------------------------------------------
 
 
 // --- skip items ------------------------------------------------------------------------
-Whitespace             : (' ' | '\n' | '\t' | '\r')+ -> skip;
+Whitespace                 : (' ' | '\n' | '\t' | '\r')+ -> skip;
 /**
  * add for line-comment also #
  **/
-LineComment            : ('//' | '#') ~[\r\n]* -> skip;
+LineComment                : ('//' | '#') ~[\r\n]* -> skip;
 /**
  * block comment allowed within the grammar
  * default behaviour does not allow block comments
  **/
-Comment                :   '/*' .*? '*/' -> skip;
+Comment                    :   '/*' .*? '*/' -> skip;
 // ---------------------------------------------------------------------------------------
