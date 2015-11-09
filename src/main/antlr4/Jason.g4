@@ -33,7 +33,7 @@ agent :
     ;
 
 initial_beliefs :
-    beliefs
+    belief*
     ;
 
 initial_goal :
@@ -46,8 +46,8 @@ initial_goal :
 
 
 // --- agent-behaviour structure ---------------------------------------------------------
-beliefs :
-    ( STRONGNEGOTATION atom DOT )+
+belief :
+    STRONGNEGOTATION atom DOT
     ;
 
 plans :
@@ -201,7 +201,7 @@ list :
  **/
 atom :
     DOT?
-    LowerCaseLetter
+    LOWERCASELETTER
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
@@ -398,9 +398,9 @@ MULTIPLY                   : '*' | 'mul';
 DIVIDE                     : '/' | 'div';
 MODULO                     : '%' | 'mod';
 
-fragment LOWERCASELETTER   : [a-z];
-fragment UPPERCASELETTER   : [A-Z];
-fragment DIGIT             : [0-9];
+LOWERCASELETTER   : [a-z];
+UPPERCASELETTER   : [A-Z];
+DIGIT             : [0-9];
 /**
  * string can be definied in single- and double-quotes
  **/
