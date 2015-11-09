@@ -109,9 +109,9 @@ body_formula :
     (belief_actionoperator | plan_actionoperator) atom
     | atomic_formula
     | if_else
-    | while_loop
-    | for_loop
-    | foreach_loop
+    //| while_loop
+    //| for_loop
+    //| foreach_loop
     | logical_expression
     | arithmetic_expression
     | assignment_expression

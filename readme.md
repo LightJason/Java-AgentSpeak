@@ -70,15 +70,19 @@ a Java 8 implementation has been created. The version defines an additional Agen
 | ----------------- | ------------------------ | ----------------- |
 | Action            | Internal-Action          | Action            |
 | Action            | External-Action          | Action            |
-| Goal              | Goal                     | (?)               |
+| Goal              | Goal                     | Plan              |
 | ?                 | Achievement Goal add/del | Event (Planname)  | 
 | Intention         | Intention                |                   |
 | Plan              | Plan                     | Plan              |
 |                   | Rule                     | Rule              |
 |                   |                          | Repair-Plan       |
+| Desire            | Goal                     | Plan              |
+| Intention         | Goal                     | Plan              |
 
 
 ### Agent-Cycle
+
+Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 1. run update beliefbase
     * write waiting / marked beliefs into the beliefbase
@@ -138,7 +142,7 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
     * _fuzzy_ to define a fuzziness value of a plan / belief
     * _parallel_ to run a plan / parallel
     * _atomic_ to run a plan always with return value true
-    * _priority_ value to define the matching priority
+    * _priority_ value to define the matching priority (renamed to _significance_)
     * _only_ value that set all current running plans to the waiting state, execute this plan only and reactivate the other plans after the execution is finished
 * atomic_formula arithmetic term fix
 * body_formula check literal / atomic_forumla rule
