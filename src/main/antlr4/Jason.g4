@@ -38,7 +38,7 @@ initial_beliefs :
 
 initial_goal :
     Exclamationmark
-    literal
+    atom
     Dot
     ;
 // ---------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ initial_goal :
 
 // --- agent-behaviour structure ---------------------------------------------------------
 beliefs :
-    ( literal Dot )+
+    ( StrongNegotation atom Dot )+
     ;
 
 plans :
@@ -69,7 +69,7 @@ plan :
     plan_trigger
     ( Colon plan_context )?
     ( Arrow body )?
-    ( Arrow literal )?
+    ( Arrow atom )?
     Dot
     ;
 
@@ -87,6 +87,7 @@ rule :
 
 plan_trigger :
     ( Plus | Minus )
+    Exclamationmark
     atom
     ( LRoundBracket list RRoundBracket )?
     ;
@@ -105,7 +106,7 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    (belief_actionoperator | plan_actionoperator) literal
+    (belief_actionoperator | plan_actionoperator) atom
     | atomic_formula
     | if_else
     | while_loop
@@ -143,12 +144,6 @@ foreach_loop :
     block_formula
     ;
 
-atomic_formula :
-    atom
-    ( LRoundBracket list RRoundBracket )?
-    ( LAngularBracket list RAngularBracket )?
-    ;
-
 logical_expression :
     logical_expression (And | Xor) logical_expression
     | logical_expression Or logical_expression
@@ -181,14 +176,15 @@ assignment_expression :
 
 
 // --- complex-data-types ----------------------------------------------------------------
-literal :
-    StrongNegotation?
-    atomic_formula
+atomic_formula :
+    atom
+    ( LRoundBracket list RRoundBracket )?
+    ( LAngularBracket list RAngularBracket )?
     ;
 
 term :
-    literal
     | LAngularBracket list RAngularBracket
+    | atom
     | variable
     | String
     ;
@@ -196,6 +192,40 @@ term :
 list :
     term
     ( Comma term )*
+    ;
+
+/**
+ * atoms are defined like Prolog atoms
+ * @note compatibility with Jason syntax, an atom can begin
+ * with a dot, it represents an internal Jason action, the dot
+ * will ignored always
+ **/
+atom :
+    Dot?
+    LowerCaseLetter
+    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    ;
+
+/**
+ * variables are defined like Prolog variables
+ **/
+variable :
+    ( UpperCaseLetter | Underscore )
+    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
+    ;
+
+
+
+plan_actionoperator :
+    Exclamationmark
+    | DoubleExclamationmark
+    | Questionmark
+    ;
+
+belief_actionoperator :
+    Plus
+    | Minus
+    | MinusPlus
     ;
 
 comparator :
@@ -219,18 +249,6 @@ pointoperator :
     | Multiply
     | Divide
     | Modulo
-    ;
-
-plan_actionoperator :
-    Exclamationmark
-    | DoubleExclamationmark
-    | Questionmark
-    ;
-
-belief_actionoperator :
-    Plus
-    | Minus
-    | MinusPlus
     ;
 
 unaryoperator :
@@ -271,10 +289,6 @@ boolean :
     | literal
     ;
 
-variable :
-    UpperCaseLetter ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
-    ;
-
 constant :
     Pi
     | Euler
@@ -285,18 +299,6 @@ constant :
     | Proton
     | Neutron
     | Lightspeed
-    ;
-
-/**
- * to create compatibility to Jason syntax, an atom can begin
- * with a dot, it represents an internal Jason action in the structure
- * jason.stdlib.<atom name>
- * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
- **/
-atom :
-    Dot?
-    LowerCaseLetter
-    ( LowerCaseLetter | UpperCaseLetter | Underscore | Digit )*
     ;
 // ---------------------------------------------------------------------------------------
 
