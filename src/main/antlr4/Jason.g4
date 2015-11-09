@@ -87,7 +87,7 @@ rule :
 
 plan_trigger :
     ( PLUS | MINUS )
-    EXCLAMATIONMARK
+    EXCLAMATIONMARK?
     atom
     ( LROUNDBRACKET list RROUNDBRACKET )?
     ;
