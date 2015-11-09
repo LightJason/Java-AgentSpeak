@@ -137,13 +137,23 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 
 ## Todos
 
-* define _fixed_ annotions like:
-    * _expires_ to remove a plan / belief automatically 
-    * _fuzzy_ to define a fuzziness value of a plan / belief
-    * _parallel_ to run a plan / parallel
-    * _atomic_ to run a plan always with return value true
-    * _priority_ value to define the matching priority (renamed to _significance_)
-    * _only_ value that set all current running plans to the waiting state, execute this plan only and reactivate the other plans after the execution is finished
+* Plans:
+    * define _fixed_ annotations in plan labels, e.g. ```@label +planname```, like:
+        * _expires_ to remove a plan / belief automatically 
+        * _fuzzy_ to define a fuzziness value of a plan / belief
+        * _parallel_ to run a plan / parallel
+        * _atomic_ to run a plan always with return value true
+        * _priority_ value to define the matching priority (renamed to _significance_)
+        * _only_ value that set all current running plans to the waiting state, execute this plan only and reactivate the other plans after the execution is finished
+    *  (see p. 97f for comparison w/ Jason)
+ *  Beliefs:
+    * (?) define annotations describing the origin/state/reason/... of a belief, including fixed ones like:
+        * _source_
+        * _expires_
+        * ... (?)
+    * (?) also non-fixed for _Mental Notes_
+    * (?) -> needs grammar update @beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
+    * (see p. 37ff for comparison w/ Jason)
 * atomic_formula arithmetic term fix
 * body_formula check literal / atomic_forumla rule
 * plan / beliefname did not be equal
