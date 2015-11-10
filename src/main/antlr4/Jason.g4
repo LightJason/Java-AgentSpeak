@@ -193,9 +193,9 @@ foreach_loop :
  **/
 logical_expression :
     NEGATION logical_expression
+    | LROUNDBRACKET logical_expression RROUNDBRACKET
     | logical_expression (XOR | AND | OR) logical_expression
     | comparison_expression
-    | NEGATION? LROUNDBRACKET logical_expression RROUNDBRACKET
     | boolean
     | clause
     ;
@@ -205,7 +205,6 @@ logical_expression :
  **/
 comparison_expression :
     arithmetic_expression comparator arithmetic_expression
-    | LROUNDBRACKET comparison_expression RROUNDBRACKET
     ;
 
 /**
@@ -236,6 +235,16 @@ assignment_expression :
 // --- complex-data-types ----------------------------------------------------------------
 
 /**
+ * clause represent a structure existing
+ * atom, optional argument, optional annotations
+ **/
+clause :
+    atom
+    ( LROUNDBRACKET list RROUNDBRACKET )?
+    ( LANGULARBRACKET list RANGULARBRACKET )?
+    ;
+
+/**
  * terms are predictable structures
  **/
 term :
@@ -254,16 +263,6 @@ term :
 list :
     term ( COMMA term )*
     | variable LISTSEPARATOR variable
-    ;
-
-/**
- * clause represent a structure existing
- * atom, optional argument, optional annotations
- **/
-clause :
-    atom
-    ( LROUNDBRACKET list RROUNDBRACKET )?
-    ( LANGULARBRACKET list RANGULARBRACKET )?
     ;
 
 /**
