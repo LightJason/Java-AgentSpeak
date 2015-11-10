@@ -111,7 +111,7 @@ principle :
  * plan trigger which can match a goal or belief
  **/
 plan_trigger :
-    (plan_trigger_belief | plan_trigger_goal)
+    (plan_belief_trigger | plan_goal_trigger)
     atom
     ( LROUNDBRACKET list RROUNDBRACKET )?
     ;
@@ -119,7 +119,7 @@ plan_trigger :
 /**
  * plan trigger for a goal
  **/
-plan_trigger_goal :
+plan_goal_trigger :
     (PLUS | MINUS)
     EXCLAMATIONMARK
     ;
@@ -127,7 +127,7 @@ plan_trigger_goal :
 /**
  * plan trigger for a belief
  **/
-plan_trigger_belief :
+plan_belief_trigger :
     PLUS
     | MINUS
     | MINUSPLUS
@@ -153,7 +153,7 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    (belief_actionoperator | plan_actionoperator)? clause
+    (belief_action | plan_action)? clause
     | if_else
     | while_loop
     | for_loop
@@ -285,7 +285,7 @@ variable :
 /**
  * plan action operator
  **/
-plan_actionoperator :
+plan_action :
     EXCLAMATIONMARK
     | DOUBLEEXCLAMATIONMARK
     | QUESTIONMARK
@@ -294,7 +294,7 @@ plan_actionoperator :
 /**
  * belief-action operator
  **/
-belief_actionoperator :
+belief_action :
     PLUS
     | MINUS
     | MINUSPLUS
