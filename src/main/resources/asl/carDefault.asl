@@ -39,7 +39,7 @@
 
     <-
          // get distance to predecessing car
-         Predecessor $= [X|_];
+         Predecessor =.. [X|_];
          mecsim_literal2number(X,Distance);
 
          // add the speed range
@@ -56,11 +56,11 @@
         // check if predecessing car is too close
         if ( BrakingDistance > Scramble*Distance )
         {
-             !decelerate;
+             !decelerate
         }
         else
         {
-             !accelerate;
+             !accelerate
         }.
 
 

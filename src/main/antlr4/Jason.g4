@@ -226,7 +226,7 @@ arithmetic_expression :
  **/
 assignment_expression :
     variable
-    ( UNIFY | DECONSTRUCT )
+    ( ASSIGN | DECONSTRUCT )
     term
     ;
 // ---------------------------------------------------------------------------------------
@@ -475,6 +475,7 @@ XOR                        : '^';
 INCREMENT                  : '++';
 DECREMENT                  : '--';
 ASSIGN                     : '=';
+DECONSTRUCT                : '=..';
 ASSIGNINCREMENT            : '+=';
 ASSIGNDECREMENT            : '-=';
 ASSIGNMULTIPLY             : '*=';
@@ -486,8 +487,6 @@ GREATER                    : '>';
 GREATEREQUAL               : '>=';
 EQUAL                      : '==';
 NOTEQUAL                   : '\\==';
-UNIFY                      : '=';
-DECONSTRUCT                : '$=';
 /**
  * allow on pow also the key-word represenation
  **/
