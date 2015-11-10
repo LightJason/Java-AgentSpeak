@@ -41,7 +41,7 @@ agent :
  * rule to represent initial beliefs
  **/
 initial_beliefs :
-    belief*
+    belief+
     ;
 
 /**
