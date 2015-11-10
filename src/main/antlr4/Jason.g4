@@ -194,9 +194,10 @@ foreach_loop :
  * logical expression
  **/
 logical_expression :
-    logical_expression (XOR | AND | OR) logical_expression
+    NEGATION logical_expression
+    | logical_expression (XOR | AND | OR) logical_expression
     | comparison_expression
-    | LROUNDBRACKET logical_expression RROUNDBRACKET
+    | NEGATION? LROUNDBRACKET logical_expression RROUNDBRACKET
     | boolean
     | clause
     ;
@@ -247,6 +248,7 @@ term :
     | clause
     | arithmetic_expression
     | logical_expression
+    | assignment_expression
     ;
 
 /**
