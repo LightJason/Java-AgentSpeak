@@ -211,10 +211,10 @@ comparison_expression :
  * arithmetic expression
  **/
 arithmetic_expression :
-    arithmetic_expression pointoperator arithmetic_expression
+    LROUNDBRACKET arithmetic_expression RROUNDBRACKET
+    | arithmetic_expression pointoperator arithmetic_expression
     | arithmetic_expression dashoperator arithmetic_expression
     | MINUS arithmetic_expression
-    | LROUNDBRACKET arithmetic_expression RROUNDBRACKET
     | number
     | variable
     | clause
