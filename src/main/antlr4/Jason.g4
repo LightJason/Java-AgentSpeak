@@ -61,7 +61,7 @@ initial_goal :
  * belief rule
  **/
 belief :
-    STRONGNEGOTATION clause DOT
+    STRONGNEGATION clause DOT
     ;
 
 /**
@@ -408,7 +408,7 @@ string :
 
 // --- character structures --------------------------------------------------------------
 EXCLAMATIONMARK            : '!';
-STRONGNEGOTATION           : '~';
+STRONGNEGATION             : '~';
 COMMA                      : ',';
 PLUS                       : '+';
 MINUS                      : '-';
@@ -446,7 +446,7 @@ RANGULARBRACKET            : ']';
 LCURVEDBRACKET             : '{';
 RCURVEDBRACKET             : '}';
 
-NEGOTATION                 : 'not';
+NEGATION                   : 'not';
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
 /**
