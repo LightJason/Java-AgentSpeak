@@ -24,6 +24,7 @@
 package jason;
 
 import jason.runtime.IAction;
+import jason.runtime.IPlan;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -51,7 +52,7 @@ public class CAgent implements IAgent
      * @note plan list ust be a linked-hashset
      * to store the execution order of the plans
      */
-    protected final Map<String, Set<Plan>> m_plans = new ConcurrentHashMap<>();
+    protected final Map<String, Set<IPlan>> m_plans = new ConcurrentHashMap<>();
     /**
      * beliefbase of the agent
      */
@@ -113,7 +114,7 @@ public class CAgent implements IAgent
         m_name = (p_name == null) || (p_name.isEmpty()) ? this.toString() : p_name;
 
         // parse AgentSpeak syntax
-        final JasonParser.AgentContext l_agent = new JasonParser( new CommonTokenStream( new JasonLexer( new ANTLRInputStream( p_stream ) ) ) ).agent();
+        final jason.JasonParser.AgentContext l_agent = new jason.JasonParser( new CommonTokenStream( new jason.JasonLexer( new ANTLRInputStream( p_stream ) ) ) ).agent();
         System.out.println( l_agent );
     }
 

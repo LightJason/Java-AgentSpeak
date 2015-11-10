@@ -22,6 +22,7 @@
  */
 
 grammar Jason;
+@header { package jason; }
 
 
 // --- agent-base structure -------------------------------------------------------------
@@ -32,7 +33,7 @@ grammar Jason;
 agent :
     initial_beliefs?
     initial_goal?
-    rules?
+    principles?
     plans
     ;
 
@@ -75,8 +76,8 @@ plans :
 /**
  * optional (prolog) rules
  **/
-rules :
-    rule+
+principles :
+    principle+
     ;
 
 /**
@@ -98,7 +99,7 @@ plan :
  * rules are similar to plans
  * but without context and trigger event
  **/
-rule :
+principle :
     ( AT clause )?
     clause
     RULEOPERATOR
@@ -195,7 +196,7 @@ logical_expression :
     | LROUNDBRACKET logical_expression RROUNDBRACKET
     | logical_expression (XOR | AND | OR) logical_expression
     | comparison_expression
-    | boolean
+    | logicalvalue
     | clause
     ;
 
@@ -376,7 +377,7 @@ integernumber :
 /**
  * boolean values
  **/
-boolean :
+logicalvalue :
     TRUE
     | FALSE
     ;

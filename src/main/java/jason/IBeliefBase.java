@@ -23,6 +23,10 @@
 
 package jason;
 
+import generic.ILiteral;
+
+import java.util.List;
+
 /**
  * beliefbase interface
  */
@@ -38,17 +42,17 @@ public interface IBeliefBase
      * returns a list of literals that are new added
      * to the beliefbase
      */
-    public List<Literal> getNewBeliefs();
+    public List<ILiteral> getNewBeliefs();
 
     /**
      * returns a list of literals that are deleted from
      * the beliefbase
      */
-    public List<Literal> getRemovedBeliefs();
+    public List<ILiteral> getRemovedBeliefs();
 
     /**
      * returns a list of literals that are changed since
      */
-    public List<Literal> getChangedBeliefs();
+    public List<ILiteral> getChangedBeliefs();
 
 }

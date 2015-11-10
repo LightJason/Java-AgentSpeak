@@ -21,33 +21,11 @@
  * @endcond
  */
 
-import jason.CAgent;
-import jason.runtime.IAction;
+package generic;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-public final class CMain
+/**
+ * literal definition
+ */
+public interface ILiteral
 {
-    /**
-     * map with actions
-     */
-    private static final Map<String, IAction> c_actions = new HashMap<>();
-
-
-
-    public static void main( final String[] p_args )
-    {
-        try (
-                final InputStream l_stream = new FileInputStream( p_args[0] );
-        ) {
-            new CAgent( c_actions, l_stream );
-        } catch ( final IOException l_exception ) {
-            l_exception.printStackTrace();
-        }
-    }
-
 }
