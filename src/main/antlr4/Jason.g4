@@ -355,7 +355,6 @@ binaryoperator :
  * also definied constants are used
  **/
 number :
-    MINUS?
     floatnumber
     | integernumber
     ;
