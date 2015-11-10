@@ -152,8 +152,7 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    (belief_actionoperator | plan_actionoperator) atom
-    | clause
+    (belief_actionoperator | plan_actionoperator)? clause
     | if_else
     | while_loop
     | for_loop
@@ -241,7 +240,6 @@ assignment_expression :
  **/
 term :
     | LANGULARBRACKET list RANGULARBRACKET
-    | atom
     | variable
     | string
     | number
