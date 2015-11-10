@@ -238,14 +238,14 @@ assignment_expression :
  * terms are predictable structures
  **/
 term :
-    | LANGULARBRACKET list RANGULARBRACKET
-    | variable
+    variable
     | string
     | number
     | clause
     | arithmetic_expression
     | logical_expression
     | assignment_expression
+    | LANGULARBRACKET list RANGULARBRACKET
     ;
 
 /**
