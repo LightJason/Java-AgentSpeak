@@ -44,9 +44,7 @@
 
          // add the speed range
          for ( range(I, 1, mathceil( Speed / 10 ) ) )
-         {
-             +speed_range(I * 10)
-         };
+             +speed_range(I * 10);
 
          // calculate braking distance with gaussian sum
          // @see https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel
@@ -55,17 +53,11 @@
 
         // check if predecessing car is too close
         if ( BrakingDistance > Scramble*Distance )
-        {
              !decelerate
-        }
         else
-        {
              !accelerate
-        }.
+        .
 
 
 // default behaviour - accelerate
-+!drive
-   :    true
-   <-
-        !accelerate.
++!drive <- !accelerate.

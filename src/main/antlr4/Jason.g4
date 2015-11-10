@@ -162,9 +162,8 @@ body_formula :
     ;
 
 block_formula :
-    LCURVEDBRACKET
-    body
-    RCURVEDBRACKET
+    LCURVEDBRACKET body RCURVEDBRACKET
+    | body_formula
     ;
 
 if_else :
