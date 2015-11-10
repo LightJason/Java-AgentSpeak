@@ -244,7 +244,7 @@ clause :
  **/
 atom :
     LOWERCASELETTER
-    ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
+    char*
     ;
 
 /**
@@ -252,7 +252,14 @@ atom :
  **/
 variable :
     ( UPPERCASELETTER | UNDERSCORE )
-    ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
+    char*
+    ;
+
+char :
+    LOWERCASELETTER
+    | UPPERCASELETTER
+    | UNDERSCORE
+    | DIGIT
     ;
 
 /**
