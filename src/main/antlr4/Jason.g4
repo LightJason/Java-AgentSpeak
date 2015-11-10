@@ -157,9 +157,8 @@ body_formula :
     | while_loop
     | for_loop
     | foreach_loop
-    | logical_expression
-    | arithmetic_expression
     | assignment_expression
+    | logical_expression
     ;
 
 block_formula :
@@ -253,8 +252,8 @@ term :
  * list equal to collcations
  **/
 list :
-    term
-    ( COMMA term )*
+    term ( COMMA term )*
+    | variable LISTSEPARATOR variable
     ;
 
 /**
@@ -453,20 +452,22 @@ RCURVEDBRACKET             : '}';
 NEGATION                   : 'not';
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
+
+LISTSEPARATOR              : '|';
 /**
  * allow on logical and-concationation
  * also c- and pascal-style-based & / and
  **/
-AND                        : '&' | '&&';
+AND                        : '&&';
 /**
  * allow on logical or-concationation
  * also c- and pascal-style-based | / or
  **/
-OR                         : '|' | '||';
+OR                         : '||';
 /**
  * define an logical xor-definition
  **/
-XOR                        : '^' | 'xor';
+XOR                        : '^';
 
 /**
  * variable operators
