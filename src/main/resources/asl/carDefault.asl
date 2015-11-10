@@ -9,8 +9,8 @@
 
 // acceleration
 +!accelerate
-   :    root_bind_speed(Speed) &
-        root_bind_acceleration(Accelerate) &
+   :    root_bind_speed(Speed) &&
+        root_bind_acceleration(Accelerate) &&
         root_bind_maxspeed(MaxSpeed)
 
    <-   min([MaxSpeed, Speed+Accelerate], NewSpeed);
@@ -20,8 +20,8 @@
 
 // deceleration
 +!decelerate
-   :    root_bind_speed(Speed) &
-        root_bind_deceleration(Decelerate) &
+   :    root_bind_speed(Speed) &&
+        root_bind_deceleration(Decelerate) &&
         Decelerate > 0
 
    <-
@@ -29,25 +29,24 @@
         mecsim_propertyset(self, m_speed, NewSpeed);
         !drive.
 
-
 // driving call if a predecessor exists
 // check distance and decelerate otherwise accelerate
 +!drive
-    :    root_bind_speed(Speed) &
-         root_bind_deceleration(Deceleration) &
-         root_mytraffic_predecessor([Predecessor]) &
+    :    root_bind_speed(Speed) &&
+         root_bind_deceleration(Deceleration) &&
+         root_mytraffic_predecessor([Predecessor]) &&
          not (empty([Predecessor]))
 
     <-
          // get distance to predecessing car
-         Predecessor =.. [X|_];
+         Predecessor $= [X|_];
          mecsim_literal2number(X,Distance);
 
          // add the speed range
          for ( range(I, 1, mathceil( Speed / 10 ) ) )
          {
-             +speed_range(I * 10);
-         }
+             +speed_range(I * 10)
+         };
 
          // calculate braking distance with gaussian sum
          // @see https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel

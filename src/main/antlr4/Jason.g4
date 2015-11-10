@@ -218,6 +218,7 @@ arithmetic_expression :
     | LROUNDBRACKET arithmetic_expression RROUNDBRACKET
     | number
     | variable
+    | clause
     ;
 
 /**
@@ -244,7 +245,6 @@ term :
     | clause
     | arithmetic_expression
     | logical_expression
-    | assignment_expression
     | LANGULARBRACKET list RANGULARBRACKET
     ;
 
@@ -487,7 +487,7 @@ GREATEREQUAL               : '>=';
 EQUAL                      : '==';
 NOTEQUAL                   : '\\==';
 UNIFY                      : '=';
-DECONSTRUCT                : '=..';
+DECONSTRUCT                : '$=';
 /**
  * allow on pow also the key-word represenation
  **/
