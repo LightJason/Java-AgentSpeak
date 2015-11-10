@@ -355,6 +355,7 @@ binaryoperator :
  * also definied constants are used
  **/
 number :
+    MINUS?
     floatnumber
     | integernumber
     ;
@@ -363,7 +364,7 @@ number :
  * floating-point number
  **/
 floatnumber :
-    (PLUS | MINUS)? DIGIT DOT DIGIT+
+    DIGIT DOT DIGIT+
     | constant
     ;
 
@@ -371,7 +372,7 @@ floatnumber :
  * integer number
  **/
 integernumber :
-    (PLUS | MINUS)? DIGIT+
+    DIGIT+
     ;
 
 /**
