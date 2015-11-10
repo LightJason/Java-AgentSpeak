@@ -234,6 +234,10 @@ assignment_expression :
 
 
 // --- complex-data-types ----------------------------------------------------------------
+
+/**
+ * terms are predictable structures
+ **/
 term :
     | LANGULARBRACKET list RANGULARBRACKET
     | atom
@@ -241,13 +245,22 @@ term :
     | string
     | number
     | clause
+    | arithmetic_expression
+    | logical_expression
     ;
 
+/**
+ * list equal to collcations
+ **/
 list :
     term
     ( COMMA term )*
     ;
 
+/**
+ * clause represent a structure existing
+ * atom, optional argument, optional annotations
+ **/
 clause :
     atom
     ( LROUNDBRACKET list RROUNDBRACKET )?
