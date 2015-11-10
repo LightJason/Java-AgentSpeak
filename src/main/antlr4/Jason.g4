@@ -452,7 +452,11 @@ NEGATION                   : 'not';
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
 
+/**
+ * prolog list seperator for head-tail definition
+ **/
 LISTSEPARATOR              : '|';
+
 /**
  * allow on logical and-concationation
  * also c- and pascal-style-based & / and
@@ -480,12 +484,16 @@ ASSIGNDECREMENT            : '-=';
 ASSIGNMULTIPLY             : '*=';
 ASSIGNDIVIDE               : '/=';
 
+/**
+ * comparator types
+ **/
 LESS                       : '<';
 LESSEQUAL                  : '<=';
 GREATER                    : '>';
 GREATEREQUAL               : '>=';
 EQUAL                      : '==';
 NOTEQUAL                   : '\\==';
+
 /**
  * allow on pow also the key-word represenation
  **/
@@ -500,18 +508,25 @@ MULTIPLY                   : '*' | 'mul';
 DIVIDE                     : '/' | 'div';
 MODULO                     : '%' | 'mod';
 
-LOWERCASELETTER   : [a-z];
-UPPERCASELETTER   : [A-Z];
-DIGIT             : [0-9];
 /**
  * string can be definied in single- and double-quotes
  **/
 SINGLEQUOTESTRING          : '\'' ('\'\'' | ~('\''))* '\'';
 DOUBLEQUOTESTRING          : '"' ('""' | ~('"'))* '"';
+
+/**
+ * char definitions
+ **/
+LOWERCASELETTER            : [a-z];
+UPPERCASELETTER            : [A-Z];
+DIGIT                      : [0-9];
 // ---------------------------------------------------------------------------------------
 
 
 // --- skip items ------------------------------------------------------------------------
+/**
+ * any whitespace
+ **/
 WHITESPACE                 : (' ' | '\n' | '\t' | '\r')+ -> skip;
 /**
  * add for line-comment also #
