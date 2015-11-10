@@ -273,7 +273,7 @@ clause :
  **/
 atom :
     LOWERCASELETTER
-    char*
+    ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
 /**
@@ -281,14 +281,7 @@ atom :
  **/
 variable :
     ( UPPERCASELETTER | UNDERSCORE )
-    char*
-    ;
-
-char :
-    LOWERCASELETTER
-    | UPPERCASELETTER
-    | UNDERSCORE
-    | DIGIT
+    ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
 /**
@@ -319,8 +312,6 @@ comparator :
     | NOTEQUAL
     | GREATER
     | GREATEREQUAL
-    | UNIFY
-    | DECONSTRUCT
     ;
 
 /**
