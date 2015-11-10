@@ -110,10 +110,26 @@ rule :
  * plan trigger which can match a goal or belief
  **/
 plan_trigger :
-    ( PLUS | MINUS | MINUSPLUS )
-    EXCLAMATIONMARK?
+    (plan_trigger_belief | plan_trigger_goal)
     atom
     ( LROUNDBRACKET list RROUNDBRACKET )?
+    ;
+
+/**
+ * plan trigger for a goal
+ **/
+plan_trigger_goal :
+    (PLUS | MINUS)
+    EXCLAMATIONMARK
+    ;
+
+/**
+ * plan trigger for a belief
+ **/
+plan_trigger_belief :
+    PLUS
+    | MINUS
+    | MINUSPLUS
     ;
 
 /**
