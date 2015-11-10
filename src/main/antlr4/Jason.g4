@@ -25,6 +25,10 @@ grammar Jason;
 
 
 // --- agent-base structure -------------------------------------------------------------
+
+/**
+ * initial grammar rule
+ **/
 agent :
     initial_beliefs?
     initial_goal?
@@ -32,10 +36,16 @@ agent :
     plans
     ;
 
+/**
+ * rule to represent initial beliefs
+ **/
 initial_beliefs :
     belief*
     ;
 
+/**
+ * rule to represent the initial goal
+ **/
 initial_goal :
     EXCLAMATIONMARK
     atom
@@ -46,14 +56,25 @@ initial_goal :
 
 
 // --- agent-behaviour structure ---------------------------------------------------------
+
+/**
+ * belief rule
+ **/
 belief :
     STRONGNEGOTATION clause DOT
     ;
 
+/**
+ * agent plans rule
+ * @note one plan must exists
+ **/
 plans :
     plan+
     ;
 
+/**
+ * optional (prolog) rules
+ **/
 rules :
     rule+
     ;
@@ -85,17 +106,26 @@ rule :
     DOT
     ;
 
+/**
+ * plan trigger which can match a goal or belief
+ **/
 plan_trigger :
-    ( PLUS | MINUS )
+    ( PLUS | MINUS | MINUSPLUS )
     EXCLAMATIONMARK?
     atom
     ( LROUNDBRACKET list RROUNDBRACKET )?
     ;
 
+/**
+ * logical context for plan matching
+ **/
 plan_context :
     logical_expression
     ;
 
+/**
+ * plan or block body
+ **/
 body :
     body_formula
     ( SEMICOLON body_formula )*
@@ -144,6 +174,9 @@ foreach_loop :
     block_formula
     ;
 
+/**
+ * logical expression
+ **/
 logical_expression :
     logical_expression (XOR | AND | OR) logical_expression
     | comparison_expression
@@ -152,11 +185,17 @@ logical_expression :
     | clause
     ;
 
+/**
+ * comparision expression
+ **/
 comparison_expression :
     arithmetic_expression comparator arithmetic_expression
     | LROUNDBRACKET comparison_expression RROUNDBRACKET
     ;
 
+/**
+ * arithmetic expression
+ **/
 arithmetic_expression :
     arithmetic_expression pointoperator arithmetic_expression
     | arithmetic_expression dashoperator arithmetic_expression
@@ -166,9 +205,12 @@ arithmetic_expression :
     | variable
     ;
 
+/**
+ * assignment expression (for assignin a variable)
+ **/
 assignment_expression :
     variable
-    EQUAL
+    ( UNIFY | DECONSTRUCT )
     term
     ;
 // ---------------------------------------------------------------------------------------
@@ -198,12 +240,9 @@ clause :
 
 /**
  * atoms are defined like Prolog atoms
- * @note compatibility with Jason syntax, an atom can begin
- * with a dot, it represents an internal Jason action, the dot
- * will ignored always
+ * @note internal action in Jason can begin with a dot, but here it is removed
  **/
 atom :
-    DOT?
     LOWERCASELETTER
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
@@ -216,20 +255,27 @@ variable :
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;
 
-
-
+/**
+ * plan action operator
+ **/
 plan_actionoperator :
     EXCLAMATIONMARK
     | DOUBLEEXCLAMATIONMARK
     | QUESTIONMARK
     ;
 
+/**
+ * belief-action operator
+ **/
 belief_actionoperator :
     PLUS
     | MINUS
     | MINUSPLUS
     ;
 
+/**
+ * comperator
+ **/
 comparator :
     LESS
     | LESSEQUAL
@@ -241,11 +287,17 @@ comparator :
     | DECONSTRUCT
     ;
 
+/**
+ * arithmetic dash operator
+ **/
 dashoperator :
     PLUS
     | MINUS
     ;
 
+/**
+ * arithmetic point operator
+ **/
 pointoperator :
     POW
     | MULTIPLY
@@ -253,11 +305,17 @@ pointoperator :
     | MODULO
     ;
 
+/**
+ * unary operator
+ **/
 unaryoperator :
     INCREMENT
     | DECREMENT
     ;
 
+/**
+ * binary operator
+ **/
 binaryoperator :
     ASSIGNINCREMENT
     | ASSIGNDECREMENT
@@ -276,20 +334,32 @@ number :
     | integernumber
     ;
 
+/**
+ * floating-point number
+ **/
 floatnumber :
     (PLUS | MINUS)? DIGIT DOT DIGIT+
     | constant
     ;
 
+/**
+ * integer number
+ **/
 integernumber :
     (PLUS | MINUS)? DIGIT+
     ;
 
+/**
+ * boolean values
+ **/
 boolean :
     TRUE
     | FALSE
     ;
 
+/**
+ * floating-point constants
+ **/
 constant :
     PI
     | EULER
@@ -302,6 +372,9 @@ constant :
     | LIGHTSPEED
     ;
 
+/**
+ * string define with single or double quotes
+ **/
 string :
     SINGLEQUOTESTRING
     | DOUBLEQUOTESTRING
