@@ -62,7 +62,7 @@ initial_goal :
  * belief rule
  **/
 belief :
-    STRONGNEGATION clause DOT
+    STRONGNEGATION? clause DOT
     ;
 
 /**
@@ -351,8 +351,8 @@ variable :
  * achivement-goal action
  **/
 achievment_goal_action :
-    ( PLUS | MINUS | DOUBLEEXCLAMATIONMARK )
-    EXCLAMATIONMARK
+    ( PLUS | MINUS ) EXCLAMATIONMARK
+    | DOUBLEEXCLAMATIONMARK
     ;
 
 /**
