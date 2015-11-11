@@ -268,9 +268,8 @@ arithmetic_expression :
  * assignment expression (for assignin a variable)
  **/
 assignment_expression :
-    variable
-    ASSIGN
-    term
+    (variable ASSIGN term)
+    | ( variable unaryoperator )
     ;
 
 /**
@@ -434,7 +433,7 @@ number :
  * floating-point number
  **/
 floatnumber :
-    DIGIT DOT DIGIT+
+    DIGIT+ DOT DIGIT+
     | constant
     ;
 
