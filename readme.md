@@ -138,7 +138,7 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 
 1. remove all dots (```.```) on actions / literals
 2. change all dots (```.```) within the plan body to semicolon (```;```) except the termination dot at the end of the plan / rule
-3. fix all belief- and plan calls - a belief goal starts with ```+```, ```-``` or ```-+```, a plan goal with ```+!```, ```-!```, ```+?``` and ```?```
+3. fix all belief- and plan calls - a belief goal starts with ```+```, ```-``` or ```-+```, a plan goal with ```+!```, ```-!```, ```+?``` or ```-?```
 4. fix all boolean structure: logical-or is defined with ```||``` and logical-and with ```&&```
 5. fix all bracket structure e.g. on if-else with unique meaning
 
