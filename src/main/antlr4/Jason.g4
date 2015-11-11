@@ -87,7 +87,7 @@ principles :
  * can be setup a repair plan
  */
 plan :
-    ( AT clause )?
+    annotations?
     plan_trigger
     ( COLON plan_context )?
     ( ARROW body )?
@@ -100,11 +100,54 @@ plan :
  * but without context and trigger event
  **/
 principle :
-    ( AT clause )?
+    annotations?
     clause
     RULEOPERATOR
     body
     DOT
+    ;
+
+/**
+ * annotation for rules and plans
+ **/
+annotations :
+    ( annotation_atom | annotation_clause )+
+    ;
+
+/**
+ * atomic annotations (without parameter)
+ **/
+annotation_atom :
+    AT
+    (ATOMIC | ONLY | PARALLEL)
+    ;
+
+/**
+ * annotation with parameter
+ **/
+annotation_clause :
+    AT
+    ( annotation_numeric_clause | annotation_symbolic_clause )
+    ;
+
+/**
+ * annotations with numerical parameter
+ **/
+annotation_numeric_clause :
+    ( FUZZY | PRIORITY )
+    LROUNDBRACKET
+    number
+    RROUNDBRACKET
+    ;
+
+/**
+ * annotation with symbolic value
+ **/
+annotation_symbolic_clause :
+    EXPIRES
+    LROUNDBRACKET
+    atom
+    RROUNDBRACKET
     ;
 
 /**
@@ -488,6 +531,17 @@ RCURVEDBRACKET             : '}';
 NEGATION                   : 'not';
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
+
+/**
+ * plan annotation
+ **/
+PARALLEL                   : 'parallel';
+ATOMIC                     : 'atomic';
+ONLY                       : 'only';
+FUZZY                      : 'fuzzy';
+PRIORITY                   : 'priority';
+EXPIRES                    : 'expires';
+
 
 /**
  * prolog list seperator for head-tail definition
