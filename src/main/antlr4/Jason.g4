@@ -119,7 +119,7 @@ annotations :
  **/
 annotation_atom :
     AT
-    (ATOMIC | ONLY | PARALLEL)
+    (ATOMIC | EXCLUSIVE | PARALLEL)
     ;
 
 /**
@@ -528,7 +528,7 @@ FALSE                      : 'false' | 'fail';
  **/
 PARALLEL                   : 'parallel';
 ATOMIC                     : 'atomic';
-ONLY                       : 'only';
+EXCLUSIVE                  : 'exclusive';
 FUZZY                      : 'fuzzy';
 PRIORITY                   : 'priority';
 EXPIRES                    : 'expires';
