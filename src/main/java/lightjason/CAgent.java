@@ -142,7 +142,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public void trigger( final String p_goal )
+    public void trigger( final String p_event )
     {
 
     }

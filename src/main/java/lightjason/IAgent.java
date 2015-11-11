@@ -51,11 +51,11 @@ public interface IAgent extends Callable<IAgent>
     public IBeliefBase getBeliefBase();
 
     /**
-     * trigger a goal
+     * trigger an event
      *
-     * @param p_goal name as string
+     * @param p_event event
      */
-    public void trigger( final String p_goal );
+    public void trigger( final String p_event );
 
     /**
      * sets the agent to a suspend state
