@@ -160,6 +160,7 @@ body_formula :
     | foreach_loop
     | assignment_expression
     | logical_expression
+    | deconstruct_expression
     ;
 
 block_formula :
@@ -225,8 +226,19 @@ arithmetic_expression :
  **/
 assignment_expression :
     variable
-    ( ASSIGN | DECONSTRUCT )
+    ASSIGN
     term
+    ;
+
+/**
+ * deconstruct expression (splitting clauses)
+ **/
+deconstruct_expression :
+    LANGULARBRACKET
+    list_headtail
+    RANGULARBRACKET
+    DECONSTRUCT
+    ( clause | variable )
     ;
 // ---------------------------------------------------------------------------------------
 
@@ -262,7 +274,17 @@ term :
  **/
 list :
     term ( COMMA term )*
-    | variable LISTSEPARATOR variable
+    | list_headtail
+    ;
+
+/**
+ * list with head-tail-annotation definition
+ **/
+list_headtail :
+    variable
+    LISTSEPARATOR
+    variable
+    (LISTSEPARATOR variable)?
     ;
 
 /**

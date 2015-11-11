@@ -39,7 +39,7 @@
 
     <-
          // get distance to predecessing car
-         Predecessor =.. [X|_];
+         [X|_] =.. Predecessor;
          mecsim_literal2number(X,Distance);
 
          // add the speed range
