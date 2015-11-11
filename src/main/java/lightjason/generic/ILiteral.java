@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package generic;
+package lightjason.generic;
 
 /**
  * literal definition

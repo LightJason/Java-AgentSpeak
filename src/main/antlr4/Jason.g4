@@ -22,7 +22,7 @@
  */
 
 grammar Jason;
-@header { package jason; }
+@header { package lightjason; }
 
 
 // --- agent-base structure -------------------------------------------------------------

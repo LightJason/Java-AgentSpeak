@@ -6,5 +6,7 @@
 !*.asl
 !*.md
 !pom.xml
+!src/main/styleguide/**/*.xml
 
-gen/**
+
+target/**

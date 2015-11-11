@@ -21,55 +21,34 @@
  * @endcond
  */
 
-package jason.runtime;
-
-import java.util.Set;
+package lightjason.runtime;
 
 /**
- * interface of plan
+ * interface of variables
  */
-public interface IPlan
+public interface IVariable<T>
 {
 
     /**
-     * returns the name of the plan
-     * which matchs also the goal
-     * definition
+     * checks if the internal datatype an instance of a class
      *
-     * @return name
+     * @param p_class class type
+     * @return boolean flag
      */
-    public String getName();
+    public boolean instance( final Class<?> p_class );
 
     /**
-     * checks the context of the plan
-     * and return if the plan can be
-     * executed
+     * returns the internal value
      *
-     * @return true iif the plan can be executed
+     * @return value
      */
-    public boolean isExecutable();
+    public T getValue();
 
     /**
-     * runs the plan and returns the result
+     * sets the internal value
      *
-     * @return execution state
+     * @param p_value value
      */
-    public EExecutionState execute();
-
-    /**
-     * returns the current state of the plan
-     *
-     * @return current / last execution state
-     */
-    public EExecutionState getState();
-
-    /**
-     * returns a significance value
-     * which matchs the plan of other
-     * possible plans
-     *
-     * @return value in [0,1]
-     */
-    public float getSignificance();
+    public void setValue( final T p_value );
 
 }

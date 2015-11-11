@@ -21,34 +21,29 @@
  * @endcond
  */
 
-package jason;
+package lightjason;
 
-import jason.runtime.IAction;
-import jason.runtime.IPlan;
+import lightjason.runtime.IAction;
+import lightjason.runtime.IPlan;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 public class CAgent implements IAgent
 {
-    /**
-     * suspending state
-     */
-    private volatile boolean m_suspend = false;
-    /**
-     * curent agent cycle
-     */
-    protected int m_cycle = 0;
     /**
      * agent name
      */
     protected final String m_name;
     /**
      * thread-safe map with all existing plans
+     *
      * @note plan list ust be a linked-hashset
      * to store the execution order of the plans
      */
@@ -57,6 +52,14 @@ public class CAgent implements IAgent
      * beliefbase of the agent
      */
     protected final IBeliefBase m_beliefbase;
+    /**
+     * curent agent cycle
+     */
+    protected int m_cycle = 0;
+    /**
+     * suspending state
+     */
+    private volatile boolean m_suspend = false;
 
 
     /**
@@ -80,7 +83,7 @@ public class CAgent implements IAgent
      * @param p_beliefbase beliefbase
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final Map<String, IAction> p_action,final InputStream p_stream, final IBeliefBase p_beliefbase ) throws IOException
+    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream, final IBeliefBase p_beliefbase ) throws IOException
     {
         this( p_action, p_stream, p_beliefbase, null );
     }
@@ -111,10 +114,10 @@ public class CAgent implements IAgent
     {
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
-        m_name = (p_name == null) || (p_name.isEmpty()) ? this.toString() : p_name;
+        m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? this.toString() : p_name;
 
         // parse AgentSpeak syntax
-        final jason.JasonParser.AgentContext l_agent = new jason.JasonParser( new CommonTokenStream( new jason.JasonLexer( new ANTLRInputStream( p_stream ) ) ) ).agent();
+        final JasonParser.AgentContext l_agent = new JasonParser( new CommonTokenStream( new JasonLexer( new ANTLRInputStream( p_stream ) ) ) ).agent();
         System.out.println( l_agent );
     }
 
@@ -138,7 +141,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public void trigger(final String p_goal )
+    public void trigger( final String p_goal )
     {
 
     }
@@ -162,12 +165,14 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public IAgent clone() {
+    public IAgent clone( IBeliefBase p_beliefbase )
+    {
         return null;
     }
 
     @Override
-    public IAgent clone(IBeliefBase p_beliefbase) {
+    public IAgent clone()
+    {
         return null;
     }
 
@@ -177,7 +182,7 @@ public class CAgent implements IAgent
         // run beliefbase update, because
         // environment can be changed
         m_beliefbase.update();
-        if (m_suspend)
+        if ( m_suspend )
             return this;
 
         // increment cycle

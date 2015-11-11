@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package jason.runtime;
+package lightjason.runtime;
 
 
 /**
@@ -29,5 +29,7 @@ package jason.runtime;
  */
 public enum EExecutionState
 {
-    Success, Fail, Wait;
+    Success,
+    Fail,
+    Wait;
 }

@@ -21,38 +21,23 @@
  * @endcond
  */
 
-package jason;
-
-import generic.ILiteral;
+package lightjason.runtime;
 
 import java.util.List;
+import java.util.Map;
+
 
 /**
- * beliefbase interface
+ * map with actions
  */
-public interface IBeliefBase
+public interface IMultiAction extends IAction, Map<String, IAction>
 {
 
     /**
-     * update internal beliefbase data
+     * returns a list with names which can handle
+     *
+     * @return list with names
      */
-    public void update();
-
-    /**
-     * returns a list of literals that are new added
-     * to the beliefbase
-     */
-    public List<ILiteral> getNewBeliefs();
-
-    /**
-     * returns a list of literals that are deleted from
-     * the beliefbase
-     */
-    public List<ILiteral> getRemovedBeliefs();
-
-    /**
-     * returns a list of literals that are changed since
-     */
-    public List<ILiteral> getChangedBeliefs();
+    public List<String> getNames();
 
 }

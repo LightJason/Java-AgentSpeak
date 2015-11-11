@@ -21,34 +21,19 @@
  * @endcond
  */
 
-package jason.runtime;
+package lightjason.runtime;
 
 /**
- * interface of variables
+ * Created by pkraus on 31.10.15.
  */
-public interface IVariable<T>
+public interface ISingleAction
 {
 
     /**
-     * checks if the internal datatype an instance of a class
+     * returns the name of the action
      *
-     * @param p_class class type
-     * @return boolean flag
+     * @return name
      */
-    public boolean instance( final Class<?> p_class );
-
-    /**
-     * returns the internal value
-     *
-     * @return value
-     */
-    public T getValue();
-
-    /**
-     * sets the internal value
-     *
-     * @param p_value value
-     */
-    public void setValue( final T p_value );
+    public String getName();
 
 }

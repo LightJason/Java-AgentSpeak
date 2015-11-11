@@ -1,4 +1,4 @@
-/**
+package lightjason; /**
  * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
@@ -21,72 +21,40 @@
  * @endcond
  */
 
-package jason;
+import lightjason.runtime.IAction;
 
-import java.util.concurrent.Callable;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * agent interface
- */
-public interface IAgent extends Callable<IAgent>
+
+public final class CMain
 {
     /**
-     * returns the current cycle
+     * map with actions
+     */
+    private static final Map<String, IAction> c_actions = new HashMap<>();
+
+
+    /**
+     * main
      *
-     * @return cycle number
+     * @param p_args command-line arguments
      */
-    public int getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
-
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger a goal
-     *
-     * @param p_goal name as string
-     */
-    public void trigger(final String p_goal );
-
-    /**
-     * sets the agent to a suspend state
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public static void main( final String[] p_args )
+    {
+        try (
+                final InputStream l_stream = new FileInputStream( p_args[0] );
+        )
+        {
+            new CAgent( c_actions, l_stream );
+        }
+        catch ( final IOException l_exception )
+        {
+            l_exception.printStackTrace();
+        }
+    }
 
 }
