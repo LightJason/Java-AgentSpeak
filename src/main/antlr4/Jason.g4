@@ -153,7 +153,7 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    (belief_action | plan_action)? clause
+    (belief_action | achievment_goal_action | test_goal_action | goal_action)? clause
     | if_else
     | while_loop
     | for_loop
@@ -283,13 +283,29 @@ variable :
     ;
 
 /**
- * plan action operator
+ * achivement-goal action
  **/
-plan_action :
+achievment_goal_action :
+    ( PLUS | MINUS )
+    EXCLAMATIONMARK
+    ;
+
+/**
+ * test-goal action
+ **/
+test_goal_action :
+    ( PLUS | MINUS )
+    QUESTIONMARK
+    ;
+
+/**
+ * goal action
+ **/
+goal_action :
     EXCLAMATIONMARK
     | DOUBLEEXCLAMATIONMARK
-    | QUESTIONMARK
     ;
+
 
 /**
  * belief-action operator
@@ -297,7 +313,6 @@ plan_action :
 belief_action :
     PLUS
     | MINUS
-    | MINUSPLUS
     ;
 
 /**
