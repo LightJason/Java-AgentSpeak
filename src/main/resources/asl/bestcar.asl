@@ -21,7 +21,7 @@ setSpeed(X) :- setProperty("speed", X).
     current_speed(Speed) &&
     Speed > 10 <-
     Speed--;
-    setSpeed( Speed )
+    setSpeed( Speed );
     !!drive.
 
 +!decelerate :
