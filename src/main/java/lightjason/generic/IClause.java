@@ -32,7 +32,7 @@ import lightjason.common.CPath;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral extends ITerm
+public interface IClause extends ITerm
 {
 
     /**
@@ -41,7 +41,7 @@ public interface ILiteral extends ITerm
      * @param p_prefix add a path to the functor
      * @return copy of the literal
      */
-    public ILiteral clone( final CPath p_prefix );
+    public IClause clone( final CPath p_prefix );
 
     /**
      * returns the optional annotations

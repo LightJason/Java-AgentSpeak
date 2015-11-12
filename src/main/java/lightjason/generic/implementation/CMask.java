@@ -27,7 +27,7 @@ package lightjason.generic.implementation;
 import lightjason.common.CPath;
 import lightjason.generic.IBeliefBase;
 import lightjason.generic.IBeliefBaseMask;
-import lightjason.generic.ILiteral;
+import lightjason.generic.IClause;
 import lightjason.generic.IStorage;
 
 import java.text.MessageFormat;
@@ -95,7 +95,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public void add( final CPath p_path, final ILiteral p_literal )
+    public void add( final CPath p_path, final IClause p_literal )
     {
         this.add( p_path, p_literal, null );
     }
@@ -120,7 +120,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public void add( final CPath p_path, final ILiteral p_literal, final IGenerator<Object> p_generator
+    public void add( final CPath p_path, final IClause p_literal, final IGenerator<Object> p_generator
     )
     {
         walk( p_path, this, p_generator ).add( p_literal );
@@ -151,7 +151,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public boolean remove( final CPath p_path, final ILiteral p_literal )
+    public boolean remove( final CPath p_path, final IClause p_literal )
     {
         return walk( p_path, this, null ).remove( p_literal );
     }
@@ -175,31 +175,31 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public Map<CPath, Set<ILiteral>> getLiterals( final CPath p_path )
+    public Map<CPath, Set<IClause>> getLiterals( final CPath p_path )
     {
         return walk( p_path, this, null ).getLiterals();
     }
 
     @Override
-    public Map<CPath, Set<ILiteral>> getLiterals()
+    public Map<CPath, Set<IClause>> getLiterals()
     {
         final CPath l_path = this.getFQNPath();
-        return new HashMap<CPath, Set<ILiteral>>()
+        return new HashMap<CPath, Set<IClause>>()
         {{
             for ( final Iterator<IBeliefBaseMask> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                for ( final Map.Entry<CPath, Set<ILiteral>> l_item : l_iterator.next().getLiterals().entrySet() )
+                for ( final Map.Entry<CPath, Set<IClause>> l_item : l_iterator.next().getLiterals().entrySet() )
                 {
-                    final Set<ILiteral> l_set = getOrDefault( l_item.getKey(), new HashSet<>() );
+                    final Set<IClause> l_set = getOrDefault( l_item.getKey(), new HashSet<>() );
                     l_set.addAll( l_item.getValue() );
                     putIfAbsent( l_item.getKey(), l_set );
                 }
 
-            for ( final Iterator<ILiteral> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
+            for ( final Iterator<IClause> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
             {
-                final ILiteral l_literal = l_iterator.next();
+                final IClause l_literal = l_iterator.next();
                 final CPath l_literalpath = l_path.append( l_literal.getFunctor().get() );
 
-                final Set<ILiteral> l_set = getOrDefault( l_literalpath, new HashSet<>() );
+                final Set<IClause> l_set = getOrDefault( l_literalpath, new HashSet<>() );
                 l_set.add( l_literal.clone( l_path ) );
                 putIfAbsent( l_literalpath, l_set );
             }
@@ -207,7 +207,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public Set<ILiteral> getLiteral( final CPath p_path )
+    public Set<IClause> getLiteral( final CPath p_path )
     {
         return walk( p_path.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElement( p_path.getSuffix() );
     }
@@ -283,7 +283,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public void add( final ILiteral p_literal )
+    public void add( final IClause p_literal )
     {
         m_beliefbase.add( p_literal );
     }
@@ -316,7 +316,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage()
+    public <L extends IStorage<IClause, IBeliefBaseMask>> L getStorage()
     {
         return m_beliefbase.getStorage();
     }
@@ -334,7 +334,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public boolean remove( final ILiteral p_literal )
+    public boolean remove( final IClause p_literal )
     {
         return m_beliefbase.remove( p_literal );
     }
@@ -370,16 +370,16 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public Iterator<ILiteral> iteratorLiteral()
+    public Iterator<IClause> iteratorLiteral()
     {
         // the fqn path is build through the tree traversing, so only the current path is build
         final CPath l_path = new CPath( m_name ).setSeparator( m_pathseparator );
-        return new Iterator<ILiteral>()
+        return new Iterator<IClause>()
         {
             /**
              * stack with iterators
              **/
-            final Stack<Iterator<ILiteral>> m_stack = new Stack<Iterator<ILiteral>>()
+            final Stack<Iterator<IClause>> m_stack = new Stack<Iterator<IClause>>()
             {{
                 add( CMask.this.getStorage().iteratorMultiElement() );
                 for ( final Iterator<IBeliefBaseMask> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
@@ -399,7 +399,7 @@ public class CMask implements IBeliefBaseMask
             }
 
             @Override
-            public ILiteral next()
+            public IClause next()
             {
                 return m_stack.peek().next().clone( l_path );
             }

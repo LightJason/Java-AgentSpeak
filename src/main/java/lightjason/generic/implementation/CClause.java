@@ -25,7 +25,7 @@ package lightjason.generic.implementation;
 
 import lightjason.common.CPath;
 import lightjason.generic.IAtom;
-import lightjason.generic.ILiteral;
+import lightjason.generic.IClause;
 import lightjason.generic.ITerm;
 import lightjason.generic.ITermCollection;
 
@@ -38,7 +38,7 @@ import java.util.Set;
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
  */
-public class CLiteral<T> implements ILiteral
+public class CClause<T> implements IClause
 {
     /**
      * the literal annotations
@@ -67,7 +67,7 @@ public class CLiteral<T> implements ILiteral
      * @param p_functor functor
      * @param p_literal literal
      */
-    public CLiteral( final String p_functor, final T p_literal )
+    public CClause( final String p_functor, final T p_literal )
     {
         this( new CStringAtom( p_functor ), p_literal, new CTermList(), new CTermSet(), false );
     }
@@ -79,7 +79,7 @@ public class CLiteral<T> implements ILiteral
      * @param p_literal literal
      * @param p_negated negated flag
      */
-    public CLiteral( final String p_functor, final T p_literal, final boolean p_negated )
+    public CClause( final String p_functor, final T p_literal, final boolean p_negated )
     {
         this( new CStringAtom( p_functor ), p_literal, new CTermList(), new CTermSet(), p_negated );
     }
@@ -92,7 +92,7 @@ public class CLiteral<T> implements ILiteral
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CLiteral( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
+    public CClause( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
     {
         this( new CStringAtom( p_functor ), p_literal, new CTermList( p_values ), new CTermSet( p_annotations ), false );
     }
@@ -106,7 +106,7 @@ public class CLiteral<T> implements ILiteral
      * @param p_annotations initial set of annotations
      * @param p_negated negated flag
      */
-    public CLiteral( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations,
+    public CClause( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations,
             final boolean p_negated
     )
     {
@@ -118,9 +118,9 @@ public class CLiteral<T> implements ILiteral
     }
 
     @Override
-    public ILiteral clone( final CPath p_prefix )
+    public IClause clone( final CPath p_prefix )
     {
-        return new CLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations, m_negated );
+        return new CClause<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations, m_negated );
     }
 
     @Override

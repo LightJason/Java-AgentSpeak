@@ -42,7 +42,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_path path
      * @param p_literal literal
      */
-    public void add( final CPath p_path, final ILiteral p_literal );
+    public void add( final CPath p_path, final IClause p_literal );
 
     /**
      * adds a mask in the current structure
@@ -82,7 +82,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_literal literal
      * @param p_generator beliefbase generator if beliefbase not exists
      */
-    public void add( final CPath p_path, final ILiteral p_literal, final IGenerator<Object> p_generator );
+    public void add( final CPath p_path, final IClause p_literal, final IGenerator<Object> p_generator );
 
 
     /**
@@ -108,7 +108,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_literal literal
      * @return is found and removed
      */
-    boolean remove( final CPath p_path, final ILiteral p_literal );
+    boolean remove( final CPath p_path, final IClause p_literal );
 
     /**
      * removes a mask
@@ -142,14 +142,14 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_path path
      * @return map with literal
      */
-    public Map<CPath, Set<ILiteral>> getLiterals( final CPath p_path );
+    public Map<CPath, Set<IClause>> getLiterals( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
      * @return set with literals
      */
-    public Map<CPath, Set<ILiteral>> getLiterals();
+    public Map<CPath, Set<IClause>> getLiterals();
 
     /**
      * returns a literal
@@ -157,7 +157,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_path path of the literal
      * @return set of literals or null
      */
-    public Set<ILiteral> getLiteral( final CPath p_path );
+    public Set<IClause> getLiteral( final CPath p_path );
 
     /**
      * returns a mask
