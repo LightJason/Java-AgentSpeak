@@ -38,7 +38,7 @@ import java.util.Set;
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
  */
-public class CLiteral<T> implements ILiteral<T>
+public class CLiteral<T> implements ILiteral
 {
     /**
      * the literal annotations
@@ -118,7 +118,7 @@ public class CLiteral<T> implements ILiteral<T>
     }
 
     @Override
-    public ILiteral<T> clone( final CPath p_prefix )
+    public ILiteral clone( final CPath p_prefix )
     {
         return new CLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations, m_negated );
     }

@@ -38,12 +38,12 @@ import java.util.Iterator;
  *
  * @tparam T literal type
  */
-public class CBeliefBase<T> implements IBeliefBase<T>
+public class CBeliefBase<T> implements IBeliefBase
 {
     /**
      * storage with data
      */
-    protected final IStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
+    protected final IStorage<ILiteral, IBeliefBaseMask> m_storage;
 
 
     /**
@@ -59,7 +59,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
+    public CBeliefBase( final IStorage<ILiteral, IBeliefBaseMask> p_storage )
     {
         if ( p_storage == null )
             throw new IllegalArgumentException( MessageFormat.format( "storage need not to be empty", "" ) );
@@ -79,13 +79,13 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public final void add( final ILiteral<T> p_literal )
+    public final void add( final ILiteral p_literal )
     {
         m_storage.addMultiElement( p_literal.getFunctor().get(), p_literal );
     }
 
     @Override
-    public final IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask )
+    public final IBeliefBaseMask add( final IBeliefBaseMask p_mask )
     {
         m_storage.addSingleElement( p_mask.getName(), p_mask );
         return p_mask;
@@ -94,21 +94,21 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public final void clear()
     {
-        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
             l_iterator.next().clear();
         m_storage.clear();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name )
+    public <E extends IBeliefBaseMask> E createMask( final String p_name )
     {
-        return (E) new CMask<T>( p_name, this );
+        return (E) new CMask( p_name, this );
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
+    public final <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage()
     {
         return (L) m_storage;
     }
@@ -120,13 +120,13 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public final boolean remove( final IBeliefBaseMask<T> p_mask )
+    public final boolean remove( final IBeliefBaseMask p_mask )
     {
         return m_storage.removeSingleElement( p_mask.getName() );
     }
 
     @Override
-    public final boolean remove( final ILiteral<T> p_literal )
+    public final boolean remove( final ILiteral p_literal )
     {
         return m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
     }
@@ -143,7 +143,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         m_storage.update();
 
         // iterate over all masks and call update (cascading)
-        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
             l_iterator.next().update();
     }
 
@@ -151,7 +151,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     public int sizeMask()
     {
         int l_sum = m_storage.sizeSingleElement();
-        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
             l_sum += l_iterator.next().sizeMask();
 
         return l_sum;
@@ -161,7 +161,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     public int sizeLiteral()
     {
         int l_sum = m_storage.sizeMultiElement();
-        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
             l_sum += l_iterator.next().sizeLiteral();
 
         return l_sum;
@@ -174,13 +174,13 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Iterator<ILiteral<T>> iteratorLiteral()
+    public Iterator<ILiteral> iteratorLiteral()
     {
         return m_storage.iteratorMultiElement();
     }
 
     @Override
-    public Iterator<IBeliefBaseMask<T>> iteratorBeliefBaseMask()
+    public Iterator<IBeliefBaseMask> iteratorBeliefBaseMask()
     {
         return m_storage.iteratorSingleElement();
     }

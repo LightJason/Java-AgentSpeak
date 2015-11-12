@@ -34,12 +34,13 @@ import java.util.HashSet;
 /**
  * generic term set for agent literals
  */
+@SuppressWarnings( "serial" )
 public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
     /**
      * empty term set
      **/
-    public static final CTermSet EMPTY_TERMSET = new CTermSet( Collections.EMPTY_SET );
+    public static final CTermSet EMPTY_TERMSET = new CTermSet( Collections.<ITerm>emptySet() );
 
     /**
      * default ctor

@@ -30,7 +30,7 @@ import java.util.Iterator;
 /**
  * interface for equal method names on masks and beliefbases
  */
-public interface IBeliefBaseAction<T>
+public interface IBeliefBaseAction
 {
 
     /**
@@ -38,7 +38,7 @@ public interface IBeliefBaseAction<T>
      *
      * @param p_literal literal
      */
-    public void add( final ILiteral<T> p_literal );
+    public void add( final ILiteral p_literal );
 
     /**
      * adds a mask into the current structure
@@ -47,7 +47,7 @@ public interface IBeliefBaseAction<T>
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
-    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask );
+    public IBeliefBaseMask add( final IBeliefBaseMask p_mask );
 
     /**
      * clears all elements
@@ -60,7 +60,7 @@ public interface IBeliefBaseAction<T>
      * @param p_name name of the mask
      * @return mask
      */
-    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name );
+    public <E extends IBeliefBaseMask> E createMask( final String p_name );
 
     /**
      * returns the storage of the beliefbase
@@ -69,7 +69,7 @@ public interface IBeliefBaseAction<T>
      *
      * @tparam L typecast
      */
-    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
+    public <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage();
 
     /**
      * checks if the structure empty
@@ -83,14 +83,14 @@ public interface IBeliefBaseAction<T>
      *
      * @param p_mask mask
      */
-    public boolean remove( final IBeliefBaseMask<T> p_mask );
+    public boolean remove( final IBeliefBaseMask p_mask );
 
     /**
      * removes a literal in the current structure
      *
      * @param p_literal literal
      */
-    public boolean remove( final ILiteral<T> p_literal );
+    public boolean remove( final ILiteral p_literal );
 
     /**
      * removes mask and literal at the current structure
@@ -134,13 +134,13 @@ public interface IBeliefBaseAction<T>
      *
      * @return iterator
      */
-    public Iterator<ILiteral<T>> iteratorLiteral();
+    public Iterator<ILiteral> iteratorLiteral();
 
     /**
      * iterator over all singlelements
      *
      * @return iterator
      */
-    public Iterator<IBeliefBaseMask<T>> iteratorBeliefBaseMask();
+    public Iterator<IBeliefBaseMask> iteratorBeliefBaseMask();
 
 }

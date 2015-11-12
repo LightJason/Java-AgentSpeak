@@ -39,7 +39,7 @@ public final class CBeliefBaseStorage<T>
     /**
      * map with case-insensitive name and a beliefbase
      **/
-    private final Map<String, IBeliefBase<T>> m_beliefbases = new HashMap<>();
+    private final Map<String, IBeliefBase> m_beliefbases = new HashMap<>();
 
 
     /**
@@ -48,7 +48,7 @@ public final class CBeliefBaseStorage<T>
      * @param p_name key name
      * @param p_base beliefbase
      */
-    public final void add( final String p_name, final IBeliefBase<T> p_base )
+    public final void add( final String p_name, final IBeliefBase p_base )
     {
         if ( m_beliefbases.containsKey( p_name.toLowerCase() ) )
             throw new IllegalArgumentException( MessageFormat.format( "beliefbase with the name {0} exists", p_name ) );
@@ -62,7 +62,7 @@ public final class CBeliefBaseStorage<T>
      * @param p_name key name
      * @return null or beliefbase
      */
-    public final IBeliefBase<T> get( final String p_name )
+    public final IBeliefBase get( final String p_name )
     {
         return m_beliefbases.get( p_name.toLowerCase() );
     }

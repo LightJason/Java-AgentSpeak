@@ -24,7 +24,7 @@
 package lightjason.generic;
 
 
-public interface IBeliefBase<T> extends IBeliefBaseAction<T>
+public interface IBeliefBase extends IBeliefBaseAction
 {
 
 }
