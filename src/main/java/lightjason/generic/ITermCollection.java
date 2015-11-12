@@ -21,23 +21,14 @@
  * @endcond
  */
 
-package lightjason.runtime;
+package lightjason.generic;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 
 /**
- * map with actions
+ * interface for term collection
  */
-public interface IMultiAction extends IAction, Map<String, IAction>
+public interface ITermCollection extends ITerm, Collection<ITerm>
 {
-
-    /**
-     * returns a list with names which can handle
-     *
-     * @return list with names
-     */
-    public List<String> getNames();
-
 }

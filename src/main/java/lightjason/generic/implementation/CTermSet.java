@@ -21,39 +21,42 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.generic.implementation;
 
-import lightjason.generic.ILiteral;
+import lightjason.generic.ITerm;
+import lightjason.generic.ITermCollection;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 
 /**
- * beliefbase interface
+ * generic term set for agent literals
  */
-public interface IBeliefBase
+public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
+    /**
+     * empty term set
+     **/
+    public static final CTermSet EMPTY_TERMSET = new CTermSet( Collections.EMPTY_SET );
 
     /**
-     * update internal beliefbase data
+     * default ctor
      */
-    public void update();
+    public CTermSet()
+    {
+        super( 0 );
+    }
 
     /**
-     * returns a list of literals that are new added
-     * to the beliefbase
+     * ctor - with initial elements specified
+     *
+     * @param p_collection collection containing initial elements
      */
-    public List<ILiteral> getNewBeliefs();
-
-    /**
-     * returns a list of literals that are deleted from
-     * the beliefbase
-     */
-    public List<ILiteral> getRemovedBeliefs();
-
-    /**
-     * returns a list of literals that are changed since
-     */
-    public List<ILiteral> getChangedBeliefs();
+    public CTermSet( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
 
 }

@@ -21,27 +21,45 @@
  * @endcond
  */
 
-package lightjason.runtime;
-
-import lightjason.IAgent;
-
-import java.util.List;
+package lightjason.generic.implementation;
 
 
 /**
- * action interface
+ * immutable belief storage
  */
-public interface IAction
+public class CImmutableBeliefStorage<N, M> extends CBeliefStorage<N, M>
 {
 
-    /**
-     * runs the action
-     *
-     * @param p_agent agent that runs the action
-     * @param p_name name of the action
-     * @param p_parameter parameter of the action
-     * @return boolean flag if the action is success or fail
-     */
-    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
+    @Override
+    public final void addMultiElement( final String p_key, final N p_element )
+    {
+    }
 
+    @Override
+    public final void addSingleElement( final String p_key, final M p_element )
+    {
+    }
+
+    @Override
+    public final void clear()
+    {
+    }
+
+    @Override
+    public final boolean remove( final String p_key )
+    {
+        return false;
+    }
+
+    @Override
+    public final boolean removeMultiElement( final String p_key, final N p_element )
+    {
+        return false;
+    }
+
+    @Override
+    public final boolean removeSingleElement( final String p_key )
+    {
+        return false;
+    }
 }

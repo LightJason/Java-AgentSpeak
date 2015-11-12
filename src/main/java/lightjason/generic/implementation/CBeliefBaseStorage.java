@@ -21,76 +21,60 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.generic.implementation;
+
 
 import lightjason.generic.IBeliefBase;
 
-import java.util.concurrent.Callable;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * agent interface
+ * storage of beliefbases to address different beliefbases with a name
  */
-public interface IAgent extends Callable<IAgent>
+public final class CBeliefBaseStorage<T>
 {
     /**
-     * returns the current cycle
+     * map with case-insensitive name and a beliefbase
+     **/
+    private final Map<String, IBeliefBase<T>> m_beliefbases = new HashMap<>();
+
+
+    /**
+     * adds a new beliefbase
      *
-     * @return cycle number
+     * @param p_name key name
+     * @param p_base beliefbase
      */
-    public int getCycle();
+    public final void add( final String p_name, final IBeliefBase<T> p_base )
+    {
+        if ( m_beliefbases.containsKey( p_name.toLowerCase() ) )
+            throw new IllegalArgumentException( MessageFormat.format( "beliefbase with the name {0} exists", p_name ) );
+
+        m_beliefbases.put( p_name.toLowerCase(), p_base );
+    }
 
     /**
-     * returns the agent name
+     * returns a beliefbase
      *
-     * @return agent name
+     * @param p_name key name
+     * @return null or beliefbase
      */
-    public String getName();
+    public final IBeliefBase<T> get( final String p_name )
+    {
+        return m_beliefbases.get( p_name.toLowerCase() );
+    }
 
     /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
+     * removes a beliefbase
      *
-     * @param p_event event
+     * @param p_name key name
      */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public final void remove( final String p_name )
+    {
+        m_beliefbases.remove( p_name.toLowerCase() );
+    }
 
 }

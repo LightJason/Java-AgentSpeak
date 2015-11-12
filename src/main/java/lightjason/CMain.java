@@ -21,7 +21,7 @@ package lightjason; /**
  * @endcond
  */
 
-import lightjason.runtime.IAction;
+import lightjason.generic.IAction;
 
 import java.io.FileInputStream;
 import java.io.IOException;

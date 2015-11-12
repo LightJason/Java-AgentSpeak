@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package lightjason.runtime;
+package lightjason.generic;
 
 /**
- * Created by pkraus on 31.10.15.
+ * single action
  */
 public interface ISingleAction
 {

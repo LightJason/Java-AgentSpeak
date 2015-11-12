@@ -23,9 +23,49 @@
 
 package lightjason.generic;
 
+
+import lightjason.common.CPath;
+
+
 /**
- * literal definition
+ * literal interface
+ *
+ * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral
+public interface ILiteral<T> extends ITerm
 {
+
+    /**
+     * clones the literal
+     *
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
+     */
+    public ILiteral<T> clone( final CPath p_prefix );
+
+    /**
+     * returns the optional annotations
+     *
+     * @return annotation term
+     */
+    public ITermCollection getAnnotation();
+
+    /**
+     * returns the functor / dataset of the literal
+     *
+     * @return function data
+     */
+    public IAtom<String> getFunctor();
+
+    /**
+     * returns the optional value term
+     *
+     * @return value term
+     */
+    public ITermCollection getValues();
+
+    /**
+     * getter of the literal for the negation
+     */
+    public boolean isNegated();
 }

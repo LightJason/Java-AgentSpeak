@@ -21,76 +21,37 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.generic.implementation;
 
-import lightjason.generic.IBeliefBase;
+import lightjason.generic.ITerm;
+import lightjason.generic.ITermCollection;
 
-import java.util.concurrent.Callable;
+import java.util.Collection;
+import java.util.LinkedList;
 
 
 /**
- * agent interface
+ * generic term list for agent literals
  */
-public interface IAgent extends Callable<IAgent>
+@SuppressWarnings( "serial" )
+public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
     /**
-     * returns the current cycle
+     * default ctor
+     */
+    public CTermList()
+    {
+        super();
+    }
+
+    /**
+     * ctor - with initial elements specified
      *
-     * @return cycle number
+     * @param p_collection collection containing initial elements
      */
-    public int getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
-
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public CTermList( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
 
 }

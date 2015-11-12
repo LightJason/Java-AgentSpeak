@@ -21,76 +21,23 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.generic;
 
-import lightjason.generic.IBeliefBase;
-
-import java.util.concurrent.Callable;
+import java.util.List;
+import java.util.Map;
 
 
 /**
- * agent interface
+ * map with actions
  */
-public interface IAgent extends Callable<IAgent>
+public interface IMultiAction extends IAction, Map<String, IAction>
 {
+
     /**
-     * returns the current cycle
+     * returns a list with names which can handle
      *
-     * @return cycle number
+     * @return list with names
      */
-    public int getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
-
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public List<String> getNames();
 
 }

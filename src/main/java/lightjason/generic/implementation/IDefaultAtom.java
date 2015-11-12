@@ -21,76 +21,99 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.generic.implementation;
 
-import lightjason.generic.IBeliefBase;
 
-import java.util.concurrent.Callable;
+import lightjason.generic.IAtom;
 
 
 /**
- * agent interface
+ * generic atom class
  */
-public interface IAgent extends Callable<IAgent>
+public abstract class IDefaultAtom<T> implements IAtom<T>
 {
     /**
-     * returns the current cycle
+     * generic class type
+     */
+    private Class<?> m_type;
+    /**
+     * value the atom represents (e.g. string, number)
+     */
+    private final T m_value;
+
+    /**
+     * default ctor
+     */
+    public IDefaultAtom()
+    {
+        m_value = null;
+    }
+
+    /**
+     * ctor - with value specified
      *
-     * @return cycle number
+     * @param p_value the atoms value
      */
-    public int getCycle();
+    public IDefaultAtom( final T p_value )
+    {
+        m_value = p_value;
+    }
 
     /**
-     * returns the agent name
+     * hashcode method to compare atoms
      *
-     * @return agent name
+     * @return the atom's hashcode
      */
-    public String getName();
+    @Override
+    public final int hashCode()
+    {
+        return m_value.hashCode();
+    }
 
     /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
+     * method to check equivalence
      *
-     * @param p_event event
+     * @param p_object
+     * @return true if input parameter equals the atom
      */
-    public void trigger( final String p_event );
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
 
     /**
-     * sets the agent to a suspend state
+     * Returns a string representation of the atom.
      *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
+     * @return string representation
      */
-    public void suspend();
+    @Override
+    public final String toString()
+    {
+        return m_value.toString();
+    }
 
     /**
-     * returns a boolean if the agent is suspending
+     * check for the atom's class type
      *
-     * @return boolean for suspending
+     * @param p_class matching class
+     * @return true if the atom's type is assignable from matching class
      */
-    public boolean isSuspending();
+    @Override
+    public final boolean isAssignableFrom( final Class<?> p_class )
+    {
+        return m_type.isAssignableFrom( p_class );
+    }
 
     /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
+     * getter for atom value
      *
-     * @return new agent instance
+     * @return the atom's value
      */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    @Override
+    public T get()
+    {
+        return m_value;
+    }
 
 }

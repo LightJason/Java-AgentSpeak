@@ -23,7 +23,8 @@
 
 package lightjason;
 
-import lightjason.runtime.IAction;
+import lightjason.generic.IAction;
+import lightjason.generic.IBeliefBase;
 import lightjason.runtime.IPlan;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;

@@ -21,76 +21,23 @@
  * @endcond
  */
 
-package lightjason;
-
-import lightjason.generic.IBeliefBase;
-
-import java.util.concurrent.Callable;
+package lightjason.generic.implementation;
 
 
 /**
- * agent interface
+ * storage of a beliefbase for storing masks only
  */
-public interface IAgent extends Callable<IAgent>
+public class CBeliefMaskStorage<N, M> extends CBeliefStorage<N, M>
 {
-    /**
-     * returns the current cycle
-     *
-     * @return cycle number
-     */
-    public int getCycle();
 
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
+    @Override
+    public final void addMultiElement( final String p_key, final N p_element )
+    {
+    }
 
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
-
+    @Override
+    public final boolean removeMultiElement( final String p_key, final N p_element )
+    {
+        return false;
+    }
 }
