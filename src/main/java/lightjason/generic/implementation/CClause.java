@@ -29,6 +29,7 @@ import lightjason.generic.IClause;
 import lightjason.generic.ITerm;
 import lightjason.generic.ITermCollection;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -38,16 +39,12 @@ import java.util.Set;
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
  */
-public class CClause<T> implements IClause
+public class CClause implements IClause
 {
     /**
      * the literal annotations
      */
     protected final ITermCollection m_annotations;
-    /**
-     * the original agent specific literal (i.e. Jason, Goal, 2APL)
-     */
-    protected final T m_literal;
     /**
      * the literal values
      */
@@ -65,53 +62,48 @@ public class CClause<T> implements IClause
      * ctor
      *
      * @param p_functor functor
-     * @param p_literal literal
      */
-    public CClause( final String p_functor, final T p_literal )
+    public CClause( final String p_functor )
     {
-        this( new CStringAtom( p_functor ), p_literal, new CTermList(), new CTermSet(), false );
+        this( new CStringAtom( p_functor ), new CTermList(), new CTermSet(), false );
     }
 
     /**
      * ctor
      *
      * @param p_functor functor
-     * @param p_literal literal
      * @param p_negated negated flag
      */
-    public CClause( final String p_functor, final T p_literal, final boolean p_negated )
+    public CClause( final String p_functor, final boolean p_negated )
     {
-        this( new CStringAtom( p_functor ), p_literal, new CTermList(), new CTermSet(), p_negated );
+        this( new CStringAtom( p_functor ), new CTermList(), new CTermSet(), p_negated );
     }
 
     /**
      * ctor
      *
      * @param p_functor functor of the literal
-     * @param p_literal the original literal
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CClause( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
+    public CClause( final String p_functor, final List<ITerm> p_values, final Set<ITerm> p_annotations )
     {
-        this( new CStringAtom( p_functor ), p_literal, new CTermList( p_values ), new CTermSet( p_annotations ), false );
+        this( new CStringAtom( p_functor ), new CTermList( p_values ), new CTermSet( p_annotations ), false );
     }
 
     /**
      * ctor
      *
      * @param p_functor functor of the literal
-     * @param p_literal the original literal
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      * @param p_negated negated flag
      */
-    public CClause( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations,
+    public CClause( final CStringAtom p_functor, final ITermCollection p_values, final ITermCollection p_annotations,
             final boolean p_negated
     )
     {
         m_functor = p_functor;
-        m_literal = p_literal;
         m_values = p_values;
         m_annotations = p_annotations;
         m_negated = p_negated;
@@ -120,7 +112,7 @@ public class CClause<T> implements IClause
     @Override
     public IClause clone( final CPath p_prefix )
     {
-        return new CClause<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations, m_negated );
+        return new CClause( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_values, m_annotations, m_negated );
     }
 
     @Override
@@ -134,7 +126,6 @@ public class CClause<T> implements IClause
     {
         return m_functor;
     }
-
 
     @Override
     public ITermCollection getValues()
@@ -166,7 +157,7 @@ public class CClause<T> implements IClause
     @Override
     public String toString()
     {
-        return ( m_negated ? "~" : "" ) + m_functor.toString() + m_values.toString() + m_annotations.toString();
+        return MessageFormat.format( "{0}{1}{2}{3}", m_negated ? "~" : "", m_functor, m_values, m_annotations );
     }
 
 }

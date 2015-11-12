@@ -3,6 +3,9 @@
 // depends on the distance to the current predecessor car
 // --------------------------------------------------------------------------------------
 
+blub(123).
+xxx("hallo").
+complex( first(true), second("xxx"), third(pi) ).
 
 // initial goal
 !drive.
@@ -15,7 +18,7 @@
 
    <-   min([MaxSpeed, Speed+Accelerate], NewSpeed);
         mecsim_propertyset(self, m_speed, NewSpeed);
-        !drive.
+        !!drive.
 
 
 // deceleration
@@ -27,7 +30,7 @@
    <-
         max([5, Speed-Decelerate], NewSpeed);
         mecsim_propertyset(self, m_speed, NewSpeed);
-        !drive.
+        !!drive.
 
 // driving call if a predecessor exists
 // check distance and decelerate otherwise accelerate
@@ -53,11 +56,11 @@
 
         // check if predecessing car is too close
         if ( BrakingDistance > Scramble*Distance )
-             !decelerate
+             !!decelerate
         else
-             !accelerate
+             !!accelerate
         .
 
 
 // default behaviour - accelerate
-+!drive <- !accelerate.
++!drive <- !!accelerate.

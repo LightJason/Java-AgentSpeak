@@ -123,7 +123,6 @@ public class CAgent implements IAgent
         ).agent();
     }
 
-
     @Override
     public final int getCycle()
     {
