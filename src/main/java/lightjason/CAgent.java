@@ -117,11 +117,14 @@ public class CAgent implements IAgent
         m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? this.toString() : p_name;
 
         // parse AgentSpeak syntax
-        new CAgentParseVisitor().visit(
+        final CAgentParseVisitor l_visit = new CAgentParseVisitor();
+        l_visit.visit(
                 new lightjason.JasonParser(
                         new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
                 ).agent()
         );
+
+        System.out.println( l_visit.getInitialBeliefs() );
     }
 
     @Override
