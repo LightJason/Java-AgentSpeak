@@ -21,22 +21,51 @@
  * @endcond
  */
 
-package lightjason.generic.implementation;
+package lightjason.generic;
+
+
+import lightjason.common.CPath;
 
 
 /**
- * numeric atom class for agent literals
+ * literal interface
+ *
+ * @note closed world assumption, no negation marker needed
  */
-public final class CNumberAtom extends IDefaultAtom<Number>
+public interface ILiteral extends ITerm
 {
-    /**
-     * ctor
-     *
-     * @param p_value the atom's value
-     */
-    public CNumberAtom( final Number p_value )
-    {
-        super( p_value );
-    }
 
+    /**
+     * clones the literal
+     *
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
+     */
+    public ILiteral clone( final CPath p_prefix );
+
+    /**
+     * returns the optional annotations
+     *
+     * @return annotation term
+     */
+    public ITermCollection getAnnotation();
+
+    /**
+     * returns the functor / dataset of the literal
+     *
+     * @return function data
+     */
+    public String getFunctor();
+
+    /**
+     * returns the optional value term
+     *
+     * @return value term
+     */
+    public ITermCollection getValues();
+
+    /**
+     * getter of the literal for the negation
+     */
+    public boolean isNegated();
 }

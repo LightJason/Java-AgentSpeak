@@ -25,6 +25,8 @@ package lightjason.generic.implementation;
 
 import lightjason.generic.IVariable;
 
+import java.text.MessageFormat;
+
 
 /**
  * default variable definition
@@ -36,6 +38,11 @@ public class CVariable<T> implements IVariable<T>
      */
     protected final String m_name;
     /**
+     * boolean flag, that defines an variable which matchs always
+     */
+    protected final boolean m_any;
+    /**
+     * value of the variable
      */
     protected T m_value;
 
@@ -47,7 +54,8 @@ public class CVariable<T> implements IVariable<T>
 
     public CVariable( final String p_name, final T p_value )
     {
-        m_name = p_name;
+        m_any = p_name.equals( "_" ) || ( p_name == null ) || p_name.isEmpty();
+        m_name = m_any ? "_" : p_name;
         m_value = p_value;
     }
 
@@ -60,13 +68,20 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public void set( final T p_value )
     {
-        m_value = p_value;
+        if ( !m_any )
+            m_value = p_value;
+    }
+
+    @Override
+    public boolean isAllocated()
+    {
+        return m_value != null;
     }
 
     @Override
     public boolean isAssignableFrom( final Class<?> p_class )
     {
-        return p_class.isAssignableFrom( m_value.getClass() );
+        return m_any || p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Override
@@ -93,4 +108,9 @@ public class CVariable<T> implements IVariable<T>
         return new CVariable<T>( m_name, m_value );
     }
 
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_name, m_value == null ? "" : m_value );
+    }
 }

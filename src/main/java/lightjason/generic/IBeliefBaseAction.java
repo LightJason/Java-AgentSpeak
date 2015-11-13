@@ -38,7 +38,7 @@ public interface IBeliefBaseAction
      *
      * @param p_literal literal
      */
-    public void add( final IClause p_literal );
+    public void add( final ILiteral p_literal );
 
     /**
      * adds a mask into the current structure
@@ -69,7 +69,7 @@ public interface IBeliefBaseAction
      *
      * @tparam L typecast
      */
-    public <L extends IStorage<IClause, IBeliefBaseMask>> L getStorage();
+    public <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage();
 
     /**
      * checks if the structure empty
@@ -90,7 +90,7 @@ public interface IBeliefBaseAction
      *
      * @param p_literal literal
      */
-    public boolean remove( final IClause p_literal );
+    public boolean remove( final ILiteral p_literal );
 
     /**
      * removes mask and literal at the current structure
@@ -134,7 +134,7 @@ public interface IBeliefBaseAction
      *
      * @return iterator
      */
-    public Iterator<IClause> iteratorLiteral();
+    public Iterator<ILiteral> iteratorLiteral();
 
     /**
      * iterator over all singlelements

@@ -24,8 +24,7 @@
 package lightjason.generic.implementation;
 
 import lightjason.common.CPath;
-import lightjason.generic.IAtom;
-import lightjason.generic.IClause;
+import lightjason.generic.ILiteral;
 import lightjason.generic.ITerm;
 import lightjason.generic.ITermCollection;
 
@@ -39,7 +38,7 @@ import java.util.Set;
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
  */
-public class CClause implements IClause
+public class CLiteral implements ILiteral
 {
     /**
      * the literal annotations
@@ -52,20 +51,26 @@ public class CClause implements IClause
     /**
      * the literals functor
      */
-    protected final IAtom<String> m_functor;
+    protected final String m_functor;
     /**
      * negated option
      */
     protected final boolean m_negated;
 
+
+    public CLiteral( final CLiteral p_relation, final boolean p_negated )
+    {
+        this( p_relation.getFunctor(), p_negated, new CTermList( p_relation.getValues() ), new CTermSet( p_relation.getAnnotation() ) );
+    }
+
     /**
      * ctor
      *
      * @param p_functor functor
      */
-    public CClause( final String p_functor )
+    public CLiteral( final String p_functor )
     {
-        this( new CStringAtom( p_functor ), new CTermList(), new CTermSet(), false );
+        this( p_functor, false, new CTermList(), new CTermSet() );
     }
 
     /**
@@ -74,9 +79,20 @@ public class CClause implements IClause
      * @param p_functor functor
      * @param p_negated negated flag
      */
-    public CClause( final String p_functor, final boolean p_negated )
+    public CLiteral( final String p_functor, final boolean p_negated )
     {
-        this( new CStringAtom( p_functor ), new CTermList(), new CTermSet(), p_negated );
+        this( p_functor, p_negated, new CTermList(), new CTermSet() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor functor of the literal
+     * @param p_values initial list of values
+     */
+    public CLiteral( final String p_functor, final List<ITerm> p_values )
+    {
+        this( p_functor, false, new CTermList( p_values ), new CTermSet() );
     }
 
     /**
@@ -86,21 +102,20 @@ public class CClause implements IClause
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CClause( final String p_functor, final List<ITerm> p_values, final Set<ITerm> p_annotations )
+    public CLiteral( final String p_functor, final List<ITerm> p_values, final Set<ITerm> p_annotations )
     {
-        this( new CStringAtom( p_functor ), new CTermList( p_values ), new CTermSet( p_annotations ), false );
+        this( p_functor, false, new CTermList( p_values ), new CTermSet( p_annotations ) );
     }
 
     /**
      * ctor
      *
      * @param p_functor functor of the literal
+     * @param p_negated negated flag
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
-     * @param p_negated negated flag
      */
-    public CClause( final CStringAtom p_functor, final ITermCollection p_values, final ITermCollection p_annotations,
-            final boolean p_negated
+    public CLiteral( final String p_functor, final boolean p_negated, final ITermCollection p_values, final ITermCollection p_annotations
     )
     {
         m_functor = p_functor;
@@ -110,9 +125,9 @@ public class CClause implements IClause
     }
 
     @Override
-    public IClause clone( final CPath p_prefix )
+    public ILiteral clone( final CPath p_prefix )
     {
-        return new CClause( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_values, m_annotations, m_negated );
+        return new CLiteral( p_prefix.append( m_functor ).toString(), m_negated, m_values, m_annotations );
     }
 
     @Override
@@ -122,7 +137,7 @@ public class CClause implements IClause
     }
 
     @Override
-    public IAtom<String> getFunctor()
+    public String getFunctor()
     {
         return m_functor;
     }

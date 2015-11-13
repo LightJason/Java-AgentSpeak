@@ -25,10 +25,14 @@ package lightjason;
 
 
 import lightjason.generic.ITerm;
+import lightjason.generic.implementation.CLiteral;
 import lightjason.generic.implementation.CVariable;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -41,31 +45,50 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
      */
     private Set<ITerm> m_initialbeliefs = new HashSet<>();
 
-
     @Override
     public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
     {
-        //m_initialbeliefs.add(  );
-        return super.visitBelief( p_context );
+        Object x = new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
+        System.out.println( x );
+        return x;
     }
 
     @Override
-    public Object visitClause( final lightjason.JasonParser.ClauseContext p_context )
+    public Object visitLiteral( final lightjason.JasonParser.LiteralContext p_context )
     {
-        //new CClause( p_context.atom().getText(), p_context. != null )
-        return super.visitClause( p_context );
+        switch ( p_context.list().size() )
+        {
+            case 1:
+                return new CLiteral( this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list( 0 ) ) );
+
+            case 2:
+                return new CLiteral(
+                        this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list( 0 ) ),
+                        new HashSet<>( (List<ITerm>) this.visitList( p_context.list( 1 ) ) )
+                );
+
+
+            default:
+                return new CLiteral( this.visitAtom( p_context.atom() ).toString() );
+        }
     }
 
     @Override
     public Object visitTerm( final lightjason.JasonParser.TermContext p_context )
     {
-        //if ((p_context.number() != null) && (p_context.number().floatnumber()) != null);
+        return super.visitTerm( p_context );
+    }
 
-        Object x = super.visitTerm( p_context );
-        if ( x != null )
-            System.out.println( x + "    " + x.getClass() );
+    @Override
+    public Object visitList( final lightjason.JasonParser.ListContext p_context )
+    {
+        return p_context.term().parallelStream().map( i -> super.visitTerm( i ) ).collect( Collectors.toCollection( () -> new LinkedList<>() ) );
+    }
 
-        return x;
+    @Override
+    public Object visitAtom( final lightjason.JasonParser.AtomContext p_context )
+    {
+        return p_context.getText();
     }
 
     @Override
@@ -120,6 +143,7 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     {
         return p_context.getText();
     }
+
 
     public final Set<ITerm> getInitialBeliefs()
     {

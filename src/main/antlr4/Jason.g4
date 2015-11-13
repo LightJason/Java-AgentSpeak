@@ -62,7 +62,7 @@ initial_goal :
  * belief rule
  **/
 belief :
-    STRONGNEGATION? clause DOT
+    STRONGNEGATION? literal DOT
     ;
 
 /**
@@ -101,7 +101,7 @@ plan :
  **/
 principle :
     annotations?
-    clause
+    literal
     RULEOPERATOR
     body
     DOT
@@ -196,7 +196,7 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    (belief_action | achievment_goal_action | test_goal_action )? clause
+    (belief_action | achievment_goal_action | test_goal_action )? literal
     | if_else
     | while_loop
     | for_loop
@@ -241,7 +241,7 @@ logical_expression :
     | logical_expression (XOR | AND | OR) logical_expression
     | comparison_expression
     | logicalvalue
-    | clause
+    | literal
     ;
 
 /**
@@ -261,7 +261,7 @@ arithmetic_expression :
     | MINUS arithmetic_expression
     | number
     | variable
-    | clause
+    | literal
     ;
 
 /**
@@ -280,7 +280,7 @@ deconstruct_expression :
     list_headtail
     RANGULARBRACKET
     DECONSTRUCT
-    ( clause | variable )
+    ( literal | variable )
     ;
 // ---------------------------------------------------------------------------------------
 
@@ -289,10 +289,10 @@ deconstruct_expression :
 // --- complex-data-types ----------------------------------------------------------------
 
 /**
- * clause represent a structure existing
+ * clause represent a literal structure existing
  * atom, optional argument, optional annotations
  **/
-clause :
+literal :
     atom
     ( LROUNDBRACKET list RROUNDBRACKET )?
     ( LANGULARBRACKET list RANGULARBRACKET )?
@@ -305,7 +305,7 @@ term :
     variable
     | string
     | number
-    | clause
+    | literal
     | arithmetic_expression
     | logical_expression
     | LANGULARBRACKET list RANGULARBRACKET

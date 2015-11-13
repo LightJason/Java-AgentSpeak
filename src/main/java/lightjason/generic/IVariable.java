@@ -42,4 +42,11 @@ public interface IVariable<T> extends IAtom<T>, Cloneable
      */
     public void set( final T p_value );
 
+    /**
+     * returns allocated state
+     *
+     * @return boolean flag
+     */
+    public boolean isAllocated();
+
 }

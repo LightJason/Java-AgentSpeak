@@ -26,7 +26,7 @@ package lightjason.generic.implementation;
 
 import lightjason.generic.IBeliefBase;
 import lightjason.generic.IBeliefBaseMask;
-import lightjason.generic.IClause;
+import lightjason.generic.ILiteral;
 import lightjason.generic.IStorage;
 
 import java.text.MessageFormat;
@@ -43,7 +43,7 @@ public class CBeliefBase<T> implements IBeliefBase
     /**
      * storage with data
      */
-    protected final IStorage<IClause, IBeliefBaseMask> m_storage;
+    protected final IStorage<ILiteral, IBeliefBaseMask> m_storage;
 
 
     /**
@@ -59,7 +59,7 @@ public class CBeliefBase<T> implements IBeliefBase
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<IClause, IBeliefBaseMask> p_storage )
+    public CBeliefBase( final IStorage<ILiteral, IBeliefBaseMask> p_storage )
     {
         if ( p_storage == null )
             throw new IllegalArgumentException( MessageFormat.format( "storage need not to be empty", "" ) );
@@ -79,9 +79,9 @@ public class CBeliefBase<T> implements IBeliefBase
     }
 
     @Override
-    public final void add( final IClause p_literal )
+    public final void add( final ILiteral p_literal )
     {
-        m_storage.addMultiElement( p_literal.getFunctor().get(), p_literal );
+        m_storage.addMultiElement( p_literal.getFunctor(), p_literal );
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CBeliefBase<T> implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<IClause, IBeliefBaseMask>> L getStorage()
+    public final <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage()
     {
         return (L) m_storage;
     }
@@ -126,9 +126,9 @@ public class CBeliefBase<T> implements IBeliefBase
     }
 
     @Override
-    public final boolean remove( final IClause p_literal )
+    public final boolean remove( final ILiteral p_literal )
     {
-        return m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
+        return m_storage.removeMultiElement( p_literal.getFunctor(), p_literal );
     }
 
     @Override
@@ -174,7 +174,7 @@ public class CBeliefBase<T> implements IBeliefBase
     }
 
     @Override
-    public Iterator<IClause> iteratorLiteral()
+    public Iterator<ILiteral> iteratorLiteral()
     {
         return m_storage.iteratorMultiElement();
     }
