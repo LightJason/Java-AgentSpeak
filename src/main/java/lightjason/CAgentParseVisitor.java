@@ -1,4 +1,4 @@
-package lightjason; /**
+/**
  * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
@@ -21,40 +21,13 @@ package lightjason; /**
  * @endcond
  */
 
-import lightjason.generic.IAction;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+package lightjason;
 
 
-public final class CMain
+/**
+ *
+ */
+public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<String>
 {
-    /**
-     * map with actions
-     */
-    private static final Map<String, IAction> c_actions = new HashMap<>();
-
-
-    /**
-     * main
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        try (
-                final InputStream l_stream = new FileInputStream( p_args[0] );
-        )
-        {
-            new CAgent( l_stream, c_actions );
-        }
-        catch ( final IOException l_exception )
-        {
-            l_exception.printStackTrace();
-        }
-    }
 
 }

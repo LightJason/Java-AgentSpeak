@@ -1,6 +1,8 @@
 routingtype("fast").
 scrambling(0.4).
 target( longitude(53.3), latitude(-9.3) ).
+anno(3)[self("blub"), value(true)].
+~neg(5).
 
 !drive.
 

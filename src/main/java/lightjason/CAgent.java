@@ -66,61 +66,62 @@ public class CAgent implements IAgent
     /**
      * ctor
      *
-     * @param p_action map with all usable actions
-     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
+     * @param p_action map with all usable actions
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream ) throws IOException
+    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action ) throws IOException
     {
-        this( p_action, p_stream, null, null );
+        this( p_stream, p_action, null, null );
     }
 
     /**
      * ctor
      *
-     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
+     * @param p_action map with all usable actions
      * @param p_beliefbase beliefbase
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream, final IBeliefBase p_beliefbase ) throws IOException
+    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase ) throws IOException
     {
-        this( p_action, p_stream, p_beliefbase, null );
+        this( p_stream, p_action, p_beliefbase, null );
     }
 
     /**
      * ctor
      *
-     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
+     * @param p_action map with all usable actions
      * @param p_name agent name
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream, final String p_name ) throws IOException
+    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final String p_name ) throws IOException
     {
-        this( p_action, p_stream, null, p_name );
+        this( p_stream, p_action, null, p_name );
     }
 
     /**
      * ctor
      *
-     * @param p_action map with all usable actions
      * @param p_stream input stream with agent-speak source
+     * @param p_action map with all usable actions
      * @param p_beliefbase beliefbase
      * @param p_name agent name
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final Map<String, IAction> p_action, final InputStream p_stream, final IBeliefBase p_beliefbase, final String p_name ) throws IOException
+    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase, final String p_name ) throws IOException
     {
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
         m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? this.toString() : p_name;
 
         // parse AgentSpeak syntax
-        final lightjason.JasonParser.AgentContext l_script = new lightjason.JasonParser(
-                new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
-        ).agent();
+        new CAgentParseVisitor().visit(
+                new lightjason.JasonParser(
+                        new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
+                ).agent()
+        );
     }
 
     @Override
