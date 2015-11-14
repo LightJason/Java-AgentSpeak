@@ -5,6 +5,7 @@
 !*.g4
 !*.asl
 !*.md
+!*.png
 !pom.xml
 !src/main/styleguide/**/*.xml
 

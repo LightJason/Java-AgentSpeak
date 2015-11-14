@@ -26,7 +26,7 @@ a Java 8 implementation has been created. The version defines an additional Agen
 
 ### Plans
 
-* Plans are _sequences of actions, rules and/or achievement goals_
+* Plans are _sequences of actions, rules and/or achievement / test goals_
 * Plans has got an optional context, that defines a constraint for execution (default is true and matchs always)
 * Plans fail iif an item of the plan fails
 * Plans returns a boolean value which defines fail (false) and success (true)
@@ -61,24 +61,25 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Goals are triggering by external events which will match by the goal name
 * Goals will be resolved into plans with equal name (and allowed context)
 * Goals are run in parallel independed from other goals
+* A goal is a sequence of plans that which must all finished successfully
+
+### Intentions
+
+* The intention is set of beliefs (of goals), which must exist simultaneously 
+* An intention is the _convex hull_ of its goals
+
+## Desires
+
+* Desires are the _convex hull_ of all intentions
+* Desires are define by a set of beliefs
+* The desire is successfully reached, iif all belief are exist simultaneously 
+
+![Structure](bdi.png)
+
+
+
 
 ## Running Semantics
-
-### Definitions
-
-| BDI-Convention    | Jason                    | Light-Jason       |
-| ----------------- | ------------------------ | ----------------- |
-| Action            | Internal-Action          | Action            |
-| Action            | External-Action          | Action            |
-| Goal              | Goal                     | Plan              |
-| ?                 | Achievement Goal add/del | Event (Planname)  | 
-| Intention         | Intention                |                   |
-| Plan              | Plan                     | Plan              |
-|                   | Rule                     | Rule              |
-|                   |                          | Repair-Plan       |
-| Desire            | Goal                     | Plan              |
-| Intention         | Goal                     | Plan              |
-
 
 ### Agent-Cycle
 
