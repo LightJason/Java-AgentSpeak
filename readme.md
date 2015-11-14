@@ -70,9 +70,9 @@ a Java 8 implementation has been created. The version defines an additional Agen
 
 ## Desires
 
-* Desires are the _convex hull_ of all intentions
+* A Desire is a vertex of the edge of all intentions
 * Desires are define by a set of beliefs
-* The desire is successfully reached, iif all belief are exist simultaneously 
+* The desire is successfully reached, iif all beliefs are existing anytime
 
 ![Structure](bdi.png)
 
