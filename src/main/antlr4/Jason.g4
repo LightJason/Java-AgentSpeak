@@ -433,15 +433,15 @@ number :
  * floating-point number
  **/
 floatnumber :
-    DIGIT+ DOT DIGIT+
-    | constant
+    MINUS?
+    ( DIGIT+ DOT DIGIT+ | constant )
     ;
 
 /**
  * integer number
  **/
 integernumber :
-    DIGIT+
+    MINUS? DIGIT+
     ;
 
 /**
