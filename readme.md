@@ -38,7 +38,7 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * If the plan calls an _test goal_ then the plan calls the test goal immediatly
 * All items results will be concatinated with a logical _and_ to calculate the plan result value
 * Each plan denotes its success/failure of execution in form of a ```(succeeds,fails)``` score, attached to its name in the static belief list _myplanscore_ (initialized at agent's birth with ```(0,0)```).
-  * After successful or failed execution of the whole plan, the corresponding value gets incremented
+  * After successful or failed execution of the whole plan, the corresponding value gets incremented  
 
 ### Rules
 
@@ -62,16 +62,21 @@ a Java 8 implementation has been created. The version defines an additional Agen
 * Goals will be resolved into plans with equal name (and allowed context)
 * Goals are run in parallel independed from other goals
 * A goal is a sequence of plans that which must all finished successfully
+* A goal is part of exactly one intention
+* A goal will be applied to a plan (a plan with equal name will be instantiiation)
+* if a goal can match a desire (the goal is near to the desire) it can add an event to match the desire belief
 
 ### Intentions
 
 * The intention is set of beliefs (of goals), which must exist simultaneously 
 * An intention is the _convex hull_ of its goals
+* Intentions cannot be in conflict with other intentions, so there dies not exists any overlaping
 
 ## Desires
 
 * A Desire is a vertex of the edge of all intentions
 * Desires are define by a set of beliefs
+* Desires can be in conflict with other desires, represented that the desires have got a large distance (much as possible) 
 * The desire is successfully reached, iif all beliefs are existing anytime
 
 ![Structure](bdi.png)
