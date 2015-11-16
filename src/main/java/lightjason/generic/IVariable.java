@@ -26,7 +26,7 @@ package lightjason.generic;
 /**
  * variable defintion
  */
-public interface IVariable<T> extends IAtom<T>, Cloneable
+public interface IVariable<T> extends ITerm, Cloneable
 {
     /**
      * returns the name of the variable

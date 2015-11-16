@@ -22,6 +22,8 @@ package lightjason; /**
  */
 
 import lightjason.generic.IAction;
+import lightjason.generic.implementation.CArithmeticExpression;
+import lightjason.generic.implementation.CVariable;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -45,11 +47,22 @@ public final class CMain
      */
     public static void main( final String[] p_args )
     {
+        final CArithmeticExpression l_expr = new CArithmeticExpression();
+
+        l_expr.add( CArithmeticExpression.EOperator.Multiply );
+        l_expr.add( CArithmeticExpression.EOperator.Minus, 4, 3 );
+        l_expr.add( CArithmeticExpression.EOperator.Plus, 1, 2 );
+        l_expr.add( CArithmeticExpression.EOperator.Multiply, new CVariable<Number>( "X" ) );
+
+
+        System.out.println( l_expr.evaluate() );
+
+
         try (
                 final InputStream l_stream = new FileInputStream( p_args[0] );
         )
         {
-            new CAgent( l_stream, c_actions );
+            //new CAgent( l_stream, c_actions );
         }
         catch ( final IOException l_exception )
         {

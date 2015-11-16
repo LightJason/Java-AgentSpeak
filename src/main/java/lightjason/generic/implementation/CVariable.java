@@ -79,18 +79,6 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public boolean isAssignableFrom( final Class<?> p_class )
-    {
-        return m_any || p_class.isAssignableFrom( m_value.getClass() );
-    }
-
-    @Override
-    public T get()
-    {
-        return m_value;
-    }
-
-    @Override
     public int hashCode()
     {
         return m_name.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );

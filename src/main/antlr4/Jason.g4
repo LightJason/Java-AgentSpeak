@@ -111,7 +111,7 @@ principle :
  * annotation for rules and plans
  **/
 annotations :
-    ( annotation_atom | annotation_clause )+
+    ( annotation_atom | annotation_literal )+
     ;
 
 /**
@@ -125,15 +125,15 @@ annotation_atom :
 /**
  * annotation with parameter
  **/
-annotation_clause :
+annotation_literal :
     AT
-    ( annotation_numeric_clause | annotation_symbolic_clause )
+    ( annotation_numeric_literal | annotation_symbolic_literal )
     ;
 
 /**
  * annotations with numerical parameter
  **/
-annotation_numeric_clause :
+annotation_numeric_literal :
     ( FUZZY | PRIORITY )
     LROUNDBRACKET
     number
@@ -143,7 +143,7 @@ annotation_numeric_clause :
 /**
  * annotation with symbolic value
  **/
-annotation_symbolic_clause :
+annotation_symbolic_literal :
     EXPIRES
     LROUNDBRACKET
     atom
@@ -255,10 +255,9 @@ comparison_expression :
  * arithmetic expression
  **/
 arithmetic_expression :
-    LROUNDBRACKET arithmetic_expression RROUNDBRACKET
+    MINUS? LROUNDBRACKET arithmetic_expression RROUNDBRACKET
     | arithmetic_expression pointoperator arithmetic_expression
     | arithmetic_expression dashoperator arithmetic_expression
-    | MINUS arithmetic_expression
     | number
     | variable
     | literal

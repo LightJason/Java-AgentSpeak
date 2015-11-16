@@ -24,24 +24,11 @@
 package lightjason.generic;
 
 /**
- * interface for atoms of agent literals
+ *
  */
-public interface IAtom<T> extends ITerm
+public interface IArithmeticExpressionElement<T>
 {
-    /**
-     * checks if the generic type of the term matches a class
-     *
-     * @param p_class matching class
-     * @return boolean of checking
-     *
-     * @note use generic_type_class.isAssignableFrom(p_class)
-     */
-    public boolean isAssignableFrom( final Class<?> p_class );
 
-    /**
-     * returns the value of the atom
-     *
-     * @return value
-     */
-    T get();
+    public T get();
+
 }

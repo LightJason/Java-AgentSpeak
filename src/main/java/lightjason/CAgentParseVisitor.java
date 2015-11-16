@@ -53,6 +53,7 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
         return x;
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public Object visitLiteral( final lightjason.JasonParser.LiteralContext p_context )
     {
@@ -66,7 +67,6 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
                         this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list( 0 ) ),
                         new HashSet<>( (List<ITerm>) this.visitList( p_context.list( 1 ) ) )
                 );
-
 
             default:
                 return new CLiteral( this.visitAtom( p_context.atom() ).toString() );
@@ -96,30 +96,32 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     {
         return new CVariable<>( p_context.getText() );
     }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public Object visitFloatnumber( final lightjason.JasonParser.FloatnumberContext p_context )
     {
         switch ( p_context.getText() )
         {
             case "pi":
-                return (p_context.MINUS() == null ? 1 : -1) * Math.PI;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * Math.PI;
             case "euler":
-                return (p_context.MINUS() == null ? 1 : -1) * Math.E;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * Math.E;
             case "lightspeed":
-                return (p_context.MINUS() == null ? 1 : -1) * (double) ( 299792458 );
+                return (double) ( ( p_context.MINUS() == null ? 1 : -1 ) * 299792458 );
             case "avogadro":
-                return (p_context.MINUS() == null ? 1 : -1) * 6.0221412927e23;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * 6.0221412927e23;
             case "boltzmann":
-                return (p_context.MINUS() == null ? 1 : -1) * 8.617330350e-15;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * 8.617330350e-15;
             case "gravity":
-                return (p_context.MINUS() == null ? 1 : -1) * 6.67408e-11;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * 6.67408e-11;
             case "electron":
-                return (p_context.MINUS() == null ? 1 : -1) * 9.10938356e-31;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * 9.10938356e-31;
             case "neutron":
-                return (p_context.MINUS() == null ? 1 : -1) * 1674927471214e-27;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * 1674927471214e-27;
             case "proton":
-                return (p_context.MINUS() == null ? 1 : -1) * 1.6726219e-27;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
 
             default:
                 return Double.valueOf( p_context.getText() );
@@ -143,7 +145,7 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     {
         return p_context.getText();
     }
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public final Set<ITerm> getInitialBeliefs()
     {
