@@ -28,7 +28,8 @@ import lightjason.generic.IArithmeticExpressionElement;
 import lightjason.generic.IVariable;
 
 import java.text.MessageFormat;
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -40,52 +41,49 @@ import java.util.Stack;
 public class CArithmeticExpression
 {
     /**
-     * stores the arithmetic expression
+     * stores the arithmetic expression (with a linked list for easier navigation)
      **/
-    private Stack<IArithmeticExpressionElement<?>> m_expression = new Stack<>();
+    private final List<IArithmeticExpressionElement<?>> m_expression = new LinkedList<>();
 
 
     public void add( final EOperator p_operator, final Number p_number1, final Number p_number2 )
     {
-        /*
-        m_expression.push( new COperatorElement( p_operator ) );
-        m_expression.push( new CNumberElement( p_number1 ) );
-        m_expression.push( new CNumberElement( p_number2 ) );
-        */
-        m_expression.push( new CNumberElement( p_operator.evaluate( p_number1, p_number2 ) ) );
+        m_expression.add( new COperatorElement( p_operator ) );
+        m_expression.add( new CNumberElement( p_number1 ) );
+        m_expression.add( new CNumberElement( p_number2 ) );
     }
 
     public <T extends Number> void add( final EOperator p_operator, final IVariable<T> p_variable1, final IVariable<T> p_variable2 )
     {
-        m_expression.push( new COperatorElement( p_operator ) );
-        m_expression.push( new CVariableElement<>( p_variable1 ) );
-        m_expression.push( new CVariableElement<>( p_variable2 ) );
+        m_expression.add( new COperatorElement( p_operator ) );
+        m_expression.add( new CVariableElement<>( p_variable1 ) );
+        m_expression.add( new CVariableElement<>( p_variable2 ) );
     }
 
     public <T extends Number> void add( final EOperator p_operator, final IVariable<T> p_variable, final Number p_number )
     {
-        m_expression.push( new COperatorElement( p_operator ) );
-        m_expression.push( new CVariableElement<>( p_variable ) );
-        m_expression.push( new CNumberElement( p_number ) );
+        m_expression.add( new COperatorElement( p_operator ) );
+        m_expression.add( new CVariableElement<>( p_variable ) );
+        m_expression.add( new CNumberElement( p_number ) );
     }
 
     public <T extends Number> void add( final EOperator p_operator, final Number p_number, final IVariable<T> p_variable )
     {
-        m_expression.push( new COperatorElement( p_operator ) );
-        m_expression.push( new CNumberElement( p_number ) );
-        m_expression.push( new CVariableElement<>( p_variable ) );
+        m_expression.add( new COperatorElement( p_operator ) );
+        m_expression.add( new CNumberElement( p_number ) );
+        m_expression.add( new CVariableElement<>( p_variable ) );
     }
 
     public <T extends Number> void add( final EOperator p_operator, final Number p_number )
     {
-        m_expression.push( new COperatorElement( p_operator ) );
-        m_expression.push( new CNumberElement( p_number ) );
+        m_expression.add( new COperatorElement( p_operator ) );
+        m_expression.add( new CNumberElement( p_number ) );
     }
 
     public <T extends Number> void add( final EOperator p_operator, final IVariable<T> p_variable )
     {
-        m_expression.push( new COperatorElement( p_operator ) );
-        m_expression.push( new CVariableElement<>( p_variable ) );
+        m_expression.add( new COperatorElement( p_operator ) );
+        m_expression.add( new CVariableElement<>( p_variable ) );
     }
 
     public void add( final EOperator p_operator )
@@ -95,16 +93,31 @@ public class CArithmeticExpression
 
     public Number evaluate()
     {
-        final Stack<IArithmeticExpressionElement<?>> l_stack = (Stack<IArithmeticExpressionElement<?>>) m_expression.clone();
+        final List<IArithmeticExpressionElement<?>> l_stack = new LinkedList<>( m_expression );
+        final List<IArithmeticExpressionElement<?>> l_cache = new LinkedList<>();
 
         while ( l_stack.size() > 1 )
         {
+            if (
+                    ( l_stack.get( 0 ) instanceof COperatorElement ) &&
+                    ( ( l_stack.get( 1 ) instanceof CVariable ) || ( l_stack.get( 1 ) instanceof CNumberElement ) ) &&
+                    ( ( l_stack.get( 2 ) instanceof CVariable ) || ( l_stack.get( 2 ) instanceof CNumberElement ) )
+                    )
+            {
+                final EOperator l_operator = this.solveOperator( l_stack.remove( 0 ) );
+                final Number l_argument1 = this.solveNumber( l_stack.remove( 0 ) );
+                final Number l_argument2 = this.solveNumber( l_stack.remove( 0 ) );
 
+                l_stack.add( 0, new CNumberElement( l_operator.evaluate( l_argument1, l_argument2 ) ) );
+                l_stack.addAll( 0, l_cache );
+                l_cache.clear();
+            }
+            else
+                l_cache.add( l_stack.remove( 0 ) );
         }
 
-        return ( (CNumberElement) l_stack.pop() ).get();
+        return ( (CNumberElement) l_stack.remove( 0 ) ).get();
     }
-
 
     public Number solveNumber( final IArithmeticExpressionElement<?> p_element )
     {
