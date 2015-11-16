@@ -100,27 +100,26 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     @Override
     public Object visitFloatnumber( final lightjason.JasonParser.FloatnumberContext p_context )
     {
-        final int l_multiplicator = p_context.MINUS() == null ? 1 : -1;
         switch ( p_context.getText() )
         {
             case "pi":
-                return l_multiplicator * Math.PI;
+                return (p_context.MINUS() == null ? 1 : -1) * Math.PI;
             case "euler":
-                return l_multiplicator * Math.E;
+                return (p_context.MINUS() == null ? 1 : -1) * Math.E;
             case "lightspeed":
-                return l_multiplicator * (double) ( 299792458 );
+                return (p_context.MINUS() == null ? 1 : -1) * (double) ( 299792458 );
             case "avogadro":
-                return l_multiplicator * 6.0221412927e23;
+                return (p_context.MINUS() == null ? 1 : -1) * 6.0221412927e23;
             case "boltzmann":
-                return l_multiplicator * 8.617330350e-15;
+                return (p_context.MINUS() == null ? 1 : -1) * 8.617330350e-15;
             case "gravity":
-                return l_multiplicator * 6.67408e-11;
+                return (p_context.MINUS() == null ? 1 : -1) * 6.67408e-11;
             case "electron":
-                return l_multiplicator * 9.10938356e-31;
+                return (p_context.MINUS() == null ? 1 : -1) * 9.10938356e-31;
             case "neutron":
-                return l_multiplicator * 1674927471214e-27;
+                return (p_context.MINUS() == null ? 1 : -1) * 1674927471214e-27;
             case "proton":
-                return l_multiplicator * 1.6726219e-27;
+                return (p_context.MINUS() == null ? 1 : -1) * 1.6726219e-27;
 
             default:
                 return Double.valueOf( p_context.getText() );
