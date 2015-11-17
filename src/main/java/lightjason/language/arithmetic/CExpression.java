@@ -66,80 +66,54 @@ public class CExpression
         m_operatordefinition = p_operator;
     }
 
-    public void add( final String p_operator, final Number p_number1, final Number p_number2 )
+    /**
+     * adds operators
+     *
+     * @param p_operator operators
+     * @return expression
+     */
+    public CExpression push( final String... p_operator )
     {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+        for ( final String l_item : p_operator )
+        {
+            final IArithmeticOperator l_operator = m_operatordefinition.get( l_item );
+            if ( l_operator == null )
+                throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", l_item ) );
 
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-        m_elements.add( new CNumberElement( p_number1 ) );
-        m_elements.add( new CNumberElement( p_number2 ) );
+            m_operator.add( l_operator );
+        }
+
+        return this;
     }
 
-    public <T extends Number> void add( final String p_operator, final IVariable<T> p_variable1, final IVariable<T> p_variable2 )
+    /**
+     * adds numbers
+     *
+     * @param p_number numbers
+     * @return expression
+     */
+    public CExpression push( final Number... p_number )
     {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+        for ( final Number l_item : p_number )
+            m_elements.add( new CNumberElement( l_item ) );
 
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-        m_elements.add( new CNumberElement( p_variable1 ) );
-        m_elements.add( new CNumberElement( p_variable2 ) );
+        return this;
     }
 
-    public <T extends Number> void add( final String p_operator, final IVariable<T> p_variable, final Number p_number )
+    /**
+     * adds variables
+     *
+     * @param p_variable variables
+     * @return expression
+     *
+     * @tparam T number type
+     */
+    public <T extends Number> CExpression push( final IVariable<T>... p_variable )
     {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+        for ( final IVariable<T> l_item : p_variable )
+            m_elements.add( new CNumberElement( l_item ) );
 
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-        m_elements.add( new CNumberElement( p_variable ) );
-        m_elements.add( new CNumberElement( p_number ) );
-    }
-
-    public <T extends Number> void add( final String p_operator, final Number p_number, final IVariable<T> p_variable )
-    {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
-
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-        m_elements.add( new CNumberElement( p_number ) );
-        m_elements.add( new CNumberElement( p_variable ) );
-    }
-
-    public <T extends Number> void add( final String p_operator, final Number p_number )
-    {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
-
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-        m_elements.add( new CNumberElement( p_number ) );
-    }
-
-    public <T extends Number> void add( final String p_operator, final IVariable<T> p_variable )
-    {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
-
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-        m_elements.add( new CNumberElement( p_variable ) );
-    }
-
-    public void add( final String p_operator )
-    {
-        if ( !m_operatordefinition.containsKey( p_operator ) )
-            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
-
-        m_operator.add( m_operatordefinition.get( p_operator ) );
-    }
-
-    public void add( final Number p_value )
-    {
-        m_elements.add( new CNumberElement( p_value ) );
-    }
-
-    public <T extends Number> void add( final IVariable<T> p_variable )
-    {
-        m_elements.add( new CNumberElement( p_variable ) );
+        return this;
     }
 
     /**
@@ -202,6 +176,11 @@ public class CExpression
          */
         private final IVariable<T> m_variable;
 
+        /**
+         * ctor
+         *
+         * @param p_value add a number
+         */
         public CNumberElement( final Number p_value )
         {
             if ( p_value == null )
@@ -211,12 +190,23 @@ public class CExpression
             m_variable = null;
         }
 
+        /**
+         * ctor
+         *
+         * @param p_variable add a variable
+         */
         public CNumberElement( final IVariable<T> p_variable )
         {
             m_value = null;
             m_variable = p_variable;
         }
 
+        /**
+         * returns the number
+         *
+         * @param p_solver solver map with variabl -> number mapping
+         * @return number
+         */
         public Number get( final Map<String, Number> p_solver )
         {
             Number l_return = m_value;

@@ -64,9 +64,8 @@ public class Test_CExpression
         final CExpression l_expression = new CExpression( c_operator );
 
         // (1+X) * 4 + 8
-        l_expression.add( "+", 1, new CVariable<Number>( "X" ) );
-        l_expression.add( "*", 4 );
-        l_expression.add( "+", 8 );
+        l_expression.push( "+" ).push( 1 ).push( new CVariable<Number>( "X" ) );
+        l_expression.push( "*" ).push( 4 ).push( "+" ).push( 8 );
 
         for ( int i = 0; i < 500; i++ )
         {
@@ -86,11 +85,8 @@ public class Test_CExpression
     public void test_ComplexExpression()
     {
         // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
-
         final CExpression l_expression1 = new CExpression( c_operator );
-        l_expression1.add( "*" );
-        l_expression1.add( "**", 3, 4 );
-        l_expression1.add( 2 );
+        l_expression1.push( "*", "**" ).push( 3, 4, 2 );
 
         final int l_value1 = l_expression1.evaluate().intValue();
         assertTrue( MessageFormat.format( "value should be [{0}] but is [{1}]", 162, l_value1 ), l_value1 == 162 );
