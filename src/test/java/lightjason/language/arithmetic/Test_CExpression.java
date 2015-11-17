@@ -88,8 +88,9 @@ public class Test_CExpression
         // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
 
         final CExpression l_expression1 = new CExpression( c_operator );
+        l_expression1.add( "*" );
         l_expression1.add( "**", 3, 4 );
-        l_expression1.add( "*", 2 );
+        l_expression1.add( 2 );
 
         final int l_value1 = l_expression1.evaluate().intValue();
         assertTrue( MessageFormat.format( "value should be [{0}] but is [{1}]", 162, l_value1 ), l_value1 == 162 );

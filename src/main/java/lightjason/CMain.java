@@ -1,5 +1,18 @@
 package lightjason;
 
+import lightjason.language.arithmetic.CExpression;
+import lightjason.language.arithmetic.operator.CDivide;
+import lightjason.language.arithmetic.operator.CMinus;
+import lightjason.language.arithmetic.operator.CModulo;
+import lightjason.language.arithmetic.operator.CMultiply;
+import lightjason.language.arithmetic.operator.CPlus;
+import lightjason.language.arithmetic.operator.CPow;
+import lightjason.language.arithmetic.operator.IArithmeticOperator;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
  * @cond LICENSE
  * ######################################################################################
@@ -25,6 +38,15 @@ package lightjason;
 
 public final class CMain
 {
+    private static final Map<String, IArithmeticOperator> c_operator = new HashMap()
+    {{
+        put( "+", new CPlus() );
+        put( "-", new CMinus() );
+        put( "*", new CMultiply() );
+        put( "/", new CDivide() );
+        put( "**", new CPow() );
+        put( "%", new CModulo() );
+    }};
 
     /**
      * main
@@ -33,7 +55,12 @@ public final class CMain
      */
     public static void main( final String[] p_args )
     {
+        final CExpression l_expression1 = new CExpression( c_operator );
+        l_expression1.add( "*" );
+        l_expression1.add( "**", 3, 4 );
+        l_expression1.add( 2 );
 
+        System.out.println( l_expression1.evaluate() );
     }
 
 }

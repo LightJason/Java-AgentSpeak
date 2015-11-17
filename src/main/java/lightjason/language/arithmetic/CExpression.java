@@ -132,6 +132,21 @@ public class CExpression
         m_operator.add( m_operatordefinition.get( p_operator ) );
     }
 
+    public void add( final Number p_value )
+    {
+        m_elements.add( new CNumberElement( p_value ) );
+    }
+
+    public <T extends Number> void add( final IVariable<T> p_variable )
+    {
+        m_elements.add( new CNumberElement( p_variable ) );
+    }
+
+    /**
+     * evaluates the expression without variable substituation
+     *
+     * @return
+     */
     public Number evaluate()
     {
         return this.evaluate( null );
@@ -140,7 +155,7 @@ public class CExpression
     /**
      * evaluates expression
      *
-     * @param p_solver map with variable replacing
+     * @param p_solver map with variable substituation
      * @return number
      */
     public Number evaluate( final Map<String, Number> p_solver )
