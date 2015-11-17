@@ -29,22 +29,22 @@ import java.util.List;
 /**
  * sin-function operator
  */
-public class CSin implements IArithmeticOperator
+public final class CSin implements IArithmeticOperator
 {
     @Override
-    public String getToken()
+    public final String getToken()
     {
         return "sin";
     }
 
     @Override
-    public int getNumberOfArguments()
+    public final int getNumberOfArguments()
     {
         return 1;
     }
 
     @Override
-    public Number execution( final List<Number> p_arguments )
+    public final Number execution( final List<Number> p_arguments )
     {
         return Math.sin( p_arguments.get( 0 ).doubleValue() );
     }

@@ -35,7 +35,7 @@ import java.util.Set;
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
  */
-public class CLiteral implements ILiteral
+public final class CLiteral implements ILiteral
 {
     /**
      * the literal annotations
@@ -54,10 +54,15 @@ public class CLiteral implements ILiteral
      */
     protected final boolean m_negated;
 
-
-    public CLiteral( final CLiteral p_relation, final boolean p_negated )
+    /**
+     * ctor
+     *
+     * @param p_literal literal
+     * @param p_negated strong negation
+     */
+    public CLiteral( final CLiteral p_literal, final boolean p_negated )
     {
-        this( p_relation.getFunctor(), p_negated, new CTermList( p_relation.getValues() ), new CTermSet( p_relation.getAnnotation() ) );
+        this( p_literal.getFunctor(), p_negated, new CTermList( p_literal.getValues() ), new CTermSet( p_literal.getAnnotation() ) );
     }
 
     /**
@@ -122,31 +127,31 @@ public class CLiteral implements ILiteral
     }
 
     @Override
-    public ILiteral clone( final CPath p_prefix )
+    public final ILiteral clone( final CPath p_prefix )
     {
         return new CLiteral( p_prefix.append( m_functor ).toString(), m_negated, m_values, m_annotations );
     }
 
     @Override
-    public ITermCollection getAnnotation()
+    public final ITermCollection getAnnotation()
     {
         return m_annotations;
     }
 
     @Override
-    public String getFunctor()
+    public final String getFunctor()
     {
         return m_functor;
     }
 
     @Override
-    public ITermCollection getValues()
+    public final ITermCollection getValues()
     {
         return m_values;
     }
 
     @Override
-    public boolean isNegated()
+    public final boolean isNegated()
     {
         return m_negated;
     }
@@ -167,7 +172,7 @@ public class CLiteral implements ILiteral
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0}{1}{2}{3}", m_negated ? "~" : "", m_functor, m_values, m_annotations );
     }

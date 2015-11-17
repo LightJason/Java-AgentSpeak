@@ -29,34 +29,34 @@ import java.util.List;
 /**
  * ceil-function operator
  */
-public class CCeil implements IArithmeticOperator
+public final class CCeil implements IArithmeticOperator
 {
     @Override
-    public String getToken()
+    public final String getToken()
     {
         return "ceil";
     }
 
     @Override
-    public int getNumberOfArguments()
+    public final int getNumberOfArguments()
     {
         return 1;
     }
 
     @Override
-    public Number execution( final List<Number> p_arguments )
+    public final Number execution( final List<Number> p_arguments )
     {
         return Math.ceil( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return getToken().hashCode();
     }
 
     @Override
-    public boolean equals( final Object p_object )
+    public final boolean equals( final Object p_object )
     {
         return this.getToken().equals( p_object );
     }

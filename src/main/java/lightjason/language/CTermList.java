@@ -31,7 +31,7 @@ import java.util.LinkedList;
  * generic term list for agent literals
  */
 @SuppressWarnings( "serial" )
-public class CTermList extends LinkedList<ITerm> implements ITermCollection
+public final class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
     /**
      * default ctor

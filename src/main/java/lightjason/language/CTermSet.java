@@ -32,7 +32,7 @@ import java.util.HashSet;
  * generic term set for agent literals
  */
 @SuppressWarnings( "serial" )
-public class CTermSet extends HashSet<ITerm> implements ITermCollection
+public final class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
     /**
      * empty term set

@@ -29,7 +29,7 @@ import java.text.MessageFormat;
 /**
  * default variable definition
  */
-public class CVariable<T> implements IVariable<T>
+public final class CVariable<T> implements IVariable<T>
 {
     /**
      * variable name

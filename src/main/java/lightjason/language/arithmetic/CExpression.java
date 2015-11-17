@@ -45,9 +45,11 @@ import lightjason.language.arithmetic.operator.IArithmeticOperator;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -58,7 +60,7 @@ import java.util.stream.Collectors;
  * @see https://en.wikipedia.org/wiki/Reverse_Polish_notation
  * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
-public class CExpression
+public final class CExpression
 {
     /**
      * map with default operators
@@ -86,6 +88,10 @@ public class CExpression
      * operator definition
      */
     private final Map<String, IArithmeticOperator> m_operatordefinition;
+    /**
+     * stores a set of all variables
+     */
+    private final Set<IVariable<Number>> m_variables = new HashSet<>();
 
     /**
      * ctor
@@ -111,7 +117,7 @@ public class CExpression
      * @param p_operator operators
      * @return expression
      */
-    public CExpression push( final String... p_operator )
+    public final CExpression push( final String... p_operator )
     {
         for ( final String l_item : p_operator )
         {
@@ -131,7 +137,7 @@ public class CExpression
      * @param p_number numbers
      * @return expression
      */
-    public CExpression push( final Number... p_number )
+    public final CExpression push( final Number... p_number )
     {
         for ( final Number l_item : p_number )
             m_elements.add( new CNumberElement<>( l_item ) );
@@ -147,12 +153,27 @@ public class CExpression
      *
      * @tparam T number type
      */
-    public <T extends Number> CExpression push( final IVariable<T>... p_variable )
+    public final <T extends Number> CExpression push( final IVariable<T>... p_variable )
     {
         for ( final IVariable<T> l_item : p_variable )
+        {
             m_elements.add( new CNumberElement<>( l_item ) );
+            //m_variables.addAll( l_item );
+        }
 
         return this;
+    }
+
+    /**
+     * returns a set of all variables of the expression
+     *
+     * @return set with variables
+     *
+     * @tparam T number
+     */
+    public final <T extends Number> Set<IVariable<T>> getVariables()
+    {
+        return null;
     }
 
     /**
@@ -160,7 +181,7 @@ public class CExpression
      *
      * @return
      */
-    public Number evaluate()
+    public final Number evaluate()
     {
         return this.evaluate( null );
     }
@@ -172,7 +193,7 @@ public class CExpression
      * @return number
      */
     @SuppressWarnings( "unchecked" )
-    public Number evaluate( final Map<String, Number> p_solver )
+    public final Number evaluate( final Map<String, Number> p_solver )
     {
         // copy of data
         final Stack<IArithmeticOperator> l_operator = (Stack<IArithmeticOperator>) m_operator.clone();
