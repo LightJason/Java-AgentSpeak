@@ -23,17 +23,50 @@
 
 package lightjason;
 
+import lightjason.runtime.IAction;
 import org.junit.Test;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * test agent structure
  */
 public class Test_CAgent {
+    /**
+     * map with actions
+     */
+    private static final Map<String, IAction> c_actions = new HashMap<>();
 
+    private static boolean testAgent(final String p_script, final String p_name) {
+        IAgent l_agent = null;
+        try (
+                final InputStream l_stream = new FileInputStream(p_script);
+        ) {
+            l_agent = new CAgent(l_stream, c_actions);
+        } catch (final Exception l_exception) {
+            System.err.println(MessageFormat.format("{0} passed with failure: {1}", p_name, l_exception.toString()));
+            return false;
+        }
+
+        System.out.println(MessageFormat.format("{0} passed successfully with beliefbase {1}", p_name, l_agent.getBeliefBase()));
+        return true;
+    }
 
     @Test
-    public void test_ParserAndLexerSuccessFull() {
-        //new CAgent( new FileInputStream( "src/resources/" ) )
+    public void test_ComplexAgent() throws IOException {
+        assertTrue(testAgent("src/test/resources/agentcomplex.asl", "complex agent"));
+    }
+
+    @Test
+    public void test_SimpleAgent() throws IOException {
+        assertTrue(testAgent("src/test/resources/agentsimple.asl", "simple agent"));
     }
 
 }

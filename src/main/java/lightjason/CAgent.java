@@ -123,8 +123,6 @@ public class CAgent implements IAgent
                         new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
                 ).agent()
         );
-
-        System.out.println( l_visit.getInitialBeliefs() );
     }
 
     @Override

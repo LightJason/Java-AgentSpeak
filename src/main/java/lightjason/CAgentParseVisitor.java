@@ -48,9 +48,7 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     @Override
     public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
     {
-        Object x = new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
-        System.out.println( x );
-        return x;
+        return new CLiteral((CLiteral) this.visitLiteral(p_context.literal()), p_context.STRONGNEGATION() != null);
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
