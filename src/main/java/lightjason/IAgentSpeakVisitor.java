@@ -24,7 +24,6 @@
 package lightjason;
 
 import lightjason.language.ILiteral;
-import lightjason.language.ITerm;
 
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
      *
      * @return set with beliefs
      */
-    public Set<ITerm> getInitialBeliefs();
+    public Set<ILiteral> getInitialBeliefs();
 
     /**
      * returns the initial goal

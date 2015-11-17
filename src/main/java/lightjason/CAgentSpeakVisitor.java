@@ -43,7 +43,7 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     /**
      * set with initial beliefs
      */
-    private final Set<ITerm> m_initialbeliefs = new HashSet<>();
+    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
     /**
      * initial goal
      */
@@ -157,20 +157,14 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * returns the initial beliefs
-     *
-     * @return set with beliefs
-     */
-    public final Set<ITerm> getInitialBeliefs()
+    @Override
+    public Set<ILiteral> getInitialBeliefs()
     {
         return m_initialbeliefs;
     }
 
-    /**
-     * returns the initial goal
-     */
-    public final ILiteral getInitialGoal()
+    @Override
+    public ILiteral getInitialGoal()
     {
         return m_initialgoal;
     }
