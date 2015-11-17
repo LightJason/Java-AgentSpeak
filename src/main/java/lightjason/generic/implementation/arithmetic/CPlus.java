@@ -47,12 +47,6 @@ public class CPlus implements IArithmeticOperator
     }
 
     @Override
-    public int getPrecedence()
-    {
-        return 0;
-    }
-
-    @Override
     public Number execution( final List<Number> p_arguments )
     {
         if ( ( p_arguments.get( 0 ) instanceof Double ) || ( p_arguments.get( 1 ) instanceof Double ) )
@@ -79,5 +73,17 @@ public class CPlus implements IArithmeticOperator
                 )
         );
 
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
     }
 }
