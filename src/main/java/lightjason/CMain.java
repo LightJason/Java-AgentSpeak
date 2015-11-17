@@ -23,6 +23,7 @@ package lightjason; /**
 
 import lightjason.generic.IAction;
 import lightjason.generic.implementation.CArithmeticExpression;
+import lightjason.generic.implementation.CVariable;
 import lightjason.generic.implementation.arithmetic.CDivide;
 import lightjason.generic.implementation.arithmetic.CMinus;
 import lightjason.generic.implementation.arithmetic.CModulo;
@@ -62,15 +63,16 @@ public final class CMain
             put( "%", new CModulo() );
         }} );
 
+        // (1+2) * 4 + 8
+        l_expr.add( "+", 1, new CVariable<Number>( "X" ) );
         l_expr.add( "*", 4 );
-        l_expr.add( "+", 1, 2 );
         l_expr.add( "+", 8 );
 
 
-        //l_expr.add( CArithmeticExpression.EOperator.Multiply, new CVariable<Number>( "X" ) );
+        final Map<String, Number> l_replace = new HashMap<>();
+        l_replace.put( "X", 3 );
 
-
-        System.out.println( l_expr.evaluate() );
+        System.out.println( l_expr.evaluate( l_replace ) );
 
 
         try (

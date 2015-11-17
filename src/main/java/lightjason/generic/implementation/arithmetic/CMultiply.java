@@ -80,4 +80,16 @@ public class CMultiply implements IArithmeticOperator
         );
 
     }
+
+    @Override
+    public int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

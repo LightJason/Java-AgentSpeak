@@ -56,4 +56,16 @@ public class CPow implements IArithmeticOperator
     {
         return Math.pow( p_arguments.get( 0 ).doubleValue(), p_arguments.get( 1 ).doubleValue() );
     }
+
+    @Override
+    public int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

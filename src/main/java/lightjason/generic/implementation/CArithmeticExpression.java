@@ -28,10 +28,11 @@ import lightjason.generic.IArithmeticOperator;
 import lightjason.generic.IVariable;
 
 import java.text.MessageFormat;
-import java.util.ArrayDeque;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 
 /**
@@ -49,13 +50,17 @@ public class CArithmeticExpression
     /**
      * output queue
      */
-    private final Queue<CNumberElement> m_elements = new ArrayDeque<>();
+    private final List<CNumberElement> m_elements = new LinkedList<>();
     /**
      * operator definition
      */
     private final Map<String, IArithmeticOperator> m_operatordefinition;
 
-
+    /**
+     * ctor
+     *
+     * @param p_operator map with operator set
+     */
     public CArithmeticExpression( final Map<String, IArithmeticOperator> p_operator )
     {
         m_operatordefinition = p_operator;
@@ -129,8 +134,29 @@ public class CArithmeticExpression
 
     public Number evaluate()
     {
-        return null;
+        return this.evaluate( null );
     }
+
+    public Number evaluate( final Map<String, Number> p_solver )
+    {
+        // copy of data
+        // @todo deep-copy
+        final Stack<IArithmeticOperator> l_operator = (Stack<IArithmeticOperator>) m_operator.clone();
+        final List<CNumberElement> l_elements = new LinkedList<>( m_elements );
+
+        while ( !l_operator.isEmpty() )
+        {
+            final IArithmeticOperator l_executeoperator = l_operator.pop();
+            final List<CNumberElement> l_arguments = l_elements.subList( 0, l_executeoperator.getNumberOfArguments() );
+            final Number l_number = l_executeoperator.execution( l_arguments.parallelStream().map( i -> i.get( p_solver ) ).collect( Collectors.toList() ) );
+
+            l_arguments.clear();
+            l_elements.add( 0, new CNumberElement( l_number ) );
+        }
+
+        return l_elements.get( 0 ).get( null );
+    }
+
 
 
     protected static class CNumberElement<T>
@@ -150,10 +176,10 @@ public class CArithmeticExpression
             m_variable = p_variable;
         }
 
-        public Number get( final Map<String, Number> p_solvings )
+        public Number get( final Map<String, Number> p_solver )
         {
-            if ( ( p_solvings != null ) && ( m_variable != null ) )
-                return p_solvings.get( m_variable.getName() );
+            if ( ( p_solver != null ) && ( m_variable != null ) )
+                return p_solver.get( m_variable.getName() );
 
             return m_value;
         }

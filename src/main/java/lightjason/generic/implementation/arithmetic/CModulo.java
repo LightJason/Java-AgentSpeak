@@ -56,4 +56,16 @@ public class CModulo implements IArithmeticOperator
     {
         return p_arguments.get( 0 ).longValue() % p_arguments.get( 1 ).longValue();
     }
+
+    @Override
+    public int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }
