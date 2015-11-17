@@ -25,9 +25,25 @@
 package lightjason.language.arithmetic;
 
 import lightjason.language.IVariable;
+import lightjason.language.arithmetic.operator.CAbs;
+import lightjason.language.arithmetic.operator.CCeil;
+import lightjason.language.arithmetic.operator.CCos;
+import lightjason.language.arithmetic.operator.CDivide;
+import lightjason.language.arithmetic.operator.CExp;
+import lightjason.language.arithmetic.operator.CFloor;
+import lightjason.language.arithmetic.operator.CMinus;
+import lightjason.language.arithmetic.operator.CModulo;
+import lightjason.language.arithmetic.operator.CMultiply;
+import lightjason.language.arithmetic.operator.CPlus;
+import lightjason.language.arithmetic.operator.CPow;
+import lightjason.language.arithmetic.operator.CSignum;
+import lightjason.language.arithmetic.operator.CSin;
+import lightjason.language.arithmetic.operator.CSqrt;
+import lightjason.language.arithmetic.operator.CTan;
 import lightjason.language.arithmetic.operator.IArithmeticOperator;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +59,19 @@ import java.util.stream.Collectors;
  */
 public class CExpression
 {
+    private static final Map<String, IArithmeticOperator> c_defaultoperator = new HashMap<String, IArithmeticOperator>()
+    {{
+        for ( final IArithmeticOperator l_operator : new IArithmeticOperator[]{
+                new CAbs(), new CCeil(), new CCos(), new CDivide(), new CExp(),
+                new CFloor(), new CMinus(), new CModulo(), new CMultiply(),
+                new CPlus(), new CPow(), new CSignum(), new CSin(), new CSqrt(),
+                new CTan()
+        } )
+            put( l_operator.getToken(), l_operator );
+    }};
+
+
+
     /**
      * stores the operator of the arithmetic expression
      **/
@@ -55,6 +84,14 @@ public class CExpression
      * operator definition
      */
     private final Map<String, IArithmeticOperator> m_operatordefinition;
+
+    /**
+     * ctor
+     */
+    public CExpression()
+    {
+        m_operatordefinition = c_defaultoperator;
+    }
 
     /**
      * ctor
