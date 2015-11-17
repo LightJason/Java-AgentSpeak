@@ -36,6 +36,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>[4.12,)</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
@@ -43,6 +51,7 @@
         <defaultGoal>package</defaultGoal>
         <plugins>
 
+            <!-- Jar disable default build -->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
@@ -54,6 +63,7 @@
                 </executions>
             </plugin>
 
+            <!-- Jar manifest definition -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -81,6 +91,7 @@
                 </executions>
             </plugin>
 
+            <!-- AntLR grammar build -->
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
@@ -101,6 +112,7 @@
                 </executions>
             </plugin>
 
+            <!-- compiler settings -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
