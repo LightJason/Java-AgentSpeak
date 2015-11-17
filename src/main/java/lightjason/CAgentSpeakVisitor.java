@@ -50,10 +50,17 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     private ILiteral m_initialgoal;
 
     @Override
+    public Object visitInitial_beliefs( final lightjason.JasonParser.Initial_beliefsContext p_context )
+    {
+        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
+        return null;
+    }
+
+    @Override
     public Object visitInitial_goal( final lightjason.JasonParser.Initial_goalContext p_context )
     {
         m_initialgoal = new CLiteral( p_context.atom().getText() );
-        return super.visitInitial_goal( p_context );
+        return null;
     }
 
     @Override

@@ -125,6 +125,7 @@ public class CAgent implements IAgent
         ).agent() );
 
         System.out.println( p_astvisitor.getInitialGoal() );
+        System.out.println( p_astvisitor.getInitialBeliefs() );
     }
 
     @Override
