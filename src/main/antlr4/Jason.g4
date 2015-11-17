@@ -577,16 +577,16 @@ NOTEQUAL                   : '\\==';
 /**
  * allow on pow also the key-word represenation
  **/
-POW                        : '**' | 'pow';
+POW                        : '**';
 /**
  * allow on multiply the key-word representation
  **/
-MULTIPLY                   : '*' | 'mul';
+MULTIPLY                   : '*';
 /**
  * allow on divide the key-word definition
  **/
-DIVIDE                     : '/' | 'div';
-MODULO                     : '%' | 'mod';
+DIVIDE                     : '/';
+MODULO                     : '%';
 
 /**
  * string can be definied in single- and double-quotes

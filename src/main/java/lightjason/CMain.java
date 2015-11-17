@@ -23,6 +23,12 @@ package lightjason; /**
 
 import lightjason.generic.IAction;
 import lightjason.generic.implementation.CArithmeticExpression;
+import lightjason.generic.implementation.arithmetic.CDivide;
+import lightjason.generic.implementation.arithmetic.CMinus;
+import lightjason.generic.implementation.arithmetic.CModulo;
+import lightjason.generic.implementation.arithmetic.CMultiply;
+import lightjason.generic.implementation.arithmetic.CPlus;
+import lightjason.generic.implementation.arithmetic.CPow;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -46,11 +52,19 @@ public final class CMain
      */
     public static void main( final String[] p_args )
     {
-        final CArithmeticExpression l_expr = new CArithmeticExpression();
+        final CArithmeticExpression l_expr = new CArithmeticExpression( new HashMap()
+        {{
+            put( "+", new CPlus() );
+            put( "-", new CMinus() );
+            put( "*", new CMultiply() );
+            put( "/", new CDivide() );
+            put( "**", new CPow() );
+            put( "%", new CModulo() );
+        }} );
 
-        l_expr.add( CArithmeticExpression.EOperator.Multiply, 4 );
-        l_expr.add( CArithmeticExpression.EOperator.Plus, 1, 2 );
-        l_expr.add( CArithmeticExpression.EOperator.Plus, 8 );
+        l_expr.add( "*", 4 );
+        l_expr.add( "+", 1, 2 );
+        l_expr.add( "+", 8 );
 
 
         //l_expr.add( CArithmeticExpression.EOperator.Multiply, new CVariable<Number>( "X" ) );

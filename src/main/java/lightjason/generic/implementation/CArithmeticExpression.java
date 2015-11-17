@@ -24,304 +24,138 @@
 
 package lightjason.generic.implementation;
 
-import lightjason.generic.IArithmeticExpressionElement;
+import lightjason.generic.IArithmeticOperator;
 import lightjason.generic.IVariable;
 
 import java.text.MessageFormat;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 
 /**
  * defines an arithmetic expression with numbers
  *
  * @see https://en.wikipedia.org/wiki/Reverse_Polish_notation
- * @see http://www.leda-tutorial.org/en/official/ch02s04s01.html
+ * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
 public class CArithmeticExpression
 {
     /**
-     * stores the arithmetic expression (with a linked list for easier navigation)
+     * stores the operator of the arithmetic expression
      **/
-    private final List<IArithmeticExpressionElement<?>> m_expression = new LinkedList<>();
+    private final Stack<IArithmeticOperator> m_operator = new Stack<>();
+    /**
+     * output queue
+     */
+    private final Queue<CNumberElement> m_elements = new ArrayDeque<>();
+    /**
+     * operator definition
+     */
+    private final Map<String, IArithmeticOperator> m_operatordefinition;
 
 
-    public void add( final EOperator p_operator, final Number p_number1, final Number p_number2 )
+    public CArithmeticExpression( final Map<String, IArithmeticOperator> p_operator )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
-        m_expression.add( new CNumberElement( p_number1 ) );
-        m_expression.add( new CNumberElement( p_number2 ) );
+        m_operatordefinition = p_operator;
     }
 
-    public <T extends Number> void add( final EOperator p_operator, final IVariable<T> p_variable1, final IVariable<T> p_variable2 )
+    public void add( final String p_operator, final Number p_number1, final Number p_number2 )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
-        m_expression.add( new CVariableElement<>( p_variable1 ) );
-        m_expression.add( new CVariableElement<>( p_variable2 ) );
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
+        m_elements.add( new CNumberElement( p_number1 ) );
+        m_elements.add( new CNumberElement( p_number2 ) );
     }
 
-    public <T extends Number> void add( final EOperator p_operator, final IVariable<T> p_variable, final Number p_number )
+    public <T extends Number> void add( final String p_operator, final IVariable<T> p_variable1, final IVariable<T> p_variable2 )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
-        m_expression.add( new CVariableElement<>( p_variable ) );
-        m_expression.add( new CNumberElement( p_number ) );
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
+        m_elements.add( new CNumberElement( p_variable1 ) );
+        m_elements.add( new CNumberElement( p_variable2 ) );
     }
 
-    public <T extends Number> void add( final EOperator p_operator, final Number p_number, final IVariable<T> p_variable )
+    public <T extends Number> void add( final String p_operator, final IVariable<T> p_variable, final Number p_number )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
-        m_expression.add( new CNumberElement( p_number ) );
-        m_expression.add( new CVariableElement<>( p_variable ) );
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
+        m_elements.add( new CNumberElement( p_variable ) );
+        m_elements.add( new CNumberElement( p_number ) );
     }
 
-    public <T extends Number> void add( final EOperator p_operator, final Number p_number )
+    public <T extends Number> void add( final String p_operator, final Number p_number, final IVariable<T> p_variable )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
-        m_expression.add( new CNumberElement( p_number ) );
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
+        m_elements.add( new CNumberElement( p_number ) );
+        m_elements.add( new CNumberElement( p_variable ) );
     }
 
-    public <T extends Number> void add( final EOperator p_operator, final IVariable<T> p_variable )
+    public <T extends Number> void add( final String p_operator, final Number p_number )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
-        m_expression.add( new CVariableElement<>( p_variable ) );
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
+        m_elements.add( new CNumberElement( p_number ) );
     }
 
-    public void add( final EOperator p_operator )
+    public <T extends Number> void add( final String p_operator, final IVariable<T> p_variable )
     {
-        m_expression.add( new COperatorElement( p_operator ) );
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
+        m_elements.add( new CNumberElement( p_variable ) );
+    }
+
+    public void add( final String p_operator )
+    {
+        if ( !m_operatordefinition.containsKey( p_operator ) )
+            throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", p_operator ) );
+
+        m_operator.add( m_operatordefinition.get( p_operator ) );
     }
 
     public Number evaluate()
     {
-        final List<IArithmeticExpressionElement<?>> l_stack = new LinkedList<>( m_expression );
-        final List<IArithmeticExpressionElement<?>> l_cache = new LinkedList<>();
-
-        while ( l_stack.size() > 1 )
-        {
-            if (
-                    ( l_stack.get( 0 ) instanceof COperatorElement ) &&
-                    ( ( l_stack.get( 1 ) instanceof CVariable ) || ( l_stack.get( 1 ) instanceof CNumberElement ) ) &&
-                    ( ( l_stack.get( 2 ) instanceof CVariable ) || ( l_stack.get( 2 ) instanceof CNumberElement ) )
-                    )
-            {
-                final EOperator l_operator = this.solveOperator( l_stack.remove( 0 ) );
-                final Number l_argument1 = this.solveNumber( l_stack.remove( 0 ) );
-                final Number l_argument2 = this.solveNumber( l_stack.remove( 0 ) );
-
-                l_stack.add( 0, new CNumberElement( l_operator.evaluate( l_argument1, l_argument2 ) ) );
-                l_stack.addAll( 0, l_cache );
-                l_cache.clear();
-            }
-            else
-                l_cache.add( l_stack.remove( 0 ) );
-        }
-
-        return ( (CNumberElement) l_stack.remove( 0 ) ).get();
-    }
-
-    public Number solveNumber( final IArithmeticExpressionElement<?> p_element )
-    {
-        if ( p_element instanceof COperatorElement )
-            throw new IllegalArgumentException( "an operator element cannot be resolved" );
-
-        if ( p_element instanceof CVariable )
-            throw new IllegalArgumentException( "not yet working" );
-
-        return (Number) p_element.get();
-    }
-
-    public EOperator solveOperator( final IArithmeticExpressionElement<?> p_element )
-    {
-        if ( !( p_element instanceof COperatorElement ) )
-            throw new IllegalArgumentException( "a number element cannot be resolved" );
-
-        return ( (COperatorElement) p_element ).get();
+        return null;
     }
 
 
-    protected static class CNumberElement implements IArithmeticExpressionElement<Number>
+    protected static class CNumberElement<T>
     {
         private final Number m_value;
+        private final IVariable<T> m_variable;
 
         public CNumberElement( final Number p_value )
         {
             m_value = p_value;
+            m_variable = null;
         }
 
-        @Override
-        public Number get()
+        public CNumberElement( final IVariable<T> p_variable )
         {
-            return m_value;
-        }
-    }
-
-
-    protected static class CVariableElement<T extends Number> implements IArithmeticExpressionElement<IVariable<T>>
-    {
-        private final IVariable<T> m_variable;
-
-        public CVariableElement( final IVariable<T> p_variable )
-        {
+            m_value = null;
             m_variable = p_variable;
         }
 
-        @Override
-        public IVariable<T> get()
+        public Number get( final Map<String, Number> p_solvings )
         {
-            return m_variable;
-        }
-    }
+            if ( ( p_solvings != null ) && ( m_variable != null ) )
+                return p_solvings.get( m_variable.getName() );
 
-
-    protected static class COperatorElement implements IArithmeticExpressionElement<EOperator>
-    {
-        private final EOperator m_operator;
-
-        public COperatorElement( final EOperator p_operator )
-        {
-            m_operator = p_operator;
-        }
-
-        @Override
-        public EOperator get()
-        {
-            return m_operator;
-        }
-    }
-
-
-    public enum EOperator
-    {
-        Multiply,
-        Divide,
-        Plus,
-        Minus,
-        Pow;
-
-        public Number evaluate( final Number p_value1, final Number p_value2 )
-        {
-            switch ( this )
-            {
-                case Plus:
-                    return this.add( p_value1, p_value2 );
-
-                case Minus:
-                    return this.minus( p_value1, p_value2 );
-
-                case Multiply:
-                    return this.multiply( p_value1, p_value2 );
-
-                case Divide:
-                    return this.divide( p_value1, p_value2 );
-
-                case Pow:
-                    return this.pow( p_value1, p_value2 );
-
-                default:
-                    throw new IllegalStateException( "operator not defined" );
-            }
-        }
-
-
-        private Number add( final Number p_value1, final Number p_value2 )
-        {
-            if ( ( p_value1 instanceof Double ) || ( p_value2 instanceof Double ) )
-                return new Double( p_value1.doubleValue() + p_value2.doubleValue() );
-
-            if ( ( p_value1 instanceof Long ) || ( p_value2 instanceof Long ) )
-                return new Double( p_value1.longValue() + p_value2.longValue() );
-
-            if ( ( p_value1 instanceof Float ) || ( p_value2 instanceof Float ) )
-                return new Double( p_value1.floatValue() + p_value2.floatValue() );
-
-            if ( ( p_value1 instanceof Integer ) || ( p_value2 instanceof Integer ) )
-                return new Double( p_value1.intValue() + p_value2.intValue() );
-
-            if ( ( p_value1 instanceof Short ) || ( p_value2 instanceof Short ) )
-                return new Double( p_value1.shortValue() + p_value2.shortValue() );
-
-            if ( ( p_value1 instanceof Byte ) || ( p_value2 instanceof Byte ) )
-                return new Double( p_value1.byteValue() + p_value2.byteValue() );
-
-            throw new IllegalArgumentException(
-                    MessageFormat.format( "Operation + is not defined on [{0}] and [{1}]", p_value1.getClass(), p_value2.getClass() ) );
-        }
-
-        private Number minus( final Number p_value1, final Number p_value2 )
-        {
-            if ( ( p_value1 instanceof Double ) || ( p_value2 instanceof Double ) )
-                return new Double( p_value1.doubleValue() - p_value2.doubleValue() );
-
-            if ( ( p_value1 instanceof Long ) || ( p_value2 instanceof Long ) )
-                return new Double( p_value1.longValue() - p_value2.longValue() );
-
-            if ( ( p_value1 instanceof Float ) || ( p_value2 instanceof Float ) )
-                return new Double( p_value1.floatValue() - p_value2.floatValue() );
-
-            if ( ( p_value1 instanceof Integer ) || ( p_value2 instanceof Integer ) )
-                return new Double( p_value1.intValue() - p_value2.intValue() );
-
-            if ( ( p_value1 instanceof Short ) || ( p_value2 instanceof Short ) )
-                return new Double( p_value1.shortValue() - p_value2.shortValue() );
-
-            if ( ( p_value1 instanceof Byte ) || ( p_value2 instanceof Byte ) )
-                return new Double( p_value1.byteValue() - p_value2.byteValue() );
-
-            throw new IllegalArgumentException(
-                    MessageFormat.format( "Operation - is not defined on [{0}] and [{1}]", p_value1.getClass(), p_value2.getClass() ) );
-        }
-
-        private Number multiply( final Number p_value1, final Number p_value2 )
-        {
-            if ( ( p_value1 instanceof Double ) || ( p_value2 instanceof Double ) )
-                return new Double( p_value1.doubleValue() * p_value2.doubleValue() );
-
-            if ( ( p_value1 instanceof Long ) || ( p_value2 instanceof Long ) )
-                return new Double( p_value1.longValue() * p_value2.longValue() );
-
-            if ( ( p_value1 instanceof Float ) || ( p_value2 instanceof Float ) )
-                return new Double( p_value1.floatValue() * p_value2.floatValue() );
-
-            if ( ( p_value1 instanceof Integer ) || ( p_value2 instanceof Integer ) )
-                return new Double( p_value1.intValue() * p_value2.intValue() );
-
-            if ( ( p_value1 instanceof Short ) || ( p_value2 instanceof Short ) )
-                return new Double( p_value1.shortValue() * p_value2.shortValue() );
-
-            if ( ( p_value1 instanceof Byte ) || ( p_value2 instanceof Byte ) )
-                return new Double( p_value1.byteValue() * p_value2.byteValue() );
-
-            throw new IllegalArgumentException(
-                    MessageFormat.format( "Operation * is not defined on [{0}] and [{1}]", p_value1.getClass(), p_value2.getClass() ) );
-        }
-
-        private Number divide( final Number p_value1, final Number p_value2 )
-        {
-            if ( ( p_value1 instanceof Double ) || ( p_value2 instanceof Double ) )
-                return new Double( p_value1.doubleValue() / p_value2.doubleValue() );
-
-            if ( ( p_value1 instanceof Long ) || ( p_value2 instanceof Long ) )
-                return new Double( p_value1.longValue() / p_value2.longValue() );
-
-            if ( ( p_value1 instanceof Float ) || ( p_value2 instanceof Float ) )
-                return new Double( p_value1.floatValue() / p_value2.floatValue() );
-
-            if ( ( p_value1 instanceof Integer ) || ( p_value2 instanceof Integer ) )
-                return new Double( p_value1.intValue() / p_value2.intValue() );
-
-            if ( ( p_value1 instanceof Short ) || ( p_value2 instanceof Short ) )
-                return new Double( p_value1.shortValue() / p_value2.shortValue() );
-
-            if ( ( p_value1 instanceof Byte ) || ( p_value2 instanceof Byte ) )
-                return new Double( p_value1.byteValue() / p_value2.byteValue() );
-
-            throw new IllegalArgumentException(
-                    MessageFormat.format( "Operation / is not defined on [{0}] and [{1}]", p_value1.getClass(), p_value2.getClass() ) );
-        }
-
-        private Number pow( final Number p_value1, final Number p_value2 )
-        {
-            return new Double( Math.pow( p_value1.doubleValue(), p_value2.doubleValue() ) );
+            return m_value;
         }
     }
 
