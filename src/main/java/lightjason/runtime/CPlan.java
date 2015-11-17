@@ -21,38 +21,50 @@
  * @endcond
  */
 
-package lightjason;
-
-import lightjason.language.ILiteral;
-import lightjason.runtime.IPlan;
-
-import java.util.Map;
-import java.util.Set;
-
+package lightjason.runtime;
 
 /**
- * visitor interface of the abstract-syntax-tree (AST)
+ * plan structure
  */
-public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
+public class CPlan implements IPlan
 {
+    /**
+     * name of the plan
+     **/
+    private final String m_name;
 
     /**
-     * returns the initial beliefs
+     * ctor
      *
-     * @return set with beliefs
+     * @param p_name name
      */
-    public Set<ILiteral> getInitialBeliefs();
+    public CPlan( final String p_name )
+    {
+        m_name = p_name;
+    }
 
-    /**
-     * returns the initial goal
-     */
-    public ILiteral getInitialGoal();
 
-    /**
-     * returns the plans
-     *
-     * @return plans
-     */
-    public Map<String, Set<IPlan>> getPlans();
+    @Override
+    public String getName()
+    {
+        return null;
+    }
 
+    @Override
+    public boolean isExecutable()
+    {
+        return false;
+    }
+
+    @Override
+    public EExecutionState execute()
+    {
+        return null;
+    }
+
+    @Override
+    public EExecutionState getState()
+    {
+        return null;
+    }
 }

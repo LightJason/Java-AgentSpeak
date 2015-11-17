@@ -6,5 +6,5 @@ second(true).
 +!drive
 : true
 <-
-	.println("drive default");
-    !drive.
+	println("drive default");
+    !!drive.

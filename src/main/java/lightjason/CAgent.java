@@ -31,6 +31,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -117,7 +118,7 @@ public class CAgent implements IAgent
     {
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
-        m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? this.toString() : p_name;
+        m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? super.toString() : p_name;
 
         // parse AgentSpeak syntax
         p_astvisitor.visit( new lightjason.JasonParser(
@@ -126,6 +127,7 @@ public class CAgent implements IAgent
 
         System.out.println( p_astvisitor.getInitialGoal() );
         System.out.println( p_astvisitor.getInitialBeliefs() );
+        System.out.println( p_astvisitor.getPlans() );
     }
 
     @Override
@@ -180,6 +182,12 @@ public class CAgent implements IAgent
     public IAgent clone()
     {
         return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0} ( Cycle: {1} / Beliefbase: {2} / Plans: {3} )", m_name, m_cycle, m_beliefbase, m_plans );
     }
 
     @Override

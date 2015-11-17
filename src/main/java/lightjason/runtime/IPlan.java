@@ -61,13 +61,4 @@ public interface IPlan
      */
     public EExecutionState getState();
 
-    /**
-     * returns a significance value
-     * which matchs the plan of other
-     * possible plans
-     *
-     * @return value in [0,1]
-     */
-    public float getSignificance();
-
 }

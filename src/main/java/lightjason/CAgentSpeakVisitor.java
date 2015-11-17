@@ -28,9 +28,12 @@ import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.runtime.IPlan;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,6 +51,10 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
      * initial goal
      */
     private ILiteral m_initialgoal;
+    /**
+     *
+     */
+    private final Map<String, Set<IPlan>> m_plans = new HashMap<>();
 
     @Override
     public Object visitInitial_beliefs( final lightjason.JasonParser.Initial_beliefsContext p_context )
@@ -67,6 +74,20 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
     {
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
+    }
+
+    @Override
+    public Object visitPlan( final lightjason.JasonParser.PlanContext p_context )
+    {
+        //final IPlan l_plan = new CPlan( p_context.atom().getText() );
+        //System.out.println(p_context.atom().getText());
+        /*
+        final Set<IPlan> l_plans = m_plans.getOrDefault( l_plan.getName(), new HashSet<>() );
+
+        l_plans.add( l_plan );
+        m_plans.putIfAbsent(  l_plan.getName(), l_plans );
+        */
+        return super.visitPlan( p_context );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -174,5 +195,11 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     public ILiteral getInitialGoal()
     {
         return m_initialgoal;
+    }
+
+    @Override
+    public Map<String, Set<IPlan>> getPlans()
+    {
+        return m_plans;
     }
 }
