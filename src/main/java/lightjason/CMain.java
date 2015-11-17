@@ -1,4 +1,6 @@
-package lightjason; /**
+package lightjason;
+
+/**
  * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #

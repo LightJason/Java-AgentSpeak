@@ -45,10 +45,6 @@ import java.util.Stack;
 public class CMask implements IBeliefBaseMask
 {
     /**
-     * path separator
-     */
-    protected String m_pathseparator = CPath.DEFAULTSEPERATOR;
-    /**
      * mask name
      */
     protected final String m_name;
@@ -56,6 +52,10 @@ public class CMask implements IBeliefBaseMask
      * reference to the beliefbase context
      */
     protected final IBeliefBase m_beliefbase;
+    /**
+     * path separator
+     */
+    protected String m_pathseparator = CPath.DEFAULTSEPERATOR;
     /**
      * parent name
      */
