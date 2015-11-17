@@ -43,6 +43,7 @@ import lightjason.language.arithmetic.operator.CTan;
 import lightjason.language.arithmetic.operator.IArithmeticOperator;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +60,7 @@ import java.util.stream.Collectors;
  */
 public class CExpression
 {
-    private static final Map<String, IArithmeticOperator> c_defaultoperator = new HashMap<String, IArithmeticOperator>()
+    public static final Map<String, IArithmeticOperator> DEFAULTOPERATOR = Collections.unmodifiableMap( new HashMap<String, IArithmeticOperator>()
     {{
         for ( final IArithmeticOperator l_operator : new IArithmeticOperator[]{
                 new CAbs(), new CCeil(), new CCos(), new CDivide(), new CExp(),
@@ -68,7 +69,7 @@ public class CExpression
                 new CTan()
         } )
             put( l_operator.getToken(), l_operator );
-    }};
+    }} );
 
 
 
@@ -90,7 +91,7 @@ public class CExpression
      */
     public CExpression()
     {
-        m_operatordefinition = c_defaultoperator;
+        m_operatordefinition = DEFAULTOPERATOR;
     }
 
     /**
