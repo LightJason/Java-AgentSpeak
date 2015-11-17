@@ -45,13 +45,6 @@ public interface IArithmeticOperator
     public int getNumberOfArguments();
 
     /**
-     * operator precedence
-     *
-     * @return precedence value [0,infinity)
-     */
-    public int getPrecedence();
-
-    /**
      * operator execution
      *
      * @param p_arguments arguments of the operator

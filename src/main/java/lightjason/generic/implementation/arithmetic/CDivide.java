@@ -47,12 +47,6 @@ public class CDivide implements IArithmeticOperator
     }
 
     @Override
-    public int getPrecedence()
-    {
-        return 1;
-    }
-
-    @Override
     public Number execution( final List<Number> p_arguments )
     {
         if ( ( p_arguments.get( 0 ) instanceof Double ) || ( p_arguments.get( 1 ) instanceof Double ) )

@@ -46,12 +46,6 @@ public class CModulo implements IArithmeticOperator
     }
 
     @Override
-    public int getPrecedence()
-    {
-        return 1;
-    }
-
-    @Override
     public Number execution( final List<Number> p_arguments )
     {
         return p_arguments.get( 0 ).longValue() % p_arguments.get( 1 ).longValue();

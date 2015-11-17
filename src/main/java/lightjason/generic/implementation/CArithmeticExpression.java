@@ -137,35 +137,61 @@ public class CArithmeticExpression
         return this.evaluate( null );
     }
 
+    /**
+     * evaluates expression
+     *
+     * @param p_solver map with variable replacing
+     * @return number
+     */
     public Number evaluate( final Map<String, Number> p_solver )
     {
         // copy of data
-        // @todo deep-copy
         final Stack<IArithmeticOperator> l_operator = (Stack<IArithmeticOperator>) m_operator.clone();
         final List<CNumberElement> l_elements = new LinkedList<>( m_elements );
 
         while ( !l_operator.isEmpty() )
         {
-            final IArithmeticOperator l_executeoperator = l_operator.pop();
-            final List<CNumberElement> l_arguments = l_elements.subList( 0, l_executeoperator.getNumberOfArguments() );
-            final Number l_number = l_executeoperator.execution( l_arguments.parallelStream().map( i -> i.get( p_solver ) ).collect( Collectors.toList() ) );
+            final IArithmeticOperator l_currentoperator = l_operator.pop();
+            if ( l_elements.size() < l_currentoperator.getNumberOfArguments() )
+                throw new IllegalStateException(
+                        MessageFormat.format( "operator [{0}] need [{1}] arguments, but the expression stack holds only [{2}] arguments", l_currentoperator
+                                .getToken(), l_currentoperator.getNumberOfArguments(), l_elements.size() ) );
+
+            final List<CNumberElement> l_arguments = l_elements.subList( 0, l_currentoperator.getNumberOfArguments() );
+            final Number l_number = l_currentoperator.execution( l_arguments.parallelStream().map( i -> i.get( p_solver ) ).collect( Collectors.toList() ) );
 
             l_arguments.clear();
             l_elements.add( 0, new CNumberElement( l_number ) );
         }
 
+        if ( l_elements.size() != 1 )
+            throw new IllegalStateException( MessageFormat.format( "expression cannot be evaluated", "" ) );
+
         return l_elements.get( 0 ).get( null );
     }
 
 
-
-    protected static class CNumberElement<T>
+    /**
+     * number element
+     *
+     * @tparam T number type
+     */
+    protected static class CNumberElement<T extends Number>
     {
+        /**
+         * number value
+         */
         private final Number m_value;
+        /**
+         * variable value
+         */
         private final IVariable<T> m_variable;
 
         public CNumberElement( final Number p_value )
         {
+            if ( p_value == null )
+                throw new IllegalArgumentException( MessageFormat.format( "number need not to be null", "" ) );
+
             m_value = p_value;
             m_variable = null;
         }
@@ -178,10 +204,15 @@ public class CArithmeticExpression
 
         public Number get( final Map<String, Number> p_solver )
         {
+            Number l_return = m_value;
             if ( ( p_solver != null ) && ( m_variable != null ) )
-                return p_solver.get( m_variable.getName() );
+            {
+                l_return = p_solver.get( m_variable.getName() );
+                if ( l_return == null )
+                    throw new IllegalStateException( MessageFormat.format( "number for variable [{0}] cannot be resolved", m_variable.getName() ) );
+            }
 
-            return m_value;
+            return l_return;
         }
     }
 

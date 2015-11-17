@@ -46,12 +46,6 @@ public class CPow implements IArithmeticOperator
     }
 
     @Override
-    public int getPrecedence()
-    {
-        return 2;
-    }
-
-    @Override
     public Number execution( final List<Number> p_arguments )
     {
         return Math.pow( p_arguments.get( 0 ).doubleValue(), p_arguments.get( 1 ).doubleValue() );
