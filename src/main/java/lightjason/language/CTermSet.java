@@ -21,76 +21,40 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language;
 
-import lightjason.beliefbase.IBeliefBase;
-
-import java.util.concurrent.Callable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 
 /**
- * agent interface
+ * generic term set for agent literals
  */
-public interface IAgent extends Callable<IAgent>
+@SuppressWarnings( "serial" )
+public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
     /**
-     * returns the current cycle
+     * empty term set
+     **/
+    public static final CTermSet EMPTY_TERMSET = new CTermSet( Collections.<ITerm>emptySet() );
+
+    /**
+     * default ctor
+     */
+    public CTermSet()
+    {
+        super( 0 );
+    }
+
+    /**
+     * ctor - with initial elements specified
      *
-     * @return cycle number
+     * @param p_collection collection containing initial elements
      */
-    public int getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
-
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public CTermSet( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
 
 }

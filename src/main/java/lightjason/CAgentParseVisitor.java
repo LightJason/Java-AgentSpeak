@@ -24,9 +24,9 @@
 package lightjason;
 
 
-import lightjason.generic.ITerm;
-import lightjason.generic.implementation.CLiteral;
-import lightjason.generic.implementation.CVariable;
+import lightjason.language.CLiteral;
+import lightjason.language.CVariable;
+import lightjason.language.ITerm;
 
 import java.util.HashSet;
 import java.util.LinkedList;

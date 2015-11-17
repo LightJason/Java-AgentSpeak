@@ -21,76 +21,82 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language;
 
-import lightjason.beliefbase.IBeliefBase;
-
-import java.util.concurrent.Callable;
+import java.text.MessageFormat;
 
 
 /**
- * agent interface
+ * default variable definition
  */
-public interface IAgent extends Callable<IAgent>
+public class CVariable<T> implements IVariable<T>
 {
     /**
-     * returns the current cycle
-     *
-     * @return cycle number
+     * variable name
      */
-    public int getCycle();
-
+    protected final String m_name;
     /**
-     * returns the agent name
-     *
-     * @return agent name
+     * boolean flag, that defines an variable which matchs always
      */
-    public String getName();
-
+    protected final boolean m_any;
     /**
-     * returns the beliefbase
+     * value of the variable
      */
-    public IBeliefBase getBeliefBase();
+    protected T m_value;
 
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
 
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
+    public CVariable( final String p_name )
+    {
+        this( p_name, null );
+    }
 
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
+    public CVariable( final String p_name, final T p_value )
+    {
+        m_any = p_name.equals( "_" ) || ( p_name == null ) || p_name.isEmpty();
+        m_name = m_any ? "_" : p_name;
+        m_value = p_value;
+    }
 
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
+    @Override
+    public String getName()
+    {
+        return m_name;
+    }
 
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
+    @Override
+    public void set( final T p_value )
+    {
+        if ( !m_any )
+            m_value = p_value;
+    }
 
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    @Override
+    public boolean isAllocated()
+    {
+        return m_value != null;
+    }
 
+    @Override
+    public int hashCode()
+    {
+        return m_name.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException
+    {
+        return new CVariable<T>( m_name, m_value );
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_name, m_value == null ? "" : m_value );
+    }
 }

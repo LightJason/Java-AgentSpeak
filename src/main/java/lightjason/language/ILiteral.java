@@ -21,76 +21,51 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language;
 
-import lightjason.beliefbase.IBeliefBase;
 
-import java.util.concurrent.Callable;
+import lightjason.common.CPath;
 
 
 /**
- * agent interface
+ * literal interface
+ *
+ * @note closed world assumption, no negation marker needed
  */
-public interface IAgent extends Callable<IAgent>
+public interface ILiteral extends ITerm
 {
+
     /**
-     * returns the current cycle
+     * clones the literal
      *
-     * @return cycle number
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
      */
-    public int getCycle();
+    public ILiteral clone( final CPath p_prefix );
 
     /**
-     * returns the agent name
+     * returns the optional annotations
      *
-     * @return agent name
+     * @return annotation term
      */
-    public String getName();
+    public ITermCollection getAnnotation();
 
     /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
+     * returns the functor / dataset of the literal
      *
-     * @param p_event event
+     * @return function data
      */
-    public void trigger( final String p_event );
+    public String getFunctor();
 
     /**
-     * sets the agent to a suspend state
+     * returns the optional value term
      *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
+     * @return value term
      */
-    public void suspend();
+    public ITermCollection getValues();
 
     /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
+     * getter of the literal for the negation
      */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
-
+    public boolean isNegated();
 }

@@ -1,4 +1,4 @@
-package lightjason; /**
+/**
  * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
@@ -21,70 +21,58 @@ package lightjason; /**
  * @endcond
  */
 
-import lightjason.language.CVariable;
-import lightjason.language.arithmetic.CExpression;
-import lightjason.language.arithmetic.operator.CDivide;
-import lightjason.language.arithmetic.operator.CMinus;
-import lightjason.language.arithmetic.operator.CModulo;
-import lightjason.language.arithmetic.operator.CMultiply;
-import lightjason.language.arithmetic.operator.CPlus;
-import lightjason.language.arithmetic.operator.CPow;
-import lightjason.runtime.IAction;
+package lightjason.beliefbase;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public final class CMain
+/**
+ * storage of beliefbases to address different beliefbases with a name
+ */
+public final class CBeliefBaseStorage<T>
 {
     /**
-     * map with actions
-     */
-    private static final Map<String, IAction> c_actions = new HashMap<>();
+     * map with case-insensitive name and a beliefbase
+     **/
+    private final Map<String, IBeliefBase> m_beliefbases = new HashMap<>();
 
 
     /**
-     * main
+     * adds a new beliefbase
      *
-     * @param p_args command-line arguments
+     * @param p_name key name
+     * @param p_base beliefbase
      */
-    public static void main( final String[] p_args )
+    public final void add( final String p_name, final IBeliefBase p_base )
     {
-        final CExpression l_expr = new CExpression( new HashMap()
-        {{
-            put( "+", new CPlus() );
-            put( "-", new CMinus() );
-            put( "*", new CMultiply() );
-            put( "/", new CDivide() );
-            put( "**", new CPow() );
-            put( "%", new CModulo() );
-        }} );
+        if ( m_beliefbases.containsKey( p_name.toLowerCase() ) )
+            throw new IllegalArgumentException( MessageFormat.format( "beliefbase with the name {0} exists", p_name ) );
 
-        // (1+2) * 4 + 8
-        l_expr.add( "+", 1, new CVariable<Number>( "X" ) );
-        l_expr.add( "*", 4 );
-        l_expr.add( "+", 8 );
+        m_beliefbases.put( p_name.toLowerCase(), p_base );
+    }
 
+    /**
+     * returns a beliefbase
+     *
+     * @param p_name key name
+     * @return null or beliefbase
+     */
+    public final IBeliefBase get( final String p_name )
+    {
+        return m_beliefbases.get( p_name.toLowerCase() );
+    }
 
-        final Map<String, Number> l_replace = new HashMap<>();
-        l_replace.put( "X", 3 );
-
-        System.out.println( l_expr.evaluate( l_replace ) );
-
-
-        try (
-                final InputStream l_stream = new FileInputStream( p_args[0] );
-        )
-        {
-            //new CAgent( l_stream, c_actions );
-        }
-        catch ( final IOException l_exception )
-        {
-            l_exception.printStackTrace();
-        }
+    /**
+     * removes a beliefbase
+     *
+     * @param p_name key name
+     */
+    public final void remove( final String p_name )
+    {
+        m_beliefbases.remove( p_name.toLowerCase() );
     }
 
 }

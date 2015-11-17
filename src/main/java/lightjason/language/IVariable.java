@@ -21,76 +21,32 @@
  * @endcond
  */
 
-package lightjason;
-
-import lightjason.beliefbase.IBeliefBase;
-
-import java.util.concurrent.Callable;
-
+package lightjason.language;
 
 /**
- * agent interface
+ * variable defintion
  */
-public interface IAgent extends Callable<IAgent>
+public interface IVariable<T> extends ITerm, Cloneable
 {
     /**
-     * returns the current cycle
+     * returns the name of the variable
      *
-     * @return cycle number
-     */
-    public int getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
+     * @return name
      */
     public String getName();
 
     /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
+     * returns the value
      *
-     * @param p_event event
+     * @param p_value
      */
-    public void trigger( final String p_event );
+    public void set( final T p_value );
 
     /**
-     * sets the agent to a suspend state
+     * returns allocated state
      *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
+     * @return boolean flag
      */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public boolean isAllocated();
 
 }

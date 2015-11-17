@@ -21,76 +21,43 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language.arithmetic.operator;
 
-import lightjason.beliefbase.IBeliefBase;
-
-import java.util.concurrent.Callable;
+import java.util.List;
 
 
 /**
- * agent interface
+ * modulo operator
  */
-public interface IAgent extends Callable<IAgent>
+public class CModulo implements IArithmeticOperator
 {
-    /**
-     * returns the current cycle
-     *
-     * @return cycle number
-     */
-    public int getCycle();
+    @Override
+    public String getToken()
+    {
+        return "%";
+    }
 
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
+    @Override
+    public int getNumberOfArguments()
+    {
+        return 2;
+    }
 
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
+    @Override
+    public Number execution( final List<Number> p_arguments )
+    {
+        return p_arguments.get( 0 ).longValue() % p_arguments.get( 1 ).longValue();
+    }
 
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
+    @Override
+    public int hashCode()
+    {
+        return getToken().hashCode();
+    }
 
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
-
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

@@ -21,76 +21,27 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.runtime;
 
-import lightjason.beliefbase.IBeliefBase;
+import lightjason.IAgent;
 
-import java.util.concurrent.Callable;
+import java.util.List;
 
 
 /**
- * agent interface
+ * action interface
  */
-public interface IAgent extends Callable<IAgent>
+public interface IAction
 {
+
     /**
-     * returns the current cycle
+     * runs the action
      *
-     * @return cycle number
+     * @param p_agent agent that runs the action
+     * @param p_name name of the action
+     * @param p_parameter parameter of the action
+     * @return boolean flag if the action is success or fail
      */
-    public int getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public String getName();
-
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
+    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
 
 }

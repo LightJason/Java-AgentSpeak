@@ -21,76 +21,34 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language.arithmetic.operator;
 
-import lightjason.beliefbase.IBeliefBase;
 
-import java.util.concurrent.Callable;
+import java.util.List;
 
 
 /**
- * agent interface
+ * interface to describe an arithmetic operator
  */
-public interface IAgent extends Callable<IAgent>
+public interface IArithmeticOperator
 {
     /**
-     * returns the current cycle
+     * token for matching
+     */
+    public String getToken();
+
+    /**
+     * number of arguments of the operator
      *
-     * @return cycle number
+     * @return argument number [1,infinty)
      */
-    public int getCycle();
+    public int getNumberOfArguments();
 
     /**
-     * returns the agent name
+     * operator execution
      *
-     * @return agent name
+     * @param p_arguments arguments of the operator
+     * @return calculated number
      */
-    public String getName();
-
-    /**
-     * returns the beliefbase
-     */
-    public IBeliefBase getBeliefBase();
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    public void trigger( final String p_event );
-
-    /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run
-     */
-    public void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     */
-    public void resume();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
-
+    public Number execution( final List<Number> p_arguments );
 }
