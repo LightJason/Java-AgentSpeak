@@ -91,7 +91,7 @@ public final class CExpression
     /**
      * stores a set of all variables
      */
-    private final Set<IVariable<Number>> m_variables = new HashSet<>();
+    private final Set<IVariable<? extends Number>> m_variables = new HashSet<>();
 
     /**
      * ctor
@@ -158,7 +158,7 @@ public final class CExpression
         for ( final IVariable<T> l_item : p_variable )
         {
             m_elements.add( new CNumberElement<>( l_item ) );
-            //m_variables.addAll( l_item );
+            m_variables.add( l_item );
         }
 
         return this;
@@ -168,12 +168,10 @@ public final class CExpression
      * returns a set of all variables of the expression
      *
      * @return set with variables
-     *
-     * @tparam T number
      */
-    public final <T extends Number> Set<IVariable<T>> getVariables()
+    public final Set<IVariable<? extends Number>> getVariables()
     {
-        return null;
+        return m_variables;
     }
 
     /**
