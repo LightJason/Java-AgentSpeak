@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 
 /**
- *
+ * class to visit each AST node
  */
 public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
 {
@@ -52,6 +52,7 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
+    @SuppressWarnings( "unchecked" )
     public Object visitLiteral( final lightjason.JasonParser.LiteralContext p_context )
     {
         switch ( p_context.list().size() )

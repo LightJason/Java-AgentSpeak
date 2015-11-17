@@ -95,7 +95,7 @@ public class CExpression
     public CExpression push( final Number... p_number )
     {
         for ( final Number l_item : p_number )
-            m_elements.add( new CNumberElement( l_item ) );
+            m_elements.add( new CNumberElement<>( l_item ) );
 
         return this;
     }
@@ -111,7 +111,7 @@ public class CExpression
     public <T extends Number> CExpression push( final IVariable<T>... p_variable )
     {
         for ( final IVariable<T> l_item : p_variable )
-            m_elements.add( new CNumberElement( l_item ) );
+            m_elements.add( new CNumberElement<>( l_item ) );
 
         return this;
     }
@@ -132,6 +132,7 @@ public class CExpression
      * @param p_solver map with variable substituation
      * @return number
      */
+    @SuppressWarnings( "unchecked" )
     public Number evaluate( final Map<String, Number> p_solver )
     {
         // copy of data
@@ -141,16 +142,19 @@ public class CExpression
         while ( !l_operator.isEmpty() )
         {
             final IArithmeticOperator l_currentoperator = l_operator.pop();
+
             if ( l_elements.size() < l_currentoperator.getNumberOfArguments() )
                 throw new IllegalStateException(
                         MessageFormat.format( "operator [{0}] need [{1}] arguments, but the expression stack holds only [{2}] arguments", l_currentoperator
                                 .getToken(), l_currentoperator.getNumberOfArguments(), l_elements.size() ) );
 
+
             final List<CNumberElement> l_arguments = l_elements.subList( 0, l_currentoperator.getNumberOfArguments() );
             final Number l_number = l_currentoperator.execution( l_arguments.parallelStream().map( i -> i.get( p_solver ) ).collect( Collectors.toList() ) );
 
+
             l_arguments.clear();
-            l_elements.add( 0, new CNumberElement( l_number ) );
+            l_elements.add( 0, new CNumberElement<>( l_number ) );
         }
 
         if ( l_elements.size() != 1 )

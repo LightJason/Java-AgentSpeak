@@ -44,9 +44,10 @@ import static org.junit.Assert.assertTrue;
 /**
  * test arithmetic expression
  */
+@SuppressWarnings( "serial" )
 public class Test_CExpression
 {
-    private static final Map<String, IArithmeticOperator> c_operator = new HashMap()
+    private static final Map<String, IArithmeticOperator> c_operator = new HashMap<String, IArithmeticOperator>()
     {{
         put( "+", new CPlus() );
         put( "-", new CMinus() );
@@ -71,7 +72,7 @@ public class Test_CExpression
         {
             final int l_inputvalue = l_random.nextInt( 100000 );
             final int l_successoutput = ( l_inputvalue + 1 ) * 4 + 8;
-            final int l_output = l_expression.evaluate( new HashMap()
+            final int l_output = l_expression.evaluate( new HashMap<String, Number>()
             {{
                 put( "X", l_inputvalue );
             }} ).intValue();
