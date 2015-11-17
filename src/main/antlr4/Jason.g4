@@ -256,8 +256,7 @@ comparison_expression :
  **/
 arithmetic_expression :
     MINUS? LROUNDBRACKET arithmetic_expression RROUNDBRACKET
-    | arithmetic_expression pointoperator arithmetic_expression
-    | arithmetic_expression dashoperator arithmetic_expression
+    | arithmetic_expression arithmeticoperator arithmetic_expression
     | number
     | variable
     | literal
@@ -382,21 +381,16 @@ comparator :
     ;
 
 /**
- * arithmetic dash operator
+ * arithmetic operator
  **/
-dashoperator :
-    PLUS
+arithmeticoperator :
+    LOWERCASELETTER+
+    | PLUS
     | MINUS
-    ;
-
-/**
- * arithmetic point operator
- **/
-pointoperator :
-    POW
     | MULTIPLY
     | DIVIDE
     | MODULO
+    | POW
     ;
 
 /**
@@ -574,17 +568,9 @@ GREATEREQUAL               : '>=';
 EQUAL                      : '==';
 NOTEQUAL                   : '\\==';
 
-/**
- * allow on pow also the key-word represenation
- **/
+
 POW                        : '**';
-/**
- * allow on multiply the key-word representation
- **/
 MULTIPLY                   : '*';
-/**
- * allow on divide the key-word definition
- **/
 DIVIDE                     : '/';
 MODULO                     : '%';
 

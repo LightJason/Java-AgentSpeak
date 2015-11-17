@@ -29,7 +29,6 @@ import lightjason.language.CVariable;
 import lightjason.language.ITerm;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -80,7 +79,7 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     @Override
     public Object visitList( final lightjason.JasonParser.ListContext p_context )
     {
-        return p_context.term().parallelStream().map( i -> super.visitTerm( i ) ).collect( Collectors.toCollection( () -> new LinkedList<>() ) );
+        return p_context.term().parallelStream().map( i -> super.visitTerm( i ) ).collect( Collectors.toList() );
     }
 
     @Override
