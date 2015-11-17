@@ -60,6 +60,9 @@ import java.util.stream.Collectors;
  */
 public class CExpression
 {
+    /**
+     * map with default operators
+     **/
     public static final Map<String, IArithmeticOperator> DEFAULTOPERATOR = Collections.unmodifiableMap( new HashMap<String, IArithmeticOperator>()
     {{
         for ( final IArithmeticOperator l_operator : new IArithmeticOperator[]{
@@ -70,8 +73,6 @@ public class CExpression
         } )
             put( l_operator.getToken(), l_operator );
     }} );
-
-
 
     /**
      * stores the operator of the arithmetic expression
