@@ -26,6 +26,7 @@ package lightjason;
 
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
+import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 
 import java.util.HashSet;
@@ -37,12 +38,23 @@ import java.util.stream.Collectors;
 /**
  * class to visit each AST node
  */
-public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
+public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> implements IAgentSpeakVisitor
 {
     /**
      * set with initial beliefs
      */
-    private Set<ITerm> m_initialbeliefs = new HashSet<>();
+    private final Set<ITerm> m_initialbeliefs = new HashSet<>();
+    /**
+     * initial goal
+     */
+    private ILiteral m_initialgoal;
+
+    @Override
+    public Object visitInitial_goal( final lightjason.JasonParser.Initial_goalContext p_context )
+    {
+        m_initialgoal = new CLiteral( p_context.atom().getText() );
+        return super.visitInitial_goal( p_context );
+    }
 
     @Override
     public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
@@ -145,8 +157,21 @@ public class CAgentParseVisitor extends lightjason.JasonBaseVisitor<Object>
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * returns the initial beliefs
+     *
+     * @return set with beliefs
+     */
     public final Set<ITerm> getInitialBeliefs()
     {
         return m_initialbeliefs;
+    }
+
+    /**
+     * returns the initial goal
+     */
+    public final ILiteral getInitialGoal()
+    {
+        return m_initialgoal;
     }
 }

@@ -72,7 +72,7 @@ public class CAgent implements IAgent
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action ) throws IOException
     {
-        this( p_stream, p_action, null, null );
+        this( p_stream, p_action, null, null, new CAgentSpeakVisitor() );
     }
 
     /**
@@ -85,7 +85,7 @@ public class CAgent implements IAgent
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase ) throws IOException
     {
-        this( p_stream, p_action, p_beliefbase, null );
+        this( p_stream, p_action, p_beliefbase, null, new CAgentSpeakVisitor() );
     }
 
     /**
@@ -98,7 +98,7 @@ public class CAgent implements IAgent
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final String p_name ) throws IOException
     {
-        this( p_stream, p_action, null, p_name );
+        this( p_stream, p_action, null, p_name, new CAgentSpeakVisitor() );
     }
 
     /**
@@ -108,21 +108,23 @@ public class CAgent implements IAgent
      * @param p_action map with all usable actions
      * @param p_beliefbase beliefbase
      * @param p_name agent name
+     * @param p_astvisitor visitor object of the AST
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase, final String p_name ) throws IOException
+    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase, final String p_name,
+            final IAgentSpeakVisitor p_astvisitor
+    ) throws IOException
     {
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
         m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? this.toString() : p_name;
 
         // parse AgentSpeak syntax
-        final CAgentParseVisitor l_visit = new CAgentParseVisitor();
-        l_visit.visit(
-                new lightjason.JasonParser(
-                        new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
-                ).agent()
-        );
+        p_astvisitor.visit( new lightjason.JasonParser(
+                new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
+        ).agent() );
+
+        System.out.println( p_astvisitor.getInitialGoal() );
     }
 
     @Override
