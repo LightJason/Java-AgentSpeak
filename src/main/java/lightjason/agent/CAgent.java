@@ -187,7 +187,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public IAgent clone( IBeliefBase p_beliefbase )
+    public IAgent clone( final IBeliefBase p_beliefbase )
     {
         return null;
     }
