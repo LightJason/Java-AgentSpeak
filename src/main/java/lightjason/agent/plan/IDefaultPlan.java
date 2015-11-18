@@ -24,58 +24,77 @@
 package lightjason.agent.plan;
 
 /**
- * interface of plan
+ * abstract plan structure
  */
-public interface IPlan
+public abstract class IDefaultPlan implements IPlan
 {
+    /**
+     * name of the plan
+     **/
+    protected final String m_name;
+    /**
+     * current plan state
+     */
+    protected EExecutionState m_currentstate = EExecutionState.Success;
+    /**
+     * number of runs
+     */
+    protected long m_runs = 0;
+    /**
+     * number of fail runs
+     */
+    protected long m_failruns = 0;
 
     /**
-     * returns the name of the plan
-     * which matchs also the goal
-     * definition
+     * ctor
      *
-     * @return name
+     * @param p_name name
      */
-    public String getName();
+    protected IDefaultPlan( final String p_name )
+    {
+        m_name = p_name;
+    }
 
-    /**
-     * checks the context of the plan
-     * and return if the plan can be
-     * executed
-     *
-     * @return true iif the plan can be executed
-     */
-    public boolean isExecutable();
 
-    /**
-     * runs the plan and returns the result
-     *
-     * @return execution state
-     */
-    public EExecutionState execute();
+    @Override
+    public final String getName()
+    {
+        return m_name;
+    }
 
-    /**
-     * returns the current state of the plan
-     *
-     * @return current / last execution state
-     */
-    public EExecutionState getState();
+    @Override
+    public final boolean isExecutable()
+    {
+        return false;
+    }
 
-    /**
-     * returns the costs of the plan
-     *
-     * @return cost
-     */
-    public double getCost();
+    @Override
+    public EExecutionState execute()
+    {
+        return null;
+    }
 
-    /**
-     * returns the number of executions
-     */
-    public long getNumberOfRuns();
+    @Override
+    public final EExecutionState getState()
+    {
+        return m_currentstate;
+    }
 
-    /**
-     * returns the number of fail runs
-     */
-    public long getNumberOfFailRuns();
+    @Override
+    public double getCost()
+    {
+        return 0;
+    }
 
+    @Override
+    public final long getNumberOfRuns()
+    {
+        return m_runs;
+    }
+
+    @Override
+    public final long getNumberOfFailRuns()
+    {
+        return m_failruns;
+    }
 }

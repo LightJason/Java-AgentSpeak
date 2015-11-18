@@ -24,6 +24,7 @@
 package lightjason.parser;
 
 
+import lightjason.JasonParser;
 import lightjason.agent.plan.IPlan;
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
@@ -77,17 +78,9 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
-    public Object visitPlan_trigger( final lightjason.JasonParser.Plan_triggerContext p_context )
-    {
-
-
-        return super.visitPlan_trigger( p_context );
-    }
-
-    @Override
     public Object visitPlan( final lightjason.JasonParser.PlanContext p_context )
     {
-
+        super.visitPlan_trigger( p_context.plan_trigger() );
 
         //System.out.println(p_context.getText());
         //System.out.println( this.visitAtom( p_context.atom() ) );
@@ -100,6 +93,18 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
         m_plans.putIfAbsent(  l_plan.getName(), l_plans );
         */
         return super.visitPlan( p_context );
+    }
+
+    @Override
+    public Object visitPlan_goal_trigger( final JasonParser.Plan_goal_triggerContext p_context )
+    {
+        return super.visitPlan_goal_trigger( p_context );
+    }
+
+    @Override
+    public Object visitPlan_belief_trigger( final JasonParser.Plan_belief_triggerContext p_context )
+    {
+        return super.visitPlan_belief_trigger( p_context );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

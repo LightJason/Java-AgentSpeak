@@ -60,6 +60,7 @@ import java.util.stream.Collectors;
  * @see https://en.wikipedia.org/wiki/Reverse_Polish_notation
  * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
+@SuppressWarnings( "serial" )
 public final class CExpression
 {
     /**

@@ -24,53 +24,17 @@
 package lightjason.agent.plan;
 
 /**
- * plan structure
+ * plan to handle belief events
  */
-public class CPlan implements IPlan
+public class CBeliefPlan extends IDefaultPlan
 {
-    /**
-     * name of the plan
-     **/
-    private final String m_name;
-
     /**
      * ctor
      *
      * @param p_name name
      */
-    public CPlan( final String p_name )
+    public CBeliefPlan( final String p_name )
     {
-        m_name = p_name;
-    }
-
-
-    @Override
-    public String getName()
-    {
-        return null;
-    }
-
-    @Override
-    public boolean isExecutable()
-    {
-        return false;
-    }
-
-    @Override
-    public EExecutionState execute()
-    {
-        return null;
-    }
-
-    @Override
-    public EExecutionState getState()
-    {
-        return null;
-    }
-
-    @Override
-    public double getCost()
-    {
-        return 0;
+        super( p_name );
     }
 }

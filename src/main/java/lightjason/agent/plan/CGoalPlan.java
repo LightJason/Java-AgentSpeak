@@ -24,58 +24,17 @@
 package lightjason.agent.plan;
 
 /**
- * interface of plan
+ * plan to handle goal events
  */
-public interface IPlan
+public class CGoalPlan extends IDefaultPlan
 {
-
     /**
-     * returns the name of the plan
-     * which matchs also the goal
-     * definition
+     * ctor
      *
-     * @return name
+     * @param p_name name
      */
-    public String getName();
-
-    /**
-     * checks the context of the plan
-     * and return if the plan can be
-     * executed
-     *
-     * @return true iif the plan can be executed
-     */
-    public boolean isExecutable();
-
-    /**
-     * runs the plan and returns the result
-     *
-     * @return execution state
-     */
-    public EExecutionState execute();
-
-    /**
-     * returns the current state of the plan
-     *
-     * @return current / last execution state
-     */
-    public EExecutionState getState();
-
-    /**
-     * returns the costs of the plan
-     *
-     * @return cost
-     */
-    public double getCost();
-
-    /**
-     * returns the number of executions
-     */
-    public long getNumberOfRuns();
-
-    /**
-     * returns the number of fail runs
-     */
-    public long getNumberOfFailRuns();
-
+    public CGoalPlan( final String p_name )
+    {
+        super( p_name );
+    }
 }
