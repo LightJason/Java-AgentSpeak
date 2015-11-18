@@ -21,44 +21,25 @@
  * @endcond
  */
 
-package lightjason.runtime;
+package lightjason.agent;
+
+import java.util.List;
+
 
 /**
- * interface of plan
+ * action interface
  */
-public interface IPlan
+public interface IAction
 {
 
     /**
-     * returns the name of the plan
-     * which matchs also the goal
-     * definition
+     * runs the action
      *
-     * @return name
+     * @param p_agent agent that runs the action
+     * @param p_name name of the action
+     * @param p_parameter parameter of the action
+     * @return boolean flag if the action is success or fail
      */
-    public String getName();
-
-    /**
-     * checks the context of the plan
-     * and return if the plan can be
-     * executed
-     *
-     * @return true iif the plan can be executed
-     */
-    public boolean isExecutable();
-
-    /**
-     * runs the plan and returns the result
-     *
-     * @return execution state
-     */
-    public EExecutionState execute();
-
-    /**
-     * returns the current state of the plan
-     *
-     * @return current / last execution state
-     */
-    public EExecutionState getState();
+    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
 
 }

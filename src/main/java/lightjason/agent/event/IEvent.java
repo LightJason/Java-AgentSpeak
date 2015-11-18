@@ -21,50 +21,26 @@
  * @endcond
  */
 
-package lightjason.runtime;
+package lightjason.agent.event;
 
 /**
- * plan structure
+ * event definition
  */
-public class CPlan implements IPlan
+public interface IEvent<T>
 {
-    /**
-     * name of the plan
-     **/
-    private final String m_name;
 
     /**
-     * ctor
+     * returns the name of the event
      *
-     * @param p_name name
+     * @return name
      */
-    public CPlan( final String p_name )
-    {
-        m_name = p_name;
-    }
+    public String getName();
 
+    /**
+     * returns the data or null
+     *
+     * @return data
+     */
+    public T getData();
 
-    @Override
-    public String getName()
-    {
-        return null;
-    }
-
-    @Override
-    public boolean isExecutable()
-    {
-        return false;
-    }
-
-    @Override
-    public EExecutionState execute()
-    {
-        return null;
-    }
-
-    @Override
-    public EExecutionState getState()
-    {
-        return null;
-    }
 }

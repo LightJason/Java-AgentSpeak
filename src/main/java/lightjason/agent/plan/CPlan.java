@@ -21,62 +21,56 @@
  * @endcond
  */
 
-package lightjason;
-
-import lightjason.runtime.IAction;
-import org.junit.Test;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertTrue;
-
+package lightjason.agent.plan;
 
 /**
- * test agent structure
+ * plan structure
  */
-public class Test_CAgent
+public class CPlan implements IPlan
 {
     /**
-     * map with actions
+     * name of the plan
+     **/
+    private final String m_name;
+
+    /**
+     * ctor
+     *
+     * @param p_name name
      */
-    private static final Map<String, IAction> c_actions = new HashMap<>();
-
-    @Test
-    public void test_ComplexAgent() throws IOException
+    public CPlan( final String p_name )
     {
-        assertTrue( testAgent( "src/test/resources/agentsuccess.asl", "complex successful agent" ) );
+        m_name = p_name;
     }
 
-    /*
-    @Test
-    public void test_SimpleAgent() throws IOException
-    {
-        assertTrue( testAgent( "src/test/resources/agentsimple.asl", "simple agent" ) );
-    }
-    */
 
-    private static boolean testAgent( final String p_script, final String p_name )
+    @Override
+    public String getName()
     {
-        IAgent l_agent = null;
-        try (
-                final InputStream l_stream = new FileInputStream( p_script );
-        )
-        {
-            l_agent = new CAgent( l_stream, c_actions );
-        }
-        catch ( final Exception l_exception )
-        {
-            System.err.println( MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
-            return false;
-        }
-
-        System.out.println( MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
-        return true;
+        return null;
     }
 
+    @Override
+    public boolean isExecutable()
+    {
+        return false;
+    }
+
+    @Override
+    public EExecutionState execute()
+    {
+        return null;
+    }
+
+    @Override
+    public EExecutionState getState()
+    {
+        return null;
+    }
+
+    @Override
+    public double getCost()
+    {
+        return 0;
+    }
 }

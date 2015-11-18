@@ -21,28 +21,23 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.agent;
 
-import lightjason.agent.CAgent;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public final class CMain
+/**
+ * map with actions
+ */
+public interface IMultiAction extends IAction, Map<String, IAction>
 {
 
     /**
-     * main
+     * returns a list with names which can handle
      *
-     * @param p_args command-line arguments
+     * @return list with names
      */
-    public static void main( final String[] p_args ) throws IOException
-    {
-
-        new CAgent( new FileInputStream( "src/test/resources/agentsimple.asl" ), new HashMap<>() );
-
-    }
+    public List<String> getNames();
 
 }

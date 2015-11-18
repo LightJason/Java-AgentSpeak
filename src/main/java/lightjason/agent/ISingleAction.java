@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.runtime;
+package lightjason.agent;
 
 /**
  * single action

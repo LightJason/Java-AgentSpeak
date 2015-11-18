@@ -21,28 +21,38 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.parser;
 
-import lightjason.agent.CAgent;
+import lightjason.agent.plan.IPlan;
+import lightjason.language.ILiteral;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
-public final class CMain
+/**
+ * visitor interface of the abstract-syntax-tree (AST)
+ */
+public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
 {
 
     /**
-     * main
+     * returns the initial beliefs
      *
-     * @param p_args command-line arguments
+     * @return set with beliefs
      */
-    public static void main( final String[] p_args ) throws IOException
-    {
+    public Set<ILiteral> getInitialBeliefs();
 
-        new CAgent( new FileInputStream( "src/test/resources/agentsimple.asl" ), new HashMap<>() );
+    /**
+     * returns the initial goal
+     */
+    public ILiteral getInitialGoal();
 
-    }
+    /**
+     * returns the plans
+     *
+     * @return plans
+     */
+    public Map<String, Set<IPlan>> getPlans();
 
 }

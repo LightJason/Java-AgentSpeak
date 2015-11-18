@@ -21,38 +21,23 @@
  * @endcond
  */
 
-package lightjason;
-
-import lightjason.language.ILiteral;
-import lightjason.runtime.IPlan;
+package lightjason.agent.cost;
 
 import java.util.Map;
-import java.util.Set;
 
 
 /**
- * visitor interface of the abstract-syntax-tree (AST)
+ * function for summarizing costs
  */
-public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
+public interface ICostSummary
 {
 
     /**
-     * returns the initial beliefs
+     * calculates
      *
-     * @return set with beliefs
+     * @param p_costs map with single costs
+     * @return summarized costs
      */
-    public Set<ILiteral> getInitialBeliefs();
-
-    /**
-     * returns the initial goal
-     */
-    public ILiteral getInitialGoal();
-
-    /**
-     * returns the plans
-     *
-     * @return plans
-     */
-    public Map<String, Set<IPlan>> getPlans();
+    public double evaluate( final Map<String, Double> p_costs );
 
 }

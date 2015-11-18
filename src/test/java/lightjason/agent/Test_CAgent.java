@@ -21,27 +21,56 @@
  * @endcond
  */
 
-package lightjason.runtime;
+package lightjason.agent;
 
-import lightjason.IAgent;
-
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * action interface
+ * test agent structure
  */
-public interface IAction
+public class Test_CAgent
 {
-
     /**
-     * runs the action
-     *
-     * @param p_agent agent that runs the action
-     * @param p_name name of the action
-     * @param p_parameter parameter of the action
-     * @return boolean flag if the action is success or fail
+     * map with actions
      */
-    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
+    private static final Map<String, IAction> c_actions = new HashMap<>();
+
+    /*
+    @Test
+    public void test_ComplexAgent() throws IOException
+    {
+        assertTrue( testAgent( "src/test/resources/agentsuccess.asl", "complex successful agent" ) );
+    }
+
+    @Test
+    public void test_SimpleAgent() throws IOException
+    {
+        assertTrue( testAgent( "src/test/resources/agentsimple.asl", "simple agent" ) );
+    }
+    */
+
+    private static boolean testAgent( final String p_script, final String p_name )
+    {
+        IAgent l_agent = null;
+        try (
+                final InputStream l_stream = new FileInputStream( p_script );
+        )
+        {
+            l_agent = new CAgent( l_stream, c_actions );
+        }
+        catch ( final Exception l_exception )
+        {
+            System.err.println( MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
+            return false;
+        }
+
+        System.out.println( MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
+        return true;
+    }
 
 }

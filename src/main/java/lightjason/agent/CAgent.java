@@ -21,11 +21,12 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.agent;
 
+import lightjason.agent.plan.IPlan;
 import lightjason.beliefbase.IBeliefBase;
-import lightjason.runtime.IAction;
-import lightjason.runtime.IPlan;
+import lightjason.parser.CAgentSpeakVisitor;
+import lightjason.parser.IAgentSpeakVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 

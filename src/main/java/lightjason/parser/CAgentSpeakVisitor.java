@@ -21,14 +21,14 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.parser;
 
 
+import lightjason.agent.plan.IPlan;
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.runtime.IPlan;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,10 +77,22 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
+    public Object visitPlan_trigger( final lightjason.JasonParser.Plan_triggerContext p_context )
+    {
+
+
+        return super.visitPlan_trigger( p_context );
+    }
+
+    @Override
     public Object visitPlan( final lightjason.JasonParser.PlanContext p_context )
     {
+
+
+        //System.out.println(p_context.getText());
+        //System.out.println( this.visitAtom( p_context.atom() ) );
+
         //final IPlan l_plan = new CPlan( p_context.atom().getText() );
-        //System.out.println(p_context.atom().getText());
         /*
         final Set<IPlan> l_plans = m_plans.getOrDefault( l_plan.getName(), new HashSet<>() );
 

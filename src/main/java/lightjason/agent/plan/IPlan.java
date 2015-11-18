@@ -21,15 +21,51 @@
  * @endcond
  */
 
-package lightjason.runtime;
-
+package lightjason.agent.plan;
 
 /**
- * execution state of a plan
+ * interface of plan
  */
-public enum EExecutionState
+public interface IPlan
 {
-    Success,
-    Fail,
-    Wait;
+
+    /**
+     * returns the name of the plan
+     * which matchs also the goal
+     * definition
+     *
+     * @return name
+     */
+    public String getName();
+
+    /**
+     * checks the context of the plan
+     * and return if the plan can be
+     * executed
+     *
+     * @return true iif the plan can be executed
+     */
+    public boolean isExecutable();
+
+    /**
+     * runs the plan and returns the result
+     *
+     * @return execution state
+     */
+    public EExecutionState execute();
+
+    /**
+     * returns the current state of the plan
+     *
+     * @return current / last execution state
+     */
+    public EExecutionState getState();
+
+    /**
+     * returns the costs of the plan
+     *
+     * @return cost
+     */
+    public double getCost();
+
 }
