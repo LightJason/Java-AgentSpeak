@@ -23,8 +23,11 @@
 
 package lightjason.agent;
 
+import lightjason.agent.event.IEvent;
+import lightjason.agent.plan.IPlan;
 import lightjason.beliefbase.IBeliefBase;
 
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 
@@ -57,13 +60,15 @@ public interface IAgent extends Callable<IAgent>
      *
      * @param p_event event
      */
-    public void trigger( final String p_event );
+    public void trigger( final IEvent<?> p_event );
 
     /**
      * sets the agent to a suspend state
      *
      * @note only the beliefbase update is called
-     * but the agent cycle is not run
+     * but the agent cycle is not run, but before
+     * the suspeding state is reached the plan "+!sleep"
+     * is called
      */
     public void suspend();
 
@@ -76,8 +81,15 @@ public interface IAgent extends Callable<IAgent>
 
     /**
      * wakes-up the agent from the suspend state
+     *
+     * @note the plan "+!wakeup" will be triggered
      */
     public void resume();
+
+    /**
+     * returns a set of the current plans
+     */
+    public Set<IPlan> getCurrentPlans();
 
     /**
      * clones the current agent

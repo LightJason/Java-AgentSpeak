@@ -46,44 +46,44 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     /**
      * initial goal
      */
-    private ILiteral m_initialgoal;
+    private ILiteral m_InitialGoal;
     /**
      * set with initial beliefs
      */
-    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
+    private final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
     /**
      * add-goal plans
      */
-    private final Map<String, Set<IPlan>> m_plansaddgoal = new HashMap<>();
+    private final Map<String, Set<IPlan>> m_PlansAddGoal = new HashMap<>();
     /**
      * delete-goal plans
      */
-    private final Map<String, Set<IPlan>> m_plansdeletgoal = new HashMap<>();
+    private final Map<String, Set<IPlan>> m_PlansDeleteGoal = new HashMap<>();
     /**
      * add-belief plans
      */
-    private final Map<String, Set<IPlan>> m_plansaddbelief = new HashMap<>();
+    private final Map<String, Set<IPlan>> m_PlanAddBelief = new HashMap<>();
     /**
      * delete-belief plans
      */
-    private final Map<String, Set<IPlan>> m_plansdeletebelief = new HashMap<>();
+    private final Map<String, Set<IPlan>> m_PlansDeleteBelief = new HashMap<>();
     /**
      * change-belief plans
      */
-    private final Map<String, Set<IPlan>> m_planschangebelief = new HashMap<>();
+    private final Map<String, Set<IPlan>> m_PlansChangeBelief = new HashMap<>();
 
 
     @Override
     public Object visitInitial_beliefs( final lightjason.JasonParser.Initial_beliefsContext p_context )
     {
-        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
+        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
         return null;
     }
 
     @Override
     public Object visitInitial_goal( final lightjason.JasonParser.Initial_goalContext p_context )
     {
-        m_initialgoal = new CLiteral( p_context.atom().getText() );
+        m_InitialGoal = new CLiteral( p_context.atom().getText() );
         return null;
     }
 
@@ -191,43 +191,43 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     @Override
     public final Set<ILiteral> getInitialBeliefs()
     {
-        return m_initialbeliefs;
+        return m_InitialBeliefs;
     }
 
     @Override
     public final ILiteral getInitialGoal()
     {
-        return m_initialgoal;
+        return m_InitialGoal;
     }
 
     @Override
-    public final Map<String, Set<IPlan>> getGoalAdditionPlans()
+    public final Map<String, Set<IPlan>> getGoalAddPlans()
     {
-        return m_plansaddgoal;
+        return m_PlansAddGoal;
     }
 
     @Override
-    public final Map<String, Set<IPlan>> getGoalDeletionPlans()
+    public final Map<String, Set<IPlan>> getGoalDeletePlans()
     {
-        return m_plansdeletgoal;
+        return m_PlansDeleteGoal;
     }
 
     @Override
-    public final Map<String, Set<IPlan>> getBeliefAdditionPlans()
+    public final Map<String, Set<IPlan>> getBeliefAddPlans()
     {
-        return m_plansaddbelief;
+        return m_PlanAddBelief;
     }
 
     @Override
-    public final Map<String, Set<IPlan>> getBeliefDeletionPlans()
+    public final Map<String, Set<IPlan>> getBeliefDeletePlans()
     {
-        return m_plansdeletebelief;
+        return m_PlansDeleteBelief;
     }
 
     @Override
     public final Map<String, Set<IPlan>> getBeliefChangePlans()
     {
-        return m_planschangebelief;
+        return m_PlansChangeBelief;
     }
 
 }

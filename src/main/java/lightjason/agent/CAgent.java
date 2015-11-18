@@ -23,6 +23,7 @@
 
 package lightjason.agent;
 
+import lightjason.agent.event.IEvent;
 import lightjason.agent.plan.IPlan;
 import lightjason.beliefbase.IBeliefBase;
 import lightjason.parser.CAgentSpeakVisitor;
@@ -129,12 +130,12 @@ public class CAgent implements IAgent
         System.out.println( p_astvisitor.getInitialGoal() );
         System.out.println( p_astvisitor.getInitialBeliefs() );
 
-        System.out.println( p_astvisitor.getBeliefAdditionPlans() );
-        System.out.println( p_astvisitor.getBeliefDeletionPlans() );
+        System.out.println( p_astvisitor.getBeliefAddPlans() );
+        System.out.println( p_astvisitor.getBeliefDeletePlans() );
         System.out.println( p_astvisitor.getBeliefChangePlans() );
 
-        System.out.println( p_astvisitor.getGoalAdditionPlans() );
-        System.out.println( p_astvisitor.getBeliefDeletionPlans() );
+        System.out.println( p_astvisitor.getGoalAddPlans() );
+        System.out.println( p_astvisitor.getBeliefDeletePlans() );
     }
 
     @Override
@@ -156,7 +157,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public void trigger( final String p_event )
+    public void trigger( final IEvent<?> p_event )
     {
 
     }
@@ -177,6 +178,12 @@ public class CAgent implements IAgent
     public final synchronized void resume()
     {
         m_suspend = false;
+    }
+
+    @Override
+    public Set<IPlan> getCurrentPlans()
+    {
+        return null;
     }
 
     @Override
