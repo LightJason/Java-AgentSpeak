@@ -207,8 +207,7 @@ public class CAgent implements IAgent
     @Override
     public IAgent call() throws Exception
     {
-        // run beliefbase update, because
-        // environment can be changed
+        // run beliefbase update, because environment can be changed
         m_beliefbase.update();
         if ( m_suspend )
             return this;

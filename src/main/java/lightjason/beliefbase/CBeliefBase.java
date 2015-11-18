@@ -35,7 +35,7 @@ import java.util.Iterator;
  *
  * @tparam T literal type
  */
-public class CBeliefBase<T> implements IBeliefBase
+public class CBeliefBase implements IBeliefBase
 {
     /**
      * storage with data
