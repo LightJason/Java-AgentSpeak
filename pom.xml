@@ -112,6 +112,28 @@
                 </executions>
             </plugin>
 
+            <!-- Doxygen and modified clean call -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <id>doxygen</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>doxygen</executable>
+                            <arguments>
+                                <argument>src/main/documentation/configuration.doxyfile</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- compiler settings -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

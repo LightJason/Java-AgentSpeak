@@ -7,7 +7,11 @@
 !*.md
 !*.png
 !pom.xml
-!src/main/styleguide/**/*.xml
 
+!src/main/documentation/*.doxyfile
+!src/main/documentation/*.htm
+!src/main/documentation/*.css
+
+!src/main/styleguide/**/*.xml
 
 target/**
