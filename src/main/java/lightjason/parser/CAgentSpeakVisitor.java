@@ -24,7 +24,6 @@
 package lightjason.parser;
 
 
-import lightjason.JasonParser;
 import lightjason.agent.plan.IPlan;
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
@@ -45,17 +44,34 @@ import java.util.stream.Collectors;
 public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> implements IAgentSpeakVisitor
 {
     /**
-     * set with initial beliefs
-     */
-    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
-    /**
      * initial goal
      */
     private ILiteral m_initialgoal;
     /**
-     *
+     * set with initial beliefs
      */
-    private final Map<String, Set<IPlan>> m_plans = new HashMap<>();
+    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
+    /**
+     * add-goal plans
+     */
+    private final Map<String, Set<IPlan>> m_plansaddgoal = new HashMap<>();
+    /**
+     * delete-goal plans
+     */
+    private final Map<String, Set<IPlan>> m_plansdeletgoal = new HashMap<>();
+    /**
+     * add-belief plans
+     */
+    private final Map<String, Set<IPlan>> m_plansaddbelief = new HashMap<>();
+    /**
+     * delete-belief plans
+     */
+    private final Map<String, Set<IPlan>> m_plansdeletebelief = new HashMap<>();
+    /**
+     * change-belief plans
+     */
+    private final Map<String, Set<IPlan>> m_planschangebelief = new HashMap<>();
+
 
     @Override
     public Object visitInitial_beliefs( final lightjason.JasonParser.Initial_beliefsContext p_context )
@@ -75,36 +91,6 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
     {
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
-    }
-
-    @Override
-    public Object visitPlan( final lightjason.JasonParser.PlanContext p_context )
-    {
-        super.visitPlan_trigger( p_context.plan_trigger() );
-
-        //System.out.println(p_context.getText());
-        //System.out.println( this.visitAtom( p_context.atom() ) );
-
-        //final IPlan l_plan = new CPlan( p_context.atom().getText() );
-        /*
-        final Set<IPlan> l_plans = m_plans.getOrDefault( l_plan.getName(), new HashSet<>() );
-
-        l_plans.add( l_plan );
-        m_plans.putIfAbsent(  l_plan.getName(), l_plans );
-        */
-        return super.visitPlan( p_context );
-    }
-
-    @Override
-    public Object visitPlan_goal_trigger( final JasonParser.Plan_goal_triggerContext p_context )
-    {
-        return super.visitPlan_goal_trigger( p_context );
-    }
-
-    @Override
-    public Object visitPlan_belief_trigger( final JasonParser.Plan_belief_triggerContext p_context )
-    {
-        return super.visitPlan_belief_trigger( p_context );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -203,20 +189,45 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Set<ILiteral> getInitialBeliefs()
+    public final Set<ILiteral> getInitialBeliefs()
     {
         return m_initialbeliefs;
     }
 
     @Override
-    public ILiteral getInitialGoal()
+    public final ILiteral getInitialGoal()
     {
         return m_initialgoal;
     }
 
     @Override
-    public Map<String, Set<IPlan>> getPlans()
+    public final Map<String, Set<IPlan>> getGoalAdditionPlans()
     {
-        return m_plans;
+        return m_plansaddgoal;
     }
+
+    @Override
+    public final Map<String, Set<IPlan>> getGoalDeletionPlans()
+    {
+        return m_plansdeletgoal;
+    }
+
+    @Override
+    public final Map<String, Set<IPlan>> getBeliefAdditionPlans()
+    {
+        return m_plansaddbelief;
+    }
+
+    @Override
+    public final Map<String, Set<IPlan>> getBeliefDeletionPlans()
+    {
+        return m_plansdeletebelief;
+    }
+
+    @Override
+    public final Map<String, Set<IPlan>> getBeliefChangePlans()
+    {
+        return m_planschangebelief;
+    }
+
 }

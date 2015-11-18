@@ -128,7 +128,13 @@ public class CAgent implements IAgent
 
         System.out.println( p_astvisitor.getInitialGoal() );
         System.out.println( p_astvisitor.getInitialBeliefs() );
-        System.out.println( p_astvisitor.getPlans() );
+
+        System.out.println( p_astvisitor.getBeliefAdditionPlans() );
+        System.out.println( p_astvisitor.getBeliefDeletionPlans() );
+        System.out.println( p_astvisitor.getBeliefChangePlans() );
+
+        System.out.println( p_astvisitor.getGoalAdditionPlans() );
+        System.out.println( p_astvisitor.getBeliefDeletionPlans() );
     }
 
     @Override

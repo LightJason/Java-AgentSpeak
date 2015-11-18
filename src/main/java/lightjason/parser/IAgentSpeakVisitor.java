@@ -49,10 +49,38 @@ public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
     public ILiteral getInitialGoal();
 
     /**
-     * returns the plans
+     * returns the plans which are triggered by add-goal event
      *
-     * @return plans
+     * @return goal plans
      */
-    public Map<String, Set<IPlan>> getPlans();
+    public Map<String, Set<IPlan>> getGoalAdditionPlans();
+
+    /**
+     * returns the plans which are triggered by delete-goal event
+     *
+     * @return goal plans
+     */
+    public Map<String, Set<IPlan>> getGoalDeletionPlans();
+
+    /**
+     * returns the plans which are triggered by add-belief event
+     *
+     * @return belief plans
+     */
+    public Map<String, Set<IPlan>> getBeliefAdditionPlans();
+
+    /**
+     * returns the plans which are triggered by delete-belief event
+     *
+     * @return belief plans
+     */
+    public Map<String, Set<IPlan>> getBeliefDeletionPlans();
+
+    /**
+     * returns the plans which are triggered by change-belief event
+     *
+     * @return belief plans
+     */
+    public Map<String, Set<IPlan>> getBeliefChangePlans();
 
 }
