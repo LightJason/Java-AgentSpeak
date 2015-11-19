@@ -21,24 +21,26 @@
  * @endcond
  */
 
-package lightjason.agent.cost;
+package lightjason.agent.score;
 
 import lightjason.agent.IAgent;
+import lightjason.agent.plan.IPlan;
+
+import java.util.Map;
 
 
 /**
- * cost definition
+ * rating structure defines a plan selection
+ * depend on plan scoring
  */
-public interface ICost
+public interface IPlanScoreRating
 {
 
     /**
-     * returns the costs of an action
-     *
-     * @param p_action action name
-     * @param p_agent agent
-     * @return cost value
+     * @param p_agent agent which is run the function
+     * @param p_score map with plan and score values
+     * @return resulting plan
      */
-    public double evaluate( final String p_action, final IAgent p_agent );
+    public IPlan evaluate( final IAgent p_agent, final Map<IPlan, Double> p_score );
 
 }

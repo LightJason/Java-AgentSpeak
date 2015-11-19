@@ -21,23 +21,26 @@
  * @endcond
  */
 
-package lightjason.agent.cost;
+package lightjason.agent.score;
+
+import lightjason.agent.IAgent;
 
 import java.util.Map;
 
 
 /**
- * function for summarizing costs
+ * function for summarizing score values
  */
-public interface ICostSummary
+public interface ISoreSum
 {
 
     /**
      * calculates
      *
-     * @param p_costs map with single costs
-     * @return summarized costs
+     * @param p_agent agent which calculates the score
+     * @param p_score map with single scores
+     * @return summarized score
      */
-    public double evaluate( final Map<String, Double> p_costs );
+    public double evaluate( final IAgent p_agent, final Map<String, Double> p_score );
 
 }
