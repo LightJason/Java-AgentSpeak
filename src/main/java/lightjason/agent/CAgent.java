@@ -48,7 +48,7 @@ public class CAgent implements IAgent
     /**
      * thread-safe map with all existing plans
      *
-     * @note plan list ust be a linked-hashset
+     * @note plan list must be a linked-hashset
      * to store the execution order of the plans
      */
     protected final Map<String, Set<IPlan>> m_plans = new ConcurrentHashMap<>();

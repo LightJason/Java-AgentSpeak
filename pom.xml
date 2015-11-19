@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.tu_clausthal.in.mec</groupId>
-    <artifactId>LightJason</artifactId>
+    <artifactId>Light-Jason</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 

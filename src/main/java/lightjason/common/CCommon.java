@@ -93,44 +93,6 @@ public final class CCommon
         return l_return;
     }
 
-    /**
-     * returns the hash of a string
-     *
-     * @param p_string input string
-     * @param p_hash hash algorithm
-     * @return hexadecimal hash value
-     */
-    public static String getHash( final String p_string, final String p_hash )
-    {
-        try
-        {
-            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( p_string.getBytes() ) );
-        }
-        catch ( final Exception l_exception )
-        {
-        }
-
-        return null;
-    }
-
-    /**
-     * @param p_file input file
-     * @param p_hash hash algorithm
-     * @return hexadecimal hash value
-     */
-    public static String getHash( final File p_file, final String p_hash )
-    {
-        try
-        {
-            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
-        }
-        catch ( final Exception l_exception )
-        {
-        }
-
-        return null;
-    }
-
 
     /**
      * creates a map from parameters
@@ -154,22 +116,6 @@ public final class CCommon
 
 
         return l_return;
-    }
-
-
-    /**
-     * returns a string with hexadecimal bytes
-     *
-     * @param p_bytes input bytes
-     * @return hexadecimal string
-     */
-    private static String getBytes2Hex( final byte[] p_bytes )
-    {
-        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
-        for ( final byte l_byte : p_bytes )
-            l_str.append( String.format( "%02x", l_byte & 0xff ) );
-
-        return l_str.toString();
     }
 
 }
