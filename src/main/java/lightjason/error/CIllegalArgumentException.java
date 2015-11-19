@@ -21,18 +21,50 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.error;
 
-public final class CMain
+/**
+ * illegal argument exception
+ */
+public final class CIllegalArgumentException extends IllegalArgumentException
 {
 
     /**
-     * main
-     *
-     * @param p_args command-line arguments
+     * ctor
      */
-    public static void main( final String[] p_args )
+    public CIllegalArgumentException()
     {
+        super();
     }
 
+    /**
+     * ctor
+     *
+     * @param p_string message
+     */
+    public CIllegalArgumentException( final String p_string )
+    {
+        super( p_string );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_message message
+     * @param p_cause throwable
+     */
+    public CIllegalArgumentException( final String p_message, final Throwable p_cause )
+    {
+        super( p_message, p_cause );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_cause throwable
+     */
+    public CIllegalArgumentException( final Throwable p_cause )
+    {
+        super( p_cause );
+    }
 }

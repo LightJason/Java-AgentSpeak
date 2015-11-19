@@ -24,6 +24,9 @@
 
 package lightjason.language.arithmetic;
 
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.error.CIllegalStateException;
 import lightjason.language.IVariable;
 import lightjason.language.arithmetic.operator.CAbs;
 import lightjason.language.arithmetic.operator.CCeil;
@@ -42,7 +45,6 @@ import lightjason.language.arithmetic.operator.CSqrt;
 import lightjason.language.arithmetic.operator.CTan;
 import lightjason.language.arithmetic.operator.IArithmeticOperator;
 
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -124,7 +126,7 @@ public final class CExpression
         {
             final IArithmeticOperator l_operator = m_operatordefinition.get( l_item );
             if ( l_operator == null )
-                throw new IllegalArgumentException( MessageFormat.format( "operator [{0}] not found", l_item ) );
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "operatornotfound", l_item ) );
 
             m_operator.add( l_operator );
         }
@@ -203,8 +205,8 @@ public final class CExpression
             final IArithmeticOperator l_currentoperator = l_operator.pop();
 
             if ( l_elements.size() < l_currentoperator.getNumberOfArguments() )
-                throw new IllegalStateException(
-                        MessageFormat.format( "operator [{0}] need [{1}] arguments, but the expression stack holds only [{2}] arguments", l_currentoperator
+                throw new CIllegalStateException(
+                        CCommon.getLanguageString( this, "argumentnumbertosmall", l_currentoperator
                                 .getToken(), l_currentoperator.getNumberOfArguments(), l_elements.size() ) );
 
 
@@ -217,7 +219,7 @@ public final class CExpression
         }
 
         if ( l_elements.size() != 1 )
-            throw new IllegalStateException( MessageFormat.format( "expression cannot be evaluated", "" ) );
+            throw new CIllegalStateException( CCommon.getLanguageString( this, "notevaluated" ) );
 
         return l_elements.get( 0 ).get( null );
     }
@@ -247,7 +249,7 @@ public final class CExpression
         public CNumberElement( final Number p_value )
         {
             if ( p_value == null )
-                throw new IllegalArgumentException( MessageFormat.format( "number need not to be null", "" ) );
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numbernotnull" ) );
 
             m_value = p_value;
             m_variable = null;
@@ -277,7 +279,7 @@ public final class CExpression
             {
                 l_return = p_solver.get( m_variable.getName() );
                 if ( l_return == null )
-                    throw new IllegalStateException( MessageFormat.format( "number for variable [{0}] cannot be resolved", m_variable.getName() ) );
+                    throw new CIllegalStateException( CCommon.getLanguageString( this, "variablenotresolve", m_variable.getName() ) );
             }
 
             return l_return;

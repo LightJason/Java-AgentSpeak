@@ -1,12 +1,13 @@
 *.*
 
 !.gitignore
+!pom.xml
 !*.java
 !*.g4
 !*.asl
 !*.md
 !*.png
-!pom.xml
+!*.properties
 
 !src/main/documentation/*.doxyfile
 !src/main/documentation/*.htm

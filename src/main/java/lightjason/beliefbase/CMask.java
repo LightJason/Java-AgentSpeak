@@ -24,7 +24,9 @@
 package lightjason.beliefbase;
 
 
+import lightjason.common.CCommon;
 import lightjason.common.CPath;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 
 import java.text.MessageFormat;
@@ -82,9 +84,9 @@ public class CMask implements IBeliefBaseMask
     public CMask( final String p_name, final IBeliefBase p_beliefbase, final IBeliefBaseMask p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( MessageFormat.format( "name need not to be empty", "" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
         if ( p_beliefbase == null )
-            throw new IllegalArgumentException( MessageFormat.format( "beliefbase need not to be empty", "" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefbaseempty" ) );
 
         m_name = p_name;
         m_beliefbase = p_beliefbase;
@@ -292,7 +294,7 @@ public class CMask implements IBeliefBaseMask
         for ( IBeliefBaseMask l_mask = this; l_mask != null; )
         {
             if ( this.getStorage().equals( p_mask.getStorage() ) )
-                throw new IllegalArgumentException( MessageFormat.format( "storages {0} are equal to {1}", p_mask.getName(), l_mask.getFQNPath() ) );
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_mask.getName(), l_mask.getFQNPath() ) );
 
             l_mask = l_mask.getParent();
         }
@@ -477,7 +479,7 @@ public class CMask implements IBeliefBaseMask
 
         // if mask null an exception is thrown
         if ( l_mask == null )
-            throw new IllegalArgumentException( MessageFormat.format( "path element {0} in {1} not found", p_path.get( 0 ), p_path ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CMask.class, "notfound", p_path.get( 0 ), p_path ) );
 
         // recursive descend
         return walk( p_path.getSubPath( 1 ), l_mask, p_generator );

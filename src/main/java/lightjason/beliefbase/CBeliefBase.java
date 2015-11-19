@@ -24,9 +24,10 @@
 package lightjason.beliefbase;
 
 
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 
-import java.text.MessageFormat;
 import java.util.Iterator;
 
 
@@ -59,7 +60,7 @@ public class CBeliefBase implements IBeliefBase
     public CBeliefBase( final IStorage<ILiteral, IBeliefBaseMask> p_storage )
     {
         if ( p_storage == null )
-            throw new IllegalArgumentException( MessageFormat.format( "storage need not to be empty", "" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
         m_storage = p_storage;
     }
 

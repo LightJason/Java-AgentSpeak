@@ -23,15 +23,26 @@
 
 package lightjason.common;
 
+import lightjason.error.CIllegalArgumentException;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Properties;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 
 /**
@@ -39,6 +50,35 @@ import java.util.Map;
  */
 public final class CCommon
 {
+    /**
+     * properties of the package
+     */
+    private static final Properties c_properties;
+    /**
+     * package name
+     **/
+    private static final String c_packageroot;
+    /**
+     * language resource bundle
+     **/
+    private static final ResourceBundle c_language = ResourceBundle.getBundle( "language", Locale.getDefault(), new UTF8Control() );
+
+    static
+    {
+        String l_packageroot = "";
+        c_properties = new Properties();
+        ;
+        try
+        {
+            c_properties.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
+            l_packageroot = c_properties.getProperty( "rootpackage" );
+        }
+        catch ( final IOException l_exception )
+        {
+        }
+
+        c_packageroot = l_packageroot;
+    }
 
     /**
      * private ctor - avoid instantiation
@@ -48,15 +88,33 @@ public final class CCommon
     }
 
     /**
-     * adds a file extension if necessary
+     * returns the language bundle
      *
-     * @param p_file file object
-     * @param p_suffix suffix
-     * @return file with extension
+     * @return bundle
      */
-    public static File addFileExtension( final File p_file, final String p_suffix )
+    public static ResourceBundle getLanguageBundle()
     {
-        return ( p_file.getAbsolutePath().endsWith( p_suffix ) ) ? p_file : new File( p_file + p_suffix );
+        return c_language;
+    }
+
+    /**
+     * returns the property data of the package
+     *
+     * @return property object
+     */
+    public static Properties getConfiguration()
+    {
+        return c_properties;
+    }
+
+    /**
+     * returns the root package path
+     *
+     * @return string package path
+     */
+    public static String getPackage()
+    {
+        return c_packageroot;
     }
 
     /**
@@ -73,6 +131,91 @@ public final class CCommon
     {
         return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
     }
+
+    /**
+     * returns root path of the resource
+     *
+     * @return URL of file or null
+     */
+    public static URL getResourceURL()
+    {
+        return CCommon.class.getClassLoader().getResource( "" );
+    }
+
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file
+     * @return URL of file or null
+     */
+    public static URL getResourceURL( final String p_file ) throws URISyntaxException, MalformedURLException
+    {
+        return getResourceURL( new File( p_file ) );
+    }
+
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file relative to the CMain
+     * @return URL of file or null
+     */
+    public static URL getResourceURL( final File p_file ) throws URISyntaxException, MalformedURLException
+    {
+        if ( p_file.exists() )
+            return p_file.toURI().normalize().toURL();
+        return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
+    }
+
+
+    /**
+     * returns the language depend string on any object
+     *
+     * @param p_source any object
+     * @param p_label label name
+     * @param p_parameter parameter
+     * @return translated string
+     *
+     * @tparam T object type
+     */
+    public static <T> String getLanguageString( final T p_source, final String p_label, final Object... p_parameter )
+    {
+        return getLanguageString( p_source.getClass(), p_label, p_parameter );
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getLanguageString( final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
+        try
+        {
+            return MessageFormat.format( c_language.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
+        }
+        catch ( final MissingResourceException l_exception )
+        {
+        }
+
+        return "";
+    }
+
+    /**
+     * returns the label of a class and string to get access to the resource
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @return label name
+     */
+    public static String getLanguageLabel( final Class<?> p_class, final String p_label )
+    {
+        return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
+                c_packageroot + ".", "" );
+    }
+
 
     /**
      * converts any collection type into a typed array
@@ -100,7 +243,7 @@ public final class CCommon
     public static Map<String, Object> getMap( final Object... p_objects )
     {
         if ( p_objects.length % 2 != 0 )
-            throw new IllegalArgumentException( MessageFormat.format( "number of arguments must be even", "" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CCommon.class, "argumentsnoteven" ) );
 
         String l_name = null;
         final Map<String, Object> l_return = new HashMap<>();
@@ -113,6 +256,56 @@ public final class CCommon
 
 
         return l_return;
+    }
+
+
+    /**
+     * class to read UTF-8 encoded property file
+     *
+     * @note Java default encoding for property files is ISO-Latin-1
+     */
+    private static final class UTF8Control extends ResourceBundle.Control
+    {
+
+        public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
+                final boolean p_reload
+        ) throws IllegalAccessException, InstantiationException, IOException
+        {
+            InputStream l_stream = null;
+            final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
+
+            if ( !p_reload )
+                l_stream = p_loader.getResourceAsStream( l_resource );
+            else
+            {
+
+                final URL l_url = p_loader.getResource( l_resource );
+                if ( l_url == null )
+                    return null;
+
+                final URLConnection l_connection = l_url.openConnection();
+                if ( l_connection == null )
+                    return null;
+
+                l_connection.setUseCaches( false );
+                l_stream = l_connection.getInputStream();
+            }
+
+            try
+            {
+                return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
+
+            }
+            catch ( final Exception l_exception )
+            {
+            }
+            finally
+            {
+                l_stream.close();
+            }
+
+            return null;
+        }
     }
 
 }

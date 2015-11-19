@@ -23,7 +23,9 @@
 
 package lightjason.language.arithmetic.operator;
 
-import java.text.MessageFormat;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
+
 import java.util.List;
 
 
@@ -65,12 +67,10 @@ public final class CMultiply implements IArithmeticOperator
         if ( ( p_arguments.get( 0 ) instanceof Byte ) || ( p_arguments.get( 1 ) instanceof Byte ) )
             return new Double( p_arguments.get( 0 ).byteValue() * p_arguments.get( 1 ).byteValue() );
 
-        throw new IllegalArgumentException(
-                MessageFormat.format( "Operation [{0}] is not defined on [{1}] and [{2}]", this.getToken(), p_arguments.get( 0 ).getClass(),
-                                      p_arguments.get( 1 ).getClass()
-                )
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notdefined", this.getToken(), p_arguments.get( 0 ).getClass(),
+                                                                        p_arguments.get( 1 ).getClass()
+        )
         );
-
     }
 
     @Override

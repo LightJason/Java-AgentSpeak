@@ -24,9 +24,9 @@
 package lightjason.common;
 
 
+import lightjason.error.CIllegalArgumentException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -109,7 +109,7 @@ public final class CPath implements Iterable<CPath>
     public static CPath createPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
-            throw new IllegalArgumentException( MessageFormat.format( "arguments must be greater than", 0 ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CPath.class, "createpath" ) );
 
         return new CPath( p_varargs );
     }
@@ -123,7 +123,7 @@ public final class CPath implements Iterable<CPath>
     public static CPath createSplitPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
-            throw new IllegalArgumentException( MessageFormat.format( "arguments must be greater than", 1 ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CPath.class, "createpath" ) );
 
         final List<String> l_pathlist = new LinkedList<>();
         for ( int i = 1; i < p_varargs.length; ++i )
@@ -252,7 +252,7 @@ public final class CPath implements Iterable<CPath>
     public final CPath setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
-            throw new IllegalArgumentException( MessageFormat.format( "seperator need not to be empty", "" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "separatornotempty" ) );
 
         m_separator = p_separator;
         return this;
@@ -476,7 +476,6 @@ public final class CPath implements Iterable<CPath>
                 m_path.add( l_item );
 
         if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( MessageFormat.format( "path need not to be empty", "" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "pathempty" ) );
     }
-
 }
