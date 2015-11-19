@@ -159,7 +159,7 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
         * _source_
         * ... (?)
     * (?) also non-fixed for _Mental Notes_
-    * (?) -> needs grammar update @beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
+    * (?) -> needs grammar update beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
     * (see p. 37ff for comparison w/ Jason)
 * plan / beliefname did not be equal
 * fix repair plan definition only for goals / syntax format and event handling must be discussed
