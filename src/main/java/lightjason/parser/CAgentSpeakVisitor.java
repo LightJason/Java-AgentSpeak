@@ -95,10 +95,15 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
+    public Object visitPlan_goal_trigger( final JasonParser.Plan_goal_triggerContext p_context )
+    {
+        return p_context.getText();
+    }
+
+    @Override
     public Object visitPlan_belief_trigger( final JasonParser.Plan_belief_triggerContext p_context )
     {
-
-        return super.visitPlan_belief_trigger( p_context );
+        return p_context.getText();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

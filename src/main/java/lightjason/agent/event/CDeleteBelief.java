@@ -31,7 +31,7 @@ public class CDeleteBelief implements IEvent<String>
     /**
      * event name
      */
-    public static final String NAME = "delete belief";
+    public static final String ID = "delete belief";
     /** event data **/
     private final String m_data;
 
@@ -61,7 +61,7 @@ public class CDeleteBelief implements IEvent<String>
     @Override
     public String getName()
     {
-        return NAME;
+        return ID;
     }
 
     @Override

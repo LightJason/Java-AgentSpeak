@@ -31,7 +31,7 @@ public class CAddBelief implements IEvent<String>
     /**
      * event name
      */
-    public static final String NAME = "add belief";
+    public static final String ID = "add belief";
     /** event data **/
     private final String m_data;
 
@@ -60,7 +60,7 @@ public class CAddBelief implements IEvent<String>
     @Override
     public String getName()
     {
-        return NAME;
+        return ID;
     }
 
     @Override

@@ -155,8 +155,7 @@ annotation_symbolic_literal :
  **/
 plan_trigger :
     (plan_belief_trigger | plan_goal_trigger)
-    atom
-    ( LROUNDBRACKET list RROUNDBRACKET )?
+    literal
     ;
 
 /**
