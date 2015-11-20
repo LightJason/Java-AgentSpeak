@@ -23,6 +23,9 @@
 
 package lightjason.agent.plan;
 
+import lightjason.agent.event.IEvent;
+
+
 /**
  * interface of plan
  */
@@ -30,13 +33,11 @@ public interface IPlan
 {
 
     /**
-     * returns the name of the plan
-     * which matchs also the goal
-     * definition
+     * returns the trigger event
      *
-     * @return name
+     * @return trigger event
      */
-    public String getName();
+    public IEvent<?> getTrigger();
 
     /**
      * checks the context of the plan

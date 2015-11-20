@@ -23,6 +23,9 @@
 
 package lightjason.agent.event;
 
+import java.text.MessageFormat;
+
+
 /**
  * event to describe belief-delete
  */
@@ -32,7 +35,9 @@ public class CDeleteBelief implements IEvent<String>
      * event name
      */
     public static final String ID = "delete belief";
-    /** event data **/
+    /**
+     * event data
+     **/
     private final String m_data;
 
     /**
@@ -56,6 +61,12 @@ public class CDeleteBelief implements IEvent<String>
     public boolean equals( final Object p_object )
     {
         return p_object.hashCode() == this.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}( {1} )", ID, m_data );
     }
 
     @Override

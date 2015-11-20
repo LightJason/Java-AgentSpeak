@@ -24,17 +24,27 @@
 package lightjason.parser;
 
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 import lightjason.JasonParser;
+import lightjason.agent.event.CAddBelief;
+import lightjason.agent.event.CAddGoal;
+import lightjason.agent.event.CChangeBelief;
+import lightjason.agent.event.CDeleteBelief;
+import lightjason.agent.event.CDeleteGoal;
+import lightjason.agent.event.IEvent;
+import lightjason.agent.plan.CPlan;
 import lightjason.agent.plan.IPlan;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.error.CIllegalStateException;
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,25 +63,9 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
      */
     private final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
     /**
-     * add-goal plans
+     * map with plans
      */
-    private final Map<String, Set<IPlan>> m_PlansAddGoal = new HashMap<>();
-    /**
-     * delete-goal plans
-     */
-    private final Map<String, Set<IPlan>> m_PlansDeleteGoal = new HashMap<>();
-    /**
-     * add-belief plans
-     */
-    private final Map<String, Set<IPlan>> m_PlanAddBelief = new HashMap<>();
-    /**
-     * delete-belief plans
-     */
-    private final Map<String, Set<IPlan>> m_PlansDeleteBelief = new HashMap<>();
-    /**
-     * change-belief plans
-     */
-    private final Map<String, Set<IPlan>> m_PlansChangeBelief = new HashMap<>();
+    private final SetMultimap<IEvent<?>, IPlan> m_plans = HashMultimap.create();
 
 
     @Override
@@ -95,15 +89,68 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
+    public Object visitPlan( final JasonParser.PlanContext p_context )
+    {
+        final IPlan l_plan;
+        final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
+
+        switch ( (String) super.visitPlan_trigger( p_context.plan_trigger() ) )
+        {
+            case CAddBelief.ID:
+                l_plan = new CPlan( new CAddBelief( l_head.getFunctor() ), l_head );
+                break;
+            case CDeleteBelief.ID:
+                l_plan = new CPlan( new CDeleteBelief( l_head.getFunctor() ), l_head );
+                break;
+            case CChangeBelief.ID:
+                l_plan = new CPlan( new CChangeBelief( l_head.getFunctor() ), l_head );
+                break;
+            case CAddGoal.ID:
+                l_plan = new CPlan( new CAddGoal( l_head.getFunctor() ), l_head );
+                break;
+            case CDeleteGoal.ID:
+                l_plan = new CPlan( new CDeleteGoal( l_head.getFunctor() ), l_head );
+                break;
+
+            default:
+                throw new CIllegalStateException( CCommon.getLanguageString( this, "event", p_context.plan_trigger().getText() ) );
+        }
+
+        m_plans.put( l_plan.getTrigger(), l_plan );
+        return null;
+    }
+
+    @Override
     public Object visitPlan_goal_trigger( final JasonParser.Plan_goal_triggerContext p_context )
     {
-        return p_context.getText();
+        switch ( p_context.getText() )
+        {
+            case "+!":
+                return CAddGoal.ID;
+            case "-!":
+                return CDeleteGoal.ID;
+
+            default:
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "goaltrigger", p_context.getText() ) );
+        }
     }
 
     @Override
     public Object visitPlan_belief_trigger( final JasonParser.Plan_belief_triggerContext p_context )
     {
-        return p_context.getText();
+        switch ( p_context.getText() )
+        {
+            case "+":
+                return CAddBelief.ID;
+            case "-":
+                return CDeleteBelief.ID;
+            case "-+":
+                return CChangeBelief.ID;
+
+            default:
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -214,33 +261,9 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
-    public final Map<String, Set<IPlan>> getGoalAddPlans()
+    public SetMultimap<IEvent<?>, IPlan> getPlans()
     {
-        return m_PlansAddGoal;
-    }
-
-    @Override
-    public final Map<String, Set<IPlan>> getGoalDeletePlans()
-    {
-        return m_PlansDeleteGoal;
-    }
-
-    @Override
-    public final Map<String, Set<IPlan>> getBeliefAddPlans()
-    {
-        return m_PlanAddBelief;
-    }
-
-    @Override
-    public final Map<String, Set<IPlan>> getBeliefDeletePlans()
-    {
-        return m_PlansDeleteBelief;
-    }
-
-    @Override
-    public final Map<String, Set<IPlan>> getBeliefChangePlans()
-    {
-        return m_PlansChangeBelief;
+        return m_plans;
     }
 
 }

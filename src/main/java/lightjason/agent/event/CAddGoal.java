@@ -21,80 +21,62 @@
  * @endcond
  */
 
-package lightjason.agent.plan;
+package lightjason.agent.event;
+
+import java.text.MessageFormat;
+
 
 /**
- * abstract plan structure
+ * event to descrigoal-add
  */
-public abstract class IDefaultPlan implements IPlan
+public class CAddGoal implements IEvent<String>
 {
     /**
-     * name of the plan
+     * event name
+     */
+    public static final String ID = "add goal";
+    /**
+     * event data
      **/
-    protected final String m_name;
-    /**
-     * current plan state
-     */
-    protected EExecutionState m_currentstate = EExecutionState.Success;
-    /**
-     * number of runs
-     */
-    protected long m_runs = 0;
-    /**
-     * number of fail runs
-     */
-    protected long m_failruns = 0;
+    private final String m_data;
 
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_belieffunctor name of the functor
      */
-    protected IDefaultPlan( final String p_name )
+    public CAddGoal( final String p_belieffunctor )
     {
-        m_name = p_name;
-    }
-
-
-    @Override
-    public final String getName()
-    {
-        return m_name;
+        m_data = p_belieffunctor;
     }
 
     @Override
-    public final boolean isExecutable()
+    public int hashCode()
     {
-        return false;
+        return m_data.hashCode() + this.getName().hashCode();
     }
 
     @Override
-    public EExecutionState execute()
+    public boolean equals( final Object p_object )
     {
-        return null;
+        return p_object.hashCode() == this.hashCode();
     }
 
     @Override
-    public final EExecutionState getState()
+    public String toString()
     {
-        return m_currentstate;
+        return MessageFormat.format( "{0}( {1} )", ID, m_data );
     }
 
     @Override
-    public double getCost()
+    public String getName()
     {
-        return 0;
+        return ID;
     }
 
     @Override
-    public final long getNumberOfRuns()
+    public String getData()
     {
-        return m_runs;
-    }
-
-    @Override
-    public final long getNumberOfFailRuns()
-    {
-        return m_failruns;
+        return m_data;
     }
 }

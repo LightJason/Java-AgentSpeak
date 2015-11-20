@@ -89,6 +89,7 @@ principles :
 plan :
     annotations?
     plan_trigger
+    literal
     ( COLON plan_context )?
     ( ARROW body )?
     ( ARROW atom )?
@@ -155,7 +156,6 @@ annotation_symbolic_literal :
  **/
 plan_trigger :
     (plan_belief_trigger | plan_goal_trigger)
-    literal
     ;
 
 /**

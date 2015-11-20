@@ -23,18 +23,96 @@
 
 package lightjason.agent.plan;
 
+import lightjason.agent.event.IEvent;
+import lightjason.language.ILiteral;
+
+import java.text.MessageFormat;
+
+
 /**
- * plan to handle belief events
+ * abstract plan structure
  */
-public class CBeliefPlan extends IDefaultPlan
+public class CPlan implements IPlan
 {
+    /**
+     * plan literal
+     **/
+    protected final ILiteral m_literal;
+    /**
+     * trigger event
+     */
+    protected final IEvent<?> m_triggerevent;
+    /**
+     * current plan state
+     */
+    protected EExecutionState m_currentstate = EExecutionState.Success;
+    /**
+     * number of runs
+     */
+    protected long m_runs = 0;
+    /**
+     * number of fail runs
+     */
+    protected long m_failruns = 0;
+
+
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_event trigger event
+     * @param p_literal head literal
      */
-    public CBeliefPlan( final String p_name )
+    public CPlan( final IEvent<?> p_event, final ILiteral p_literal )
     {
-        super( p_name );
+        m_literal = p_literal;
+        m_triggerevent = p_event;
+    }
+
+    @Override
+    public IEvent<?> getTrigger()
+    {
+        return m_triggerevent;
+    }
+
+    @Override
+    public final boolean isExecutable()
+    {
+        return false;
+    }
+
+    @Override
+    public EExecutionState execute()
+    {
+        return null;
+    }
+
+    @Override
+    public final EExecutionState getState()
+    {
+        return m_currentstate;
+    }
+
+    @Override
+    public double getCost()
+    {
+        return 0;
+    }
+
+    @Override
+    public final long getNumberOfRuns()
+    {
+        return m_runs;
+    }
+
+    @Override
+    public final long getNumberOfFailRuns()
+    {
+        return m_failruns;
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0} ( trigger event : {1} / literal : {2} )", super.toString(), m_triggerevent, m_literal );
     }
 }

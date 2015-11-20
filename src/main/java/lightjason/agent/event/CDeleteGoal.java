@@ -21,20 +21,62 @@
  * @endcond
  */
 
-package lightjason.agent.plan;
+package lightjason.agent.event;
+
+import java.text.MessageFormat;
+
 
 /**
- * plan to handle goal events
+ * event to descrigoal-add
  */
-public class CGoalPlan extends IDefaultPlan
+public class CDeleteGoal implements IEvent<String>
 {
+    /**
+     * event name
+     */
+    public static final String ID = "delete goal";
+    /**
+     * event data
+     **/
+    private final String m_data;
+
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_belieffunctor name of the functor
      */
-    public CGoalPlan( final String p_name )
+    public CDeleteGoal( final String p_belieffunctor )
     {
-        super( p_name );
+        m_data = p_belieffunctor;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return m_data.hashCode() + this.getName().hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return p_object.hashCode() == this.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}( {1} )", ID, m_data );
+    }
+
+    @Override
+    public String getName()
+    {
+        return ID;
+    }
+
+    @Override
+    public String getData()
+    {
+        return m_data;
     }
 }

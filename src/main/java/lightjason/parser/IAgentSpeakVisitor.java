@@ -23,10 +23,11 @@
 
 package lightjason.parser;
 
+import com.google.common.collect.SetMultimap;
+import lightjason.agent.event.IEvent;
 import lightjason.agent.plan.IPlan;
 import lightjason.language.ILiteral;
 
-import java.util.Map;
 import java.util.Set;
 
 
@@ -49,38 +50,9 @@ public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
     public ILiteral getInitialGoal();
 
     /**
-     * returns the plans which are triggered by add-goal event
+     * get a multimap with event-plan matching
      *
-     * @return goal plans
+     * @return multimap
      */
-    public Map<String, Set<IPlan>> getGoalAddPlans();
-
-    /**
-     * returns the plans which are triggered by delete-goal event
-     *
-     * @return goal plans
-     */
-    public Map<String, Set<IPlan>> getGoalDeletePlans();
-
-    /**
-     * returns the plans which are triggered by add-belief event
-     *
-     * @return belief plans
-     */
-    public Map<String, Set<IPlan>> getBeliefAddPlans();
-
-    /**
-     * returns the plans which are triggered by delete-belief event
-     *
-     * @return belief plans
-     */
-    public Map<String, Set<IPlan>> getBeliefDeletePlans();
-
-    /**
-     * returns the plans which are triggered by change-belief event
-     *
-     * @return belief plans
-     */
-    public Map<String, Set<IPlan>> getBeliefChangePlans();
-
+    public SetMultimap<IEvent<?>, IPlan> getPlans();
 }
