@@ -24,6 +24,7 @@
 package lightjason.parser;
 
 
+import lightjason.JasonParser;
 import lightjason.agent.plan.IPlan;
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
@@ -91,6 +92,13 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
     {
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
+    }
+
+    @Override
+    public Object visitPlan_belief_trigger( final JasonParser.Plan_belief_triggerContext p_context )
+    {
+
+        return super.visitPlan_belief_trigger( p_context );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
