@@ -113,6 +113,6 @@ public class CPlan implements IPlan
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} ( trigger event : {1} / literal : {2} )", super.toString(), m_triggerevent, m_literal );
+        return MessageFormat.format( "{0} (trigger event : {1} / literal : {2})", super.toString(), m_triggerevent, m_literal );
     }
 }

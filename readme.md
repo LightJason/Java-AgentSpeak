@@ -73,12 +73,13 @@ structure to describe an optimizing process.
 * An intention is the _convex hull_ of its goals
 * Intentions cannot be in conflict with other intentions, so there dies not exists any overlaping
 
-## Desires
+### Desires
 
 * A Desire is a vertex of the edge of all intentions
 * Desires are define by a set of beliefs
 * Desires can be in conflict with other desires, represented that the desires have got a large distance (much as possible) 
 * The desire is successfully reached, iif all beliefs are existing anytime
+
 
 ![Structure](bdi.png)
 
