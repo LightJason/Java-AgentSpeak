@@ -24,6 +24,7 @@
 package lightjason.agent.plan;
 
 import lightjason.agent.event.IEvent;
+import lightjason.agent.score.IAgentActionScore;
 
 
 /**
@@ -63,11 +64,18 @@ public interface IPlan
     public EExecutionState getState();
 
     /**
-     * returns the costs of the plan
+     * returns the score of the plan
      *
      * @return cost
      */
-    public double getCost();
+    public double getScore();
+
+    /**
+     * sets the score sum
+     *
+     * @param p_score score sum
+     */
+    public void setScore( final IAgentActionScore p_score );
 
     /**
      * returns the number of executions
