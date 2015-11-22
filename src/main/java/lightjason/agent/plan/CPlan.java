@@ -23,11 +23,12 @@
 
 package lightjason.agent.plan;
 
+import lightjason.agent.IAction;
 import lightjason.agent.event.IEvent;
-import lightjason.agent.score.IAgentActionScore;
 import lightjason.language.ILiteral;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 
 /**
@@ -48,10 +49,6 @@ public class CPlan implements IPlan
      */
     protected EExecutionState m_currentstate = EExecutionState.Success;
     /**
-     * score sum of the actions
-     */
-    protected IAgentActionScore m_score;
-    /**
      * number of runs
      */
     protected long m_runs = 0;
@@ -59,6 +56,10 @@ public class CPlan implements IPlan
      * number of fail runs
      */
     protected long m_failruns = 0;
+    /**
+     * list with the plan body actions
+     */
+    protected final List<IAction> m_actions;
 
     /**
      * ctor
@@ -70,6 +71,7 @@ public class CPlan implements IPlan
     {
         m_literal = p_literal;
         m_triggerevent = p_event;
+        m_actions = null;
     }
 
     @Override
@@ -97,12 +99,6 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public double getScore()
-    {
-        return 0;
-    }
-
-    @Override
     public final long getNumberOfRuns()
     {
         return m_runs;
@@ -115,9 +111,9 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public void setScore( final IAgentActionScore p_score )
+    public final List<IAction> getActions()
     {
-        m_score = p_score;
+        return m_actions;
     }
 
     @Override

@@ -21,65 +21,25 @@
  * @endcond
  */
 
-package lightjason.agent.plan;
+package lightjason.agent.score;
 
-import lightjason.agent.IAction;
-import lightjason.agent.event.IEvent;
-
-import java.util.List;
+import lightjason.agent.IAgent;
+import lightjason.agent.plan.IPlan;
 
 
 /**
- * interface of plan
+ * score definition
  */
-public interface IPlan
+public interface IAgentPlanScore
 {
 
     /**
-     * returns the trigger event
+     * returns the score of an action
      *
-     * @return trigger event
+     * @param p_agent agent
+     * @param p_plan plan
+     * @return cost value
      */
-    public IEvent<?> getTrigger();
-
-    /**
-     * checks the context of the plan
-     * and return if the plan can be
-     * executed
-     *
-     * @return true iif the plan can be executed
-     */
-    public boolean isExecutable();
-
-    /**
-     * runs the plan and returns the result
-     *
-     * @return execution state
-     */
-    public EExecutionState execute();
-
-    /**
-     * returns the current state of the plan
-     *
-     * @return current / last execution state
-     */
-    public EExecutionState getState();
-
-    /**
-     * returns the number of executions
-     */
-    public long getNumberOfRuns();
-
-    /**
-     * returns the number of fail runs
-     */
-    public long getNumberOfFailRuns();
-
-    /**
-     * returns the list of actions
-     *
-     * @return list with actions
-     */
-    public List<IAction> getActions();
+    public double evaluate( final IAgent p_agent, final IPlan p_plan );
 
 }

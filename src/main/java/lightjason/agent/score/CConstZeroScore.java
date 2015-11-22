@@ -24,21 +24,18 @@
 package lightjason.agent.score;
 
 import lightjason.agent.IAgent;
+import lightjason.agent.plan.IPlan;
 
 
 /**
- * score definition
+ * null constant score function
  */
-public interface IAgentActionScore
+public class CConstZeroScore implements IAgentPlanScore
 {
 
-    /**
-     * returns the score of an action
-     *
-     * @param p_agent agent
-     * @param p_action action name
-     * @return cost value
-     */
-    public double evaluate( final IAgent p_agent, final String p_action );
-
+    @Override
+    public double evaluate( final IAgent p_agent, final IPlan p_plan )
+    {
+        return 0;
+    }
 }

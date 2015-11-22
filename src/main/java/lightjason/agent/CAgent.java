@@ -25,6 +25,8 @@ package lightjason.agent;
 
 import lightjason.agent.event.IEvent;
 import lightjason.agent.plan.IPlan;
+import lightjason.agent.score.CConstZeroScore;
+import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBase;
 import lightjason.parser.CAgentSpeakVisitor;
 import lightjason.parser.IAgentSpeakVisitor;
@@ -60,6 +62,10 @@ public class CAgent implements IAgent
      * curent agent cycle
      */
     protected int m_cycle = 0;
+    /**
+     * score sum of the actions
+     */
+    protected final IAgentPlanScore m_score;
     /**
      * suspending state
      */
@@ -121,6 +127,7 @@ public class CAgent implements IAgent
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
         m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? super.toString() : p_name;
+        m_score = new CConstZeroScore();
 
         // parse AgentSpeak syntax
         p_astvisitor.visit( new lightjason.JasonParser(
