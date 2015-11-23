@@ -92,7 +92,6 @@ plan :
     literal
     ( COLON plan_context )?
     ( ARROW body )?
-    ( ARROW atom )?
     DOT
     ;
 
