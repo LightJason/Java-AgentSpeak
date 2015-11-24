@@ -21,6 +21,10 @@
  * @endcond
  */
 
+/**
+ * base grammar rules of an additional version of AgentSpeak(L) without any terminal symbols,
+ * the rules are restricted to the AgentSpeak elements e.g. beliefs, plan, ...
+ **/
 grammar AgentSpeak;
 import Terminal;
 

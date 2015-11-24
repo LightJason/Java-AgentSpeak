@@ -23,38 +23,22 @@
 
 /**
  * high-level grammar rules of AgentSpeak(L)
- * which defines the agent
+ * which defines plan-bundles for importing in an agent
  **/
-grammar Agent;
+grammar PlanBundle;
 import AgentSpeak;
 @header { package lightjason.grammar; }
 
 
-// --- agent structure -------------------------------------------------------------------
+// --- plan-bundle structure -------------------------------------------------------------
 
 /**
  * initial grammar rule
  **/
-agent :
-    initial_beliefs?
-    initial_goal?
+planbundle :
+    belief*
     principles?
     plans
     ;
 
-/**
- * rule to represent initial beliefs
- **/
-initial_beliefs :
-    belief+
-    ;
-
-/**
- * rule to represent the initial goal
- **/
-initial_goal :
-    EXCLAMATIONMARK
-    atom
-    DOT
-    ;
 // ---------------------------------------------------------------------------------------

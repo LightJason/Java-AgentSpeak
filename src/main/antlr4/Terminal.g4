@@ -21,6 +21,9 @@
  * @endcond
  */
 
+/**
+ * grammar defines the terminal symbols of all grammar rules
+ **/
 lexer grammar Terminal;
 
 
