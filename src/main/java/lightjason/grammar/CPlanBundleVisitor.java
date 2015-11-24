@@ -23,44 +23,58 @@
 
 package lightjason.grammar;
 
-import com.google.common.collect.SetMultimap;
+import lightjason.agent.IAction;
 import lightjason.agent.event.IEvent;
+import lightjason.agent.plan.EExecutionState;
 import lightjason.agent.plan.IPlan;
-import lightjason.language.ILiteral;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * class to visit each AST node of an plan-bundle
  */
-public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
+public class CPlanBundleVisitor implements IPlan
 {
+    @Override
+    public IEvent<?> getTrigger()
+    {
+        return null;
+    }
 
-    /**
-     * returns the initial beliefs
-     *
-     * @return set with beliefs
-     */
-    public Set<ILiteral> getInitialBeliefs();
+    @Override
+    public boolean isExecutable()
+    {
+        return false;
+    }
 
-    /**
-     * returns the initial goal
-     */
-    public ILiteral getInitialGoal();
+    @Override
+    public EExecutionState execute()
+    {
+        return null;
+    }
 
-    /**
-     * get a multimap with event-plan matching
-     *
-     * @return multimap
-     */
-    public SetMultimap<IEvent<?>, IPlan> getPlans();
+    @Override
+    public EExecutionState getState()
+    {
+        return null;
+    }
 
-    /**
-     * returns the rules / principles
-     *
-     * @return map with rules
-     */
-    public Map<String, Object> getRules();
+    @Override
+    public long getNumberOfRuns()
+    {
+        return 0;
+    }
+
+    @Override
+    public long getNumberOfFailRuns()
+    {
+        return 0;
+    }
+
+    @Override
+    public List<IAction> getActions()
+    {
+        return null;
+    }
 }

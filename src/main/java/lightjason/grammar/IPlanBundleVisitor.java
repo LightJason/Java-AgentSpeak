@@ -33,22 +33,17 @@ import java.util.Set;
 
 
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * visitor interface of the abstract-syntax-tree (AST) for an plan-bundle
  */
-public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
+public interface IPlanBundleVisitor extends lightjason.grammar.PlanBundleVisitor<Object>
 {
 
     /**
-     * returns the initial beliefs
+     * returns the beliefs
      *
      * @return set with beliefs
      */
-    public Set<ILiteral> getInitialBeliefs();
-
-    /**
-     * returns the initial goal
-     */
-    public ILiteral getInitialGoal();
+    public Set<ILiteral> getBeliefs();
 
     /**
      * get a multimap with event-plan matching
@@ -63,4 +58,5 @@ public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
      * @return map with rules
      */
     public Map<String, Object> getRules();
+
 }

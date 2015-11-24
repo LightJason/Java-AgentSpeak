@@ -44,12 +44,13 @@ import lightjason.language.ITerm;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
 /**
- * class to visit each AST node
+ * class to visit each AST node of an agent
  */
 public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> implements IAgentVisitor
 {
@@ -263,6 +264,12 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public SetMultimap<IEvent<?>, IPlan> getPlans()
     {
         return m_plans;
+    }
+
+    @Override
+    public Map<String, Object> getRules()
+    {
+        return null;
     }
 
 }
