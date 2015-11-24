@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.parser;
+package lightjason.grammar;
 
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.event.IEvent;
@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * visitor interface of the abstract-syntax-tree (AST)
  */
-public interface IAgentSpeakVisitor extends lightjason.JasonVisitor<Object>
+public interface IAgentSpeakVisitor extends lightjason.grammar.AgentVisitor<Object>
 {
 
     /**

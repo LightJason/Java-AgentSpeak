@@ -28,8 +28,8 @@ import lightjason.agent.plan.IPlan;
 import lightjason.agent.score.CConstZeroScore;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBase;
-import lightjason.parser.CAgentSpeakVisitor;
-import lightjason.parser.IAgentSpeakVisitor;
+import lightjason.grammar.CAgentSpeakVisitor;
+import lightjason.grammar.IAgentSpeakVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -130,8 +130,8 @@ public class CAgent implements IAgent
         m_score = new CConstZeroScore();
 
         // parse AgentSpeak syntax
-        p_astvisitor.visit( new lightjason.JasonParser(
-                new CommonTokenStream( new lightjason.JasonLexer( new ANTLRInputStream( p_stream ) ) )
+        p_astvisitor.visit( new lightjason.grammar.AgentParser(
+                new CommonTokenStream( new lightjason.grammar.AgentLexer( new ANTLRInputStream( p_stream ) ) )
         ).agent() );
 
         System.out.println( p_astvisitor.getInitialGoal() );

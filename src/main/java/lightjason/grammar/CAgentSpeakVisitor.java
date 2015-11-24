@@ -21,12 +21,11 @@
  * @endcond
  */
 
-package lightjason.parser;
+package lightjason.grammar;
 
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-import lightjason.JasonParser;
 import lightjason.agent.event.CAddBelief;
 import lightjason.agent.event.CAddGoal;
 import lightjason.agent.event.CChangeBelief;
@@ -52,7 +51,7 @@ import java.util.stream.Collectors;
 /**
  * class to visit each AST node
  */
-public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> implements IAgentSpeakVisitor
+public class CAgentSpeakVisitor extends lightjason.grammar.AgentBaseVisitor<Object> implements IAgentSpeakVisitor
 {
     /**
      * initial goal
@@ -69,28 +68,28 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
 
 
     @Override
-    public Object visitInitial_beliefs( final lightjason.JasonParser.Initial_beliefsContext p_context )
+    public Object visitInitial_beliefs( final lightjason.grammar.AgentParser.Initial_beliefsContext p_context )
     {
         p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
         return null;
     }
 
     @Override
-    public Object visitInitial_goal( final lightjason.JasonParser.Initial_goalContext p_context )
+    public Object visitInitial_goal( final lightjason.grammar.AgentParser.Initial_goalContext p_context )
     {
         m_InitialGoal = new CLiteral( p_context.atom().getText() );
         return null;
     }
 
     @Override
-    public Object visitBelief( final lightjason.JasonParser.BeliefContext p_context )
+    public Object visitBelief( final lightjason.grammar.AgentParser.BeliefContext p_context )
     {
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitPlan( final JasonParser.PlanContext p_context )
+    public Object visitPlan( final lightjason.grammar.AgentParser.PlanContext p_context )
     {
         final IPlan l_plan;
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
@@ -122,7 +121,7 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
-    public Object visitPlan_goal_trigger( final JasonParser.Plan_goal_triggerContext p_context )
+    public Object visitPlan_goal_trigger( final lightjason.grammar.AgentParser.Plan_goal_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -137,7 +136,7 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
-    public Object visitPlan_belief_trigger( final JasonParser.Plan_belief_triggerContext p_context )
+    public Object visitPlan_belief_trigger( final lightjason.grammar.AgentParser.Plan_belief_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -156,7 +155,7 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitLiteral( final lightjason.JasonParser.LiteralContext p_context )
+    public Object visitLiteral( final lightjason.grammar.AgentParser.LiteralContext p_context )
     {
         switch ( p_context.list().size() )
         {
@@ -175,25 +174,25 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
-    public Object visitTerm( final lightjason.JasonParser.TermContext p_context )
+    public Object visitTerm( final lightjason.grammar.AgentParser.TermContext p_context )
     {
         return super.visitTerm( p_context );
     }
 
     @Override
-    public Object visitList( final lightjason.JasonParser.ListContext p_context )
+    public Object visitList( final lightjason.grammar.AgentParser.ListContext p_context )
     {
         return p_context.term().parallelStream().map( i -> super.visitTerm( i ) ).collect( Collectors.toList() );
     }
 
     @Override
-    public Object visitAtom( final lightjason.JasonParser.AtomContext p_context )
+    public Object visitAtom( final lightjason.grammar.AgentParser.AtomContext p_context )
     {
         return p_context.getText();
     }
 
     @Override
-    public Object visitVariable( final lightjason.JasonParser.VariableContext p_context )
+    public Object visitVariable( final lightjason.grammar.AgentParser.VariableContext p_context )
     {
         return new CVariable<>( p_context.getText() );
     }
@@ -201,7 +200,7 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
-    public Object visitFloatnumber( final lightjason.JasonParser.FloatnumberContext p_context )
+    public Object visitFloatnumber( final lightjason.grammar.AgentParser.FloatnumberContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -230,19 +229,19 @@ public class CAgentSpeakVisitor extends lightjason.JasonBaseVisitor<Object> impl
     }
 
     @Override
-    public Object visitIntegernumber( final lightjason.JasonParser.IntegernumberContext p_context )
+    public Object visitIntegernumber( final lightjason.grammar.AgentParser.IntegernumberContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
 
     @Override
-    public Object visitLogicalvalue( final lightjason.JasonParser.LogicalvalueContext p_context )
+    public Object visitLogicalvalue( final lightjason.grammar.AgentParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null ? true : false;
     }
 
     @Override
-    public Object visitString( final lightjason.JasonParser.StringContext p_context )
+    public Object visitString( final lightjason.grammar.AgentParser.StringContext p_context )
     {
         return p_context.getText();
     }
