@@ -83,16 +83,24 @@ principles :
 /**
  * plan modified against the original Jason grammar,
  * so a context is optional (on default true) and the
- * plan body is also optional and after the body
- * can be setup a repair plan
+ * plan body is also optional. The definition is
+ * trigger name [ plancontent ]* .
  */
 plan :
     annotations?
     plan_trigger
     literal
-    ( COLON plan_context )?
-    ( ARROW body )?
+    plancontent*
     DOT
+    ;
+
+/**
+ * plan body context and context definition
+ * The definition is [ : condition ] [ <- body ]
+ **/
+plancontent :
+    ( COLON plan_context )?
+    ARROW body
     ;
 
 /**
