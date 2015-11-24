@@ -39,7 +39,8 @@ structure to describe an optimizing process.
 * If the plan calls an _test goal_ then the plan calls the test goal immediatly
 * All items results will be concatinated with a logical _and_ to calculate the plan result value
 * Each plan denotes its success/failure of execution in form of a ```(succeeds,fails)``` score, attached to its name in the static belief list _myplanscore_ (initialized at agent's birth with ```(0,0)```).
-  * After successful or failed execution of the whole plan, the corresponding value gets incremented  
+  * After successful or failed execution of the whole plan, the corresponding value gets incremented    
+
 
 ### Rules
 
@@ -83,6 +84,13 @@ structure to describe an optimizing process.
 
 ![Structure](bdi.png)
 
+
+## Coding
+
+### Agent
+
+* agent (ASL) can be defined as a logic program with beliefs, rules and plans
+* plans can be bundeld in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
 
 
@@ -163,7 +171,6 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
     * (?) -> needs grammar update beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
     * (see p. 37ff for comparison w/ Jason)
 * plan / beliefname did not be equal
-* fix repair plan definition only for goals / syntax format and event handling must be discussed
 * callback for actions to create concurrent calls after the action is finished
 * communication definition / drop equal messages / each message triggers only one event
 * parallel / SIMD unification with [type inhertitance](http://stackoverflow.com/questions/1396558/how-can-i-implement-the-unification-algorithm-in-a-language-like-java-or-c) or [Java Unification](https://code.google.com/p/kawala/source/browse/trunk/src/com/kaching/platform/common/types/Unification.java?r=265)
