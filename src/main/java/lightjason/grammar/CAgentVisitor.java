@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 /**
  * class to visit each AST node
  */
-public class CAgentSpeakVisitor extends lightjason.grammar.AgentBaseVisitor<Object> implements IAgentSpeakVisitor
+public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> implements IAgentVisitor
 {
     /**
      * initial goal

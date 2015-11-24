@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * visitor interface of the abstract-syntax-tree (AST)
  */
-public interface IAgentSpeakVisitor extends lightjason.grammar.AgentVisitor<Object>
+public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
 {
 
     /**

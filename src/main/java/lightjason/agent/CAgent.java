@@ -28,8 +28,8 @@ import lightjason.agent.plan.IPlan;
 import lightjason.agent.score.CConstZeroScore;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBase;
-import lightjason.grammar.CAgentSpeakVisitor;
-import lightjason.grammar.IAgentSpeakVisitor;
+import lightjason.grammar.CAgentVisitor;
+import lightjason.grammar.IAgentVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -81,7 +81,7 @@ public class CAgent implements IAgent
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action ) throws IOException
     {
-        this( p_stream, p_action, null, null, new CAgentSpeakVisitor() );
+        this( p_stream, p_action, null, null, new CAgentVisitor() );
     }
 
     /**
@@ -94,7 +94,7 @@ public class CAgent implements IAgent
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase ) throws IOException
     {
-        this( p_stream, p_action, p_beliefbase, null, new CAgentSpeakVisitor() );
+        this( p_stream, p_action, p_beliefbase, null, new CAgentVisitor() );
     }
 
     /**
@@ -107,7 +107,7 @@ public class CAgent implements IAgent
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final String p_name ) throws IOException
     {
-        this( p_stream, p_action, null, p_name, new CAgentSpeakVisitor() );
+        this( p_stream, p_action, null, p_name, new CAgentVisitor() );
     }
 
     /**
@@ -121,7 +121,7 @@ public class CAgent implements IAgent
      * @throws IOException is throwing on parsing error
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase, final String p_name,
-            final IAgentSpeakVisitor p_astvisitor
+            final IAgentVisitor p_astvisitor
     ) throws IOException
     {
         // initialize agent
