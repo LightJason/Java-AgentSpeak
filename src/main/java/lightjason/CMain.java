@@ -23,6 +23,9 @@
 
 package lightjason;
 
+import lightjason.agent.CAgent;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 
 
@@ -36,7 +39,7 @@ public final class CMain
      */
     public static void main( final String[] p_args ) throws IOException
     {
-        //new CAgent( new FileInputStream( "src/test/resources/agentsuccess.asl" ), null );
+        new CAgent( new FileInputStream( p_args[0] ), null );
     }
 
 }
