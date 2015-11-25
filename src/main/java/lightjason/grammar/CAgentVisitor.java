@@ -95,6 +95,9 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         final IPlan l_plan;
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
 
+        // @bug incomplete
+        //System.out.println( p_context.plancontent().parallelStream().map( i -> this.visitPlancontent( i ) ).collect( Collectors.toList() ) );
+
         switch ( (String) super.visitPlan_trigger( p_context.plan_trigger() ) )
         {
             case CAddBelief.ID:
@@ -153,6 +156,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         }
     }
 
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     @SuppressWarnings( "unchecked" )
@@ -197,6 +201,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     {
         return new CVariable<>( p_context.getText() );
     }
+
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
