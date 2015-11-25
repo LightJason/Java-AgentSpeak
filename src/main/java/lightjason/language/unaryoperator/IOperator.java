@@ -21,39 +21,22 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.language.unaryoperator;
+
+import lightjason.language.IVariable;
+
 
 /**
- * variable defintion
+ * interface of variable unary operator
  */
-public interface IVariable<T> extends ITerm, Cloneable
+public interface IOperator<T extends Number>
 {
     /**
-     * returns the name of the variable
+     * evaluates the expression
      *
-     * @return name
+     * @param p_variable
+     * @return
      */
-    public String getName();
-
-    /**
-     * sets the value
-     *
-     * @param p_value
-     */
-    public void set( final T p_value );
-
-    /**
-     * gets the value
-     *
-     * @return value
-     */
-    public T get();
-
-    /**
-     * returns allocated state
-     *
-     * @return boolean flag
-     */
-    public boolean isAllocated();
+    public IVariable<T> evaluate( final IVariable<T> p_variable );
 
 }

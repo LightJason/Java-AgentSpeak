@@ -71,6 +71,12 @@ public final class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    public T get()
+    {
+        return m_value;
+    }
+
+    @Override
     public boolean isAllocated()
     {
         return m_value != null;

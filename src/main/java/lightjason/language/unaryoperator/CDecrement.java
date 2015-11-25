@@ -21,39 +21,23 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.language.unaryoperator;
+
+import lightjason.common.CCommon;
+import lightjason.language.IVariable;
+
 
 /**
- * variable defintion
+ * unary increment
  */
-public interface IVariable<T> extends ITerm, Cloneable
+public class CDecrement<T extends Number> implements IOperator<T>
 {
-    /**
-     * returns the name of the variable
-     *
-     * @return name
-     */
-    public String getName();
+    @Override
+    public IVariable<T> evaluate( final IVariable<T> p_variable )
+    {
+        if ( !p_variable.isAllocated() )
+            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", p_variable ) );
 
-    /**
-     * sets the value
-     *
-     * @param p_value
-     */
-    public void set( final T p_value );
-
-    /**
-     * gets the value
-     *
-     * @return value
-     */
-    public T get();
-
-    /**
-     * returns allocated state
-     *
-     * @return boolean flag
-     */
-    public boolean isAllocated();
-
+        return p_variable;
+    }
 }

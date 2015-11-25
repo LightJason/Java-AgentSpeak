@@ -178,6 +178,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         }
     }
 
+
     @Override
     public Object visitTerm( final lightjason.grammar.AgentParser.TermContext p_context )
     {
