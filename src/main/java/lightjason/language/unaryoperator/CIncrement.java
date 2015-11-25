@@ -30,10 +30,10 @@ import lightjason.language.IVariable;
 /**
  * unary increment
  */
-public class CIncrement<T extends Number> implements IOperator<T>
+public final class CIncrement<T extends Number> implements IOperator<T>
 {
     @Override
-    public IVariable<T> evaluate( final IVariable<T> p_variable )
+    public final IVariable<T> evaluate( final IVariable<T> p_variable )
     {
         if ( !p_variable.isAllocated() )
             throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", p_variable ) );

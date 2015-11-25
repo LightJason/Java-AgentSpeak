@@ -56,4 +56,12 @@ public interface IVariable<T> extends ITerm, Cloneable
      */
     public boolean isAllocated();
 
+    /**
+     * checkes assinable of the value
+     *
+     * @param p_class class
+     * @return assinable (on null always true)
+     */
+    public boolean isValueAssignableFrom( final Class<?> p_class );
+
 }

@@ -83,6 +83,12 @@ public final class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    public boolean isValueAssignableFrom( final Class<?> p_class )
+    {
+        return m_value == null ? true : m_value.getClass().isAssignableFrom( p_class );
+    }
+
+    @Override
     public int hashCode()
     {
         return m_name.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
