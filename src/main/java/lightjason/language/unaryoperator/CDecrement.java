@@ -33,11 +33,20 @@ import lightjason.language.IVariable;
 public final class CDecrement<T extends Number> implements IOperator<T>
 {
     @Override
-    public final IVariable<T> evaluate( final IVariable<T> p_variable )
+    @SuppressWarnings( "unchecked" )
+    public IVariable<T> evaluate( final IVariable<T> p_variable )
     {
         if ( !p_variable.isAllocated() )
             throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", p_variable ) );
 
+        if ( p_variable.isValueAssignableFrom( Double.class ) )
+            return p_variable.set( (T) new Double( p_variable.get().doubleValue() - 1 ) );
+        if ( p_variable.isValueAssignableFrom( Long.class ) )
+            return p_variable.set( (T) new Long( p_variable.get().longValue() - 1 ) );
+        if ( p_variable.isValueAssignableFrom( Float.class ) )
+            return p_variable.set( (T) new Float( p_variable.get().floatValue() - 1 ) );
+        if ( p_variable.isValueAssignableFrom( Integer.class ) )
+            return p_variable.set( (T) new Integer( p_variable.get().intValue() - 1 ) );
 
         return p_variable;
     }

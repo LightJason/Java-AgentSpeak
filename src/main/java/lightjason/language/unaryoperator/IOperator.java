@@ -29,13 +29,13 @@ import lightjason.language.IVariable;
 /**
  * interface of variable unary operator
  */
-public interface IOperator<T extends Number>
+public interface IOperator<T>
 {
     /**
      * evaluates the expression
      *
      * @param p_variable
-     * @return
+     * @return the assigned variable
      */
     public IVariable<T> evaluate( final IVariable<T> p_variable );
 

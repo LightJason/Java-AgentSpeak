@@ -39,8 +39,9 @@ public interface IVariable<T> extends ITerm, Cloneable
      * sets the value
      *
      * @param p_value
+     * @return the object itself
      */
-    public void set( final T p_value );
+    public IVariable<T> set( final T p_value );
 
     /**
      * gets the value
