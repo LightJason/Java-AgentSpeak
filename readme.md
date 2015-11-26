@@ -177,3 +177,7 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * expression grammar [AntLR](http://stackoverflow.com/questions/16469023/antlr-left-recursion-for-nesting-boolean-expressions), [C#](http://www.codeproject.com/Articles/18880/State-of-the-Art-Expression-Evaluation), [Expression Grammar](https://ivanyu.me/blog/2014/09/13/creating-a-simple-parser-with-antlr/)
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
+
+## Open Questions
+
+* Currently in Jason a goal addition (to trigger an ```achievment_goal_action```) is denoted by either ```!foo``` or ```!!foo```, beliefs (which trigger ```belief_action```) are denoted by a trailing ```+``` or ```-``` (```+foo```/```-foo```). Conceptual this seems to be inconsistent. Also if we want to consider explicit goal removal (simmilar to belief removal) ```+!foo``` or ```+!!foo``` should be used in a plan's body. This would require reverting https://github.com/flashpixx/Light-Jason/commit/7c24bfd0252a15a2f1aa0646b5b376c154809ad8 and add ```(PLUS | MINUS)``` to ```DOUBLEEXCLAMATIONMARK```.
