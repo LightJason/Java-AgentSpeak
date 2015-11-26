@@ -327,8 +327,7 @@ variable :
  * achivement-goal action
  **/
 achievment_goal_action :
-    ( PLUS | MINUS ) EXCLAMATIONMARK
-    | DOUBLEEXCLAMATIONMARK
+    EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK
     ;
 
 /**
