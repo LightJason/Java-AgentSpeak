@@ -21,38 +21,31 @@
  * @endcond
  */
 
-package lightjason.grammar;
+package lightjason.language.plan.arithmetic.operator;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.language.ILiteral;
-import lightjason.language.event.IEvent;
-import lightjason.language.plan.IPlan;
-
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 
 /**
- * class to visit each AST node of an plan-bundle
+ * sin-function operator
  */
-public class CPlanBundleVisitor extends lightjason.grammar.PlanBundleBaseVisitor<Object> implements IPlanBundleVisitor
+public final class CSin implements IArithmeticOperator
 {
-
     @Override
-    public Set<ILiteral> getBeliefs()
+    public final String getToken()
     {
-        return null;
+        return "sin";
     }
 
     @Override
-    public SetMultimap<IEvent<?>, IPlan> getPlans()
+    public final int getNumberOfArguments()
     {
-        return null;
+        return 1;
     }
 
     @Override
-    public Map<String, Object> getRules()
+    public final Number execution( final List<Number> p_arguments )
     {
-        return null;
+        return Math.sin( p_arguments.get( 0 ).doubleValue() );
     }
 }

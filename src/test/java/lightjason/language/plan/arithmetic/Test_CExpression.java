@@ -21,33 +21,58 @@
  * @endcond
  */
 
-package lightjason.language.unaryoperator;
+package lightjason.language.plan.arithmetic;
 
-import lightjason.common.CCommon;
-import lightjason.language.IVariable;
+import lightjason.language.CVariable;
+import org.junit.Test;
+
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Random;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**
- * unary increment
+ * test arithmetic expression
  */
-public final class CDecrement<T extends Number> implements IOperator<T>
+@SuppressWarnings( "serial" )
+public class Test_CExpression
 {
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public IVariable<T> evaluate( final IVariable<T> p_variable )
+
+    @Test
+    public void test_SimpleExpressionWithVariable()
     {
-        if ( !p_variable.isAllocated() )
-            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", p_variable ) );
+        final Random l_random = new Random();
+        final CExpression l_expression = new CExpression();
 
-        if ( p_variable.isValueAssignableFrom( Double.class ) )
-            return p_variable.set( (T) new Double( p_variable.get().doubleValue() - 1 ) );
-        if ( p_variable.isValueAssignableFrom( Long.class ) )
-            return p_variable.set( (T) new Long( p_variable.get().longValue() - 1 ) );
-        if ( p_variable.isValueAssignableFrom( Float.class ) )
-            return p_variable.set( (T) new Float( p_variable.get().floatValue() - 1 ) );
-        if ( p_variable.isValueAssignableFrom( Integer.class ) )
-            return p_variable.set( (T) new Integer( p_variable.get().intValue() - 1 ) );
+        // (1+X) * 4 + 8
+        l_expression.push( "+" ).push( 1 ).push( new CVariable<Number>( "X" ) );
+        l_expression.push( "*" ).push( 4 ).push( "+" ).push( 8 );
 
-        return p_variable;
+        for ( int i = 0; i < 500; i++ )
+        {
+            final int l_inputvalue = l_random.nextInt( 100000 );
+            final int l_successoutput = ( l_inputvalue + 1 ) * 4 + 8;
+            final int l_output = l_expression.evaluate( new HashMap<String, Number>()
+            {{
+                put( "X", l_inputvalue );
+            }} ).intValue();
+            assertTrue( MessageFormat.format( "value in run [{0}] should be [{1}] but is [{2}]", i, l_successoutput, l_output ), l_successoutput == l_output );
+        }
+
     }
+
+
+    @Test
+    public void test_ComplexExpression()
+    {
+        // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
+        final CExpression l_expression1 = new CExpression();
+        l_expression1.push( "*", "**" ).push( 3, 4, 2 );
+
+        final int l_value1 = l_expression1.evaluate().intValue();
+        assertTrue( MessageFormat.format( "value should be [{0}] but is [{1}]", 162, l_value1 ), l_value1 == 162 );
+    }
+
 }

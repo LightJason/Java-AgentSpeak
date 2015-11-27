@@ -21,34 +21,22 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.unaryoperator;
 
-
-import java.util.List;
+import lightjason.language.IVariable;
 
 
 /**
- * interface to describe an arithmetic operator
+ * interface of variable unary operator
  */
-public interface IArithmeticOperator
+public interface IOperator<T>
 {
     /**
-     * token for matching
-     */
-    public String getToken();
-
-    /**
-     * number of arguments of the operator
+     * evaluates the expression
      *
-     * @return argument number [1,infinty)
+     * @param p_variable
+     * @return the assigned variable
      */
-    public int getNumberOfArguments();
+    public IVariable<T> evaluate( final IVariable<T> p_variable );
 
-    /**
-     * operator execution
-     *
-     * @param p_arguments arguments of the operator
-     * @return calculated number
-     */
-    public Number execution( final List<Number> p_arguments );
 }

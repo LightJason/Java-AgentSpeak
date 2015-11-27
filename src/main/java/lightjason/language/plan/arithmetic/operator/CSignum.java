@@ -21,22 +21,43 @@
  * @endcond
  */
 
-package lightjason.language.unaryoperator;
+package lightjason.language.plan.arithmetic.operator;
 
-import lightjason.language.IVariable;
+import java.util.List;
 
 
 /**
- * interface of variable unary operator
+ * signum operator
  */
-public interface IOperator<T>
+public final class CSignum implements IArithmeticOperator
 {
-    /**
-     * evaluates the expression
-     *
-     * @param p_variable
-     * @return the assigned variable
-     */
-    public IVariable<T> evaluate( final IVariable<T> p_variable );
+    @Override
+    public final String getToken()
+    {
+        return "signum";
+    }
 
+    @Override
+    public final int getNumberOfArguments()
+    {
+        return 1;
+    }
+
+    @Override
+    public final Number execution( final List<Number> p_arguments )
+    {
+        return Math.signum( p_arguments.get( 0 ).doubleValue() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

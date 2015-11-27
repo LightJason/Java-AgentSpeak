@@ -21,20 +21,20 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * floor-function operator
+ * sqrt-function operator
  */
-public final class CFloor implements IArithmeticOperator
+public final class CSqrt implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "floor";
+        return "tan";
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class CFloor implements IArithmeticOperator
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.floor( p_arguments.get( 0 ).doubleValue() );
+        return Math.sqrt( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override

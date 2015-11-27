@@ -67,13 +67,24 @@ public interface IPlan
 
     /**
      * returns the number of executions
+     *
+     * @return number
      */
     public long getNumberOfRuns();
 
     /**
      * returns the number of fail runs
+     *
+     * @return number
      */
     public long getNumberOfFailRuns();
+
+    /**
+     * returns the number of successful runs
+     *
+     * @return number
+     */
+    public long getNumberOfSuccessfulRuns();
 
     /**
      * returns the list of actions

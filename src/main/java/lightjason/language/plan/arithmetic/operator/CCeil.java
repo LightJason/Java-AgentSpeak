@@ -21,20 +21,20 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * sqrt-function operator
+ * ceil-function operator
  */
-public final class CSqrt implements IArithmeticOperator
+public final class CCeil implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "tan";
+        return "ceil";
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class CSqrt implements IArithmeticOperator
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.sqrt( p_arguments.get( 0 ).doubleValue() );
+        return Math.ceil( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override

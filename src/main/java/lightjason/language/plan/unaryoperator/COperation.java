@@ -21,43 +21,43 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.unaryoperator;
 
-import java.util.List;
+import lightjason.language.IVariable;
+import lightjason.language.plan.IBodyOperation;
 
 
 /**
- * cos-function operator
+ * defines an unary operation
  */
-public final class CCos implements IArithmeticOperator
+public class COperation<T extends Number> implements IBodyOperation
 {
-    @Override
-    public final String getToken()
+    /**
+     * variable
+     */
+    private final IVariable<T> m_variable;
+    /**
+     * operator
+     */
+    private final IOperator<T> m_operation;
+
+    /**
+     * ctor
+     *
+     * @param p_variable variable
+     * @param p_operator operator
+     */
+    public COperation( final IVariable<T> p_variable, final IOperator<T> p_operator )
     {
-        return "cos";
+        m_variable = p_variable;
+        m_operation = p_operator;
     }
 
-    @Override
-    public final int getNumberOfArguments()
-    {
-        return 1;
-    }
 
     @Override
-    public final Number execution( final List<Number> p_arguments )
+    public boolean evaluate()
     {
-        return Math.cos( p_arguments.get( 0 ).doubleValue() );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return getToken().hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.getToken().equals( p_object );
+        m_operation.evaluate( m_variable );
+        return true;
     }
 }

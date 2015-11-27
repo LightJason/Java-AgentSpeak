@@ -21,58 +21,34 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic;
+package lightjason.language.plan.arithmetic.operator;
 
-import lightjason.language.CVariable;
-import org.junit.Test;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Random;
-
-import static org.junit.Assert.assertTrue;
+import java.util.List;
 
 
 /**
- * test arithmetic expression
+ * interface to describe an arithmetic operator
  */
-@SuppressWarnings( "serial" )
-public class Test_CExpression
+public interface IArithmeticOperator
 {
+    /**
+     * token for matching
+     */
+    public String getToken();
 
-    @Test
-    public void test_SimpleExpressionWithVariable()
-    {
-        final Random l_random = new Random();
-        final CExpression l_expression = new CExpression();
+    /**
+     * number of arguments of the operator
+     *
+     * @return argument number [1,infinty)
+     */
+    public int getNumberOfArguments();
 
-        // (1+X) * 4 + 8
-        l_expression.push( "+" ).push( 1 ).push( new CVariable<Number>( "X" ) );
-        l_expression.push( "*" ).push( 4 ).push( "+" ).push( 8 );
-
-        for ( int i = 0; i < 500; i++ )
-        {
-            final int l_inputvalue = l_random.nextInt( 100000 );
-            final int l_successoutput = ( l_inputvalue + 1 ) * 4 + 8;
-            final int l_output = l_expression.evaluate( new HashMap<String, Number>()
-            {{
-                put( "X", l_inputvalue );
-            }} ).intValue();
-            assertTrue( MessageFormat.format( "value in run [{0}] should be [{1}] but is [{2}]", i, l_successoutput, l_output ), l_successoutput == l_output );
-        }
-
-    }
-
-
-    @Test
-    public void test_ComplexExpression()
-    {
-        // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
-        final CExpression l_expression1 = new CExpression();
-        l_expression1.push( "*", "**" ).push( 3, 4, 2 );
-
-        final int l_value1 = l_expression1.evaluate().intValue();
-        assertTrue( MessageFormat.format( "value should be [{0}] but is [{1}]", 162, l_value1 ), l_value1 == 162 );
-    }
-
+    /**
+     * operator execution
+     *
+     * @param p_arguments arguments of the operator
+     * @return calculated number
+     */
+    public Number execution( final List<Number> p_arguments );
 }

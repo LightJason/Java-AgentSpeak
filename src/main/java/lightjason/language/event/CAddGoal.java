@@ -43,11 +43,11 @@ public class CAddGoal implements IEvent<String>
     /**
      * ctor
      *
-     * @param p_belieffunctor name of the functor
+     * @param p_functor name of the functor
      */
-    public CAddGoal( final String p_belieffunctor )
+    public CAddGoal( final String p_functor )
     {
-        m_data = p_belieffunctor;
+        m_data = p_functor;
     }
 
     @Override

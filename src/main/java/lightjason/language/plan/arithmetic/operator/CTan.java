@@ -21,33 +21,43 @@
  * @endcond
  */
 
-package lightjason.language.unaryoperator;
+package lightjason.language.plan.arithmetic.operator;
 
-import lightjason.common.CCommon;
-import lightjason.language.IVariable;
+import java.util.List;
 
 
 /**
- * unary increment
+ * tan-function operator
  */
-public final class CIncrement<T extends Number> implements IOperator<T>
+public final class CTan implements IArithmeticOperator
 {
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IVariable<T> evaluate( final IVariable<T> p_variable )
+    public final String getToken()
     {
-        if ( !p_variable.isAllocated() )
-            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", p_variable ) );
+        return "tan";
+    }
 
-        if ( p_variable.isValueAssignableFrom( Double.class ) )
-            return p_variable.set( (T) new Double( p_variable.get().doubleValue() + 1 ) );
-        if ( p_variable.isValueAssignableFrom( Long.class ) )
-            return p_variable.set( (T) new Long( p_variable.get().longValue() + 1 ) );
-        if ( p_variable.isValueAssignableFrom( Float.class ) )
-            return p_variable.set( (T) new Float( p_variable.get().floatValue() + 1 ) );
-        if ( p_variable.isValueAssignableFrom( Integer.class ) )
-            return p_variable.set( (T) new Integer( p_variable.get().intValue() + 1 ) );
+    @Override
+    public final int getNumberOfArguments()
+    {
+        return 1;
+    }
 
-        return p_variable;
+    @Override
+    public final Number execution( final List<Number> p_arguments )
+    {
+        return Math.tan( p_arguments.get( 0 ).doubleValue() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
     }
 }

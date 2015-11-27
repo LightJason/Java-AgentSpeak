@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.arithmetic.operator;
 
 import java.util.List;
 

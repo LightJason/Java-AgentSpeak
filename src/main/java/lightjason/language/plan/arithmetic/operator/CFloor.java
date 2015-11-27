@@ -21,32 +21,32 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * modulo operator
+ * floor-function operator
  */
-public final class CModulo implements IArithmeticOperator
+public final class CFloor implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "%";
+        return "floor";
     }
 
     @Override
     public final int getNumberOfArguments()
     {
-        return 2;
+        return 1;
     }
 
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return p_arguments.get( 0 ).longValue() % p_arguments.get( 1 ).longValue();
+        return Math.floor( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override

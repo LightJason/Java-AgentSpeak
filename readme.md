@@ -39,7 +39,15 @@ structure to describe an optimizing process.
 * If the plan calls an _test goal_ then the plan calls the test goal immediatly
 * All items results will be concatinated with a logical _and_ to calculate the plan result value
 * Each plan denotes its success/failure of execution in form of a ```(succeeds,fails)``` score, attached to its name in the static belief list _myplanscore_ (initialized at agent's birth with ```(0,0)```).
-  * After successful or failed execution of the whole plan, the corresponding value gets incremented    
+  * After successful or failed execution of the whole plan, the corresponding value gets incremented  
+    
+#### Internals
+ 
+ * The plan has got additional beliefs, that are added in the context condition
+    * _score_ returns the current score-value of the plan
+    * _failrun_ stores the number of fail runs
+    * _successrun_ stores the number of successful runs
+    * _runs_ number of runs of the plan (fail + successful runs)
 
 
 ### Rules
@@ -147,17 +155,6 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * _myplanbasesize_ number of plans, generates no event
 * _myexecutionplans_ string list with current execution plan names, generates no event
 * _mywaitingplans_ string list with current waiting plan names, generates no event
-* _myplanscore_ string list with plan list and score value for defining successful finished
-
-
-## Convert Jason to LightJason
-
-1. remove all dots (```.```) on actions / literals
-2. change all dots (```.```) within the plan body to semicolon (```;```) except the termination dot at the end of the plan / rule
-3. fix all belief- and plan calls - a belief goal starts with ```+```, ```-``` or ```-+```, a plan goal with ```+!```, ```-!```, ```+?``` or ```-?```
-4. fix all boolean structure: logical-or is defined with ```||``` and logical-and with ```&&```
-5. fix all bracket structure e.g. on if-else with unique meaning
-
 
 
 ## Todos

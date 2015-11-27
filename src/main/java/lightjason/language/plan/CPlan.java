@@ -111,6 +111,12 @@ public class CPlan implements IPlan
     }
 
     @Override
+    public long getNumberOfSuccessfulRuns()
+    {
+        return 0;
+    }
+
+    @Override
     public final List<IAction> getActions()
     {
         return m_actions;

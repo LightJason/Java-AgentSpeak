@@ -21,31 +21,19 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
-
-import java.util.List;
-
+package lightjason.language.plan;
 
 /**
- * sin-function operator
+ * defines any plan-body operation
  */
-public final class CSin implements IArithmeticOperator
+public interface IBodyOperation
 {
-    @Override
-    public final String getToken()
-    {
-        return "sin";
-    }
 
-    @Override
-    public final int getNumberOfArguments()
-    {
-        return 1;
-    }
+    /**
+     * defines a plan-body operation
+     *
+     * @return boolean-flag that the operation is run successfully
+     */
+    public boolean evaluate();
 
-    @Override
-    public final Number execution( final List<Number> p_arguments )
-    {
-        return Math.sin( p_arguments.get( 0 ).doubleValue() );
-    }
 }

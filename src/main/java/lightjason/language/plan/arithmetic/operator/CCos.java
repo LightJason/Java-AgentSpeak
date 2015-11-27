@@ -21,32 +21,32 @@
  * @endcond
  */
 
-package lightjason.language.arithmetic.operator;
+package lightjason.language.plan.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * pow operator
+ * cos-function operator
  */
-public final class CPow implements IArithmeticOperator
+public final class CCos implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "**";
+        return "cos";
     }
 
     @Override
     public final int getNumberOfArguments()
     {
-        return 2;
+        return 1;
     }
 
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.pow( p_arguments.get( 0 ).doubleValue(), p_arguments.get( 1 ).doubleValue() );
+        return Math.cos( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override
