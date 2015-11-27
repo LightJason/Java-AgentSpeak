@@ -21,32 +21,32 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * exponential-function operator
+ * modulo operator
  */
-public final class CExp implements IArithmeticOperator
+public final class CModulo implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "exp";
+        return "%";
     }
 
     @Override
     public final int getNumberOfArguments()
     {
-        return 1;
+        return 2;
     }
 
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.exp( p_arguments.get( 0 ).doubleValue() );
+        return p_arguments.get( 0 ).longValue() % p_arguments.get( 1 ).longValue();
     }
 
     @Override

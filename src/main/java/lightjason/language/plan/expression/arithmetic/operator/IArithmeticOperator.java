@@ -21,52 +21,34 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.arithmetic.operator;
+
 
 import java.util.List;
 
 
 /**
- * abs-function operator
+ * interface to describe an arithmetic operator
  */
-public final class CAbs implements IArithmeticOperator
+public interface IArithmeticOperator
 {
-    @Override
-    public final String getToken()
-    {
-        return "abs";
-    }
+    /**
+     * token for matching
+     */
+    public String getToken();
 
-    @Override
-    public final int getNumberOfArguments()
-    {
-        return 1;
-    }
+    /**
+     * number of arguments of the operator
+     *
+     * @return argument number [1,infinty)
+     */
+    public int getNumberOfArguments();
 
-    @Override
-    public final Number execution( final List<Number> p_arguments )
-    {
-        if ( p_arguments.get( 0 ) instanceof Long )
-            return Math.abs( p_arguments.get( 0 ).longValue() );
-
-        if ( p_arguments.get( 0 ) instanceof Integer )
-            return Math.abs( p_arguments.get( 0 ).intValue() );
-
-        if ( p_arguments.get( 0 ) instanceof Float )
-            return Math.abs( p_arguments.get( 0 ).floatValue() );
-
-        return Math.abs( p_arguments.get( 0 ).doubleValue() );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return getToken().hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.getToken().equals( p_object );
-    }
+    /**
+     * operator execution
+     *
+     * @param p_arguments arguments of the operator
+     * @return calculated number
+     */
+    public Number execution( final List<Number> p_arguments );
 }

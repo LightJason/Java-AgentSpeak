@@ -21,20 +21,20 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * ceil-function operator
+ * signum operator
  */
-public final class CCeil implements IArithmeticOperator
+public final class CSignum implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "ceil";
+        return "signum";
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class CCeil implements IArithmeticOperator
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.ceil( p_arguments.get( 0 ).doubleValue() );
+        return Math.signum( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override

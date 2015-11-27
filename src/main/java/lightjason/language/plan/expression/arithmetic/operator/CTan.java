@@ -21,34 +21,43 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
-
+package lightjason.language.plan.expression.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * interface to describe an arithmetic operator
+ * tan-function operator
  */
-public interface IArithmeticOperator
+public final class CTan implements IArithmeticOperator
 {
-    /**
-     * token for matching
-     */
-    public String getToken();
+    @Override
+    public final String getToken()
+    {
+        return "tan";
+    }
 
-    /**
-     * number of arguments of the operator
-     *
-     * @return argument number [1,infinty)
-     */
-    public int getNumberOfArguments();
+    @Override
+    public final int getNumberOfArguments()
+    {
+        return 1;
+    }
 
-    /**
-     * operator execution
-     *
-     * @param p_arguments arguments of the operator
-     * @return calculated number
-     */
-    public Number execution( final List<Number> p_arguments );
+    @Override
+    public final Number execution( final List<Number> p_arguments )
+    {
+        return Math.tan( p_arguments.get( 0 ).doubleValue() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

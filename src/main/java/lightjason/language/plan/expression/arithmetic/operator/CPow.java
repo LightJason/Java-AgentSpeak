@@ -21,32 +21,32 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * sqrt-function operator
+ * pow operator
  */
-public final class CSqrt implements IArithmeticOperator
+public final class CPow implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "tan";
+        return "**";
     }
 
     @Override
     public final int getNumberOfArguments()
     {
-        return 1;
+        return 2;
     }
 
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.sqrt( p_arguments.get( 0 ).doubleValue() );
+        return Math.pow( p_arguments.get( 0 ).doubleValue(), p_arguments.get( 1 ).doubleValue() );
     }
 
     @Override

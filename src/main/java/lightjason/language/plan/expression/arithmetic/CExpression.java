@@ -22,28 +22,29 @@
  */
 
 
-package lightjason.language.plan.arithmetic;
+package lightjason.language.plan.expression.arithmetic;
 
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 import lightjason.language.IVariable;
-import lightjason.language.plan.arithmetic.operator.CAbs;
-import lightjason.language.plan.arithmetic.operator.CCeil;
-import lightjason.language.plan.arithmetic.operator.CCos;
-import lightjason.language.plan.arithmetic.operator.CDivide;
-import lightjason.language.plan.arithmetic.operator.CExp;
-import lightjason.language.plan.arithmetic.operator.CFloor;
-import lightjason.language.plan.arithmetic.operator.CMinus;
-import lightjason.language.plan.arithmetic.operator.CModulo;
-import lightjason.language.plan.arithmetic.operator.CMultiply;
-import lightjason.language.plan.arithmetic.operator.CPlus;
-import lightjason.language.plan.arithmetic.operator.CPow;
-import lightjason.language.plan.arithmetic.operator.CSignum;
-import lightjason.language.plan.arithmetic.operator.CSin;
-import lightjason.language.plan.arithmetic.operator.CSqrt;
-import lightjason.language.plan.arithmetic.operator.CTan;
-import lightjason.language.plan.arithmetic.operator.IArithmeticOperator;
+import lightjason.language.plan.expression.IExpression;
+import lightjason.language.plan.expression.arithmetic.operator.CAbs;
+import lightjason.language.plan.expression.arithmetic.operator.CCeil;
+import lightjason.language.plan.expression.arithmetic.operator.CCos;
+import lightjason.language.plan.expression.arithmetic.operator.CDivide;
+import lightjason.language.plan.expression.arithmetic.operator.CExp;
+import lightjason.language.plan.expression.arithmetic.operator.CFloor;
+import lightjason.language.plan.expression.arithmetic.operator.CMinus;
+import lightjason.language.plan.expression.arithmetic.operator.CModulo;
+import lightjason.language.plan.expression.arithmetic.operator.CMultiply;
+import lightjason.language.plan.expression.arithmetic.operator.CPlus;
+import lightjason.language.plan.expression.arithmetic.operator.CPow;
+import lightjason.language.plan.expression.arithmetic.operator.CSignum;
+import lightjason.language.plan.expression.arithmetic.operator.CSin;
+import lightjason.language.plan.expression.arithmetic.operator.CSqrt;
+import lightjason.language.plan.expression.arithmetic.operator.CTan;
+import lightjason.language.plan.expression.arithmetic.operator.IArithmeticOperator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ import java.util.stream.Collectors;
  * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
 @SuppressWarnings( "serial" )
-public final class CExpression
+public final class CExpression implements IExpression
 {
     /**
      * map with default operators

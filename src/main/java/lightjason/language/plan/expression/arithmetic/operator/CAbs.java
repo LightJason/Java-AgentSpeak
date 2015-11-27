@@ -21,32 +21,41 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * pow operator
+ * abs-function operator
  */
-public final class CPow implements IArithmeticOperator
+public final class CAbs implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "**";
+        return "abs";
     }
 
     @Override
     public final int getNumberOfArguments()
     {
-        return 2;
+        return 1;
     }
 
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.pow( p_arguments.get( 0 ).doubleValue(), p_arguments.get( 1 ).doubleValue() );
+        if ( p_arguments.get( 0 ) instanceof Long )
+            return Math.abs( p_arguments.get( 0 ).longValue() );
+
+        if ( p_arguments.get( 0 ) instanceof Integer )
+            return Math.abs( p_arguments.get( 0 ).intValue() );
+
+        if ( p_arguments.get( 0 ) instanceof Float )
+            return Math.abs( p_arguments.get( 0 ).floatValue() );
+
+        return Math.abs( p_arguments.get( 0 ).doubleValue() );
     }
 
     @Override

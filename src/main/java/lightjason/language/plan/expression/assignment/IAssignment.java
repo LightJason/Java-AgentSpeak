@@ -21,43 +21,18 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.assignment;
 
-import java.util.List;
+import lightjason.language.IVariable;
+import lightjason.language.plan.expression.IExpression;
 
 
 /**
- * cos-function operator
+ * interface of an assignment
  */
-public final class CCos implements IArithmeticOperator
+public interface IAssignment<T extends IExpression>
 {
-    @Override
-    public final String getToken()
-    {
-        return "cos";
-    }
 
-    @Override
-    public final int getNumberOfArguments()
-    {
-        return 1;
-    }
+    public boolean assign( final IVariable<?> p_variable, final T p_term );
 
-    @Override
-    public final Number execution( final List<Number> p_arguments )
-    {
-        return Math.cos( p_arguments.get( 0 ).doubleValue() );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return getToken().hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.getToken().equals( p_object );
-    }
 }

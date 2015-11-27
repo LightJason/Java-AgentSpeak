@@ -21,20 +21,20 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.arithmetic.operator;
 
 import java.util.List;
 
 
 /**
- * floor-function operator
+ * sin-function operator
  */
-public final class CFloor implements IArithmeticOperator
+public final class CSin implements IArithmeticOperator
 {
     @Override
     public final String getToken()
     {
-        return "floor";
+        return "sin";
     }
 
     @Override
@@ -46,18 +46,6 @@ public final class CFloor implements IArithmeticOperator
     @Override
     public final Number execution( final List<Number> p_arguments )
     {
-        return Math.floor( p_arguments.get( 0 ).doubleValue() );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return getToken().hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.getToken().equals( p_object );
+        return Math.sin( p_arguments.get( 0 ).doubleValue() );
     }
 }

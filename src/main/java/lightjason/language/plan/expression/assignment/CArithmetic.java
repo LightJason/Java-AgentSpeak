@@ -21,31 +21,51 @@
  * @endcond
  */
 
-package lightjason.language.plan.arithmetic.operator;
+package lightjason.language.plan.expression.assignment;
 
-import java.util.List;
+import lightjason.language.CVariable;
+import lightjason.language.IVariable;
+import lightjason.language.plan.IBodyOperation;
+import lightjason.language.plan.expression.IExpression;
+import lightjason.language.plan.expression.arithmetic.CExpression;
 
 
 /**
- * sin-function operator
+ * assignment of arithmetic expression
  */
-public final class CSin implements IArithmeticOperator
+public class CArithmetic implements IAssignment<CExpression>, IBodyOperation
 {
-    @Override
-    public final String getToken()
+    /**
+     * variable
+     */
+    private final CVariable<?> m_variable;
+    /**
+     * expression
+     */
+    private final IExpression m_expression;
+
+    /**
+     * ctor
+     *
+     * @param p_variable assign variable
+     * @param p_expression evalute expression
+     */
+    public CArithmetic( final CVariable<?> p_variable, final CExpression p_expression )
     {
-        return "sin";
+        m_variable = p_variable;
+        m_expression = p_expression;
+    }
+
+
+    @Override
+    public boolean evaluate()
+    {
+        return true;
     }
 
     @Override
-    public final int getNumberOfArguments()
+    public boolean assign( final IVariable<?> p_variable, final CExpression p_term )
     {
-        return 1;
-    }
-
-    @Override
-    public final Number execution( final List<Number> p_arguments )
-    {
-        return Math.sin( p_arguments.get( 0 ).doubleValue() );
+        return true;
     }
 }
