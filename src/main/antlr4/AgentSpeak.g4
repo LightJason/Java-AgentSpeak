@@ -150,9 +150,7 @@ plan_goal_trigger :
  * plan trigger for a belief
  **/
 plan_belief_trigger :
-    PLUS
-    | MINUS
-    | MINUSPLUS
+    PLUS | MINUS
     ;
 
 /**
@@ -334,7 +332,6 @@ achievment_goal_action :
  * test-goal action
  **/
 test_goal_action :
-    ( PLUS | MINUS )
     QUESTIONMARK
     ;
 
@@ -344,6 +341,7 @@ test_goal_action :
 belief_action :
     PLUS
     | MINUS
+    | MINUSPLUS
     ;
 
 /**
