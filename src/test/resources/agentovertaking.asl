@@ -2,9 +2,10 @@
 // using the 5 overtaking phases from [Irzik2009] in a chaining order
 // uses plan bundling concept, does not take plan failures (-!) into account.
 
+// initial goal
 !init.
 
-
+// plans
 
 +!init <- !drive.
 
@@ -31,25 +32,26 @@
 
 //phase1
 +!approach
-  :
-    distance_predecessor([Distance|_]) && Distance >= 5
-  <-
-    !approach.
-
-//phase1
-+!approach
-  :
-    distance_predecessor([Distance|_]) && Distance < 5
-  <-
-    !overtake.
+  : distance_predecessor([Distance|_]) && Distance >= 5 <- !approach
+  : distance_predecessor([Distance|_]) && Distance < 5 <- !overtake.
 
 //phase2to4: parent plan
-+!overtake <- !pull_out.
++!overtake
+  <-
+    ?lane(MyLane);
+    ?left(ViewLeft);
+    if (MyLane == left && ViewLeft == free)
+    {
+      !pull_out
+    }
+    else
+    {
+      !overtake
+    }.
 
 //phase2
 +!pull_out
-  :
-    lane(right) && left(free)
+  : lane(right) && left(free)
   <-
     changeToLane(left);
     !!accelerate;
@@ -83,11 +85,11 @@
 
 //phase5 (also phase 0 == free flow driving)
 +!drive
-  : empty(distance_predecessor(_))  // we don't see anyone in front of us => free flow
+  : distance_predecessor(L) && length(L) == 0  // we don't see anyone in front of us => free flow
     && current_speed(CSpeed) && intended_speed(ISpeed) && CSpeed < ISpeed // we can go faster
   <-
     !!accelerate;
     !drive
-  : not empty(distance_predecessor(_)) // someone is in front of us -> execute approach plan
+  : distance_predecessor(L) && length(L) > 0 // someone is in front of us -> execute approach plan
   <-
     !approach.
