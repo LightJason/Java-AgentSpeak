@@ -21,20 +21,20 @@
  * @endcond
  */
 
-package lightjason.agent.event;
+package lightjason.language.event;
 
 import java.text.MessageFormat;
 
 
 /**
- * event to describe belief-change
+ * event to descrigoal-add
  */
-public class CChangeBelief implements IEvent<String>
+public class CAddGoal implements IEvent<String>
 {
     /**
      * event name
      */
-    public static final String ID = "change belief";
+    public static final String ID = "add goal";
     /**
      * event data
      **/
@@ -45,7 +45,7 @@ public class CChangeBelief implements IEvent<String>
      *
      * @param p_belieffunctor name of the functor
      */
-    public CChangeBelief( final String p_belieffunctor )
+    public CAddGoal( final String p_belieffunctor )
     {
         m_data = p_belieffunctor;
     }

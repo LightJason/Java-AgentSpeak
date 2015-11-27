@@ -24,7 +24,7 @@
 package lightjason.agent.score;
 
 import lightjason.agent.IAgent;
-import lightjason.agent.plan.IPlan;
+import lightjason.language.plan.IPlan;
 
 
 /**

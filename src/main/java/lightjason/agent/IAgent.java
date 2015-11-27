@@ -23,9 +23,9 @@
 
 package lightjason.agent;
 
-import lightjason.agent.event.IEvent;
-import lightjason.agent.plan.IPlan;
 import lightjason.beliefbase.IBeliefBase;
+import lightjason.language.event.IEvent;
+import lightjason.language.plan.IPlan;
 
 import java.util.Set;
 import java.util.concurrent.Callable;

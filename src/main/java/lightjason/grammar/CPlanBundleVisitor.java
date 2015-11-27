@@ -24,9 +24,9 @@
 package lightjason.grammar;
 
 import lightjason.agent.IAction;
-import lightjason.agent.event.IEvent;
-import lightjason.agent.plan.EExecutionState;
-import lightjason.agent.plan.IPlan;
+import lightjason.language.event.IEvent;
+import lightjason.language.plan.EExecutionState;
+import lightjason.language.plan.IPlan;
 
 import java.util.List;
 

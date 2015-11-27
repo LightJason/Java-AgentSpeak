@@ -23,13 +23,13 @@
 
 package lightjason.agent;
 
-import lightjason.agent.event.IEvent;
-import lightjason.agent.plan.IPlan;
 import lightjason.agent.score.CConstZeroScore;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBase;
 import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
+import lightjason.language.event.IEvent;
+import lightjason.language.plan.IPlan;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 

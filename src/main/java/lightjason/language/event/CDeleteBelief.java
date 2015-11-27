@@ -21,65 +21,63 @@
  * @endcond
  */
 
-package lightjason.agent.plan;
+package lightjason.language.event;
 
-import lightjason.agent.IAction;
-import lightjason.agent.event.IEvent;
-
-import java.util.List;
+import java.text.MessageFormat;
 
 
 /**
- * interface of plan
+ * event to describe belief-delete
  */
-public interface IPlan
+public class CDeleteBelief implements IEvent<String>
 {
+    /**
+     * event name
+     */
+    public static final String ID = "delete belief";
+    /**
+     * event data
+     **/
+    private final String m_data;
 
     /**
-     * returns the trigger event
+     * ctor
      *
-     * @return trigger event
+     * @param p_belieffunctor name of the functor
      */
-    public IEvent<?> getTrigger();
+    public CDeleteBelief( final String p_belieffunctor )
+    {
+        m_data = p_belieffunctor;
+    }
 
-    /**
-     * checks the context of the plan
-     * and return if the plan can be
-     * executed
-     *
-     * @return true iif the plan can be executed
-     */
-    public boolean isExecutable();
 
-    /**
-     * runs the plan and returns the result
-     *
-     * @return execution state
-     */
-    public EExecutionState execute();
+    @Override
+    public int hashCode()
+    {
+        return m_data.hashCode() + this.getName().hashCode();
+    }
 
-    /**
-     * returns the current state of the plan
-     *
-     * @return current / last execution state
-     */
-    public EExecutionState getState();
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return p_object.hashCode() == this.hashCode();
+    }
 
-    /**
-     * returns the number of executions
-     */
-    public long getNumberOfRuns();
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}( {1} )", ID, m_data );
+    }
 
-    /**
-     * returns the number of fail runs
-     */
-    public long getNumberOfFailRuns();
+    @Override
+    public String getName()
+    {
+        return ID;
+    }
 
-    /**
-     * returns the list of actions
-     *
-     * @return list with actions
-     */
-    public List<IAction> getActions();
-
+    @Override
+    public String getData()
+    {
+        return m_data;
+    }
 }

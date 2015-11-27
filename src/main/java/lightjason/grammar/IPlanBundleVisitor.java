@@ -24,9 +24,9 @@
 package lightjason.grammar;
 
 import com.google.common.collect.SetMultimap;
-import lightjason.agent.event.IEvent;
-import lightjason.agent.plan.IPlan;
 import lightjason.language.ILiteral;
+import lightjason.language.event.IEvent;
+import lightjason.language.plan.IPlan;
 
 import java.util.Map;
 import java.util.Set;

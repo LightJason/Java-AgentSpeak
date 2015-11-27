@@ -21,62 +21,26 @@
  * @endcond
  */
 
-package lightjason.agent.event;
-
-import java.text.MessageFormat;
-
+package lightjason.language.event;
 
 /**
- * event to descrigoal-add
+ * event definition
  */
-public class CAddGoal implements IEvent<String>
+public interface IEvent<T>
 {
-    /**
-     * event name
-     */
-    public static final String ID = "add goal";
-    /**
-     * event data
-     **/
-    private final String m_data;
 
     /**
-     * ctor
+     * returns the name of the event
      *
-     * @param p_belieffunctor name of the functor
+     * @return name
      */
-    public CAddGoal( final String p_belieffunctor )
-    {
-        m_data = p_belieffunctor;
-    }
+    public String getName();
 
-    @Override
-    public int hashCode()
-    {
-        return m_data.hashCode() + this.getName().hashCode();
-    }
+    /**
+     * returns the data or null
+     *
+     * @return data
+     */
+    public T getData();
 
-    @Override
-    public boolean equals( final Object p_object )
-    {
-        return p_object.hashCode() == this.hashCode();
-    }
-
-    @Override
-    public String toString()
-    {
-        return MessageFormat.format( "{0}( {1} )", ID, m_data );
-    }
-
-    @Override
-    public String getName()
-    {
-        return ID;
-    }
-
-    @Override
-    public String getData()
-    {
-        return m_data;
-    }
 }

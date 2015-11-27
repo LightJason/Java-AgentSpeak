@@ -21,26 +21,62 @@
  * @endcond
  */
 
-package lightjason.agent.event;
+package lightjason.language.event;
+
+import java.text.MessageFormat;
+
 
 /**
- * event definition
+ * event to describe belief-add
  */
-public interface IEvent<T>
+public class CAddBelief implements IEvent<String>
 {
+    /**
+     * event name
+     */
+    public static final String ID = "add belief";
+    /**
+     * event data
+     **/
+    private final String m_data;
 
     /**
-     * returns the name of the event
+     * ctor
      *
-     * @return name
+     * @param p_belieffunctor name of the functor
      */
-    public String getName();
+    public CAddBelief( final String p_belieffunctor )
+    {
+        m_data = p_belieffunctor;
+    }
 
-    /**
-     * returns the data or null
-     *
-     * @return data
-     */
-    public T getData();
+    @Override
+    public int hashCode()
+    {
+        return m_data.hashCode() + this.getName().hashCode();
+    }
 
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return p_object.hashCode() == this.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}( {1} )", ID, m_data );
+    }
+
+    @Override
+    public String getName()
+    {
+        return ID;
+    }
+
+    @Override
+    public String getData()
+    {
+        return m_data;
+    }
 }

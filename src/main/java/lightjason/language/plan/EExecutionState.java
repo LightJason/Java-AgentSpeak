@@ -21,62 +21,15 @@
  * @endcond
  */
 
-package lightjason.agent.event;
-
-import java.text.MessageFormat;
+package lightjason.language.plan;
 
 
 /**
- * event to describe belief-add
+ * execution state of a plan
  */
-public class CAddBelief implements IEvent<String>
+public enum EExecutionState
 {
-    /**
-     * event name
-     */
-    public static final String ID = "add belief";
-    /**
-     * event data
-     **/
-    private final String m_data;
-
-    /**
-     * ctor
-     *
-     * @param p_belieffunctor name of the functor
-     */
-    public CAddBelief( final String p_belieffunctor )
-    {
-        m_data = p_belieffunctor;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return m_data.hashCode() + this.getName().hashCode();
-    }
-
-    @Override
-    public boolean equals( final Object p_object )
-    {
-        return p_object.hashCode() == this.hashCode();
-    }
-
-    @Override
-    public String toString()
-    {
-        return MessageFormat.format( "{0}( {1} )", ID, m_data );
-    }
-
-    @Override
-    public String getName()
-    {
-        return ID;
-    }
-
-    @Override
-    public String getData()
-    {
-        return m_data;
-    }
+    Success,
+    Fail,
+    Wait;
 }

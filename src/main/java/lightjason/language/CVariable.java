@@ -64,10 +64,11 @@ public final class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public void set( final T p_value )
+    public IVariable<T> set( final T p_value )
     {
         if ( !m_any )
             m_value = p_value;
+        return this;
     }
 
     @Override

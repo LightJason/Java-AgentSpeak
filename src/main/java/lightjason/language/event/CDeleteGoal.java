@@ -21,104 +21,62 @@
  * @endcond
  */
 
-package lightjason.agent.plan;
-
-import lightjason.agent.IAction;
-import lightjason.agent.event.IEvent;
-import lightjason.language.ILiteral;
+package lightjason.language.event;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 
 /**
- * abstract plan structure
+ * event to descrigoal-add
  */
-public class CPlan implements IPlan
+public class CDeleteGoal implements IEvent<String>
 {
     /**
-     * plan literal
+     * event name
+     */
+    public static final String ID = "delete goal";
+    /**
+     * event data
      **/
-    protected final ILiteral m_literal;
-    /**
-     * trigger event
-     */
-    protected final IEvent<?> m_triggerevent;
-    /**
-     * current plan state
-     */
-    protected EExecutionState m_currentstate = EExecutionState.Success;
-    /**
-     * number of runs
-     */
-    protected long m_runs = 0;
-    /**
-     * number of fail runs
-     */
-    protected long m_failruns = 0;
-    /**
-     * list with the plan body actions
-     */
-    protected final List<IAction> m_actions;
+    private final String m_data;
 
     /**
      * ctor
      *
-     * @param p_event trigger event
-     * @param p_literal head literal
+     * @param p_belieffunctor name of the functor
      */
-    public CPlan( final IEvent<?> p_event, final ILiteral p_literal )
+    public CDeleteGoal( final String p_belieffunctor )
     {
-        m_literal = p_literal;
-        m_triggerevent = p_event;
-        m_actions = null;
+        m_data = p_belieffunctor;
     }
 
     @Override
-    public IEvent<?> getTrigger()
+    public int hashCode()
     {
-        return m_triggerevent;
+        return m_data.hashCode() + this.getName().hashCode();
     }
 
     @Override
-    public final boolean isExecutable()
+    public boolean equals( final Object p_object )
     {
-        return false;
-    }
-
-    @Override
-    public EExecutionState execute()
-    {
-        return null;
-    }
-
-    @Override
-    public final EExecutionState getState()
-    {
-        return m_currentstate;
-    }
-
-    @Override
-    public final long getNumberOfRuns()
-    {
-        return m_runs;
-    }
-
-    @Override
-    public final long getNumberOfFailRuns()
-    {
-        return m_failruns;
-    }
-
-    @Override
-    public final List<IAction> getActions()
-    {
-        return m_actions;
+        return p_object.hashCode() == this.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} (trigger event : {1} / literal : {2})", super.toString(), m_triggerevent, m_literal );
+        return MessageFormat.format( "{0}( {1} )", ID, m_data );
+    }
+
+    @Override
+    public String getName()
+    {
+        return ID;
+    }
+
+    @Override
+    public String getData()
+    {
+        return m_data;
     }
 }
