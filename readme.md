@@ -40,7 +40,7 @@ structure to describe an optimizing process.
     
 #### Internals
  
- * The plan has got additional beliefs, that are added in the context condition (values are calculated before plan execution is started)
+* The plan has got additional beliefs, that are added in the context condition (values are calculated before plan execution is started)
     * _score_ returns the current score-value of the plan
     * _failrun_ stores the number of fail runs
     * _successrun_ stores the number of successful runs
@@ -68,15 +68,21 @@ structure to describe an optimizing process.
 * Goals are triggered by external events which will match by the goal name
 * Goals will be resolved into plans with equal name (and allowed context)
 * Goals are run in parallel independed from other goals
-* A goal is a sequence of plans that which must all finished successfully
+* A goal is a sequence of plans which must all finished successfully
 * A goal is part of exactly one intention
 * A goal will be applied to a plan (a plan with equal name will be instantiiation)
 * if a goal can match a desire (the goal is near to the desire) it can add an event to match the desire belief
 
+#### Test Goals
+
+* A test goal is a literal with the definition ```?literal``` 
+* The test return true iif a plan with an equal literal is within the current execution (current running or supsending)
+
+
 ### Intentions
 
-* The intention is set of beliefs (of goals), which must exist simultaneously 
 * An intention is the _convex hull_ of its goals
+* The intention is set of of goals, which must exist simultaneously 
 * Intentions cannot be in conflict with other intentions, so there dies not exists any overlaping
 
 ### Desires
@@ -120,23 +126,17 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     4. execute collected plans in parallel and apply the following rules for each body formula
 
         1. if an item is an _action_ or _rule_ execute it immediatly
-        2. if an item is a _test goal_ try to find within the current context a
-            * rule, if found execute rule immediatly, result is passed for the test
-            * plan, if found set current plan to _waiting state_ and add found plan to the _earmarked executing plans list_
-                * if the plan has got an annotation _only_ all plans within the next cycle will be suspend until this plan is finished
-
-
+        2. if an item is a _test goal_ check instantiated plans if a plan is found return true otherwise false
         3. if an item is an _achievment goal_ and
             * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
-            * begins with ```!!``` the plan which is mached by the goal is executated immediately
-            
+            * begins with ```!!``` the plan which is matched by the goal is executated immediately within the current plan context          
         4. if an item is a belief-
             * addition, mark the literal for adding into the beliefbase
             * deletion, mark the literal for removing from beliefbase
             * changing, mark the literal with changes for update within the beliefbase
 
     5. if a plan is finished check plan towards the _waiting state plan list_ and move waiting plans to the _earmarked executing plans list_
-        * if the plan fails add if exists the _repair plan_ to the _earmarked executing plans list_
+        * if the plan fails create a ``-!goal``` event 
 
 4. increment cycle value
 
