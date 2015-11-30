@@ -41,7 +41,7 @@ import lightjason.language.event.CDeleteBelief;
 import lightjason.language.event.CDeleteGoal;
 import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
-import lightjason.language.plan.IBodyOperation;
+import lightjason.language.plan.IOperation;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.action.CAchievementGoal;
 import lightjason.language.plan.action.CTestGoal;
@@ -139,7 +139,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @Override
     public Object visitPlandefinition( final lightjason.grammar.AgentParser.PlandefinitionContext p_context )
     {
-        return new ImmutablePair<Object, List<IBodyOperation>>( this.visitPlan_context( p_context.plan_context() ), (List) this.visitBody( p_context.body() ) );
+        return new ImmutablePair<Object, List<IOperation>>( this.visitPlan_context( p_context.plan_context() ), (List) this.visitBody( p_context.body() ) );
     }
 
     @Override

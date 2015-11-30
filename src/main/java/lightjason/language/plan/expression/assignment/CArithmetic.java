@@ -23,9 +23,10 @@
 
 package lightjason.language.plan.expression.assignment;
 
+import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.CVariable;
 import lightjason.language.IVariable;
-import lightjason.language.plan.IBodyOperation;
+import lightjason.language.plan.IOperation;
 import lightjason.language.plan.expression.IExpression;
 import lightjason.language.plan.expression.arithmetic.CExpression;
 
@@ -33,7 +34,7 @@ import lightjason.language.plan.expression.arithmetic.CExpression;
 /**
  * assignment of arithmetic expression
  */
-public class CArithmetic implements IAssignment<CExpression>, IBodyOperation
+public class CArithmetic implements IAssignment<CExpression>, IOperation
 {
     /**
      * variable
@@ -58,7 +59,7 @@ public class CArithmetic implements IAssignment<CExpression>, IBodyOperation
 
 
     @Override
-    public boolean evaluate()
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase )
     {
         return true;
     }

@@ -23,17 +23,21 @@
 
 package lightjason.language.plan;
 
+import lightjason.beliefbase.IBeliefBaseMask;
+
+
 /**
  * defines any plan-body operation
  */
-public interface IBodyOperation
+public interface IOperation
 {
 
     /**
      * defines a plan-body operation
      *
+     * @param p_beliefbase root mask of the beliefbase
      * @return boolean-flag that the operation is run successfully
      */
-    public boolean evaluate();
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase );
 
 }
