@@ -146,12 +146,10 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 
 * _myname_ agent name, generates no event
 * _mycycle_ current agent cylce which generates always ```-+``` event
-* _mysuspend_ number of the suspending cycles, generate ```+``` and ```-+``` event
-* _myawake_ exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1
+* _myawake_ exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
 * _mybeliefbasesize_ number of beliefs within the current beliefbase, generates no event
 * _myplanbasesize_ number of plans, generates no event
-* _myexecutionplans_ string list with current execution plan names, generates no event
-* _mywaitingplans_ string list with current waiting plan names, generates no event
+* _mycurrentplans_ list with current plan names, generates no event with symbols of plan(state([pause|running|stoped]))
 
 
 ## Todos
