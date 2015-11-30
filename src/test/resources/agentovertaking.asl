@@ -39,11 +39,11 @@
 +!overtake
   :  lane(MyLane) && MyLane == right &&       // i'm on right lane
      left(ViewLeft) && ViewLeft == free       // and left lane is free
-  <- !pull_out                               // => pull out
+  <- !pull_out                                // => pull out
 
   :  lane(MyLane) && MyLane == right &&       // i'm on right lane
-     left(ViewLeft) && ViewLeft == blocked     // and left lane is blocked
-  <- !overtake                               // => continue in overtaking mode
+     left(ViewLeft) && ViewLeft == blocked    // and left lane is blocked
+  <- !overtake                                // => continue in overtaking mode
   .
 
 //phase2
