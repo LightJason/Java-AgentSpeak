@@ -173,7 +173,10 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    (belief_action | achievment_goal_action | test_goal_action )? literal
+    belief_action
+    | achievement_goal_action
+    | test_goal_action
+    | literal
     | if_else
     | while_loop
     | for_loop
@@ -258,6 +261,27 @@ unary_expression :
     ;
 
 /**
+ * achivement-goal action
+ **/
+achievement_goal_action :
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) literal
+    ;
+
+/**
+ * test-goal action
+ **/
+test_goal_action :
+    QUESTIONMARK literal
+    ;
+
+/**
+ * belief-action operator
+ **/
+belief_action :
+    ( PLUS | MINUS | MINUSPLUS ) literal
+    ;
+
+/**
  * deconstruct expression (splitting clauses)
  **/
 deconstruct_expression :
@@ -329,29 +353,6 @@ atom :
 variable :
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
-    ;
-
-/**
- * achivement-goal action
- **/
-achievment_goal_action :
-    EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK
-    ;
-
-/**
- * test-goal action
- **/
-test_goal_action :
-    QUESTIONMARK
-    ;
-
-/**
- * belief-action operator
- **/
-belief_action :
-    PLUS
-    | MINUS
-    | MINUSPLUS
     ;
 
 /**

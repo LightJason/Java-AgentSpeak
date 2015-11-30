@@ -43,6 +43,8 @@ import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
 import lightjason.language.plan.IBodyOperation;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.action.CAchievementGoal;
+import lightjason.language.plan.action.CTestGoal;
 import lightjason.language.plan.unaryoperator.CDecrement;
 import lightjason.language.plan.unaryoperator.CIncrement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -200,6 +202,18 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         }
     }
 
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object visitAchievement_goal_action( final lightjason.grammar.AgentParser.Achievement_goal_actionContext p_context )
+    {
+        return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
+
+    @Override
+    public Object visitTest_goal_action( final lightjason.grammar.AgentParser.Test_goal_actionContext p_context )
+    {
+        return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
