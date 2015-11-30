@@ -31,5 +31,5 @@ public enum EExecutionState
 {
     Success,
     Fail,
-    Wait;
+    Suspend;
 }

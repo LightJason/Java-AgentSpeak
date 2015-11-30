@@ -23,12 +23,10 @@
 
 package lightjason.language.plan;
 
-import lightjason.agent.IAction;
 import lightjason.language.ILiteral;
 import lightjason.language.event.IEvent;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 
 /**
@@ -56,10 +54,6 @@ public class CPlan implements IPlan
      * number of fail runs
      */
     protected long m_failruns = 0;
-    /**
-     * list with the plan body actions
-     */
-    protected final List<IAction> m_actions;
 
     /**
      * ctor
@@ -71,7 +65,6 @@ public class CPlan implements IPlan
     {
         m_literal = p_literal;
         m_triggerevent = p_event;
-        m_actions = null;
     }
 
     @Override
@@ -81,45 +74,9 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public final boolean isExecutable()
-    {
-        return false;
-    }
-
-    @Override
     public EExecutionState execute()
     {
         return null;
-    }
-
-    @Override
-    public final EExecutionState getState()
-    {
-        return m_currentstate;
-    }
-
-    @Override
-    public final long getNumberOfRuns()
-    {
-        return m_runs;
-    }
-
-    @Override
-    public final long getNumberOfFailRuns()
-    {
-        return m_failruns;
-    }
-
-    @Override
-    public long getNumberOfSuccessfulRuns()
-    {
-        return 0;
-    }
-
-    @Override
-    public final List<IAction> getActions()
-    {
-        return m_actions;
     }
 
     @Override
