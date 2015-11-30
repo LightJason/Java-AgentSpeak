@@ -34,9 +34,8 @@ public interface IOperator<T>
     /**
      * evaluates the expression
      *
-     * @param p_variable
      * @return the assigned variable
      */
-    public IVariable<T> evaluate( final IVariable<T> p_variable );
+    public IVariable<T> evaluate();
 
 }

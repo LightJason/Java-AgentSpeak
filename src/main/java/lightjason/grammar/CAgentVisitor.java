@@ -33,6 +33,7 @@ import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.event.CAddBelief;
 import lightjason.language.event.CAddGoal;
 import lightjason.language.event.CChangeBelief;
@@ -41,6 +42,8 @@ import lightjason.language.event.CDeleteGoal;
 import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.unaryoperator.CDecrement;
+import lightjason.language.plan.unaryoperator.CIncrement;
 
 import java.util.HashSet;
 import java.util.List;
@@ -96,9 +99,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
 
         // @bug incomplete
+        //System.out.println("--- " + l_head + " -------------------------------------------------");
+        //for( final lightjason.grammar.AgentParser.PlancontentContext l_item : p_context.plancontent() )
+        //    System.out.println(l_item.getText());
         //System.out.println( p_context.plancontent().parallelStream().map( i -> this.visitPlancontent( i ) ).collect( Collectors.toList() ) );
+        //System.out.println("--------------------------------------------------------------------");
 
-        switch ( (String) super.visitPlan_trigger( p_context.plan_trigger() ) )
+        switch ( (String) this.visitPlan_trigger( p_context.plan_trigger() ) )
         {
             case CAddBelief.ID:
                 l_plan = new CPlan( new CAddBelief( l_head.getFunctor() ), l_head );
@@ -156,6 +163,22 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         }
     }
 
+    @Override
+    public Object visitUnary_expression( final lightjason.grammar.AgentParser.Unary_expressionContext p_context )
+    {
+        switch ( p_context.unaryoperator().getText() )
+        {
+            case "++":
+                return new CIncrement<>( (IVariable) this.visitVariable( p_context.variable() ) );
+
+            case "--":
+                return new CDecrement<>( (IVariable) this.visitVariable( p_context.variable() ) );
+
+            default:
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "unaryoperator", p_context.getText() ) );
+        }
+    }
+
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
@@ -178,17 +201,10 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         }
     }
 
-
-    @Override
-    public Object visitTerm( final lightjason.grammar.AgentParser.TermContext p_context )
-    {
-        return super.visitTerm( p_context );
-    }
-
     @Override
     public Object visitList( final lightjason.grammar.AgentParser.ListContext p_context )
     {
-        return p_context.term().parallelStream().map( i -> super.visitTerm( i ) ).collect( Collectors.toList() );
+        return p_context.term().parallelStream().map( i -> this.visitTerm( i ) ).collect( Collectors.toList() );
     }
 
     @Override

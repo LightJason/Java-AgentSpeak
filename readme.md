@@ -40,8 +40,8 @@ structure to describe an optimizing process.
     
 #### Internals
  
-* The plan has got additional beliefs, that are added in the context condition (values are calculated before plan execution is started)
-    * _score_ returns the current score-value of the plan
+* The plan has got additional variables / constants, that are added in the context condition (values are calculated before plan execution is started)
+    * _Score_ returns the current score-value of the plan
     * _failrun_ stores the number of fail runs
     * _successrun_ stores the number of successful runs
     * _runs_ number of runs of the plan (fail + successful runs)

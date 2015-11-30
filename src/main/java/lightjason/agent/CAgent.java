@@ -134,10 +134,9 @@ public class CAgent implements IAgent
                 new CommonTokenStream( new lightjason.grammar.AgentLexer( new ANTLRInputStream( p_stream ) ) )
         ).agent() );
 
-        System.out.println( p_astvisitor.getInitialGoal() );
-        System.out.println( p_astvisitor.getInitialBeliefs() );
-
-        System.out.println( p_astvisitor.getPlans() );
+        //System.out.println( p_astvisitor.getInitialGoal() );
+        //System.out.println( p_astvisitor.getInitialBeliefs() );
+        //System.out.println( p_astvisitor.getPlans() );
     }
 
     @Override

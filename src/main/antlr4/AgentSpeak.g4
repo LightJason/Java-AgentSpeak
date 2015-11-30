@@ -179,6 +179,7 @@ body_formula :
     | for_loop
     | foreach_loop
     | assignment_expression
+    | unary_expression
     | logical_expression
     | deconstruct_expression
     ;
@@ -243,8 +244,17 @@ arithmetic_expression :
  * assignment expression (for assignin a variable)
  **/
 assignment_expression :
-    (variable ASSIGN term)
-    | ( variable unaryoperator )
+    variable
+    ASSIGN
+    term
+    ;
+
+/**
+ * unary expression
+ **/
+unary_expression :
+    variable
+    unaryoperator
     ;
 
 /**

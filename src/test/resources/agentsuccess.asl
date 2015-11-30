@@ -11,7 +11,7 @@ setSpeed(X) :- setProperty("speed", X).
 
 @fuzzy(0.8)
 +!accelerate
-    : current_speed(Speed) && distance_predecessor([Distance|_]) && Distance > Speed && Score(X) && X > 0.3 <-
+    : current_speed(Speed) && distance_predecessor([Distance|_]) && Distance > Speed && Score > 0.3 <-
         Speed++;
         setSpeed( Speed );
         !!drive
