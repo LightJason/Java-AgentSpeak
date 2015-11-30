@@ -63,15 +63,15 @@ plan :
     annotations?
     plan_trigger
     literal
-    plancontent*
+    plandefinition*
     DOT
     ;
 
 /**
- * plan body context and context definition
+ * plan body & context definition
  * The definition is [ : condition ] [ <- body ]
  **/
-plancontent :
+plandefinition :
     ( COLON plan_context )?
     ARROW body
     ;

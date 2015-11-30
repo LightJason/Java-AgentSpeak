@@ -66,4 +66,10 @@ public final class CDecrement<T extends Number> implements IOperator<T>
 
         return m_variable;
     }
+
+    @Override
+    public String toString()
+    {
+        return m_variable.toString() + "--";
+    }
 }

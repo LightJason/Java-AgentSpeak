@@ -41,9 +41,11 @@ import lightjason.language.event.CDeleteBelief;
 import lightjason.language.event.CDeleteGoal;
 import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
+import lightjason.language.plan.IBodyOperation;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.unaryoperator.CDecrement;
 import lightjason.language.plan.unaryoperator.CIncrement;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.HashSet;
 import java.util.List;
@@ -98,9 +100,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         final IPlan l_plan;
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
 
-        // @bug incomplete
-        //System.out.println("--- " + l_head + " -------------------------------------------------");
-        //System.out.println("--------------------------------------------------------------------");
+        //@bug
+        System.out.println( "--- " + l_head + " -----------------------------------------" );
+        p_context.plandefinition().parallelStream().forEach( i -> {
+            System.out.println( this.visitPlandefinition( i ) );
+        } );
+        System.out.println( "------------------------------------------------------------" );
+
 
         switch ( (String) this.visitPlan_trigger( p_context.plan_trigger() ) )
         {
@@ -126,6 +132,12 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
         m_plans.put( l_plan.getTrigger(), l_plan );
         return null;
+    }
+
+    @Override
+    public Object visitPlandefinition( final lightjason.grammar.AgentParser.PlandefinitionContext p_context )
+    {
+        return new ImmutablePair<Object, List<IBodyOperation>>( this.visitPlan_context( p_context.plan_context() ), (List) this.visitBody( p_context.body() ) );
     }
 
     @Override
@@ -158,6 +170,12 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );
         }
+    }
+
+    @Override
+    public Object visitPlan_context( final lightjason.grammar.AgentParser.Plan_contextContext p_context )
+    {
+        return p_context == null ? "" : p_context.getText();
     }
 
     @Override
