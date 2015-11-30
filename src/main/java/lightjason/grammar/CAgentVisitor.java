@@ -100,9 +100,6 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
         // @bug incomplete
         //System.out.println("--- " + l_head + " -------------------------------------------------");
-        //for( final lightjason.grammar.AgentParser.PlancontentContext l_item : p_context.plancontent() )
-        //    System.out.println(l_item.getText());
-        //System.out.println( p_context.plancontent().parallelStream().map( i -> this.visitPlancontent( i ) ).collect( Collectors.toList() ) );
         //System.out.println("--------------------------------------------------------------------");
 
         switch ( (String) this.visitPlan_trigger( p_context.plan_trigger() ) )
@@ -161,6 +158,12 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );
         }
+    }
+
+    @Override
+    public Object visitBody( final lightjason.grammar.AgentParser.BodyContext p_context )
+    {
+        return p_context.body_formula().parallelStream().map( i -> this.visitBody_formula( i ) ).collect( Collectors.toList() );
     }
 
     @Override
