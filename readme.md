@@ -9,41 +9,38 @@ structure to describe an optimizing process.
 
 ### Beliefs
 
-* Beliefs describe implicit the current state of the agent
+* Beliefs implicitly describe the current state of the agent
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
-* Messages and Percepts are beliefs
-* Beliefs must be exists iif a expression is computed (beliefs can be exist on-fly)
-* Belief addition triggers an plan with the structure ```+belief```
-* Belief deletion triggers an plan with the structure ```-belief```
+* Messages and Percepts turn into beliefs
+* Beliefs must be exists iif a expression is computed (beliefs can be exist on the fly)
+* Belief addition triggers a plan with the definition ```+belief``` 
+* Belief retraction triggers a plan with the definition ```-belief```
 
 
 ### Actions
 
-* Actions will be run immediatly
+* Actions will be run immediately
 * Actions can fail (false) or succede (true)
 * There is no difference between internal and external actions
-* Actions can be also an logical expression (assignments are logical expression that are always true)
+* Actions can be also a logical or assignment expression (these are always true)
 
 
 ### Plans
 
 * Plans are _sequences of actions, rules and/or achievement / test goals_
-* Plans has got an optional context, that defines a constraint for execution (default is true and matchs always)
+* Plans has got an optional context, that defines a constraint for execution (default is true and matches always)
 * Plans fail iif an item of the plan fails
 * Plans returns a boolean value which defines fail (false) and success (true)
 * _Atomic Plans_ cannot fail, only the items within can fail
 * Plans run items in sequential order
 * _Parallel Plans_ run items in parallel
-* If the plan calls an _achievment goal addition_, the goal is added to the global goal list and the current plan is paused until the goal is reached
-* If the plan calls an _achievment goal deletion_, the goal is removed from the global goal list iif exists and returns true otherwise it returns false and the plan can fail
-* If the plan calls an _test goal_ then the plan calls the test goal immediatly
-* All items results will be concatinated with a logical _and_ to calculate the plan result value
-* Each plan denotes its success/failure of execution in form of a ```(succeeds,fails)``` score, attached to its name in the static belief list _myplanscore_ (initialized at agent's birth with ```(0,0)```).
-  * After successful or failed execution of the whole plan, the corresponding value gets incremented  
+* If the plan calls an _achievement goal addition_, the goal is added to the global goal list and the current plan is paused until the goal is reached
+* If the plan calls an _achievement goal deletion_, the goal is removed from the global goal list iif exists and returns true otherwise it returns false and the plan can fail
+* All items results will be concatenated with a logical _and_ to calculate the plan result value
     
 #### Internals
  
- * The plan has got additional beliefs, that are added in the context condition
+ * The plan has got additional beliefs, that are added in the context condition (values are calculated before plan execution is started)
     * _score_ returns the current score-value of the plan
     * _failrun_ stores the number of fail runs
     * _successrun_ stores the number of successful runs
@@ -64,11 +61,11 @@ structure to describe an optimizing process.
  
 ### Goals
 
-* Semantically a goal marks a certain state of the world an agent _whishes to bring about_ [AgentSpeak, p.40]
+* Semantically a goal marks a certain state of the world an agent _wishes to bring about_ [AgentSpeak, p.40]
 * New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition/deletion_ which leads to the execution of a corresponding _plan_
 * On agent start, there can exists one _initial goal_
 * Each agent can track _more than one goal_ otherwise the agent suspends
-* Goals are triggering by external events which will match by the goal name
+* Goals are triggered by external events which will match by the goal name
 * Goals will be resolved into plans with equal name (and allowed context)
 * Goals are run in parallel independed from other goals
 * A goal is a sequence of plans that which must all finished successfully
@@ -85,7 +82,7 @@ structure to describe an optimizing process.
 ### Desires
 
 * A Desire is a vertex of the edge of all intentions
-* Desires are define by a set of beliefs
+* Desires are defined by a set of beliefs
 * Desires can be in conflict with other desires, represented that the desires have got a large distance (much as possible) 
 * The desire is successfully reached, iif all beliefs are existing anytime
 
@@ -98,7 +95,7 @@ structure to describe an optimizing process.
 ### Agent
 
 * agent (ASL) can be defined as a logic program with beliefs, rules and plans
-* plans can be bundeld in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
+* plans can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
 
 
@@ -113,7 +110,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     * generate beliefbase events
 
 2. if agent is in suspend state
-    * check wakup goal iif match, wake-up agent otherwise stop execution
+    * check wake-up goal iif match, wake-up agent otherwise stop execution
     
 3. run agent cycle
 
@@ -131,7 +128,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
         3. if an item is an _achievment goal_ and
             * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
-            * begins with ```!!``` the plan which is mached by the goal is executated immediatly
+            * begins with ```!!``` the plan which is mached by the goal is executated immediately
             
         4. if an item is a belief-
             * addition, mark the literal for adding into the beliefbase
