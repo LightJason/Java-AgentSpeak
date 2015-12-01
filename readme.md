@@ -144,12 +144,12 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 default _unchangeable / unmodifiable_ beliefs which are exist always within the beliefbase
 
-* _myname_ agent name, generates no event
-* _mycycle_ current agent cylce which generates always ```-+``` event
-* _myawake_ exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
-* _mybeliefbasesize_ number of beliefs within the current beliefbase, generates no event
-* _myplanbasesize_ number of plans, generates no event
-* _mycurrentplans_ list with current plan names, generates no event with symbols of plan(state([pause|running|stoped]))
+* ```my/name``` agent name, generates no event
+* ```my/cycle``` current agent cylce which generates always ```-+``` event
+* ```my/awake``` exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
+* ```my/size/beliefbase``` number of beliefs within the current beliefbase, generates no event
+* ```my/size/planbase``` number of plans, generates no event
+* ```my/current/plans/``` planname with state [pause|running] as string value
 
 
 ## Todos
