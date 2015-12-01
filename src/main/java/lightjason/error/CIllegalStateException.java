@@ -26,6 +26,7 @@ package lightjason.error;
 /**
  * illegal state exception
  */
+@SuppressWarnings( "serial" )
 public final class CIllegalStateException extends IllegalStateException
 {
     /**

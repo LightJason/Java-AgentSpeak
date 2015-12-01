@@ -138,9 +138,11 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public Object visitPlandefinition( final lightjason.grammar.AgentParser.PlandefinitionContext p_context )
     {
-        return new ImmutablePair<Object, List<IOperation>>( this.visitPlan_context( p_context.plan_context() ), (List) this.visitBody( p_context.body() ) );
+        return new ImmutablePair<Object, List<IOperation>>(
+                this.visitPlan_context( p_context.plan_context() ), (List<IOperation>) this.visitBody( p_context.body() ) );
     }
 
     @Override
@@ -188,6 +190,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public Object visitUnary_expression( final lightjason.grammar.AgentParser.Unary_expressionContext p_context )
     {
         switch ( p_context.unaryoperator().getText() )

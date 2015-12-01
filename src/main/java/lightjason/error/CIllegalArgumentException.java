@@ -26,6 +26,7 @@ package lightjason.error;
 /**
  * illegal argument exception
  */
+@SuppressWarnings( "serial" )
 public final class CIllegalArgumentException extends IllegalArgumentException
 {
 
