@@ -17,6 +17,7 @@
   <-
      Speed++;
      setSpeed( Speed )
+  <- fail 
   .
 
 @fuzzy(0.5)
@@ -29,31 +30,48 @@
     setSpeed( Speed )
   .
 
-//phase1
+// phase 1: approaching a predecessor
 +!approach
   :  distance_predecessor([Distance|_]) && Distance >= 5 <- !approach
   :  distance_predecessor([Distance|_]) && Distance < 5 <- !overtake
   .
 
-//phase2to4: parent plan
+// phase 2 to 4: parent plan for the overtaking maneuver
 +!overtake
   :  lane(MyLane) && MyLane == right &&       // i'm on right lane
      left(ViewLeft) && ViewLeft == free       // and left lane is free
-  <- !pull_out                                // => pull out
+  <-
+     !pull_out;                               // => pull out
+     !pass_on
 
   :  lane(MyLane) && MyLane == right &&       // i'm on right lane
      left(ViewLeft) && ViewLeft == blocked    // and left lane is blocked
   <- !overtake                                // => continue in overtaking mode
   .
 
-//phase2
+// phase 2: pull out
 +!pull_out
-  : lane(right) && left(free)
+  :  lane(MyLane) && MyLane == right &&
+     left(ViewLeft) && ViewLeft == free
   <-
-    changeToLane(left);
-    !!accelerate;
-    !pass_on
+     changeToLane(left);
+     !!accelerate;
+     !pass_on
   .
+
+// phase 2: plan recovery
+/* -!pull_out
+  :  lane(MyLane) && MyLane == right &&
+     left(ViewLeft) && ViewLeft == free   // apparently we couldn't change lane, but the left lane seems to be free
+  <- !pull_out                            // => retry to pull out
+
+  :  lane(MyLane) && MyLane == left       // lange change succeeded, so
+
+  <- !!accelerate;
+     !overtake                            // => return to the overtaking plan
+  .
+
+*/
 
 //phase3
 +!pass_on
