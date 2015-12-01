@@ -51,11 +51,18 @@ public interface ILiteral extends ITerm
     public ITermCollection getAnnotation();
 
     /**
-     * returns the functor / dataset of the literal
+     * returns the functor without path
      *
-     * @return function data
+     * @return functor
      */
     public String getFunctor();
+
+    /**
+     * returns the path of the functor
+     *
+     * @return path
+     */
+    public CPath getFunctorPath();
 
     /**
      * returns the optional value term

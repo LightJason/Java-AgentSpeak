@@ -24,6 +24,7 @@
 package lightjason.language.plan.action;
 
 import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.common.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 
@@ -56,7 +57,23 @@ public final class CBeliefAction extends IAction
     @Override
     public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        return false;
+        switch ( m_action )
+        {
+            case Add:
+                p_beliefbase.add( m_literal.getFunctorPath(), m_literal );
+                break;
+
+            case Delete:
+                p_beliefbase.remove( m_literal.getFunctorPath(), m_literal );
+                break;
+
+            // @todo change literal
+
+            default:
+                throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
+        }
+
+        return true;
     }
 
     @Override

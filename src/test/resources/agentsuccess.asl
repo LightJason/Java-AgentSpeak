@@ -32,7 +32,7 @@ setSpeed(X) :- setProperty("speed", X).
     routingtype(Type) &&
     Speed <= 10 <-
     reroute( target, Type );
-    -bar(Speed);
+    -bar/blub(Speed);
     !!decelerate.
 
 

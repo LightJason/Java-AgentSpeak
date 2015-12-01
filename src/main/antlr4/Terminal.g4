@@ -44,6 +44,7 @@ COLON                      : ':';
 SEMICOLON                  : ';';
 DOT                        : '.';
 UNDERSCORE                 : '_';
+SLASH                      : '/';
 
 IF                         : 'if';
 ELSE                       : 'else';

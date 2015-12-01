@@ -38,7 +38,7 @@ import java.util.Set;
 public final class CLiteral implements ILiteral
 {
     /**
-     * the literal annotations
+     * literal annotations
      */
     protected final ITermCollection m_annotations;
     /**
@@ -46,9 +46,9 @@ public final class CLiteral implements ILiteral
      */
     protected final ITermCollection m_values;
     /**
-     * the literals functor
+     * literals functor
      */
-    protected final String m_functor;
+    protected final CPath m_functor;
     /**
      * negated option
      */
@@ -120,7 +120,7 @@ public final class CLiteral implements ILiteral
     public CLiteral( final String p_functor, final boolean p_negated, final ITermCollection p_values, final ITermCollection p_annotations
     )
     {
-        m_functor = p_functor;
+        m_functor = CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_functor );
         m_values = p_values;
         m_annotations = p_annotations;
         m_negated = p_negated;
@@ -141,7 +141,13 @@ public final class CLiteral implements ILiteral
     @Override
     public final String getFunctor()
     {
-        return m_functor;
+        return m_functor.getSuffix();
+    }
+
+    @Override
+    public CPath getFunctorPath()
+    {
+        return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
