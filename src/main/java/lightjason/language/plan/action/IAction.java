@@ -23,39 +23,28 @@
 
 package lightjason.language.plan.action;
 
-import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-
-import java.text.MessageFormat;
-import java.util.Set;
+import lightjason.language.plan.IOperation;
 
 
 /**
  * test goal action
  */
-public final class CTestGoal extends IAction
+public abstract class IAction implements IOperation
 {
+    /**
+     * literal
+     */
+    protected final ILiteral m_literal;
 
     /**
      * ctor
      *
      * @param p_literal literal
      */
-    public CTestGoal( final ILiteral p_literal )
+    public IAction( final ILiteral p_literal )
     {
-        super( p_literal );
+        m_literal = p_literal;
     }
 
-    @Override
-    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
-    {
-        return false;
-    }
-
-    @Override
-    public String toString()
-    {
-        return MessageFormat.format( "?{0}", m_literal );
-    }
 }

@@ -34,22 +34,12 @@ import java.util.Set;
 /**
  * achievement goal action
  */
-public final class CAchievementGoal extends IGoalAction
+public final class CAchievementGoal extends IAction
 {
     /**
      * flag to run immediately
      */
     private final boolean m_immediately;
-
-    /**
-     * ctor
-     *
-     * @param p_literal literal
-     */
-    public CAchievementGoal( final ILiteral p_literal )
-    {
-        this( p_literal, false );
-    }
 
     /**
      * ctor

@@ -23,28 +23,76 @@
 
 package lightjason.language.plan.action;
 
+import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IOperation;
+import lightjason.language.plan.IPlan;
+
+import java.text.MessageFormat;
+import java.util.Set;
 
 
 /**
- * test goal action
+ * belief action
  */
-public abstract class IGoalAction implements IOperation
+public final class CBeliefAction extends IAction
 {
     /**
-     * literal
+     * running action
      */
-    protected final ILiteral m_literal;
+    private final EAction m_action;
 
     /**
      * ctor
      *
      * @param p_literal literal
+     * @param p_action action
      */
-    public IGoalAction( final ILiteral p_literal )
+    public CBeliefAction( final ILiteral p_literal, final EAction p_action )
     {
-        m_literal = p_literal;
+        super( p_literal );
+        m_action = p_action;
     }
 
+    @Override
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
+    {
+        return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_action, m_literal );
+    }
+
+    /**
+     * belief action definition
+     */
+    public enum EAction
+    {
+        Add( "+" ),
+        Delete( "-" ),
+        Change( "-+" );
+
+        /**
+         * name
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name string represenation
+         */
+        private EAction( final String p_name )
+        {
+            m_name = p_name;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_name;
+        }
+    }
 }

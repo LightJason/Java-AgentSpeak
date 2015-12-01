@@ -44,6 +44,7 @@ import lightjason.language.plan.CPlan;
 import lightjason.language.plan.IOperation;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.action.CAchievementGoal;
+import lightjason.language.plan.action.CBeliefAction;
 import lightjason.language.plan.action.CTestGoal;
 import lightjason.language.plan.unaryoperator.CDecrement;
 import lightjason.language.plan.unaryoperator.CIncrement;
@@ -213,6 +214,21 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public Object visitTest_goal_action( final lightjason.grammar.AgentParser.Test_goal_actionContext p_context )
     {
         return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
+
+    @Override
+    public Object visitBelief_action( final lightjason.grammar.AgentParser.Belief_actionContext p_context )
+    {
+        if ( p_context.PLUS() != null )
+            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Add );
+
+        if ( p_context.MINUS() != null )
+            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Delete );
+
+        if ( p_context.MINUSPLUS() != null )
+            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Change );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
