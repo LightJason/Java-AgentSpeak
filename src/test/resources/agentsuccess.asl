@@ -15,7 +15,7 @@ setSpeed(X) :- setProperty("speed", X).
         Speed++;
         setSpeed( Speed );
         !!drive;
-        -+baz("hallo");
+        -+baz("hallo")
     <- true.
 
 @fuzzy(0.5)
@@ -23,7 +23,7 @@ setSpeed(X) :- setProperty("speed", X).
     current_speed(Speed) &&
     Speed > 10 <-
     Speed--;
-    +foo(5)
+    +foo(5);
     setSpeed( Speed );
     !!drive.
 
@@ -32,7 +32,7 @@ setSpeed(X) :- setProperty("speed", X).
     routingtype(Type) &&
     Speed <= 10 <-
     reroute( target, Type );
-    -bar(123);
+    -bar(Speed);
     !!decelerate.
 
 

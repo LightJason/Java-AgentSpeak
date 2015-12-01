@@ -186,7 +186,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @Override
     public Object visitBody( final lightjason.grammar.AgentParser.BodyContext p_context )
     {
-        return p_context.body_formula().parallelStream().map( i -> this.visitBody_formula( i ) ).collect( Collectors.toList() );
+        // filter null values of the body formular, because blank lines add a null value
+        return p_context.body_formula().parallelStream().filter( i -> i != null ).map( i -> this.visitBody_formula( i ) ).collect( Collectors.toList() );
     }
 
     @Override
