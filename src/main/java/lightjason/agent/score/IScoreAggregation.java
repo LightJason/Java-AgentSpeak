@@ -29,9 +29,9 @@ import java.util.Map;
 
 
 /**
- * function for summarizing score values
+ * function for aggregation score values
  */
-public interface ISoreSum
+public interface IScoreAggregation
 {
 
     /**

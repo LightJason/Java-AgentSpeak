@@ -23,19 +23,23 @@
 
 package lightjason.language.plan.action;
 
+import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
+import lightjason.language.plan.IPlan;
+
+import java.text.MessageFormat;
+import java.util.Set;
 
 
 /**
  * achievement goal action
  */
-public final class CAchievementGoal
+public final class CAchievementGoal extends IGoalAction
 {
     /**
-     * literal
+     * flag to run immediately
      */
-    private final ILiteral m_literal;
-
+    private final boolean m_immediately;
 
     /**
      * ctor
@@ -44,7 +48,30 @@ public final class CAchievementGoal
      */
     public CAchievementGoal( final ILiteral p_literal )
     {
-        m_literal = p_literal;
+        this( p_literal, false );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_literal literal
+     * @param p_immediately immediately execution
+     */
+    public CAchievementGoal( final ILiteral p_literal, final boolean p_immediately )
+    {
+        super( p_literal );
+        m_immediately = p_immediately;
+    }
+
+    @Override
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
+    {
+        return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_literal );
+    }
 }

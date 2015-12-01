@@ -25,6 +25,8 @@ package lightjason.language.plan;
 
 import lightjason.beliefbase.IBeliefBaseMask;
 
+import java.util.Set;
+
 
 /**
  * defines any plan-body operation
@@ -36,8 +38,9 @@ public interface IOperation
      * defines a plan-body operation
      *
      * @param p_beliefbase root mask of the beliefbase
+     * @param p_runningplan current running plans
      * @return boolean-flag that the operation is run successfully
      */
-    public boolean evaluate( final IBeliefBaseMask p_beliefbase );
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan );
 
 }

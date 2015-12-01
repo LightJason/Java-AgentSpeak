@@ -27,8 +27,11 @@ import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.CVariable;
 import lightjason.language.IVariable;
 import lightjason.language.plan.IOperation;
+import lightjason.language.plan.IPlan;
 import lightjason.language.plan.expression.IExpression;
 import lightjason.language.plan.expression.arithmetic.CExpression;
+
+import java.util.Set;
 
 
 /**
@@ -59,7 +62,7 @@ public class CArithmetic implements IAssignment<CExpression>, IOperation
 
 
     @Override
-    public boolean evaluate( final IBeliefBaseMask p_beliefbase )
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
         return true;
     }

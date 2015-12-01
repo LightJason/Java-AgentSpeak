@@ -21,11 +21,30 @@
  * @endcond
  */
 
-package lightjason.language.plan.expression.assignment;
+package lightjason.language.plan.action;
+
+import lightjason.language.ILiteral;
+import lightjason.language.plan.IOperation;
+
 
 /**
- * assignment of logical formula
+ * test goal action
  */
-public class CLogic
+public abstract class IGoalAction implements IOperation
 {
+    /**
+     * literal
+     */
+    protected final ILiteral m_literal;
+
+    /**
+     * ctor
+     *
+     * @param p_literal literal
+     */
+    public IGoalAction( final ILiteral p_literal )
+    {
+        m_literal = p_literal;
+    }
+
 }

@@ -23,7 +23,6 @@
 
 package lightjason.agent;
 
-import lightjason.agent.score.CConstZeroScore;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBase;
 import lightjason.grammar.CAgentVisitor;
@@ -127,7 +126,7 @@ public class CAgent implements IAgent
         // initialize agent
         m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
         m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? super.toString() : p_name;
-        m_score = new CConstZeroScore();
+        m_score = null;
 
         // parse AgentSpeak syntax
         p_astvisitor.visit( new lightjason.grammar.AgentParser(

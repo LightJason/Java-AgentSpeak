@@ -206,7 +206,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitAchievement_goal_action( final lightjason.grammar.AgentParser.Achievement_goal_actionContext p_context )
     {
-        return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
     }
 
     @Override
