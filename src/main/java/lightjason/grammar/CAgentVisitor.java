@@ -36,7 +36,7 @@ import lightjason.language.IVariable;
 import lightjason.language.event.CEvent;
 import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
-import lightjason.language.plan.IOperation;
+import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.action.CAchievementGoal;
 import lightjason.language.plan.action.CBeliefAction;
@@ -110,7 +110,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
         p_context.plandefinition().parallelStream().forEach( i -> {
 
-            final Pair<Object, List<IOperation>> l_content = (Pair<Object, List<IOperation>>) this.visitPlandefinition( i );
+            final Pair<Object, List<IBodyAction>> l_content = (Pair<Object, List<IBodyAction>>) this.visitPlandefinition( i );
             final IPlan l_plan = new CPlan( new CEvent( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
 
             System.out.println( l_plan );
@@ -124,8 +124,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitPlandefinition( final lightjason.grammar.AgentParser.PlandefinitionContext p_context )
     {
-        return new ImmutablePair<Object, List<IOperation>>(
-                this.visitPlan_context( p_context.plan_context() ), (List<IOperation>) this.visitBody( p_context.body() ) );
+        return new ImmutablePair<Object, List<IBodyAction>>(
+                this.visitPlan_context( p_context.plan_context() ), (List<IBodyAction>) this.visitBody( p_context.body() ) );
     }
 
     @Override

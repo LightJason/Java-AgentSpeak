@@ -55,7 +55,7 @@ public class CPlan implements IPlan
     /**
      * current plan state
      */
-    protected EExecutionState m_currentstate = EExecutionState.Success;
+    protected EState m_currentstate = EState.SUCCESS;
     /**
      * number of runs
      */
@@ -67,7 +67,7 @@ public class CPlan implements IPlan
     /**
      * action list
      */
-    protected final List<IOperation> m_action;
+    protected final List<IBodyAction> m_action;
     /**
      * set with annotation
      */
@@ -81,7 +81,7 @@ public class CPlan implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final IEvent<?> p_event, final ILiteral p_literal, final List<IOperation> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( final IEvent<?> p_event, final ILiteral p_literal, final List<IBodyAction> p_body, final Set<IAnnotation<?>> p_annotation )
     {
         m_literal = p_literal;
         m_triggerevent = p_event;
@@ -93,6 +93,12 @@ public class CPlan implements IPlan
     public IEvent<?> getTrigger()
     {
         return m_triggerevent;
+    }
+
+    @Override
+    public EState getState()
+    {
+        return m_currentstate;
     }
 
     @Override

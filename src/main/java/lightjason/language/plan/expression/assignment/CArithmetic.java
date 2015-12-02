@@ -26,7 +26,7 @@ package lightjason.language.plan.expression.assignment;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.CVariable;
 import lightjason.language.IVariable;
-import lightjason.language.plan.IOperation;
+import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.expression.IExpression;
 import lightjason.language.plan.expression.arithmetic.CExpression;
@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * assignment of arithmetic expression
  */
-public class CArithmetic implements IAssignment<CExpression>, IOperation
+public class CArithmetic implements IAssignment<CExpression>, IBodyAction
 {
     /**
      * variable

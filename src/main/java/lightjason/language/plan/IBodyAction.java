@@ -31,7 +31,7 @@ import java.util.Set;
 /**
  * defines any plan-body operation
  */
-public interface IOperation
+public interface IBodyAction
 {
 
     /**

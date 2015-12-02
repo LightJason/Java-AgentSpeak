@@ -29,7 +29,7 @@ import lightjason.language.event.IEvent;
 /**
  * interface of plan
  */
-public interface IPlan extends IOperation
+public interface IPlan extends IBodyAction
 {
 
     /**
@@ -38,5 +38,23 @@ public interface IPlan extends IOperation
      * @return trigger event
      */
     public IEvent<?> getTrigger();
+
+    /**
+     * returns plan state
+     *
+     * @return state
+     */
+    public EState getState();
+
+
+    /**
+     * execution state of a plan
+     */
+    public enum EState
+    {
+        SUCCESS,
+        FAIL,
+        SUSPEND;
+    }
 
 }

@@ -24,13 +24,13 @@
 package lightjason.language.plan.action;
 
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IOperation;
+import lightjason.language.plan.IBodyAction;
 
 
 /**
  * test goal action
  */
-public abstract class IAction implements IOperation
+public abstract class IAction implements IBodyAction
 {
     /**
      * literal
