@@ -55,6 +55,12 @@ public final class CEvent implements IEvent<CPath>
     }
 
     @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
     public String toString()
     {
         return MessageFormat.format( "{0}{1}", m_event, m_data );
