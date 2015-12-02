@@ -23,10 +23,15 @@
 
 package lightjason.language.plan;
 
+import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
 import lightjason.language.event.IEvent;
 
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
 
 /**
@@ -54,17 +59,23 @@ public class CPlan implements IPlan
      * number of fail runs
      */
     protected long m_failruns = 0;
+    /**
+     * action list
+     */
+    protected final List<IOperation> m_action;
 
     /**
      * ctor
      *
      * @param p_event trigger event
      * @param p_literal head literal
+     * @param p_body plan body
      */
-    public CPlan( final IEvent<?> p_event, final ILiteral p_literal )
+    public CPlan( final IEvent<?> p_event, final ILiteral p_literal, final List<IOperation> p_body )
     {
         m_literal = p_literal;
         m_triggerevent = p_event;
+        m_action = Collections.unmodifiableList( p_body );
     }
 
     @Override
@@ -74,14 +85,15 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public EExecutionState execute()
+    public String toString()
     {
-        return null;
+        return MessageFormat.format( "{0} (trigger event : {1} / literal : {2} = {3})", super.toString(), m_triggerevent, m_literal, m_action );
     }
 
     @Override
-    public String toString()
+    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        return MessageFormat.format( "{0} (trigger event : {1} / literal : {2})", super.toString(), m_triggerevent, m_literal );
+        // @todo parallel / atomic ...
+        return m_action.stream().map( i -> i.evaluate( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );
     }
 }

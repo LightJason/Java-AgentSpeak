@@ -49,6 +49,7 @@ import lightjason.language.plan.action.CTestGoal;
 import lightjason.language.plan.unaryoperator.CDecrement;
 import lightjason.language.plan.unaryoperator.CIncrement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.List;
@@ -100,40 +101,42 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitPlan( final lightjason.grammar.AgentParser.PlanContext p_context )
     {
-        final IPlan l_plan;
+        // @bug parallelism can be create a wrong order of body
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
+        final String l_trigger = (String) this.visitPlan_trigger( p_context.plan_trigger() );
 
-        //@bug
-        System.out.println( "--- " + l_head + " -----------------------------------------" );
         p_context.plandefinition().parallelStream().forEach( i -> {
-            System.out.println( this.visitPlandefinition( i ) );
+
+            // read one plan definition
+            final IPlan l_plan;
+            final Pair<Object, List<IOperation>> l_content = (Pair<Object, List<IOperation>>) this.visitPlandefinition( i );
+
+            switch ( l_trigger )
+            {
+                case CAddBelief.ID:
+                    l_plan = new CPlan( new CAddBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    break;
+                case CDeleteBelief.ID:
+                    l_plan = new CPlan( new CDeleteBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    break;
+                case CChangeBelief.ID:
+                    l_plan = new CPlan( new CChangeBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    break;
+                case CAddGoal.ID:
+                    l_plan = new CPlan( new CAddGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    break;
+                case CDeleteGoal.ID:
+                    l_plan = new CPlan( new CDeleteGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    break;
+
+                default:
+                    throw new CIllegalStateException( CCommon.getLanguageString( this, "event", p_context.plan_trigger().getText() ) );
+            }
+
+            System.out.println( l_plan );
+            m_plans.put( l_plan.getTrigger(), l_plan );
         } );
-        System.out.println( "------------------------------------------------------------" );
 
-
-        switch ( (String) this.visitPlan_trigger( p_context.plan_trigger() ) )
-        {
-            case CAddBelief.ID:
-                l_plan = new CPlan( new CAddBelief( l_head.getFQNFunctor() ), l_head );
-                break;
-            case CDeleteBelief.ID:
-                l_plan = new CPlan( new CDeleteBelief( l_head.getFQNFunctor() ), l_head );
-                break;
-            case CChangeBelief.ID:
-                l_plan = new CPlan( new CChangeBelief( l_head.getFQNFunctor() ), l_head );
-                break;
-            case CAddGoal.ID:
-                l_plan = new CPlan( new CAddGoal( l_head.getFQNFunctor() ), l_head );
-                break;
-            case CDeleteGoal.ID:
-                l_plan = new CPlan( new CDeleteGoal( l_head.getFQNFunctor() ), l_head );
-                break;
-
-            default:
-                throw new CIllegalStateException( CCommon.getLanguageString( this, "event", p_context.plan_trigger().getText() ) );
-        }
-
-        m_plans.put( l_plan.getTrigger(), l_plan );
         return null;
     }
 
