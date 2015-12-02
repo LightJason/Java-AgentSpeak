@@ -58,7 +58,7 @@ public final class CBeliefAction extends IAction
      * @todo change literal event is missing
      */
     @Override
-    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
         switch ( m_action )
         {

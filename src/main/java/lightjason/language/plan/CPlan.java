@@ -111,8 +111,8 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        return m_action.stream().map( i -> i.evaluate( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );
+        return m_action.stream().map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );
     }
 }

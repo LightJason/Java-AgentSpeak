@@ -62,14 +62,13 @@ public class CArithmetic implements IAssignment<CExpression>, IBodyAction
 
 
     @Override
-    public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
         return true;
     }
 
     @Override
-    public boolean assign( final IVariable<?> p_variable, final CExpression p_term )
+    public void assign( final IVariable<?> p_variable, final CExpression p_term )
     {
-        return true;
     }
 }

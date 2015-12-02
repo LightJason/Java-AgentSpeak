@@ -32,7 +32,12 @@ import lightjason.language.plan.expression.IExpression;
  */
 public interface IAssignment<T extends IExpression>
 {
-
-    public boolean assign( final IVariable<?> p_variable, final T p_term );
+    /**
+     * assignes the variable wit the term
+     *
+     * @param p_variable variable
+     * @param p_term term expression
+     */
+    public void assign( final IVariable<?> p_variable, final T p_term );
 
 }
