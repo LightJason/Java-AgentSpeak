@@ -130,6 +130,7 @@ public class CAgent implements IAgent
      * @param p_name agent name
      * @param p_astvisitor visitor object of the AST
      * @throws IOException is throwing on parsing error
+     * @bug remove test plan execution
      */
     public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase, final String p_name,
             final IAgentVisitor p_astvisitor
@@ -148,7 +149,7 @@ public class CAgent implements IAgent
 
         p_astvisitor.getPlans().values().stream().forEach( i -> {
             System.out.println( i );
-            System.out.println( i.evaluate( null, null ) );
+            //System.out.println( i.evaluate( null, null ) );
         } );
     }
 
