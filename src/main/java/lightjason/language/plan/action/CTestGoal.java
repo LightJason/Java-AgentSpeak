@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * test goal action
  */
-public final class CTestGoal extends IAction
+public final class CTestGoal extends IAction<ILiteral>
 {
 
     /**
@@ -56,6 +56,6 @@ public final class CTestGoal extends IAction
     @Override
     public String toString()
     {
-        return MessageFormat.format( "?{0}", m_literal );
+        return MessageFormat.format( "?{0}", m_data );
     }
 }

@@ -151,6 +151,7 @@ public class CAgent implements IAgent
             System.out.println( i );
             //System.out.println( i.evaluate( null, null ) );
         } );
+
     }
 
     @Override

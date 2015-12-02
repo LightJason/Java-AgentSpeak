@@ -97,9 +97,6 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
     }
 
-    /**
-     * @todo check parallelism of plan building - body action order can be indeterministic
-     */
     @Override
     @SuppressWarnings( "unchecked" )
     public Object visitPlan( final lightjason.grammar.AgentParser.PlanContext p_context )
@@ -108,7 +105,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         final IEvent.EType l_trigger = (IEvent.EType) this.visitPlan_trigger( p_context.plan_trigger() );
         final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
 
-        p_context.plandefinition().parallelStream().forEach( i -> {
+        // parallel stream does not work with multi hashmap
+        p_context.plandefinition().stream().forEach( i -> {
 
             final Pair<Object, List<IBodyAction>> l_content = (Pair<Object, List<IBodyAction>>) this.visitPlandefinition( i );
             final IPlan l_plan = new CPlan( new CEvent( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );

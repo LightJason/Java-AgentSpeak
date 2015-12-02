@@ -23,28 +23,35 @@
 
 package lightjason.language.plan.action;
 
-import lightjason.language.ILiteral;
 import lightjason.language.plan.IBodyAction;
 
 
 /**
  * test goal action
  */
-public abstract class IAction implements IBodyAction
+public abstract class IAction<T> implements IBodyAction
 {
     /**
-     * literal
+     * data
      */
-    protected final ILiteral m_literal;
+    protected final T m_data;
+
+    /**
+     * ctor
+     */
+    protected IAction()
+    {
+        m_data = null;
+    }
 
     /**
      * ctor
      *
-     * @param p_literal literal
+     * @param p_data data
      */
-    public IAction( final ILiteral p_literal )
+    protected IAction( final T p_data )
     {
-        m_literal = p_literal;
+        m_data = p_data;
     }
 
 }

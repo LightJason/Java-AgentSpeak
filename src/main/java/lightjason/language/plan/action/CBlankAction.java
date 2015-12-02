@@ -24,93 +24,37 @@
 package lightjason.language.plan.action;
 
 import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.common.CCommon;
-import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 import lightjason.language.plan.IPlan;
 
-import java.text.MessageFormat;
 import java.util.Set;
 
 
 /**
- * belief action
+ * encapsulate class for any non-executable data type e.g. boolean
  */
-public final class CBeliefAction extends IAction<ILiteral>
+public class CBlankAction<T> extends IAction<T>
 {
-    /**
-     * running action
-     */
-    private final EAction m_action;
-
     /**
      * ctor
      *
-     * @param p_literal literal
-     * @param p_action action
+     * @param p_data any object data
      */
-    public CBeliefAction( final ILiteral p_literal, final EAction p_action )
+    public CBlankAction( final T p_data )
     {
-        super( p_literal );
-        m_action = p_action;
+        super( p_data );
     }
 
-    /**
-     * @todo change literal event is missing
-     */
     @Override
+    @SuppressWarnings( "unchecked" )
     public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        switch ( m_action )
-        {
-            case Add:
-                p_beliefbase.add( m_data.getFunctorPath(), m_data );
-                break;
+        if ( m_data instanceof IVariable )
+            return ( (IVariable) m_data ).isAllocated();
 
-            case Delete:
-                p_beliefbase.remove( m_data.getFunctorPath(), m_data );
-                break;
-
-            default:
-                throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
-        }
+        if ( m_data instanceof Boolean )
+            return (Boolean) m_data;
 
         return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return MessageFormat.format( "{0}{1}", m_action, m_data );
-    }
-
-    /**
-     * belief action definition
-     */
-    public enum EAction
-    {
-        Add( "+" ),
-        Delete( "-" ),
-        Change( "-+" );
-
-        /**
-         * name
-         */
-        private final String m_name;
-
-        /**
-         * ctor
-         *
-         * @param p_name string represenation
-         */
-        private EAction( final String p_name )
-        {
-            m_name = p_name;
-        }
-
-        @Override
-        public String toString()
-        {
-            return m_name;
-        }
     }
 }

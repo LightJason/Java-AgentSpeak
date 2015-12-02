@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * achievement goal action
  */
-public final class CAchievementGoal extends IAction
+public final class CAchievementGoal extends IAction<ILiteral>
 {
     /**
      * flag to run immediately
@@ -62,6 +62,6 @@ public final class CAchievementGoal extends IAction
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_literal );
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_data );
     }
 }
