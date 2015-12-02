@@ -324,8 +324,10 @@ term :
  * list equal to collcations
  **/
 list :
-    term ( COMMA term )*
-    | list_headtail
+    (
+        term ( COMMA term )*
+        | list_headtail
+    )? // also allow lists to be empty
     ;
 
 /**
