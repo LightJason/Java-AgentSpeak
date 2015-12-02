@@ -56,6 +56,7 @@ public final class CBeliefAction extends IAction<ILiteral>
 
     /**
      * @todo change literal event is missing
+     * @todo disable actions
      */
     @Override
     public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
@@ -63,11 +64,11 @@ public final class CBeliefAction extends IAction<ILiteral>
         switch ( m_action )
         {
             case Add:
-                p_beliefbase.add( m_data.getFunctorPath(), m_data );
+                //p_beliefbase.add( m_data.getFunctorPath(), m_data );
                 break;
 
             case Delete:
-                p_beliefbase.remove( m_data.getFunctorPath(), m_data );
+                //p_beliefbase.remove( m_data.getFunctorPath(), m_data );
                 break;
 
             default:

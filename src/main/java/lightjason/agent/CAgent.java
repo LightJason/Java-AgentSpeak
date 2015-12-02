@@ -149,7 +149,7 @@ public class CAgent implements IAgent
 
         p_astvisitor.getPlans().values().stream().forEach( i -> {
             System.out.println( i );
-            //System.out.println( i.evaluate( null, null ) );
+            System.out.println( i.execute( null, null ) );
         } );
 
     }

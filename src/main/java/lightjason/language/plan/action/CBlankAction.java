@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * encapsulate class for any non-executable data type e.g. boolean
  */
-public class CBlankAction<T> extends IAction<T>
+public final class CBlankAction<T> extends IAction<T>
 {
     /**
      * ctor
@@ -56,5 +56,17 @@ public class CBlankAction<T> extends IAction<T>
             return (Boolean) m_data;
 
         return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return m_data != null ? m_data.hashCode() : super.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return m_data != null ? m_data.toString() : super.toString();
     }
 }

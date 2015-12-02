@@ -40,6 +40,7 @@ import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.action.CAchievementGoal;
 import lightjason.language.plan.action.CBeliefAction;
+import lightjason.language.plan.action.CBlankAction;
 import lightjason.language.plan.action.CTestGoal;
 import lightjason.language.plan.annotation.CAtomAnnotation;
 import lightjason.language.plan.annotation.CNumberAnnotation;
@@ -220,7 +221,15 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public Object visitBody( final lightjason.grammar.AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().parallelStream().filter( i -> i != null ).map( i -> this.visitBody_formula( i ) ).collect( Collectors.toList() );
+        return p_context.body_formula().parallelStream().filter( i -> i != null ).map( i -> {
+
+            final Object l_item = this.visitBody_formula( i );
+            if ( l_item instanceof IBodyAction )
+                return l_item;
+
+            return new CBlankAction<>( l_item );
+
+        } ).collect( Collectors.toList() );
     }
 
     @Override
