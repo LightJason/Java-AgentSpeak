@@ -30,6 +30,7 @@ package lightjason.error;
  * @note must be an illegal state exception, because the AntLR error
  * lister cannot throw any other exception
  */
+@SuppressWarnings( "serial" )
 public final class CSyntaxErrorException extends IllegalStateException
 {
 

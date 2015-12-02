@@ -38,7 +38,7 @@ import java.util.BitSet;
  * parser error handling
  */
 @SuppressWarnings( "serial" )
-public final class CParserErrorListener implements ANTLRErrorListener
+public final class CErrorListener implements ANTLRErrorListener
 {
     @Override
     public void syntaxError( final Recognizer<?, ?> p_recognizer, final Object p_symbol, final int p_line, final int p_charposition, final String p_message,
