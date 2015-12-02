@@ -25,7 +25,9 @@ package lightjason.agent;
 
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBase;
+import lightjason.grammar.AgentLexer;
 import lightjason.grammar.CAgentVisitor;
+import lightjason.grammar.CParserErrorListener;
 import lightjason.grammar.IAgentVisitor;
 import lightjason.language.event.IEvent;
 import lightjason.language.plan.IPlan;
@@ -40,6 +42,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
+/**
+ * agent class
+ */
 public class CAgent implements IAgent
 {
     /**
@@ -129,9 +134,10 @@ public class CAgent implements IAgent
         m_score = null;
 
         // parse AgentSpeak syntax
-        p_astvisitor.visit( new lightjason.grammar.AgentParser(
-                new CommonTokenStream( new lightjason.grammar.AgentLexer( new ANTLRInputStream( p_stream ) ) )
-        ).agent() );
+        final AgentLexer l_lexer = new lightjason.grammar.AgentLexer( new ANTLRInputStream( p_stream ) );
+        l_lexer.removeErrorListeners();
+        l_lexer.addErrorListener( new CParserErrorListener() );
+        p_astvisitor.visit( new lightjason.grammar.AgentParser( new CommonTokenStream( l_lexer ) ).agent() );
 
         //System.out.println( p_astvisitor.getInitialGoal() );
         //System.out.println( p_astvisitor.getInitialBeliefs() );
