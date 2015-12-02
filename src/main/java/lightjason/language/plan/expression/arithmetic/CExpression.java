@@ -87,7 +87,7 @@ public final class CExpression implements IExpression
     /**
      * output queue
      */
-    private final List<CNumberElement> m_elements = new LinkedList<>();
+    private final List<CNumberElement<?>> m_elements = new LinkedList<>();
     /**
      * operator definition
      */
@@ -199,7 +199,7 @@ public final class CExpression implements IExpression
     {
         // copy of data
         final Stack<IArithmeticOperator> l_operator = (Stack<IArithmeticOperator>) m_operator.clone();
-        final List<CNumberElement> l_elements = new LinkedList<>( m_elements );
+        final List<CNumberElement<?>> l_elements = new LinkedList<>( m_elements );
 
         while ( !l_operator.isEmpty() )
         {
@@ -211,7 +211,7 @@ public final class CExpression implements IExpression
                                 .getToken(), l_currentoperator.getNumberOfArguments(), l_elements.size() ) );
 
 
-            final List<CNumberElement> l_arguments = l_elements.subList( 0, l_currentoperator.getNumberOfArguments() );
+            final List<CNumberElement<?>> l_arguments = l_elements.subList( 0, l_currentoperator.getNumberOfArguments() );
             final Number l_number = l_currentoperator.execution( l_arguments.parallelStream().map( i -> i.get( p_solver ) ).collect( Collectors.toList() ) );
 
 

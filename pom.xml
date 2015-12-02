@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>19.0-rc2</version>
+            <version>19.0-rc3</version>
             <scope>compile</scope>
         </dependency>
 
@@ -82,8 +82,10 @@
     </dependencies>
 
     <build>
-        <defaultGoal>package</defaultGoal>
+        <!-- default goal is set to package and checking dependency updates -->
+        <defaultGoal>package versions:display-dependency-updates</defaultGoal>
 
+        <!-- include resource directory with replacing configuration variables -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

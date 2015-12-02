@@ -55,6 +55,7 @@ import static org.junit.Assert.fail;
 /**
  * test all resource strings
  */
+@SuppressWarnings( "serial" )
 public class Test_CLanguageLabels
 {
     /**
@@ -164,7 +165,7 @@ public class Test_CLanguageLabels
     /**
      * AST visitor class
      */
-    private class MyMethodVisitor extends VoidVisitorAdapter
+    private class MyMethodVisitor extends VoidVisitorAdapter<Object>
     {
         /**
          * inner class name *
