@@ -112,9 +112,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
             final Pair<Object, List<IBodyAction>> l_content = (Pair<Object, List<IBodyAction>>) this.visitPlandefinition( i );
             final IPlan l_plan = new CPlan( new CEvent( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-
-            System.out.println( l_plan );
             m_plans.put( l_plan.getTrigger(), l_plan );
+
         } );
 
         return null;

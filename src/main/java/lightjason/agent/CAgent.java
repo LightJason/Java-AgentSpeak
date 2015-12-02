@@ -145,6 +145,11 @@ public class CAgent implements IAgent
         //System.out.println( p_astvisitor.getInitialGoal() );
         //System.out.println( p_astvisitor.getInitialBeliefs() );
         //System.out.println( p_astvisitor.getPlans() );
+
+        p_astvisitor.getPlans().values().stream().forEach( i -> {
+            System.out.println( i );
+            System.out.println( i.evaluate( null, null ) );
+        } );
     }
 
     @Override
