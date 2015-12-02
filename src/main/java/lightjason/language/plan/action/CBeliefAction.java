@@ -54,6 +54,9 @@ public final class CBeliefAction extends IAction
         m_action = p_action;
     }
 
+    /**
+     * @todo change literal event is missing
+     */
     @Override
     public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
@@ -66,8 +69,6 @@ public final class CBeliefAction extends IAction
             case Delete:
                 p_beliefbase.remove( m_literal.getFunctorPath(), m_literal );
                 break;
-
-            // @todo change literal
 
             default:
                 throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );

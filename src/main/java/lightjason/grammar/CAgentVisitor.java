@@ -97,11 +97,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
     }
 
+    /**
+     * @todo check parallelism of plan building - body action order can be indeterministic
+     */
     @Override
     @SuppressWarnings( "unchecked" )
     public Object visitPlan( final lightjason.grammar.AgentParser.PlanContext p_context )
     {
-        // @bug parallelism can be create a wrong order of body
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
         final String l_trigger = (String) this.visitPlan_trigger( p_context.plan_trigger() );
 

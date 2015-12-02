@@ -35,7 +35,11 @@ import java.util.function.Predicate;
 
 
 /**
- * abstract plan structure
+ * plan structure
+ *
+ * @todo annotations are missing
+ * @todo scoring is missing
+ * @todo hashcode / equals are missing
  */
 public class CPlan implements IPlan
 {
@@ -90,10 +94,12 @@ public class CPlan implements IPlan
         return MessageFormat.format( "{0} ({1} |- {2} = {3})", super.toString(), m_triggerevent, m_literal, m_action );
     }
 
+    /**
+     * @todo annotation handling is missing
+     */
     @Override
     public boolean evaluate( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        // @todo parallel / atomic ...
         return m_action.stream().map( i -> i.evaluate( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );
     }
 }

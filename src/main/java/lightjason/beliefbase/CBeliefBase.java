@@ -38,6 +38,7 @@ import java.util.Set;
  * default beliefbase
  *
  * @tparam T literal type
+ * @todo event handling is missing / incomplete
  */
 public class CBeliefBase implements IBeliefBase
 {
