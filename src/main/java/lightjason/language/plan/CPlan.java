@@ -26,6 +26,7 @@ package lightjason.language.plan;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
 import lightjason.language.event.IEvent;
+import lightjason.language.plan.annotation.IAnnotation;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -67,6 +68,10 @@ public class CPlan implements IPlan
      * action list
      */
     protected final List<IOperation> m_action;
+    /**
+     * set with annotation
+     */
+    protected final Set<IAnnotation<?>> m_annotation;
 
     /**
      * ctor
@@ -74,12 +79,14 @@ public class CPlan implements IPlan
      * @param p_event trigger event
      * @param p_literal head literal
      * @param p_body plan body
+     * @param p_annotation annotations
      */
-    public CPlan( final IEvent<?> p_event, final ILiteral p_literal, final List<IOperation> p_body )
+    public CPlan( final IEvent<?> p_event, final ILiteral p_literal, final List<IOperation> p_body, final Set<IAnnotation<?>> p_annotation )
     {
         m_literal = p_literal;
         m_triggerevent = p_event;
         m_action = Collections.unmodifiableList( p_body );
+        m_annotation = Collections.unmodifiableSet( p_annotation );
     }
 
     @Override
@@ -91,7 +98,7 @@ public class CPlan implements IPlan
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} ({1} |- {2} = {3})", super.toString(), m_triggerevent, m_literal, m_action );
+        return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation, m_triggerevent, m_literal, m_action );
     }
 
     /**

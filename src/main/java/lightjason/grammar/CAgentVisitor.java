@@ -46,11 +46,16 @@ import lightjason.language.plan.IPlan;
 import lightjason.language.plan.action.CAchievementGoal;
 import lightjason.language.plan.action.CBeliefAction;
 import lightjason.language.plan.action.CTestGoal;
+import lightjason.language.plan.annotation.CAtomAnnotation;
+import lightjason.language.plan.annotation.CNumberAnnotation;
+import lightjason.language.plan.annotation.CSymbolicAnnotation;
+import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.unaryoperator.CDecrement;
 import lightjason.language.plan.unaryoperator.CIncrement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +111,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     {
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
         final String l_trigger = (String) this.visitPlan_trigger( p_context.plan_trigger() );
+        final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
 
         p_context.plandefinition().parallelStream().forEach( i -> {
 
@@ -116,19 +122,19 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
             switch ( l_trigger )
             {
                 case CAddBelief.ID:
-                    l_plan = new CPlan( new CAddBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    l_plan = new CPlan( new CAddBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
                     break;
                 case CDeleteBelief.ID:
-                    l_plan = new CPlan( new CDeleteBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    l_plan = new CPlan( new CDeleteBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
                     break;
                 case CChangeBelief.ID:
-                    l_plan = new CPlan( new CChangeBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    l_plan = new CPlan( new CChangeBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
                     break;
                 case CAddGoal.ID:
-                    l_plan = new CPlan( new CAddGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    l_plan = new CPlan( new CAddGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
                     break;
                 case CDeleteGoal.ID:
-                    l_plan = new CPlan( new CDeleteGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight() );
+                    l_plan = new CPlan( new CDeleteGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
                     break;
 
                 default:
@@ -279,6 +285,58 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         return new CVariable<>( p_context.getText() );
     }
 
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object visitAnnotations( final lightjason.grammar.AgentParser.AnnotationsContext p_context )
+    {
+        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+            return Collections.EMPTY_SET;
+
+        final Set<IAnnotation<?>> l_annotation = new HashSet<>();
+        if ( p_context.annotation_atom() != null )
+            p_context.annotation_atom().stream().forEach( i -> l_annotation.add( (IAnnotation) this.visitAnnotation_atom( i ) ) );
+        if ( p_context.annotation_literal() != null )
+            p_context.annotation_literal().stream().forEach( i -> l_annotation.add( (IAnnotation) this.visitAnnotation_literal( i ) ) );
+
+        return l_annotation.isEmpty() ? Collections.EMPTY_SET : l_annotation;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object visitAnnotation_numeric_literal( final lightjason.grammar.AgentParser.Annotation_numeric_literalContext p_context )
+    {
+        if ( p_context.FUZZY() != null )
+            return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
+
+        if ( p_context.PRIORITY() != null )
+            return new CNumberAnnotation<>( IAnnotation.EType.PRIORITY, ( (Number) this.visitNumber( p_context.number() ) ).longValue() );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitAnnotation_symbolic_literal( final lightjason.grammar.AgentParser.Annotation_symbolic_literalContext p_context )
+    {
+        if ( p_context.EXPIRES() != null )
+            return new CSymbolicAnnotation( IAnnotation.EType.EXPIRES, (ILiteral) this.visitAtom( p_context.atom() ) );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "symbolicliteralannotation", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitAnnotation_atom( final lightjason.grammar.AgentParser.Annotation_atomContext p_context )
+    {
+        if ( p_context.ATOMIC() != null )
+            return new CAtomAnnotation( IAnnotation.EType.ATOMIC );
+
+        if ( p_context.EXCLUSIVE() != null )
+            return new CAtomAnnotation( IAnnotation.EType.EXCLUSIVE );
+
+        if ( p_context.PARALLEL() != null )
+            return new CAtomAnnotation( IAnnotation.EType.PARALLEL );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "atomannotation", p_context.getText() ) );
+    }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
