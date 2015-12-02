@@ -23,13 +23,15 @@
 
 package lightjason.language.event;
 
+import lightjason.common.CPath;
+
 import java.text.MessageFormat;
 
 
 /**
  * event to descrigoal-add
  */
-public class CDeleteGoal implements IEvent<String>
+public class CDeleteGoal implements IEvent<CPath>
 {
     /**
      * event name
@@ -38,14 +40,14 @@ public class CDeleteGoal implements IEvent<String>
     /**
      * event data
      **/
-    private final String m_data;
+    private final CPath m_data;
 
     /**
      * ctor
      *
      * @param p_functor name of the functor
      */
-    public CDeleteGoal( final String p_functor )
+    public CDeleteGoal( final CPath p_functor )
     {
         m_data = p_functor;
     }
@@ -75,7 +77,7 @@ public class CDeleteGoal implements IEvent<String>
     }
 
     @Override
-    public String getData()
+    public CPath getData()
     {
         return m_data;
     }

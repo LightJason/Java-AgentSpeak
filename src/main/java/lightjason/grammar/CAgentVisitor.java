@@ -114,19 +114,19 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         switch ( (String) this.visitPlan_trigger( p_context.plan_trigger() ) )
         {
             case CAddBelief.ID:
-                l_plan = new CPlan( new CAddBelief( l_head.getFunctor() ), l_head );
+                l_plan = new CPlan( new CAddBelief( l_head.getFQNFunctor() ), l_head );
                 break;
             case CDeleteBelief.ID:
-                l_plan = new CPlan( new CDeleteBelief( l_head.getFunctor() ), l_head );
+                l_plan = new CPlan( new CDeleteBelief( l_head.getFQNFunctor() ), l_head );
                 break;
             case CChangeBelief.ID:
-                l_plan = new CPlan( new CChangeBelief( l_head.getFunctor() ), l_head );
+                l_plan = new CPlan( new CChangeBelief( l_head.getFQNFunctor() ), l_head );
                 break;
             case CAddGoal.ID:
-                l_plan = new CPlan( new CAddGoal( l_head.getFunctor() ), l_head );
+                l_plan = new CPlan( new CAddGoal( l_head.getFQNFunctor() ), l_head );
                 break;
             case CDeleteGoal.ID:
-                l_plan = new CPlan( new CDeleteGoal( l_head.getFunctor() ), l_head );
+                l_plan = new CPlan( new CDeleteGoal( l_head.getFQNFunctor() ), l_head );
                 break;
 
             default:

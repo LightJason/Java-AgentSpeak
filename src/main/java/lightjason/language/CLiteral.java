@@ -62,7 +62,7 @@ public final class CLiteral implements ILiteral
      */
     public CLiteral( final CLiteral p_literal, final boolean p_negated )
     {
-        this( p_literal.getFunctor(), p_negated, new CTermList( p_literal.getValues() ), new CTermSet( p_literal.getAnnotation() ) );
+        this( p_literal.getFQNFunctor(), p_negated, new CTermList( p_literal.getValues() ), new CTermSet( p_literal.getAnnotation() ) );
     }
 
     /**
@@ -120,11 +120,25 @@ public final class CLiteral implements ILiteral
     public CLiteral( final String p_functor, final boolean p_negated, final ITermCollection p_values, final ITermCollection p_annotations
     )
     {
-        m_functor = CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_functor );
+        this( CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_functor ), p_negated, p_values, p_annotations );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor functor of the literal
+     * @param p_negated negated flag
+     * @param p_values initial list of values
+     * @param p_annotations initial set of annotations
+     */
+    protected CLiteral( final CPath p_functor, final boolean p_negated, final ITermCollection p_values, final ITermCollection p_annotations )
+    {
+        m_functor = p_functor;
         m_values = p_values;
         m_annotations = p_annotations;
         m_negated = p_negated;
     }
+
 
     @Override
     public final ILiteral clone( final CPath p_prefix )
@@ -148,6 +162,12 @@ public final class CLiteral implements ILiteral
     public CPath getFunctorPath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
+    }
+
+    @Override
+    public CPath getFQNFunctor()
+    {
+        return m_functor;
     }
 
     @Override

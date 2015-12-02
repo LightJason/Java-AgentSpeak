@@ -23,13 +23,15 @@
 
 package lightjason.language.event;
 
+import lightjason.common.CPath;
+
 import java.text.MessageFormat;
 
 
 /**
  * event to describe belief-add
  */
-public class CAddBelief implements IEvent<String>
+public class CAddBelief implements IEvent<CPath>
 {
     /**
      * event name
@@ -38,14 +40,14 @@ public class CAddBelief implements IEvent<String>
     /**
      * event data
      **/
-    private final String m_data;
+    private final CPath m_data;
 
     /**
      * ctor
      *
-     * @param p_functor name of the functor
+     * @param p_functor functor
      */
-    public CAddBelief( final String p_functor )
+    public CAddBelief( final CPath p_functor )
     {
         m_data = p_functor;
     }
@@ -75,7 +77,7 @@ public class CAddBelief implements IEvent<String>
     }
 
     @Override
-    public String getData()
+    public CPath getData()
     {
         return m_data;
     }

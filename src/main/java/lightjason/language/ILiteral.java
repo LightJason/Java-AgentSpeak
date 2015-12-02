@@ -65,6 +65,14 @@ public interface ILiteral extends ITerm
     public CPath getFunctorPath();
 
     /**
+     * returns the full-qualified functor
+     * with path and name
+     *
+     * @return fqn functor
+     */
+    public CPath getFQNFunctor();
+
+    /**
      * returns the optional value term
      *
      * @return value term
