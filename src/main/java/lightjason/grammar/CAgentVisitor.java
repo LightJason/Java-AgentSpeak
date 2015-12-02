@@ -28,17 +28,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.error.CIllegalStateException;
 import lightjason.language.CLiteral;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
-import lightjason.language.event.CAddBelief;
-import lightjason.language.event.CAddGoal;
-import lightjason.language.event.CChangeBelief;
-import lightjason.language.event.CDeleteBelief;
-import lightjason.language.event.CDeleteGoal;
+import lightjason.language.event.CEvent;
 import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
 import lightjason.language.plan.IOperation;
@@ -110,36 +105,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public Object visitPlan( final lightjason.grammar.AgentParser.PlanContext p_context )
     {
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
-        final String l_trigger = (String) this.visitPlan_trigger( p_context.plan_trigger() );
+        final IEvent.EType l_trigger = (IEvent.EType) this.visitPlan_trigger( p_context.plan_trigger() );
         final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
 
         p_context.plandefinition().parallelStream().forEach( i -> {
 
-            // read one plan definition
-            final IPlan l_plan;
             final Pair<Object, List<IOperation>> l_content = (Pair<Object, List<IOperation>>) this.visitPlandefinition( i );
-
-            switch ( l_trigger )
-            {
-                case CAddBelief.ID:
-                    l_plan = new CPlan( new CAddBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-                    break;
-                case CDeleteBelief.ID:
-                    l_plan = new CPlan( new CDeleteBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-                    break;
-                case CChangeBelief.ID:
-                    l_plan = new CPlan( new CChangeBelief( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-                    break;
-                case CAddGoal.ID:
-                    l_plan = new CPlan( new CAddGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-                    break;
-                case CDeleteGoal.ID:
-                    l_plan = new CPlan( new CDeleteGoal( l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-                    break;
-
-                default:
-                    throw new CIllegalStateException( CCommon.getLanguageString( this, "event", p_context.plan_trigger().getText() ) );
-            }
+            final IPlan l_plan = new CPlan( new CEvent( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
 
             System.out.println( l_plan );
             m_plans.put( l_plan.getTrigger(), l_plan );
@@ -162,9 +134,9 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         switch ( p_context.getText() )
         {
             case "+!":
-                return CAddGoal.ID;
+                return IEvent.EType.ADDGOAL;
             case "-!":
-                return CDeleteGoal.ID;
+                return IEvent.EType.DELETEGOAL;
 
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "goaltrigger", p_context.getText() ) );
@@ -177,11 +149,11 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         switch ( p_context.getText() )
         {
             case "+":
-                return CAddBelief.ID;
+                return IEvent.EType.ADDBELIEF;
             case "-":
-                return CDeleteBelief.ID;
+                return IEvent.EType.DELETEBELIEF;
             case "-+":
-                return CChangeBelief.ID;
+                return IEvent.EType.CHANGEBELIEF;
 
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );

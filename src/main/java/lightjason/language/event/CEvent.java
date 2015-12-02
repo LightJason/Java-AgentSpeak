@@ -29,52 +29,41 @@ import java.text.MessageFormat;
 
 
 /**
- * event to describe belief-delete
+ * event with literal data
  */
-public class CDeleteBelief implements IEvent<CPath>
+public final class CEvent implements IEvent<CPath>
 {
     /**
-     * event name
+     * literal path
      */
-    public static final String ID = "delete belief";
-    /**
-     * event data
-     **/
     private final CPath m_data;
-
     /**
-     * ctor
-     *
-     * @param p_functor name of the functor
+     * event type
      */
-    public CDeleteBelief( final CPath p_functor )
-    {
-        m_data = p_functor;
-    }
+    private final EType m_event;
 
+    public CEvent( final EType p_event, final CPath p_data )
+    {
+        m_data = p_data;
+        m_event = p_event;
+    }
 
     @Override
     public int hashCode()
     {
-        return m_data.hashCode() + this.getName().hashCode();
-    }
-
-    @Override
-    public boolean equals( final Object p_object )
-    {
-        return p_object.hashCode() == this.hashCode();
+        return 11 * m_event.hashCode() + 17 * m_data.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}( {1} )", ID, m_data );
+        return MessageFormat.format( "{0}{1}", m_event, m_data );
     }
 
     @Override
-    public String getName()
+    public EType getID()
     {
-        return ID;
+        return m_event;
     }
 
     @Override

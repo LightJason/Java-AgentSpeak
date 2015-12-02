@@ -30,11 +30,11 @@ public interface IEvent<T>
 {
 
     /**
-     * returns the name of the event
+     * returns the type of the event
      *
-     * @return name
+     * @return type
      */
-    public String getName();
+    public EType getID();
 
     /**
      * returns the data or null
@@ -42,5 +42,39 @@ public interface IEvent<T>
      * @return data
      */
     public T getData();
+
+
+    /**
+     * event types
+     */
+    public enum EType
+    {
+        ADDBELIEF( "+" ),
+        DELETEBELIEF( "-" ),
+        CHANGEBELIEF( "-+" ),
+        ADDGOAL( "+!" ),
+        DELETEGOAL( "-!" );
+
+        /**
+         * text name of the enum
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name text name
+         */
+        private EType( final String p_name )
+        {
+            m_name = p_name;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_name;
+        }
+    }
 
 }
