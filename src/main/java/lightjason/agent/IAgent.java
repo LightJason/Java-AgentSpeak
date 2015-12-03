@@ -24,8 +24,8 @@
 package lightjason.agent;
 
 import lightjason.beliefbase.IBeliefBase;
-import lightjason.language.event.IEvent;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.trigger.ITrigger;
 
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -60,7 +60,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @param p_event event
      */
-    public void trigger( final IEvent<?> p_event );
+    public void trigger( final ITrigger<?> p_event );
 
     /**
      * sets the agent to a suspend state

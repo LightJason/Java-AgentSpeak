@@ -29,7 +29,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -54,12 +54,18 @@ public final class CBeliefAction extends IAction<ILiteral>
         m_action = p_action;
     }
 
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_action, m_data );
+    }
+
     /**
      * @todo change literal event is missing
      * @todo disable actions
      */
     @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
         switch ( m_action )
         {
@@ -76,12 +82,6 @@ public final class CBeliefAction extends IAction<ILiteral>
         }
 
         return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return MessageFormat.format( "{0}{1}", m_action, m_data );
     }
 
     /**

@@ -24,8 +24,9 @@
 package lightjason.language.plan;
 
 import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.language.ILiteral;
 
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -38,9 +39,9 @@ public interface IBodyAction
      * defines a plan-body operation
      *
      * @param p_beliefbase root mask of the beliefbase
-     * @param p_runningplan current running plans
+     * @param p_runningplan current running plans search on their literal name
      * @return boolean-flag that the operation is run successfully
      */
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan );
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan );
 
 }

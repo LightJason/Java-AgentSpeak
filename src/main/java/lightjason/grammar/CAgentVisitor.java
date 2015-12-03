@@ -33,8 +33,6 @@ import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
-import lightjason.language.event.CEvent;
-import lightjason.language.event.IEvent;
 import lightjason.language.plan.CPlan;
 import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
@@ -46,6 +44,8 @@ import lightjason.language.plan.annotation.CAtomAnnotation;
 import lightjason.language.plan.annotation.CNumberAnnotation;
 import lightjason.language.plan.annotation.CSymbolicAnnotation;
 import lightjason.language.plan.annotation.IAnnotation;
+import lightjason.language.plan.trigger.CTrigger;
+import lightjason.language.plan.trigger.ITrigger;
 import lightjason.language.plan.unaryoperator.CDecrement;
 import lightjason.language.plan.unaryoperator.CIncrement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -75,7 +75,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     /**
      * map with plans
      */
-    private final SetMultimap<IEvent<?>, IPlan> m_plans = HashMultimap.create();
+    private final SetMultimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
 
 
     @Override
@@ -103,14 +103,14 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public Object visitPlan( final lightjason.grammar.AgentParser.PlanContext p_context )
     {
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
-        final IEvent.EType l_trigger = (IEvent.EType) this.visitPlan_trigger( p_context.plan_trigger() );
+        final ITrigger.EType l_trigger = (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() );
         final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
 
         // parallel stream does not work with multi hashmap
         p_context.plandefinition().stream().forEach( i -> {
 
             final Pair<Object, List<IBodyAction>> l_content = (Pair<Object, List<IBodyAction>>) this.visitPlandefinition( i );
-            final IPlan l_plan = new CPlan( new CEvent( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
+            final IPlan l_plan = new CPlan( new CTrigger( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
             m_plans.put( l_plan.getTrigger(), l_plan );
 
         } );
@@ -185,9 +185,9 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         switch ( p_context.getText() )
         {
             case "+!":
-                return IEvent.EType.ADDGOAL;
+                return ITrigger.EType.ADDGOAL;
             case "-!":
-                return IEvent.EType.DELETEGOAL;
+                return ITrigger.EType.DELETEGOAL;
 
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "goaltrigger", p_context.getText() ) );
@@ -200,11 +200,11 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         switch ( p_context.getText() )
         {
             case "+":
-                return IEvent.EType.ADDBELIEF;
+                return ITrigger.EType.ADDBELIEF;
             case "-":
-                return IEvent.EType.DELETEBELIEF;
+                return ITrigger.EType.DELETEBELIEF;
             case "-+":
-                return IEvent.EType.CHANGEBELIEF;
+                return ITrigger.EType.CHANGEBELIEF;
 
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );
@@ -380,7 +380,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
-    public SetMultimap<IEvent<?>, IPlan> getPlans()
+    public SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }

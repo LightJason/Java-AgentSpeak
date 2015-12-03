@@ -24,10 +24,11 @@
 package lightjason.language.plan.action;
 
 import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.plan.IPlan;
 
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -46,19 +47,6 @@ public final class CBlankAction<T> extends IAction<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
-    {
-        if ( m_data instanceof IVariable )
-            return ( (IVariable) m_data ).isAllocated();
-
-        if ( m_data instanceof Boolean )
-            return (Boolean) m_data;
-
-        return true;
-    }
-
-    @Override
     public int hashCode()
     {
         return m_data != null ? m_data.hashCode() : super.hashCode();
@@ -68,5 +56,18 @@ public final class CBlankAction<T> extends IAction<T>
     public String toString()
     {
         return m_data != null ? m_data.toString() : super.toString();
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    {
+        if ( m_data instanceof IVariable )
+            return ( (IVariable) m_data ).isAllocated();
+
+        if ( m_data instanceof Boolean )
+            return (Boolean) m_data;
+
+        return true;
     }
 }

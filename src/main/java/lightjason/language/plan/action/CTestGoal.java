@@ -28,7 +28,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -47,18 +47,15 @@ public final class CTestGoal extends IAction<ILiteral>
         super( p_literal );
     }
 
-    /**
-     * @todo contains operator need match to the plan literal (not the trigger)
-     */
-    @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
-    {
-        return p_runningplan.contains( m_data );
-    }
-
     @Override
     public String toString()
     {
         return MessageFormat.format( "?{0}", m_data );
+    }
+
+    @Override
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    {
+        return p_runningplan.containsKey( m_data );
     }
 }

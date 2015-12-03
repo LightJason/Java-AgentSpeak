@@ -29,8 +29,8 @@ import lightjason.error.CSyntaxErrorException;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
-import lightjason.language.event.IEvent;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.trigger.ITrigger;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -173,7 +173,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public void trigger( final IEvent<?> p_event )
+    public void trigger( final ITrigger<?> p_event )
     {
 
     }

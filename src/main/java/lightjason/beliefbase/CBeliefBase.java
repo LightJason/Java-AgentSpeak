@@ -27,7 +27,7 @@ package lightjason.beliefbase;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
-import lightjason.language.event.IEvent;
+import lightjason.language.plan.trigger.ITrigger;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,7 +49,7 @@ public class CBeliefBase implements IBeliefBase
     /**
      * event storage
      */
-    protected final Set<IEvent<?>> m_event = new HashSet<>();
+    protected final Set<ITrigger<?>> m_event = new HashSet<>();
 
     /**
      * ctor - creates an root beliefbase

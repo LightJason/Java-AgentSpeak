@@ -23,7 +23,7 @@
 
 package lightjason.language.plan;
 
-import lightjason.language.event.IEvent;
+import lightjason.language.plan.trigger.ITrigger;
 
 
 /**
@@ -37,7 +37,7 @@ public interface IPlan extends IBodyAction
      *
      * @return trigger event
      */
-    public IEvent<?> getTrigger();
+    public ITrigger<?> getTrigger();
 
     /**
      * returns plan state

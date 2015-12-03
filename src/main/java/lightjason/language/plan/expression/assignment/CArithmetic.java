@@ -25,13 +25,14 @@ package lightjason.language.plan.expression.assignment;
 
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.CVariable;
+import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.expression.IExpression;
 import lightjason.language.plan.expression.arithmetic.CExpression;
 
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -60,15 +61,14 @@ public class CArithmetic implements IAssignment<CExpression>, IBodyAction
         m_expression = p_expression;
     }
 
-
-    @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
-    {
-        return true;
-    }
-
     @Override
     public void assign( final IVariable<?> p_variable, final CExpression p_term )
     {
+    }
+
+    @Override
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    {
+        return true;
     }
 }

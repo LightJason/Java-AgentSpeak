@@ -21,60 +21,66 @@
  * @endcond
  */
 
-package lightjason.language.event;
+package lightjason.language.plan.trigger;
+
+import lightjason.common.CPath;
+
+import java.text.MessageFormat;
+
 
 /**
- * event definition
+ * event with literal data
  */
-public interface IEvent<T>
+public final class CTrigger implements ITrigger<CPath>
 {
+    /**
+     * literal path
+     */
+    private final CPath m_data;
+    /**
+     * event type
+     */
+    private final EType m_event;
 
     /**
-     * returns the type of the event
+     * ctor
      *
-     * @return type
+     * @param p_event type
+     * @param p_data data
      */
-    public EType getID();
-
-    /**
-     * returns the data or null
-     *
-     * @return data
-     */
-    public T getData();
-
-
-    /**
-     * event types
-     */
-    public enum EType
+    public CTrigger( final EType p_event, final CPath p_data )
     {
-        ADDBELIEF( "+" ),
-        DELETEBELIEF( "-" ),
-        CHANGEBELIEF( "-+" ),
-        ADDGOAL( "+!" ),
-        DELETEGOAL( "-!" );
-
-        /**
-         * text name of the enum
-         */
-        private final String m_name;
-
-        /**
-         * ctor
-         *
-         * @param p_name text name
-         */
-        private EType( final String p_name )
-        {
-            m_name = p_name;
-        }
-
-        @Override
-        public String toString()
-        {
-            return m_name;
-        }
+        m_data = p_data;
+        m_event = p_event;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return 11 * m_event.hashCode() + 17 * m_data.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_event, m_data );
+    }
+
+    @Override
+    public EType getID()
+    {
+        return m_event;
+    }
+
+    @Override
+    public CPath getData()
+    {
+        return m_data;
+    }
 }

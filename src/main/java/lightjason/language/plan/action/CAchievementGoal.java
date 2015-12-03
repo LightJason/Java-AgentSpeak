@@ -28,7 +28,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -54,14 +54,14 @@ public final class CAchievementGoal extends IAction<ILiteral>
     }
 
     @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
-    {
-        return false;
-    }
-
-    @Override
     public String toString()
     {
         return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_data );
+    }
+
+    @Override
+    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    {
+        return false;
     }
 }

@@ -25,8 +25,8 @@ package lightjason.grammar;
 
 import com.google.common.collect.SetMultimap;
 import lightjason.language.ILiteral;
-import lightjason.language.event.IEvent;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.trigger.ITrigger;
 
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class CPlanBundleVisitor extends lightjason.grammar.PlanBundleBaseVisitor
     }
 
     @Override
-    public SetMultimap<IEvent<?>, IPlan> getPlans()
+    public SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return null;
     }
