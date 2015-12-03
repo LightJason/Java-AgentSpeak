@@ -30,7 +30,9 @@ import lightjason.language.plan.annotation.IAnnotation;
 
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -69,9 +71,9 @@ public class CPlan implements IPlan
      */
     protected final List<IBodyAction> m_action;
     /**
-     * set with annotation
+     * map with annotation (enum value for getting annotation object)
      */
-    protected final Set<IAnnotation<?>> m_annotation;
+    protected final Map<IAnnotation.EType, IAnnotation<?>> m_annotation;
 
     /**
      * ctor
@@ -86,7 +88,7 @@ public class CPlan implements IPlan
         m_literal = p_literal;
         m_triggerevent = p_event;
         m_action = Collections.unmodifiableList( p_body );
-        m_annotation = Collections.unmodifiableSet( p_annotation );
+        m_annotation = Collections.unmodifiableMap( p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll ) );
     }
 
     @Override
@@ -104,7 +106,7 @@ public class CPlan implements IPlan
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation, m_triggerevent, m_literal, m_action );
+        return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.keySet(), m_triggerevent, m_literal, m_action );
     }
 
     /**
@@ -113,6 +115,7 @@ public class CPlan implements IPlan
     @Override
     public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        return m_action.stream().map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );
+        return ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) || m_action.stream().map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch(
+                Predicate.isEqual( true ) );
     }
 }

@@ -47,4 +47,5 @@ public final class CNumberAnnotation<T extends Number> extends IBaseAnnotation<T
     {
         return MessageFormat.format( "{0}({1})", m_type, m_data );
     }
+
 }

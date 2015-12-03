@@ -27,6 +27,7 @@ setSpeed(X) :- setProperty("speed", X).
     setSpeed( Speed );
     !!drive.
 
+@atomic
 +!decelerate :
     current_speed(Speed) &&
     routingtype(Type) &&

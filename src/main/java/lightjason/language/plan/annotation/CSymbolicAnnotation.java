@@ -25,6 +25,8 @@ package lightjason.language.plan.annotation;
 
 import lightjason.language.ILiteral;
 
+import java.text.MessageFormat;
+
 
 /**
  * atom / literal annotation
@@ -40,5 +42,11 @@ public final class CSymbolicAnnotation extends IBaseAnnotation<ILiteral>
     public CSymbolicAnnotation( final EType p_type, final ILiteral p_data )
     {
         super( p_type, p_data );
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_type, m_data );
     }
 }
