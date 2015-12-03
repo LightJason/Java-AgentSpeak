@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 
 /**
@@ -117,7 +116,7 @@ public class CPlan implements IPlan
     public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
         return ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
-               ((m_annotation.containsKey( IAnnotation.EType.PARALLEL ))
+               ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                        ? m_action.parallelStream()
                        : m_action.stream()
                ).map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );

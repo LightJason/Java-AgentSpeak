@@ -47,10 +47,13 @@ public final class CTestGoal extends IAction<ILiteral>
         super( p_literal );
     }
 
+    /**
+     * @todo contains operator need match to the plan literal (not the trigger)
+     */
     @Override
     public boolean execute( final IBeliefBaseMask p_beliefbase, final Set<IPlan> p_runningplan )
     {
-        return false;
+        return p_runningplan.contains( m_data );
     }
 
     @Override
