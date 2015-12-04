@@ -25,6 +25,7 @@ package lightjason.language.plan;
 
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
+import lightjason.language.plan.annotation.CNumberAnnotation;
 import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.fuzzy.CBoolean;
 import lightjason.language.plan.trigger.ITrigger;
@@ -90,7 +91,7 @@ public class CPlan implements IPlan
         m_literal = p_literal;
         m_triggerevent = p_event;
         m_action = Collections.unmodifiableList( p_body );
-        m_annotation = Collections.unmodifiableMap( p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll ) );
+        m_annotation = addDefault( p_annotation );
     }
 
     @Override
@@ -120,7 +121,7 @@ public class CPlan implements IPlan
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.keySet(), m_triggerevent, m_literal, m_action );
+        return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, m_action );
     }
 
     /**
@@ -132,9 +133,22 @@ public class CPlan implements IPlan
         return new CBoolean(
                 ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
-                       ? m_action.parallelStream()
-                       : m_action.stream()
+                        ? m_action.parallelStream()
+                        : m_action.stream()
                 ).map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) )
         );
+    }
+
+    /**
+     * add default values to the annotation map
+     * @param p_annotation set with annotation
+     * @return unmodifiable map
+     */
+    protected static Map<IAnnotation.EType, IAnnotation<?>> addDefault( final Set<IAnnotation<?>> p_annotation )
+    {
+        final Map<IAnnotation.EType, IAnnotation<?>> l_map = p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll );
+
+        l_map.putIfAbsent( IAnnotation.EType.FUZZY, new CNumberAnnotation<>( IAnnotation.EType.FUZZY, 1.0 ) );
+        return Collections.unmodifiableMap( l_map );
     }
 }
