@@ -23,7 +23,11 @@
 
 package lightjason.language.plan;
 
+import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.trigger.ITrigger;
+
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -45,6 +49,20 @@ public interface IPlan extends IBodyAction
      * @return state
      */
     public EState getState();
+
+    /**
+     * return unmodifieable annotation set
+     *
+     * @return set with annotation
+     */
+    public Collection<IAnnotation<?>> getAnnotations();
+
+    /**
+     * returns unmodifieable list with plan actions
+     *
+     * @return action list;
+     */
+    public List<IBodyAction> getBodyActions();
 
 
     /**

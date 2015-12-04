@@ -29,6 +29,7 @@ import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -101,6 +102,18 @@ public class CPlan implements IPlan
     public EState getState()
     {
         return m_currentstate;
+    }
+
+    @Override
+    public Collection<IAnnotation<?>> getAnnotations()
+    {
+        return m_annotation.values();
+    }
+
+    @Override
+    public List<IBodyAction> getBodyActions()
+    {
+        return m_action;
     }
 
     @Override
