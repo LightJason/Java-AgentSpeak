@@ -29,6 +29,7 @@ import com.google.common.collect.SetMultimap;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CLiteral;
+import lightjason.language.CMutexVariable;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -313,7 +314,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @Override
     public Object visitVariable( final lightjason.grammar.AgentParser.VariableContext p_context )
     {
-        return new CVariable<>( p_context.getText() );
+        return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

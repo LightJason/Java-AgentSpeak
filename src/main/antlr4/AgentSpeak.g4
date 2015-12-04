@@ -350,9 +350,11 @@ atom :
     ;
 
 /**
- * variables are defined like Prolog variables
+ * variables are defined like Prolog variables,
+ * @-prefix creates a thread-safe variable
  **/
 variable :
+    AT?
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT )*
     ;

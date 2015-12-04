@@ -23,36 +23,19 @@
 
 package lightjason.language;
 
-import java.text.MessageFormat;
-
-
 /**
- * default variable definition
- * @note variable set is not thread-safe
+ * thread-safe variable
  */
-public class CVariable<T> implements IVariable<T>
+public final class CMutexVariable<T> extends CVariable<T>
 {
-    /**
-     * variable name
-     */
-    protected final String m_name;
-    /**
-     * boolean flag, that defines an variable which matchs always
-     */
-    protected final boolean m_any;
-    /**
-     * value of the variable
-     */
-    protected T m_value;
-
     /**
      * ctor
      *
      * @param p_name name
      */
-    public CVariable( final String p_name )
+    public CMutexVariable( final String p_name )
     {
-        this( p_name, null );
+        super( p_name );
     }
 
     /**
@@ -61,66 +44,38 @@ public class CVariable<T> implements IVariable<T>
      * @param p_name name
      * @param p_value value
      */
-    public CVariable( final String p_name, final T p_value )
+    public CMutexVariable( final String p_name, final T p_value )
     {
-        m_any = p_name.equals( "_" ) || ( p_name == null ) || p_name.isEmpty();
-        m_name = m_any ? "_" : p_name;
-        m_value = p_value;
+        super( p_name, p_value );
     }
 
     @Override
-    public final String getName()
+    public synchronized IVariable<T> set( final T p_value )
     {
-        return m_name;
+        return super.set( p_value );
     }
 
     @Override
-    public IVariable<T> set( final T p_value )
+    public synchronized T get()
     {
-        if ( !m_any )
-            m_value = p_value;
-        return this;
-    }
-
-    @Override
-    public T get()
-    {
-        return m_value;
+        return super.get();
     }
 
     @Override
     public boolean isAllocated()
     {
-        return m_value != null;
+        return super.isAllocated();
     }
 
     @Override
-    public boolean isValueAssignableFrom( final Class<?> p_class )
+    public synchronized boolean isValueAssignableFrom( final Class<?> p_class )
     {
-        return m_value == null ? true : m_value.getClass().isAssignableFrom( p_class );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_name.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.hashCode() == p_object.hashCode();
+        return super.isValueAssignableFrom( p_class );
     }
 
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        return new CVariable<T>( m_name, m_value );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}({1})", m_name, m_value == null ? "" : m_value );
+        return new CMutexVariable<T>( m_name, m_value );
     }
 }
