@@ -45,6 +45,14 @@ structure to describe an optimizing process.
     * _failrun_ stores the number of fail runs
     * _successrun_ stores the number of successful runs
     * _runs_ number of runs of the plan (fail + successful runs)
+    
+#### Fuzziness
+
+* Fuzzy value must be in [0,1]
+* Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
+* Each action in a fuzzy-plan returns also a fuzzy value to define the fuzziness
+* The plan result returns true / false and the aggregated fuzzy value
+* If a test goal or achievement goal is called it can trigger all plans which are matched also by the fuzzy value
 
 
 ### Rules

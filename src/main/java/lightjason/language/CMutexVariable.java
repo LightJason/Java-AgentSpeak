@@ -62,7 +62,7 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public boolean isAllocated()
+    public synchronized boolean isAllocated()
     {
         return super.isAllocated();
     }
