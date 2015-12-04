@@ -27,6 +27,7 @@ import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -65,7 +66,7 @@ public final class CBeliefAction extends IAction<ILiteral>
      * @todo disable actions
      */
     @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
         switch ( m_action )
         {
@@ -81,7 +82,7 @@ public final class CBeliefAction extends IAction<ILiteral>
                 throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
         }
 
-        return true;
+        return new CBoolean( true );
     }
 
     /**

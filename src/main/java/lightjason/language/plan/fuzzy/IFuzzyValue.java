@@ -21,54 +21,25 @@
  * @endcond
  */
 
-package lightjason.language.plan.action;
-
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.language.ILiteral;
-import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.fuzzy.CBoolean;
-
-import java.util.Map;
-
+package lightjason.language.plan.fuzzy;
 
 /**
- * encapsulate class for any non-executable data type e.g. boolean
+ * result for a fuzzy value
  */
-public final class CBlankAction<T> extends IAction<T>
+public interface IFuzzyValue<T>
 {
     /**
-     * ctor
+     * returns the result
      *
-     * @param p_data any object data
+     * @return value
      */
-    public CBlankAction( final T p_data )
-    {
-        super( p_data );
-    }
+    public T getValue();
 
-    @Override
-    public int hashCode()
-    {
-        return m_data != null ? m_data.hashCode() : super.hashCode();
-    }
+    /**
+     * returns the fuzziness
+     *
+     * @return fuzzy value in [0,1]
+     */
+    public Double getFuzzy();
 
-    @Override
-    public String toString()
-    {
-        return m_data != null ? m_data.toString() : super.toString();
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
-    {
-        if ( m_data instanceof IVariable )
-            return new CBoolean( ( (IVariable) m_data ).isAllocated() );
-
-        if ( m_data instanceof Boolean )
-            return new CBoolean( (Boolean) m_data );
-
-        return new CBoolean( true );
-    }
 }

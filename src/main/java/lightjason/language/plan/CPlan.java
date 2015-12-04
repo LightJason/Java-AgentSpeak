@@ -26,6 +26,7 @@ package lightjason.language.plan;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.annotation.IAnnotation;
+import lightjason.language.plan.fuzzy.CBoolean;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.text.MessageFormat;
@@ -126,12 +127,14 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
-        return ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
-               ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
+        return new CBoolean(
+                ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
+                ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                        ? m_action.parallelStream()
                        : m_action.stream()
-               ).map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) );
+                ).map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) )
+        );
     }
 }

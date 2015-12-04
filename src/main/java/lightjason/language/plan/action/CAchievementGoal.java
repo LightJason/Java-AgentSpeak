@@ -26,6 +26,7 @@ package lightjason.language.plan.action;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -60,8 +61,8 @@ public final class CAchievementGoal extends IAction<ILiteral>
     }
 
     @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
-        return false;
+        return new CBoolean( false );
     }
 }

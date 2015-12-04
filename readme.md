@@ -42,9 +42,9 @@ structure to describe an optimizing process.
  
 * The plan has got additional variables / constants, that are added in the context condition (values are calculated before plan execution is started)
     * _Score_ returns the current score-value of the plan
-    * _failrun_ stores the number of fail runs
-    * _successrun_ stores the number of successful runs
-    * _runs_ number of runs of the plan (fail + successful runs)
+    * _Failrun_ stores the number of fail runs
+    * _Successrun_ stores the number of successful runs
+    * _Runs_ number of runs of the plan (fail + successful runs)
     
 #### Fuzziness
 
@@ -52,7 +52,7 @@ structure to describe an optimizing process.
 * Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
 * Each action in a fuzzy-plan returns also a fuzzy value to define the fuzziness
 * The plan result returns true / false and the aggregated fuzzy value
-* If a test goal or achievement goal is called it can trigger all plans which are matched also by the fuzzy value
+* If a test or achievement goal is called it triggers all plans which are matched by the calculated fuzzy value
 
 
 ### Rules
@@ -158,6 +158,11 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * ```my/size/beliefbase``` number of beliefs within the current beliefbase, generates no event
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
+
+### Variables
+
+* variables are written with an upper-case letter at begin
+* thread-safe variables start with @ (at-sign) followed by an upper-case letter
 
 
 ## Todos

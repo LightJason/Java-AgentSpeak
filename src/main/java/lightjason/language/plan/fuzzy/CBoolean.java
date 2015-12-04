@@ -21,54 +21,69 @@
  * @endcond
  */
 
-package lightjason.language.plan.action;
+package lightjason.language.plan.fuzzy;
 
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.language.ILiteral;
-import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.fuzzy.CBoolean;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
 
-import java.util.Map;
+import java.text.MessageFormat;
 
 
 /**
- * encapsulate class for any non-executable data type e.g. boolean
+ * boolean fuzzy value
  */
-public final class CBlankAction<T> extends IAction<T>
+public final class CBoolean implements IFuzzyValue<Boolean>
 {
+    /**
+     * boolean value
+     */
+    private final Boolean m_value;
+    /**
+     * fuzzy value
+     */
+    private final double m_fuzzy;
+
     /**
      * ctor
      *
-     * @param p_data any object data
+     * @param p_value value
      */
-    public CBlankAction( final T p_data )
+    public CBoolean( final Boolean p_value )
     {
-        super( p_data );
+        this( p_value, 1 );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value value
+     * @param p_fuzzy fuzzy
+     */
+    public CBoolean( final Boolean p_value, final double p_fuzzy )
+    {
+        if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_fuzzy ) );
+
+        m_fuzzy = p_fuzzy;
+        m_value = p_value;
+    }
+
+
+    @Override
+    public Boolean getValue()
+    {
+        return m_value;
     }
 
     @Override
-    public int hashCode()
+    public Double getFuzzy()
     {
-        return m_data != null ? m_data.hashCode() : super.hashCode();
+        return m_fuzzy;
     }
 
     @Override
     public String toString()
     {
-        return m_data != null ? m_data.toString() : super.toString();
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
-    {
-        if ( m_data instanceof IVariable )
-            return new CBoolean( ( (IVariable) m_data ).isAllocated() );
-
-        if ( m_data instanceof Boolean )
-            return new CBoolean( (Boolean) m_data );
-
-        return new CBoolean( true );
+        return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }
 }

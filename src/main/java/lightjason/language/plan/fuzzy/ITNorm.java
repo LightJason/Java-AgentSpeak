@@ -21,54 +21,17 @@
  * @endcond
  */
 
-package lightjason.language.plan.action;
+package lightjason.language.plan.fuzzy;
 
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.language.ILiteral;
-import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.fuzzy.CBoolean;
-
-import java.util.Map;
+import java.util.stream.Collector;
 
 
 /**
- * encapsulate class for any non-executable data type e.g. boolean
+ * defines a fuzzy t-norm
+ *
+ * @see https://en.wikipedia.org/wiki/T-norm_fuzzy_logics
  */
-public final class CBlankAction<T> extends IAction<T>
+public interface ITNorm<T extends IFuzzyValue<?>> extends Collector<T, T, T>
 {
-    /**
-     * ctor
-     *
-     * @param p_data any object data
-     */
-    public CBlankAction( final T p_data )
-    {
-        super( p_data );
-    }
 
-    @Override
-    public int hashCode()
-    {
-        return m_data != null ? m_data.hashCode() : super.hashCode();
-    }
-
-    @Override
-    public String toString()
-    {
-        return m_data != null ? m_data.toString() : super.toString();
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
-    {
-        if ( m_data instanceof IVariable )
-            return new CBoolean( ( (IVariable) m_data ).isAllocated() );
-
-        if ( m_data instanceof Boolean )
-            return new CBoolean( (Boolean) m_data );
-
-        return new CBoolean( true );
-    }
 }

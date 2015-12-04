@@ -31,6 +31,7 @@ import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.expression.IExpression;
 import lightjason.language.plan.expression.arithmetic.CExpression;
+import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.util.Map;
 
@@ -67,8 +68,8 @@ public class CArithmetic implements IAssignment<CExpression>, IBodyAction
     }
 
     @Override
-    public boolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
-        return true;
+        return new CBoolean( true );
     }
 }

@@ -21,54 +21,47 @@
  * @endcond
  */
 
-package lightjason.language.plan.action;
+package lightjason.language.plan.fuzzy;
 
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.language.ILiteral;
-import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.fuzzy.CBoolean;
-
-import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 /**
- * encapsulate class for any non-executable data type e.g. boolean
+ * Gödel implication
  */
-public final class CBlankAction<T> extends IAction<T>
+public class CGoedel implements ITNorm<CBoolean>
 {
-    /**
-     * ctor
-     *
-     * @param p_data any object data
-     */
-    public CBlankAction( final T p_data )
+    @Override
+    public Supplier<CBoolean> supplier()
     {
-        super( p_data );
+        return null;
     }
 
     @Override
-    public int hashCode()
+    public BiConsumer<CBoolean, CBoolean> accumulator()
     {
-        return m_data != null ? m_data.hashCode() : super.hashCode();
+        return null;
     }
 
     @Override
-    public String toString()
+    public BinaryOperator<CBoolean> combiner()
     {
-        return m_data != null ? m_data.toString() : super.toString();
+        return null;
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public Function<CBoolean, CBoolean> finisher()
     {
-        if ( m_data instanceof IVariable )
-            return new CBoolean( ( (IVariable) m_data ).isAllocated() );
+        return null;
+    }
 
-        if ( m_data instanceof Boolean )
-            return new CBoolean( (Boolean) m_data );
-
-        return new CBoolean( true );
+    @Override
+    public Set<Characteristics> characteristics()
+    {
+        return null;
     }
 }
