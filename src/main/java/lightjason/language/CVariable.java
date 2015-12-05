@@ -28,6 +28,7 @@ import java.text.MessageFormat;
 
 /**
  * default variable definition
+ *
  * @note variable set is not thread-safe
  */
 public class CVariable<T> implements IVariable<T>

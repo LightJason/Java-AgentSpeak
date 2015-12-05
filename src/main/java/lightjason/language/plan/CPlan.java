@@ -141,6 +141,7 @@ public class CPlan implements IPlan
 
     /**
      * add default values to the annotation map
+     *
      * @param p_annotation set with annotation
      * @return unmodifiable map
      */

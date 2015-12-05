@@ -30,6 +30,7 @@ import java.util.stream.Collector;
  * defines a fuzzy t-norm
  *
  * @see https://en.wikipedia.org/wiki/T-norm_fuzzy_logics
+ * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
  */
 public interface ITNorm<T extends IFuzzyValue<?>> extends Collector<T, T, T>
 {
