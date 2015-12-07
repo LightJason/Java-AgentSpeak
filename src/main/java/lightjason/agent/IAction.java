@@ -44,10 +44,9 @@ public interface IAction
      * runs the action
      *
      * @param p_agent agent that runs the action
-     * @param p_name name of the action
      * @param p_parameter parameter of the action
      * @return boolean flag if the action is success or fail
      */
-    public boolean execute( final IAgent p_agent, final String p_name, final List<Object> p_parameter );
+    public boolean execute( final IAgent p_agent, final List<Object> p_parameter );
 
 }
