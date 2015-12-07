@@ -34,40 +34,59 @@ import java.util.Map;
 
 
 /**
- * interface to define the agent configuration
+ * default agent configuration
  */
-public interface IAgentConfiguration
+public class CAgentConfiguration implements IAgentConfiguration
 {
-
     /**
-     * returns a beliefbase of the agent
+     * name of the agent
      */
-    public IBeliefBaseMask getBeliefbase();
-
+    private final CPath m_name;
     /**
-     * returns the initial goal
+     * instance of agent plans
      */
-    public ILiteral getInitialGoal();
+    private final SetMultimap<ITrigger<?>, IPlan> m_plans;
 
     /**
-     * get a multimap with event-plan matching
+     * ctor
      *
-     * @return multimap
+     * @param p_name name
+     * @param p_plans plans
      */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
+    public CAgentConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans )
+    {
+        m_name = p_name;
+        m_plans = p_plans;
+    }
 
-    /**
-     * returns the rules / principles
-     *
-     * @return map with rules
-     */
-    public Map<String, Object> getRules();
+    @Override
+    public IBeliefBaseMask getBeliefbase()
+    {
+        return null;
+    }
 
-    /**
-     * returns an unique name of the agent
-     *
-     * @return path with agent name
-     */
-    public CPath getName();
+    @Override
+    public ILiteral getInitialGoal()
+    {
+        return null;
+    }
+
+    @Override
+    public SetMultimap<ITrigger<?>, IPlan> getPlans()
+    {
+        return m_plans;
+    }
+
+    @Override
+    public Map<String, Object> getRules()
+    {
+        return null;
+    }
+
+    @Override
+    public CPath getName()
+    {
+        return m_name;
+    }
 
 }

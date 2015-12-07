@@ -23,51 +23,35 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.common.CPath;
-import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
-
-import java.util.Map;
+import java.util.Set;
 
 
 /**
- * interface to define the agent configuration
+ * generator interface to create agents
  */
-public interface IAgentConfiguration
+public interface IAgentGenerator
 {
 
     /**
-     * returns a beliefbase of the agent
-     */
-    public IBeliefBaseMask getBeliefbase();
-
-    /**
-     * returns the initial goal
-     */
-    public ILiteral getInitialGoal();
-
-    /**
-     * get a multimap with event-plan matching
+     * generates an agent
      *
-     * @return multimap
+     * @param p_data any object data
+     * @return agent
+     *
+     * @tparam T any object type
      */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
+    public <T> IAgent generate( final T... p_data ) throws Exception;
+
 
     /**
-     * returns the rules / principles
+     * generates a set of agents
      *
-     * @return map with rules
-     */
-    public Map<String, Object> getRules();
-
-    /**
-     * returns an unique name of the agent
+     * @param p_number number of agents within the set
+     * @param p_data any object data
+     * @return set of agents
      *
-     * @return path with agent name
+     * @tparam T any object type
      */
-    public CPath getName();
+    public <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
 
 }

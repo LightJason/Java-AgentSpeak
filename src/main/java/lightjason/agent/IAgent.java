@@ -24,6 +24,7 @@
 package lightjason.agent;
 
 import lightjason.beliefbase.IBeliefBase;
+import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -53,8 +54,10 @@ public interface IAgent extends Callable<IAgent>
 
     /**
      * returns the beliefbase
+     *
+     * @return beliefbase
      */
-    public IBeliefBase getBeliefBase();
+    public IBeliefBaseMask getBeliefBase();
 
     /**
      * trigger an event
