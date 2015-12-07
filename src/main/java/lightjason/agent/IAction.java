@@ -23,6 +23,8 @@
 
 package lightjason.agent;
 
+import lightjason.common.CPath;
+
 import java.util.List;
 
 
@@ -31,6 +33,12 @@ import java.util.List;
  */
 public interface IAction
 {
+    /**
+     * returns the name with path of the action
+     *
+     * @return path (literal functor)
+     */
+    public CPath getName();
 
     /**
      * runs the action

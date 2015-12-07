@@ -40,6 +40,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -54,6 +55,10 @@ public class CAgentGenerator implements IAgentGenerator
      * visitor to store parsed data
      */
     private final IAgentVisitor m_visitor;
+    /**
+     * actions
+     */
+    private final Map<CPath, IAction> m_actions;
 
     /**
      * ctor
@@ -61,10 +66,19 @@ public class CAgentGenerator implements IAgentGenerator
      * @param p_stream input stream
      * @throws IOException thrown on error
      */
-    public CAgentGenerator( final InputStream p_stream ) throws IOException
+    public CAgentGenerator( final InputStream p_stream, final Map<CPath, IAction> p_actions ) throws IOException
     {
         m_visitor = new CAgentVisitor();
+        m_actions = p_actions;
         parse( p_stream, m_visitor );
+
+        // replace all literals within the plans with actions
+        m_visitor.getPlans().values().parallelStream().forEach(
+                i -> {
+
+                    i.getBodyActions()
+
+                } );
     }
 
     @Override
