@@ -24,12 +24,13 @@
 package lightjason.beliefbase;
 
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -44,26 +45,18 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     /**
      * map with elements
      **/
-    protected final Map<String, Set<N>> m_multielements = new HashMap<>();
+    protected final Map<String, Set<N>> m_multielements = new ConcurrentHashMap<>();
     /**
      * map with masks
      **/
-    protected final Map<String, M> m_singleelements = new HashMap<>();
+    protected final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
 
 
     @Override
     public void addMultiElement( final String p_key, final N p_element )
     {
-        final Set<N> l_element;
-
-        if ( m_multielements.containsKey( p_key ) )
-            l_element = m_multielements.get( p_key );
-        else
-        {
-            l_element = new HashSet<>();
-            m_multielements.put( p_key, l_element );
-        }
-
+        final Set<N> l_element = m_multielements.getOrDefault( p_key, Collections.synchronizedSet( new HashSet<N>() ) );
+        m_multielements.putIfAbsent( p_key, l_element );
         l_element.add( p_element );
     }
 

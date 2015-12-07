@@ -25,8 +25,8 @@ package lightjason.beliefbase;
 
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -37,7 +37,7 @@ public final class CBeliefBaseStorage<T>
     /**
      * map with case-insensitive name and a beliefbase
      **/
-    private final Map<String, IBeliefBase> m_beliefbases = new HashMap<>();
+    private final Map<String, IBeliefBase> m_beliefbases = new ConcurrentHashMap<>();
 
 
     /**

@@ -33,6 +33,7 @@ import java.util.Set;
  *
  * @tparam N multiple elements
  * @tparam M single elements
+ * @warning internal data structure must be thread-safe
  */
 public interface IStorage<N, M>
 {

@@ -24,10 +24,12 @@
 package lightjason.agent;
 
 import lightjason.agent.score.IAgentPlanScore;
+import lightjason.beliefbase.CBeliefBase;
+import lightjason.beliefbase.CBeliefMaskStorage;
 import lightjason.beliefbase.IBeliefBase;
+import lightjason.common.CPath;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.grammar.AgentLexer;
-import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -57,7 +59,7 @@ public class CAgent implements IAgent
     /**
      * agent name
      */
-    protected final String m_name;
+    protected final CPath m_name;
     /**
      * thread-safe map with all existing plans
      *
@@ -87,67 +89,37 @@ public class CAgent implements IAgent
      * ctor
      *
      * @param p_stream input stream with agent-speak source
-     * @param p_action map with all usable actions
+     * @param p_configuration agent configuration
      * @throws IOException is throwing on parsing error
      */
-    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action ) throws IOException
+    public CAgent( final InputStream p_stream, final IAgentConfiguration p_configuration ) throws IOException
     {
-        this( p_stream, p_action, null, null, new CAgentVisitor() );
+        this( p_stream, p_configuration, null );
     }
 
     /**
      * ctor
      *
      * @param p_stream input stream with agent-speak source
-     * @param p_action map with all usable actions
+     * @param p_configuration agent configuration
      * @param p_beliefbase beliefbase
-     * @throws IOException is throwing on parsing error
-     */
-    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase ) throws IOException
-    {
-        this( p_stream, p_action, p_beliefbase, null, new CAgentVisitor() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_stream input stream with agent-speak source
-     * @param p_action map with all usable actions
-     * @param p_name agent name
-     * @throws IOException is throwing on parsing error
-     */
-    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final String p_name ) throws IOException
-    {
-        this( p_stream, p_action, null, p_name, new CAgentVisitor() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_stream input stream with agent-speak source
-     * @param p_action map with all usable actions
-     * @param p_beliefbase beliefbase
-     * @param p_name agent name
-     * @param p_astvisitor visitor object of the AST
      * @throws IOException is throwing on parsing error
      * @bug remove test plan execution
      */
-    public CAgent( final InputStream p_stream, final Map<String, IAction> p_action, final IBeliefBase p_beliefbase, final String p_name,
-            final IAgentVisitor p_astvisitor
-    ) throws IOException
+    public CAgent( final InputStream p_stream, final IAgentConfiguration p_configuration, final IBeliefBase p_beliefbase ) throws IOException
     {
         // initialize agent
-        m_beliefbase = p_beliefbase == null ? null : p_beliefbase;
-        m_name = ( p_name == null ) || ( p_name.isEmpty() ) ? super.toString() : p_name;
+        m_beliefbase = p_beliefbase == null ? new CBeliefBase( new CBeliefMaskStorage<>() ) : p_beliefbase;
+        m_name = p_configuration.getName();
         m_score = null;
 
-        parse( p_stream, p_astvisitor );
+        parse( p_stream, p_configuration.getParser() );
 
         //System.out.println( p_astvisitor.getInitialGoal() );
         //System.out.println( p_astvisitor.getInitialBeliefs() );
         //System.out.println( p_astvisitor.getPlans() );
 
-        p_astvisitor.getPlans().values().stream().forEach( i -> {
+        p_configuration.getParser().getPlans().values().stream().forEach( i -> {
             System.out.println( i );
             System.out.println( i.execute( null, null ) );
         } );
@@ -161,7 +133,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final String getName()
+    public final CPath getName()
     {
         return m_name;
     }

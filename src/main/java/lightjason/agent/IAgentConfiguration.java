@@ -21,25 +21,41 @@
  * @endcond
  */
 
-package lightjason.beliefbase;
+package lightjason.agent;
 
-import java.util.Map;
+import lightjason.common.CPath;
+import lightjason.grammar.IAgentVisitor;
+
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * thread-safe storage e.g. for shared-beliefs
+ * interface to define the agent configuration
  */
-public class CBeliefSynchronizedStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
+public interface IAgentConfiguration
 {
+
     /**
-     * thread-safe map with elements
-     **/
-    protected final Map<String, Set<N>> m_elements = new ConcurrentHashMap<>();
+     * returns a set with agent actions
+     *
+     * @return action set
+     */
+    public Set<IAction> getActions();
+
+
     /**
-     * thread-safe map with masks
-     **/
-    protected final Map<String, M> m_masks = new ConcurrentHashMap<>();
+     * returns the parser definition of
+     * the AgentSpeak(L) syntax
+     *
+     * @return parser visitor
+     */
+    public IAgentVisitor getParser();
+
+    /**
+     * returns an unique name of the agent
+     *
+     * @return path with agent name
+     */
+    public CPath getName();
 
 }

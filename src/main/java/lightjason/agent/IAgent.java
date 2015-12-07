@@ -24,6 +24,7 @@
 package lightjason.agent;
 
 import lightjason.beliefbase.IBeliefBase;
+import lightjason.common.CPath;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
@@ -48,7 +49,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return agent name
      */
-    public String getName();
+    public CPath getName();
 
     /**
      * returns the beliefbase
