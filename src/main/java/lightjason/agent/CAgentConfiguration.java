@@ -52,6 +52,8 @@ public class CAgentConfiguration implements IAgentConfiguration
      *
      * @param p_name name
      * @param p_plans plans
+     * @todo plans must be cloned
+     * @todo beliefbase must be cloned
      */
     public CAgentConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans )
     {
