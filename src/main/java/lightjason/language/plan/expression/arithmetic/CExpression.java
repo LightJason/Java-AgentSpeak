@@ -273,7 +273,7 @@ public final class CExpression implements IExpression
          * @param p_solver solver map with variabl -> number mapping
          * @return number
          */
-        public Number get( final Map<String, Number> p_solver )
+        public final Number get( final Map<String, Number> p_solver )
         {
             Number l_return = m_value;
             if ( ( p_solver != null ) && ( m_variable != null ) )

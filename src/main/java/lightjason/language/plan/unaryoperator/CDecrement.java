@@ -52,14 +52,14 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return m_variable.toString() + "--";
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IAgent p_agent,
+    public final CBoolean execute( final IAgent p_agent,
             final List<?> p_parameter
     )
     {

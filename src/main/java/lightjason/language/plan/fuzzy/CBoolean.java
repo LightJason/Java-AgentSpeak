@@ -70,19 +70,19 @@ public final class CBoolean implements IFuzzyValue<Boolean>
 
 
     @Override
-    public Boolean getValue()
+    public final Boolean getValue()
     {
         return m_value;
     }
 
     @Override
-    public Double getFuzzy()
+    public final Double getFuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }

@@ -54,13 +54,13 @@ public final class CAchievementGoal extends IAction<ILiteral>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Override
-    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         return new CBoolean( false );
     }

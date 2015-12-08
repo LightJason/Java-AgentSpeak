@@ -55,7 +55,7 @@ public final class CTrigger implements ITrigger<CPath>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return 11 * m_event.hashCode() + 17 * m_data.hashCode();
     }
@@ -67,19 +67,19 @@ public final class CTrigger implements ITrigger<CPath>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0}{1}", m_event, m_data );
     }
 
     @Override
-    public EType getID()
+    public final EType getID()
     {
         return m_event;
     }
 
     @Override
-    public CPath getData()
+    public final CPath getData()
     {
         return m_data;
     }

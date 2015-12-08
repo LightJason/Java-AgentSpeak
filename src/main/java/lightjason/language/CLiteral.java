@@ -162,13 +162,13 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public CPath getFunctorPath()
+    public final CPath getFunctorPath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public CPath getFQNFunctor()
+    public final CPath getFQNFunctor()
     {
         return m_functor;
     }

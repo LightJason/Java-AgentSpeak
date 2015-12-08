@@ -55,7 +55,7 @@ public final class CBeliefAction extends IAction<ILiteral>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0}{1}", m_action, m_value );
     }
@@ -65,7 +65,7 @@ public final class CBeliefAction extends IAction<ILiteral>
      * @todo disable actions
      */
     @Override
-    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         switch ( m_action )
         {

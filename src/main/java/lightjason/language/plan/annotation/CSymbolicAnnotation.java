@@ -45,7 +45,7 @@ public final class CSymbolicAnnotation extends IBaseAnnotation<ILiteral>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0}({1})", m_type, m_data );
     }

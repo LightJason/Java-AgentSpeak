@@ -61,12 +61,12 @@ public class CArithmetic implements IAssignment<CExpression>, IBodyAction
     }
 
     @Override
-    public void assign( final IVariable<?> p_variable, final CExpression p_term )
+    public final void assign( final IVariable<?> p_variable, final CExpression p_term )
     {
     }
 
     @Override
-    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         return new CBoolean( true );
     }

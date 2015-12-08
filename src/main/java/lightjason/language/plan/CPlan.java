@@ -95,31 +95,31 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public ITrigger<?> getTrigger()
+    public final ITrigger<?> getTrigger()
     {
         return m_triggerevent;
     }
 
     @Override
-    public EState getState()
+    public final EState getState()
     {
         return m_currentstate;
     }
 
     @Override
-    public Collection<IAnnotation<?>> getAnnotations()
+    public final Collection<IAnnotation<?>> getAnnotations()
     {
         return m_annotation.values();
     }
 
     @Override
-    public List<IBodyAction> getBodyActions()
+    public final List<IBodyAction> getBodyActions()
     {
         return m_action;
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, m_action );
     }
@@ -128,7 +128,7 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         return new CBoolean(
                 ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||

@@ -40,7 +40,7 @@ public final class CAtomAnnotation extends IBaseAnnotation<Object>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return m_type.toString();
     }

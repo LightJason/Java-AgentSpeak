@@ -46,20 +46,20 @@ public final class CRawAction<T> extends IAction<T>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return m_value != null ? m_value.hashCode() : super.hashCode();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return m_value != null ? m_value.toString() : super.toString();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         if ( m_value instanceof IVariable )
             return new CBoolean( ( (IVariable) m_value ).isAllocated() );
