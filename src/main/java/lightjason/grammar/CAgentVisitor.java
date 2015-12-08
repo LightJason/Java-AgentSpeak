@@ -284,13 +284,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public Object visitLiteral( final lightjason.grammar.AgentParser.LiteralContext p_context )
     {
         return new CLiteral(
-                this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list() ),
-                (Set<ILiteral>) this.visitLiterallist( p_context.literallist() )
+                this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitTermlist( p_context.termlist() ),
+                (Set<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
     }
 
     @Override
-    public Object visitList( final lightjason.grammar.AgentParser.ListContext p_context )
+    public Object visitTermlist( final lightjason.grammar.AgentParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -299,7 +299,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
-    public Object visitLiterallist( final lightjason.grammar.AgentParser.LiterallistContext p_context )
+    public Object visitLiteralset( final lightjason.grammar.AgentParser.LiteralsetContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;

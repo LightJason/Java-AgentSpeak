@@ -13,7 +13,7 @@ setSpeed(X) :- setProperty("speed", X).
 +!accelerate
     : current_speed(Speed) && distance_predecessor([Distance|_]) && Distance > Speed && Score > 0.3 <-
         Speed++;
-        setSpeed( Speed );
+        setSpeed( Speed )[blub(3),blub(4)];
         !!drive;
         -+baz("hallo")
     <- true.

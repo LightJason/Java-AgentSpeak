@@ -303,8 +303,8 @@ deconstruct_expression :
  **/
 literal :
     atom
-    ( LROUNDBRACKET list RROUNDBRACKET )?
-    ( LANGULARBRACKET literallist RANGULARBRACKET )?
+    ( LROUNDBRACKET termlist RROUNDBRACKET )?
+    ( LANGULARBRACKET literalset RANGULARBRACKET )?
     ;
 
 /**
@@ -317,13 +317,13 @@ term :
     | literal
     | arithmetic_expression
     | logical_expression
-    | LANGULARBRACKET list RANGULARBRACKET
+    | LANGULARBRACKET termlist RANGULARBRACKET
     ;
 
 /**
  * generic list equal to collcations with empty clause
  **/
-list :
+termlist :
     (
         term ( COMMA term )*
         | list_headtail
@@ -333,7 +333,7 @@ list :
 /**
  * specified list only with literals and empty clause
  **/
-literallist :
+literalset :
     (
         literal ( COMMA literal )*
     ) ?
