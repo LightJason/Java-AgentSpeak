@@ -23,19 +23,13 @@
 
 package lightjason.language.plan.unaryoperator;
 
-import lightjason.language.IVariable;
+import lightjason.language.plan.IBodyAction;
 
 
 /**
  * interface of variable unary operator
  */
-public interface IOperator<T>
+public interface IOperator<T> extends IBodyAction
 {
-    /**
-     * evaluates the expression
-     *
-     * @return the assigned variable
-     */
-    public IVariable<T> evaluate();
 
 }

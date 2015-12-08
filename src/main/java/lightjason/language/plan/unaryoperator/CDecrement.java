@@ -23,8 +23,14 @@
 
 package lightjason.language.plan.unaryoperator;
 
+import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CCommon;
+import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
+import lightjason.language.plan.IPlan;
+import lightjason.language.plan.fuzzy.CBoolean;
+
+import java.util.Map;
 
 
 /**
@@ -47,29 +53,29 @@ public final class CDecrement<T extends Number> implements IOperator<T>
         m_variable = p_variable;
     }
 
+    @Override
+    public String toString()
+    {
+        return m_variable.toString() + "--";
+    }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public IVariable<T> evaluate()
+    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan
+    )
     {
         if ( !m_variable.isAllocated() )
             throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", m_variable ) );
 
         if ( m_variable.isValueAssignableTo( Double.class ) )
-            return m_variable.set( (T) new Double( m_variable.get().doubleValue() - 1 ) );
+            m_variable.set( (T) new Double( m_variable.get().doubleValue() - 1 ) );
         if ( m_variable.isValueAssignableTo( Long.class ) )
-            return m_variable.set( (T) new Long( m_variable.get().longValue() - 1 ) );
+            m_variable.set( (T) new Long( m_variable.get().longValue() - 1 ) );
         if ( m_variable.isValueAssignableTo( Float.class ) )
-            return m_variable.set( (T) new Float( m_variable.get().floatValue() - 1 ) );
+            m_variable.set( (T) new Float( m_variable.get().floatValue() - 1 ) );
         if ( m_variable.isValueAssignableTo( Integer.class ) )
-            return m_variable.set( (T) new Integer( m_variable.get().intValue() - 1 ) );
+            m_variable.set( (T) new Integer( m_variable.get().intValue() - 1 ) );
 
-        return m_variable;
-    }
-
-    @Override
-    public String toString()
-    {
-        return m_variable.toString() + "--";
+        return new CBoolean( true );
     }
 }
