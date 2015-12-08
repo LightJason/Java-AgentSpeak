@@ -24,6 +24,7 @@
 package lightjason.language;
 
 
+import com.google.common.collect.SetMultimap;
 import lightjason.common.CPath;
 
 
@@ -48,7 +49,7 @@ public interface ILiteral extends ITerm
      *
      * @return annotation term
      */
-    public ITermCollection getAnnotation();
+    public SetMultimap<CPath, ILiteral> getAnnotation();
 
     /**
      * returns the functor without path

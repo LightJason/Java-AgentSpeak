@@ -283,26 +283,28 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitLiteral( final lightjason.grammar.AgentParser.LiteralContext p_context )
     {
-        switch ( p_context.list().size() )
-        {
-            case 1:
-                return new CLiteral( this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list( 0 ) ) );
-
-            case 2:
-                return new CLiteral(
-                        this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list( 0 ) ),
-                        new HashSet<>( (List<ITerm>) this.visitList( p_context.list( 1 ) ) )
-                );
-
-            default:
-                return new CLiteral( this.visitAtom( p_context.atom() ).toString() );
-        }
+        return new CLiteral(
+                this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitList( p_context.list() ),
+                (Set<ILiteral>) this.visitLiterallist( p_context.literallist() )
+        );
     }
 
     @Override
     public Object visitList( final lightjason.grammar.AgentParser.ListContext p_context )
     {
+        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+            return Collections.EMPTY_LIST;
+
         return p_context.term().parallelStream().map( i -> this.visitTerm( i ) ).collect( Collectors.toList() );
+    }
+
+    @Override
+    public Object visitLiterallist( final lightjason.grammar.AgentParser.LiterallistContext p_context )
+    {
+        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+            return Collections.EMPTY_SET;
+
+        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).collect( Collectors.toSet() );
     }
 
     @Override

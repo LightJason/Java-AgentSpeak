@@ -25,6 +25,7 @@ package lightjason.language.plan.expression;
 
 /**
  * interface of any expression type
+ *
  * @todo add action interface
  */
 public interface IExpression
