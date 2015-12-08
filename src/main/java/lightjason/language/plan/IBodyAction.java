@@ -38,8 +38,8 @@ public interface IBodyAction
     /**
      * defines a plan-body operation
      *
-     * @param p_agent
-     * @param p_parameter
+     * @param p_agent agent which calls the action
+     * @param p_parameter parameter of the action
      * @return fuzzy boolean
      */
     public CBoolean execute( final IAgent p_agent, final List<?> p_parameter );
