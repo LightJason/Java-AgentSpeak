@@ -45,7 +45,7 @@ public final class CLiteral implements ILiteral
      */
     protected final SetMultimap<CPath, ILiteral> m_annotations = HashMultimap.create();
     /**
-     * the literal values
+     * literal values
      */
     protected final ITermCollection m_values;
     /**
