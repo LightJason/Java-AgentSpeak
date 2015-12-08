@@ -48,4 +48,16 @@ public final class CSin implements IArithmeticOperator
     {
         return Math.sin( p_arguments.get( 0 ).doubleValue() );
     }
+
+    @Override
+    public final int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

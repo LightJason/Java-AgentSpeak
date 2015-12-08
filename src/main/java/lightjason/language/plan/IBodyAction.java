@@ -40,7 +40,7 @@ public interface IBodyAction
      *
      * @param p_agent
      * @param p_parameter
-     * @return pair with boolean and fuzzy value
+     * @return fuzzy boolean
      */
     public CBoolean execute( final IAgent p_agent, final List<?> p_parameter );
 

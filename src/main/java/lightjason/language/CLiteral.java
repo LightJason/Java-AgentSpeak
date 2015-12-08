@@ -185,10 +185,10 @@ public final class CLiteral implements ILiteral
     @Override
     public final int hashCode()
     {
-        return 41 * m_functor.hashCode() +
-               43 * m_values.hashCode() +
-               59 * m_annotations.hashCode() +
-               ( m_negated ? 11 : 17 );
+        return m_functor.hashCode() +
+               m_values.hashCode() +
+               m_annotations.hashCode() +
+               ( m_negated ? 17737 : 55529 );
     }
 
     @Override
