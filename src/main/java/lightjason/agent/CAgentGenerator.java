@@ -147,7 +147,8 @@ public class CAgentGenerator implements IAgentGenerator
                     }
 
                     @Override
-                    public void reportAttemptingFullContext( final Parser p_parser, final DFA p_dfa, final int p_i, final int p_i1, final BitSet p_bitSet,
+                    public void reportAttemptingFullContext( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
+                            final BitSet p_bitSet,
                             final ATNConfigSet p_configuration
                     )
                     {
