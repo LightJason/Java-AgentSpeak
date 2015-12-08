@@ -23,6 +23,8 @@
 
 package lightjason.language;
 
+import lightjason.common.CPath;
+
 import java.text.MessageFormat;
 
 
@@ -36,7 +38,7 @@ public class CVariable<T> implements IVariable<T>
     /**
      * variable name
      */
-    protected final String m_name;
+    protected final CPath m_name;
     /**
      * boolean flag, that defines an variable which matchs always
      */
@@ -65,12 +67,12 @@ public class CVariable<T> implements IVariable<T>
     public CVariable( final String p_name, final T p_value )
     {
         m_any = p_name.equals( "_" ) || ( p_name == null ) || p_name.isEmpty();
-        m_name = m_any ? "_" : p_name;
+        m_name = m_any ? new CPath( "_" ) : CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_name );
         m_value = p_value;
     }
 
     @Override
-    public final String getName()
+    public final CPath getName()
     {
         return m_name;
     }
@@ -116,7 +118,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        return new CVariable<T>( m_name, m_value );
+        return new CVariable<T>( m_name.toString(), m_value );
     }
 
     @Override

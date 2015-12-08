@@ -23,6 +23,9 @@
 
 package lightjason.language;
 
+import lightjason.common.CPath;
+
+
 /**
  * variable defintion
  */
@@ -33,7 +36,7 @@ public interface IVariable<T> extends ITerm, Cloneable
      *
      * @return name
      */
-    public String getName();
+    public CPath getName();
 
     /**
      * sets the value
