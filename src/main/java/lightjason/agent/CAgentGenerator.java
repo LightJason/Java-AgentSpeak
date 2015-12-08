@@ -65,6 +65,7 @@ public class CAgentGenerator implements IAgentGenerator
      * @param p_actions set with actions
      * @throws IOException thrown on error
      */
+    @SuppressWarnings( "unchecked" )
     public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws IOException
     {
         // run parsing with default AgentSpeak(L) visitor

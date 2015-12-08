@@ -75,7 +75,7 @@ public final class CLiteral implements ILiteral
      */
     public CLiteral( final String p_functor )
     {
-        this( p_functor, false, new CTermList(), Collections.EMPTY_SET );
+        this( p_functor, false, new CTermList(), Collections.<ILiteral>emptySet() );
     }
 
     /**
@@ -86,7 +86,7 @@ public final class CLiteral implements ILiteral
      */
     public CLiteral( final String p_functor, final boolean p_negated )
     {
-        this( p_functor, p_negated, new CTermList(), Collections.EMPTY_SET );
+        this( p_functor, p_negated, new CTermList(), Collections.<ILiteral>emptySet() );
     }
 
     /**
@@ -97,7 +97,7 @@ public final class CLiteral implements ILiteral
      */
     public CLiteral( final String p_functor, final List<ITerm> p_values )
     {
-        this( p_functor, false, new CTermList( p_values ), Collections.EMPTY_SET );
+        this( p_functor, false, new CTermList( p_values ), Collections.<ILiteral>emptySet() );
     }
 
     /**
