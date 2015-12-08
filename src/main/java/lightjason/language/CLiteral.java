@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
- * an optional set of annotations, e.g. speed(50)[source(self)]
+ * an optional set of annotations, e.g. velocity(50)[source(self)]
  */
 public final class CLiteral implements ILiteral
 {
