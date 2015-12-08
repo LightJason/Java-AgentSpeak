@@ -23,7 +23,6 @@
 
 package lightjason.agent;
 
-import lightjason.beliefbase.IBeliefBase;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.plan.IPlan;
@@ -43,7 +42,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return cycle number
      */
-    public int getCycle();
+    public long getCycle();
 
     /**
      * returns the agent name
@@ -94,19 +93,5 @@ public interface IAgent extends Callable<IAgent>
      * returns a set of the current plans
      */
     public Set<IPlan> getCurrentPlans();
-
-    /**
-     * clones the current agent
-     *
-     * @return new agent instance
-     */
-    public IAgent clone();
-
-    /**
-     * clones the agent and adds a new beliefbase
-     *
-     * @return new agent instance with an own beliefbase
-     */
-    public IAgent clone( final IBeliefBase p_beliefbase );
 
 }

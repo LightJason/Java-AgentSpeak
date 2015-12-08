@@ -24,7 +24,6 @@
 package lightjason.agent;
 
 import lightjason.agent.score.IAgentPlanScore;
-import lightjason.beliefbase.IBeliefBase;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.plan.IPlan;
@@ -97,7 +96,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final int getCycle()
+    public final long getCycle()
     {
         return m_cycle;
     }
@@ -140,18 +139,6 @@ public class CAgent implements IAgent
 
     @Override
     public Set<IPlan> getCurrentPlans()
-    {
-        return null;
-    }
-
-    @Override
-    public IAgent clone( final IBeliefBase p_beliefbase )
-    {
-        return null;
-    }
-
-    @Override
-    public IAgent clone()
     {
         return null;
     }
