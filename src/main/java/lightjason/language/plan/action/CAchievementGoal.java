@@ -23,13 +23,12 @@
 
 package lightjason.language.plan.action;
 
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
 import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.text.MessageFormat;
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -61,7 +60,7 @@ public final class CAchievementGoal extends IAction<ILiteral>
     }
 
     @Override
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         return new CBoolean( false );
     }

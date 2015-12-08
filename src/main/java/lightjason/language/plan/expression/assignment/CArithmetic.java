@@ -23,17 +23,15 @@
 
 package lightjason.language.plan.expression.assignment;
 
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.agent.IAgent;
 import lightjason.language.CVariable;
-import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.plan.IBodyAction;
-import lightjason.language.plan.IPlan;
 import lightjason.language.plan.expression.IExpression;
 import lightjason.language.plan.expression.arithmetic.CExpression;
 import lightjason.language.plan.fuzzy.CBoolean;
 
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -68,7 +66,7 @@ public class CArithmetic implements IAssignment<CExpression>, IBodyAction
     }
 
     @Override
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         return new CBoolean( true );
     }

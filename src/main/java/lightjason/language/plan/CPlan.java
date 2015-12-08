@@ -23,7 +23,7 @@
 
 package lightjason.language.plan;
 
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.annotation.CNumberAnnotation;
 import lightjason.language.plan.annotation.IAnnotation;
@@ -128,14 +128,14 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         return new CBoolean(
                 ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                         ? m_action.parallelStream()
                         : m_action.stream()
-                ).map( i -> i.execute( p_beliefbase, p_runningplan ) ).allMatch( Predicate.isEqual( true ) )
+                ).map( i -> i.execute( p_agent, null ) ).allMatch( Predicate.isEqual( true ) )
         );
     }
 

@@ -64,7 +64,19 @@
             <version>19.0-rc3</version>
             <scope>compile</scope>
         </dependency>
+        <!--
+                <dependency>
+                    <groupId>org.checkerframework</groupId>
+                    <artifactId>checker-qual</artifactId>
+                    <version>1.9.9</version>
+                </dependency>
 
+                <dependency>
+                    <groupId>org.checkerframework</groupId>
+                    <artifactId>checker</artifactId>
+                    <version>1.9.9</version>
+                </dependency>
+        -->
 
         <!-- test -->
         <dependency>

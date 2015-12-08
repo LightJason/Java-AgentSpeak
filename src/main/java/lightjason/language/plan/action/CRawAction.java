@@ -23,13 +23,11 @@
 
 package lightjason.language.plan.action;
 
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.language.ILiteral;
+import lightjason.agent.IAgent;
 import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
 import lightjason.language.plan.fuzzy.CBoolean;
 
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -61,7 +59,7 @@ public final class CRawAction<T> extends IAction<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
+    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
     {
         if ( m_value instanceof IVariable )
             return new CBoolean( ( (IVariable) m_value ).isAllocated() );

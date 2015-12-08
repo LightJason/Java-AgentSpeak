@@ -23,14 +23,12 @@
 
 package lightjason.language.plan.unaryoperator;
 
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
-import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
 import lightjason.language.plan.fuzzy.CBoolean;
 
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -61,7 +59,8 @@ public final class CIncrement<T extends Number> implements IOperator<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan
+    public CBoolean execute( final IAgent p_agent,
+            final List<?> p_parameter
     )
     {
         if ( !m_variable.isAllocated() )

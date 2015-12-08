@@ -23,12 +23,13 @@
 
 package lightjason.agent;
 
+import com.google.common.collect.SetMultimap;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
+import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 
@@ -90,8 +91,17 @@ public interface IAgent extends Callable<IAgent>
     public void resume();
 
     /**
-     * returns a set of the current plans
+     * returns a map of the current running plans
+     *
+     * @return map with running plans
      */
-    public Set<IPlan> getCurrentPlans();
+    public SetMultimap<ILiteral, IPlan> getRunningPlans();
+
+    /**
+     * returns a map of all plans
+     *
+     * @return map with plans
+     */
+    public SetMultimap<ITrigger<?>, IPlan> getPlans();
 
 }

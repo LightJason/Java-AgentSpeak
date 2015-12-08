@@ -23,11 +23,10 @@
 
 package lightjason.language.plan;
 
-import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.language.ILiteral;
+import lightjason.agent.IAgent;
 import lightjason.language.plan.fuzzy.CBoolean;
 
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -39,10 +38,10 @@ public interface IBodyAction
     /**
      * defines a plan-body operation
      *
-     * @param p_beliefbase root mask of the beliefbase
-     * @param p_runningplan current running plans search on their literal name
+     * @param p_agent
+     * @param p_parameter
      * @return pair with boolean and fuzzy value
      */
-    public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan );
+    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter );
 
 }

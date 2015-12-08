@@ -23,9 +23,11 @@
 
 package lightjason.agent;
 
+import com.google.common.collect.SetMultimap;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
+import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
@@ -90,7 +92,7 @@ public class CAgent implements IAgent
 
         p_configuration.getPlans().values().stream().forEach( i -> {
             System.out.println( i );
-            System.out.println( i.execute( null, null ) );
+            System.out.println( i.execute( this, null ) );
         } );
 
     }
@@ -138,7 +140,13 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public Set<IPlan> getCurrentPlans()
+    public SetMultimap<ILiteral, IPlan> getRunningPlans()
+    {
+        return null;
+    }
+
+    @Override
+    public SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return null;
     }
