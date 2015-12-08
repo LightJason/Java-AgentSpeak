@@ -68,14 +68,32 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public synchronized boolean isValueAssignableFrom( final Class<?> p_class )
+    public synchronized boolean isValueAssignableTo( final Class<?> p_class )
     {
-        return super.isValueAssignableFrom( p_class );
+        return super.isValueAssignableTo( p_class );
+    }
+
+    @Override
+    public synchronized int hashCode()
+    {
+        return super.hashCode();
+    }
+
+    @Override
+    public synchronized boolean equals( final Object p_object )
+    {
+        return super.equals( p_object );
     }
 
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
         return new CMutexVariable<T>( m_name, m_value );
+    }
+
+    @Override
+    public synchronized String toString()
+    {
+        return super.toString();
     }
 }

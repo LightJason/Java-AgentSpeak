@@ -28,6 +28,8 @@ import lightjason.error.CSyntaxErrorException;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
+import lightjason.language.plan.IBodyAction;
+import lightjason.language.plan.action.CRawAction;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -54,31 +56,40 @@ public class CAgentGenerator implements IAgentGenerator
     /**
      * visitor to store parsed data
      */
-    private final IAgentVisitor m_visitor;
-    /**
-     * actions
-     */
-    private final Map<CPath, IAction> m_actions;
+    private final IAgentVisitor m_visitor = new CAgentVisitor();
 
     /**
      * ctor
      *
      * @param p_stream input stream
+     * @param p_actions set with actions
      * @throws IOException thrown on error
      */
-    public CAgentGenerator( final InputStream p_stream, final Map<CPath, IAction> p_actions ) throws IOException
+    public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws IOException
     {
-        m_visitor = new CAgentVisitor();
-        m_actions = p_actions;
+        // run parsing with default AgentSpeak(L) visitor
         parse( p_stream, m_visitor );
 
         // replace all literals within the plans with actions
-        m_visitor.getPlans().values().parallelStream().forEach(
-                i -> {
+        final Map<CPath, IAction> l_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
 
-                    i.getBodyActions()
+        m_visitor.getPlans().values().stream().forEach(
+
+                i -> {
+                    System.out.println( "------------------------------------" );
+                    for ( IBodyAction l_item : i.getBodyActions() )
+                    {
+                        System.out.print( l_item + "\t" + l_item.getClass() );
+                        if ( l_item.getClass().equals( CRawAction.class ) )
+                        {
+                            final CRawAction<?> l_raw = ( (CRawAction) l_item );
+                            System.out.print( "\t" + l_raw.getValue().getClass() );
+                        }
+                        System.out.println();
+                    }
 
                 } );
+        System.out.println( "------------------------------------" );
     }
 
     @Override

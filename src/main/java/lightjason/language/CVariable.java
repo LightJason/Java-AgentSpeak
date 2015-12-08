@@ -96,19 +96,19 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public boolean isValueAssignableFrom( final Class<?> p_class )
+    public boolean isValueAssignableTo( final Class<?> p_class )
     {
-        return m_value == null ? true : m_value.getClass().isAssignableFrom( p_class );
+        return m_value == null ? true : p_class.isAssignableFrom( m_value.getClass() );
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return m_name.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public boolean equals( final Object p_object )
     {
         return this.hashCode() == p_object.hashCode();
     }
@@ -120,7 +120,7 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format( "{0}({1})", m_name, m_value == null ? "" : m_value );
     }

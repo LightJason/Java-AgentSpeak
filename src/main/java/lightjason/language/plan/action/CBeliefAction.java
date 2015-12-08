@@ -58,7 +58,7 @@ public final class CBeliefAction extends IAction<ILiteral>
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_action, m_data );
+        return MessageFormat.format( "{0}{1}", m_action, m_value );
     }
 
     /**

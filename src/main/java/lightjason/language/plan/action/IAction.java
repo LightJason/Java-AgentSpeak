@@ -34,24 +34,45 @@ public abstract class IAction<T> implements IBodyAction
     /**
      * data
      */
-    protected final T m_data;
+    protected final T m_value;
 
     /**
      * ctor
      */
     protected IAction()
     {
-        m_data = null;
+        m_value = null;
     }
 
     /**
      * ctor
      *
-     * @param p_data data
+     * @param p_value data
      */
-    protected IAction( final T p_data )
+    protected IAction( final T p_value )
     {
-        m_data = p_data;
+        m_value = p_value;
+    }
+
+    /**
+     * checkes assinable of the value
+     *
+     * @param p_class class
+     * @return assinable (on null always true)
+     */
+    public final boolean isValueAssignableTo( final Class<?> p_class )
+    {
+        return ( m_value == null ) || p_class.isAssignableFrom( m_value.getClass() );
+    }
+
+    /**
+     * returns the value of the action
+     *
+     * @return value
+     */
+    public final T getValue()
+    {
+        return m_value;
     }
 
 }

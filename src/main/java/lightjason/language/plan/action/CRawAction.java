@@ -35,14 +35,14 @@ import java.util.Map;
 /**
  * encapsulate class for any non-executable data type e.g. boolean
  */
-public final class CBlankAction<T> extends IAction<T>
+public final class CRawAction<T> extends IAction<T>
 {
     /**
      * ctor
      *
      * @param p_data any object data
      */
-    public CBlankAction( final T p_data )
+    public CRawAction( final T p_data )
     {
         super( p_data );
     }
@@ -50,24 +50,24 @@ public final class CBlankAction<T> extends IAction<T>
     @Override
     public int hashCode()
     {
-        return m_data != null ? m_data.hashCode() : super.hashCode();
+        return m_value != null ? m_value.hashCode() : super.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return m_data != null ? m_data.toString() : super.toString();
+        return m_value != null ? m_value.toString() : super.toString();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
     public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
-        if ( m_data instanceof IVariable )
-            return new CBoolean( ( (IVariable) m_data ).isAllocated() );
+        if ( m_value instanceof IVariable )
+            return new CBoolean( ( (IVariable) m_value ).isAllocated() );
 
-        if ( m_data instanceof Boolean )
-            return new CBoolean( (Boolean) m_data );
+        if ( m_value instanceof Boolean )
+            return new CBoolean( (Boolean) m_value );
 
         return new CBoolean( true );
     }

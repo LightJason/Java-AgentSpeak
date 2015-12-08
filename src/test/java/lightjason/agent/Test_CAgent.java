@@ -58,7 +58,7 @@ public class Test_CAgent
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CAgentGenerator( l_stream ).generate();
+            //l_agent = new CAgentGenerator( l_stream ).generate();
         }
         catch ( final Exception l_exception )
         {

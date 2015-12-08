@@ -57,7 +57,7 @@ public final class CAchievementGoal extends IAction<ILiteral>
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_data );
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Override

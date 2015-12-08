@@ -39,7 +39,7 @@ import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.action.CAchievementGoal;
 import lightjason.language.plan.action.CBeliefAction;
-import lightjason.language.plan.action.CBlankAction;
+import lightjason.language.plan.action.CRawAction;
 import lightjason.language.plan.action.CTestGoal;
 import lightjason.language.plan.annotation.CAtomAnnotation;
 import lightjason.language.plan.annotation.CNumberAnnotation;
@@ -228,7 +228,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
             if ( l_item instanceof IBodyAction )
                 return l_item;
 
-            return new CBlankAction<>( l_item );
+            return new CRawAction<>( l_item );
 
         } ).collect( Collectors.toList() );
     }

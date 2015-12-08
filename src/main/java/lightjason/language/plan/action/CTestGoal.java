@@ -51,12 +51,12 @@ public final class CTestGoal extends IAction<ILiteral>
     @Override
     public String toString()
     {
-        return MessageFormat.format( "?{0}", m_data );
+        return MessageFormat.format( "?{0}", m_value );
     }
 
     @Override
     public CBoolean execute( final IBeliefBaseMask p_beliefbase, final Map<ILiteral, IPlan> p_runningplan )
     {
-        return new CBoolean( p_runningplan.containsKey( m_data ) );
+        return new CBoolean( p_runningplan.containsKey( m_value ) );
     }
 }
