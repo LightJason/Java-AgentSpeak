@@ -32,9 +32,9 @@ import lightjason.common.CPath;
 public final class CRawTerm<T> implements ITerm
 {
     /**
-     * data
+     * value data
      */
-    private final T m_data;
+    private final T m_value;
     /**
      * functor
      */
@@ -44,30 +44,30 @@ public final class CRawTerm<T> implements ITerm
     /**
      * ctor
      *
-     * @param p_data data
+     * @param p_value data
      */
-    public CRawTerm( final T p_data )
+    public CRawTerm( final T p_value )
     {
-        m_data = p_data;
-        m_functor = new CPath( m_data.toString() );
+        m_value = p_value;
+        m_functor = new CPath( m_value.toString() );
     }
 
     @Override
     public final int hashCode()
     {
-        return m_data == null ? super.hashCode() : m_data.hashCode();
+        return m_value == null ? super.hashCode() : m_value.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return m_data == null ? super.equals( p_object ) : m_data.equals( p_object );
+        return m_value == null ? super.equals( p_object ) : m_value.equals( p_object );
     }
 
     @Override
     public final String toString()
     {
-        return m_data == null ? "" : m_data.toString();
+        return m_value == null ? "" : m_value.toString();
     }
 
     @Override
@@ -86,5 +86,15 @@ public final class CRawTerm<T> implements ITerm
     public final CPath getFQNFunctor()
     {
         return m_functor;
+    }
+
+    /**
+     * returns the raw valuw
+     *
+     * @return value
+     */
+    public final T getValue()
+    {
+        return m_value;
     }
 }
