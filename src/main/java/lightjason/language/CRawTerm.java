@@ -23,12 +23,68 @@
 
 package lightjason.language;
 
-import java.util.Collection;
+import lightjason.common.CPath;
 
 
 /**
- * interface for term collection
+ * term structure for simple datatypes
  */
-public interface ITermCollection extends ITerm, Collection<ITerm>
+public final class CRawTerm<T> implements ITerm
 {
+    /**
+     * data
+     */
+    private final T m_data;
+    /**
+     * functor
+     */
+    private final CPath m_functor;
+
+
+    /**
+     * ctor
+     *
+     * @param p_data data
+     */
+    public CRawTerm( final T p_data )
+    {
+        m_data = p_data;
+        m_functor = new CPath( m_data.toString() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_data == null ? super.hashCode() : m_data.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return m_data == null ? super.equals( p_object ) : m_data.equals( p_object );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_data == null ? "" : m_data.toString();
+    }
+
+    @Override
+    public final String getFunctor()
+    {
+        return m_functor.getSuffix();
+    }
+
+    @Override
+    public final CPath getFunctorPath()
+    {
+        return m_functor.getSubPath( 0, m_functor.size() - 1 );
+    }
+
+    @Override
+    public final CPath getFQNFunctor()
+    {
+        return m_functor;
+    }
 }

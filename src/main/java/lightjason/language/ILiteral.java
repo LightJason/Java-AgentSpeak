@@ -47,16 +47,16 @@ public interface ILiteral extends ITerm
     /**
      * returns the optional annotations
      *
-     * @return annotation term
+     * @return annotation terms
      */
     public SetMultimap<CPath, ILiteral> getAnnotation();
 
     /**
      * returns the optional value term
      *
-     * @return value term
+     * @return value terms
      */
-    public ITermCollection getValues();
+    public SetMultimap<CPath, ITerm> getValues();
 
     /**
      * getter of the literal for the negation

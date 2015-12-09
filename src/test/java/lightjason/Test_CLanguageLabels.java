@@ -131,7 +131,7 @@ public class Test_CLanguageLabels
      * @param p_names list of package parts
      * @return full-qualified string
      */
-    private static String getPackagePath( String... p_names )
+    private static String getPackagePath( final String... p_names )
     {
         String l_return = "";
         for ( int i = 0; i < p_names.length - 1; i++ )

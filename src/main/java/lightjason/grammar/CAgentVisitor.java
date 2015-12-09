@@ -30,6 +30,7 @@ import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CLiteral;
 import lightjason.language.CMutexVariable;
+import lightjason.language.CRawTerm;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -52,6 +53,7 @@ import lightjason.language.plan.unaryoperator.CIncrement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -285,7 +287,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     {
         return new CLiteral(
                 this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitTermlist( p_context.termlist() ),
-                (Set<ILiteral>) this.visitLiteralset( p_context.literalset() )
+                (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
     }
 
@@ -295,16 +297,24 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
 
-        return p_context.term().parallelStream().map( i -> this.visitTerm( i ) ).collect( Collectors.toList() );
+        return p_context.term().parallelStream().map( i -> {
+
+            final Object l_item = this.visitTerm( i );
+            if ( l_item instanceof ITerm )
+                return l_item;
+
+            return new CRawTerm<>( l_item );
+
+        } ).collect( Collectors.toList() );
     }
 
     @Override
     public Object visitLiteralset( final lightjason.grammar.AgentParser.LiteralsetContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_SET;
+            return Collections.EMPTY_LIST;
 
-        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).collect( Collectors.toSet() );
+        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).collect( Collectors.toList() );
     }
 
     @Override
