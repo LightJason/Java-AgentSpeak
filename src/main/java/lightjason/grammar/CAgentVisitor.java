@@ -298,10 +298,10 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
 
-        Object x = p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
+        Object x = p_context.term().stream().map( i -> this.visitTerm( i ) ).peek( System.out::println ).filter( i -> i != null ).map(
                 i -> i instanceof ITerm ? (ITerm) i : new CRawTerm<>( i )
         ).collect( Collectors.toList() );
-        System.out.println( x );
+        //System.out.println( x );
 
         return x;
     }
