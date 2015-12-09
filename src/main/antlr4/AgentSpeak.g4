@@ -304,7 +304,7 @@ deconstruct_expression :
 literal :
     atom
     ( LROUNDBRACKET termlist RROUNDBRACKET )?
-    ( LANGULARBRACKET literalset RANGULARBRACKET )?
+    ( LANGULARBRACKET literalset? RANGULARBRACKET )?
     ;
 
 /**
@@ -334,9 +334,7 @@ termlist :
  * specified list only with literals and empty clause
  **/
 literalset :
-    (
-        literal ( COMMA literal )*
-    ) ?
+    literal ( COMMA literal )*
     ;
 
 /**
