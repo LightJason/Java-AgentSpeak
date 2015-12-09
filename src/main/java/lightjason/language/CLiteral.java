@@ -156,6 +156,18 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final ITermCollection getValues()
+    {
+        return m_values;
+    }
+
+    @Override
+    public final boolean isNegated()
+    {
+        return m_negated;
+    }
+
+    @Override
     public final String getFunctor()
     {
         return m_functor.getSuffix();
@@ -171,18 +183,6 @@ public final class CLiteral implements ILiteral
     public final CPath getFQNFunctor()
     {
         return m_functor;
-    }
-
-    @Override
-    public final ITermCollection getValues()
-    {
-        return m_values;
-    }
-
-    @Override
-    public final boolean isNegated()
-    {
-        return m_negated;
     }
 
     @Override

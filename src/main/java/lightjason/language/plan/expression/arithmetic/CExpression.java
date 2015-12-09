@@ -25,6 +25,7 @@
 package lightjason.language.plan.expression.arithmetic;
 
 import lightjason.common.CCommon;
+import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 import lightjason.language.IVariable;
@@ -195,7 +196,7 @@ public final class CExpression implements IExpression
      * @return number
      */
     @SuppressWarnings( "unchecked" )
-    public final Number evaluate( final Map<String, Number> p_solver )
+    public final Number evaluate( final Map<CPath, Number> p_solver )
     {
         // copy of data
         final Stack<IArithmeticOperator> l_operator = (Stack<IArithmeticOperator>) m_operator.clone();
@@ -273,14 +274,14 @@ public final class CExpression implements IExpression
          * @param p_solver solver map with variabl -> number mapping
          * @return number
          */
-        public final Number get( final Map<String, Number> p_solver )
+        public final Number get( final Map<CPath, Number> p_solver )
         {
             Number l_return = m_value;
             if ( ( p_solver != null ) && ( m_variable != null ) )
             {
-                l_return = p_solver.get( m_variable.getName() );
+                l_return = p_solver.get( m_variable.getFQNFunctor() );
                 if ( l_return == null )
-                    throw new CIllegalStateException( CCommon.getLanguageString( this, "variablenotresolve", m_variable.getName() ) );
+                    throw new CIllegalStateException( CCommon.getLanguageString( this, "variablenotresolve", m_variable.getFQNFunctor() ) );
             }
 
             return l_return;

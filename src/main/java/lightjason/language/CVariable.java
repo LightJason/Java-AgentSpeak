@@ -36,9 +36,9 @@ import java.text.MessageFormat;
 public class CVariable<T> implements IVariable<T>
 {
     /**
-     * variable name
+     * variable / functor name
      */
-    protected final CPath m_name;
+    protected final CPath m_functor;
     /**
      * boolean flag, that defines an variable which matchs always
      */
@@ -51,30 +51,24 @@ public class CVariable<T> implements IVariable<T>
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_functor name
      */
-    public CVariable( final String p_name )
+    public CVariable( final String p_functor )
     {
-        this( p_name, null );
+        this( p_functor, null );
     }
 
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_functor name
      * @param p_value value
      */
-    public CVariable( final String p_name, final T p_value )
+    public CVariable( final String p_functor, final T p_value )
     {
-        m_any = p_name.equals( "_" ) || ( p_name == null ) || p_name.isEmpty();
-        m_name = m_any ? new CPath( "_" ) : CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_name );
+        m_any = p_functor.equals( "_" ) || ( p_functor == null ) || p_functor.isEmpty();
+        m_functor = m_any ? new CPath( "_" ) : CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_functor );
         m_value = p_value;
-    }
-
-    @Override
-    public final CPath getName()
-    {
-        return m_name;
     }
 
     @Override
@@ -106,7 +100,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public int hashCode()
     {
-        return m_name.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
+        return m_functor.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
     }
 
     @Override
@@ -118,12 +112,30 @@ public class CVariable<T> implements IVariable<T>
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        return new CVariable<T>( m_name.toString(), m_value );
+        return new CVariable<T>( m_functor.toString(), m_value );
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0}({1})", m_name, m_value == null ? "" : m_value );
+        return MessageFormat.format( "{0}({1})", m_functor, m_value == null ? "" : m_value );
+    }
+
+    @Override
+    public final String getFunctor()
+    {
+        return m_functor.getSuffix();
+    }
+
+    @Override
+    public final CPath getFunctorPath()
+    {
+        return m_functor.getSubPath( 0, m_functor.size() - 1 );
+    }
+
+    @Override
+    public final CPath getFQNFunctor()
+    {
+        return m_functor;
     }
 }

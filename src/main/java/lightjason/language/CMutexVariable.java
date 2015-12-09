@@ -88,7 +88,7 @@ public final class CMutexVariable<T> extends CVariable<T>
     @Override
     protected synchronized final Object clone() throws CloneNotSupportedException
     {
-        return new CMutexVariable<T>( m_name.toString(), m_value );
+        return new CMutexVariable<T>( m_functor.toString(), m_value );
     }
 
     @Override

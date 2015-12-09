@@ -23,6 +23,8 @@
 
 package lightjason.language;
 
+import lightjason.common.CPath;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -51,4 +53,21 @@ public final class CTermList extends LinkedList<ITerm> implements ITermCollectio
         super( p_collection );
     }
 
+    @Override
+    public String getFunctor()
+    {
+        return new String();
+    }
+
+    @Override
+    public CPath getFunctorPath()
+    {
+        return CPath.EMPTY;
+    }
+
+    @Override
+    public CPath getFQNFunctor()
+    {
+        return CPath.EMPTY;
+    }
 }

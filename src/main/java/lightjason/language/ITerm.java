@@ -23,10 +23,35 @@
 
 package lightjason.language;
 
+import lightjason.common.CPath;
+
+
 /**
  * term interface
  */
 public interface ITerm
 {
+
+    /**
+     * returns the functor without path
+     *
+     * @return functor
+     */
+    public String getFunctor();
+
+    /**
+     * returns the path of the functor
+     *
+     * @return path
+     */
+    public CPath getFunctorPath();
+
+    /**
+     * returns the full-qualified functor
+     * with path and name
+     *
+     * @return fqn functor
+     */
+    public CPath getFQNFunctor();
 
 }
