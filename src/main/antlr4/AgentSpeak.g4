@@ -303,7 +303,7 @@ deconstruct_expression :
  **/
 literal :
     atom
-    ( LROUNDBRACKET termlist RROUNDBRACKET )?
+    ( LROUNDBRACKET termlist? RROUNDBRACKET )?
     ( LANGULARBRACKET literalset? RANGULARBRACKET )?
     ;
 
@@ -324,10 +324,7 @@ term :
  * generic list equal to collcations with empty clause
  **/
 termlist :
-    (
-        term ( COMMA term )*
-        | list_headtail
-    )?
+    term ( COMMA term )*
     ;
 
 /**
