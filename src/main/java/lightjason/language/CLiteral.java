@@ -24,6 +24,7 @@
 package lightjason.language;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.common.CPath;
@@ -43,11 +44,11 @@ public final class CLiteral implements ILiteral
     /**
      * literal annotations
      */
-    protected final SetMultimap<CPath, ILiteral> m_annotations = HashMultimap.create();
+    protected final ImmutableSetMultimap<CPath, ILiteral> m_annotations;
     /**
      * literal values
      */
-    protected final SetMultimap<CPath, ITerm> m_values = LinkedHashMultimap.create();
+    protected final ImmutableSetMultimap<CPath, ITerm> m_values;
     /**
      * literals functor
      */
@@ -136,10 +137,17 @@ public final class CLiteral implements ILiteral
      */
     protected CLiteral( final CPath p_functor, final boolean p_negated, final Collection<ITerm> p_values, final Collection<ILiteral> p_annotations )
     {
-        m_functor = p_functor;
-        p_values.stream().forEachOrdered( i -> m_values.put( i.getFQNFunctor(), i ) );
-        p_annotations.stream().forEach( i -> m_annotations.put( i.getFQNFunctor(), i ) );
         m_negated = p_negated;
+        m_functor = p_functor;
+
+        // create immutable structures
+        final SetMultimap<CPath, ILiteral> l_annotations = HashMultimap.create();
+        p_annotations.stream().forEach( i -> l_annotations.put( i.getFQNFunctor(), i ) );
+        m_annotations = ImmutableSetMultimap.copyOf( l_annotations );
+
+        final SetMultimap<CPath, ITerm> l_values = LinkedHashMultimap.create();
+        p_values.stream().forEachOrdered( i -> l_values.put( i.getFQNFunctor(), i ) );
+        m_values = ImmutableSetMultimap.copyOf( l_values );
     }
 
 
