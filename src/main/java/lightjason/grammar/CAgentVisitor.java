@@ -285,22 +285,25 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitLiteral( final lightjason.grammar.AgentParser.LiteralContext p_context )
     {
-        final Collection<ITerm> z = ( p_context.termlist() == null )
-                ? Collections.EMPTY_LIST
-                : p_context.termlist().term().stream().map( i -> {
-            Object x = this.visitTerm( i );
-            System.out.println( x );
-            return x;
-        } ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : new CRawTerm<>( i )
-        ).collect( Collectors.toList() );
-        System.out.println( z );
-
         return new CLiteral(
                 this.visitAtom( p_context.atom() ).toString(),
-                z,
+                (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
+    }
+
+    @Override
+    public Object visitTermlist( final lightjason.grammar.AgentParser.TermlistContext p_context )
+    {
+        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+            return Collections.EMPTY_LIST;
+
+        Object x = p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
+                i -> i instanceof ITerm ? (ITerm) i : new CRawTerm<>( i )
+        ).collect( Collectors.toList() );
+        System.out.println( x );
+
+        return x;
     }
 
     @Override
