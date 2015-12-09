@@ -285,8 +285,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitLiteral( final lightjason.grammar.AgentParser.LiteralContext p_context )
     {
+        System.out.println( "--- " + p_context.getText() + " --------------------------------------------" );
+        final Collection<ITerm> x = (Collection<ITerm>) this.visitTermlist( p_context.termlist() );
+        System.out.println( p_context.atom().getText() + "\t" + x );
+        System.out.println( "--------------------------" );
+
         return new CLiteral(
-                this.visitAtom( p_context.atom() ).toString(), (List<ITerm>) this.visitTermlist( p_context.termlist() ),
+                this.visitAtom( p_context.atom() ).toString(), x,
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
     }
@@ -297,15 +302,12 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
 
-        return p_context.term().parallelStream().map( i -> {
+        Object x = p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map( i -> i instanceof ITerm ? i : new CRawTerm<>( i ) )
+                            .collect( Collectors.toList() );
+        System.out.println( p_context.getText() + "\t\t" + x );
 
-            final Object l_item = this.visitTerm( i );
-            if ( l_item instanceof ITerm )
-                return l_item;
-
-            return new CRawTerm<>( l_item );
-
-        } ).collect( Collectors.toList() );
+        // null values must be filtered
+        return x;
     }
 
     @Override
@@ -314,7 +316,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
 
-        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).collect( Collectors.toList() );
+        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
     }
 
     @Override

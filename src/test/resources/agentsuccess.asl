@@ -1,3 +1,4 @@
+/*
 routingtype("fast").
 scrambling(0.4).
 target( longitude(53.3), latitude(-9.3) ).
@@ -16,17 +17,21 @@ setSpeed(X) :- setProperty("speed", X).
         !!drive;
         -+baz("hallo")
     <- true.
-
+*/
 
 @fuzzy(0.5)
-+!decelerate :
++!decelerate <-
+    /*
     current_speed(Speed) &&
     Speed > 10 <-
     Speed--;
     +foo(5);
     setSpeed( Speed );
-    !!drive.
+    */
+    hola([1,2,3,4]).
+    //!!drive.
 
+/*
 @atomic
 +!decelerate :
     current_speed(Speed) &&
@@ -39,3 +44,4 @@ setSpeed(X) :- setProperty("speed", X).
 
 @fuzzy(0.7)
 +!drive <- !!accelerate.
+*/
