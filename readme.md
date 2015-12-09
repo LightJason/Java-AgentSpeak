@@ -165,6 +165,9 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * thread-safe variables start with @ (at-sign) followed by an upper-case letter
 
 
+## Migration Original-Jason to Light-Jason 
+
+
 ## Todos
 
 * Plans:
@@ -175,8 +178,6 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
     * (?) also non-fixed for _Mental Notes_
     * (?) -> needs grammar update beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
     * (see p. 37ff for comparison w/ Jason)
-* plan / beliefname did not be equal
-* callback for actions to create concurrent calls after the action is finished
 * communication definition / drop equal messages / each message triggers only one event
 * parallel / SIMD unification with [type inhertitance](http://stackoverflow.com/questions/1396558/how-can-i-implement-the-unification-algorithm-in-a-language-like-java-or-c) or [Java Unification](https://code.google.com/p/kawala/source/browse/trunk/src/com/kaching/platform/common/types/Unification.java?r=265)
 * expression grammar [AntLR](http://stackoverflow.com/questions/16469023/antlr-left-recursion-for-nesting-boolean-expressions), [C#](http://www.codeproject.com/Articles/18880/State-of-the-Art-Expression-Evaluation), [Expression Grammar](https://ivanyu.me/blog/2014/09/13/creating-a-simple-parser-with-antlr/)
@@ -186,4 +187,6 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 
 ## Open Questions
 
-* Currently in Jason a goal addition (to trigger an ```achievment_goal_action```) is denoted by either ```!foo``` or ```!!foo```, beliefs (which trigger ```belief_action```) are denoted by a trailing ```+``` or ```-``` (```+foo```/```-foo```). Conceptual this seems to be inconsistent. Also if we want to consider explicit goal removal (simmilar to belief removal) ```+!foo``` or ```+!!foo``` should be used in a plan's body. This would require reverting https://github.com/flashpixx/Light-Jason/commit/7c24bfd0252a15a2f1aa0646b5b376c154809ad8 and add ```(PLUS | MINUS)``` to ```DOUBLEEXCLAMATIONMARK```.
+* Currently in Jason a goal addition (to trigger an ```achievment_goal_action```) is denoted by either ```!foo``` or ```!!foo```, beliefs (which trigger ```belief_action```) are denoted by a trailing ```+``` or ```-``` (```+foo```/```-foo```).
+Conceptual this seems to be inconsistent. Also if we want to consider explicit goal removal (simmilar to belief removal) ```+!foo``` or ```+!!foo``` should be used in a plan's body. 
+This would require reverting https://github.com/flashpixx/Light-Jason/commit/7c24bfd0252a15a2f1aa0646b5b376c154809ad8 and add ```(PLUS | MINUS)``` to ```DOUBLEEXCLAMATIONMARK```.
