@@ -293,17 +293,35 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
+    public Object visitTerm( final lightjason.grammar.AgentParser.TermContext p_context )
+    {
+        if ( p_context.string() != null )
+            return this.visitString( p_context.string() );
+        if ( p_context.number() != null )
+            return this.visitNumber( p_context.number() );
+        if ( p_context.literal() != null )
+            return this.visitLiteral( p_context.literal() );
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+        if ( p_context.arithmetic_expression() != null )
+            return this.visitArithmetic_expression( p_context.arithmetic_expression() );
+        if ( p_context.logical_expression() != null )
+            return this.visitLogical_expression( p_context.logical_expression() );
+        if ( p_context.termlist() != null )
+            return this.visitTermlist( p_context.termlist() );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
+    }
+
+    @Override
     public Object visitTermlist( final lightjason.grammar.AgentParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
 
-        Object x = p_context.term().stream().map( i -> this.visitTerm( i ) ).peek( System.out::println ).filter( i -> i != null ).map(
+        return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
                 i -> i instanceof ITerm ? (ITerm) i : new CRawTerm<>( i )
         ).collect( Collectors.toList() );
-        //System.out.println( x );
-
-        return x;
     }
 
     @Override

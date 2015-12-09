@@ -311,10 +311,10 @@ literal :
  * terms are predictable structures
  **/
 term :
-    variable
-    | string
+    string
     | number
     | literal
+    | variable
     | arithmetic_expression
     | logical_expression
     | LANGULARBRACKET termlist RANGULARBRACKET
