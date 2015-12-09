@@ -66,11 +66,11 @@ public class CAgentGenerator implements IAgentGenerator
      * @throws IOException thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws IOException
+    public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
         parse( p_stream, m_visitor );
-
+        System.out.println( "------> xxxx" );
         // replace all literals within the plans with actions
         final Map<CPath, IAction> l_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
 
@@ -121,7 +121,7 @@ public class CAgentGenerator implements IAgentGenerator
      * @param p_astvisitor AST visitor object
      * @throws IOException thrown on IO errors
      */
-    protected static void parse( final InputStream p_stream, final IAgentVisitor p_astvisitor ) throws IOException
+    protected static void parse( final InputStream p_stream, final IAgentVisitor p_astvisitor ) throws Exception
     {
         final AgentLexer l_lexer = new lightjason.grammar.AgentLexer( new ANTLRInputStream( p_stream ) );
         l_lexer.removeErrorListeners();

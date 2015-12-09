@@ -27,7 +27,6 @@ import lightjason.agent.CAgentGenerator;
 import lightjason.agent.IAction;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashSet;
 
 
@@ -39,7 +38,7 @@ public final class CMain
      *
      * @param p_args command-line arguments
      */
-    public static void main( final String[] p_args ) throws IOException
+    public static void main( final String[] p_args ) throws Exception
     {
         new CAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>() ).generate();
     }
