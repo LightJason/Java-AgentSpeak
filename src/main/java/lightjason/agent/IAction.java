@@ -28,7 +28,7 @@ import lightjason.language.plan.IBodyAction;
 
 
 /**
- * action interface
+ * external action interface
  */
 public interface IAction extends IBodyAction
 {

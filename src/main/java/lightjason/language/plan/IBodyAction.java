@@ -32,7 +32,7 @@ import java.util.Collection;
 
 
 /**
- * defines any plan-body operation
+ * internal action interface
  */
 public interface IBodyAction
 {
