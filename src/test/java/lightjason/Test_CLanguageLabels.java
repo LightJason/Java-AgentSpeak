@@ -33,21 +33,21 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import lightjason.common.CCommon;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -59,6 +59,10 @@ import static org.junit.Assert.fail;
 @SuppressWarnings( "serial" )
 public class Test_CLanguageLabels
 {
+    /**
+     * search path
+     **/
+    private static final URI c_search;
     /**
      * list of all project packages for searching classes
      *
@@ -73,6 +77,13 @@ public class Test_CLanguageLabels
 
     }};
     /**
+     * skip list to ignore files
+     */
+    private static final Set<String> c_skipfiles = new HashSet<String>()
+    {{
+        add( "lightjason/grammar/CASTErrorListener.java" );
+    }};
+    /**
      * set with all labels *
      */
     private final Set<String> m_labels = new HashSet<>();
@@ -85,20 +96,33 @@ public class Test_CLanguageLabels
      */
     private final Pattern m_language = Pattern.compile( m_translatemethod + ".+\\)" );
 
+    static
+    {
+        URI l_uri = null;
+        try
+        {
+            l_uri = CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI();
+        }
+        catch ( final Exception l_exception )
+        {
+        }
+
+        c_search = l_uri;
+    }
 
     /**
      * test-case all resource strings
-     *
-    @Test
+     * @bug disable unused label checking
      */
+    @Test
     public void testResourceString()
     {
         // --- check source -> label definition
         try
         {
             final List<Path> l_files = new ArrayList<>();
-            Files.walk( Paths.get( CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI() ) ).filter( Files::isRegularFile ).forEach(
-                    path -> l_files.add( path )
+            Files.walk( Paths.get( c_search ) ).filter( Files::isRegularFile ).forEach(
+                    i -> l_files.add( i )
             );
 
             for ( final Path l_item : l_files )
@@ -113,6 +137,7 @@ public class Test_CLanguageLabels
 
 
         // --- check label -> property definition
+        /*
         for ( final String l_language : CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
         {
             Locale.setDefault( Locale.forLanguageTag( l_language ) );
@@ -122,8 +147,8 @@ public class Test_CLanguageLabels
             assertTrue(
                     String.format( "the following keys in language [%s] are unused: %s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
             );
-
         }
+        */
 
     }
 
@@ -148,7 +173,7 @@ public class Test_CLanguageLabels
      */
     private void checkFile( final Path p_file ) throws IOException
     {
-        if ( !p_file.toString().endsWith( ".java" ) )
+        if ( ( !p_file.toString().endsWith( ".java" ) ) || ( c_skipfiles.contains( c_search.relativize( p_file.toUri() ).normalize().toString() )))
             return;
 
         try
