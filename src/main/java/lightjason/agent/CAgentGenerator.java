@@ -26,6 +26,7 @@ package lightjason.agent;
 import lightjason.common.CPath;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.grammar.AgentLexer;
+import lightjason.grammar.AgentParser;
 import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
 import lightjason.language.plan.IBodyAction;
@@ -70,7 +71,7 @@ public class CAgentGenerator implements IAgentGenerator
     {
         // run parsing with default AgentSpeak(L) visitor
         parse( p_stream, m_visitor );
-        System.out.println( "------> xxxx" );
+
         // replace all literals within the plans with actions
         final Map<CPath, IAction> l_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
 
@@ -123,48 +124,53 @@ public class CAgentGenerator implements IAgentGenerator
      */
     protected static void parse( final InputStream p_stream, final IAgentVisitor p_astvisitor ) throws Exception
     {
-        final AgentLexer l_lexer = new lightjason.grammar.AgentLexer( new ANTLRInputStream( p_stream ) );
+        final ANTLRErrorListener l_errorlistener = new ANTLRErrorListener()
+        {
+            @Override
+            public void syntaxError( final Recognizer<?, ?> p_recognizer, final Object p_symbol, final int p_line, final int p_charposition,
+                    final String p_message,
+                    final RecognitionException p_exception
+            )
+            {
+                throw new CSyntaxErrorException( p_message, p_exception );
+            }
+
+            @Override
+            public void reportAmbiguity( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex, final boolean p_exact,
+                    final BitSet p_alternatives,
+                    final ATNConfigSet p_configuration
+            )
+            {
+
+            }
+
+            @Override
+            public void reportAttemptingFullContext( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
+                    final BitSet p_bitSet,
+                    final ATNConfigSet p_configuration
+            )
+            {
+
+            }
+
+            @Override
+            public void reportContextSensitivity( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
+                    final int p_prediction,
+                    final ATNConfigSet p_configuration
+            )
+            {
+
+            }
+        };
+
+        final AgentLexer l_lexer = new AgentLexer( new ANTLRInputStream( p_stream ) );
         l_lexer.removeErrorListeners();
-        l_lexer.addErrorListener(
-                new ANTLRErrorListener()
-                {
-                    @Override
-                    public void syntaxError( final Recognizer<?, ?> p_recognizer, final Object p_symbol, final int p_line, final int p_charposition,
-                            final String p_message,
-                            final RecognitionException p_exception
-                    )
-                    {
-                        throw new CSyntaxErrorException( p_message, p_exception );
-                    }
+        l_lexer.addErrorListener( l_errorlistener );
 
-                    @Override
-                    public void reportAmbiguity( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex, final boolean p_exact,
-                            final BitSet p_alternatives,
-                            final ATNConfigSet p_configuration
-                    )
-                    {
+        final AgentParser l_parser = new AgentParser( new CommonTokenStream( l_lexer ) );
+        l_parser.removeErrorListeners();
+        l_parser.addErrorListener( l_errorlistener );
 
-                    }
-
-                    @Override
-                    public void reportAttemptingFullContext( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
-                            final BitSet p_bitSet,
-                            final ATNConfigSet p_configuration
-                    )
-                    {
-
-                    }
-
-                    @Override
-                    public void reportContextSensitivity( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
-                            final int p_prediction,
-                            final ATNConfigSet p_configuration
-                    )
-                    {
-
-                    }
-                }
-        );
-        p_astvisitor.visit( new lightjason.grammar.AgentParser( new CommonTokenStream( l_lexer ) ).agent() );
+        p_astvisitor.visit( l_parser.agent() );
     }
 }

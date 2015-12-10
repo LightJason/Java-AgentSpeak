@@ -36,4 +36,3 @@ setSpeed(X) :- setProperty("speed", X).
 
 @fuzzy(0.7)
 +!drive <- !!accelerate.
-
