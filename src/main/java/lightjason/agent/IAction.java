@@ -24,14 +24,13 @@
 package lightjason.agent;
 
 import lightjason.common.CPath;
-
-import java.util.List;
+import lightjason.language.plan.IBodyAction;
 
 
 /**
  * action interface
  */
-public interface IAction
+public interface IAction extends IBodyAction
 {
     /**
      * returns the name with path of the action
@@ -39,14 +38,5 @@ public interface IAction
      * @return path (literal functor)
      */
     public CPath getName();
-
-    /**
-     * runs the action
-     *
-     * @param p_agent agent that runs the action
-     * @param p_parameter parameter of the action
-     * @return boolean flag if the action is success or fail
-     */
-    public boolean execute( final IAgent p_agent, final List<Object> p_parameter );
 
 }

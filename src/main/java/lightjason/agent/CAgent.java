@@ -28,11 +28,13 @@ import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -92,7 +94,7 @@ public class CAgent implements IAgent
 
         p_configuration.getPlans().values().stream().forEach( i -> {
             System.out.println( i );
-            System.out.println( i.execute( this, null ) );
+            System.out.println( i.execute( this, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) );
         } );
 
     }

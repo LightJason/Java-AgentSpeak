@@ -25,6 +25,7 @@ package lightjason.language.plan;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.plan.annotation.CNumberAnnotation;
 import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.fuzzy.CBoolean;
@@ -127,14 +128,14 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation )
     {
         return new CBoolean(
                 ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                         ? m_action.parallelStream()
                         : m_action.stream()
-                ).map( i -> i.execute( p_agent, null ) ).allMatch( CBoolean.isTrue() )
+                ).map( i -> i.execute( p_agent, p_parameter, p_annotation ) ).allMatch( CBoolean.isTrue() )
         );
     }
 

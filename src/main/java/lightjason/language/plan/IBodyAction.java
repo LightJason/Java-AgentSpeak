@@ -24,9 +24,11 @@
 package lightjason.language.plan;
 
 import lightjason.agent.IAgent;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.plan.fuzzy.CBoolean;
 
-import java.util.List;
+import java.util.Collection;
 
 
 /**
@@ -40,8 +42,9 @@ public interface IBodyAction
      *
      * @param p_agent agent which calls the action
      * @param p_parameter parameter of the action
+     * @param p_annotation annotation
      * @return fuzzy boolean
      */
-    public CBoolean execute( final IAgent p_agent, final List<?> p_parameter );
+    public CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation );
 
 }

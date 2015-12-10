@@ -25,10 +25,11 @@ package lightjason.language.plan.action;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.text.MessageFormat;
-import java.util.List;
+import java.util.Collection;
 
 
 /**
@@ -60,7 +61,9 @@ public final class CAchievementGoal extends IAction<ILiteral>
     }
 
     @Override
-    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
+    public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
     {
         return new CBoolean( false );
     }
