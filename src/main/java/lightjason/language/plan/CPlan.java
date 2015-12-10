@@ -28,7 +28,6 @@ import lightjason.language.ILiteral;
 import lightjason.language.plan.annotation.CNumberAnnotation;
 import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.fuzzy.CBoolean;
-import lightjason.language.plan.fuzzy.CPredicate;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.text.MessageFormat;
@@ -135,7 +134,7 @@ public class CPlan implements IPlan
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                         ? m_action.parallelStream()
                         : m_action.stream()
-                ).map( i -> i.execute( p_agent, null ) ).allMatch( CPredicate.isTrue() )
+                ).map( i -> i.execute( p_agent, null ) ).allMatch( CBoolean.isTrue() )
         );
     }
 

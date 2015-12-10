@@ -27,6 +27,7 @@ import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 
 import java.text.MessageFormat;
+import java.util.function.Predicate;
 
 
 /**
@@ -85,5 +86,15 @@ public final class CBoolean implements IFuzzyValue<Boolean>
     public final String toString()
     {
         return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
+    }
+
+    /**
+     * check fuzzy-trueness
+     *
+     * @return predicate
+     */
+    public static Predicate<CBoolean> isTrue()
+    {
+        return p -> p.getValue();
     }
 }
