@@ -49,6 +49,7 @@ public final class CMain
         new CAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
         {{
             add( new CPrint() );
+            add( new CSetProperty() );
         }} ).generate();
     }
 
@@ -70,6 +71,28 @@ public final class CMain
         )
         {
             System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_agent );
+            return CBoolean.from( true );
+        }
+    }
+
+    /**
+     * test print action
+     */
+    private final static class CSetProperty implements IAction
+    {
+        private final CPath c_name = CPath.from( "setProperty" );
+
+        @Override
+        public CPath getName()
+        {
+            return c_name;
+        }
+
+        @Override
+        public CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        )
+        {
+            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_agent );
             return CBoolean.from( true );
         }
     }

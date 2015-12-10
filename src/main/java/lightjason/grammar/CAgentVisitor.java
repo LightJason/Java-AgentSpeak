@@ -26,7 +26,9 @@ package lightjason.grammar;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.IAction;
 import lightjason.common.CCommon;
+import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.grammar.AgentParser.Achievement_goal_actionContext;
 import lightjason.grammar.AgentParser.Annotation_atomContext;
@@ -106,7 +108,15 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
      * map with plans
      */
     private final SetMultimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
+    /**
+     * map with action definition
+     */
+    private final Map<CPath, IAction> m_actions;
 
+    public CAgentVisitor( final Set<IAction> p_actions )
+    {
+        m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
+    }
 
     @Override
     public Object visitInitial_beliefs( final Initial_beliefsContext p_context )
@@ -248,15 +258,29 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public Object visitBody( final BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
         return p_context.body_formula().parallelStream().filter( i -> i != null ).map( i -> {
 
             final Object l_item = this.visitBody_formula( i );
+
+            // body actions directly return
             if ( l_item instanceof IBodyAction )
                 return l_item;
 
+            // literals are actions
+            if ( l_item instanceof ILiteral )
+            {
+                final IBodyAction l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
+                if ( l_action == null )
+                    throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", l_item ) );
+
+                return l_action;
+            }
+
+            // otherwise only simple types encapsulate
             return new CRawAction<>( l_item );
 
         } ).collect( Collectors.toList() );

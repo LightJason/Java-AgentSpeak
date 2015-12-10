@@ -12,7 +12,7 @@ setSpeed(X) :- setProperty("speed", X).
 +!accelerate
     : current_speed(Speed) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
         //Speed++;
-        setSpeed( Speed )[blub(3),blub(4)];
+        setProperty( Speed )[blub(3),blub(4)];
         !!drive;
         -+baz("hallo")
     <- true.
@@ -22,14 +22,14 @@ setSpeed(X) :- setProperty("speed", X).
     : current_speed(Speed) && Speed > 10 <-
         //Speed--;
         +foo(5);
-        setSpeed( Speed );
-        hola([1,2,3,4]);
+        setProperty( Speed );
+        print([1,2,3,4]);
         !!drive.
 
 @atomic
 +!decelerate
     : current_speed(Speed) && routingtype(Type) && Speed <= 10 <-
-        reroute( target, Type );
+        print( target, Type );
         -bar/blub(Speed);
         !!decelerate.
 

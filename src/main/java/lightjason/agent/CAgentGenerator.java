@@ -37,7 +37,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -51,7 +50,7 @@ public class CAgentGenerator implements IAgentGenerator
     /**
      * visitor to store parsed data
      */
-    private final IAgentVisitor m_visitor = new CAgentVisitor();
+    private final IAgentVisitor m_visitor;
 
     /**
      * ctor
@@ -64,10 +63,8 @@ public class CAgentGenerator implements IAgentGenerator
     public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
+        m_visitor = new CAgentVisitor( p_actions );
         parse( p_stream, m_visitor );
-
-        // replace all literals within the plans with actions
-        final Map<CPath, IAction> l_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
 
         m_visitor.getPlans().values().stream().forEach(
 
