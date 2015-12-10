@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import lightjason.common.CCommon;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -54,6 +53,8 @@ import static org.junit.Assert.fail;
 
 /**
  * test all resource strings
+ *
+ * @todo add ignore class definitions
  */
 @SuppressWarnings( "serial" )
 public class Test_CLanguageLabels
@@ -87,8 +88,9 @@ public class Test_CLanguageLabels
 
     /**
      * test-case all resource strings
-     */
+     *
     @Test
+     */
     public void testResourceString()
     {
         // --- check source -> label definition

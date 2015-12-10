@@ -92,7 +92,7 @@ import java.util.stream.Collectors;
 /**
  * class to visit each AST node of an agent
  */
-public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVisitor
+public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> implements IAgentVisitor
 {
     /**
      * initial goal
