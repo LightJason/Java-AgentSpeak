@@ -59,7 +59,7 @@ public final class CTestGoal extends IAction<ILiteral>
             final Collection<ILiteral> p_annotation
     )
     {
-        return new CBoolean( p_agent.getRunningPlans().containsKey( m_value ) );
+        return CBoolean.from( p_agent.getRunningPlans().containsKey( m_value ) );
     }
 
 }

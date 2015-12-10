@@ -146,6 +146,17 @@ public final class CPath implements Iterable<CPath>
     }
 
     /**
+     * factor method to build path
+     *
+     * @param p_string input string
+     * @return path
+     */
+    public static CPath from( final String p_string )
+    {
+        return createSplitPath( DEFAULTSEPERATOR, p_string );
+    }
+
+    /**
      * appends a string at the current path and returns the new object
      *
      * @param p_path string with path

@@ -25,8 +25,14 @@ package lightjason;
 
 import lightjason.agent.CAgentGenerator;
 import lightjason.agent.IAction;
+import lightjason.agent.IAgent;
+import lightjason.common.CPath;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.io.FileInputStream;
+import java.util.Collection;
 import java.util.HashSet;
 
 
@@ -40,7 +46,31 @@ public final class CMain
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        new CAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>() ).generate();
+        new CAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
+        {{
+            add( new CPrint() );
+        }} ).generate();
     }
 
+    /**
+     * test print action
+     */
+    private final static class CPrint implements IAction
+    {
+        private final CPath c_name = CPath.from( "print" );
+
+        @Override
+        public CPath getName()
+        {
+            return c_name;
+        }
+
+        @Override
+        public CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        )
+        {
+            System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_agent );
+            return CBoolean.from( true );
+        }
+    }
 }

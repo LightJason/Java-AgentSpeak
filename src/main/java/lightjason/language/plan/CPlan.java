@@ -130,7 +130,7 @@ public class CPlan implements IPlan
     @Override
     public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation )
     {
-        return new CBoolean(
+        return CBoolean.from(
                 ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) ||
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                         ? m_action.parallelStream()

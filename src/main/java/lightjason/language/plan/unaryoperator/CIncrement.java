@@ -78,6 +78,6 @@ public final class CIncrement<T extends Number> implements IOperator<T>
         if ( m_variable.isValueAssignableTo( Integer.class ) )
             m_variable.set( (T) new Integer( m_variable.get().intValue() + 1 ) );
 
-        return new CBoolean( true );
+        return CBoolean.from( true );
     }
 }

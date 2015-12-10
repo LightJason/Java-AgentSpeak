@@ -76,7 +76,7 @@ public final class CRawAction<T> extends IAction<T>
      */
     private CBoolean getTypedResult( final Boolean p_value )
     {
-        return new CBoolean( p_value );
+        return CBoolean.from( p_value );
     }
 
     /**
@@ -87,7 +87,7 @@ public final class CRawAction<T> extends IAction<T>
      */
     private CBoolean getTypedResult( final IVariable<?> p_value )
     {
-        return new CBoolean( p_value.isAllocated() );
+        return CBoolean.from( p_value.isAllocated() );
     }
 
     /**
@@ -98,6 +98,6 @@ public final class CRawAction<T> extends IAction<T>
      */
     private CBoolean getTypedResult( final T p_value )
     {
-        return new CBoolean( true );
+        return CBoolean.from( true );
     }
 }

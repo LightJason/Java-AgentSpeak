@@ -97,4 +97,27 @@ public final class CBoolean implements IFuzzyValue<Boolean>
     {
         return p -> p.getValue();
     }
+
+    /**
+     * factory
+     *
+     * @param p_value boolean value
+     * @return boolean object
+     */
+    public static CBoolean from( final boolean p_value )
+    {
+        return new CBoolean( p_value );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_value boolean value
+     * @param p_fuzzy fuzzy value
+     * @return boolean object
+     */
+    public static CBoolean from( final boolean p_value, final double p_fuzzy )
+    {
+        return new CBoolean( p_value, p_fuzzy );
+    }
 }

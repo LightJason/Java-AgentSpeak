@@ -84,7 +84,7 @@ public final class CBeliefAction extends IAction<ILiteral>
                 throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
         }
 
-        return new CBoolean( true );
+        return CBoolean.from( true );
     }
 
     /**

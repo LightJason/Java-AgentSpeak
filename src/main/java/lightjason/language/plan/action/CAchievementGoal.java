@@ -65,6 +65,6 @@ public final class CAchievementGoal extends IAction<ILiteral>
             final Collection<ILiteral> p_annotation
     )
     {
-        return new CBoolean( false );
+        return CBoolean.from( false );
     }
 }
