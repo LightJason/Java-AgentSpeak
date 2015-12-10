@@ -21,79 +21,32 @@
  * @endcond
  */
 
-package lightjason.language.plan.action;
+package lightjason.language.plan.fuzzy;
 
-import lightjason.agent.IAgent;
-import lightjason.language.IVariable;
-import lightjason.language.plan.fuzzy.CBoolean;
-
-import java.util.List;
+import java.util.function.Predicate;
 
 
 /**
- * encapsulate class for any non-executable data type e.g. boolean
+ * fuzzy predicate
  */
-public final class CRawAction<T> extends IAction<T>
+public final class CPredicate
 {
     /**
      * ctor
-     *
-     * @param p_data any object data
      */
-    public CRawAction( final T p_data )
+    private CPredicate()
     {
-        super( p_data );
-    }
 
-    @Override
-    public final int hashCode()
-    {
-        return m_value != null ? m_value.hashCode() : super.hashCode();
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_value != null ? m_value.toString() : super.toString();
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final CBoolean execute( final IAgent p_agent, final List<?> p_parameter )
-    {
-        return this.getTypedResult( m_value );
     }
 
     /**
-     * fixed type result
+     * check fuzzy-trueness
      *
-     * @param p_value boolean value
-     * @return fuzzy-boolean
+     * @return predicate
      */
-    private CBoolean getTypedResult( final Boolean p_value )
+    public static Predicate<CBoolean> isTrue()
     {
-        return new CBoolean( p_value );
+        return p -> p.getValue();
     }
 
-    /**
-     * fixed type result
-     *
-     * @param p_value variable value
-     * @return fuzzy-boolean
-     */
-    private CBoolean getTypedResult( final IVariable<?> p_value )
-    {
-        return new CBoolean( p_value.isAllocated() );
-    }
-
-    /**
-     * fixed type result
-     *
-     * @param p_value any other value
-     * @return fuzzy-boolean
-     */
-    private CBoolean getTypedResult( final T p_value )
-    {
-        return new CBoolean( true );
-    }
 }

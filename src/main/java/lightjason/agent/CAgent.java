@@ -92,7 +92,7 @@ public class CAgent implements IAgent
 
         p_configuration.getPlans().values().stream().forEach( i -> {
             System.out.println( i );
-            //System.out.println( i.execute( this, null ) );
+            System.out.println( i.execute( this, null ) );
         } );
 
     }
