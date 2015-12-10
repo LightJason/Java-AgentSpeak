@@ -336,6 +336,7 @@ literalset :
 
 /**
  * list with head-tail-annotation definition
+ * @bug move to variable type
  **/
 list_headtail :
     variable

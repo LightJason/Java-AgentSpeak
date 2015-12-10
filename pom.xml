@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>19.0-rc3</version>
+            <version>19.0</version>
             <scope>compile</scope>
         </dependency>
 
