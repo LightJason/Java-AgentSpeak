@@ -96,7 +96,7 @@ public class CAgent implements IAgent
 
         p_configuration.getPlans().values().stream().forEach( i -> {
 
-            System.out.println( "=====>> " + i + " ===" );
+            System.out.println( "=====>> " + i + " ===\n" );
             i.getBodyActions().stream().forEachOrdered( n -> {
                 System.out.print( n + "\t" + n.getClass() );
                 if ( n.getClass().equals( CRawAction.class ) )
@@ -106,7 +106,8 @@ public class CAgent implements IAgent
                 }
                 System.out.println();
             } );
-            System.out.println( "--> " + i.execute( this, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--" );
+            System.out.println();
+            System.out.println( "\n--> " + i.execute( this, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--\n" );
             System.out.println( "===================================================================" );
 
         } );
