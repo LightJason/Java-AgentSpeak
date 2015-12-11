@@ -62,7 +62,7 @@ public final class CMain
         /**
          * static name of the action
          **/
-        private final CPath c_name = CPath.from( "print" );
+        private static final CPath c_name = CPath.from( "print" );
 
 
         @Override
@@ -86,7 +86,7 @@ public final class CMain
     private final static class CSetProperty extends IBaseAction
     {
         /** static name of the action **/
-        private final CPath c_name = CPath.from( "setProperty" );
+        private static final CPath c_name = CPath.from( "setProperty" );
 
         @Override
         public final CPath getName()
