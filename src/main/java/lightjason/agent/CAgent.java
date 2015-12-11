@@ -29,14 +29,11 @@ import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
-import lightjason.language.ITerm;
 import lightjason.language.plan.IPlan;
-import lightjason.language.plan.action.CRawAction;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,29 +86,6 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_name = p_configuration.getName();
         m_score = null;
-
-        //System.out.println( p_astvisitor.getInitialGoal() );
-        //System.out.println( p_astvisitor.getInitialBeliefs() );
-        //System.out.println( p_astvisitor.getPlans() );
-
-        p_configuration.getPlans().values().stream().forEach( i -> {
-
-            System.out.println( "=====>> " + i + " ===\n" );
-            i.getBodyActions().stream().forEachOrdered( n -> {
-                System.out.print( n + "\t" + n.getClass() );
-                if ( n.getClass().equals( CRawAction.class ) )
-                {
-                    final CRawAction<?> l_raw = ( (CRawAction) n );
-                    System.out.print( "\t" + l_raw.getValue().getClass() );
-                }
-                System.out.println();
-            } );
-            System.out.println();
-            System.out.println( "\n--> " + i.execute( this, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--\n" );
-            System.out.println( "===================================================================" );
-
-        } );
-
     }
 
     @Override

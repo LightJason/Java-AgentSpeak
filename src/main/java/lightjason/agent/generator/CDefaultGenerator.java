@@ -33,12 +33,16 @@ import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
 import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.plan.action.CRawAction;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -67,6 +71,30 @@ public class CDefaultGenerator implements IGenerator
         // run parsing with default AgentSpeak(L) visitor
         m_visitor = new CAgentVisitor( p_actions );
         parse( p_stream, m_visitor );
+
+
+        System.out.println( m_visitor.getInitialGoal() );
+        System.out.println();
+        System.out.println( m_visitor.getInitialBeliefs() );
+        System.out.println();
+        m_visitor.getPlans().values().stream().forEach( i -> {
+
+            System.out.println( "=====>> " + i + " ===\n" );
+            i.getBodyActions().stream().forEachOrdered( n -> {
+                System.out.print( n + "\t" + n.getClass() );
+                if ( n.getClass().equals( CRawAction.class ) )
+                {
+                    final CRawAction<?> l_raw = ( (CRawAction) n );
+                    System.out.print( "\t" + l_raw.getValue().getClass() );
+                }
+                System.out.println();
+            } );
+            System.out.println();
+            System.out.println( "\n--> " + i.execute( null, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--\n" );
+            System.out.println( "===================================================================" );
+
+        } );
+
     }
 
     @Override
