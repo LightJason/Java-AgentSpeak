@@ -185,8 +185,3 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
 
-## Open Questions
-
-* Currently in Jason a goal addition (to trigger an ```achievment_goal_action```) is denoted by either ```!foo``` or ```!!foo```, beliefs (which trigger ```belief_action```) are denoted by a trailing ```+``` or ```-``` (```+foo```/```-foo```).
-Conceptual this seems to be inconsistent. Also if we want to consider explicit goal removal (simmilar to belief removal) ```+!foo``` or ```+!!foo``` should be used in a plan's body. 
-This would require reverting https://github.com/flashpixx/Light-Jason/commit/7c24bfd0252a15a2f1aa0646b5b376c154809ad8 and add ```(PLUS | MINUS)``` to ```DOUBLEEXCLAMATIONMARK```.
