@@ -130,7 +130,7 @@ public class CPlan implements IPlan
     @Override
     public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation )
     {
-        // execution must be the first call, because all elements must execute
+        // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked
         return CBoolean.from(
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                         ? m_action.parallelStream()
