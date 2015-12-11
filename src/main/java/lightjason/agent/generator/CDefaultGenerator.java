@@ -21,16 +21,18 @@
  * @endcond
  */
 
-package lightjason.agent;
+package lightjason.agent.generator;
 
+import lightjason.agent.CAgent;
+import lightjason.agent.IAgent;
+import lightjason.agent.action.IAction;
+import lightjason.agent.configuration.CDefaultConfiguration;
 import lightjason.common.CPath;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
 import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
-import lightjason.language.plan.IBodyAction;
-import lightjason.language.plan.action.CRawAction;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -45,7 +47,7 @@ import java.util.stream.IntStream;
 /**
  * agent generator
  */
-public class CAgentGenerator implements IAgentGenerator
+public class CDefaultGenerator implements IGenerator
 {
     /**
      * visitor to store parsed data
@@ -60,35 +62,17 @@ public class CAgentGenerator implements IAgentGenerator
      * @throws IOException thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public CDefaultGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
         m_visitor = new CAgentVisitor( p_actions );
         parse( p_stream, m_visitor );
-
-        m_visitor.getPlans().values().stream().forEach(
-
-                i -> {
-                    System.out.println( "------------------------------------" );
-                    for ( IBodyAction l_item : i.getBodyActions() )
-                    {
-                        System.out.print( l_item + "\t" + l_item.getClass() );
-                        if ( l_item.getClass().equals( CRawAction.class ) )
-                        {
-                            final CRawAction<?> l_raw = ( (CRawAction) l_item );
-                            System.out.print( "\t" + l_raw.getValue().getClass() );
-                        }
-                        System.out.println();
-                    }
-
-                } );
-        System.out.println( "------------------------------------" );
     }
 
     @Override
     public <T> IAgent generate( final T... p_data ) throws IOException
     {
-        return new CAgent( new CAgentConfiguration( CPath.createPath( "agent" ), m_visitor.getPlans() ) );
+        return new CAgent( new CDefaultConfiguration( CPath.createPath( "agent" ), m_visitor.getPlans() ) );
     }
 
     @Override

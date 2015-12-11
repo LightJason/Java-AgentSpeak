@@ -21,74 +21,22 @@
  * @endcond
  */
 
-package lightjason.agent;
+package lightjason.agent.action;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
-
-import java.util.Map;
+import lightjason.language.plan.IBodyAction;
 
 
 /**
- * default agent configuration
+ * external action interface
  */
-public class CAgentConfiguration implements IAgentConfiguration
+public interface IAction extends IBodyAction
 {
     /**
-     * name of the agent
-     */
-    private final CPath m_name;
-    /**
-     * instance of agent plans
-     */
-    private final SetMultimap<ITrigger<?>, IPlan> m_plans;
-
-    /**
-     * ctor
+     * returns the name with path of the action
      *
-     * @param p_name name
-     * @param p_plans plans
-     * @todo plans must be cloned
-     * @todo beliefbase must be cloned
+     * @return path (literal functor)
      */
-    public CAgentConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans )
-    {
-        m_name = p_name;
-        m_plans = p_plans;
-    }
-
-    @Override
-    public IBeliefBaseMask getBeliefbase()
-    {
-        return null;
-    }
-
-    @Override
-    public ILiteral getInitialGoal()
-    {
-        return null;
-    }
-
-    @Override
-    public SetMultimap<ITrigger<?>, IPlan> getPlans()
-    {
-        return m_plans;
-    }
-
-    @Override
-    public Map<String, Object> getRules()
-    {
-        return null;
-    }
-
-    @Override
-    public CPath getName()
-    {
-        return m_name;
-    }
+    public CPath getName();
 
 }

@@ -24,12 +24,14 @@
 package lightjason.agent;
 
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.configuration.IConfiguration;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.plan.IPlan;
+import lightjason.language.plan.action.CRawAction;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.io.IOException;
@@ -81,7 +83,7 @@ public class CAgent implements IAgent
      * @bug remove test plan execution
      * @bug score function not working
      */
-    public CAgent( final IAgentConfiguration p_configuration ) throws IOException
+    public CAgent( final IConfiguration p_configuration ) throws IOException
     {
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();
@@ -93,8 +95,20 @@ public class CAgent implements IAgent
         //System.out.println( p_astvisitor.getPlans() );
 
         p_configuration.getPlans().values().stream().forEach( i -> {
-            System.out.println( i );
-            System.out.println( i.execute( this, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) );
+
+            System.out.println( "=====>> " + i + " ===" );
+            i.getBodyActions().stream().forEachOrdered( n -> {
+                System.out.print( n + "\t" + n.getClass() );
+                if ( n.getClass().equals( CRawAction.class ) )
+                {
+                    final CRawAction<?> l_raw = ( (CRawAction) n );
+                    System.out.print( "\t" + l_raw.getValue().getClass() );
+                }
+                System.out.println();
+            } );
+            System.out.println( "--> " + i.execute( this, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--" );
+            System.out.println( "===================================================================" );
+
         } );
 
     }
@@ -156,7 +170,7 @@ public class CAgent implements IAgent
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{0} ( Cycle: {1} / Beliefbase: {2} / Plans: {3} )", m_name, m_cycle, m_beliefbase, m_plans );
+        return MessageFormat.format( "{0} [{1}]( Cycle: {2} / Beliefbase: {3} / Plans: {4} )", super.toString(), m_name, m_cycle, m_beliefbase, m_plans );
     }
 
     @Override

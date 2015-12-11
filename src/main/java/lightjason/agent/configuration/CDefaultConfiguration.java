@@ -21,37 +21,74 @@
  * @endcond
  */
 
-package lightjason.agent;
+package lightjason.agent.configuration;
 
-import java.util.Set;
+import com.google.common.collect.SetMultimap;
+import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.common.CPath;
+import lightjason.language.ILiteral;
+import lightjason.language.plan.IPlan;
+import lightjason.language.plan.trigger.ITrigger;
+
+import java.util.Map;
 
 
 /**
- * generator interface to create agents
+ * default agent configuration
  */
-public interface IAgentGenerator
+public class CDefaultConfiguration implements IConfiguration
 {
+    /**
+     * name of the agent
+     */
+    private final CPath m_name;
+    /**
+     * instance of agent plans
+     */
+    private final SetMultimap<ITrigger<?>, IPlan> m_plans;
 
     /**
-     * generates an agent
+     * ctor
      *
-     * @param p_data any object data
-     * @return agent
-     *
-     * @tparam T any object type
+     * @param p_name name
+     * @param p_plans plans
+     * @todo plans must be cloned
+     * @todo beliefbase must be cloned
      */
-    public <T> IAgent generate( final T... p_data ) throws Exception;
+    public CDefaultConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans )
+    {
+        m_name = p_name;
+        m_plans = p_plans;
+    }
 
+    @Override
+    public IBeliefBaseMask getBeliefbase()
+    {
+        return null;
+    }
 
-    /**
-     * generates a set of agents
-     *
-     * @param p_number number of agents within the set
-     * @param p_data any object data
-     * @return set of agents
-     *
-     * @tparam T any object type
-     */
-    public <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
+    @Override
+    public ILiteral getInitialGoal()
+    {
+        return null;
+    }
+
+    @Override
+    public SetMultimap<ITrigger<?>, IPlan> getPlans()
+    {
+        return m_plans;
+    }
+
+    @Override
+    public Map<String, Object> getRules()
+    {
+        return null;
+    }
+
+    @Override
+    public CPath getName()
+    {
+        return m_name;
+    }
 
 }

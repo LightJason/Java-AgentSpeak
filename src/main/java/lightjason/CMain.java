@@ -23,9 +23,10 @@
 
 package lightjason;
 
-import lightjason.agent.CAgentGenerator;
-import lightjason.agent.IAction;
 import lightjason.agent.IAgent;
+import lightjason.agent.action.IAction;
+import lightjason.agent.action.IBaseAction;
+import lightjason.agent.generator.CDefaultGenerator;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -46,7 +47,7 @@ public final class CMain
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        new CAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
+        new CDefaultGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
         {{
             add( new CPrint() );
             add( new CSetProperty() );
@@ -56,44 +57,50 @@ public final class CMain
     /**
      * test print action
      */
-    private final static class CPrint implements IAction
+    private final static class CPrint extends IBaseAction
     {
+        /**
+         * static name of the action
+         **/
         private final CPath c_name = CPath.from( "print" );
 
-        @Override
-        public CPath getName()
-        {
-            return c_name;
-        }
 
         @Override
-        public CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
         )
         {
             System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_agent );
             return CBoolean.from( true );
         }
+
+        @Override
+        public final CPath getName()
+        {
+            return c_name;
+        }
     }
 
     /**
-     * test print action
+     * test setproperty action
      */
-    private final static class CSetProperty implements IAction
+    private final static class CSetProperty extends IBaseAction
     {
+        /** static name of the action **/
         private final CPath c_name = CPath.from( "setProperty" );
 
         @Override
-        public CPath getName()
+        public final CPath getName()
         {
             return c_name;
         }
 
         @Override
-        public CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
         )
         {
             System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_agent );
             return CBoolean.from( true );
         }
+
     }
 }
