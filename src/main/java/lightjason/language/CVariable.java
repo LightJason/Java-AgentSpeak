@@ -100,7 +100,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public int hashCode()
     {
-        return m_functor.hashCode() + ( ( m_value != null ) ? m_value.hashCode() : 0 );
+        return m_functor.hashCode();
     }
 
     @Override

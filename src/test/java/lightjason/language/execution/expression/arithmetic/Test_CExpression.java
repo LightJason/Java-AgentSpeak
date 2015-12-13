@@ -28,7 +28,6 @@ import lightjason.language.CVariable;
 import org.junit.Test;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Random;
 
 import static org.junit.Assert.assertTrue;
@@ -55,10 +54,10 @@ public class Test_CExpression
         {
             final int l_inputvalue = l_random.nextInt( 100000 );
             final int l_successoutput = ( l_inputvalue + 1 ) * 4 + 8;
-            final int l_output = l_expression.evaluate( new HashMap<CPath, Number>()
-            {{
-                put( new CPath( "X" ), l_inputvalue );
-            }} ).intValue();
+
+            l_expression.getVariables().get( CPath.from( "X" ) ).set( new Integer( l_inputvalue ) );
+            final int l_output = l_expression.evaluate().intValue();
+
             assertTrue( MessageFormat.format( "value in run [{0}] should be [{1}] but is [{2}]", i, l_successoutput, l_output ), l_successoutput == l_output );
         }
 

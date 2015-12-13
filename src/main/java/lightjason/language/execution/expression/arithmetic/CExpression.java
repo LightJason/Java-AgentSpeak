@@ -49,11 +49,9 @@ import lightjason.language.execution.expression.arithmetic.operator.IArithmeticO
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -94,9 +92,9 @@ public final class CExpression implements IExpression
      */
     private final Map<String, IArithmeticOperator> m_operatordefinition;
     /**
-     * stores a set of all variables
+     * stores a map of variables
      */
-    private final Set<IVariable<? extends Number>> m_variables = new HashSet<>();
+    private final Map<CPath, IVariable<Number>> m_variables = new HashMap<>();
 
     /**
      * ctor
@@ -158,12 +156,12 @@ public final class CExpression implements IExpression
      *
      * @tparam T number type
      */
-    public final <T extends Number> CExpression push( final IVariable<T>... p_variable )
+    public final CExpression push( final IVariable<Number>... p_variable )
     {
-        for ( final IVariable<T> l_item : p_variable )
+        for ( final IVariable<Number> l_item : p_variable )
         {
             m_elements.add( new CNumberElement<>( l_item ) );
-            m_variables.add( l_item );
+            m_variables.put( l_item.getFQNFunctor(), l_item );
         }
 
         return this;
@@ -174,29 +172,18 @@ public final class CExpression implements IExpression
      *
      * @return set with variables
      */
-    public final Set<IVariable<? extends Number>> getVariables()
+    public final Map<CPath, IVariable<Number>> getVariables()
     {
         return m_variables;
     }
 
     /**
-     * evaluates the expression without variable substituation
-     *
-     * @return
-     */
-    public final Number evaluate()
-    {
-        return this.evaluate( null );
-    }
-
-    /**
      * evaluates expression
      *
-     * @param p_solver map with variable substituation
      * @return number
      */
     @SuppressWarnings( "unchecked" )
-    public final Number evaluate( final Map<CPath, Number> p_solver )
+    public final Number evaluate()
     {
         // copy of data
         final Stack<IArithmeticOperator> l_operator = (Stack<IArithmeticOperator>) m_operator.clone();
@@ -213,7 +200,7 @@ public final class CExpression implements IExpression
 
 
             final List<CNumberElement<?>> l_arguments = l_elements.subList( 0, l_currentoperator.getNumberOfArguments() );
-            final Number l_number = l_currentoperator.execution( l_arguments.parallelStream().map( i -> i.get( p_solver ) ).collect( Collectors.toList() ) );
+            final Number l_number = l_currentoperator.execution( l_arguments.parallelStream().map( i -> i.get() ).collect( Collectors.toList() ) );
 
 
             l_arguments.clear();
@@ -223,7 +210,7 @@ public final class CExpression implements IExpression
         if ( l_elements.size() != 1 )
             throw new CIllegalStateException( CCommon.getLanguageString( this, "notevaluated" ) );
 
-        return l_elements.get( 0 ).get( null );
+        return l_elements.get( 0 ).get();
     }
 
 
@@ -271,20 +258,17 @@ public final class CExpression implements IExpression
         /**
          * returns the number
          *
-         * @param p_solver solver map with variabl -> number mapping
          * @return number
          */
-        public final Number get( final Map<CPath, Number> p_solver )
+        public final Number get()
         {
-            Number l_return = m_value;
-            if ( ( p_solver != null ) && ( m_variable != null ) )
-            {
-                l_return = p_solver.get( m_variable.getFQNFunctor() );
-                if ( l_return == null )
-                    throw new CIllegalStateException( CCommon.getLanguageString( this, "variablenotresolve", m_variable.getFQNFunctor() ) );
-            }
+            if ( m_value != null )
+                return m_value;
 
-            return l_return;
+            if ( !m_variable.isAllocated() )
+                throw new CIllegalStateException( CCommon.getLanguageString( this, "variablenotresolve", m_variable.getFQNFunctor() ) );
+
+            return m_variable.get();
         }
     }
 
