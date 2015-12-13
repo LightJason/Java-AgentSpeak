@@ -21,22 +21,34 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.expression.arithmetic.operator;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+
+import java.util.List;
 
 
 /**
- * external action interface
+ * interface to describe an arithmetic operator
  */
-public interface IAction extends IExecution
+public interface IArithmeticOperator
 {
     /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
+     * token for matching
      */
-    public CPath getName();
+    public String getToken();
 
+    /**
+     * number of arguments of the operator
+     *
+     * @return argument number [1,infinty)
+     */
+    public int getNumberOfArguments();
+
+    /**
+     * operator execution
+     *
+     * @param p_arguments arguments of the operator
+     * @return calculated number
+     */
+    public Number execution( final List<Number> p_arguments );
 }

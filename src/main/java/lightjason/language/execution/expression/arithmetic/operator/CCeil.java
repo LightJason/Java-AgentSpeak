@@ -21,22 +21,43 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.expression.arithmetic.operator;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import java.util.List;
 
 
 /**
- * external action interface
+ * ceil-function operator
  */
-public interface IAction extends IExecution
+public final class CCeil implements IArithmeticOperator
 {
-    /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
-     */
-    public CPath getName();
+    @Override
+    public final String getToken()
+    {
+        return "ceil";
+    }
 
+    @Override
+    public final int getNumberOfArguments()
+    {
+        return 1;
+    }
+
+    @Override
+    public final Number execution( final List<Number> p_arguments )
+    {
+        return Math.ceil( p_arguments.get( 0 ).doubleValue() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return getToken().hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.getToken().equals( p_object );
+    }
 }

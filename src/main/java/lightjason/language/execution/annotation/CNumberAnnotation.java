@@ -21,22 +21,31 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.annotation;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import java.text.MessageFormat;
 
 
 /**
- * external action interface
+ * number annotation
  */
-public interface IAction extends IExecution
+public final class CNumberAnnotation<T extends Number> extends IBaseAnnotation<T>
 {
     /**
-     * returns the name with path of the action
+     * ctor
      *
-     * @return path (literal functor)
+     * @param p_type type
+     * @param p_data number
      */
-    public CPath getName();
+    public CNumberAnnotation( final EType p_type, final T p_data )
+    {
+        super( p_type, p_data );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_type, m_data );
+    }
 
 }

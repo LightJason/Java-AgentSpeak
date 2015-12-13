@@ -21,88 +21,83 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language.execution.action;
 
-import lightjason.agent.action.IAction;
-import lightjason.agent.action.IBaseAction;
-import lightjason.agent.generator.CDefaultGenerator;
-import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 
-import java.io.FileInputStream;
 import java.util.Collection;
-import java.util.HashSet;
 
 
-public final class CMain
+/**
+ * encapsulate class for any non-executable data type e.g. boolean
+ */
+public final class CRawAction<T> extends IAction<T>
 {
-
     /**
-     * main
+     * ctor
      *
-     * @param p_args command-line arguments
+     * @param p_data any object data
      */
-    public static void main( final String[] p_args ) throws Exception
+    public CRawAction( final T p_data )
     {
-        new CDefaultGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
-        {{
-            add( new CPrint() );
-            add( new CSetProperty() );
-        }} ).generate();
+        super( p_data );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_value != null ? m_value.hashCode() : super.hashCode();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_value != null ? m_value.toString() : super.toString();
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
+    {
+        return this.getTypedResult( m_value );
     }
 
     /**
-     * test print action
+     * fixed type result
+     *
+     * @param p_value boolean value
+     * @return fuzzy-boolean
      */
-    private final static class CPrint extends IBaseAction
+    private CBoolean getTypedResult( final Boolean p_value )
     {
-        /**
-         * static name of the action
-         **/
-        private static final CPath c_name = CPath.from( "print" );
-
-
-        @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
-        )
-        {
-            System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_context );
-            return CBoolean.from( true );
-        }
-
-        @Override
-        public final CPath getName()
-        {
-            return c_name;
-        }
+        return CBoolean.from( p_value );
     }
 
     /**
-     * test setproperty action
+     * fixed type result
+     *
+     * @param p_value variable value
+     * @return fuzzy-boolean
      */
-    private final static class CSetProperty extends IBaseAction
+    private CBoolean getTypedResult( final IVariable<?> p_value )
     {
-        /**
-         * static name of the action
-         **/
-        private static final CPath c_name = CPath.from( "setProperty" );
+        return CBoolean.from( p_value.isAllocated() );
+    }
 
-        @Override
-        public final CPath getName()
-        {
-            return c_name;
-        }
-
-        @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
-        )
-        {
-            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_context );
-            return CBoolean.from( true );
-        }
-
+    /**
+     * fixed type result
+     *
+     * @param p_value any other value
+     * @return fuzzy-boolean
+     */
+    private CBoolean getTypedResult( final T p_value )
+    {
+        return CBoolean.from( true );
     }
 }

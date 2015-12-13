@@ -35,8 +35,8 @@ import lightjason.grammar.CAgentVisitor;
 import lightjason.grammar.IAgentVisitor;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.language.plan.CExecutionContext;
-import lightjason.language.plan.action.CRawAction;
+import lightjason.language.execution.CContext;
+import lightjason.language.execution.action.CRawAction;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -100,8 +100,8 @@ public class CDefaultGenerator implements IGenerator
             } );
             System.out.println();
             System.out.println(                                                              "\n--> " + i.execute(
-                    new CExecutionContext( l_agent, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
-                                           Collections.unmodifiableMap( new HashMap<>() )
+                    new CContext( l_agent, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
+                                  Collections.unmodifiableMap( new HashMap<>() )
                     ), Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--\n" );
             System.out.println( "===================================================================" );
 

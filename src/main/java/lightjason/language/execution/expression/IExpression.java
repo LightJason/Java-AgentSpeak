@@ -21,22 +21,13 @@
  * @endcond
  */
 
-package lightjason.agent.action;
-
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
-
+package lightjason.language.execution.expression;
 
 /**
- * external action interface
+ * interface of any expression type
+ *
+ * @todo add action interface
  */
-public interface IAction extends IExecution
+public interface IExpression
 {
-    /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
-     */
-    public CPath getName();
-
 }

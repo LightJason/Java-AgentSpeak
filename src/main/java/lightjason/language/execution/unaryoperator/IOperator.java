@@ -21,22 +21,15 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.unaryoperator;
 
-import lightjason.common.CPath;
 import lightjason.language.execution.IExecution;
 
 
 /**
- * external action interface
+ * interface of variable unary operator
  */
-public interface IAction extends IExecution
+public interface IOperator<T> extends IExecution
 {
-    /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
-     */
-    public CPath getName();
 
 }

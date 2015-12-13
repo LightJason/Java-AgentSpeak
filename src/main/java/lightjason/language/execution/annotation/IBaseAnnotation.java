@@ -21,22 +21,56 @@
  * @endcond
  */
 
-package lightjason.agent.action;
-
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+package lightjason.language.execution.annotation;
 
 
 /**
- * external action interface
+ * annotation base
  */
-public interface IAction extends IExecution
+public abstract class IBaseAnnotation<T> implements IAnnotation<T>
 {
     /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
+     * number data
      */
-    public CPath getName();
+    protected final T m_data;
+    /**
+     * annotation type
+     */
+    protected final EType m_type;
 
+    /**
+     * ctor
+     *
+     * @param p_type type
+     * @param p_data data
+     */
+    protected IBaseAnnotation( final EType p_type, final T p_data )
+    {
+        m_data = p_data;
+        m_type = p_type;
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_type.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public final EType getID()
+    {
+        return m_type;
+    }
+
+    @Override
+    public final T getData()
+    {
+        return m_data;
+    }
 }

@@ -21,22 +21,27 @@
  * @endcond
  */
 
-package lightjason.agent.action;
-
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
-
+package lightjason.language.execution.annotation;
 
 /**
- * external action interface
+ * annotation without parameter
  */
-public interface IAction extends IExecution
+public final class CAtomAnnotation extends IBaseAnnotation<Object>
 {
-    /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
-     */
-    public CPath getName();
 
+    /**
+     * ctor
+     *
+     * @param p_type type
+     */
+    public CAtomAnnotation( final EType p_type )
+    {
+        super( p_type, null );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_type.toString();
+    }
 }

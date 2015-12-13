@@ -21,59 +21,63 @@
  * @endcond
  */
 
-package lightjason.language.plan;
+package lightjason.language.execution.unaryoperator;
 
-import lightjason.language.execution.IExecution;
-import lightjason.language.execution.annotation.IAnnotation;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.common.CCommon;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
 
 import java.util.Collection;
-import java.util.List;
 
 
 /**
- * interface of plan
+ * unary increment
  */
-public interface IPlan extends IExecution
+public final class CDecrement<T extends Number> implements IOperator<T>
 {
+    /**
+     * variable
+     */
+    private final IVariable<T> m_variable;
 
     /**
-     * returns the trigger event
+     * ctor
      *
-     * @return trigger event
+     * @param p_variable variable
      */
-    public ITrigger<?> getTrigger();
-
-    /**
-     * returns plan state
-     *
-     * @return state
-     */
-    public EState getState();
-
-    /**
-     * return unmodifieable annotation set
-     *
-     * @return set with annotation
-     */
-    public Collection<IAnnotation<?>> getAnnotations();
-
-    /**
-     * returns unmodifieable list with plan actions
-     *
-     * @return action list;
-     */
-    public List<IExecution> getBodyActions();
-
-
-    /**
-     * execution state of a plan
-     */
-    public enum EState
+    public CDecrement( final IVariable<T> p_variable )
     {
-        SUCCESS,
-        FAIL,
-        SUSPEND;
+        m_variable = p_variable;
     }
 
+    @Override
+    public final String toString()
+    {
+        return m_variable.toString() + "--";
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final CBoolean execute( final IContext p_context,
+            final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
+    {
+        if ( !m_variable.isAllocated() )
+            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", m_variable ) );
+
+        if ( m_variable.isValueAssignableTo( Double.class ) )
+            m_variable.set( (T) new Double( m_variable.get().doubleValue() - 1 ) );
+        if ( m_variable.isValueAssignableTo( Long.class ) )
+            m_variable.set( (T) new Long( m_variable.get().longValue() - 1 ) );
+        if ( m_variable.isValueAssignableTo( Float.class ) )
+            m_variable.set( (T) new Float( m_variable.get().floatValue() - 1 ) );
+        if ( m_variable.isValueAssignableTo( Integer.class ) )
+            m_variable.set( (T) new Integer( m_variable.get().intValue() - 1 ) );
+
+        return CBoolean.from( true );
+    }
 }

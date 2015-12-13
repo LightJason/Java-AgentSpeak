@@ -21,22 +21,45 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.action;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+
+import java.text.MessageFormat;
+import java.util.Collection;
 
 
 /**
- * external action interface
+ * test goal action
  */
-public interface IAction extends IExecution
+public final class CTestGoal extends IAction<ILiteral>
 {
+
     /**
-     * returns the name with path of the action
+     * ctor
      *
-     * @return path (literal functor)
+     * @param p_literal literal
      */
-    public CPath getName();
+    public CTestGoal( final ILiteral p_literal )
+    {
+        super( p_literal );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "?{0}", m_value );
+    }
+
+    @Override
+    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
+    {
+        return CBoolean.from( p_context.getRunningPlans().containsKey( m_value ) );
+    }
 
 }

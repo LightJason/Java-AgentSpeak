@@ -21,22 +21,23 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.expression.assignment;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import lightjason.language.IVariable;
+import lightjason.language.execution.expression.IExpression;
 
 
 /**
- * external action interface
+ * interface of an assignment
  */
-public interface IAction extends IExecution
+public interface IAssignment<T extends IExpression>
 {
     /**
-     * returns the name with path of the action
+     * assignes the variable wit the term
      *
-     * @return path (literal functor)
+     * @param p_variable variable
+     * @param p_term term expression
      */
-    public CPath getName();
+    public void assign( final IVariable<?> p_variable, final T p_term );
 
 }

@@ -21,22 +21,58 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.action;
 
-import lightjason.common.CPath;
 import lightjason.language.execution.IExecution;
 
 
 /**
- * external action interface
+ * test goal action
  */
-public interface IAction extends IExecution
+public abstract class IAction<T> implements IExecution
 {
     /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
+     * data
      */
-    public CPath getName();
+    protected final T m_value;
+
+    /**
+     * ctor
+     */
+    protected IAction()
+    {
+        m_value = null;
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value data
+     */
+    protected IAction( final T p_value )
+    {
+        m_value = p_value;
+    }
+
+    /**
+     * checkes assinable of the value
+     *
+     * @param p_class class
+     * @return assinable (on null always true)
+     */
+    public final boolean isValueAssignableTo( final Class<?> p_class )
+    {
+        return ( m_value == null ) || p_class.isAssignableFrom( m_value.getClass() );
+    }
+
+    /**
+     * returns the value of the action
+     *
+     * @return value
+     */
+    public final T getValue()
+    {
+        return m_value;
+    }
 
 }

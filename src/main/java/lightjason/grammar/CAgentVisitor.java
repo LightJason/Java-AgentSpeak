@@ -64,21 +64,21 @@ import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
+import lightjason.language.execution.IExecution;
+import lightjason.language.execution.action.CAchievementGoal;
+import lightjason.language.execution.action.CBeliefAction;
+import lightjason.language.execution.action.CRawAction;
+import lightjason.language.execution.action.CTestGoal;
+import lightjason.language.execution.annotation.CAtomAnnotation;
+import lightjason.language.execution.annotation.CNumberAnnotation;
+import lightjason.language.execution.annotation.CSymbolicAnnotation;
+import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.execution.unaryoperator.CDecrement;
+import lightjason.language.execution.unaryoperator.CIncrement;
 import lightjason.language.plan.CPlan;
-import lightjason.language.plan.IBodyAction;
 import lightjason.language.plan.IPlan;
-import lightjason.language.plan.action.CAchievementGoal;
-import lightjason.language.plan.action.CBeliefAction;
-import lightjason.language.plan.action.CRawAction;
-import lightjason.language.plan.action.CTestGoal;
-import lightjason.language.plan.annotation.CAtomAnnotation;
-import lightjason.language.plan.annotation.CNumberAnnotation;
-import lightjason.language.plan.annotation.CSymbolicAnnotation;
-import lightjason.language.plan.annotation.IAnnotation;
 import lightjason.language.plan.trigger.CTrigger;
 import lightjason.language.plan.trigger.ITrigger;
-import lightjason.language.plan.unaryoperator.CDecrement;
-import lightjason.language.plan.unaryoperator.CIncrement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -149,7 +149,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
         // parallel stream does not work with multi hashmap
         p_context.plandefinition().stream().forEach( i -> {
 
-            final Pair<Object, List<IBodyAction>> l_content = (Pair<Object, List<IBodyAction>>) this.visitPlandefinition( i );
+            final Pair<Object, List<IExecution>> l_content = (Pair<Object, List<IExecution>>) this.visitPlandefinition( i );
             final IPlan l_plan = new CPlan( new CTrigger( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
             m_plans.put( l_plan.getTrigger(), l_plan );
 
@@ -162,8 +162,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     @SuppressWarnings( "unchecked" )
     public Object visitPlandefinition( final PlandefinitionContext p_context )
     {
-        return new ImmutablePair<Object, List<IBodyAction>>(
-                this.visitPlan_context( p_context.plan_context() ), (List<IBodyAction>) this.visitBody( p_context.body() ) );
+        return new ImmutablePair<Object, List<IExecution>>(
+                this.visitPlan_context( p_context.plan_context() ), (List<IExecution>) this.visitBody( p_context.body() ) );
     }
 
     @Override
@@ -267,13 +267,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
             final Object l_item = this.visitBody_formula( i );
 
             // body actions directly return
-            if ( l_item instanceof IBodyAction )
+            if ( l_item instanceof IExecution )
                 return l_item;
 
             // literals are actions
             if ( l_item instanceof ILiteral )
             {
-                final IBodyAction l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
+                final IExecution l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
                 if ( l_action == null )
                     throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", l_item ) );
 

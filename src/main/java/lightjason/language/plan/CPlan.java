@@ -25,9 +25,11 @@ package lightjason.language.plan;
 
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.language.plan.annotation.CNumberAnnotation;
-import lightjason.language.plan.annotation.IAnnotation;
-import lightjason.language.plan.fuzzy.CBoolean;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.IExecution;
+import lightjason.language.execution.annotation.CNumberAnnotation;
+import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.text.MessageFormat;
@@ -71,7 +73,7 @@ public class CPlan implements IPlan
     /**
      * action list
      */
-    protected final List<IBodyAction> m_action;
+    protected final List<IExecution> m_action;
     /**
      * map with annotation (enum value for getting annotation object)
      */
@@ -85,7 +87,7 @@ public class CPlan implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger<?> p_event, final ILiteral p_literal, final List<IBodyAction> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( final ITrigger<?> p_event, final ILiteral p_literal, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
     {
         m_literal = p_literal;
         m_triggerevent = p_event;
@@ -112,7 +114,7 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public final List<IBodyAction> getBodyActions()
+    public final List<IExecution> getBodyActions()
     {
         return m_action;
     }
@@ -127,7 +129,7 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public final CBoolean execute( final IExecutionContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation )
+    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked
         return CBoolean.from(

@@ -21,22 +21,32 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.annotation;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import lightjason.language.ILiteral;
+
+import java.text.MessageFormat;
 
 
 /**
- * external action interface
+ * atom / literal annotation
  */
-public interface IAction extends IExecution
+public final class CSymbolicAnnotation extends IBaseAnnotation<ILiteral>
 {
     /**
-     * returns the name with path of the action
+     * ctor
      *
-     * @return path (literal functor)
+     * @param p_type type
+     * @param p_data data
      */
-    public CPath getName();
+    public CSymbolicAnnotation( final EType p_type, final ILiteral p_data )
+    {
+        super( p_type, p_data );
+    }
 
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_type, m_data );
+    }
 }

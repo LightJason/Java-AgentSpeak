@@ -21,22 +21,25 @@
  * @endcond
  */
 
-package lightjason.agent.action;
-
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
-
+package lightjason.language.execution.fuzzy;
 
 /**
- * external action interface
+ * result for a fuzzy value
  */
-public interface IAction extends IExecution
+public interface IFuzzyValue<T>
 {
     /**
-     * returns the name with path of the action
+     * returns the result
      *
-     * @return path (literal functor)
+     * @return value
      */
-    public CPath getName();
+    public T getValue();
+
+    /**
+     * returns the fuzziness
+     *
+     * @return fuzzy value in [0,1]
+     */
+    public Double getFuzzy();
 
 }

@@ -21,88 +21,100 @@
  * @endcond
  */
 
-package lightjason;
+package lightjason.language.execution.action;
 
-import lightjason.agent.action.IAction;
-import lightjason.agent.action.IBaseAction;
-import lightjason.agent.generator.CDefaultGenerator;
-import lightjason.common.CPath;
+import lightjason.common.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 
-import java.io.FileInputStream;
+import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.HashSet;
 
 
-public final class CMain
+/**
+ * belief action
+ */
+public final class CBeliefAction extends IAction<ILiteral>
 {
+    /**
+     * running action
+     */
+    private final EAction m_action;
 
     /**
-     * main
+     * ctor
      *
-     * @param p_args command-line arguments
+     * @param p_literal literal
+     * @param p_action action
      */
-    public static void main( final String[] p_args ) throws Exception
+    public CBeliefAction( final ILiteral p_literal, final EAction p_action )
     {
-        new CDefaultGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
-        {{
-            add( new CPrint() );
-            add( new CSetProperty() );
-        }} ).generate();
+        super( p_literal );
+        m_action = p_action;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_action, m_value );
     }
 
     /**
-     * test print action
+     * @todo change literal event is missing
+     * @todo disable actions
      */
-    private final static class CPrint extends IBaseAction
+    @Override
+    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
     {
-        /**
-         * static name of the action
-         **/
-        private static final CPath c_name = CPath.from( "print" );
-
-
-        @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
-        )
+        switch ( m_action )
         {
-            System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_context );
-            return CBoolean.from( true );
+            case Add:
+                //p_beliefbase.add( m_data.getFunctorPath(), m_data );
+                break;
+
+            case Delete:
+                //p_beliefbase.remove( m_data.getFunctorPath(), m_data );
+                break;
+
+            default:
+                throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
         }
 
-        @Override
-        public final CPath getName()
-        {
-            return c_name;
-        }
+        return CBoolean.from( true );
     }
 
     /**
-     * test setproperty action
+     * belief action definition
      */
-    private final static class CSetProperty extends IBaseAction
+    public enum EAction
     {
+        Add( "+" ),
+        Delete( "-" ),
+        Change( "-+" );
+
         /**
-         * static name of the action
-         **/
-        private static final CPath c_name = CPath.from( "setProperty" );
+         * name
+         */
+        private final String m_name;
 
-        @Override
-        public final CPath getName()
+        /**
+         * ctor
+         *
+         * @param p_name string represenation
+         */
+        private EAction( final String p_name )
         {
-            return c_name;
+            m_name = p_name;
         }
 
         @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
-        )
+        public String toString()
         {
-            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_context );
-            return CBoolean.from( true );
+            return m_name;
         }
-
     }
 }

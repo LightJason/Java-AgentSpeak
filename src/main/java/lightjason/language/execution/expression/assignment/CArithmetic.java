@@ -21,22 +21,57 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.expression.assignment;
 
-import lightjason.common.CPath;
+import lightjason.language.CVariable;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
+import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.expression.arithmetic.CExpression;
+import lightjason.language.execution.fuzzy.CBoolean;
+
+import java.util.Collection;
 
 
 /**
- * external action interface
+ * assignment of arithmetic expression
  */
-public interface IAction extends IExecution
+public class CArithmetic implements IAssignment<CExpression>, IExecution
 {
     /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
+     * variable
      */
-    public CPath getName();
+    private final CVariable<?> m_variable;
+    /**
+     * expression
+     */
+    private final IExpression m_expression;
 
+    /**
+     * ctor
+     *
+     * @param p_variable assign variable
+     * @param p_expression evalute expression
+     */
+    public CArithmetic( final CVariable<?> p_variable, final CExpression p_expression )
+    {
+        m_variable = p_variable;
+        m_expression = p_expression;
+    }
+
+    @Override
+    public final void assign( final IVariable<?> p_variable, final CExpression p_term )
+    {
+    }
+
+    @Override
+    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
+    {
+        return new CBoolean( true );
+    }
 }

@@ -21,22 +21,19 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.fuzzy;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import java.util.stream.Collector;
 
 
 /**
- * external action interface
+ * defines a fuzzy t-norm
+ *
+ * @see https://en.wikipedia.org/wiki/T-norm_fuzzy_logics
+ * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
+ * @see https://en.wikipedia.org/wiki/Construction_of_t-norms
  */
-public interface IAction extends IExecution
+public interface ITNorm<T extends IFuzzyValue<?>> extends Collector<T, T, T>
 {
-    /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
-     */
-    public CPath getName();
 
 }

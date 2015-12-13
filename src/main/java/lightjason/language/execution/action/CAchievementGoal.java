@@ -21,22 +21,50 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution.action;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+
+import java.text.MessageFormat;
+import java.util.Collection;
 
 
 /**
- * external action interface
+ * achievement goal action
  */
-public interface IAction extends IExecution
+public final class CAchievementGoal extends IAction<ILiteral>
 {
     /**
-     * returns the name with path of the action
-     *
-     * @return path (literal functor)
+     * flag to run immediately
      */
-    public CPath getName();
+    private final boolean m_immediately;
 
+    /**
+     * ctor
+     *
+     * @param p_literal literal
+     * @param p_immediately immediately execution
+     */
+    public CAchievementGoal( final ILiteral p_literal, final boolean p_immediately )
+    {
+        super( p_literal );
+        m_immediately = p_immediately;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+    }
+
+    @Override
+    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter,
+            final Collection<ILiteral> p_annotation
+    )
+    {
+        return CBoolean.from( false );
+    }
 }

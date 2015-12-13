@@ -21,22 +21,60 @@
  * @endcond
  */
 
-package lightjason.agent.action;
-
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
-
+package lightjason.language.execution.annotation;
 
 /**
- * external action interface
+ * annotation interface
  */
-public interface IAction extends IExecution
+public interface IAnnotation<T>
 {
     /**
-     * returns the name with path of the action
+     * returns the type of the annotation
      *
-     * @return path (literal functor)
+     * @return type
      */
-    public CPath getName();
+    public EType getID();
+
+    /**
+     * returns the data of the annotation if exists
+     *
+     * @return data or null
+     */
+    public T getData();
+
+
+    /**
+     * annotation types
+     */
+    public enum EType
+    {
+        FUZZY( "@Fuzzy" ),
+        PRIORITY( "@Priority" ),
+        EXPIRES( "@Expires" ),
+        ATOMIC( "@Atomic" ),
+        EXCLUSIVE( "@Exclusive" ),
+        PARALLEL( "@Parallel" );
+
+        /**
+         * text name of the enum
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name text name
+         */
+        private EType( final String p_name )
+        {
+            m_name = p_name;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_name;
+        }
+    }
 
 }

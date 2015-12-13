@@ -21,22 +21,29 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution;
 
-import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.execution.fuzzy.CBoolean;
+
+import java.util.Collection;
 
 
 /**
- * external action interface
+ * internal execution interface
  */
-public interface IAction extends IExecution
+public interface IExecution
 {
+
     /**
-     * returns the name with path of the action
+     * defines a plan-body operation
      *
-     * @return path (literal functor)
+     * @param p_context current execution context
+     * @param p_parameter parameter of the action
+     * @param p_annotation annotation
+     * @return fuzzy boolean
      */
-    public CPath getName();
+    public CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation );
 
 }

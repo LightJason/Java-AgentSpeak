@@ -21,22 +21,46 @@
  * @endcond
  */
 
-package lightjason.agent.action;
+package lightjason.language.execution;
 
+import lightjason.agent.IAgent;
 import lightjason.common.CPath;
-import lightjason.language.execution.IExecution;
+import lightjason.language.ILiteral;
+import lightjason.language.plan.IPlan;
+
+import java.util.Map;
 
 
 /**
- * external action interface
+ * execution context with local data
  */
-public interface IAction extends IExecution
+public interface IContext
 {
+
     /**
-     * returns the name with path of the action
+     * returns the agent of the context
      *
-     * @return path (literal functor)
+     * @return agent
      */
-    public CPath getName();
+    public IAgent getAgent();
+
+    /**
+     * returns the plan or rule of the context
+     *
+     * @return plan
+     */
+    public IPlan getPlan();
+
+    /**
+     * returns the current running plans
+     */
+    public Map<ILiteral, IPlan> getRunningPlans();
+
+    /**
+     * returns the variables names and their current value
+     *
+     * @return variable names and their current value
+     */
+    public Map<CPath, Object> getVariables();
 
 }
