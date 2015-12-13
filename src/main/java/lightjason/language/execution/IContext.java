@@ -25,8 +25,6 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
 
 import java.util.Map;
 
@@ -34,7 +32,7 @@ import java.util.Map;
 /**
  * execution context with local data
  */
-public interface IContext
+public interface IContext<T>
 {
 
     /**
@@ -45,16 +43,11 @@ public interface IContext
     public IAgent getAgent();
 
     /**
-     * returns the plan or rule of the context
+     * returns the instance object
      *
-     * @return plan
+     * @return instance object plan or rule
      */
-    public IPlan getPlan();
-
-    /**
-     * returns the current running plans
-     */
-    public Map<ILiteral, IPlan> getRunningPlans();
+    public T getInstance();
 
     /**
      * returns the variables names and their current value

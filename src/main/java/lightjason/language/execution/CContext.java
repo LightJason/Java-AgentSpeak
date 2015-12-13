@@ -37,16 +37,16 @@ import java.util.Map;
 /**
  * execution context
  */
-public final class CContext implements IContext
+public final class CContext<T> implements IContext<T>
 {
     /**
      * agent of the running context
      */
     private final IAgent m_agent;
     /**
-     * current instantiated plan
+     * current instance object
      */
-    private final IPlan m_plan;
+    private final T m_instance;
     /**
      * plan variables with their data
      */
@@ -60,17 +60,17 @@ public final class CContext implements IContext
      * ctor
      *
      * @param p_agent agent
-     * @param p_plan instantiated plan
+     * @param p_instance instance object
      * @param p_variables variables with number
      * @param p_runningplans current running plans
      */
-    public CContext( final IAgent p_agent, final IPlan p_plan, final Map<CPath, Object> p_variables, final Map<ILiteral, IPlan> p_runningplans )
+    public CContext( final IAgent p_agent, final T p_instance, final Map<CPath, Object> p_variables, final Map<ILiteral, IPlan> p_runningplans )
     {
-        if ( ( p_agent == null ) || ( p_plan == null ) || ( p_variables == null ) || ( p_runningplans == null ) )
+        if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) || ( p_runningplans == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
 
         m_agent = p_agent;
-        m_plan = p_plan;
+        m_instance = p_instance;
         m_variables = p_variables;
         m_runningplans = p_runningplans;
     }
@@ -83,15 +83,9 @@ public final class CContext implements IContext
     }
 
     @Override
-    public final IPlan getPlan()
+    public T getInstance()
     {
-        return m_plan;
-    }
-
-    @Override
-    public Map<ILiteral, IPlan> getRunningPlans()
-    {
-        return null;
+        return m_instance;
     }
 
     @Override
@@ -103,7 +97,7 @@ public final class CContext implements IContext
     @Override
     public final int hashCode()
     {
-        return m_agent.hashCode() + m_plan.hashCode() + m_variables.keySet().hashCode() + m_runningplans.values().hashCode();
+        return m_agent.hashCode() + m_instance.hashCode() + m_variables.keySet().hashCode() + m_runningplans.values().hashCode();
     }
 
     @Override
@@ -115,6 +109,6 @@ public final class CContext implements IContext
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [{1} | {2} | {3} | {4}]", super.toString(), m_agent, m_plan, m_variables, m_runningplans.values() );
+        return MessageFormat.format( "{0} [{1} | {2} | {3} | {4}]", super.toString(), m_agent, m_instance, m_variables, m_runningplans.values() );
     }
 }
