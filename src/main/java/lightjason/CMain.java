@@ -23,13 +23,13 @@
 
 package lightjason;
 
-import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
 import lightjason.agent.generator.CDefaultGenerator;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.plan.IExecutionContext;
 import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.io.FileInputStream;
@@ -66,10 +66,10 @@ public final class CMain
 
 
         @Override
-        public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        public final CBoolean execute( final IExecutionContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
         )
         {
-            System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_agent );
+            System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_context );
             return CBoolean.from( true );
         }
 
@@ -85,7 +85,9 @@ public final class CMain
      */
     private final static class CSetProperty extends IBaseAction
     {
-        /** static name of the action **/
+        /**
+         * static name of the action
+         **/
         private static final CPath c_name = CPath.from( "setProperty" );
 
         @Override
@@ -95,10 +97,10 @@ public final class CMain
         }
 
         @Override
-        public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        public final CBoolean execute( final IExecutionContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
         )
         {
-            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_agent );
+            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_context );
             return CBoolean.from( true );
         }
 

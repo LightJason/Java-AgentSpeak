@@ -23,9 +23,9 @@
 
 package lightjason.language.plan.action;
 
-import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.plan.IExecutionContext;
 import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.text.MessageFormat;
@@ -55,11 +55,11 @@ public final class CTestGoal extends IAction<ILiteral>
     }
 
     @Override
-    public final CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter,
+    public final CBoolean execute( final IExecutionContext p_context, final Collection<ITerm> p_parameter,
             final Collection<ILiteral> p_annotation
     )
     {
-        return CBoolean.from( p_agent.getRunningPlans().containsKey( m_value ) );
+        return CBoolean.from( p_context.getRunningPlans().containsKey( m_value ) );
     }
 
 }

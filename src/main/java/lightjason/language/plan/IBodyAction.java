@@ -23,7 +23,6 @@
 
 package lightjason.language.plan;
 
-import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.plan.fuzzy.CBoolean;
@@ -40,11 +39,11 @@ public interface IBodyAction
     /**
      * defines a plan-body operation
      *
-     * @param p_agent agent which calls the action
+     * @param p_context current execution context
      * @param p_parameter parameter of the action
      * @param p_annotation annotation
      * @return fuzzy boolean
      */
-    public CBoolean execute( final IAgent p_agent, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation );
+    public CBoolean execute( final IExecutionContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation );
 
 }

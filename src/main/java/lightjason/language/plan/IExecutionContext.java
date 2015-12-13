@@ -21,83 +21,45 @@
  * @endcond
  */
 
-package lightjason.language.plan.action;
+package lightjason.language.plan;
 
+import lightjason.agent.IAgent;
+import lightjason.common.CPath;
 import lightjason.language.ILiteral;
-import lightjason.language.ITerm;
-import lightjason.language.IVariable;
-import lightjason.language.plan.IExecutionContext;
-import lightjason.language.plan.fuzzy.CBoolean;
 
-import java.util.Collection;
+import java.util.Map;
 
 
 /**
- * encapsulate class for any non-executable data type e.g. boolean
+ * execution context with local data
  */
-public final class CRawAction<T> extends IAction<T>
+public interface IExecutionContext
 {
-    /**
-     * ctor
-     *
-     * @param p_data any object data
-     */
-    public CRawAction( final T p_data )
-    {
-        super( p_data );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_value != null ? m_value.hashCode() : super.hashCode();
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_value != null ? m_value.toString() : super.toString();
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final CBoolean execute( final IExecutionContext p_context, final Collection<ITerm> p_parameter,
-            final Collection<ILiteral> p_annotation
-    )
-    {
-        return this.getTypedResult( m_value );
-    }
 
     /**
-     * fixed type result
+     * returns the agent of the context
      *
-     * @param p_value boolean value
-     * @return fuzzy-boolean
+     * @return agent
      */
-    private CBoolean getTypedResult( final Boolean p_value )
-    {
-        return CBoolean.from( p_value );
-    }
+    public IAgent getAgent();
 
     /**
-     * fixed type result
+     * returns the plan or rule of the context
      *
-     * @param p_value variable value
-     * @return fuzzy-boolean
+     * @return plan
      */
-    private CBoolean getTypedResult( final IVariable<?> p_value )
-    {
-        return CBoolean.from( p_value.isAllocated() );
-    }
+    public IPlan getPlan();
 
     /**
-     * fixed type result
-     *
-     * @param p_value any other value
-     * @return fuzzy-boolean
+     * returns the current running plans
      */
-    private CBoolean getTypedResult( final T p_value )
-    {
-        return CBoolean.from( true );
-    }
+    public Map<ILiteral, IPlan> getRunningPlans();
+
+    /**
+     * returns the variables names and their current value
+     *
+     * @return variable names and their current value
+     */
+    public Map<CPath, Object> getVariables();
+
 }

@@ -23,6 +23,7 @@
 
 package lightjason.agent;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IConfiguration;
 import lightjason.agent.score.IAgentPlanScore;
@@ -34,9 +35,6 @@ import lightjason.language.plan.trigger.ITrigger;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -54,7 +52,11 @@ public class CAgent implements IAgent
      * @note plan list must be a linked-hashset
      * to store the execution order of the plans
      */
-    protected final Map<String, Set<IPlan>> m_plans = new ConcurrentHashMap<>();
+    protected final SetMultimap<ITrigger<?>, IPlan> m_plans;
+    /**
+     * running plans
+     */
+    protected final SetMultimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
     /**
      * beliefbase
      */
@@ -85,6 +87,7 @@ public class CAgent implements IAgent
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();
         m_name = p_configuration.getName();
+        m_plans = p_configuration.getPlans();
         m_score = null;
     }
 
@@ -133,13 +136,13 @@ public class CAgent implements IAgent
     @Override
     public SetMultimap<ILiteral, IPlan> getRunningPlans()
     {
-        return null;
+        return m_runningplans;
     }
 
     @Override
     public SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
-        return null;
+        return m_plans;
     }
 
     @Override

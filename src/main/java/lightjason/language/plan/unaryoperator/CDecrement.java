@@ -23,11 +23,11 @@
 
 package lightjason.language.plan.unaryoperator;
 
-import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
+import lightjason.language.plan.IExecutionContext;
 import lightjason.language.plan.fuzzy.CBoolean;
 
 import java.util.Collection;
@@ -61,7 +61,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final CBoolean execute( final IAgent p_agent,
+    public final CBoolean execute( final IExecutionContext p_context,
             final Collection<ITerm> p_parameter,
             final Collection<ILiteral> p_annotation
     )
