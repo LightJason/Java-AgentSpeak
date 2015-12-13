@@ -153,8 +153,6 @@ public final class CExpression implements IExpression
      *
      * @param p_variable variables
      * @return expression
-     *
-     * @tparam T number type
      */
     public final CExpression push( final IVariable<Number>... p_variable )
     {
@@ -168,13 +166,13 @@ public final class CExpression implements IExpression
     }
 
     /**
-     * returns a set of all variables of the expression
+     * returns a map of all variables of the expression
      *
-     * @return set with variables
+     * @return unmodifiable map with variables
      */
     public final Map<CPath, IVariable<Number>> getVariables()
     {
-        return m_variables;
+        return Collections.unmodifiableMap( m_variables );
     }
 
     /**
