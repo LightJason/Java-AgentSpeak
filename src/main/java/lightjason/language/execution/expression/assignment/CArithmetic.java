@@ -39,6 +39,7 @@ import java.util.Collection;
 /**
  * assignment of arithmetic expression
  */
+@Deprecated
 public class CArithmetic implements IAssignment<CExpression>, IExecution
 {
     /**

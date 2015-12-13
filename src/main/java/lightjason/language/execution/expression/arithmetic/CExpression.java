@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
  * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
 @SuppressWarnings( "serial" )
-public final class CExpression implements IExpression
+public final class CExpression implements IExpression<Number>
 {
     /**
      * map with default operators
@@ -114,13 +114,14 @@ public final class CExpression implements IExpression
         m_operatordefinition = p_operator;
     }
 
-    /**
-     * adds operators
-     *
-     * @param p_operator operators
-     * @return expression
-     */
-    public final CExpression push( final String... p_operator )
+    @Override
+    public final Map<CPath, IVariable<Number>> getVariables()
+    {
+        return Collections.unmodifiableMap( m_variables );
+    }
+
+    @Override
+    public final IExpression<Number> push( final String... p_operator )
     {
         for ( final String l_item : p_operator )
         {
@@ -134,27 +135,8 @@ public final class CExpression implements IExpression
         return this;
     }
 
-    /**
-     * adds numbers
-     *
-     * @param p_number numbers
-     * @return expression
-     */
-    public final CExpression push( final Number... p_number )
-    {
-        for ( final Number l_item : p_number )
-            m_elements.add( new CNumberElement<>( l_item ) );
-
-        return this;
-    }
-
-    /**
-     * adds variables
-     *
-     * @param p_variable variables
-     * @return expression
-     */
-    public final CExpression push( final IVariable<Number>... p_variable )
+    @Override
+    public final IExpression<Number> push( final IVariable<Number>... p_variable )
     {
         for ( final IVariable<Number> l_item : p_variable )
         {
@@ -165,21 +147,16 @@ public final class CExpression implements IExpression
         return this;
     }
 
-    /**
-     * returns a map of all variables of the expression
-     *
-     * @return unmodifiable map with variables
-     */
-    public final Map<CPath, IVariable<Number>> getVariables()
+    @Override
+    public final IExpression<Number> push( final Number... p_number )
     {
-        return Collections.unmodifiableMap( m_variables );
+        for ( final Number l_item : p_number )
+            m_elements.add( new CNumberElement<>( l_item ) );
+
+        return this;
     }
 
-    /**
-     * evaluates expression
-     *
-     * @return number
-     */
+    @Override
     @SuppressWarnings( "unchecked" )
     public final Number evaluate()
     {

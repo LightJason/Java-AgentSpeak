@@ -23,11 +23,60 @@
 
 package lightjason.language.execution.expression;
 
+import lightjason.common.CPath;
+import lightjason.language.IVariable;
+
+import java.util.Map;
+
+
 /**
  * interface of any expression type
  *
  * @todo add action interface
  */
-public interface IExpression
+public interface IExpression<T>
 {
+
+    /**
+     * returns a map of all variables of the expression
+     *
+     * @return unmodifiable map with variables
+     */
+    public Map<CPath, IVariable<T>> getVariables();
+
+
+    /**
+     * adds operators
+     *
+     * @param p_operator operators
+     * @return expression
+     */
+    public IExpression<T> push( final String... p_operator );
+
+
+    /**
+     * adds variables
+     *
+     * @param p_variable variables
+     * @return expression
+     */
+    public IExpression<T> push( final IVariable<T>... p_variable );
+
+
+    /**
+     * adds values
+     *
+     * @param p_value values
+     * @return expression
+     */
+    public IExpression<T> push( final T... p_value );
+
+
+    /**
+     * evaluates expression
+     *
+     * @return result
+     */
+    public T evaluate();
+
 }
