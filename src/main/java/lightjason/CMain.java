@@ -71,7 +71,7 @@ public final class CMain
                 final Collection<ITerm> p_return
         )
         {
-            System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_context );
+            System.out.println( "---> print : " + p_parameter + "      " + p_annotation );
             return CBoolean.from( true );
         }
 
@@ -103,7 +103,7 @@ public final class CMain
                 final Collection<ITerm> p_return
         )
         {
-            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_context );
+            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation );
             return CBoolean.from( true );
         }
 
