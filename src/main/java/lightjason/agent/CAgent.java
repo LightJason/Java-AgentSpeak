@@ -30,12 +30,18 @@ import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.execution.CContext;
+import lightjason.language.execution.action.CRawAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -68,6 +74,12 @@ public class CAgent implements IAgent
      */
     protected final IBeliefBaseMask m_beliefbase;
     /**
+     * execution goal list
+     *
+     * @bug incompelete / unusable
+     */
+    protected final Set<ILiteral> m_goals = Collections.newSetFromMap( new ConcurrentHashMap<>() );
+    /**
      * curent agent cycle
      */
     protected int m_cycle = 0;
@@ -94,6 +106,8 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_name = p_configuration.getName();
         m_plans = p_configuration.getPlans();
+        m_goals.add( p_configuration.getInitialGoal() );
+
         m_score = null;
     }
 
@@ -167,9 +181,44 @@ public class CAgent implements IAgent
     public IAgent call() throws Exception
     {
         // run beliefbase update, because environment can be changed
-        m_beliefbase.update();
+        //m_beliefbase.update();
         if ( m_suspend )
+            // check wakup-event otherwise suspend
             return this;
+
+        // collect belief events
+        // collect plan/goal events
+        // create execution list
+
+
+        System.out.println( m_goals );
+        System.out.println();
+        /*
+        System.out.println( m_visitor.getInitialBeliefs() );
+        System.out.println();
+        */
+
+        m_plans.values().stream().forEach( i -> {
+
+            System.out.println( "=====>> " + i + " ===\n" );
+            i.getBodyActions().stream().forEachOrdered( n -> {
+                System.out.print( n + "\t" + n.getClass() );
+                if ( n.getClass().equals( CRawAction.class ) )
+                {
+                    final CRawAction<?> l_raw = ( (CRawAction) n );
+                    System.out.print( "\t" + l_raw.getValue().getClass() );
+                }
+                System.out.println();
+            } );
+            System.out.println();
+            System.out.println(                                                                                              "\n--> "                                                                                     + i.execute(
+                    new CContext( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
+                                  Collections.unmodifiableMap( new HashMap<>() )
+                    ), Collections.<ILiteral>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) + " <--\n" );
+            System.out.println( "===================================================================" );
+
+        } );
+
 
         // increment cycle
         m_cycle++;

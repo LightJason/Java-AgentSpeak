@@ -51,7 +51,7 @@ public final class CMain
         {{
             add( new CPrint() );
             add( new CSetProperty() );
-        }} ).generate();
+        }} ).generate().call();
     }
 
     /**

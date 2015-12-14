@@ -5,6 +5,12 @@ a Java 8 implementation has been created. The version defines an additional Agen
 [AntLR](http://www.antlr.org/) and a fuzzy-based logical calculus and unification based on a mathematical
 structure to describe an optimizing process.
 
+
+## Requirements
+
+* Java 1.8
+
+
 ## Base Definitions
 
 ### Beliefs

@@ -39,6 +39,10 @@ import java.util.Map;
 public class CDefaultConfiguration implements IConfiguration
 {
     /**
+     * initial goal
+     */
+    final ILiteral m_initialgoal;
+    /**
      * name of the agent
      */
     private final CPath m_name;
@@ -47,18 +51,21 @@ public class CDefaultConfiguration implements IConfiguration
      */
     private final SetMultimap<ITrigger<?>, IPlan> m_plans;
 
+
     /**
      * ctor
      *
      * @param p_name name
      * @param p_plans plans
+     * @param p_initialgoal initial goal
      * @todo plans must be cloned
      * @todo beliefbase must be cloned
      */
-    public CDefaultConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans )
+    public CDefaultConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal )
     {
         m_name = p_name;
         m_plans = p_plans;
+        m_initialgoal = p_initialgoal;
     }
 
     @Override
@@ -70,7 +77,7 @@ public class CDefaultConfiguration implements IConfiguration
     @Override
     public ILiteral getInitialGoal()
     {
-        return null;
+        return m_initialgoal;
     }
 
     @Override
