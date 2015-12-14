@@ -61,8 +61,8 @@ public final class CAchievementGoal extends IAction<ILiteral>
     }
 
     @Override
-    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter,
-            final Collection<ILiteral> p_annotation
+    public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+            final Collection<ITerm> p_return
     )
     {
         return CBoolean.from( false );

@@ -99,10 +99,10 @@ public class CDefaultGenerator implements IGenerator
                 System.out.println();
             } );
             System.out.println();
-            System.out.println(                                                              "\n--> " + i.execute(
+            System.out.println(                                                                                              "\n--> "                                                                                     + i.execute(
                     new CContext( l_agent, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
                                   Collections.unmodifiableMap( new HashMap<>() )
-                    ), Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() ) + " <--\n" );
+                    ), Collections.<ILiteral>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) + " <--\n" );
             System.out.println( "===================================================================" );
 
         } );

@@ -62,8 +62,8 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     @Override
     @SuppressWarnings( "unchecked" )
     public final CBoolean execute( final IContext p_context,
-            final Collection<ITerm> p_parameter,
-            final Collection<ILiteral> p_annotation
+            final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+            final Collection<ITerm> p_return
     )
     {
         if ( !m_variable.isAllocated() )

@@ -40,10 +40,13 @@ public interface IExecution
      * defines a plan-body operation
      *
      * @param p_context current execution context
-     * @param p_parameter parameter of the action
      * @param p_annotation annotation
+     * @param p_parameter parameter of the action
+     * @param p_return return values
      * @return fuzzy boolean
      */
-    public CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation );
+    public CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+            final Collection<ITerm> p_return
+    );
 
 }

@@ -66,7 +66,8 @@ public final class CMain
 
 
         @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+                final Collection<ITerm> p_return
         )
         {
             System.out.println( "---> print : " + p_parameter + "      " + p_annotation + "      " + p_context );
@@ -97,7 +98,8 @@ public final class CMain
         }
 
         @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation
+        public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+                final Collection<ITerm> p_return
         )
         {
             System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation + "      " + p_context );

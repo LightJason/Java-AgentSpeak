@@ -129,14 +129,16 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public final CBoolean execute( final IContext p_context, final Collection<ITerm> p_parameter, final Collection<ILiteral> p_annotation )
+    public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+            final Collection<ITerm> p_return
+    )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked
         return CBoolean.from(
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                         ? m_action.parallelStream()
                         : m_action.stream()
-                ).map( i -> i.execute( p_context, p_parameter, p_annotation ) ).allMatch( CBoolean.isTrue() )
+                ).map( i -> i.execute( p_context, p_annotation, p_parameter, p_return ) ).allMatch( CBoolean.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );
     }
