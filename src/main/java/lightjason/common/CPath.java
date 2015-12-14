@@ -153,7 +153,7 @@ public final class CPath implements Iterable<CPath>
      */
     public static CPath from( final String p_string )
     {
-        return createSplitPath( DEFAULTSEPERATOR, p_string );
+        return ( p_string == null ) || ( p_string.isEmpty() ) ? EMPTY : createSplitPath( DEFAULTSEPERATOR, p_string );
     }
 
     /**

@@ -21,95 +21,64 @@
  * @endcond
  */
 
-package lightjason.agent;
+package lightjason.language;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.common.CCommon;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
-
-import java.util.Map;
-import java.util.concurrent.Callable;
+import lightjason.error.CIllegalStateException;
 
 
 /**
- * agent interface
+ * constant definition
  */
-public interface IAgent extends Callable<IAgent>
+public final class CConstant<T> extends CVariable<T>
 {
-    /**
-     * returns the current cycle
-     *
-     * @return cycle number
-     */
-    public long getCycle();
 
     /**
-     * returns the agent name
+     * ctor
      *
-     * @return agent name
+     * @param p_functor name
      */
-    public CPath getName();
+    public CConstant( final String p_functor )
+    {
+        super( p_functor );
+    }
 
     /**
-     * returns the beliefbase
+     * ctor
      *
-     * @return beliefbase
+     * @param p_functor name
+     * @param p_value value
      */
-    public IBeliefBaseMask getBeliefBase();
+    public CConstant( final String p_functor, final T p_value )
+    {
+        super( p_functor, p_value );
+    }
 
     /**
-     * trigger an event
+     * ctor
      *
-     * @param p_event event
+     * @param p_functor name
      */
-    public void trigger( final ITrigger<?> p_event );
+    public CConstant( final CPath p_functor )
+    {
+        super( p_functor );
+    }
 
     /**
-     * sets the agent to a suspend state
+     * ctor
      *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run, but before
-     * the suspeding state is reached the plan "+!sleep"
-     * is called
+     * @param p_functor name
+     * @param p_value value
      */
-    public void suspend();
+    public CConstant( final CPath p_functor, final T p_value )
+    {
+        super( p_functor, p_value );
+    }
 
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    public boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     *
-     * @note the plan "+!wakeup" will be triggered
-     */
-    public void resume();
-
-    /**
-     * returns a map of the current running plans
-     *
-     * @return map with running plans
-     */
-    public SetMultimap<ILiteral, IPlan> getRunningPlans();
-
-    /**
-     * returns a map of all plans
-     *
-     * @return map with plans
-     */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
-
-    /**
-     * storage access
-     *
-     * @return storage map
-     */
-    public Map<String, ?> getStorage( final String p_key );
-
+    @Override
+    public final IVariable<T> set( final T p_value )
+    {
+        throw new CIllegalStateException( CCommon.getLanguageString( this, "const", m_functor ) );
+    }
 }

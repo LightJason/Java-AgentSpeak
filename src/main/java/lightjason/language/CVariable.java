@@ -55,7 +55,7 @@ public class CVariable<T> implements IVariable<T>
      */
     public CVariable( final String p_functor )
     {
-        this( p_functor, null );
+        this( CPath.from( p_functor ), null );
     }
 
     /**
@@ -66,8 +66,29 @@ public class CVariable<T> implements IVariable<T>
      */
     public CVariable( final String p_functor, final T p_value )
     {
-        m_any = p_functor.equals( "_" ) || ( p_functor == null ) || p_functor.isEmpty();
-        m_functor = m_any ? new CPath( "_" ) : CPath.createSplitPath( CPath.DEFAULTSEPERATOR, p_functor );
+        this( CPath.from( p_functor ), p_value );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     */
+    public CVariable( final CPath p_functor )
+    {
+        this( p_functor, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     * @param p_value value
+     */
+    public CVariable( final CPath p_functor, final T p_value )
+    {
+        m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );
+        m_functor = p_functor;
         m_value = p_value;
     }
 

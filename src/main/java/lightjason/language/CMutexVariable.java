@@ -23,30 +23,55 @@
 
 package lightjason.language;
 
+import lightjason.common.CPath;
+
+
 /**
  * thread-safe variable
  */
 public final class CMutexVariable<T> extends CVariable<T>
 {
+
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_functor name
      */
-    public CMutexVariable( final String p_name )
+    public CMutexVariable( final String p_functor )
     {
-        super( p_name );
+        super( p_functor );
     }
 
     /**
      * ctor
      *
-     * @param p_name name
+     * @param p_functor name
      * @param p_value value
      */
-    public CMutexVariable( final String p_name, final T p_value )
+    public CMutexVariable( final String p_functor, final T p_value )
     {
-        super( p_name, p_value );
+        super( p_functor, p_value );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     */
+    public CMutexVariable( final CPath p_functor )
+    {
+        super( p_functor );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor name
+     * @param p_value value
+     */
+    public CMutexVariable( final CPath p_functor, final T p_value )
+    {
+        super( p_functor, p_value );
     }
 
     @Override
