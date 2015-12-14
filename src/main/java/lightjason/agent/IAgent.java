@@ -110,6 +110,6 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return storage map
      */
-    public Map<String, ?> getStorage( final String p_key );
+    public Map<String, ?> getStorage();
 
 }

@@ -79,6 +79,6 @@ public final class CConstant<T> extends CVariable<T>
     @Override
     public final IVariable<T> set( final T p_value )
     {
-        throw new CIllegalStateException( CCommon.getLanguageString( this, "const", m_functor ) );
+        throw new CIllegalStateException( CCommon.getLanguageString( this, "set", m_functor ) );
     }
 }

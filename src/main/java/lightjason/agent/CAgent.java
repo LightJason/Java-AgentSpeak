@@ -152,7 +152,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final Map<String, ?> getStorage( final String p_key )
+    public final Map<String, ?> getStorage()
     {
         return m_storage;
     }
