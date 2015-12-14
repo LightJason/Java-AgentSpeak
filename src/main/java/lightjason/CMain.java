@@ -52,6 +52,7 @@ public final class CMain
         {{
             add( new CPrint() );
             add( new CSetProperty() );
+            add( new CMin() );
         }} ).generate().call();
     }
 
@@ -107,5 +108,31 @@ public final class CMain
             return CBoolean.from( true );
         }
 
+    }
+
+    /**
+     * test min action
+     */
+    private final static class CMin extends IBaseAction
+    {
+        /**
+         * static name of the action
+         **/
+        private static final CPath c_name = CPath.from( "min" );
+
+        @Override
+        public CPath getName()
+        {
+            return c_name;
+        }
+
+        @Override
+        public CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+                final Collection<ITerm> p_return
+        )
+        {
+            System.out.println( "---> min" );
+            return CBoolean.from( true );
+        }
     }
 }

@@ -67,6 +67,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoal;
 import lightjason.language.execution.action.CBeliefAction;
+import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CTestGoal;
 import lightjason.language.execution.annotation.CAtomAnnotation;
@@ -272,6 +273,8 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
             // literals are actions
             if ( l_item instanceof ILiteral )
+                return new CProxyAction( (ILiteral) l_item, m_actions );
+            /*
             {
                 final IExecution l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
                 if ( l_action == null )
@@ -279,6 +282,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
                 return l_action;
             }
+            */
 
             // otherwise only simple types encapsulate
             return new CRawAction<>( l_item );
