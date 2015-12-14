@@ -35,6 +35,8 @@ import lightjason.language.plan.trigger.ITrigger;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -57,6 +59,10 @@ public class CAgent implements IAgent
      * running plans
      */
     protected final SetMultimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
+    /**
+     * storage mao
+     */
+    protected final Map<String, Object> m_storage = new ConcurrentHashMap<>();
     /**
      * beliefbase
      */
@@ -143,6 +149,26 @@ public class CAgent implements IAgent
     public SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <T> T getStorageItem( final String p_key )
+    {
+        return (T) m_storage.get( p_key.toLowerCase() );
+    }
+
+    @Override
+    public void setStorageItem( final String p_key, final Object p_object )
+    {
+        m_storage.put( p_key.toLowerCase(), p_object );
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <T> T removeStorageItem( final String p_key )
+    {
+        return (T) m_storage.remove( p_key.toLowerCase() );
     }
 
     @Override

@@ -104,4 +104,32 @@ public interface IAgent extends Callable<IAgent>
      */
     public SetMultimap<ITrigger<?>, IPlan> getPlans();
 
+    /**
+     * storage access getter
+     *
+     * @param p_key item key (case insensitive)
+     * @return null or item
+     *
+     * @tparam T object type
+     */
+    public <T> T getStorageItem( final String p_key );
+
+    /**
+     * storage access setter
+     *
+     * @param p_key item key (case insensitive)
+     * @param p_object any object
+     */
+    public void setStorageItem( final String p_key, final Object p_object );
+
+    /**
+     * remove storage item
+     *
+     * @param p_key item key (case insensitive)
+     * @return removed object
+     *
+     * @tparam T object type
+     */
+    public <T> T removeStorageItem( final String p_key );
+
 }
