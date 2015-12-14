@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 
+@SuppressWarnings( "serial" )
 public final class CMain
 {
 
@@ -66,7 +67,7 @@ public final class CMain
 
 
         @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+        public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
                 final Collection<ITerm> p_return
         )
         {
@@ -98,7 +99,7 @@ public final class CMain
         }
 
         @Override
-        public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+        public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
                 final Collection<ITerm> p_return
         )
         {

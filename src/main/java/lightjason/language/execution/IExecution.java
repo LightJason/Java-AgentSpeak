@@ -45,7 +45,7 @@ public interface IExecution
      * @param p_return return values
      * @return fuzzy boolean
      */
-    public CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     );
 

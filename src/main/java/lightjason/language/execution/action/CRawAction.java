@@ -61,7 +61,7 @@ public final class CRawAction<T> extends IAction<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final CBoolean execute( final IContext p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     )
     {
