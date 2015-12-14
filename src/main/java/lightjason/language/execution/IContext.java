@@ -25,6 +25,7 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
+import lightjason.language.IVariable;
 
 import java.util.Map;
 
@@ -54,6 +55,6 @@ public interface IContext<T>
      *
      * @return variable names and their current value
      */
-    public Map<CPath, Object> getVariables();
+    public Map<CPath, IVariable<?>> getVariables();
 
 }

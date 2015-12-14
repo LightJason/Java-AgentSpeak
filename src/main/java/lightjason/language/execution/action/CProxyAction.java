@@ -29,6 +29,7 @@ import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -37,6 +38,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,6 +50,10 @@ public final class CProxyAction implements IExecution
      * inner execution structure in reverse order
      */
     private final List<IExecution> m_execution = new LinkedList<>();
+    /**
+     * initial / inner arguments
+     */
+    private final List<ITerm> m_arguments = new LinkedList<>();
 
 
     /**
@@ -58,13 +64,13 @@ public final class CProxyAction implements IExecution
      */
     public CProxyAction( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
-        this.createCallerStack( p_literal, p_actions );
+        this.createCaller( p_literal, p_actions );
     }
 
     @Override
     public final String toString()
     {
-        return m_execution.toString();
+        return m_execution.toString() + "\t" + m_arguments;
     }
 
     @Override
@@ -73,15 +79,25 @@ public final class CProxyAction implements IExecution
     )
     {
         // foo( bar(3,4), blub( xxx(3,4) ) ) -> xxx, blub, bar, foo
+        final List<ITerm> l_argumentstack = m_arguments.stream().map( i -> {
 
-        final List<ITerm> l_argumentstack = new LinkedList<>();
+            final IVariable<?> l_variable = p_context.getVariables().get( i.getFQNFunctor() );
+            if ( l_variable != null )
+                return l_variable;
+
+            return i;
+
+        } ).collect( Collectors.toCollection( LinkedList::new ) );
+
+
         m_execution.stream().forEach( i -> i.execute( p_context, p_annotation, l_argumentstack, l_argumentstack ) );
+
 
         return CBoolean.from( true );
     }
 
     @SuppressWarnings( "unchecked" )
-    private void createCallerStack( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
+    private void createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
         final IExecution l_action = p_actions.get( p_literal.getFQNFunctor() );
         if ( l_action == null )
@@ -91,7 +107,9 @@ public final class CProxyAction implements IExecution
         p_literal.getValues().entries().stream().forEach( i -> {
 
             if ( i.getValue() instanceof ILiteral )
-                this.createCallerStack( (ILiteral) i.getValue(), p_actions );
+                this.createCaller( (ILiteral) i.getValue(), p_actions );
+            else
+                m_arguments.add( i.getValue() );
 
         } );
     }

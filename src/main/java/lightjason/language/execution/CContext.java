@@ -28,6 +28,7 @@ import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
@@ -50,7 +51,7 @@ public final class CContext<T> implements IContext<T>
     /**
      * plan variables with their data
      */
-    private final Map<CPath, Object> m_variables;
+    private final Map<CPath, IVariable<?>> m_variables;
     /**
      * current running plans
      */
@@ -64,7 +65,7 @@ public final class CContext<T> implements IContext<T>
      * @param p_variables variables with number
      * @param p_runningplans current running plans
      */
-    public CContext( final IAgent p_agent, final T p_instance, final Map<CPath, Object> p_variables, final Map<ILiteral, IPlan> p_runningplans )
+    public CContext( final IAgent p_agent, final T p_instance, final Map<CPath, IVariable<?>> p_variables, final Map<ILiteral, IPlan> p_runningplans )
     {
         if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) || ( p_runningplans == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
@@ -89,7 +90,7 @@ public final class CContext<T> implements IContext<T>
     }
 
     @Override
-    public final Map<CPath, Object> getVariables()
+    public final Map<CPath, IVariable<?>> getVariables()
     {
         return m_variables;
     }
