@@ -33,10 +33,9 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,11 +50,7 @@ public final class CProxyAction implements IExecution
     /**
      * inner execution structure in reverse order with number of argmuments
      */
-    private final List<Pair<IExecution, Integer>> m_execution = new LinkedList<>();
-    /**
-     * initial / inner arguments
-     */
-    private final List<ITerm> m_initialarguments = new LinkedList<>();
+    private final List<CStackExecution> m_execution = new LinkedList<>();
 
 
     /**
@@ -72,7 +67,7 @@ public final class CProxyAction implements IExecution
     @Override
     public final String toString()
     {
-        return m_execution.toString() + "\t" + m_initialarguments;
+        return m_execution.toString();
     }
 
     @Override
@@ -80,6 +75,8 @@ public final class CProxyAction implements IExecution
             final Collection<ITerm> p_return
     )
     {
+
+        /*
         // foo( bar(3,4), blub( xxx(3,4) ) ) -> xxx, blub, bar, foo
 
         // build initial argument stack for execution (replace variables with local stack definition)
@@ -98,7 +95,7 @@ public final class CProxyAction implements IExecution
 
             i.getLeft().execute( p_context, p_annotation, l_argumentstack, l_argumentstack );
         } );
-
+        */
 
         return CBoolean.from( true );
     }
@@ -112,6 +109,18 @@ public final class CProxyAction implements IExecution
     @SuppressWarnings( "unchecked" )
     private void createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
+        p_literal.getValues().entries().stream().forEach( i -> {
+
+            if ( i.getValue() instanceof ILiteral )
+                this.createCaller( (ILiteral) i.getValue(), p_actions );
+            /*
+            else
+                m_initialarguments.add( i.getValue() );
+                */
+
+        } );
+
+
         final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
         if ( l_action == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
@@ -122,15 +131,40 @@ public final class CProxyAction implements IExecution
                     CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
 
         // create execution definition as stack definition
-        m_execution.add( 0, new ImmutablePair<>( l_action, l_action.getMinimalArgumentNumber() ) );
-        p_literal.getValues().entries().stream().forEach( i -> {
+        m_execution.add( 0, new CStackExecution( l_action ) );
 
-            if ( i.getValue() instanceof ILiteral )
-                this.createCaller( (ILiteral) i.getValue(), p_actions );
-            else
-                m_initialarguments.add( i.getValue() );
+    }
 
-        } );
+
+    private static class CStackExecution
+    {
+        private final IAction m_action;
+
+        public CStackExecution( final IAction p_action )
+        {
+            m_action = p_action;
+        }
+
+        public Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_parameter )
+        {
+            // create return values and replace parameter variables with stack variables
+            final List<ITerm> l_return = new LinkedList<>();
+            final List<ITerm> l_parameter = Collections.unmodifiableList( p_parameter.stream().map( i -> {
+
+                final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
+                if ( l_variable != null )
+                    return l_variable;
+
+                return i;
+            } ).collect( Collectors.toList() ) );
+
+            // @todo add annotation replaceing
+
+            // call action
+            m_action.execute( p_context, null, p_parameter, l_return );
+
+            return l_return;
+        }
     }
 
 }
