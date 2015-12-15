@@ -55,6 +55,6 @@ public interface IContext<T>
      *
      * @return variable names and their current value
      */
-    public Map<CPath, IVariable<?>> getVariables();
+    public Map<CPath, IVariable<?>> getInstanceVariables();
 
 }

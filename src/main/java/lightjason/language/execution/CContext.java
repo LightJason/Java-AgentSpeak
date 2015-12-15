@@ -90,7 +90,7 @@ public final class CContext<T> implements IContext<T>
     }
 
     @Override
-    public final Map<CPath, IVariable<?>> getVariables()
+    public final Map<CPath, IVariable<?>> getInstanceVariables()
     {
         return m_variables;
     }

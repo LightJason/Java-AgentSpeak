@@ -81,7 +81,7 @@ public final class CProxyAction implements IExecution
         // foo( bar(3,4), blub( xxx(3,4) ) ) -> xxx, blub, bar, foo
         final List<ITerm> l_argumentstack = m_arguments.stream().map( i -> {
 
-            final IVariable<?> l_variable = p_context.getVariables().get( i.getFQNFunctor() );
+            final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
             if ( l_variable != null )
                 return l_variable;
 
@@ -99,11 +99,17 @@ public final class CProxyAction implements IExecution
     @SuppressWarnings( "unchecked" )
     private void createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
-        final IExecution l_action = p_actions.get( p_literal.getFQNFunctor() );
+        final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
         if ( l_action == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
-        m_execution.add( l_action );
 
+        // check number of arguments
+        if ( !( ( l_action.getMinimalArgumentNumber() <= p_literal.getValues().size() ) &&
+                ( p_literal.getValues().size() <= l_action.getMaximalArgumentNumber() ) ) )
+            throw new CIllegalArgumentException(
+                    CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
+
+        m_execution.add( l_action );
         p_literal.getValues().entries().stream().forEach( i -> {
 
             if ( i.getValue() instanceof ILiteral )

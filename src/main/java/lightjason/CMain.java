@@ -81,6 +81,18 @@ public final class CMain
         {
             return c_name;
         }
+
+        @Override
+        public final int getMinimalArgumentNumber()
+        {
+            return 0;
+        }
+
+        @Override
+        public final int getMaximalArgumentNumber()
+        {
+            return Integer.MAX_VALUE;
+        }
     }
 
     /**
@@ -97,6 +109,18 @@ public final class CMain
         public final CPath getName()
         {
             return c_name;
+        }
+
+        @Override
+        public final int getMinimalArgumentNumber()
+        {
+            return 3;
+        }
+
+        @Override
+        public final int getMaximalArgumentNumber()
+        {
+            return 3;
         }
 
         @Override
@@ -124,6 +148,18 @@ public final class CMain
         public CPath getName()
         {
             return c_name;
+        }
+
+        @Override
+        public final int getMinimalArgumentNumber()
+        {
+            return 1;
+        }
+
+        @Override
+        public final int getMaximalArgumentNumber()
+        {
+            return Integer.MAX_VALUE;
         }
 
         @Override

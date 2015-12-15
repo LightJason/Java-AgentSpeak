@@ -39,4 +39,18 @@ public interface IAction extends IExecution
      */
     public CPath getName();
 
+    /**
+     * minimum number of arguments
+     *
+     * @return number of minimal arguments
+     */
+    public int getMinimalArgumentNumber();
+
+    /**
+     * maximum number of arguments
+     *
+     * @return number of maximal arguments
+     */
+    public int getMaximalArgumentNumber();
+
 }
