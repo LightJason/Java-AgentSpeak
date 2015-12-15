@@ -46,11 +46,4 @@ public interface IAction extends IExecution
      */
     public int getMinimalArgumentNumber();
 
-    /**
-     * maximum number of arguments
-     *
-     * @return number of maximal arguments
-     */
-    public int getMaximalArgumentNumber();
-
 }

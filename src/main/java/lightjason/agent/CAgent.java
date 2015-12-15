@@ -211,7 +211,7 @@ public class CAgent implements IAgent
                 System.out.println();
             } );
             System.out.println();
-            System.out.println(                                                                                              "\n--> " + i.execute(
+            System.out.println(                                                                                              "\n--> " +                                                                                   i.execute(
                     new CContext<>( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
                                     Collections.unmodifiableMap( new HashMap<>() )
                     ), Collections.<ILiteral>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) + " <--\n" );

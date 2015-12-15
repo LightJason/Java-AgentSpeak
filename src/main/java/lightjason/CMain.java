@@ -88,11 +88,6 @@ public final class CMain
             return 0;
         }
 
-        @Override
-        public final int getMaximalArgumentNumber()
-        {
-            return Integer.MAX_VALUE;
-        }
     }
 
     /**
@@ -113,12 +108,6 @@ public final class CMain
 
         @Override
         public final int getMinimalArgumentNumber()
-        {
-            return 3;
-        }
-
-        @Override
-        public final int getMaximalArgumentNumber()
         {
             return 3;
         }
@@ -154,12 +143,6 @@ public final class CMain
         public final int getMinimalArgumentNumber()
         {
             return 1;
-        }
-
-        @Override
-        public final int getMaximalArgumentNumber()
-        {
-            return Integer.MAX_VALUE;
         }
 
         @Override

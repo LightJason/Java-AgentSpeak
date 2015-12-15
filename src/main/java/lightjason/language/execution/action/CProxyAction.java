@@ -33,7 +33,8 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
-import org.antlr.v4.runtime.misc.Triple;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -50,7 +51,7 @@ public final class CProxyAction implements IExecution
     /**
      * inner execution structure in reverse order with number of argmuments
      */
-    private final List<Triple<IExecution, Integer, Integer>> m_execution = new LinkedList<>();
+    private final List<Pair<IExecution, Integer>> m_execution = new LinkedList<>();
     /**
      * initial / inner arguments
      */
@@ -95,8 +96,7 @@ public final class CProxyAction implements IExecution
         // execute action and build sublists of argument stack
         m_execution.stream().forEach( i -> {
 
-
-            i.a.execute( p_context, p_annotation, l_argumentstack, l_argumentstack );
+            i.getLeft().execute( p_context, p_annotation, l_argumentstack, l_argumentstack );
         } );
 
 
@@ -116,19 +116,13 @@ public final class CProxyAction implements IExecution
         if ( l_action == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 
-        // check argument numbers
-        if ( l_action.getMinimalArgumentNumber() > l_action.getMaximalArgumentNumber() )
-            throw new CIllegalArgumentException(
-                    CCommon.getLanguageString( this, "argumentminmax", p_literal, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
-
         // check number of arguments
-        if ( !( ( l_action.getMinimalArgumentNumber() <= p_literal.getValues().size() ) &&
-                ( p_literal.getValues().size() <= l_action.getMaximalArgumentNumber() ) ) )
+        if ( l_action.getMinimalArgumentNumber() > p_literal.getValues().size() )
             throw new CIllegalArgumentException(
-                    CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
+                    CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
 
         // create execution definition as stack definition
-        m_execution.add( 0, new Triple<IExecution, Integer, Integer>( l_action, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
+        m_execution.add( 0, new ImmutablePair<>( l_action, l_action.getMinimalArgumentNumber() ) );
         p_literal.getValues().entries().stream().forEach( i -> {
 
             if ( i.getValue() instanceof ILiteral )
@@ -138,4 +132,5 @@ public final class CProxyAction implements IExecution
 
         } );
     }
+
 }
