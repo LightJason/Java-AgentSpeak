@@ -8,7 +8,13 @@ structure to describe an optimizing process.
 
 ## Requirements
 
-* Java 1.8
+* [JRE 1.8](http://www.java.com/)
+
+### Development
+
+* [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/)
+* [Maven 3](http://maven.apache.org/)
+* [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
 
 
 ## Base Definitions
