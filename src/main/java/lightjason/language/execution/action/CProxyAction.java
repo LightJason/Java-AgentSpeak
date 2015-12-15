@@ -33,6 +33,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
+import org.antlr.v4.runtime.misc.Triple;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -47,13 +48,13 @@ import java.util.stream.Collectors;
 public final class CProxyAction implements IExecution
 {
     /**
-     * inner execution structure in reverse order
+     * inner execution structure in reverse order with number of argmuments
      */
-    private final List<IExecution> m_execution = new LinkedList<>();
+    private final List<Triple<IExecution, Integer, Integer>> m_execution = new LinkedList<>();
     /**
      * initial / inner arguments
      */
-    private final List<ITerm> m_arguments = new LinkedList<>();
+    private final List<ITerm> m_initialarguments = new LinkedList<>();
 
 
     /**
@@ -70,7 +71,7 @@ public final class CProxyAction implements IExecution
     @Override
     public final String toString()
     {
-        return m_execution.toString() + "\t" + m_arguments;
+        return m_execution.toString() + "\t" + m_initialarguments;
     }
 
     @Override
@@ -79,7 +80,9 @@ public final class CProxyAction implements IExecution
     )
     {
         // foo( bar(3,4), blub( xxx(3,4) ) ) -> xxx, blub, bar, foo
-        final List<ITerm> l_argumentstack = m_arguments.stream().map( i -> {
+
+        // build initial argument stack for execution (replace variables with local stack definition)
+        final List<ITerm> l_argumentstack = m_initialarguments.stream().map( i -> {
 
             final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
             if ( l_variable != null )
@@ -89,13 +92,23 @@ public final class CProxyAction implements IExecution
 
         } ).collect( Collectors.toCollection( LinkedList::new ) );
 
+        // execute action and build sublists of argument stack
+        m_execution.stream().forEach( i -> {
 
-        m_execution.stream().forEach( i -> i.execute( p_context, p_annotation, l_argumentstack, l_argumentstack ) );
+
+            i.a.execute( p_context, p_annotation, l_argumentstack, l_argumentstack );
+        } );
 
 
         return CBoolean.from( true );
     }
 
+    /**
+     * create execution stack of function and arguments
+     *
+     * @param p_literal literal
+     * @param p_actions map with action definition
+     */
     @SuppressWarnings( "unchecked" )
     private void createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
@@ -103,19 +116,25 @@ public final class CProxyAction implements IExecution
         if ( l_action == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 
+        // check argument numbers
+        if ( l_action.getMinimalArgumentNumber() > l_action.getMaximalArgumentNumber() )
+            throw new CIllegalArgumentException(
+                    CCommon.getLanguageString( this, "argumentminmax", p_literal, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
+
         // check number of arguments
         if ( !( ( l_action.getMinimalArgumentNumber() <= p_literal.getValues().size() ) &&
                 ( p_literal.getValues().size() <= l_action.getMaximalArgumentNumber() ) ) )
             throw new CIllegalArgumentException(
                     CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
 
-        m_execution.add( l_action );
+        // create execution definition as stack definition
+        m_execution.add( 0, new Triple<IExecution, Integer, Integer>( l_action, l_action.getMinimalArgumentNumber(), l_action.getMaximalArgumentNumber() ) );
         p_literal.getValues().entries().stream().forEach( i -> {
 
             if ( i.getValue() instanceof ILiteral )
                 this.createCaller( (ILiteral) i.getValue(), p_actions );
             else
-                m_arguments.add( i.getValue() );
+                m_initialarguments.add( i.getValue() );
 
         } );
     }

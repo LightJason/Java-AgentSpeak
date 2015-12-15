@@ -6,13 +6,13 @@ anno(3)[self("blub"), value(true), xxx(success)].
 
 !drive.
 
-setSpeed(X) :- setProperty("speed", X).
+setSpeed(X) :- setProperty("speed", X, Y).
 
 @fuzzy(0.8)
 +!accelerate
     : current_speed(Speed) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
         //Speed++;
-        setProperty( Speed )[blub(3),blub(4)];
+        setProperty( Speed, "", 1 )[blub(3),blub(4)];
         !!drive;
         -+baz("hallo")
     <- true.
@@ -22,7 +22,7 @@ setSpeed(X) :- setProperty("speed", X).
     : current_speed(Speed) && Speed > 10 <-
         //Speed--;
         +foo(5);
-        setProperty( Speed );
+        setProperty( Speed, "", "" );
         print([1,2,3,4]);
         !!drive.
 
