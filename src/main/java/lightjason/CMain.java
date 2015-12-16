@@ -150,7 +150,7 @@ public final class CMain
                 final Collection<ITerm> p_return
         )
         {
-            System.out.println( "---> min" );
+            System.out.println( "---> min : " + p_parameter );
             return CBoolean.from( true );
         }
     }

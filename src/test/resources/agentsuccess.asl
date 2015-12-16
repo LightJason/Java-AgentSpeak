@@ -29,7 +29,7 @@ setSpeed(X) :- setProperty("speed", X, Y).
 @atomic
 +!decelerate
     : current_speed(Speed) && routingtype(Type) && Speed <= 10 <-
-        print( min(3,5), Type );
+        @print( min(3,5), Type );
         -bar/blub(Speed);
         !!decelerate.
 

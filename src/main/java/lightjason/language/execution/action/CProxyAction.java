@@ -33,7 +33,9 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
+import org.apache.commons.lang3.StringUtils;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,9 +51,9 @@ import java.util.stream.Collectors;
 public final class CProxyAction implements IExecution
 {
     /**
-     * inner execution structure in reverse order with number of argmuments
+     * execution
      */
-    private final List<IProxyExecution> m_execution = new LinkedList<>();
+    private final IProxyExecution m_execution;
     /**
      * run action in parallel
      */
@@ -67,14 +69,7 @@ public final class CProxyAction implements IExecution
     public CProxyAction( final Map<CPath, IAction> p_actions, final ILiteral p_literal )
     {
         m_parallel = p_literal.hasAt();
-        this.createCaller( p_literal, p_actions );
-    }
-
-
-    @Override
-    public final String toString()
-    {
-        return m_execution.toString();
+        m_execution = this.createCaller( p_literal, p_actions );
     }
 
     @Override
@@ -82,28 +77,7 @@ public final class CProxyAction implements IExecution
             final Collection<ITerm> p_return
     )
     {
-
-        /*
-        // foo( bar(3,4), blub( xxx(3,4) ) ) -> xxx, blub, bar, foo
-
-        // build initial argument stack for execution (replace variables with local stack definition)
-        final List<ITerm> l_argumentstack = m_initialarguments.stream().map( i -> {
-
-            final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
-            if ( l_variable != null )
-                return l_variable;
-
-            return i;
-
-        } ).collect( Collectors.toCollection( LinkedList::new ) );
-
-        // execute action and build sublists of argument stack
-        m_execution.stream().forEach( i -> {
-
-            i.getLeft().execute( p_context, p_annotation, l_argumentstack, l_argumentstack );
-        } );
-        */
-
+        m_execution.execute( p_context );
         return CBoolean.from( true );
     }
 
@@ -128,7 +102,7 @@ public final class CProxyAction implements IExecution
 
 
         // build argument list and create action (argument list defines only executable statements to generate allocation for arguments and return lists)
-        return new CExecution( l_action, p_literal.getValues().entries().stream().map( i -> {
+        return new CExecution( p_literal.hasAt(), l_action, p_literal.getValues().entries().stream().map( i -> {
 
             if ( i.getValue() instanceof ILiteral )
                 return this.createCaller( (ILiteral) i.getValue(), p_actions );
@@ -136,6 +110,12 @@ public final class CProxyAction implements IExecution
             return new CStatic( i.getValue() );
 
         } ).collect( Collectors.toList() ) );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_execution.toString();
     }
 
     /**
@@ -198,14 +178,35 @@ public final class CProxyAction implements IExecution
         {
             return Collections.unmodifiableList( this.replaceFromContext( p_context, m_values ) );
         }
-    }
 
+        @Override
+        public final int hashCode()
+        {
+            return m_values.hashCode();
+        }
+
+        @Override
+        public final String toString()
+        {
+            return MessageFormat.format( "{0}", StringUtils.join( " ,", m_values ) );
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return this.hashCode() == p_object.hashCode();
+        }
+    }
 
     /**
      * inner class for encapsulating action execution
      */
     private static class CExecution extends IProxyExecution
     {
+        /**
+         * parallel execution flag
+         */
+        private final boolean m_parallel;
         /**
          * action
          */
@@ -218,11 +219,13 @@ public final class CProxyAction implements IExecution
         /**
          * ctor
          *
+         * @param p_parallel run action arguments in parallel
          * @param p_action action object
          * @param p_arguments arguments
          */
-        public CExecution( final IAction p_action, final List<IProxyExecution> p_arguments )
+        public CExecution( final boolean p_parallel, final IAction p_action, final List<IProxyExecution> p_arguments )
         {
+            m_parallel = p_parallel;
             m_action = p_action;
             m_arguments = p_arguments;
         }
@@ -235,13 +238,33 @@ public final class CProxyAction implements IExecution
         {
             // allocate return values (can be set only with types within the current execution context
             final List<ITerm> l_return = new LinkedList<>();
-
-            // call all arguments first
-            //m_arguments.stream()
-
-            m_action.execute( p_context, null, null, l_return );
-
+            m_action.execute( p_context, null,
+                              Collections.unmodifiableList(
+                                      ( m_parallel
+                                              ? m_arguments.parallelStream()
+                                              : m_arguments.stream()
+                                      ).map( i -> i.execute( p_context ) ).flatMap( i -> i.stream() ).collect( Collectors.toList() ) ),
+                              l_return
+            );
             return l_return;
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return m_action.hashCode() + m_arguments.hashCode();
+        }
+
+        @Override
+        public final String toString()
+        {
+            return MessageFormat.format( "{0}({1})", m_action, m_arguments );
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return this.hashCode() == p_object.hashCode();
         }
     }
 
