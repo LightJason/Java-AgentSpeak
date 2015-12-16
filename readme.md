@@ -176,6 +176,10 @@ default _unchangeable / unmodifiable_ beliefs which are exist always within the 
 * variables are written with an upper-case letter at begin
 * thread-safe variables start with @ (at-sign) followed by an upper-case letter
 
+### Actions
+
+* actions with @-prefix wil be executed in parallel
+
 
 ## Migration Original-Jason to Light-Jason 
 
