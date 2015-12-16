@@ -55,6 +55,10 @@ public final class CProxyAction implements IExecution
      */
     private final IProxyExecution m_execution;
     /**
+     * annotation execution
+     */
+    private final List<IProxyExecution> m_annotationexecution;
+    /**
      * run action in parallel
      */
     private final boolean m_parallel;
@@ -69,7 +73,11 @@ public final class CProxyAction implements IExecution
     public CProxyAction( final Map<CPath, IAction> p_actions, final ILiteral p_literal )
     {
         m_parallel = p_literal.hasAt();
+
+        // define execution structure
         m_execution = this.createCaller( p_literal, p_actions );
+        m_annotationexecution = p_literal.getAnnotation().entries().stream().map( i -> this.createCaller( i.getValue(), p_actions ) ).collect(
+                Collectors.toList() );
     }
 
     @Override
@@ -77,7 +85,7 @@ public final class CProxyAction implements IExecution
             final Collection<ITerm> p_return
     )
     {
-        m_execution.execute( p_context );
+        m_execution.execute( p_context, null );
         return CBoolean.from( true );
     }
 
@@ -121,9 +129,10 @@ public final class CProxyAction implements IExecution
          * execute method
          *
          * @param p_context execution context
+         * @param p_annotation arguments
          * @return list of returning arguments
          */
-        public abstract Collection<ITerm> execute( final IContext<?> p_context );
+        public abstract Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation );
 
         /**
          * helper method to replace variables with context variables
@@ -168,7 +177,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Collection<ITerm> execute( final IContext<?> p_context )
+        public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
             return Collections.unmodifiableList( this.replaceFromContext( p_context, m_values ) );
         }
@@ -228,7 +237,7 @@ public final class CProxyAction implements IExecution
          * @todo annotation definition incomplete
          */
         @Override
-        public final Collection<ITerm> execute( final IContext<?> p_context )
+        public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
             // allocate return values (can be set only with types within the current execution context
             final List<ITerm> l_return = new LinkedList<>();
@@ -237,7 +246,7 @@ public final class CProxyAction implements IExecution
                                       ( m_parallel
                                               ? m_arguments.parallelStream()
                                               : m_arguments.stream()
-                                      ).map( i -> i.execute( p_context ) ).flatMap( i -> i.stream() ).collect( Collectors.toList() ) ),
+                                      ).map( i -> i.execute( p_context, p_annotation ) ).flatMap( i -> i.stream() ).collect( Collectors.toList() ) ),
                               l_return
             );
             return l_return;
@@ -265,7 +274,7 @@ public final class CProxyAction implements IExecution
     @Override
     public final String toString()
     {
-        return m_execution.toString();
+        return MessageFormat.format( "{0}{1}", m_execution, m_annotationexecution );
     }
 
 
