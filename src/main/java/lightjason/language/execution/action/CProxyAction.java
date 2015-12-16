@@ -34,6 +34,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -50,19 +51,25 @@ public final class CProxyAction implements IExecution
     /**
      * inner execution structure in reverse order with number of argmuments
      */
-    private final List<CStackExecution> m_execution = new LinkedList<>();
+    private final List<IProxyExecution> m_execution = new LinkedList<>();
+    /**
+     * run action in parallel
+     */
+    private final boolean m_parallel;
 
 
     /**
      * ctor
      *
-     * @param p_literal literal
      * @param p_actions actions definition
+     * @param p_literal literal
      */
-    public CProxyAction( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
+    public CProxyAction( final Map<CPath, IAction> p_actions, final ILiteral p_literal )
     {
+        m_parallel = p_literal.hasAt();
         this.createCaller( p_literal, p_actions );
     }
+
 
     @Override
     public final String toString()
@@ -107,20 +114,9 @@ public final class CProxyAction implements IExecution
      * @param p_actions map with action definition
      */
     @SuppressWarnings( "unchecked" )
-    private void createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
+    private IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
-        p_literal.getValues().entries().stream().forEach( i -> {
-
-            if ( i.getValue() instanceof ILiteral )
-                this.createCaller( (ILiteral) i.getValue(), p_actions );
-            /*
-            else
-                m_initialarguments.add( i.getValue() );
-                */
-
-        } );
-
-
+        // resolve action
         final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
         if ( l_action == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
@@ -130,38 +126,120 @@ public final class CProxyAction implements IExecution
             throw new CIllegalArgumentException(
                     CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
 
-        // create execution definition as stack definition
-        m_execution.add( 0, new CStackExecution( l_action ) );
 
+        // build argument list and create action (argument list defines only executable statements to generate allocation for arguments and return lists)
+        return new CExecution( l_action, p_literal.getValues().entries().stream().map( i -> {
+
+            if ( i.getValue() instanceof ILiteral )
+                return this.createCaller( (ILiteral) i.getValue(), p_actions );
+
+            return new CStatic( i.getValue() );
+
+        } ).collect( Collectors.toList() ) );
     }
 
-
-    private static class CStackExecution
+    /**
+     * base class for encapsulation execution content
+     */
+    private static abstract class IProxyExecution
     {
-        private final IAction m_action;
+        /**
+         * execute method
+         *
+         * @param p_context execution context
+         * @return list of returning arguments
+         */
+        public abstract Collection<ITerm> execute( final IContext<?> p_context );
 
-        public CStackExecution( final IAction p_action )
+        /**
+         * helper method to replace variables with context variables
+         *
+         * @param p_context execution context
+         * @param p_terms replacing term list
+         * @return result term list
+         */
+        protected final List<ITerm> replaceFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
         {
-            m_action = p_action;
-        }
-
-        public Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_parameter )
-        {
-            // create return values and replace parameter variables with stack variables
-            final List<ITerm> l_return = new LinkedList<>();
-            final List<ITerm> l_parameter = Collections.unmodifiableList( p_parameter.stream().map( i -> {
+            return p_terms.stream().map( i -> {
 
                 final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
                 if ( l_variable != null )
                     return l_variable;
 
                 return i;
-            } ).collect( Collectors.toList() ) );
 
-            // @todo add annotation replaceing
+            } ).collect( Collectors.toList() );
+        }
 
-            // call action
-            m_action.execute( p_context, null, p_parameter, l_return );
+    }
+
+    /**
+     * inner class for encapsulating values
+     */
+    private static class CStatic extends IProxyExecution
+    {
+        /**
+         * value list
+         */
+        private final Collection<ITerm> m_values;
+
+        /**
+         * ctor
+         *
+         * @param p_value any term
+         */
+        public CStatic( final ITerm... p_value )
+        {
+            m_values = Collections.unmodifiableList( Arrays.asList( p_value ) );
+        }
+
+        @Override
+        public Collection<ITerm> execute( final IContext<?> p_context )
+        {
+            return Collections.unmodifiableList( this.replaceFromContext( p_context, m_values ) );
+        }
+    }
+
+
+    /**
+     * inner class for encapsulating action execution
+     */
+    private static class CExecution extends IProxyExecution
+    {
+        /**
+         * action
+         */
+        private final IAction m_action;
+        /**
+         * arguments
+         */
+        private final List<IProxyExecution> m_arguments;
+
+        /**
+         * ctor
+         *
+         * @param p_action action object
+         * @param p_arguments arguments
+         */
+        public CExecution( final IAction p_action, final List<IProxyExecution> p_arguments )
+        {
+            m_action = p_action;
+            m_arguments = p_arguments;
+        }
+
+        /**
+         * @todo annotation definition incomplete
+         */
+        @Override
+        public Collection<ITerm> execute( final IContext<?> p_context )
+        {
+            // allocate return values (can be set only with types within the current execution context
+            final List<ITerm> l_return = new LinkedList<>();
+
+            // call all arguments first
+            //m_arguments.stream()
+
+            m_action.execute( p_context, null, null, l_return );
 
             return l_return;
         }

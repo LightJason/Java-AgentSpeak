@@ -273,8 +273,11 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
 
             // literals are actions
             if ( l_item instanceof ILiteral )
-                return new CProxyAction( (ILiteral) l_item, m_actions );
-            /*
+            {
+                final ILiteral l_literal = (ILiteral) l_item;
+                return new CProxyAction( m_actions, l_literal );
+            }
+                /*
             {
                 final IExecution l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
                 if ( l_action == null )
@@ -341,6 +344,7 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     public Object visitLiteral( final LiteralContext p_context )
     {
         return new CLiteral(
+                p_context.AT() != null,
                 this.visitAtom( p_context.atom() ).toString(),
                 (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )

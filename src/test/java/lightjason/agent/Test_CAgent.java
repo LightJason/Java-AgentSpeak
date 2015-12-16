@@ -25,10 +25,7 @@ package lightjason.agent;
 
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
 
 import static org.junit.Assert.assertTrue;
 
@@ -53,12 +50,13 @@ public class Test_CAgent
 
     private static boolean testAgent( final String p_script, final String p_name )
     {
+        /*
         IAgent l_agent = null;
         try (
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            //l_agent = new CAgentGenerator( l_stream ).generate();
+            l_agent = new CDefaultGenerator( l_stream ).generate();
         }
         catch ( final Exception l_exception )
         {
@@ -67,6 +65,7 @@ public class Test_CAgent
         }
 
         System.out.println( MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
+        */
         return true;
     }
 

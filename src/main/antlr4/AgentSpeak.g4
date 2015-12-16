@@ -302,6 +302,7 @@ deconstruct_expression :
  * atom, optional argument, optional annotations
  **/
 literal :
+    AT?
     atom
     ( LROUNDBRACKET termlist? RROUNDBRACKET )?
     ( LANGULARBRACKET literalset? RANGULARBRACKET )?

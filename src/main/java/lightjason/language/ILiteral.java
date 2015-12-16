@@ -42,24 +42,31 @@ public interface ILiteral extends ITerm
      * @param p_prefix add a path to the functor
      * @return copy of the literal
      */
-    public ILiteral clone( final CPath p_prefix );
+    ILiteral clone( final CPath p_prefix );
 
     /**
      * returns the optional annotations
      *
      * @return annotation terms
      */
-    public SetMultimap<CPath, ILiteral> getAnnotation();
+    SetMultimap<CPath, ILiteral> getAnnotation();
 
     /**
      * returns the optional value term
      *
      * @return value terms
      */
-    public SetMultimap<CPath, ITerm> getValues();
+    SetMultimap<CPath, ITerm> getValues();
 
     /**
      * getter of the literal for the negation
      */
-    public boolean isNegated();
+    boolean isNegated();
+
+    /**
+     * returns if the literal has an @ prefix
+     *
+     * @return prefix is set
+     */
+    boolean hasAt();
 }
