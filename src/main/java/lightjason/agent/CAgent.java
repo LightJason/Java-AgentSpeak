@@ -28,7 +28,6 @@ import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IConfiguration;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.CContext;
@@ -50,10 +49,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CAgent implements IAgent
 {
-    /**
-     * agent name
-     */
-    protected final CPath m_name;
     /**
      * thread-safe map with all existing plans
      *
@@ -104,7 +99,6 @@ public class CAgent implements IAgent
     {
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();
-        m_name = p_configuration.getName();
         m_plans = p_configuration.getPlans();
         m_goals.add( p_configuration.getInitialGoal() );
 
@@ -115,12 +109,6 @@ public class CAgent implements IAgent
     public final long getCycle()
     {
         return m_cycle;
-    }
-
-    @Override
-    public final CPath getName()
-    {
-        return m_name;
     }
 
     @Override
@@ -174,7 +162,7 @@ public class CAgent implements IAgent
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [{1}]( Cycle: {2} / Beliefbase: {3} / Plans: {4} )", super.toString(), m_name, m_cycle, m_beliefbase, m_plans );
+        return MessageFormat.format( "{0} ( Cycle: {2} / Beliefbase: {3} / Plans: {4} )", super.toString(), m_cycle, m_beliefbase, m_plans );
     }
 
     @Override
@@ -211,7 +199,7 @@ public class CAgent implements IAgent
                 System.out.println();
             } );
             System.out.println();
-            System.out.println(                                                                                              "\n--> "                                                                                     + i.execute(
+            System.out.println(                                                                                              "\n--> " +                                                                                   i.execute(
                     new CContext<>( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
                                     Collections.unmodifiableMap( new HashMap<>() )
                     ), Collections.<ILiteral>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) + " <--\n" );

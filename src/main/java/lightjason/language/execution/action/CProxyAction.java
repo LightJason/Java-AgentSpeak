@@ -112,12 +112,6 @@ public final class CProxyAction implements IExecution
         } ).collect( Collectors.toList() ) );
     }
 
-    @Override
-    public final String toString()
-    {
-        return m_execution.toString();
-    }
-
     /**
      * base class for encapsulation execution content
      */
@@ -188,7 +182,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final String toString()
         {
-            return MessageFormat.format( "{0}", StringUtils.join( " ,", m_values ) );
+            return MessageFormat.format( "{0}", StringUtils.join( m_values, ", " ) );
         }
 
         @Override
@@ -196,6 +190,12 @@ public final class CProxyAction implements IExecution
         {
             return this.hashCode() == p_object.hashCode();
         }
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_execution.toString();
     }
 
     /**
@@ -258,7 +258,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final String toString()
         {
-            return MessageFormat.format( "{0}({1})", m_action, m_arguments );
+            return MessageFormat.format( "{0}({1})", m_action, StringUtils.join( m_arguments, ", " ) );
         }
 
         @Override

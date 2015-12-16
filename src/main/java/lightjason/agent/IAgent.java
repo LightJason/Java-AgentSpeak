@@ -25,7 +25,6 @@ package lightjason.agent;
 
 import com.google.common.collect.SetMultimap;
 import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -44,28 +43,21 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return cycle number
      */
-    public long getCycle();
-
-    /**
-     * returns the agent name
-     *
-     * @return agent name
-     */
-    public CPath getName();
+    long getCycle();
 
     /**
      * returns the beliefbase
      *
      * @return beliefbase
      */
-    public IBeliefBaseMask getBeliefBase();
+    IBeliefBaseMask getBeliefBase();
 
     /**
      * trigger an event
      *
      * @param p_event event
      */
-    public void trigger( final ITrigger<?> p_event );
+    void trigger( final ITrigger<?> p_event );
 
     /**
      * sets the agent to a suspend state
@@ -75,41 +67,41 @@ public interface IAgent extends Callable<IAgent>
      * the suspeding state is reached the plan "+!sleep"
      * is called
      */
-    public void suspend();
+    void suspend();
 
     /**
      * returns a boolean if the agent is suspending
      *
      * @return boolean for suspending
      */
-    public boolean isSuspending();
+    boolean isSuspending();
 
     /**
      * wakes-up the agent from the suspend state
      *
      * @note the plan "+!wakeup" will be triggered
      */
-    public void resume();
+    void resume();
 
     /**
      * returns a map of the current running plans
      *
      * @return map with running plans
      */
-    public SetMultimap<ILiteral, IPlan> getRunningPlans();
+    SetMultimap<ILiteral, IPlan> getRunningPlans();
 
     /**
      * returns a map of all plans
      *
      * @return map with plans
      */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
+    SetMultimap<ITrigger<?>, IPlan> getPlans();
 
     /**
      * storage access
      *
      * @return storage map
      */
-    public Map<String, ?> getStorage();
+    Map<String, ?> getStorage();
 
 }

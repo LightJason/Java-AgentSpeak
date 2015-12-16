@@ -25,7 +25,6 @@ package lightjason.agent.configuration;
 
 import com.google.common.collect.SetMultimap;
 import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -42,32 +41,25 @@ public interface IConfiguration
     /**
      * returns a beliefbase of the agent
      */
-    public IBeliefBaseMask getBeliefbase();
+    IBeliefBaseMask getBeliefbase();
 
     /**
      * returns the initial goal
      */
-    public ILiteral getInitialGoal();
+    ILiteral getInitialGoal();
 
     /**
      * get a multimap with event-plan matching
      *
      * @return multimap
      */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
+    SetMultimap<ITrigger<?>, IPlan> getPlans();
 
     /**
      * returns the rules / principles
      *
      * @return map with rules
      */
-    public Map<String, Object> getRules();
-
-    /**
-     * returns an unique name of the agent
-     *
-     * @return path with agent name
-     */
-    public CPath getName();
+    Map<String, Object> getRules();
 
 }

@@ -31,6 +31,7 @@ import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.plan.trigger.ITrigger;
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -122,7 +123,8 @@ public class CPlan implements IPlan
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, m_action );
+        return MessageFormat.format(
+                "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, StringUtils.join( m_action, "; " ) );
     }
 
     /**

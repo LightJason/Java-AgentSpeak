@@ -25,7 +25,6 @@ package lightjason.agent.configuration;
 
 import com.google.common.collect.SetMultimap;
 import lightjason.beliefbase.IBeliefBaseMask;
-import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -43,10 +42,6 @@ public class CDefaultConfiguration implements IConfiguration
      */
     final ILiteral m_initialgoal;
     /**
-     * name of the agent
-     */
-    private final CPath m_name;
-    /**
      * instance of agent plans
      */
     private final SetMultimap<ITrigger<?>, IPlan> m_plans;
@@ -55,15 +50,13 @@ public class CDefaultConfiguration implements IConfiguration
     /**
      * ctor
      *
-     * @param p_name name
      * @param p_plans plans
      * @param p_initialgoal initial goal
      * @todo plans must be cloned
      * @todo beliefbase must be cloned
      */
-    public CDefaultConfiguration( final CPath p_name, final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal )
+    public CDefaultConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal )
     {
-        m_name = p_name;
         m_plans = p_plans;
         m_initialgoal = p_initialgoal;
     }
@@ -90,12 +83,6 @@ public class CDefaultConfiguration implements IConfiguration
     public Map<String, Object> getRules()
     {
         return null;
-    }
-
-    @Override
-    public CPath getName()
-    {
-        return m_name;
     }
 
 }

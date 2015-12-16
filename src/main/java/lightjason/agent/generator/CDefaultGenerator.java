@@ -27,7 +27,6 @@ import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultConfiguration;
-import lightjason.common.CPath;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
@@ -71,7 +70,7 @@ public class CDefaultGenerator implements IGenerator
     @Override
     public <T> IAgent generate( final T... p_data ) throws IOException
     {
-        return new CAgent( new CDefaultConfiguration( CPath.createPath( "agent" ), m_visitor.getPlans(), m_visitor.getInitialGoal() ) );
+        return new CAgent( new CDefaultConfiguration( m_visitor.getPlans(), m_visitor.getInitialGoal() ) );
     }
 
     @Override
