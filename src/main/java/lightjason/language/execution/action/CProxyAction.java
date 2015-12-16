@@ -73,7 +73,7 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     )
     {
@@ -88,7 +88,7 @@ public final class CProxyAction implements IExecution
      * @param p_actions map with action definition
      */
     @SuppressWarnings( "unchecked" )
-    private IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
+    private final IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
     {
         // resolve action
         final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
