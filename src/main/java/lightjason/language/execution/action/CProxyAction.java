@@ -168,7 +168,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public Collection<ITerm> execute( final IContext<?> p_context )
+        public final Collection<ITerm> execute( final IContext<?> p_context )
         {
             return Collections.unmodifiableList( this.replaceFromContext( p_context, m_values ) );
         }
@@ -190,12 +190,6 @@ public final class CProxyAction implements IExecution
         {
             return this.hashCode() == p_object.hashCode();
         }
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_execution.toString();
     }
 
     /**
@@ -234,7 +228,7 @@ public final class CProxyAction implements IExecution
          * @todo annotation definition incomplete
          */
         @Override
-        public Collection<ITerm> execute( final IContext<?> p_context )
+        public final Collection<ITerm> execute( final IContext<?> p_context )
         {
             // allocate return values (can be set only with types within the current execution context
             final List<ITerm> l_return = new LinkedList<>();
@@ -267,5 +261,13 @@ public final class CProxyAction implements IExecution
             return this.hashCode() == p_object.hashCode();
         }
     }
+
+    @Override
+    public final String toString()
+    {
+        return m_execution.toString();
+    }
+
+
 
 }
