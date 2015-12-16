@@ -23,7 +23,7 @@ setSpeed(X) :- setProperty("speed", X, Y).
         //Speed--;
         +foo(5);
         setProperty( Speed, "", "" );
-        print([1,2,3,4]);
+        print(1,2,3,4);
         !!drive.
 
 @atomic

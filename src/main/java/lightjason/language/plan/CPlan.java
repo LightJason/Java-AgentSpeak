@@ -124,7 +124,7 @@ public class CPlan implements IPlan
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ({1} | {2} |- {3} = {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, StringUtils.join( m_action, "; " ) );
+                "{0} ({1} | {2} |- {3} =>> {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, StringUtils.join( m_action, "; " ) );
     }
 
     /**

@@ -27,10 +27,12 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
 import lightjason.agent.generator.CDefaultGenerator;
 import lightjason.common.CPath;
+import lightjason.language.CRawTerm;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;
 import java.util.Collection;
@@ -72,7 +74,7 @@ public final class CMain
                 final Collection<ITerm> p_return
         )
         {
-            System.out.println( "---> print : " + p_parameter + "      " + p_annotation );
+            System.out.println( StringUtils.join( p_parameter, ", " ) );
             return CBoolean.from( true );
         }
 
@@ -150,7 +152,12 @@ public final class CMain
                 final Collection<ITerm> p_return
         )
         {
-            System.out.println( "---> min : " + p_parameter );
+            if ( p_parameter.size() < this.getMinimalArgumentNumber() )
+                throw new IllegalArgumentException( "not enough arguments" );
+
+            p_return.add( new CRawTerm<>( p_parameter.stream().mapToDouble( i -> ( (Number) ( (CRawTerm) i ).getValue() ).doubleValue() ).min()
+                                                     .getAsDouble() ) );
+
             return CBoolean.from( true );
         }
     }
