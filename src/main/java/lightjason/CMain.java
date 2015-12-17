@@ -119,7 +119,7 @@ public final class CMain
                 final Collection<ITerm> p_return
         )
         {
-            System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation );
+            //System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation );
             return CBoolean.from( true );
         }
 
@@ -155,7 +155,7 @@ public final class CMain
             if ( p_parameter.size() < this.getMinimalArgumentNumber() )
                 throw new IllegalArgumentException( "not enough arguments" );
 
-            p_return.add( new CRawTerm<>( p_parameter.stream().mapToDouble( i -> ( (Number) ( (CRawTerm) i ).getValue() ).doubleValue() ).min()
+            p_return.add( new CRawTerm<>( p_parameter.parallelStream().mapToDouble( i -> ( (Number) ( (CRawTerm) i ).getValue() ).doubleValue() ).min()
                                                      .getAsDouble() ) );
 
             return CBoolean.from( true );
