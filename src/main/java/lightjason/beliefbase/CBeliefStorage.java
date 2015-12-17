@@ -24,14 +24,17 @@
 package lightjason.beliefbase;
 
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.SetMultimap;
+
 import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,7 +49,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     /**
      * map with elements
      **/
-    protected final Map<String, Set<N>> m_multielements = new ConcurrentHashMap<>();
+    protected final SetMultimap<String, N> m_multielements = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
     /**
      * map with masks
      **/
@@ -56,9 +59,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     @Override
     public void addMultiElement( final String p_key, final N p_element )
     {
-        final Set<N> l_element = m_multielements.getOrDefault( p_key, Collections.synchronizedSet( new HashSet<N>() ) );
-        m_multielements.putIfAbsent( p_key, l_element );
-        l_element.add( p_element );
+        m_multielements.put( p_key, p_element );
     }
 
     @Override
@@ -83,11 +84,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     @Override
     public final boolean containsMultiElement( final String p_key )
     {
-        final Set<N> l_elements = m_multielements.get( p_key );
-        if ( l_elements == null )
-            return false;
-
-        return !l_elements.isEmpty();
+        return m_multielements.containsKey( p_key );
     }
 
     @Override
@@ -117,17 +114,13 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     @Override
     public boolean remove( final String p_key )
     {
-        return ( m_singleelements.remove( p_key ) != null ) || ( m_multielements.remove( p_key ) != null );
+        return ( m_singleelements.remove( p_key ) != null ) || ( m_multielements.removeAll( p_key ) != null );
     }
 
     @Override
     public boolean removeMultiElement( final String p_key, final N p_element )
     {
-        final Set<N> l_element = m_multielements.get( p_key );
-        if ( l_element == null )
-            return false;
-
-        return l_element.remove( p_element );
+        return m_multielements.remove( p_key, p_element );
     }
 
     @Override
@@ -148,16 +141,13 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     @Override
     public final int sizeMultiElement()
     {
-        int l_sum = 0;
-        for ( final Set<N> l_item : m_multielements.values() )
-            l_sum += l_item.size();
-        return 0;
+        return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum();
     }
 
     @Override
     public final int sizeSingleElement()
     {
-        return m_multielements.size();
+        return m_singleelements.size();
     }
 
     @Override
@@ -174,29 +164,25 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
             /**
              * stack with all iterators
              **/
-            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
-            {{
-                for ( final Set<N> l_item : m_multielements.values() )
-                    add( l_item.iterator() );
-            }};
+            private final List<Iterator<N>> m_iterator = m_multielements.asMap().values().stream().map( i -> i.iterator() ).collect( Collectors.toList() );
 
             @Override
             public boolean hasNext()
             {
-                if ( m_stack.isEmpty() )
+                if ( m_iterator.isEmpty() )
                     return false;
 
-                if ( m_stack.peek().hasNext() )
+                if ( m_iterator.get( 0 ).hasNext() )
                     return true;
 
-                m_stack.pop();
+                m_iterator.remove( 0 );
                 return this.hasNext();
             }
 
             @Override
             public N next()
             {
-                return m_stack.peek().next();
+                return m_iterator.get( 0 ).next();
             }
         };
     }
