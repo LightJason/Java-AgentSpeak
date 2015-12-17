@@ -44,7 +44,7 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @param p_element element
      */
-    public void addMultiElement( final String p_key, final N p_element );
+    void addMultiElement( final String p_key, final N p_element );
 
     /**
      * adds a new mask
@@ -52,12 +52,12 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @param p_element mask element
      */
-    public void addSingleElement( final String p_key, final M p_element );
+    void addSingleElement( final String p_key, final M p_element );
 
     /**
      * clears all elements
      */
-    public void clear();
+    void clear();
 
     /**
      * checks any element exists
@@ -65,7 +65,7 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return exist boolean
      */
-    public boolean contains( final String p_key );
+    boolean contains( final String p_key );
 
     /**
      * check if an element exists
@@ -73,7 +73,7 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return exist boolean
      */
-    public boolean containsMultiElement( final String p_key );
+    boolean containsMultiElement( final String p_key );
 
     /**
      * checks if a mask exists
@@ -81,7 +81,7 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return exist boolean
      */
-    public boolean containsSingleElement( String p_key );
+    boolean containsSingleElement( String p_key );
 
     /**
      * returns a set of elements
@@ -89,7 +89,7 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return set
      */
-    public Set<N> getMultiElement( final String p_key );
+    Set<N> getMultiElement( final String p_key );
 
     /**
      * returns a mask
@@ -97,14 +97,14 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return mask
      */
-    public M getSingleElement( final String p_key );
+    M getSingleElement( final String p_key );
 
     /**
      * checks if a storage is empty
      *
      * @return empty boolean
      */
-    public boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * removes all elements by its name
@@ -112,7 +112,7 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return boolean flag that elements could be removed
      */
-    public boolean remove( final String p_key );
+    boolean remove( final String p_key );
 
     /**
      * removes an element
@@ -121,7 +121,7 @@ public interface IStorage<N, M>
      * @param p_element element
      * @return boolean flag, that the element is removed
      */
-    public boolean removeMultiElement( final String p_key, final N p_element );
+    boolean removeMultiElement( final String p_key, final N p_element );
 
     /**
      * removes a mask
@@ -129,45 +129,40 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return boolean flag the element is removed
      */
-    public boolean removeSingleElement( final String p_key );
-
-    /**
-     * updates all items
-     */
-    public void update();
+    boolean removeSingleElement( final String p_key );
 
     /**
      * number of multielements
      *
      * @return size
      */
-    public int sizeMultiElement();
+    int sizeMultiElement();
 
     /**
      * number of singleelements
      *
      * @return size
      */
-    public int sizeSingleElement();
+    int sizeSingleElement();
 
 
     /**
      * number of all elements
      */
-    public int size();
+    int size();
 
     /**
      * iterator over all multielements
      *
      * @return iterator
      */
-    public Iterator<N> iteratorMultiElement();
+    Iterator<N> iteratorMultiElement();
 
     /**
      * iterator over all singlelements
      *
      * @return iterator
      */
-    public Iterator<M> iteratorSingleElement();
+    Iterator<M> iteratorSingleElement();
 
 }

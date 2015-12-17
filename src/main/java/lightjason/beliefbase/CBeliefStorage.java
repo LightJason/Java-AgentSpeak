@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * non-thread-safe storage of the data
+ * thread-safe storage of the data
  *
  * @tparam N element type
  * @tparam M mask type
@@ -127,15 +127,6 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     public boolean removeSingleElement( final String p_key )
     {
         return m_singleelements.remove( p_key ) != null;
-    }
-
-    /**
-     * @bug not implemented
-     */
-    @Override
-    public void update()
-    {
-
     }
 
     @Override
