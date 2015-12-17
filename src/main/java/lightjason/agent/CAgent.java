@@ -160,7 +160,7 @@ public class CAgent implements IAgent
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} ( Cycle: {2} / Beliefbase: {3} / Plans: {4} )", super.toString(), m_cycle, m_beliefbase, m_plans );
+        return MessageFormat.format( "{0} ( Cycle: {2} / Beliefbase: {3} )", super.toString(), m_cycle, m_beliefbase );
     }
 
     @Override
@@ -177,10 +177,7 @@ public class CAgent implements IAgent
         // create execution list
 
 
-        System.out.println( "=====>> " + m_goals );
-        System.out.println();
-        System.out.println( "=====>> " + m_beliefbase );
-        System.out.println();
+        System.out.println( "=====>> " + this );
 
         m_plans.values().stream().forEach( i -> {
 
@@ -208,6 +205,7 @@ public class CAgent implements IAgent
 
         } );
 
+        System.out.println( "=====>> " + this );
 
         // increment cycle
         m_cycle++;

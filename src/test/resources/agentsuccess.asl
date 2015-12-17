@@ -30,7 +30,7 @@ setSpeed(X) :- setProperty("speed", X, Y).
 +!decelerate
     : current_speed(Speed) && routingtype(Type) && Speed <= 10 <-
         @print( min(3,5), Type );
-        -bar/blub(Speed);
+        -blub(Speed);
         !!decelerate.
 
 

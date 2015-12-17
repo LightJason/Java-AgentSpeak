@@ -73,11 +73,11 @@ public final class CBeliefAction extends IAction<ILiteral>
         switch ( m_action )
         {
             case Add:
-                //p_beliefbase.add( m_data.getFunctorPath(), m_data );
+                p_context.getAgent().getBeliefBase().add( m_value.getFunctorPath(), m_value );
                 break;
 
             case Delete:
-                //p_beliefbase.remove( m_data.getFunctorPath(), m_data );
+                p_context.getAgent().getBeliefBase().remove( m_value.getFunctorPath(), m_value );
                 break;
 
             default:
@@ -106,7 +106,7 @@ public final class CBeliefAction extends IAction<ILiteral>
          *
          * @param p_name string represenation
          */
-        private EAction( final String p_name )
+        EAction( final String p_name )
         {
             m_name = p_name;
         }
