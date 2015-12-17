@@ -71,7 +71,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     /**
-     * private ctor
+     * ctor
      *
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
@@ -222,6 +222,8 @@ public class CMask implements IBeliefBaseMask
     @Override
     public Map<CPath, IBeliefBaseMask> getMasks()
     {
+        
+
         return new HashMap<CPath, IBeliefBaseMask>()
         {{
             for ( final Iterator<IBeliefBaseMask> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )

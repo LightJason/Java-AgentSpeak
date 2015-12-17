@@ -130,6 +130,11 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
+    public void update()
+    {
+    }
+
+    @Override
     public final int sizeMultiElement()
     {
         return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum();

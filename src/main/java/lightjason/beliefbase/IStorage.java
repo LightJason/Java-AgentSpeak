@@ -132,6 +132,11 @@ public interface IStorage<N, M>
     boolean removeSingleElement( final String p_key );
 
     /**
+     * updates all items
+     */
+    void update();
+
+    /**
      * number of multielements
      *
      * @return size
