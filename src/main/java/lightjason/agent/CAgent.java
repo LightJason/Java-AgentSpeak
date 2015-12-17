@@ -29,9 +29,7 @@ import lightjason.agent.configuration.IConfiguration;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
-import lightjason.language.ITerm;
 import lightjason.language.execution.CContext;
-import lightjason.language.execution.action.CRawAction;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
@@ -189,6 +187,7 @@ public class CAgent implements IAgent
         m_plans.values().stream().forEach( i -> {
 
             System.out.println( "=====>> " + i + " ===\n" );
+            /*
             i.getBodyActions().stream().forEachOrdered( n -> {
                 System.out.print( n + "\t" + n.getClass() );
                 if ( n.getClass().equals( CRawAction.class ) )
@@ -199,10 +198,14 @@ public class CAgent implements IAgent
                 System.out.println();
             } );
             System.out.println();
-            System.out.println(                                                                                              "\n--> " +                                                                                   i.execute(
-                    new CContext<>( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
+            */
+            System.out.println(
+                    "\n--> " +
+                    i.execute(
+                            new CContext<>( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
                                     Collections.unmodifiableMap( new HashMap<>() )
-                    ), Collections.<ILiteral>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) + " <--\n" );
+                            ), null, null, null
+                    )        + " <--\n" );
             System.out.println( "===================================================================" );
 
         } );
