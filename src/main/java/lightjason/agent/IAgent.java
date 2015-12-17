@@ -24,7 +24,7 @@
 package lightjason.agent;
 
 import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -50,7 +50,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return beliefbase
      */
-    IBeliefBaseMask getBeliefBase();
+    IMask getBeliefBase();
 
     /**
      * trigger an event

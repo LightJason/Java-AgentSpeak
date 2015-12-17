@@ -32,7 +32,7 @@ import java.util.Iterator;
 /**
  * interface for equal method names on masks and beliefbases
  */
-public interface IBeliefBaseAction
+public interface IStructure
 {
 
     /**
@@ -49,7 +49,7 @@ public interface IBeliefBaseAction
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
-    public IBeliefBaseMask add( final IBeliefBaseMask p_mask );
+    public IMask add( final IMask p_mask );
 
     /**
      * clears all elements
@@ -62,7 +62,7 @@ public interface IBeliefBaseAction
      * @param p_name name of the mask
      * @return mask
      */
-    public <E extends IBeliefBaseMask> E createMask( final String p_name );
+    public <E extends IMask> E createMask( final String p_name );
 
     /**
      * returns the storage of the beliefbase
@@ -71,7 +71,7 @@ public interface IBeliefBaseAction
      *
      * @tparam L typecast
      */
-    public <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage();
+    public <L extends IStorage<ILiteral, IMask>> L getStorage();
 
     /**
      * checks if the structure empty
@@ -85,7 +85,7 @@ public interface IBeliefBaseAction
      *
      * @param p_mask mask
      */
-    public boolean remove( final IBeliefBaseMask p_mask );
+    public boolean remove( final IMask p_mask );
 
     /**
      * removes a literal in the current structure
@@ -143,6 +143,6 @@ public interface IBeliefBaseAction
      *
      * @return iterator
      */
-    public Iterator<IBeliefBaseMask> iteratorBeliefBaseMask();
+    public Iterator<IMask> iteratorBeliefBaseMask();
 
 }

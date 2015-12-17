@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * mask of the path
  */
-public interface IBeliefBaseMask extends IBeliefBaseAction
+public interface IMask extends IStructure
 {
 
     /**
@@ -53,7 +53,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_mask mask
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      */
-    IBeliefBaseMask add( final CPath p_path, final IBeliefBaseMask p_mask );
+    IMask add( final CPath p_path, final IMask p_mask );
 
     /**
      * adds a mask in the current structure
@@ -63,7 +63,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
-    IBeliefBaseMask add( final CPath p_path, final IGenerator<Object> p_generator );
+    IMask add( final CPath p_path, final IGenerator<Object> p_generator );
 
     /**
      * adds a mask in the current structure
@@ -74,7 +74,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
-    IBeliefBaseMask add( final CPath p_path, final IBeliefBaseMask p_mask, final IGenerator<Object> p_generator );
+    IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator );
 
 
     /**
@@ -119,7 +119,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_mask mask
      * @return is found and removed
      */
-    boolean remove( final CPath p_path, final IBeliefBaseMask p_mask );
+    boolean remove( final CPath p_path, final IMask p_mask );
 
     /**
      * removes literal and mask
@@ -135,7 +135,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_parent new parent
      * @return new mask object
      */
-    IBeliefBaseMask clone( final IBeliefBaseMask p_parent );
+    IMask clone( final IMask p_parent );
 
     /**
      * gets a list of all literals
@@ -167,7 +167,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_path path of the mask
      * @return mask or null
      */
-    IBeliefBaseMask getMask( final CPath p_path );
+    IMask getMask( final CPath p_path );
 
     /**
      * gets a list of all literals
@@ -176,14 +176,14 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_path path
      * @return map with literal
      */
-    Map<CPath, IBeliefBaseMask> getMasks( final CPath p_path );
+    Map<CPath, IMask> getMasks( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
      * @return map with literals
      */
-    Map<CPath, IBeliefBaseMask> getMasks();
+    Map<CPath, IMask> getMasks();
 
     /**
      * returns the full path
@@ -204,7 +204,7 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      *
      * @return parent object or null
      */
-    IBeliefBaseMask getParent();
+    IMask getParent();
 
     /**
      * returns if the mask has a parent
@@ -218,6 +218,6 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      */
     interface IGenerator<Q>
     {
-        IBeliefBaseMask createBeliefbase( final String p_name );
+        IMask createBeliefbase( final String p_name );
     }
 }

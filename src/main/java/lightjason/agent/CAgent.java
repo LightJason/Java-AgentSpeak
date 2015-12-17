@@ -27,7 +27,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IConfiguration;
 import lightjason.agent.score.IAgentPlanScore;
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.CContext;
 import lightjason.language.plan.IPlan;
@@ -65,7 +65,7 @@ public class CAgent implements IAgent
     /**
      * beliefbase
      */
-    protected final IBeliefBaseMask m_beliefbase;
+    protected final IMask m_beliefbase;
     /**
      * execution goal list
      *
@@ -110,7 +110,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IBeliefBaseMask getBeliefBase()
+    public final IMask getBeliefBase()
     {
         return m_beliefbase;
     }

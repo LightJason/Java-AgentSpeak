@@ -24,7 +24,7 @@
 package lightjason.agent.configuration;
 
 import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IBeliefBaseMask;
+import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -41,7 +41,7 @@ public interface IConfiguration
     /**
      * returns a beliefbase of the agent
      */
-    IBeliefBaseMask getBeliefbase();
+    IMask getBeliefbase();
 
     /**
      * returns the initial goal

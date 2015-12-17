@@ -45,7 +45,7 @@ public class CBeliefBase implements IBeliefBase
     /**
      * storage with data
      */
-    protected final IStorage<ILiteral, IBeliefBaseMask> m_storage;
+    protected final IStorage<ILiteral, IMask> m_storage;
     /**
      * event storage
      */
@@ -64,7 +64,7 @@ public class CBeliefBase implements IBeliefBase
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<ILiteral, IBeliefBaseMask> p_storage )
+    public CBeliefBase( final IStorage<ILiteral, IMask> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -91,7 +91,7 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final IBeliefBaseMask add( final IBeliefBaseMask p_mask )
+    public final IMask add( final IMask p_mask )
     {
         m_storage.getSingleElements().put( p_mask.getName(), p_mask );
         return p_mask;
@@ -106,14 +106,14 @@ public class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <E extends IBeliefBaseMask> E createMask( final String p_name )
+    public <E extends IMask> E createMask( final String p_name )
     {
         return (E) new CMask( p_name, this );
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<ILiteral, IBeliefBaseMask>> L getStorage()
+    public final <L extends IStorage<ILiteral, IMask>> L getStorage()
     {
         return (L) m_storage;
     }
@@ -125,7 +125,7 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final boolean remove( final IBeliefBaseMask p_mask )
+    public final boolean remove( final IMask p_mask )
     {
         return m_storage.getSingleElements().remove( p_mask.getName() ) != null;
     }
@@ -176,7 +176,7 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public Iterator<IBeliefBaseMask> iteratorBeliefBaseMask()
+    public Iterator<IMask> iteratorBeliefBaseMask()
     {
         return m_storage.getSingleElements().values().iterator();
     }
