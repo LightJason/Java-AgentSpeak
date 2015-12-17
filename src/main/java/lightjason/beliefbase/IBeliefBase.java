@@ -23,7 +23,9 @@
 
 package lightjason.beliefbase;
 
-
+/**
+ * interface of beliefbase definition
+ */
 public interface IBeliefBase extends IStructure
 {
 
