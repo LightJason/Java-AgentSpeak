@@ -160,7 +160,7 @@ public class CAgent implements IAgent
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} ( Cycle: {2} / Beliefbase: {3} )", super.toString(), m_cycle, m_beliefbase );
+        return MessageFormat.format( "{0} ( Cycle: {1} / Beliefbase: {2} )", super.toString(), m_cycle, m_beliefbase );
     }
 
     @Override
