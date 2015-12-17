@@ -240,9 +240,6 @@ public final class CProxyAction implements IExecution
             m_arguments = p_arguments;
         }
 
-        /**
-         * @todo annotation definition incomplete
-         */
         @Override
         public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
