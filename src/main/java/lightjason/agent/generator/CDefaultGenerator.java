@@ -27,6 +27,7 @@ import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultConfiguration;
+import lightjason.agent.configuration.IConfiguration;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
@@ -49,9 +50,9 @@ import java.util.stream.IntStream;
 public class CDefaultGenerator implements IGenerator
 {
     /**
-     * visitor to store parsed data
+     * configuration of an agent
      */
-    private final IAgentVisitor m_visitor;
+    protected final IConfiguration m_configuration;
 
     /**
      * ctor
@@ -63,14 +64,17 @@ public class CDefaultGenerator implements IGenerator
     public CDefaultGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        m_visitor = new CAgentVisitor( p_actions );
-        parse( p_stream, m_visitor );
+        final IAgentVisitor l_visitor = new CAgentVisitor( p_actions );
+        parse( p_stream, l_visitor );
+
+        // build configuration (configuration runs cloning of objects if needed)
+        m_configuration = new CDefaultConfiguration( l_visitor.getPlans(), l_visitor.getInitialGoal(), l_visitor.getInitialBeliefs() );
     }
 
     @Override
-    public <T> IAgent generate( final T... p_data ) throws IOException
+    public <T> IAgent generate( final T... p_data ) throws Exception
     {
-        return new CAgent( new CDefaultConfiguration( m_visitor.getPlans(), m_visitor.getInitialGoal() ) );
+        return new CAgent( m_configuration );
     }
 
     @Override
@@ -81,12 +85,13 @@ public class CDefaultGenerator implements IGenerator
             {
                 return this.generate( p_data );
             }
-            catch ( final IOException l_exception )
+            catch ( final Exception l_exception )
             {
                 return null;
             }
         } ).filter( i -> i != null ).collect( Collectors.toSet() );
     }
+
 
     /**
      * parsing ASL code

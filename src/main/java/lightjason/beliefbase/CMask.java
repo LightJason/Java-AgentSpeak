@@ -272,13 +272,13 @@ public class CMask implements IBeliefBaseMask
     @Override
     public int hashCode()
     {
-        return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
+        return m_name.hashCode() + m_beliefbase.hashCode();
     }
 
     @Override
     public String toString()
     {
-        return MessageFormat.format( "{ name : {0}, fqn : {1}, storage : {2} }", m_name, this.getFQNPath(), m_beliefbase.getStorage() );
+        return MessageFormat.format( "[name : {0}, fqn : {1}, storage : {2}]", m_name, this.getFQNPath(), m_beliefbase.getStorage() );
     }
 
     @Override

@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 
 /**
  * proxy action to encapsulate all actions
+ *
  * @bug check ordering of arguments on parallel streams
  */
 public final class CProxyAction implements IExecution
@@ -280,7 +281,5 @@ public final class CProxyAction implements IExecution
     {
         return MessageFormat.format( "{0}{1}", m_execution, m_annotationexecution );
     }
-
-
 
 }

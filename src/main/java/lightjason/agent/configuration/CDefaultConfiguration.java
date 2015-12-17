@@ -24,11 +24,14 @@
 package lightjason.agent.configuration;
 
 import com.google.common.collect.SetMultimap;
+import lightjason.beliefbase.CBeliefBase;
+import lightjason.beliefbase.CBeliefStorage;
 import lightjason.beliefbase.IBeliefBaseMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -45,6 +48,10 @@ public class CDefaultConfiguration implements IConfiguration
      * instance of agent plans
      */
     private final SetMultimap<ITrigger<?>, IPlan> m_plans;
+    /**
+     * instance of initial beliefs
+     */
+    private final Collection<ILiteral> m_initialbeliefs;
 
 
     /**
@@ -52,19 +59,21 @@ public class CDefaultConfiguration implements IConfiguration
      *
      * @param p_plans plans
      * @param p_initialgoal initial goal
-     * @todo plans must be cloned
-     * @todo beliefbase must be cloned
+     * @param p_initalbeliefs set with initial beliefs
      */
-    public CDefaultConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal )
+    public CDefaultConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal, final Collection<ILiteral> p_initalbeliefs )
     {
         m_plans = p_plans;
         m_initialgoal = p_initialgoal;
+        m_initialbeliefs = p_initalbeliefs;
     }
 
     @Override
     public IBeliefBaseMask getBeliefbase()
     {
-        return null;
+        final IBeliefBaseMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).createMask( "root" );
+        m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
+        return l_beliefbase;
     }
 
     @Override

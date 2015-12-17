@@ -202,6 +202,12 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public ILiteral clone()
+    {
+        return new CLiteral( m_at, m_functor, m_negated, m_values.values(), m_annotations.values() );
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? "~" : "", m_at ? "@" : "", m_functor, m_values.values(), m_annotations.values() );

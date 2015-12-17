@@ -40,9 +40,16 @@ public interface ILiteral extends ITerm
      * clones the literal
      *
      * @param p_prefix add a path to the functor
-     * @return copy of the literal
+     * @return new instance of the literal
      */
     ILiteral clone( final CPath p_prefix );
+
+    /**
+     * clones the literal
+     *
+     * @return new instance of the literal
+     */
+    ILiteral clone();
 
     /**
      * returns the optional annotations

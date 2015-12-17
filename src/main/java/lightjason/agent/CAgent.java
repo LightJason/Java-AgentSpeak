@@ -167,7 +167,7 @@ public class CAgent implements IAgent
     public IAgent call() throws Exception
     {
         // run beliefbase update, because environment can be changed
-        //m_beliefbase.update();
+        m_beliefbase.update();
         if ( m_suspend )
             // check wakup-event otherwise suspend
             return this;
@@ -179,10 +179,8 @@ public class CAgent implements IAgent
 
         System.out.println( "=====>> " + m_goals );
         System.out.println();
-        /*
-        System.out.println( m_visitor.getInitialBeliefs() );
+        System.out.println( "=====>> " + m_beliefbase );
         System.out.println();
-        */
 
         m_plans.values().stream().forEach( i -> {
 
@@ -203,7 +201,7 @@ public class CAgent implements IAgent
                     "\n--> " +
                     i.execute(
                             new CContext<>( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
-                                    Collections.unmodifiableMap( new HashMap<>() )
+                                            Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null
                     )        + " <--\n" );
             System.out.println( "===================================================================" );
