@@ -55,10 +55,6 @@ public class CMask implements IBeliefBaseMask
      */
     protected final IBeliefBase m_beliefbase;
     /**
-     * path separator
-     */
-    protected String m_pathseparator = CPath.DEFAULTSEPERATOR;
-    /**
      * parent name
      */
     private final IBeliefBaseMask m_parent;
@@ -239,16 +235,7 @@ public class CMask implements IBeliefBaseMask
     @Override
     public CPath getFQNPath()
     {
-        final CPath l_path = new CPath();
-        l_path.setSeparator( m_pathseparator );
-        return getFQNPath( this, l_path );
-    }
-
-    @Override
-    public IBeliefBaseMask setPathSeparator( final String p_separator )
-    {
-        m_pathseparator = p_separator;
-        return this;
+        return getFQNPath( this, new CPath() );
     }
 
     @Override
@@ -372,7 +359,7 @@ public class CMask implements IBeliefBaseMask
     public Iterator<ILiteral> iteratorLiteral()
     {
         // the fqn path is build through the tree traversing, so only the current path is build
-        final CPath l_path = new CPath( m_name ).setSeparator( m_pathseparator );
+        final CPath l_path = CPath.from( m_name );
         return new Iterator<ILiteral>()
         {
             /**
