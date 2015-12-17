@@ -252,31 +252,31 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return m_name;
     }
 
     @Override
-    public IBeliefBaseMask getParent()
+    public final IBeliefBaseMask getParent()
     {
         return m_parent;
     }
 
     @Override
-    public boolean hasParent()
+    public final boolean hasParent()
     {
         return m_parent != null;
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return m_name.hashCode() + m_beliefbase.hashCode();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return MessageFormat.format( "[name : {0}, fqn : {1}, storage : {2}]", m_name, this.getFQNPath(), m_beliefbase.getStorage() );
     }
@@ -303,7 +303,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_beliefbase.clear();
     }
@@ -321,7 +321,7 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_beliefbase.isEmpty();
     }
@@ -351,19 +351,19 @@ public class CMask implements IBeliefBaseMask
     }
 
     @Override
-    public int sizeMask()
+    public final int sizeMask()
     {
         return m_beliefbase.sizeMask();
     }
 
     @Override
-    public int sizeLiteral()
+    public final int sizeLiteral()
     {
         return m_beliefbase.sizeLiteral();
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_beliefbase.size();
     }

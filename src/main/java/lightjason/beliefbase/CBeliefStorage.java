@@ -24,6 +24,7 @@
 package lightjason.beliefbase;
 
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -135,6 +136,9 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
         return m_singleelements.remove( p_key ) != null;
     }
 
+    /**
+     * @bug not implemented
+     */
     @Override
     public void update()
     {
@@ -142,7 +146,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public int sizeMultiElement()
+    public final int sizeMultiElement()
     {
         int l_sum = 0;
         for ( final Set<N> l_item : m_multielements.values() )
@@ -151,13 +155,13 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public int sizeSingleElement()
+    public final int sizeSingleElement()
     {
         return m_multielements.size();
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return this.sizeMultiElement() + this.sizeSingleElement();
     }
@@ -204,8 +208,8 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
-        return "{ multi elements : " + m_multielements + ", single elements : " + m_singleelements + " }";
+        return MessageFormat.format( "[multi elements: {0}, single elements: {1}]", m_multielements, m_singleelements );
     }
 }
