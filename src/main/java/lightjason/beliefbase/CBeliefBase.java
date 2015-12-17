@@ -74,7 +74,7 @@ public class CBeliefBase implements IBeliefBase
     @Override
     public final int hashCode()
     {
-        return 23 * m_storage.hashCode();
+        return m_storage.hashCode();
     }
 
     @Override
