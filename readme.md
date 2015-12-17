@@ -50,7 +50,7 @@ structure to describe an optimizing process.
 * If the plan calls an _achievement goal deletion_, the goal is removed from the global goal list iif exists and returns true otherwise it returns false and the plan can fail
 * All items results will be concatenated with a logical _and_ to calculate the plan result value
     
-#### Internals
+#### Internals Constants
  
 * The plan has got additional variables / constants, that are added in the context condition (values are calculated before plan execution is started)
     * _Score_ returns the current score-value of the plan
@@ -162,38 +162,28 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ### Static-Beliefs
 
-default _unchangeable / unmodifiable_ beliefs which are exist always within the beliefbase
-
 * ```my/cycle``` current agent cylce, generates no event
 * ```my/awake``` exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
 * ```my/size/beliefbase``` number of beliefs within the current beliefbase, generates no event
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
-### Variables
+### Variables / Actions
 
 * variables are written with an upper-case letter at begin
 * thread-safe variables start with @ (at-sign) followed by an upper-case letter
-
-### Actions
-
 * actions with @-prefix wil be executed in parallel
-
-
-## Migration Original-Jason to Light-Jason 
 
 
 ## Todos
 
 * Plans:
     * annotation of comparison (see p. 97f)
-*  Beliefs:
-    * (?) define annotations describing the origin/state/reason/... of a belief, including fixed ones like:
-        * _source_
+* Beliefs:
+    * (?) define annotations describing the origin/state/reason/... of a belief, including fixed ones like: _source_
     * (?) also non-fixed for _Mental Notes_
     * (?) -> needs grammar update beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
     * (see p. 37ff for comparison w/ Jason)
-* communication definition / drop equal messages / each message triggers only one event
 * parallel / SIMD unification with [type inhertitance](http://stackoverflow.com/questions/1396558/how-can-i-implement-the-unification-algorithm-in-a-language-like-java-or-c) or [Java Unification](https://code.google.com/p/kawala/source/browse/trunk/src/com/kaching/platform/common/types/Unification.java?r=265)
 * expression grammar [AntLR](http://stackoverflow.com/questions/16469023/antlr-left-recursion-for-nesting-boolean-expressions), [C#](http://www.codeproject.com/Articles/18880/State-of-the-Art-Expression-Evaluation), [Expression Grammar](https://ivanyu.me/blog/2014/09/13/creating-a-simple-parser-with-antlr/)
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
