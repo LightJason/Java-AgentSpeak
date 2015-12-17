@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 
 /**
  * proxy action to encapsulate all actions
+ * @bug check ordering of arguments on parallel streams
  */
 public final class CProxyAction implements IExecution
 {
@@ -85,7 +86,13 @@ public final class CProxyAction implements IExecution
             final Collection<ITerm> p_return
     )
     {
-        m_execution.execute( p_context, null );
+        m_execution.execute(
+                p_context,
+                Collections.unmodifiableList(
+                        ( m_parallel ? m_annotationexecution.parallelStream() : m_annotationexecution.stream() )
+                                .flatMap( i -> i.execute( p_context, null ).stream() ).collect( Collectors.toList() )
+                )
+        );
         return CBoolean.from( true );
     }
 
@@ -246,7 +253,7 @@ public final class CProxyAction implements IExecution
                                       ( m_parallel
                                               ? m_arguments.parallelStream()
                                               : m_arguments.stream()
-                                      ).map( i -> i.execute( p_context, p_annotation ) ).flatMap( i -> i.stream() ).collect( Collectors.toList() ) ),
+                                      ).flatMap( i -> i.execute( p_context, p_annotation ).stream() ).collect( Collectors.toList() ) ),
                               l_return
             );
             return l_return;
