@@ -24,6 +24,7 @@
 package lightjason.beliefbase;
 
 
+import com.google.common.collect.SetMultimap;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 
@@ -143,14 +144,14 @@ public interface IBeliefBaseMask extends IBeliefBaseAction
      * @param p_path path
      * @return map with literal
      */
-    Map<CPath, Set<ILiteral>> getLiterals( final CPath p_path );
+    SetMultimap<CPath, ILiteral> getLiterals( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
      * @return set with literals
      */
-    Map<CPath, Set<ILiteral>> getLiterals();
+    SetMultimap<CPath, ILiteral> getLiterals();
 
     /**
      * returns a literal

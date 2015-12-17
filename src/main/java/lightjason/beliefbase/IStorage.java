@@ -24,8 +24,9 @@
 package lightjason.beliefbase;
 
 
-import java.util.Iterator;
-import java.util.Set;
+import com.google.common.collect.SetMultimap;
+
+import java.util.Map;
 
 
 /**
@@ -39,25 +40,24 @@ public interface IStorage<N, M>
 {
 
     /**
-     * adds an element
+     * returns the map with multiple elements
      *
-     * @param p_key key name
-     * @param p_element element
+     * @return multimap
      */
-    void addMultiElement( final String p_key, final N p_element );
+    public SetMultimap<String, N> getMultiElements();
 
     /**
-     * adds a new mask
+     * returns the map with single elements
      *
-     * @param p_key key name
-     * @param p_element mask element
+     * @return map
      */
-    void addSingleElement( final String p_key, final M p_element );
+    public Map<String, M> getSingleElements();
+
 
     /**
      * clears all elements
      */
-    void clear();
+    public void clear();
 
     /**
      * checks any element exists
@@ -65,109 +65,23 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return exist boolean
      */
-    boolean contains( final String p_key );
-
-    /**
-     * check if an element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    boolean containsMultiElement( final String p_key );
-
-    /**
-     * checks if a mask exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    boolean containsSingleElement( String p_key );
-
-    /**
-     * returns a set of elements
-     *
-     * @param p_key key name
-     * @return set
-     */
-    Set<N> getMultiElement( final String p_key );
-
-    /**
-     * returns a mask
-     *
-     * @param p_key key name
-     * @return mask
-     */
-    M getSingleElement( final String p_key );
+    public boolean contains( final String p_key );
 
     /**
      * checks if a storage is empty
      *
      * @return empty boolean
      */
-    boolean isEmpty();
-
-    /**
-     * removes all elements by its name
-     *
-     * @param p_key key name
-     * @return boolean flag that elements could be removed
-     */
-    boolean remove( final String p_key );
-
-    /**
-     * removes an element
-     *
-     * @param p_key key name
-     * @param p_element element
-     * @return boolean flag, that the element is removed
-     */
-    boolean removeMultiElement( final String p_key, final N p_element );
-
-    /**
-     * removes a mask
-     *
-     * @param p_key key name
-     * @return boolean flag the element is removed
-     */
-    boolean removeSingleElement( final String p_key );
+    public boolean isEmpty();
 
     /**
      * updates all items
      */
-    void update();
-
-    /**
-     * number of multielements
-     *
-     * @return size
-     */
-    int sizeMultiElement();
-
-    /**
-     * number of singleelements
-     *
-     * @return size
-     */
-    int sizeSingleElement();
-
+    public void update();
 
     /**
      * number of all elements
      */
-    int size();
-
-    /**
-     * iterator over all multielements
-     *
-     * @return iterator
-     */
-    Iterator<N> iteratorMultiElement();
-
-    /**
-     * iterator over all singlelements
-     *
-     * @return iterator
-     */
-    Iterator<M> iteratorSingleElement();
+    public int size();
 
 }

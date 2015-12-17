@@ -29,12 +29,8 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 
 import java.text.MessageFormat;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 
 /**
@@ -55,17 +51,16 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
      **/
     protected final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
 
-
     @Override
-    public void addMultiElement( final String p_key, final N p_element )
+    public final SetMultimap<String, N> getMultiElements()
     {
-        m_multielements.put( p_key, p_element );
+        return m_multielements;
     }
 
     @Override
-    public void addSingleElement( final String p_key, final M p_element )
+    public final Map<String, M> getSingleElements()
     {
-        m_singleelements.put( p_key, p_element );
+        return m_singleelements;
     }
 
     @Override
@@ -82,51 +77,9 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public final boolean containsMultiElement( final String p_key )
-    {
-        return m_multielements.containsKey( p_key );
-    }
-
-    @Override
-    public final boolean containsSingleElement( String p_key )
-    {
-        return m_singleelements.containsKey( p_key );
-    }
-
-    @Override
-    public final Set<N> getMultiElement( final String p_key )
-    {
-        return m_multielements.get( p_key );
-    }
-
-    @Override
-    public final M getSingleElement( final String p_key )
-    {
-        return m_singleelements.get( p_key );
-    }
-
-    @Override
     public final boolean isEmpty()
     {
         return m_multielements.isEmpty() && m_singleelements.isEmpty();
-    }
-
-    @Override
-    public boolean remove( final String p_key )
-    {
-        return ( m_singleelements.remove( p_key ) != null ) || ( m_multielements.removeAll( p_key ) != null );
-    }
-
-    @Override
-    public boolean removeMultiElement( final String p_key, final N p_element )
-    {
-        return m_multielements.remove( p_key, p_element );
-    }
-
-    @Override
-    public boolean removeSingleElement( final String p_key )
-    {
-        return m_singleelements.remove( p_key ) != null;
     }
 
     @Override
@@ -135,58 +88,9 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public final int sizeMultiElement()
-    {
-        return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum();
-    }
-
-    @Override
-    public final int sizeSingleElement()
-    {
-        return m_singleelements.size();
-    }
-
-    @Override
     public final int size()
     {
-        return this.sizeMultiElement() + this.sizeSingleElement();
-    }
-
-    @Override
-    public Iterator<N> iteratorMultiElement()
-    {
-        return new Iterator<N>()
-        {
-            /**
-             * stack with all iterators
-             **/
-            private final List<Iterator<N>> m_iterator = m_multielements.asMap().values().stream().map( i -> i.iterator() ).collect( Collectors.toList() );
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_iterator.isEmpty() )
-                    return false;
-
-                if ( m_iterator.get( 0 ).hasNext() )
-                    return true;
-
-                m_iterator.remove( 0 );
-                return this.hasNext();
-            }
-
-            @Override
-            public N next()
-            {
-                return m_iterator.get( 0 ).next();
-            }
-        };
-    }
-
-    @Override
-    public Iterator<M> iteratorSingleElement()
-    {
-        return m_singleelements.values().iterator();
+        return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum() + m_singleelements.size();
     }
 
     @Override

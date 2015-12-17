@@ -87,21 +87,20 @@ public class CBeliefBase implements IBeliefBase
     public final void add( final ILiteral p_literal )
     {
         //m_event.add()
-        m_storage.addMultiElement( p_literal.getFunctor(), p_literal );
+        m_storage.getMultiElements().put( p_literal.getFunctor(), p_literal );
     }
 
     @Override
     public final IBeliefBaseMask add( final IBeliefBaseMask p_mask )
     {
-        m_storage.addSingleElement( p_mask.getName(), p_mask );
+        m_storage.getSingleElements().put( p_mask.getName(), p_mask );
         return p_mask;
     }
 
     @Override
     public final void clear()
     {
-        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
-            l_iterator.next().clear();
+        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
         m_storage.clear();
     }
 
@@ -128,49 +127,40 @@ public class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final IBeliefBaseMask p_mask )
     {
-        return m_storage.removeSingleElement( p_mask.getName() );
+        return m_storage.getSingleElements().remove( p_mask.getName() ) != null;
     }
 
     @Override
     public final boolean remove( final ILiteral p_literal )
     {
-        return m_storage.removeMultiElement( p_literal.getFunctor(), p_literal );
+        return m_storage.getMultiElements().remove( p_literal.getFunctor(), p_literal );
     }
 
     @Override
     public boolean remove( final String p_name )
     {
-        return m_storage.remove( p_name );
+        final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
+        final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
+        return l_single || l_multi;
     }
 
     @Override
     public final void update()
     {
         m_storage.update();
-
-        // iterate over all masks and call update (cascading)
-        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
-            l_iterator.next().update();
+        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update() );
     }
 
     @Override
     public int sizeMask()
     {
-        int l_sum = m_storage.sizeSingleElement();
-        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
-            l_sum += l_iterator.next().sizeMask();
-
-        return l_sum;
+        return m_storage.getSingleElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.sizeMask() ).sum();
     }
 
     @Override
     public int sizeLiteral()
     {
-        int l_sum = m_storage.sizeMultiElement();
-        for ( final Iterator<IBeliefBaseMask> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
-            l_sum += l_iterator.next().sizeLiteral();
-
-        return l_sum;
+        return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.sizeLiteral() ).sum();
     }
 
     @Override
@@ -182,13 +172,13 @@ public class CBeliefBase implements IBeliefBase
     @Override
     public Iterator<ILiteral> iteratorLiteral()
     {
-        return m_storage.iteratorMultiElement();
+        return m_storage.getMultiElements().values().iterator();
     }
 
     @Override
     public Iterator<IBeliefBaseMask> iteratorBeliefBaseMask()
     {
-        return m_storage.iteratorSingleElement();
+        return m_storage.getSingleElements().values().iterator();
     }
 
 }
