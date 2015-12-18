@@ -42,7 +42,7 @@ public interface IGenerator
      *
      * @tparam T any object type
      */
-    public <T> IAgent generate( final T... p_data ) throws Exception;
+     <T> IAgent generate( final T... p_data ) throws Exception;
 
 
     /**
@@ -54,6 +54,6 @@ public interface IGenerator
      *
      * @tparam T any object type
      */
-    public <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
+    <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
 
 }

@@ -40,6 +40,6 @@ public interface IAgentPlanScore
      * @param p_plan plan
      * @return cost value
      */
-    public double evaluate( final IAgent p_agent, final IPlan p_plan );
+    double evaluate( final IAgent p_agent, final IPlan p_plan );
 
 }

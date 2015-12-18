@@ -37,14 +37,14 @@ public interface ITerm
      *
      * @return functor
      */
-    public String getFunctor();
+    String getFunctor();
 
     /**
      * returns the path of the functor
      *
      * @return path
      */
-    public CPath getFunctorPath();
+    CPath getFunctorPath();
 
     /**
      * returns the full-qualified functor
@@ -52,6 +52,6 @@ public interface ITerm
      *
      * @return fqn functor
      */
-    public CPath getFQNFunctor();
+    CPath getFQNFunctor();
 
 }

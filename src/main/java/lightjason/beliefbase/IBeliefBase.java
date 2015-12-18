@@ -35,6 +35,6 @@ public interface IBeliefBase extends IStructure
      * @param p_name name
      * @return success
      */
-    public boolean remove( final String p_name );
+    boolean remove( final String p_name );
 
 }

@@ -43,20 +43,20 @@ public interface IPlanBundleVisitor extends lightjason.grammar.PlanBundleVisitor
      *
      * @return set with beliefs
      */
-    public Set<ILiteral> getBeliefs();
+    Set<ILiteral> getBeliefs();
 
     /**
      * get a multimap with event-plan matching
      *
      * @return multimap
      */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
+    SetMultimap<ITrigger<?>, IPlan> getPlans();
 
     /**
      * returns the rules / principles
      *
      * @return map with rules
      */
-    public Map<String, Object> getRules();
+    Map<String, Object> getRules();
 
 }

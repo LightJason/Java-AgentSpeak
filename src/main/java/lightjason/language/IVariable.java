@@ -35,21 +35,21 @@ public interface IVariable<T> extends ITerm, Cloneable
      * @param p_value
      * @return the object itself
      */
-    public IVariable<T> set( final T p_value );
+    IVariable<T> set( final T p_value );
 
     /**
      * gets the value
      *
      * @return value
      */
-    public T get();
+    T get();
 
     /**
      * returns allocated state
      *
      * @return boolean flag
      */
-    public boolean isAllocated();
+    boolean isAllocated();
 
     /**
      * checkes assinable of the value
@@ -57,6 +57,6 @@ public interface IVariable<T> extends ITerm, Cloneable
      * @param p_class class
      * @return assignable (on null always true)
      */
-    public boolean isValueAssignableTo( final Class<?> p_class );
+    boolean isValueAssignableTo( final Class<?> p_class );
 
 }

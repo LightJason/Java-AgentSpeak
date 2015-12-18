@@ -43,19 +43,19 @@ public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
      *
      * @return set with beliefs
      */
-    public Set<ILiteral> getInitialBeliefs();
+    Set<ILiteral> getInitialBeliefs();
 
     /**
      * returns the initial goal
      */
-    public ILiteral getInitialGoal();
+    ILiteral getInitialGoal();
 
     /**
      * get a multimap with event-plan matching
      *
      * @return multimap
      */
-    public SetMultimap<ITrigger<?>, IPlan> getPlans();
+    SetMultimap<ITrigger<?>, IPlan> getPlans();
 
     /**
      * returns the rules / principles

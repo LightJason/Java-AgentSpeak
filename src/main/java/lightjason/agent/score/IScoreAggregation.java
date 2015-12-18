@@ -41,6 +41,6 @@ public interface IScoreAggregation
      * @param p_score map with single scores
      * @return summarized score
      */
-    public double evaluate( final IAgent p_agent, final Map<String, Double> p_score );
+    double evaluate( final IAgent p_agent, final Map<String, Double> p_score );
 
 }

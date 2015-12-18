@@ -41,6 +41,6 @@ public interface IPlanScoreRating
      * @param p_score map with plan and score values
      * @return resulting plan
      */
-    public IPlan evaluate( final IAgent p_agent, final Map<IPlan, Double> p_score );
+    IPlan evaluate( final IAgent p_agent, final Map<IPlan, Double> p_score );
 
 }
