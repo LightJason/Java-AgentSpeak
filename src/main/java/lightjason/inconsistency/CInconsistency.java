@@ -34,7 +34,6 @@ import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
-import lightjason.common.CPath;
 import lightjason.error.CIllegalStateException;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
-public final class CInconsistency<T extends IAgent> implements Callable<CInconsistency<T>>
+public final class CInconsistency implements Callable<CInconsistency>
 {
     /**
      * algebra object
@@ -61,7 +60,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
     /**
      * map with object and inconsistency value
      **/
-    private final Map<T, Double> m_data = new ConcurrentHashMap<>();
+    private final Map<IAgent, Double> m_data = new ConcurrentHashMap<>();
     /**
      * epsilon value to create an aperiodic markow-chain
      **/
@@ -73,14 +72,14 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
     /**
      * metric object to create the value of two objects
      **/
-    private IMetric<T, CPath> m_metric;
+    private IMetric m_metric;
 
     /**
      * ctor - use numeric algorithm
      *
      * @param p_metric object metric
      */
-    public CInconsistency( final IMetric<T, CPath> p_metric )
+    public CInconsistency( final IMetric p_metric )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Numeric;
@@ -95,7 +94,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistency( final IMetric<T, CPath> p_metric, final int p_iteration, final double p_epsilon )
+    public CInconsistency( final IMetric p_metric, final int p_iteration, final double p_epsilon )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Iteration;
@@ -109,7 +108,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      * @param p_object object
      * @return value
      */
-    public final Double getInconsistencyValue( final T p_object )
+    public final Double getInconsistencyValue( final IAgent p_object )
     {
         return m_data.get( p_object );
     }
@@ -120,7 +119,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      *
      * @param p_object new object
      */
-    public final boolean add( final T p_object )
+    public final boolean add( final IAgent p_object )
     {
         return m_data.putIfAbsent( p_object, new Double( 0 ) ) == null;
     }
@@ -129,19 +128,19 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      * @bug run it parallel stream
      */
     @Override
-    public final CInconsistency<T> call() throws Exception
+    public final CInconsistency call() throws Exception
     {
         if ( m_data.size() < 2 )
             return this;
 
         // get key list of map for addressing elements in the correct order
-        final ArrayList<T> l_keys = new ArrayList<T>( m_data.keySet() );
+        final ArrayList<IAgent> l_keys = new ArrayList<>( m_data.keySet() );
 
         // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
         for ( int i = 0; i < l_keys.size(); ++i )
         {
-            final T l_item = l_keys.get( i );
+            final IAgent l_item = l_keys.get( i );
             for ( int j = i + 1; j < l_keys.size(); ++j )
             {
                 final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
@@ -176,7 +175,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      *
      * @return get metric
      */
-    public final IMetric<T, CPath> getMetric()
+    public final IMetric getMetric()
     {
         return m_metric;
     }
@@ -186,7 +185,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      *
      * @param p_metric metric
      */
-    public final void setMetric( final IMetric<T, CPath> p_metric )
+    public final void setMetric( final IMetric p_metric )
     {
         m_metric = p_metric;
     }
@@ -197,7 +196,7 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      *
      * @param p_object removing object
      */
-    public final boolean remove( final T p_object )
+    public final boolean remove( final IAgent p_object )
     {
         return m_data.remove( p_object ) != null;
     }
@@ -254,9 +253,9 @@ public final class CInconsistency<T extends IAgent> implements Callable<CInconsi
      *
      * @param p_first
      * @param p_second
-     * @return
+     * @return metric value
      */
-    private double getMetricValue( final T p_first, final T p_second )
+    private final double getMetricValue( final IAgent p_first, final IAgent p_second )
     {
         if ( p_first.equals( p_second ) )
             return 0;

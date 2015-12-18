@@ -24,6 +24,7 @@
 package lightjason.inconsistency;
 
 
+import lightjason.agent.IAgent;
 import lightjason.common.CPath;
 
 import java.util.Collection;
@@ -34,27 +35,17 @@ import java.util.Collection;
  *
  * @see http://mathworld.wolfram.com/DiscreteMetric.html
  */
-public final class CDiscreteMetric<T> extends IDefaultMetric<T>
+public final class CDiscreteMetric<T> extends IDefaultMetric
 {
 
     /**
      * ctor
      *
-     * @param p_paths path list
+     * @param p_paths for reading agent value
      */
     public CDiscreteMetric( final CPath... p_paths )
     {
         super( p_paths );
-    }
-
-    /**
-     * copy-ctor
-     *
-     * @param p_metric metric
-     */
-    public CDiscreteMetric( final IDefaultMetric<T> p_metric )
-    {
-        super( p_metric );
     }
 
     /**
@@ -68,13 +59,9 @@ public final class CDiscreteMetric<T> extends IDefaultMetric<T>
     }
 
     @Override
-    public final double calculate( final T p_first, final T p_second )
+    public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        // equal objects create zero value
-        if ( p_first.equals( p_second ) )
-            return 0;
-
-        return 1;
+        return p_first.equals( p_second ) ? 0 : 1;
     }
 
 }

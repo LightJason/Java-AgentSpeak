@@ -36,26 +36,17 @@ import java.util.Set;
  * metric on collections returns the size of symmetric difference
  */
 @SuppressWarnings( "serial" )
-public final class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
+public final class CSymmetricDifferenceMetric extends IDefaultMetric
 {
+
     /**
      * ctor
      *
-     * @param p_paths path list
+     * @param p_paths for reading agent value
      */
     public CSymmetricDifferenceMetric( final CPath... p_paths )
     {
         super( p_paths );
-    }
-
-    /**
-     * copy ctor
-     *
-     * @param p_metric metric
-     */
-    public CSymmetricDifferenceMetric( final IDefaultMetric<T> p_metric )
-    {
-        super( p_metric );
     }
 
     /**
@@ -69,12 +60,8 @@ public final class CSymmetricDifferenceMetric<T extends IAgent> extends IDefault
     }
 
     @Override
-    public final double calculate( final T p_first, final T p_second )
+    public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        // equal objects create zero value
-        if ( p_first.equals( p_second ) )
-            return 0;
-
         final Set<ILiteral> l_firstLiterals = new HashSet<>();
         final Set<ILiteral> l_secondLiterals = new HashSet<>();
 

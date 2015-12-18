@@ -38,12 +38,13 @@ import java.util.Set;
  * to size of union and intersection of beliefbases.
  */
 @SuppressWarnings( "serial" )
-public final class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
+public final class CWeightedDifferenceMetric extends IDefaultMetric
 {
+
     /**
      * ctor
      *
-     * @param p_paths path list
+     * @param p_paths for reading agent value
      */
     public CWeightedDifferenceMetric( final CPath... p_paths )
     {
@@ -53,30 +54,16 @@ public final class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultM
     /**
      * ctor
      *
-     * @param p_paths collection of paths
+     * @param p_paths collection of path
      */
     public CWeightedDifferenceMetric( final Collection<CPath> p_paths )
     {
         super( p_paths );
     }
 
-    /**
-     * copy-ctor
-     *
-     * @param p_metric metric
-     */
-    public CWeightedDifferenceMetric( final IDefaultMetric<T> p_metric )
-    {
-        super( p_metric );
-    }
-
     @Override
-    public final double calculate( final T p_first, final T p_second )
+    public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        // equal objects create zero value
-        if ( p_first.equals( p_second ) )
-            return 0;
-
         // collect all literals within specified paths
         final Set<ILiteral> l_firstLiterals = new HashSet<>();
         final Set<ILiteral> l_secondLiterals = new HashSet<>();

@@ -24,6 +24,9 @@
 package lightjason.inconsistency;
 
 
+import lightjason.agent.IAgent;
+import lightjason.common.CPath;
+
 import java.util.Collection;
 
 
@@ -32,7 +35,7 @@ import java.util.Collection;
  *
  * @see http://en.wikipedia.org/wiki/Metric_space
  */
-public interface IMetric<T, N>
+public interface IMetric
 {
 
     /**
@@ -42,16 +45,14 @@ public interface IMetric<T, N>
      * @param p_second second object
      * @return double metric
      */
-    double calculate( final T p_first, final T p_second );
+    double calculate( final IAgent p_first, final IAgent p_second );
 
 
     /**
      * returns the selectors
      *
      * @return selector
-     *
-     * @tparam N returns a collection of belief selectors
      */
-    Collection<N> getSelector();
+    Collection<CPath> getSelector();
 
 }
