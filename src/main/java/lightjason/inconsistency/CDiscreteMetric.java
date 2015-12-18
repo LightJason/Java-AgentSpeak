@@ -68,7 +68,7 @@ public final class CDiscreteMetric<T> extends IDefaultMetric<T>
     }
 
     @Override
-    public double calculate( final T p_first, final T p_second )
+    public final double calculate( final T p_first, final T p_second )
     {
         // equal objects create zero value
         if ( p_first.equals( p_second ) )
