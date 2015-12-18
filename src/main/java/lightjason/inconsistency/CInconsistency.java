@@ -35,6 +35,7 @@ import cern.jet.math.Mult;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalStateException;
+import lightjason.inconsistency.metric.IMetric;
 
 import java.util.ArrayList;
 import java.util.Map;

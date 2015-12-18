@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.inconsistency;
+package lightjason.inconsistency.metric;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
@@ -36,7 +36,7 @@ import java.util.Set;
  * metric on collections returns the size of symmetric difference
  */
 @SuppressWarnings( "serial" )
-public final class CSymmetricDifferenceMetric extends IDefaultMetric
+public final class CSymmetricDifference extends IBaseMetric
 {
 
     /**
@@ -44,7 +44,7 @@ public final class CSymmetricDifferenceMetric extends IDefaultMetric
      *
      * @param p_paths for reading agent value
      */
-    public CSymmetricDifferenceMetric( final CPath... p_paths )
+    public CSymmetricDifference( final CPath... p_paths )
     {
         super( p_paths );
     }
@@ -54,7 +54,7 @@ public final class CSymmetricDifferenceMetric extends IDefaultMetric
      *
      * @param p_paths collection of path
      */
-    public CSymmetricDifferenceMetric( final Collection<CPath> p_paths )
+    public CSymmetricDifference( final Collection<CPath> p_paths )
     {
         super( p_paths );
     }

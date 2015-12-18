@@ -21,35 +21,31 @@
  * @endcond
  */
 
-package lightjason.inconsistency;
+package lightjason.inconsistency.metric;
 
+
+import lightjason.agent.IAgent;
 import lightjason.common.CPath;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
- * default metric with an optional set of path values
+ * generic discrete metric
+ *
+ * @see http://mathworld.wolfram.com/DiscreteMetric.html
  */
-public abstract class IDefaultMetric implements IMetric
+public final class CDiscrete<T> extends IBaseMetric
 {
-    /**
-     * set with paths
-     */
-    protected final Set<CPath> m_paths = new HashSet<>();
 
     /**
      * ctor
      *
      * @param p_paths for reading agent value
      */
-    protected IDefaultMetric( final CPath... p_paths )
+    public CDiscrete( final CPath... p_paths )
     {
-        if ( p_paths != null )
-            m_paths.addAll( Arrays.asList( p_paths ) );
+        super( p_paths );
     }
 
     /**
@@ -57,15 +53,15 @@ public abstract class IDefaultMetric implements IMetric
      *
      * @param p_paths collection of path
      */
-    protected IDefaultMetric( final Collection<CPath> p_paths )
+    public CDiscrete( final Collection<CPath> p_paths )
     {
-        if ( p_paths != null )
-            m_paths.addAll( p_paths );
+        super( p_paths );
     }
 
     @Override
-    public final Collection<CPath> getSelector()
+    public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        return m_paths;
+        return p_first.equals( p_second ) ? 0 : 1;
     }
+
 }
