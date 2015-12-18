@@ -282,9 +282,9 @@ public class CMask implements IMask
     }
 
     @Override
-    public <E extends IMask> E createMask( final String p_name )
+    public <E extends IMask> E create( final String p_name )
     {
-        return m_beliefbase.createMask( p_name );
+        return m_beliefbase.create( p_name );
     }
 
     @Override
@@ -321,18 +321,6 @@ public class CMask implements IMask
     public void update()
     {
         m_beliefbase.update();
-    }
-
-    @Override
-    public final int sizeMask()
-    {
-        return m_beliefbase.sizeMask();
-    }
-
-    @Override
-    public final int sizeLiteral()
-    {
-        return m_beliefbase.sizeLiteral();
     }
 
     @Override

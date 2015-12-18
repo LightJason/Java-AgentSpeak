@@ -106,7 +106,7 @@ public class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <E extends IMask> E createMask( final String p_name )
+    public <E extends IMask> E create( final String p_name )
     {
         return (E) new CMask( p_name, this );
     }
@@ -152,21 +152,9 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public int sizeMask()
-    {
-        return m_storage.getSingleElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.sizeMask() ).sum();
-    }
-
-    @Override
-    public int sizeLiteral()
-    {
-        return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.sizeLiteral() ).sum();
-    }
-
-    @Override
     public int size()
     {
-        return this.sizeMask() + this.sizeLiteral();
+        return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
     }
 
     @Override

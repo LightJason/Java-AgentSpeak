@@ -40,7 +40,7 @@ public interface IStructure
      *
      * @param p_literal literal
      */
-    public void add( final ILiteral p_literal );
+    void add( final ILiteral p_literal );
 
     /**
      * adds a mask into the current structure
@@ -49,12 +49,12 @@ public interface IStructure
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
-    public IMask add( final IMask p_mask );
+    IMask add( final IMask p_mask );
 
     /**
      * clears all elements
      */
-    public void clear();
+    void clear();
 
     /**
      * returns a new mask of the belief base
@@ -62,7 +62,7 @@ public interface IStructure
      * @param p_name name of the mask
      * @return mask
      */
-    public <E extends IMask> E createMask( final String p_name );
+    <E extends IMask> E create( final String p_name );
 
     /**
      * returns the storage of the beliefbase
@@ -71,28 +71,28 @@ public interface IStructure
      *
      * @tparam L typecast
      */
-    public <L extends IStorage<ILiteral, IMask>> L getStorage();
+    <L extends IStorage<ILiteral, IMask>> L getStorage();
 
     /**
      * checks if the structure empty
      *
      * @return empty boolean
      */
-    public boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * removes a mask in the current structure
      *
      * @param p_mask mask
      */
-    public boolean remove( final IMask p_mask );
+    boolean remove( final IMask p_mask );
 
     /**
      * removes a literal in the current structure
      *
      * @param p_literal literal
      */
-    public boolean remove( final ILiteral p_literal );
+    boolean remove( final ILiteral p_literal );
 
     /**
      * removes mask and literal at the current structure
@@ -108,41 +108,27 @@ public interface IStructure
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
-    public void update();
+    void update();
 
     /**
-     * number of masks
+     * number of literal elements
      *
      * @return size
      */
-    public int sizeMask();
-
-    /**
-     * number of literals
-     *
-     * @return size
-     */
-    public int sizeLiteral();
-
-    /**
-     * number of element
-     *
-     * @return size
-     */
-    public int size();
+    int size();
 
     /**
      * iterator over all multielements
      *
      * @return iterator
      */
-    public Iterator<ILiteral> iteratorLiteral();
+    Iterator<ILiteral> iteratorLiteral();
 
     /**
      * iterator over all singlelements
      *
      * @return iterator
      */
-    public Iterator<IMask> iteratorBeliefBaseMask();
+    Iterator<IMask> iteratorBeliefBaseMask();
 
 }

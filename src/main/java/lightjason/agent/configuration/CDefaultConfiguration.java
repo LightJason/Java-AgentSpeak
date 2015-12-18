@@ -71,7 +71,7 @@ public class CDefaultConfiguration implements IConfiguration
     @Override
     public IMask getBeliefbase()
     {
-        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).createMask( "root" );
+        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
         return l_beliefbase;
     }
