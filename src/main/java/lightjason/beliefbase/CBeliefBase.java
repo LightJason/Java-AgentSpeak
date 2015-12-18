@@ -120,14 +120,6 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public boolean remove( final String p_name )
-    {
-        final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
-        final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
-        return l_single || l_multi;
-    }
-
-    @Override
     public final void update()
     {
         m_storage.update();
@@ -150,6 +142,14 @@ public class CBeliefBase implements IBeliefBase
     public Iterator<IMask> iteratorBeliefBaseMask()
     {
         return m_storage.getSingleElements().values().iterator();
+    }
+
+    @Override
+    public boolean remove( final String p_name )
+    {
+        final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
+        final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
+        return l_single || l_multi;
     }
 
 }
