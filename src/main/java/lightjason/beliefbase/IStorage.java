@@ -44,19 +44,19 @@ public interface IStorage<N, M>
      *
      * @return multimap
      */
-    SetMultimap<String, N> getMultiElements();
+    public SetMultimap<String, N> getMultiElements();
 
     /**
      * returns the map with single elements
      *
      * @return map
      */
-    Map<String, M> getSingleElements();
+    public Map<String, M> getSingleElements();
 
     /**
      * clears all elements
      */
-    void clear();
+    public void clear();
 
     /**
      * checks any element exists
@@ -64,23 +64,23 @@ public interface IStorage<N, M>
      * @param p_key key name
      * @return exist boolean
      */
-    boolean contains( final String p_key );
+    public boolean contains( final String p_key );
 
     /**
      * checks if a storage is empty
      *
      * @return empty boolean
      */
-    boolean isEmpty();
+    public boolean isEmpty();
 
     /**
      * updates all items
      */
-    void update();
+    public void update();
 
     /**
      * number of all elements
      */
-    int size();
+    public int size();
 
 }
