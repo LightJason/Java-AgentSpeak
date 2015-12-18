@@ -91,9 +91,138 @@ public class CMask implements IMask
     }
 
     @Override
-    public void add( final CPath p_path, final ILiteral p_literal )
+    public void add( final ILiteral p_literal )
     {
-        this.add( p_path, p_literal, null );
+        this.add( p_literal, null );
+    }
+
+    @Override
+    public IMask add( final IMask p_mask )
+    {
+        // check first, if a mask with an equal storage exists  on the path
+        for ( IMask l_mask = this; l_mask != null; )
+        {
+            if ( this.getStorage().equals( p_mask.getStorage() ) )
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_mask.getName(), l_mask.getFQNPath() ) );
+
+            l_mask = l_mask.getParent();
+        }
+
+        return m_beliefbase.add( p_mask.clone( this ) );
+    }
+
+    @Override
+    public final void clear()
+    {
+        m_beliefbase.clear();
+    }
+
+    @Override
+    public <E extends IMask> E create( final String p_name )
+    {
+        return m_beliefbase.create( p_name );
+    }
+
+    @Override
+    public <L extends IStorage<ILiteral, IMask>> L getStorage()
+    {
+        return m_beliefbase.getStorage();
+    }
+
+    @Override
+    public final boolean isEmpty()
+    {
+        return m_beliefbase.isEmpty();
+    }
+
+    @Override
+    public boolean remove( final IMask p_mask )
+    {
+        return m_beliefbase.remove( p_mask );
+    }
+
+    @Override
+    public void update()
+    {
+        m_beliefbase.update();
+    }
+
+    @Override
+    public final int size()
+    {
+        return m_beliefbase.size();
+    }
+
+    @Override
+    public Iterator<ILiteral> iteratorLiteral()
+    {
+        // the fqn path is build through the tree traversing, so only the current path is build
+        final CPath l_path = CPath.from( m_name );
+        return new Iterator<ILiteral>()
+        {
+            /**
+             * stack with iterators
+             **/
+            final Stack<Iterator<ILiteral>> m_stack = new Stack<Iterator<ILiteral>>()
+            {{
+                add( CMask.this.iteratorLiteral() );
+                CMask.this.getStorage().getSingleElements().values().stream().forEach( i -> add( i.iteratorLiteral() ) );
+            }};
+
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public ILiteral next()
+            {
+                return m_stack.peek().next().clone( l_path );
+            }
+
+        };
+    }
+
+    @Override
+    public Iterator<IMask> iteratorBeliefBaseMask()
+    {
+        return new Iterator<IMask>()
+        {
+            /**
+             * stack with iterator
+             **/
+            final Stack<Iterator<IMask>> m_stack = new Stack<Iterator<IMask>>()
+            {{
+                add( CMask.this.getStorage().getSingleElements().values().iterator() );
+                CMask.this.getStorage().getSingleElements().values().stream().forEach( i -> add( i.iteratorBeliefBaseMask() ) );
+            }};
+
+
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public IMask next()
+            {
+                return m_stack.peek().next();
+            }
+        };
     }
 
     @Override
@@ -116,10 +245,13 @@ public class CMask implements IMask
     }
 
     @Override
-    public void add( final CPath p_path, final ILiteral p_literal, final IGenerator<Object> p_generator
+    public void add( final ILiteral p_literal, final IGenerator<Object> p_generator
     )
     {
-        walk( p_path, this, p_generator ).add( p_literal );
+        if ( p_literal.getFunctorPath().isEmpty() )
+            m_beliefbase.add( p_literal );
+        else
+            walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal );
     }
 
     @Override
@@ -147,9 +279,15 @@ public class CMask implements IMask
     }
 
     @Override
-    public boolean remove( final CPath p_path, final ILiteral p_literal )
+    public boolean remove( final ILiteral p_literal )
     {
-        return walk( p_path, this, null ).remove( p_literal );
+        if ( p_literal.getFunctorPath().isEmpty() )
+        {
+            m_beliefbase.add( p_literal );
+            return true;
+        }
+
+        return walk( p_literal.getFunctorPath(), this, null ).remove( p_literal );
     }
 
     @Override
@@ -161,7 +299,13 @@ public class CMask implements IMask
     @Override
     public boolean remove( final CPath p_path )
     {
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path.getSuffix() );
+        if ( p_path.size() == 1 )
+        {
+            m_beliefbase.remove( p_path.getSuffix() );
+            return true;
+        }
+
+        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path );
     }
 
     @Override
@@ -252,151 +396,6 @@ public class CMask implements IMask
     public final String toString()
     {
         return MessageFormat.format( "[name : {0}, fqn : {1}, storage : {2}]", m_name, this.getFQNPath(), m_beliefbase.getStorage() );
-    }
-
-    @Override
-    public void add( final ILiteral p_literal )
-    {
-        m_beliefbase.add( p_literal );
-    }
-
-    @Override
-    public IMask add( final IMask p_mask )
-    {
-        // check first, if a mask with an equal storage exists  on the path
-        for ( IMask l_mask = this; l_mask != null; )
-        {
-            if ( this.getStorage().equals( p_mask.getStorage() ) )
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_mask.getName(), l_mask.getFQNPath() ) );
-
-            l_mask = l_mask.getParent();
-        }
-
-        return m_beliefbase.add( p_mask.clone( this ) );
-    }
-
-    @Override
-    public final void clear()
-    {
-        m_beliefbase.clear();
-    }
-
-    @Override
-    public <E extends IMask> E create( final String p_name )
-    {
-        return m_beliefbase.create( p_name );
-    }
-
-    @Override
-    public <L extends IStorage<ILiteral, IMask>> L getStorage()
-    {
-        return m_beliefbase.getStorage();
-    }
-
-    @Override
-    public final boolean isEmpty()
-    {
-        return m_beliefbase.isEmpty();
-    }
-
-    @Override
-    public boolean remove( final IMask p_mask )
-    {
-        return m_beliefbase.remove( p_mask );
-    }
-
-    @Override
-    public boolean remove( final ILiteral p_literal )
-    {
-        return m_beliefbase.remove( p_literal );
-    }
-
-    @Override
-    public boolean remove( final String p_name )
-    {
-        return m_beliefbase.remove( p_name );
-    }
-
-    @Override
-    public void update()
-    {
-        m_beliefbase.update();
-    }
-
-    @Override
-    public final int size()
-    {
-        return m_beliefbase.size();
-    }
-
-    @Override
-    public Iterator<ILiteral> iteratorLiteral()
-    {
-        // the fqn path is build through the tree traversing, so only the current path is build
-        final CPath l_path = CPath.from( m_name );
-        return new Iterator<ILiteral>()
-        {
-            /**
-             * stack with iterators
-             **/
-            final Stack<Iterator<ILiteral>> m_stack = new Stack<Iterator<ILiteral>>()
-            {{
-                add( CMask.this.iteratorLiteral() );
-                CMask.this.getStorage().getSingleElements().values().stream().forEach( i -> add( i.iteratorLiteral() ) );
-            }};
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public ILiteral next()
-            {
-                return m_stack.peek().next().clone( l_path );
-            }
-
-        };
-    }
-
-    @Override
-    public Iterator<IMask> iteratorBeliefBaseMask()
-    {
-        return new Iterator<IMask>()
-        {
-            /** stack with iterator **/
-            final Stack<Iterator<IMask>> m_stack = new Stack<Iterator<IMask>>()
-            {{
-                add( CMask.this.getStorage().getSingleElements().values().iterator() );
-                CMask.this.getStorage().getSingleElements().values().stream().forEach( i -> add( i.iteratorBeliefBaseMask() ) );
-            }};
-
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public IMask next()
-            {
-                return m_stack.peek().next();
-            }
-        };
     }
 
     /**

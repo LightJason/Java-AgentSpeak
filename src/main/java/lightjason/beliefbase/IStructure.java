@@ -95,13 +95,6 @@ public interface IStructure
     boolean remove( final ILiteral p_literal );
 
     /**
-     * removes mask and literal at the current structure
-     *
-     * @param p_name name
-     */
-    boolean remove( final String p_name );
-
-    /**
      * updates all items
      *
      * @warning call update on a storage and on all storage-masks, if exists different masks

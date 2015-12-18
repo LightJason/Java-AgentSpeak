@@ -29,4 +29,13 @@ package lightjason.beliefbase;
 public interface IBeliefBase extends IStructure
 {
 
+    /**
+     * removes single- and multi-elements
+     *
+     * @param p_name name
+     * @return success
+     */
+    boolean remove( final String p_name );
+
+
 }

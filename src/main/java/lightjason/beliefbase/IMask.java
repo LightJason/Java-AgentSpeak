@@ -39,14 +39,6 @@ public interface IMask extends IStructure
 {
 
     /**
-     * adds a literal in the current structure
-     *
-     * @param p_path path
-     * @param p_literal literal
-     */
-    void add( final CPath p_path, final ILiteral p_literal );
-
-    /**
      * adds a mask in the current structure
      *
      * @param p_path path
@@ -80,11 +72,10 @@ public interface IMask extends IStructure
     /**
      * adds a literal in the current structure
      *
-     * @param p_path path
      * @param p_literal literal
      * @param p_generator beliefbase generator if beliefbase not exists
      */
-    void add( final CPath p_path, final ILiteral p_literal, final IGenerator<Object> p_generator );
+    void add( final ILiteral p_literal, final IGenerator<Object> p_generator );
 
 
     /**
@@ -106,11 +97,10 @@ public interface IMask extends IStructure
     /**
      * removes a literal
      *
-     * @param p_path path
      * @param p_literal literal
      * @return is found and removed
      */
-    boolean remove( final CPath p_path, final ILiteral p_literal );
+    boolean remove( final ILiteral p_literal );
 
     /**
      * removes a mask
