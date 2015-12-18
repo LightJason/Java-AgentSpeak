@@ -112,6 +112,7 @@ public class Test_CLanguageLabels
 
     /**
      * test-case all resource strings
+     *
      * @bug disable unused label checking
      */
     @Test
@@ -173,12 +174,12 @@ public class Test_CLanguageLabels
      */
     private void checkFile( final Path p_file ) throws IOException
     {
-        if ( ( !p_file.toString().endsWith( ".java" ) ) || ( c_skipfiles.contains( c_search.relativize( p_file.toUri() ).normalize().toString() )))
+        if ( ( !p_file.toString().endsWith( ".java" ) ) || ( c_skipfiles.contains( c_search.relativize( p_file.toUri() ).normalize().toString() ) ) )
             return;
 
         try
                 (
-                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
+                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() )
                 )
         {
             new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
