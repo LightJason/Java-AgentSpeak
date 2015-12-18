@@ -21,39 +21,60 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.inconsistency;
 
-import lightjason.agent.IAgent;
 
-import java.util.Set;
+import lightjason.common.CPath;
+
+import java.util.Collection;
 
 
 /**
- * generator interface to create agents
+ * generic discrete metric
+ *
+ * @see http://mathworld.wolfram.com/DiscreteMetric.html
  */
-public interface IGenerator
+public final class CDiscreteMetric<T> extends IDefaultMetric<T>
 {
 
     /**
-     * generates an agent
+     * ctor
      *
-     * @param p_data any object data
-     * @return agent
-     *
-     * @tparam T any object type
+     * @param p_paths path list
      */
-    <T> IAgent generate( final T... p_data ) throws Exception;
-
+    public CDiscreteMetric( final CPath... p_paths )
+    {
+        super( p_paths );
+    }
 
     /**
-     * generates a set of agents
+     * copy-ctor
      *
-     * @param p_number number of agents within the set
-     * @param p_data any object data
-     * @return set of agents
-     *
-     * @tparam T any object type
+     * @param p_metric metric
      */
-    <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
+    public CDiscreteMetric( final IDefaultMetric<T> p_metric )
+    {
+        super( p_metric );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_paths collection of path
+     */
+    public CDiscreteMetric( final Collection<CPath> p_paths )
+    {
+        super( p_paths );
+    }
+
+    @Override
+    public double calculate( final T p_first, final T p_second )
+    {
+        // equal objects create zero value
+        if ( p_first.equals( p_second ) )
+            return 0;
+
+        return 1;
+    }
 
 }

@@ -21,39 +21,64 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.inconsistency;
 
-import lightjason.agent.IAgent;
+import lightjason.common.CPath;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 
 /**
- * generator interface to create agents
+ * default metric with an optional set of path values
  */
-public interface IGenerator
+public abstract class IDefaultMetric<T> implements IMetric<T, CPath>
 {
+    /**
+     * set with paths
+     */
+    protected final Set<CPath> m_paths = new HashSet<>();
 
     /**
-     * generates an agent
+     * ctor
      *
-     * @param p_data any object data
-     * @return agent
-     *
-     * @tparam T any object type
+     * @param p_paths for reading agent value
      */
-    <T> IAgent generate( final T... p_data ) throws Exception;
-
+    public IDefaultMetric( final CPath... p_paths )
+    {
+        if ( p_paths != null )
+            m_paths.addAll( Arrays.asList( p_paths ) );
+    }
 
     /**
-     * generates a set of agents
+     * ctor
      *
-     * @param p_number number of agents within the set
-     * @param p_data any object data
-     * @return set of agents
-     *
-     * @tparam T any object type
+     * @param p_paths collection of path
      */
-    <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
+    public IDefaultMetric( final Collection<CPath> p_paths )
+    {
+        if ( p_paths != null )
+            m_paths.addAll( p_paths );
+    }
 
+    /**
+     * copy-ctor
+     *
+     * @param p_metric default metric
+     */
+    public IDefaultMetric( final IDefaultMetric<T> p_metric )
+    {
+        m_paths.addAll( p_metric.m_paths );
+    }
+
+    @Override
+    public abstract double calculate( final T p_first, final T p_second );
+
+    @Override
+    public final Collection<CPath> getSelector()
+    {
+        return m_paths;
+    }
 }

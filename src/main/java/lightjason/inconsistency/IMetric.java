@@ -21,39 +21,37 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.inconsistency;
 
-import lightjason.agent.IAgent;
 
-import java.util.Set;
+import java.util.Collection;
 
 
 /**
- * generator interface to create agents
+ * metric interface of the inconsistency structure
+ *
+ * @see http://en.wikipedia.org/wiki/Metric_space
  */
-public interface IGenerator
+public interface IMetric<T, N>
 {
 
     /**
-     * generates an agent
+     * calculates the metric value between two objects
      *
-     * @param p_data any object data
-     * @return agent
-     *
-     * @tparam T any object type
+     * @param p_first first object
+     * @param p_second second object
+     * @return double metric
      */
-    <T> IAgent generate( final T... p_data ) throws Exception;
+    double calculate( final T p_first, final T p_second );
 
 
     /**
-     * generates a set of agents
+     * returns the selectors
      *
-     * @param p_number number of agents within the set
-     * @param p_data any object data
-     * @return set of agents
+     * @return selector
      *
-     * @tparam T any object type
+     * @tparam N returns a collection of belief selectors
      */
-    <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
+    public Collection<N> getSelector();
 
 }
