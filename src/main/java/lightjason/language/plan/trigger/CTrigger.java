@@ -57,7 +57,7 @@ public final class CTrigger implements ITrigger<CPath>
     @Override
     public final int hashCode()
     {
-        return 11 * m_event.hashCode() + 17 * m_data.hashCode();
+        return m_event.hashCode() + m_data.hashCode();
     }
 
     @Override

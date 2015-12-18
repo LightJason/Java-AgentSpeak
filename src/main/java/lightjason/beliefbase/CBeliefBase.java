@@ -27,18 +27,14 @@ package lightjason.beliefbase;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.trigger.ITrigger;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 
 /**
  * default beliefbase
  *
  * @tparam T literal type
- * @todo event handling is missing / incomplete
  */
 public class CBeliefBase implements IBeliefBase
 {
@@ -46,18 +42,6 @@ public class CBeliefBase implements IBeliefBase
      * storage with data
      */
     protected final IStorage<ILiteral, IMask> m_storage;
-    /**
-     * event storage
-     */
-    protected final Set<ITrigger<?>> m_event = new HashSet<>();
-
-    /**
-     * ctor - creates an root beliefbase
-     */
-    public CBeliefBase()
-    {
-        this( new CBeliefStorage<>() );
-    }
 
     /**
      * ctor
@@ -86,7 +70,6 @@ public class CBeliefBase implements IBeliefBase
     @Override
     public final void add( final ILiteral p_literal )
     {
-        //m_event.add()
         m_storage.getMultiElements().put( p_literal.getFunctor(), p_literal );
     }
 
