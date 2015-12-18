@@ -27,7 +27,6 @@
  **/
 grammar Agent;
 import AgentSpeak;
-@header { package lightjason.grammar; }
 
 
 // --- agent structure -------------------------------------------------------------------

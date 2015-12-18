@@ -27,7 +27,6 @@
  **/
 grammar PlanBundle;
 import AgentSpeak;
-@header { package lightjason.grammar; }
 
 
 // --- plan-bundle structure -------------------------------------------------------------
