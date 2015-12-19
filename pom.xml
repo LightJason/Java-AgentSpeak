@@ -147,10 +147,9 @@
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>4.5.1-1</version>
                 <configuration>
-                    <arguments>
-                        <argument>-visitor</argument>
-                        <argument>-no-listener</argument>
-                    </arguments>
+                    <visitor>true</visitor>
+                    <listener>false</listener>
+                    <treatWarningsAsErrors>true</treatWarningsAsErrors>
                 </configuration>
                 <executions>
                     <execution>
