@@ -25,7 +25,7 @@ package lightjason;
 
 import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
-import lightjason.agent.generator.CDefaultGenerator;
+import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.common.CPath;
 import lightjason.language.CRawTerm;
 import lightjason.language.ILiteral;
@@ -50,7 +50,7 @@ public final class CMain
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        new CDefaultGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
+        new CDefaultAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
         {{
             add( new CPrint() );
             add( new CSetProperty() );

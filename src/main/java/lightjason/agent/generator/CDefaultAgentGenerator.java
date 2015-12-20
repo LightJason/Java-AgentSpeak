@@ -47,7 +47,7 @@ import java.util.stream.IntStream;
 /**
  * agent generator
  */
-public class CDefaultGenerator implements IGenerator
+public class CDefaultAgentGenerator implements IAgentGenerator
 {
     /**
      * configuration of an agent
@@ -61,7 +61,7 @@ public class CDefaultGenerator implements IGenerator
      * @param p_actions set with actions
      * @throws IOException thrown on error
      */
-    public CDefaultGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
         final IAgentVisitor l_visitor = new CASTVisitor( p_actions );

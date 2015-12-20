@@ -1,3 +1,26 @@
+/**
+ * @cond LICENSE
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the Light-Jason                                               #
+ * # Copyright (c) 2015, Philipp Kraus (philipp.kraus@tu-clausthal.de)                  #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
 package lightjason.grammar;
 
 
@@ -30,6 +53,7 @@ import lightjason.language.plan.CPlan;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.CTrigger;
 import lightjason.language.plan.trigger.ITrigger;
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -46,7 +70,7 @@ import java.util.stream.Collectors;
  * abstract syntax tree (AST) visitor
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisitor
+public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAgentVisitor
 {
 
     /**
@@ -81,6 +105,12 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     // --- agent rules -----------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
+    public final Object visitAgent( final AgentParser.AgentContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
     public Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
     {
         p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
@@ -106,7 +136,18 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    public final Object visitPlans( final AgentParser.PlansContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitPrinciples( final AgentParser.PrinciplesContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
     public Object visitPlan( final AgentParser.PlanContext p_context )
     {
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
@@ -126,7 +167,6 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public Object visitPlandefinition( final AgentParser.PlandefinitionContext p_context )
     {
         return new ImmutablePair<Object, List<IExecution>>(
@@ -134,7 +174,12 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    public Object visitPrinciple( final AgentParser.PrincipleContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
     public Object visitAnnotations( final AgentParser.AnnotationsContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
@@ -165,7 +210,12 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    public final Object visitAnnotation_literal( final AgentParser.Annotation_literalContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
     public Object visitAnnotation_numeric_literal( final AgentParser.Annotation_numeric_literalContext p_context )
     {
         if ( p_context.FUZZY() != null )
@@ -184,6 +234,12 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
             return new CSymbolicAnnotation( IAnnotation.EType.EXPIRES, (ILiteral) this.visitAtom( p_context.atom() ) );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "symbolicliteralannotation", p_context.getText() ) );
+    }
+
+    @Override
+    public final Object visitPlan_trigger( final AgentParser.Plan_triggerContext p_context )
+    {
+        return this.visitChildren( p_context );
     }
 
     @Override
@@ -225,7 +281,6 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
@@ -260,7 +315,66 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitIf_else( final AgentParser.If_elseContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitWhile_loop( final AgentParser.While_loopContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitFor_loop( final AgentParser.For_loopContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitForeach_loop( final AgentParser.Foreach_loopContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitLogical_expression( final AgentParser.Logical_expressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitComparison_expression( final AgentParser.Comparison_expressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitArithmetic_expression( final AgentParser.Arithmetic_expressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
     public Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
     {
         switch ( p_context.unaryoperator().getText() )
@@ -303,10 +417,11 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+    @Override
+    public Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
 
     @Override
     public Object visitLiteral( final AgentParser.LiteralContext p_context )
@@ -351,6 +466,11 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
         ).collect( Collectors.toList() );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitLiteralset( final AgentParser.LiteralsetContext p_context )
     {
@@ -358,6 +478,12 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
             return Collections.EMPTY_LIST;
 
         return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
+    }
+
+    @Override
+    public Object visitList_headtail( final AgentParser.List_headtailContext p_context )
+    {
+        return this.visitChildren( p_context );
     }
 
     @Override
@@ -372,10 +498,40 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
 
+    @Override
+    public final Object visitComparator( final AgentParser.ComparatorContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitArithmeticoperator( final AgentParser.ArithmeticoperatorContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitUnaryoperator( final AgentParser.UnaryoperatorContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- raw data --------------------------------------------------------------------------------------------------------------------------------------------
+    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Object visitBinaryoperator( final AgentParser.BinaryoperatorContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitNumber( final AgentParser.NumberContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
 
     @Override
     public Object visitFloatnumber( final AgentParser.FloatnumberContext p_context )
@@ -407,67 +563,63 @@ public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisit
     }
 
     @Override
-    public Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
+    public final Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- helper rules ----------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
+    public final Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null ? true : false;
     }
 
     @Override
-    public Object visitString( final AgentParser.StringContext p_context )
+    public final Object visitConstant( final AgentParser.ConstantContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitString( final AgentParser.StringContext p_context )
     {
         return p_context.getText();
     }
-
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * returns initial beliefs
-     *
-     * @return set with initial beliefs
-     */
+    @Override
     public final Set<ILiteral> getInitialBeliefs()
     {
         return m_InitialBeliefs;
     }
 
-    /**
-     * returns initial goal
-     *
-     * @return literal
-     */
-    public final ILiteral getInitialGoal()
-    {
-        return m_InitialGoal;
-    }
-
-    /**
-     * returns all plans
-     *
-     * @return set with triggers and plans
-     */
+    @Override
     public final SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }
 
-    /**
-     * returns all rules
-     *
-     * @return rules
-     */
+    @Override
     public final Map<String, Object> getRules()
     {
         return null;
     }
+
+    @Override
+    public final ILiteral getInitialGoal()
+    {
+        return m_InitialGoal;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }

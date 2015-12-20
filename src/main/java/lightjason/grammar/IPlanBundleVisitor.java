@@ -23,20 +23,9 @@
 
 package lightjason.grammar;
 
-import lightjason.language.ILiteral;
-
-
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * visitor interface of the abstract-syntax-tree (AST) for a plan bundle
  */
-public interface IAgentVisitor extends IVisitor, AgentVisitor<Object>
+public interface IPlanBundleVisitor extends IVisitor, PlanBundleVisitor<Object>
 {
-
-    /**
-     * returns the initial goal
-     *
-     * @returns literal or null
-     */
-    ILiteral getInitialGoal();
-
 }

@@ -31,7 +31,7 @@ import java.util.Set;
 /**
  * generator interface to create agents
  */
-public interface IGenerator
+public interface IAgentGenerator
 {
 
     /**

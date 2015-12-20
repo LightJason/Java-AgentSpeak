@@ -23,20 +23,40 @@
 
 package lightjason.grammar;
 
+import com.google.common.collect.SetMultimap;
 import lightjason.language.ILiteral;
+import lightjason.language.plan.IPlan;
+import lightjason.language.plan.trigger.ITrigger;
+
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * interface of visitor structure
  */
-public interface IAgentVisitor extends IVisitor, AgentVisitor<Object>
+public interface IVisitor
 {
 
     /**
-     * returns the initial goal
+     * returns initial beliefs
      *
-     * @returns literal or null
+     * @return set with initial beliefs
      */
-    ILiteral getInitialGoal();
+    Set<ILiteral> getInitialBeliefs();
+
+    /**
+     * get a multimap with event-plan matching
+     *
+     * @return multimap
+     */
+    SetMultimap<ITrigger<?>, IPlan> getPlans();
+
+    /**
+     * returns the rules / principles
+     *
+     * @return map with rules
+     */
+    Map<String, Object> getRules();
 
 }
