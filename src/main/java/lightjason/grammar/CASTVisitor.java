@@ -1,26 +1,3 @@
-/**
- * @cond LICENSE
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the Light-Jason                                               #
- * # Copyright (c) 2015, Philipp Kraus (philipp.kraus@tu-clausthal.de)                  #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
- * @endcond
- */
-
 package lightjason.grammar;
 
 
@@ -30,33 +7,6 @@ import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.grammar.AgentParser.Achievement_goal_actionContext;
-import lightjason.grammar.AgentParser.Annotation_atomContext;
-import lightjason.grammar.AgentParser.Annotation_numeric_literalContext;
-import lightjason.grammar.AgentParser.Annotation_symbolic_literalContext;
-import lightjason.grammar.AgentParser.AnnotationsContext;
-import lightjason.grammar.AgentParser.AtomContext;
-import lightjason.grammar.AgentParser.BeliefContext;
-import lightjason.grammar.AgentParser.Belief_actionContext;
-import lightjason.grammar.AgentParser.BodyContext;
-import lightjason.grammar.AgentParser.FloatnumberContext;
-import lightjason.grammar.AgentParser.Initial_beliefsContext;
-import lightjason.grammar.AgentParser.Initial_goalContext;
-import lightjason.grammar.AgentParser.IntegernumberContext;
-import lightjason.grammar.AgentParser.LiteralContext;
-import lightjason.grammar.AgentParser.LiteralsetContext;
-import lightjason.grammar.AgentParser.LogicalvalueContext;
-import lightjason.grammar.AgentParser.PlanContext;
-import lightjason.grammar.AgentParser.Plan_belief_triggerContext;
-import lightjason.grammar.AgentParser.Plan_contextContext;
-import lightjason.grammar.AgentParser.Plan_goal_triggerContext;
-import lightjason.grammar.AgentParser.PlandefinitionContext;
-import lightjason.grammar.AgentParser.StringContext;
-import lightjason.grammar.AgentParser.TermContext;
-import lightjason.grammar.AgentParser.TermlistContext;
-import lightjason.grammar.AgentParser.Test_goal_actionContext;
-import lightjason.grammar.AgentParser.Unary_expressionContext;
-import lightjason.grammar.AgentParser.VariableContext;
 import lightjason.language.CLiteral;
 import lightjason.language.CMutexVariable;
 import lightjason.language.CRawTerm;
@@ -93,55 +43,71 @@ import java.util.stream.Collectors;
 
 
 /**
- * class to visit each AST node of an agent
+ * abstract syntax tree (AST) visitor
  */
-public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVisitor
+@SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
+public class CASTVisitor extends AgentBaseVisitor<Object> implements IAgentVisitor
 {
+
     /**
      * initial goal
      */
-    private ILiteral m_InitialGoal;
+    protected ILiteral m_InitialGoal;
     /**
      * set with initial beliefs
      */
-    private final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
+    protected final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
     /**
      * map with plans
      */
-    private final SetMultimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
+    protected final SetMultimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
     /**
      * map with action definition
      */
-    private final Map<CPath, IAction> m_actions;
+    protected final Map<CPath, IAction> m_actions;
 
-    public CAgentVisitor( final Set<IAction> p_actions )
+    /**
+     * ctor
+     *
+     * @param p_actions set with actions
+     */
+    public CASTVisitor( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // --- agent rules -----------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public Object visitInitial_beliefs( final Initial_beliefsContext p_context )
+    public Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
     {
         p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
         return null;
     }
 
     @Override
-    public Object visitInitial_goal( final Initial_goalContext p_context )
+    public Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
     {
         m_InitialGoal = new CLiteral( p_context.atom().getText() );
         return null;
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public Object visitBelief( final BeliefContext p_context )
+    public Object visitBelief( final AgentParser.BeliefContext p_context )
     {
         return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitPlan( final PlanContext p_context )
+    public Object visitPlan( final AgentParser.PlanContext p_context )
     {
         final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
         final ITrigger.EType l_trigger = (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() );
@@ -161,7 +127,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitPlandefinition( final PlandefinitionContext p_context )
+    public Object visitPlandefinition( final AgentParser.PlandefinitionContext p_context )
     {
         return new ImmutablePair<Object, List<IExecution>>(
                 this.visitPlan_context( p_context.plan_context() ), (List<IExecution>) this.visitBody( p_context.body() ) );
@@ -169,7 +135,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitAnnotations( final AnnotationsContext p_context )
+    public Object visitAnnotations( final AgentParser.AnnotationsContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;
@@ -184,7 +150,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitAnnotation_atom( final Annotation_atomContext p_context )
+    public Object visitAnnotation_atom( final AgentParser.Annotation_atomContext p_context )
     {
         if ( p_context.ATOMIC() != null )
             return new CAtomAnnotation( IAnnotation.EType.ATOMIC );
@@ -200,7 +166,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitAnnotation_numeric_literal( final Annotation_numeric_literalContext p_context )
+    public Object visitAnnotation_numeric_literal( final AgentParser.Annotation_numeric_literalContext p_context )
     {
         if ( p_context.FUZZY() != null )
             return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
@@ -212,7 +178,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitAnnotation_symbolic_literal( final Annotation_symbolic_literalContext p_context )
+    public Object visitAnnotation_symbolic_literal( final AgentParser.Annotation_symbolic_literalContext p_context )
     {
         if ( p_context.EXPIRES() != null )
             return new CSymbolicAnnotation( IAnnotation.EType.EXPIRES, (ILiteral) this.visitAtom( p_context.atom() ) );
@@ -221,7 +187,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitPlan_goal_trigger( final Plan_goal_triggerContext p_context )
+    public Object visitPlan_goal_trigger( final AgentParser.Plan_goal_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -236,7 +202,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitPlan_belief_trigger( final Plan_belief_triggerContext p_context )
+    public Object visitPlan_belief_trigger( final AgentParser.Plan_belief_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -253,14 +219,14 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitPlan_context( final Plan_contextContext p_context )
+    public Object visitPlan_context( final AgentParser.Plan_contextContext p_context )
     {
         return p_context == null ? "" : p_context.getText();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitBody( final BodyContext p_context )
+    public Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
         return p_context.body_formula().parallelStream().filter( i -> i != null ).map( i -> {
@@ -295,7 +261,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object visitUnary_expression( final Unary_expressionContext p_context )
+    public Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
     {
         switch ( p_context.unaryoperator().getText() )
         {
@@ -311,20 +277,19 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public Object visitAchievement_goal_action( final Achievement_goal_actionContext p_context )
+    public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
         return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
     }
 
     @Override
-    public Object visitTest_goal_action( final Test_goal_actionContext p_context )
+    public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
     {
         return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
     @Override
-    public Object visitBelief_action( final Belief_actionContext p_context )
+    public Object visitBelief_action( final AgentParser.Belief_actionContext p_context )
     {
         if ( p_context.PLUS() != null )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Add );
@@ -339,9 +304,12 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
-    @SuppressWarnings( "unchecked" )
-    public Object visitLiteral( final LiteralContext p_context )
+    public Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
         return new CLiteral(
                 p_context.AT() != null,
@@ -352,7 +320,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitTerm( final TermContext p_context )
+    public Object visitTerm( final AgentParser.TermContext p_context )
     {
         if ( p_context.string() != null )
             return this.visitString( p_context.string() );
@@ -373,7 +341,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitTermlist( final TermlistContext p_context )
+    public Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -384,7 +352,7 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitLiteralset( final LiteralsetContext p_context )
+    public Object visitLiteralset( final AgentParser.LiteralsetContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -393,22 +361,24 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitAtom( final AtomContext p_context )
+    public Object visitAtom( final AgentParser.AtomContext p_context )
     {
         return p_context.getText();
     }
 
     @Override
-    public Object visitVariable( final VariableContext p_context )
+    public Object visitVariable( final AgentParser.VariableContext p_context )
     {
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // --- raw data --------------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public Object visitFloatnumber( final FloatnumberContext p_context )
+    public Object visitFloatnumber( final AgentParser.FloatnumberContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -437,43 +407,64 @@ public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVis
     }
 
     @Override
-    public Object visitIntegernumber( final IntegernumberContext p_context )
+    public Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
 
     @Override
-    public Object visitLogicalvalue( final LogicalvalueContext p_context )
+    public Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null ? true : false;
     }
 
     @Override
-    public Object visitString( final StringContext p_context )
+    public Object visitString( final AgentParser.StringContext p_context )
     {
         return p_context.getText();
     }
+
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    @Override
+
+    // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * returns initial beliefs
+     *
+     * @return set with initial beliefs
+     */
     public final Set<ILiteral> getInitialBeliefs()
     {
         return m_InitialBeliefs;
     }
 
-    @Override
+    /**
+     * returns initial goal
+     *
+     * @return literal
+     */
     public final ILiteral getInitialGoal()
     {
         return m_InitialGoal;
     }
 
-    @Override
+    /**
+     * returns all plans
+     *
+     * @return set with triggers and plans
+     */
     public final SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }
 
-    @Override
+    /**
+     * returns all rules
+     *
+     * @return rules
+     */
     public final Map<String, Object> getRules()
     {
         return null;

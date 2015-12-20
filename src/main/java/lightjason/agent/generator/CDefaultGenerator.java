@@ -31,7 +31,7 @@ import lightjason.agent.configuration.IConfiguration;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
-import lightjason.grammar.CAgentVisitor;
+import lightjason.grammar.CASTVisitor;
 import lightjason.grammar.IAgentVisitor;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -64,7 +64,7 @@ public class CDefaultGenerator implements IGenerator
     public CDefaultGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IAgentVisitor l_visitor = new CAgentVisitor( p_actions );
+        final IAgentVisitor l_visitor = new CASTVisitor( p_actions );
         parse( p_stream, l_visitor );
 
         // build configuration (configuration runs cloning of objects if needed)
