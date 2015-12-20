@@ -21,25 +21,42 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.agent;
 
-import lightjason.agent.IPlanBundle;
+import com.google.common.collect.SetMultimap;
+import lightjason.language.ILiteral;
+import lightjason.language.plan.IPlan;
+import lightjason.language.plan.trigger.ITrigger;
+
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * generator interface to generate plan bundles
+ * plan bundle interface
  */
-public interface IPlanBundleGenerator
+public interface IPlanBundle
 {
 
     /**
-     * generates a plan bundle
+     * returns initial beliefs
      *
-     * @param p_data any object data
-     * @return plan bundle
-     *
-     * @tparam T any object type
+     * @return set with initial beliefs
      */
-    <T> IPlanBundle generate( final T... p_data ) throws Exception;
+    Set<ILiteral> getInitialBeliefs();
+
+    /**
+     * get a multimap with event-plan matching
+     *
+     * @return multimap
+     */
+    SetMultimap<ITrigger<?>, IPlan> getPlans();
+
+    /**
+     * returns the rules / principles
+     *
+     * @return map with rules
+     */
+    Map<String, Object> getRules();
 
 }
