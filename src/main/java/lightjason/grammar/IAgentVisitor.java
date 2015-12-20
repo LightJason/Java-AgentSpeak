@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * visitor interface of the abstract-syntax-tree (AST) for an agent
  */
-public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
+public interface IAgentVisitor extends AgentVisitor<Object>
 {
 
     /**
@@ -62,5 +62,5 @@ public interface IAgentVisitor extends lightjason.grammar.AgentVisitor<Object>
      *
      * @return map with rules
      */
-    public Map<String, Object> getRules();
+    Map<String, Object> getRules();
 }

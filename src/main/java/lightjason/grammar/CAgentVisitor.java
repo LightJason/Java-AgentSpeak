@@ -95,7 +95,7 @@ import java.util.stream.Collectors;
 /**
  * class to visit each AST node of an agent
  */
-public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> implements IAgentVisitor
+public class CAgentVisitor extends AgentBaseVisitor<Object> implements IAgentVisitor
 {
     /**
      * initial goal
@@ -468,13 +468,13 @@ public class CAgentVisitor extends lightjason.grammar.AgentBaseVisitor<Object> i
     }
 
     @Override
-    public SetMultimap<ITrigger<?>, IPlan> getPlans()
+    public final SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public Map<String, Object> getRules()
+    public final Map<String, Object> getRules()
     {
         return null;
     }
