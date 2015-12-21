@@ -26,8 +26,8 @@ package lightjason.agent.generator;
 import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
-import lightjason.agent.configuration.CDefaultConfiguration;
-import lightjason.agent.configuration.IConfiguration;
+import lightjason.agent.configuration.CDefaultAgentConfiguration;
+import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
@@ -52,7 +52,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     /**
      * configuration of an agent
      */
-    protected final IConfiguration m_configuration;
+    protected final IAgentConfiguration m_configuration;
 
     /**
      * ctor
@@ -68,7 +68,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
         parse( p_stream, l_visitor );
 
         // build configuration (configuration runs cloning of objects if needed)
-        m_configuration = new CDefaultConfiguration( l_visitor.getPlans(), l_visitor.getInitialGoal(), l_visitor.getInitialBeliefs() );
+        m_configuration = new CDefaultAgentConfiguration( l_visitor.getPlans(), l_visitor.getInitialGoal(), l_visitor.getInitialBeliefs() );
     }
 
     @Override

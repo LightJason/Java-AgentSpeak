@@ -24,30 +24,74 @@
 package lightjason.agent.configuration;
 
 import com.google.common.collect.SetMultimap;
+import lightjason.beliefbase.CBeliefBase;
+import lightjason.beliefbase.CBeliefStorage;
+import lightjason.beliefbase.IMask;
+import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
+import java.util.Collection;
 import java.util.Map;
 
 
 /**
- * configuration for plan bundle and agent
+ * default agent configuration
  */
-public interface IConfiguration
+public class CDefaultAgentConfiguration implements IAgentConfiguration
 {
+    /**
+     * initial goal
+     */
+    final ILiteral m_initialgoal;
+    /**
+     * instance of agent plans
+     */
+    private final SetMultimap<ITrigger<?>, IPlan> m_plans;
+    /**
+     * instance of initial beliefs
+     */
+    private final Collection<ILiteral> m_initialbeliefs;
+
 
     /**
-     * get a multimap with event-plan matching
+     * ctor
      *
-     * @return multimap
+     * @param p_plans plans
+     * @param p_initialgoal initial goal
+     * @param p_initalbeliefs set with initial beliefs
      */
-    SetMultimap<ITrigger<?>, IPlan> getPlans();
+    public CDefaultAgentConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal, final Collection<ILiteral> p_initalbeliefs )
+    {
+        m_plans = p_plans;
+        m_initialgoal = p_initialgoal;
+        m_initialbeliefs = p_initalbeliefs;
+    }
 
-    /**
-     * returns the rules / principles
-     *
-     * @return map with rules
-     */
-    Map<String, Object> getRules();
+    @Override
+    public IMask getBeliefbase()
+    {
+        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
+        return l_beliefbase;
+    }
+
+    @Override
+    public ILiteral getInitialGoal()
+    {
+        return m_initialgoal;
+    }
+
+    @Override
+    public SetMultimap<ITrigger<?>, IPlan> getPlans()
+    {
+        return m_plans;
+    }
+
+    @Override
+    public Map<String, Object> getRules()
+    {
+        return null;
+    }
 
 }

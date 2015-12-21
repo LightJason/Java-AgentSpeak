@@ -25,7 +25,7 @@ package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-import lightjason.agent.configuration.IConfiguration;
+import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
@@ -33,7 +33,6 @@ import lightjason.language.execution.CContext;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,7 +92,7 @@ public class CAgent implements IAgent
      * @bug remove test plan execution
      * @bug score function not working
      */
-    public CAgent( final IConfiguration p_configuration ) throws IOException
+    public CAgent( final IAgentConfiguration p_configuration )
     {
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();

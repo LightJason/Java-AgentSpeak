@@ -23,31 +23,22 @@
 
 package lightjason.agent.configuration;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.ILiteral;
 
-import java.util.Map;
+import java.util.Set;
 
 
 /**
- * configuration for plan bundle and agent
+ * plan bundle configuration
  */
-public interface IConfiguration
+public interface IPlanBundleConfiguration extends IConfiguration
 {
 
     /**
-     * get a multimap with event-plan matching
+     * get beliefs
      *
-     * @return multimap
+     * @return set with beliefs
      */
-    SetMultimap<ITrigger<?>, IPlan> getPlans();
-
-    /**
-     * returns the rules / principles
-     *
-     * @return map with rules
-     */
-    Map<String, Object> getRules();
+    Set<ILiteral> getBeliefs();
 
 }

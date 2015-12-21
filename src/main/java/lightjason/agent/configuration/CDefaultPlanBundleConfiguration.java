@@ -24,26 +24,19 @@
 package lightjason.agent.configuration;
 
 import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.CBeliefBase;
-import lightjason.beliefbase.CBeliefStorage;
-import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
- * default agent configuration
+ *
  */
-public class CDefaultConfiguration implements IConfiguration
+public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
 {
-    /**
-     * initial goal
-     */
-    final ILiteral m_initialgoal;
     /**
      * instance of agent plans
      */
@@ -51,47 +44,35 @@ public class CDefaultConfiguration implements IConfiguration
     /**
      * instance of initial beliefs
      */
-    private final Collection<ILiteral> m_initialbeliefs;
-
+    private final Set<ILiteral> m_initialbeliefs;
 
     /**
      * ctor
      *
      * @param p_plans plans
-     * @param p_initialgoal initial goal
-     * @param p_initalbeliefs set with initial beliefs
+     * @param p_initalbeliefs initial beliefs
      */
-    public CDefaultConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal, final Collection<ILiteral> p_initalbeliefs )
+    public CDefaultPlanBundleConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final Set<ILiteral> p_initalbeliefs )
     {
         m_plans = p_plans;
-        m_initialgoal = p_initialgoal;
         m_initialbeliefs = p_initalbeliefs;
     }
 
     @Override
-    public IMask getBeliefbase()
+    public final Set<ILiteral> getBeliefs()
     {
-        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
-        m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
-        return l_beliefbase;
+        return m_initialbeliefs;
     }
 
     @Override
-    public ILiteral getInitialGoal()
-    {
-        return m_initialgoal;
-    }
-
-    @Override
-    public SetMultimap<ITrigger<?>, IPlan> getPlans()
+    public final SetMultimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public Map<String, Object> getRules()
+    public final Map<String, Object> getRules()
     {
         return null;
     }
-
 }

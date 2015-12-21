@@ -21,33 +21,52 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.agent;
 
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.configuration.IPlanBundleConfiguration;
+import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
 import java.util.Map;
+import java.util.Set;
 
 
 /**
- * configuration for plan bundle and agent
+ * plan bundle class
  */
-public interface IConfiguration
+public class CPlanBundle implements IPlanBundle
 {
-
     /**
-     * get a multimap with event-plan matching
+     * thread-safe map with all existing plans
      *
-     * @return multimap
+     * @note plan list must be a linked-hashset
+     * to store the execution order of the plans
      */
-    SetMultimap<ITrigger<?>, IPlan> getPlans();
+    protected final SetMultimap<ITrigger<?>, IPlan> m_plans;
 
-    /**
-     * returns the rules / principles
-     *
-     * @return map with rules
-     */
-    Map<String, Object> getRules();
 
+    public CPlanBundle( final IPlanBundleConfiguration p_configuration )
+    {
+        m_plans = p_configuration.getPlans();
+    }
+
+    @Override
+    public final Set<ILiteral> getInitialBeliefs()
+    {
+        return null;
+    }
+
+    @Override
+    public final SetMultimap<ITrigger<?>, IPlan> getPlans()
+    {
+        return m_plans;
+    }
+
+    @Override
+    public final Map<String, Object> getRules()
+    {
+        return null;
+    }
 }
