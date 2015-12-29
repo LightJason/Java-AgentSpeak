@@ -285,9 +285,7 @@ belief_action :
  * deconstruct expression (splitting clauses)
  **/
 deconstruct_expression :
-    LANGULARBRACKET
-    list_headtail
-    RANGULARBRACKET
+    variablelist
     DECONSTRUCT
     ( literal | variable )
     ;
@@ -316,6 +314,7 @@ term :
     | number
     | literal
     | variable
+    | variablelist
     | arithmetic_expression
     | logical_expression
     | LANGULARBRACKET termlist RANGULARBRACKET
@@ -337,13 +336,11 @@ literalset :
 
 /**
  * list with head-tail-annotation definition
- * @bug move to variable type
  **/
-list_headtail :
-    variable
-    LISTSEPARATOR
-    variable
-    (LISTSEPARATOR variable)?
+variablelist :
+    LANGULARBRACKET
+    variable (LISTSEPARATOR variable)+
+    RANGULARBRACKET
     ;
 
 /**

@@ -479,7 +479,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
     @Override
-    public Object visitList_headtail( final AgentParser.List_headtailContext p_context )
+    public Object visitVariablelist( final AgentParser.VariablelistContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -760,16 +760,16 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitWhile_loop( final PlanBundleParser.While_loopContext p_context )
     {
         return this.visitChildren( p_context );
     }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Object visitFor_loop( final PlanBundleParser.For_loopContext p_context )
@@ -888,6 +888,11 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
     {
@@ -899,11 +904,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         ).collect( Collectors.toList() );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
-
     @Override
     public Object visitLiteralset( final PlanBundleParser.LiteralsetContext p_context )
     {
@@ -914,7 +914,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
     @Override
-    public Object visitList_headtail( final PlanBundleParser.List_headtailContext p_context )
+    public Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
     {
         return this.visitChildren( p_context );
     }
