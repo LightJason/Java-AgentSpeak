@@ -35,7 +35,7 @@ import java.util.Collection;
 /**
  * achievement goal action
  */
-public final class CAchievementGoal extends IAction<ILiteral>
+public final class CAchievementGoal extends IBaseExecution<ILiteral>
 {
     /**
      * flag to run immediately

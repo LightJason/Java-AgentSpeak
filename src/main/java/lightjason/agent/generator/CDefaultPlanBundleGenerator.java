@@ -55,8 +55,7 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IPlanBundleVisitor l_visitor = new CASTVisitor( p_actions );
-        parse( p_stream, l_visitor );
+        final IPlanBundleVisitor l_visitor = this.parse( p_stream, new CASTVisitor( p_actions ) );
     }
 
 
@@ -71,9 +70,11 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
      *
      * @param p_stream input stream
      * @param p_astvisitor AST visitor object
+     * @return visitor instance
+     *
      * @throws IOException thrown on IO errors
      */
-    protected static void parse( final InputStream p_stream, final IPlanBundleVisitor p_astvisitor ) throws Exception
+    protected IPlanBundleVisitor parse( final InputStream p_stream, final IPlanBundleVisitor p_astvisitor ) throws Exception
     {
         final ANTLRErrorListener l_errorlistener = new CASTErrorListener();
 
@@ -86,5 +87,6 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
         l_parser.addErrorListener( l_errorlistener );
 
         p_astvisitor.visit( l_parser.planbundle() );
+        return p_astvisitor;
     }
 }

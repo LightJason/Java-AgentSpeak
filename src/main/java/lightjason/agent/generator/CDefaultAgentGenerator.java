@@ -64,8 +64,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IAgentVisitor l_visitor = new CASTVisitor( p_actions );
-        parse( p_stream, l_visitor );
+        final IAgentVisitor l_visitor = this.parse( p_stream, new CASTVisitor( p_actions ) );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration( l_visitor.getPlans(), l_visitor.getInitialGoal(), l_visitor.getInitialBeliefs() );
@@ -98,9 +97,11 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @param p_stream input stream
      * @param p_astvisitor AST visitor object
+     * @return visitor instance
+     *
      * @throws IOException thrown on IO errors
      */
-    protected static void parse( final InputStream p_stream, final IAgentVisitor p_astvisitor ) throws Exception
+    protected IAgentVisitor parse( final InputStream p_stream, final IAgentVisitor p_astvisitor ) throws Exception
     {
         final ANTLRErrorListener l_errorlistener = new CASTErrorListener();
 
@@ -113,6 +114,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
         l_parser.addErrorListener( l_errorlistener );
 
         p_astvisitor.visit( l_parser.agent() );
+        return p_astvisitor;
     }
 
 }

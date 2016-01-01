@@ -29,7 +29,7 @@ import lightjason.language.execution.IExecution;
 /**
  * test goal action
  */
-public abstract class IAction<T> implements IExecution
+public abstract class IBaseExecution<T> implements IExecution
 {
     /**
      * data
@@ -39,7 +39,7 @@ public abstract class IAction<T> implements IExecution
     /**
      * ctor
      */
-    protected IAction()
+    protected IBaseExecution()
     {
         m_value = null;
     }
@@ -49,7 +49,7 @@ public abstract class IAction<T> implements IExecution
      *
      * @param p_value data
      */
-    protected IAction( final T p_value )
+    protected IBaseExecution( final T p_value )
     {
         m_value = p_value;
     }

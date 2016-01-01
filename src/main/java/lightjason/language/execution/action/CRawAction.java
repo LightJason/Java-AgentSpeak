@@ -35,7 +35,7 @@ import java.util.Collection;
 /**
  * encapsulate class for any non-executable data type e.g. boolean
  */
-public final class CRawAction<T> extends IAction<T>
+public final class CRawAction<T> extends IBaseExecution<T>
 {
     /**
      * ctor

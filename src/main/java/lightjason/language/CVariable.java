@@ -131,12 +131,6 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException
-    {
-        return new CVariable<T>( m_functor.toString(), m_value );
-    }
-
-    @Override
     public String toString()
     {
         return MessageFormat.format( "{0}({1})", m_functor, m_value == null ? "" : m_value );
@@ -158,5 +152,11 @@ public class CVariable<T> implements IVariable<T>
     public final CPath getFQNFunctor()
     {
         return m_functor;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException
+    {
+        return new CVariable<T>( m_functor.toString(), m_value );
     }
 }

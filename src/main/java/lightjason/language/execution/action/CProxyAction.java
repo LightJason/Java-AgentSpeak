@@ -97,6 +97,12 @@ public final class CProxyAction implements IExecution
         return CBoolean.from( true );
     }
 
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_execution, m_annotationexecution );
+    }
+
     /**
      * create execution stack of function and arguments
      *
@@ -274,12 +280,6 @@ public final class CProxyAction implements IExecution
         {
             return this.hashCode() == p_object.hashCode();
         }
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}{1}", m_execution, m_annotationexecution );
     }
 
 }

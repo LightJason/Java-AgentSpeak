@@ -35,7 +35,7 @@ import java.util.Collection;
 /**
  * test goal action
  */
-public final class CTestGoal extends IAction<ILiteral>
+public final class CTestGoal extends IBaseExecution<ILiteral>
 {
 
     /**

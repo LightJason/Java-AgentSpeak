@@ -36,7 +36,7 @@ import java.util.Collection;
 /**
  * belief action
  */
-public final class CBeliefAction extends IAction<ILiteral>
+public final class CBeliefAction extends IBaseExecution<ILiteral>
 {
     /**
      * running action
