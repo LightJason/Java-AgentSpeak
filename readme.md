@@ -122,8 +122,8 @@ structure to describe an optimizing process.
 
 ### <a name="variable"></a> Variables
 
-* variables are written with an upper-case letter at begin
-* thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
+* Variables are written with an upper-case letter at begin
+* Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
 
 
 ![Structure](bdi.png)
@@ -133,8 +133,9 @@ structure to describe an optimizing process.
 
 ### Agent
 
-* agent (ASL) can be defined as a logic program with beliefs, rules and plans
-* [plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
+* Agent (ASL) can be defined as a logic program with [beliefs](#belief), [rules](#rule) and [plans](#plan)
+* Agents must be run (triggered) by an external runtime e.g. from an outside system component
+* [Plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
 
 
