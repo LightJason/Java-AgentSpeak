@@ -7,7 +7,7 @@ machine:
 
 dependencies:
     pre:
-        - sudo apt-get install doxygen graphviz
+        - sudo apt-get install doxygen graphviz libgvc6
 
 test:
     override:
