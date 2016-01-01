@@ -170,7 +170,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
             * changing, mark the literal with changes for update within the beliefbase
 
     5. if a plan is finished check plan towards the _waiting state plan list_ and move waiting plans to the _earmarked executing plans list_
-        * if the plan fails create a ``-!goal``` event 
+        * if the plan fails create a ```-!goal``` event 
 
 4. increment cycle value
 
