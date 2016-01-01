@@ -79,8 +79,9 @@ PARALLEL                   : 'parallel';
 ATOMIC                     : 'atomic';
 EXCLUSIVE                  : 'exclusive';
 FUZZY                      : 'fuzzy';
-PRIORITY                   : 'priority';
+SCORE                      : 'score';
 EXPIRES                    : 'expires';
+INFINITY                   : 'infinity';
 
 
 /**

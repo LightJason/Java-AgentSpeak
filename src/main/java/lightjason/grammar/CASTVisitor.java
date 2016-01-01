@@ -312,8 +312,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.FUZZY() != null )
             return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
 
-        if ( p_context.PRIORITY() != null )
-            return new CNumberAnnotation<>( IAnnotation.EType.PRIORITY, ( (Number) this.visitNumber( p_context.number() ) ).longValue() );
+        if ( p_context.SCORE() != null )
+            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).doubleValue() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
     }
@@ -324,8 +324,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.FUZZY() != null )
             return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
 
-        if ( p_context.PRIORITY() != null )
-            return new CNumberAnnotation<>( IAnnotation.EType.PRIORITY, ( (Number) this.visitNumber( p_context.number() ) ).longValue() );
+        if ( p_context.SCORE() != null )
+            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).longValue() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
     }
@@ -935,6 +935,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 return ( p_context.MINUS() == null ? 1 : -1 ) * 1674927471214e-27;
             case "proton":
                 return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
+            case "infinity":
+                return p_context.MINUS() == null ? Double.NEGATIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
             default:
                 return Double.valueOf( p_context.getText() );
@@ -964,6 +966,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 return ( p_context.MINUS() == null ? 1 : -1 ) * 1674927471214e-27;
             case "proton":
                 return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
+            case "infinity":
+                return p_context.MINUS() == null ? Double.NEGATIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
             default:
                 return Double.valueOf( p_context.getText() );

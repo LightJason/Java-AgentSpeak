@@ -19,7 +19,7 @@ structure to describe an optimizing process.
 
 ## Base Definitions
 
-### Beliefs
+### <a name="belief"></a> Beliefs
 
 * Beliefs implicitly describe the current state of the agent
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
@@ -29,7 +29,7 @@ structure to describe an optimizing process.
 * Belief retraction triggers a plan with the definition ```-belief```
 
 
-### Actions
+### <a name="action"></a> Actions
 
 * Actions will be run immediately
 * Actions can fail (false) or succede (true)
@@ -37,7 +37,7 @@ structure to describe an optimizing process.
 * Actions can be also a logical or assignment expression (these are always true)
 
 
-### Plans
+### <a name="plan"></a> Plans
 
 * Plans are _sequences of actions, rules and/or achievement / test goals_
 * Plans has got an optional context, that defines a constraint for execution (default is true and matches always)
@@ -50,7 +50,7 @@ structure to describe an optimizing process.
 * If the plan calls an _achievement goal deletion_, the goal is removed from the global goal list iif exists and returns true otherwise it returns false and the plan can fail
 * All items results will be concatenated with a logical _and_ to calculate the plan result value
     
-#### Internals Constants
+#### <a name="planinternal"></a> Internals Constants
  
 * The plan has got additional variables / constants, that are added in the context condition (values are calculated before plan execution is started)
     * _Score_ returns the current score-value of the plan
@@ -58,7 +58,7 @@ structure to describe an optimizing process.
     * _Successrun_ stores the number of successful runs
     * _Runs_ number of runs of the plan (fail + successful runs)
     
-#### Fuzziness
+#### <a name="fuzzy"></a> Fuzziness
 
 * Fuzzy value must be in [0,1]
 * Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
@@ -67,7 +67,7 @@ structure to describe an optimizing process.
 * If a test or achievement goal is called it triggers all plans which are matched by the calculated fuzzy value
 
 
-### Rules
+### <a name="rule"></a> Rules
 
 * Rules are similar to plans without the context condition
 * Rules cannot be triggered by a goal, so they must be called from a plan
@@ -78,34 +78,44 @@ structure to describe an optimizing process.
 * Rules returns a boolean value which defines fail (false) and success (true)
 * All items results will be concatinate with a logical _and_ to calculate the plan result value
 
+### <a name="annotation"></a> Rule / Plan Annotation
+
+* Annotations can modify a plan / rule behaviour to change runtime semantic
+* The following annotation can be used
+    *  ```@Fuzzy``` sets the fuzzy value ()
+    * ```@Score``` adds an individual score value
+    * ```@Expires``` define a condition which trigger the plan remove
+    * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the actions can fail)
+    * ```@Exclusive``` no other plann / rule will run simulaneously
+    * ```@Parallel``` all actions will be run in parallel
+
  
-### Goals
+### <a name="goal"></a> Goals
 
 * Semantically a goal marks a certain state of the world an agent _wishes to bring about_ [AgentSpeak, p.40]
-* New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition/deletion_ which leads to the execution of a corresponding _plan_
-* On agent start, there can exists one _initial goal_
-* Each agent can track _more than one goal_ otherwise the agent suspends
+* New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition/deletion_ which leads to the execution of a corresponding [plan](#plan)
+* On agent start, there can exists one _initial goal_ only (like the ```main``` function in Java, C/C++)
+* Each agent can track _more than one goal_ otherwise the agent is idles (the suspending state is not used)
 * Goals are triggered by external events which will match by the goal name
-* Goals will be resolved into plans with equal name (and allowed context)
+* Goals will be resolved into [plans](#plan) with equal name (and allowed context), the [plan](#plan) is the intantiiation of the goal
 * Goals are run in parallel independed from other goals
-* A goal is a sequence of plans which must all finished successfully
-* A goal is part of exactly one intention
-* A goal will be applied to a plan (a plan with equal name will be instantiiation)
-* if a goal can match a desire (the goal is near to the desire) it can add an event to match the desire belief
+* A goal is a sequence of [plans](#plan) which must all finished successfully
+* A goal is part of exactly one [intention](#intention)
+* if a goal can match a [desire](#desire) (the goal is near to the desire) it can add an event to match the desire [belief](#belief)
 
-#### Test Goals
+#### <a name="testgoal"></a> Test Goals
 
 * A test goal is a literal with the definition ```?literal``` 
 * The test return true iif a plan with an equal literal is within the current execution (current running or supsending)
 
 
-### Intentions
+### <a name="intention"></a> Intentions
 
-* An intention is the _convex hull_ of its goals
+* An intention is the _convex hull_ of its [goals](#goal)
 * The intention is set of of goals, which must exist simultaneously 
 * Intentions cannot be in conflict with other intentions, so there dies not exists any overlaping
 
-### Desires
+### <a name="desire"></a> Desires
 
 * A Desire is a vertex of the edge of all intentions
 * Desires are defined by a set of beliefs
@@ -127,7 +137,7 @@ structure to describe an optimizing process.
 
 ## Running Semantics
 
-### Agent-Cycle
+### <a name="cycle"></a> Agent-Cycle
 
 Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
@@ -160,7 +170,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 4. increment cycle value
 
-### Static-Beliefs
+### <a name="buildinbelief"></a> Build-in Beliefs
 
 * ```my/cycle``` current agent cylce, generates no event
 * ```my/awake``` exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
@@ -168,11 +178,11 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
-### Variables / Actions
+### <a name="variablesactionprefix"></a> Variables / Actions
 
 * variables are written with an upper-case letter at begin
-* thread-safe variables start with @ (at-sign) followed by an upper-case letter
-* actions with @-prefix wil be executed in parallel
+* thread-safe variables start with ```@``` (at-sign) followed by an upper-case letter
+* actions with ```@```-prefix wil be executed in parallel (each inner action will be run in parallel)
 
 
 ## Todos

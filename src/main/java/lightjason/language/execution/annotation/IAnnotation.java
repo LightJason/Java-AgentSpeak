@@ -49,7 +49,7 @@ public interface IAnnotation<T>
     public enum EType
     {
         FUZZY( "@Fuzzy" ),
-        PRIORITY( "@Priority" ),
+        SCORE( "@Score" ),
         EXPIRES( "@Expires" ),
         ATOMIC( "@Atomic" ),
         EXCLUSIVE( "@Exclusive" ),

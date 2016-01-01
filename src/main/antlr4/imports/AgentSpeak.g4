@@ -115,7 +115,7 @@ annotation_literal :
  * annotations with numerical parameter
  **/
 annotation_numeric_literal :
-    ( FUZZY | PRIORITY )
+    ( FUZZY | SCORE )
     LROUNDBRACKET
     number
     RROUNDBRACKET
@@ -452,6 +452,7 @@ constant :
     | PROTON
     | NEUTRON
     | LIGHTSPEED
+    | INFINITY
     ;
 
 /**
