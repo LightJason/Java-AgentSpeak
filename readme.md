@@ -1,5 +1,7 @@
 # Light-Jason - Lightwire version of AgentSpeak(L)
 
+[![Circle CI](https://circleci.com/gh/flashpixx/Light-Jason.svg?style=shield)](https://circleci.com/gh/flashpixx/Light-Jason)
+
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini
 a Java 8 implementation has been created. The version defines an additional AgentSpeak grammar with
 [AntLR](http://www.antlr.org/) and a fuzzy-based logical calculus and unification based on a mathematical

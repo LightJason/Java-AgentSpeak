@@ -5,6 +5,10 @@ machine:
     java:
         version: oraclejdk8
 
+dependencies:
+    pre:
+        - sudo apt-get install doxygen graphviz
+
 test:
     override:
         - mvn
