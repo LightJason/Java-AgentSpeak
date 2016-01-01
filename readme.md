@@ -32,27 +32,26 @@ structure to describe an optimizing process.
 ### <a name="action"></a> Actions
 
 * Actions will be run immediately
-* Actions can fail (false) or succede (true)
+* Actions can fail (false) or succeed (true)
 * There is no difference between internal and external actions
 * Actions can be also a logical or assignment expression (these are always true)
+* actions with ```@```-prefix wil be executed in parallel (each inner action will be run in parallel)
 
 
 ### <a name="plan"></a> Plans
 
-* Plans are _sequences of actions, rules and/or achievement / test goals_
+* Plans are _sequences of [actions](#action), [rules](#rule) and/or achievement / test [goals](#goal)_
 * Plans has got an optional context, that defines a constraint for execution (default is true and matches always)
 * Plans fail iif an item of the plan fails
 * Plans returns a boolean value which defines fail (false) and success (true)
-* _Atomic Plans_ cannot fail, only the items within can fail
-* Plans run items in sequential order
-* _Parallel Plans_ run items in parallel
-* If the plan calls an _achievement goal addition_, the goal is added to the global goal list and the current plan is paused until the goal is reached
-* If the plan calls an _achievement goal deletion_, the goal is removed from the global goal list iif exists and returns true otherwise it returns false and the plan can fail
+* Plans run items in sequential order on default
+* If the plan calls an _achievement [goal](#goal) addition_, the [goal](#goal) is added to the global [goal](#goal) list and the current plan is paused until the goal is reached
+* If the plan calls an _achievement [goal](#goal) deletion_, the [goal](#goal) is removed from the global [goal](#goal) list iif exists and returns true otherwise it returns false and the plan can fail
 * All items results will be concatenated with a logical _and_ to calculate the plan result value
     
 #### <a name="planinternal"></a> Internals Constants
  
-* The plan has got additional variables / constants, that are added in the context condition (values are calculated before plan execution is started)
+* The plan has got additional [constant variables](#variable), that are added in the context condition (values are calculated before plan execution is started)
     * _Score_ returns the current score-value of the plan
     * _Failrun_ stores the number of fail runs
     * _Successrun_ stores the number of successful runs
@@ -62,32 +61,31 @@ structure to describe an optimizing process.
 
 * Fuzzy value must be in [0,1]
 * Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
-* Each action in a fuzzy-plan returns also a fuzzy value to define the fuzziness
-* The plan result returns true / false and the aggregated fuzzy value
-* If a test or achievement goal is called it triggers all plans which are matched by the calculated fuzzy value
+* Each [action](#action) in a fuzzy-plan returns also a fuzzy value to define the fuzziness
+* The [plan](#plan) or [rule](#rule) result returns true / false and the aggregated fuzzy value
+* If a test or achievement [goal](#goal) is called it triggers all [plans](#plan) which are matched by the calculated fuzzy value
 
 
 ### <a name="rule"></a> Rules
 
-* Rules are similar to plans without the context condition
+* Rules are similar to [plans](#plan) without the context condition
 * Rules cannot be triggered by a goal, so they must be called from a plan
 * Rules run immediatly
-* Rules run sequentially
-* _Parallel Rules_ run items in parallel
-* _Atomic Rules_ cannot be fail, only the items within can fail
+* Rules run sequentially on default
 * Rules returns a boolean value which defines fail (false) and success (true)
 * All items results will be concatinate with a logical _and_ to calculate the plan result value
+* [Variables](#variable) will be unified
 
 ### <a name="annotation"></a> Rule / Plan Annotation
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
 * The following annotation can be used
-    *  ```@Fuzzy``` sets the fuzzy value ()
+    * ```@Fuzzy``` sets the fuzzy value ()
     * ```@Score``` adds an individual score value
     * ```@Expires``` define a condition which trigger the plan remove
     * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the actions can fail)
     * ```@Exclusive``` no other plann / rule will run simulaneously
-    * ```@Parallel``` all actions will be run in parallel
+    * ```@Parallel``` all items will be run in parallel
 
  
 ### <a name="goal"></a> Goals
@@ -122,6 +120,11 @@ structure to describe an optimizing process.
 * Desires can be in conflict with other desires, represented that the desires have got a large distance (much as possible) 
 * The desire is successfully reached, iif all beliefs are existing anytime
 
+### <a name="variable"></a> Variables
+
+* variables are written with an upper-case letter at begin
+* thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
+
 
 ![Structure](bdi.png)
 
@@ -131,7 +134,7 @@ structure to describe an optimizing process.
 ### Agent
 
 * agent (ASL) can be defined as a logic program with beliefs, rules and plans
-* plans can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
+* [plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
 
 
@@ -178,17 +181,9 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
-### <a name="variablesactionprefix"></a> Variables / Actions
-
-* variables are written with an upper-case letter at begin
-* thread-safe variables start with ```@``` (at-sign) followed by an upper-case letter
-* actions with ```@```-prefix wil be executed in parallel (each inner action will be run in parallel)
-
 
 ## Todos
 
-* Plans:
-    * annotation of comparison (see p. 97f)
 * Beliefs:
     * (?) define annotations describing the origin/state/reason/... of a belief, including fixed ones like: _source_
     * (?) also non-fixed for _Mental Notes_
