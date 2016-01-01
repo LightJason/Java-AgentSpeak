@@ -7,7 +7,7 @@ machine:
 
 dependencies:
     pre:
-        - sudo apt-get install -q -y doxygen graphviz
+        - sudo apt-get install -y -q -f doxygen graphviz
 
 test:
     override:
