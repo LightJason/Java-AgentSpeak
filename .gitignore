@@ -1,6 +1,7 @@
 *.*
 
 !.gitignore
+!circle.yml
 !pom.xml
 !*.java
 !*.g4

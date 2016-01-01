@@ -1,0 +1,10 @@
+machine:
+    timezone:
+        Europe/Berlin
+
+    java:
+        version: oraclejdk8
+
+test:
+    override:
+        - mvn
