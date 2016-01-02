@@ -49,7 +49,6 @@ import java.util.stream.Collectors;
 /**
  * plan structure
  *
- * @todo annotations are missing
  * @todo hashcode / equals are missing
  */
 public class CPlan implements IPlan
@@ -149,11 +148,17 @@ public class CPlan implements IPlan
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
-        return p_aggregate.evaluate( Collections.unmodifiableCollection( m_action.parallelStream().mapToDouble( i -> i.score( p_aggregate, p_agent ) ).boxed()
-                                                                                 .collect(
-                                                                                         Collectors.toList() ) ) );
+        final Collection<Double> l_values = m_action.parallelStream().mapToDouble( i -> i.score( p_aggregate, p_agent ) ).boxed().collect(
+                Collectors.toList() );
+
+        final CNumberAnnotation<Number> l_planscore = (CNumberAnnotation) m_annotation.get( IAnnotation.EType.SCORE );
+        if ( l_planscore != null )
+            l_values.add( l_planscore.getData().doubleValue() );
+
+        return p_aggregate.evaluate( Collections.unmodifiableCollection( l_values ) );
     }
 
     /**
