@@ -44,15 +44,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * agent class
+ * @bug remove test plan execution
  */
 public class CAgent implements IAgent
 {
     /**
-     * thread-safe map with all existing plans
+     * map with all existing plans
      */
     protected final SetMultimap<ITrigger<?>, IPlan> m_plans;
     /**
-     * running plans
+     * running plans (thread-safe)
      */
     protected final SetMultimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
     /**
@@ -91,8 +92,6 @@ public class CAgent implements IAgent
      * ctor
      *
      * @param p_configuration agent configuration
-     * @bug remove test plan execution
-     * @bug score function not working
      */
     public CAgent( final IAgentConfiguration p_configuration )
     {

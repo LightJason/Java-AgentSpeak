@@ -126,7 +126,7 @@ public final class CInconsistency implements Callable<CInconsistency>
     }
 
     /**
-     * @bug run it parallel stream
+     * @bug run it with parallel stream
      */
     @Override
     public final CInconsistency call() throws Exception
