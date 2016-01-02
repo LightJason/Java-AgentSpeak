@@ -16,4 +16,6 @@
 
 !src/main/styleguide/**/*.xml
 
+src/main/antlr4/lightjason/grammar/AgentSpeak.g4
+src/main/antlr4/lightjason/grammar/Terminal.g4
 target/**
