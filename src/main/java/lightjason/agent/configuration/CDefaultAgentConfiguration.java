@@ -30,6 +30,8 @@ import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.score.IAggregation;
+import lightjason.language.score.ISelector;
 
 import java.util.Collection;
 import java.util.Map;
@@ -52,18 +54,32 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * instance of initial beliefs
      */
     private final Collection<ILiteral> m_initialbeliefs;
+    /**
+     * instance of the aggregate function
+     */
+    private final IAggregation m_aggregation;
+    /**
+     * instance of the selector function
+     */
+    private final ISelector m_selector;
 
 
     /**
      * ctor
      *
+     * @param p_aggregation aggregation function
+     * @param p_selector selector function
      * @param p_plans plans
-     * @param p_initialgoal initial goal
      * @param p_initalbeliefs set with initial beliefs
+     * @param p_initialgoal initial goal
      */
-    public CDefaultAgentConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final ILiteral p_initialgoal, final Collection<ILiteral> p_initalbeliefs )
+    public CDefaultAgentConfiguration( final IAggregation p_aggregation, final ISelector p_selector, final SetMultimap<ITrigger<?>, IPlan> p_plans,
+            final Collection<ILiteral> p_initalbeliefs, final ILiteral p_initialgoal
+    )
     {
         m_plans = p_plans;
+        m_aggregation = p_aggregation;
+        m_selector = p_selector;
         m_initialgoal = p_initialgoal;
         m_initialbeliefs = p_initalbeliefs;
     }
@@ -80,6 +96,18 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public ILiteral getInitialGoal()
     {
         return m_initialgoal;
+    }
+
+    @Override
+    public IAggregation getAggregate()
+    {
+        return m_aggregation;
+    }
+
+    @Override
+    public ISelector getSelector()
+    {
+        return m_selector;
     }
 
     @Override

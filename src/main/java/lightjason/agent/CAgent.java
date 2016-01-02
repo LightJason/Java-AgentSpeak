@@ -24,9 +24,7 @@
 package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multiset;
 import com.google.common.collect.SetMultimap;
-import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
@@ -37,7 +35,6 @@ import lightjason.language.score.IAggregation;
 import lightjason.language.score.ISelector;
 
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,9 +74,13 @@ public class CAgent implements IAgent
      */
     protected int m_cycle = 0;
     /**
-     * score sum of the actions
+     * aggregation function
      */
-    protected final ISelector m_score;
+    protected final IAggregation m_aggregation;
+    /**
+     * plan selector
+     */
+    protected final ISelector m_selector;
     /**
      * suspending state
      */
@@ -98,9 +99,11 @@ public class CAgent implements IAgent
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();
         m_plans = p_configuration.getPlans();
-        m_goals.add( p_configuration.getInitialGoal() );
+        m_aggregation = p_configuration.getAggregate();
+        m_selector = p_configuration.getSelector();
 
-        m_score = null;
+        if ( p_configuration.getInitialGoal() != null )
+            m_goals.add( p_configuration.getInitialGoal() );
     }
 
     @Override
@@ -183,21 +186,7 @@ public class CAgent implements IAgent
 
             System.out.println( "=====>> " + i + " ===\n" );
 
-            System.out.println( "Score " + i.score( new IAggregation()
-            {
-                @Override
-                public double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
-                {
-                    return 0;
-                }
-
-                @Override
-                public double evaluate( final Collection<Double> p_values )
-                {
-                    return p_values.parallelStream().mapToDouble( i -> i ).sum();
-                }
-            }, this ) + "\n" );
-
+            System.out.println( "Score " + i.score( m_aggregation, this ) + "\n" );
 
             /*
             i.getBodyActions().stream().forEachOrdered( n -> {

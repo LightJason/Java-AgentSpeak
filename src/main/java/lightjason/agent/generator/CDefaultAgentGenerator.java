@@ -33,6 +33,8 @@ import lightjason.grammar.AgentParser;
 import lightjason.grammar.CASTErrorListener;
 import lightjason.grammar.CASTVisitor;
 import lightjason.grammar.IAgentVisitor;
+import lightjason.language.score.IAggregation;
+import lightjason.language.score.ISelector;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -59,15 +61,19 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with actions
+     * @param p_aggregation aggregation function
+     * @param p_selector selector function
      * @throws IOException thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation, final ISelector p_selector )
+    throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
         final IAgentVisitor l_visitor = this.parse( p_stream, new CASTVisitor( p_actions ) );
 
         // build configuration (configuration runs cloning of objects if needed)
-        m_configuration = new CDefaultAgentConfiguration( l_visitor.getPlans(), l_visitor.getInitialGoal(), l_visitor.getInitialBeliefs() );
+        m_configuration = new CDefaultAgentConfiguration(
+                p_aggregation, p_selector, l_visitor.getPlans(), l_visitor.getInitialBeliefs(), l_visitor.getInitialGoal() );
     }
 
     @Override

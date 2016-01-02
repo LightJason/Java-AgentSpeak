@@ -23,6 +23,8 @@
 
 package lightjason;
 
+import com.google.common.collect.Multiset;
+import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
 import lightjason.agent.generator.CDefaultAgentGenerator;
@@ -32,11 +34,13 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @SuppressWarnings( "serial" )
@@ -50,13 +54,50 @@ public final class CMain
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        new CDefaultAgentGenerator( new FileInputStream( p_args[0] ), new HashSet<IAction>()
+        final Map<IAction, Double> l_actions = new HashMap<IAction, Double>()
         {{
-            add( new CPrint() );
-            add( new CSetProperty() );
-            add( new CMin() );
-        }} ).generate().call();
+            put( new CPrint(), 1.0 );
+            put( new CSetProperty(), 2.0 );
+            put( new CMin(), 3.0 );
+        }};
+
+        new CDefaultAgentGenerator( new FileInputStream( p_args[0] ), l_actions.keySet(), new CAggregation( l_actions ), null ).generate().call();
     }
+
+
+    /**
+     * aggregation function
+     */
+    private final static class CAggregation implements IAggregation
+    {
+        /**
+         * action & score value
+         */
+        private final Map<IAction, Double> m_actions;
+
+        /**
+         * ctor
+         *
+         * @param p_actions action score map
+         */
+        public CAggregation( final Map<IAction, Double> p_actions )
+        {
+            m_actions = p_actions;
+        }
+
+        @Override
+        public double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+        {
+            return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( i -> m_actions.get( i ) ).sum();
+        }
+
+        @Override
+        public double evaluate( final Collection<Double> p_values )
+        {
+            return p_values.parallelStream().mapToDouble( i -> i ).sum();
+        }
+    }
+
 
     /**
      * test print action
