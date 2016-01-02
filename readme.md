@@ -25,7 +25,6 @@ structure to describe an optimizing process.
 
 * Beliefs implicitly describe the current state of the agent
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
-* Messages and Percepts turn into beliefs
 * Beliefs must be exists iif a expression is computed (beliefs can be exist on the fly)
 * Belief addition triggers a plan with the definition ```+belief``` 
 * Belief retraction triggers a plan with the definition ```-belief```
@@ -82,11 +81,11 @@ structure to describe an optimizing process.
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
 * The following annotation can be used
-    * ```@Fuzzy``` sets the fuzzy value ()
+    * ```@Fuzzy``` sets the [fuzzy value](#fuzzy)
     * ```@Score``` adds an individual score value
-    * ```@Expires``` define a condition which trigger the plan remove
-    * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the actions can fail)
-    * ```@Exclusive``` no other plann / rule will run simulaneously
+    * ```@Expires``` defines a belief which stops the [plan](#plan) execution immediatly
+    * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the [actions](#action) can fail)
+    * ```@Exclusive``` no other [plan](#plan) / [rule](#rule) will run simulaneously
     * ```@Parallel``` all items will be run in parallel
 
  
