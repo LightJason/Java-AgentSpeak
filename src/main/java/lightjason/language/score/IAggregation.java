@@ -21,25 +21,38 @@
  * @endcond
  */
 
-package lightjason.agent.score;
+package lightjason.language.score;
 
+import com.google.common.collect.Multiset;
 import lightjason.agent.IAgent;
-import lightjason.language.plan.IPlan;
+import lightjason.agent.action.IAction;
+
+import java.util.Collection;
 
 
 /**
- * score definition
+ * aggregation interface of score values
  */
-public interface IAgentPlanScore
+public interface IAggregation
 {
 
     /**
-     * returns the score of an action
+     * calculates the aggregated score value
+     * of an agent and a set of actions
      *
      * @param p_agent agent
-     * @param p_plan plan
-     * @return cost value
+     * @param p_score set with actions
+     * @return aggregated score of a body item
      */
-    double evaluate( final IAgent p_agent, final IPlan p_plan );
+    double evaluate( final IAgent p_agent, final Multiset<IAction> p_score );
+
+    /**
+     * calculates the full aggregated score value depends
+     * of a list of single score values
+     *
+     * @param p_values list with single score values
+     * @return full aggregated score value of a plan
+     */
+    double evaluate( final Collection<Double> p_values );
 
 }

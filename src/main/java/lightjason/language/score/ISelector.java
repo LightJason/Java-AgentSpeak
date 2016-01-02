@@ -21,26 +21,28 @@
  * @endcond
  */
 
-package lightjason.agent.score;
+package lightjason.language.score;
 
 import lightjason.agent.IAgent;
+import lightjason.language.plan.IPlan;
 
 import java.util.Map;
 
 
 /**
- * function for aggregation score values
+ * plan selector of the scoring values
  */
-public interface IScoreAggregation
+public interface ISelector
 {
 
     /**
-     * calculates
+     * returns a map of plans
+     * which
      *
-     * @param p_agent agent which calculates the score
-     * @param p_score map with single scores
-     * @return summarized score
+     * @param p_agent agent
+     * @param p_plan plan and score value
+     * @return map with running plans and scoring value
      */
-    double evaluate( final IAgent p_agent, final Map<String, Double> p_score );
+    Map<IPlan, Double> select( final IAgent p_agent, final Map<IPlan, Double> p_plan );
 
 }

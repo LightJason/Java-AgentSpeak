@@ -24,16 +24,20 @@
 package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.IAgentConfiguration;
-import lightjason.agent.score.IAgentPlanScore;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.CContext;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.score.IAggregation;
+import lightjason.language.score.ISelector;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +82,7 @@ public class CAgent implements IAgent
     /**
      * score sum of the actions
      */
-    protected final IAgentPlanScore m_score;
+    protected final ISelector m_score;
     /**
      * suspending state
      */
@@ -181,6 +185,23 @@ public class CAgent implements IAgent
         m_plans.values().stream().forEach( i -> {
 
             System.out.println( "=====>> " + i + " ===\n" );
+
+            System.out.println( "Score " + i.score( new IAggregation()
+            {
+                @Override
+                public double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+                {
+                    return 0;
+                }
+
+                @Override
+                public double evaluate( final Collection<Double> p_values )
+                {
+                    return p_values.parallelStream().mapToDouble( i -> i ).sum();
+                }
+            }, this ) + "\n" );
+
+
             /*
             i.getBodyActions().stream().forEachOrdered( n -> {
                 System.out.print( n + "\t" + n.getClass() );

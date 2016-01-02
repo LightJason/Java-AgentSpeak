@@ -23,6 +23,10 @@
 
 package lightjason.language.execution.action;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableMultiset;
+import com.google.common.collect.Multiset;
+import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -34,6 +38,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
@@ -68,7 +73,10 @@ public final class CProxyAction implements IExecution
      * run action in parallel
      */
     private final boolean m_parallel;
-
+    /**
+     * cache list of all used actions for calculating score value
+     */
+    private final Multiset<IAction> m_scoringcache;
 
     /**
      * ctor
@@ -80,10 +88,15 @@ public final class CProxyAction implements IExecution
     {
         m_parallel = p_literal.hasAt();
 
-        // define execution structure
-        m_execution = this.createCaller( p_literal, p_actions );
-        m_annotationexecution = p_literal.getAnnotation().entries().stream().map( i -> this.createCaller( i.getValue(), p_actions ) ).collect(
+        // define execution structure and create cache for scoring action
+        final Multiset<IAction> l_scoringcache = HashMultiset.create();
+
+        m_execution = this.createCaller( p_literal, p_actions, l_scoringcache );
+        m_annotationexecution = p_literal.getAnnotation().entries().stream().map( i -> this.createCaller( i.getValue(), p_actions, l_scoringcache ) ).collect(
                 Collectors.toList() );
+
+        // scoring set is created so build-up to an unmodifieable set
+        m_scoringcache = ImmutableMultiset.copyOf( l_scoringcache );
     }
 
     @Override
@@ -102,6 +115,12 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
+    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return p_aggregate.evaluate( p_agent, m_scoringcache );
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format( "{0}{1}", m_execution, m_annotationexecution );
@@ -112,9 +131,10 @@ public final class CProxyAction implements IExecution
      *
      * @param p_literal literal
      * @param p_actions map with action definition
+     * @param p_scoringcache cache for action references to calculate scoring value
      */
     @SuppressWarnings( "unchecked" )
-    private final IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions )
+    private final IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions, final Multiset<IAction> p_scoringcache )
     {
         // resolve action
         final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
@@ -127,11 +147,13 @@ public final class CProxyAction implements IExecution
                     CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
 
 
-        // build argument list and create action (argument list defines only executable statements to generate allocation for arguments and return lists)
+        // build argument list, create action (argument list defines only executable statements to
+        // generate allocation for arguments and return lists) and cache action reference for scoring calculation
+        p_scoringcache.add( l_action );
         return new CExecution( p_literal.hasAt(), l_action, p_literal.getValues().entries().stream().map( i -> {
 
             if ( i.getValue() instanceof ILiteral )
-                return this.createCaller( (ILiteral) i.getValue(), p_actions );
+                return this.createCaller( (ILiteral) i.getValue(), p_actions, p_scoringcache );
 
             return new CStatic( i.getValue() );
 

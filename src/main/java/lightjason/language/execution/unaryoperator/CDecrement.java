@@ -23,12 +23,15 @@
 
 package lightjason.language.execution.unaryoperator;
 
+import com.google.common.collect.ImmutableMultiset;
+import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
 
@@ -79,5 +82,11 @@ public final class CDecrement<T extends Number> implements IOperator<T>
             m_variable.set( (T) new Integer( m_variable.get().intValue() - 1 ) );
 
         return CBoolean.from( true );
+    }
+
+    @Override
+    public double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
     }
 }

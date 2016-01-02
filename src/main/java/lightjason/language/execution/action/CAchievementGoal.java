@@ -23,11 +23,14 @@
 
 package lightjason.language.execution.action;
 
+import com.google.common.collect.ImmutableMultiset;
+import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -68,4 +71,11 @@ public final class CAchievementGoal extends IBaseExecution<ILiteral>
     {
         return CBoolean.from( false );
     }
+
+    @Override
+    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+    }
+
 }

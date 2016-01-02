@@ -122,7 +122,6 @@ public final class CMain
             //System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation );
             return CBoolean.from( true );
         }
-
     }
 
     /**

@@ -23,8 +23,10 @@
 
 package lightjason.language.execution;
 
+import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
 
@@ -47,5 +49,14 @@ public interface IExecution
     public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     );
+
+    /**
+     * returns the scoring value of the execution structure
+     *
+     * @param p_aggregate aggregation function
+     * @param p_agent agent for which calculates the score value
+     * @return score value
+     */
+    public double score( final IAggregation p_aggregate, final IAgent p_agent );
 
 }

@@ -23,7 +23,10 @@
 
 package lightjason.language.execution.action;
 
+import com.google.common.collect.ImmutableMultiset;
+import lightjason.agent.IAgent;
 import lightjason.language.execution.IExecution;
+import lightjason.language.score.IAggregation;
 
 
 /**
@@ -75,4 +78,9 @@ public abstract class IBaseExecution<T> implements IExecution
         return m_value;
     }
 
+    @Override
+    public double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+    }
 }

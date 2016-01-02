@@ -23,6 +23,7 @@
 
 package lightjason.language.plan;
 
+import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
@@ -32,6 +33,7 @@ import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
@@ -41,13 +43,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
  * plan structure
  *
  * @todo annotations are missing
- * @todo scoring is missing
  * @todo hashcode / equals are missing
  */
 public class CPlan implements IPlan
@@ -94,7 +96,7 @@ public class CPlan implements IPlan
         m_literal = p_literal;
         m_triggerevent = p_event;
         m_action = Collections.unmodifiableList( p_body );
-        m_annotation = addDefault( p_annotation );
+        m_annotation = this.addDefault( p_annotation );
     }
 
     @Override
@@ -146,13 +148,21 @@ public class CPlan implements IPlan
         );
     }
 
+    @Override
+    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return p_aggregate.evaluate( Collections.unmodifiableCollection( m_action.parallelStream().mapToDouble( i -> i.score( p_aggregate, p_agent ) ).boxed()
+                                                                                 .collect(
+                                                                                         Collectors.toList() ) ) );
+    }
+
     /**
      * add default values to the annotation map
      *
      * @param p_annotation set with annotation
      * @return unmodifiable map
      */
-    protected static Map<IAnnotation.EType, IAnnotation<?>> addDefault( final Set<IAnnotation<?>> p_annotation )
+    protected Map<IAnnotation.EType, IAnnotation<?>> addDefault( final Set<IAnnotation<?>> p_annotation )
     {
         final Map<IAnnotation.EType, IAnnotation<?>> l_map = p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll );
 
