@@ -52,9 +52,6 @@ public class CAgent implements IAgent
 {
     /**
      * thread-safe map with all existing plans
-     *
-     * @note plan list must be a linked-hashset
-     * to store the execution order of the plans
      */
     protected final SetMultimap<ITrigger<?>, IPlan> m_plans;
     /**

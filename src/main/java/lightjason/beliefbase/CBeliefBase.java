@@ -35,6 +35,7 @@ import java.util.Iterator;
  * default beliefbase
  *
  * @tparam T literal type
+ * @todo event storing must be implement
  */
 public class CBeliefBase implements IBeliefBase
 {

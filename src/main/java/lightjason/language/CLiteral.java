@@ -38,6 +38,8 @@ import java.util.Collections;
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. velocity(50)[source(self)]
+ *
+ * @todo add getter with recursive walk for inner elements
  */
 public final class CLiteral implements ILiteral
 {
