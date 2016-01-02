@@ -28,7 +28,8 @@ structure to describe an optimizing process.
 * Beliefs must be exists iif a expression is computed (beliefs can be exist on the fly)
 * Belief addition triggers a plan with the definition ```+belief``` 
 * Belief retraction triggers a plan with the definition ```-belief```
-
+* If a literal of a belief is named equal to an [action](#action) the action will not be executed (store the value of the action within a variable, which is used within the belief literal)
+* [Variables](#variable) within a belief literal will be unified before the belief is added to the beliefbase
 
 ### <a name="action"></a> Actions
 

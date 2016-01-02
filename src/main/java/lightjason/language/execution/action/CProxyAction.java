@@ -33,7 +33,6 @@ import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -183,15 +182,7 @@ public final class CProxyAction implements IExecution
          */
         protected final List<ITerm> replaceFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
         {
-            return p_terms.stream().map( i -> {
-
-                final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
-                if ( l_variable != null )
-                    return l_variable;
-
-                return i;
-
-            } ).collect( Collectors.toList() );
+            return CCommon.replaceVariableFromContext( p_context, p_terms );
         }
 
     }

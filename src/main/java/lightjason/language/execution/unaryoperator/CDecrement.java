@@ -69,17 +69,19 @@ public final class CDecrement<T extends Number> implements IOperator<T>
             final Collection<ITerm> p_return
     )
     {
-        if ( !m_variable.isAllocated() )
-            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", m_variable ) );
+        final IVariable<T> l_variable = (IVariable<T>) CCommon.replaceVariableFromContext( p_context, m_variable );
 
-        if ( m_variable.isValueAssignableTo( Double.class ) )
-            m_variable.set( (T) new Double( m_variable.get().doubleValue() - 1 ) );
-        if ( m_variable.isValueAssignableTo( Long.class ) )
-            m_variable.set( (T) new Long( m_variable.get().longValue() - 1 ) );
-        if ( m_variable.isValueAssignableTo( Float.class ) )
-            m_variable.set( (T) new Float( m_variable.get().floatValue() - 1 ) );
-        if ( m_variable.isValueAssignableTo( Integer.class ) )
-            m_variable.set( (T) new Integer( m_variable.get().intValue() - 1 ) );
+        if ( !l_variable.isAllocated() )
+            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", l_variable ) );
+
+        if ( l_variable.isValueAssignableTo( Double.class ) )
+            l_variable.set( (T) new Double( l_variable.get().doubleValue() - 1 ) );
+        if ( l_variable.isValueAssignableTo( Long.class ) )
+            l_variable.set( (T) new Long( l_variable.get().longValue() - 1 ) );
+        if ( l_variable.isValueAssignableTo( Float.class ) )
+            l_variable.set( (T) new Float( l_variable.get().floatValue() - 1 ) );
+        if ( l_variable.isValueAssignableTo( Integer.class ) )
+            l_variable.set( (T) new Integer( l_variable.get().intValue() - 1 ) );
 
         return CBoolean.from( true );
     }

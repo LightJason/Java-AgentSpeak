@@ -21,7 +21,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
 +!decelerate
     : current_speed(Speed) && Speed > 10 <-
         //Speed--;
-        +foo(5);
+        +foo(min(5));
         setProperty( Speed, "", "" );
         print(1,2,3,4);
         !!drive.

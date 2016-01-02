@@ -36,6 +36,8 @@ import java.util.Collection;
 
 /**
  * belief action
+ *
+ * @todo add unification for variables
  */
 public final class CBeliefAction extends IBaseExecution<ILiteral>
 {
