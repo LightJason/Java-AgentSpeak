@@ -23,9 +23,8 @@
 
 package lightjason.language.execution;
 
-import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
 
@@ -45,7 +44,7 @@ public interface IExecution
      * @param p_return return values
      * @return fuzzy boolean
      */
-    public CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     );
 

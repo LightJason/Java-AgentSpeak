@@ -68,6 +68,7 @@ import java.util.stream.Collectors;
 
 /**
  * default abstract-syntax-tree (AST) visitor for plan-bundles and agent scripts
+ *
  * @note methods are implemented twice agent and plan-bundle, because both use equal
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
  */

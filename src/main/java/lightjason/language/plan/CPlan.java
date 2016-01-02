@@ -30,6 +30,7 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.plan.trigger.ITrigger;
 import org.apache.commons.lang3.StringUtils;
 
@@ -131,7 +132,7 @@ public class CPlan implements IPlan
      * @todo annotation handling is missing
      */
     @Override
-    public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     )
     {

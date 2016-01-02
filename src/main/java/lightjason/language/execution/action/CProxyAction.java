@@ -33,6 +33,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
@@ -48,7 +49,10 @@ import java.util.stream.Collectors;
 /**
  * proxy action to encapsulate all actions
  *
+ * @note inner annotations cannot be used on the
+ * grammer definition, so the inner annotations are ignored
  * @bug check ordering of arguments on parallel streams
+ * @bug set return value depend on execution results
  */
 public final class CProxyAction implements IExecution
 {
@@ -83,7 +87,7 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     )
     {
@@ -252,13 +256,15 @@ public final class CProxyAction implements IExecution
         {
             // allocate return values (can be set only with types within the current execution context
             final List<ITerm> l_return = new LinkedList<>();
-            m_action.execute( p_context, null,
-                              Collections.unmodifiableList(
-                                      ( m_parallel
-                                              ? m_arguments.parallelStream()
-                                              : m_arguments.stream()
-                                      ).flatMap( i -> i.execute( p_context, p_annotation ).stream() ).collect( Collectors.toList() ) ),
-                              l_return
+            m_action.execute(
+                    p_context,
+                    p_annotation,
+                    Collections.unmodifiableList(
+                            ( m_parallel
+                                    ? m_arguments.parallelStream()
+                                    : m_arguments.stream()
+                            ).flatMap( i -> i.execute( p_context, p_annotation ).stream() ).collect( Collectors.toList() ) ),
+                    l_return
             );
             return l_return;
         }

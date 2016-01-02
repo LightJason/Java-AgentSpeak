@@ -28,6 +28,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -66,7 +67,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
      * @todo disable actions
      */
     @Override
-    public final CBoolean execute( final IContext<?> p_context, final Collection<ILiteral> p_annotation, final Collection<ITerm> p_parameter,
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
             final Collection<ITerm> p_return
     )
     {

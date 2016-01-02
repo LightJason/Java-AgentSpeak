@@ -93,7 +93,7 @@ public final class CBoolean implements IFuzzyValue<Boolean>
      *
      * @return predicate
      */
-    public static Predicate<CBoolean> isTrue()
+    public static Predicate<IFuzzyValue<Boolean>> isTrue()
     {
         return p -> p.getValue();
     }
