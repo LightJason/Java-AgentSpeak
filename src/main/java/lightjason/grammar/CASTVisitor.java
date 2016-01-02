@@ -979,7 +979,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             case "proton":
                 return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
             case "infinity":
-                return p_context.MINUS() == null ? Double.NEGATIVE_INFINITY : Double.NEGATIVE_INFINITY;
+                return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
             default:
                 return Double.valueOf( p_context.getText() );
@@ -1010,7 +1010,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             case "proton":
                 return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
             case "infinity":
-                return p_context.MINUS() == null ? Double.NEGATIVE_INFINITY : Double.NEGATIVE_INFINITY;
+                return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
             default:
                 return Double.valueOf( p_context.getText() );

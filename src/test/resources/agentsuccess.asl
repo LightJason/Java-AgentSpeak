@@ -38,5 +38,5 @@ anno(3)[self("blub"), value(true), xxx(success)].
 
 
 @fuzzy(0.7)
-@score(0.8)
+@score(infinity)
 +!drive <- !!accelerate.
