@@ -81,4 +81,10 @@ public final class CConstant<T> extends CVariable<T>
     {
         throw new CIllegalStateException( CCommon.getLanguageString( this, "set", m_functor ) );
     }
+
+    @Override
+    protected final Object clone() throws CloneNotSupportedException
+    {
+        return new CConstant<T>( m_functor.toString(), m_value );
+    }
 }
