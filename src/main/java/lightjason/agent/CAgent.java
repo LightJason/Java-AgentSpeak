@@ -73,7 +73,7 @@ public class CAgent implements IAgent
     /**
      * curent agent cycle
      */
-    protected int m_cycle = 0;
+    protected long m_cycle = 0;
     /**
      * aggregation function
      */
