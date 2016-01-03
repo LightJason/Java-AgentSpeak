@@ -8,7 +8,3 @@ machine:
 dependencies:
     pre:
         - sudo apt-get install doxygen
-
-test:
-    override:
-        - mvn
