@@ -25,6 +25,10 @@
         <JSON>
           <option name="SPACE_BEFORE_COLON" value="true" />
         </JSON>
+        <JavaCodeStyleSettings>
+          <option name = "ANNOTATION_PARAMETER_WRAP" value = "1" />
+          <option name = "ALIGN_MULTILINE_ANNOTATION_PARAMETERS" value = "true" />
+        </JavaCodeStyleSettings>
         <XML>
           <option name="XML_SPACE_AROUND_EQUALITY_IN_ATTRIBUTE" value="true" />
           <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
@@ -44,9 +48,9 @@
           <option name="CATCH_ON_NEW_LINE" value="true" />
           <option name="FINALLY_ON_NEW_LINE" value="true" />
           <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
-          <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
           <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
           <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
+          <option name = "ALIGN_MULTILINE_TERNARY_OPERATION" value = "true" />
           <option name="ALIGN_THROWS_KEYWORD" value="true" />
           <option name="SPACE_WITHIN_PARENTHESES" value="true" />
           <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
@@ -72,12 +76,15 @@
           <option name="THROWS_KEYWORD_WRAP" value="1" />
           <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
           <option name="BINARY_OPERATION_WRAP" value="1" />
+          <option name = "TERNARY_OPERATION_WRAP" value = "1" />
+          <option name = "TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value = "true" />
           <option name="FOR_STATEMENT_WRAP" value="1" />
           <option name="FOR_STATEMENT_RPAREN_ON_NEXT_LINE" value="true" />
           <option name="ARRAY_INITIALIZER_WRAP" value="1" />
           <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
           <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
           <option name="ASSERT_STATEMENT_WRAP" value="1" />
+          <option name = "ASSERT_STATEMENT_COLON_ON_NEXT_LINE" value = "true" />
           <option name="PARAMETER_ANNOTATION_WRAP" value="1" />
           <option name="VARIABLE_ANNOTATION_WRAP" value="1" />
           <option name="SPACE_WITHIN_ANNOTATION_PARENTHESES" value="true" />

@@ -61,7 +61,7 @@ public final class CMain
             put( new CMin(), 3.0 );
         }};
 
-        new CDefaultAgentGenerator( new FileInputStream( p_args[0] ), l_actions.keySet(), new CAggregation( l_actions ), null ).generate().call();
+        new CDefaultAgentGenerator( new FileInputStream( p_args[0] ), l_actions.keySet(), new CAggregation( l_actions ) ).generate().call();
     }
 
 
@@ -112,7 +112,7 @@ public final class CMain
 
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                final Collection<ITerm> p_return
+                                                   final Collection<ITerm> p_return
         )
         {
             System.out.println( StringUtils.join( p_parameter, ", " ) );
@@ -157,7 +157,7 @@ public final class CMain
 
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                final Collection<ITerm> p_return
+                                                   final Collection<ITerm> p_return
         )
         {
             //System.out.println( "---> setProperty : " + p_parameter + "      " + p_annotation );
@@ -189,7 +189,7 @@ public final class CMain
 
         @Override
         public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                final Collection<ITerm> p_return
+                                             final Collection<ITerm> p_return
         )
         {
             if ( p_parameter.size() < this.getMinimalArgumentNumber() )

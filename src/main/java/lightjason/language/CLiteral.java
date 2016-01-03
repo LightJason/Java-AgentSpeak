@@ -105,7 +105,7 @@ public final class CLiteral implements ILiteral
      * @param p_annotations initial set of annotations
      */
     public CLiteral( final boolean p_at, final String p_functor, final boolean p_negated, final Collection<ITerm> p_values,
-            final Collection<ILiteral> p_annotations
+                     final Collection<ILiteral> p_annotations
     )
     {
         this( p_at, CPath.from( p_functor ), p_negated, p_values, p_annotations );
@@ -122,7 +122,7 @@ public final class CLiteral implements ILiteral
      * @param p_annotations initial set of annotations
      */
     public CLiteral( final boolean p_at, final CPath p_functor, final boolean p_negated, final Collection<ITerm> p_values,
-            final Collection<ILiteral> p_annotations
+                     final Collection<ILiteral> p_annotations
     )
     {
         m_at = p_at;

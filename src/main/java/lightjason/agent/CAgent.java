@@ -32,7 +32,6 @@ import lightjason.language.execution.CContext;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
-import lightjason.language.score.ISelector;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -80,10 +79,6 @@ public class CAgent implements IAgent
      */
     protected final IAggregation m_aggregation;
     /**
-     * plan selector
-     */
-    protected final ISelector m_selector;
-    /**
      * suspending state
      */
     private volatile boolean m_suspend = false;
@@ -100,7 +95,6 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_plans = p_configuration.getPlans();
         m_aggregation = p_configuration.getAggregate();
-        m_selector = p_configuration.getSelector();
 
         if ( p_configuration.getInitialGoal() != null )
             m_goals.add( p_configuration.getInitialGoal() );

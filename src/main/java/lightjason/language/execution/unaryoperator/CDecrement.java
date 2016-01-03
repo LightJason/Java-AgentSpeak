@@ -65,8 +65,8 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context,
-            final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-            final Collection<ITerm> p_return
+                                               final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
+                                               final Collection<ITerm> p_return
     )
     {
         final IVariable<T> l_variable = (IVariable<T>) CCommon.replaceVariableFromContext( p_context, m_variable );

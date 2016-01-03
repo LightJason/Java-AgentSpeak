@@ -100,7 +100,7 @@ public final class CProxyAction implements IExecution
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-            final Collection<ITerm> p_return
+                                               final Collection<ITerm> p_return
     )
     {
         m_execution.execute(
@@ -274,8 +274,8 @@ public final class CProxyAction implements IExecution
                     p_annotation,
                     Collections.unmodifiableList(
                             ( m_parallel
-                                    ? m_arguments.parallelStream()
-                                    : m_arguments.stream()
+                              ? m_arguments.parallelStream()
+                              : m_arguments.stream()
                             ).flatMap( i -> i.execute( p_context, p_annotation ).stream() ).collect( Collectors.toList() ) ),
                     l_return
             );

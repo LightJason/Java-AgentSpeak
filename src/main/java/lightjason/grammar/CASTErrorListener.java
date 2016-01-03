@@ -43,8 +43,8 @@ public final class CASTErrorListener implements ANTLRErrorListener
 {
     @Override
     public void syntaxError( final Recognizer<?, ?> p_recognizer, final Object p_symbol, final int p_line, final int p_charposition,
-            final String p_message,
-            final RecognitionException p_exception
+                             final String p_message,
+                             final RecognitionException p_exception
     )
     {
         final String l_message = CCommon.getLanguageString(
@@ -54,8 +54,8 @@ public final class CASTErrorListener implements ANTLRErrorListener
 
     @Override
     public void reportAmbiguity( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex, final boolean p_exact,
-            final BitSet p_alternatives,
-            final ATNConfigSet p_configuration
+                                 final BitSet p_alternatives,
+                                 final ATNConfigSet p_configuration
     )
     {
 
@@ -63,8 +63,8 @@ public final class CASTErrorListener implements ANTLRErrorListener
 
     @Override
     public void reportAttemptingFullContext( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
-            final BitSet p_bitSet,
-            final ATNConfigSet p_configuration
+                                             final BitSet p_bitSet,
+                                             final ATNConfigSet p_configuration
     )
     {
 
@@ -72,8 +72,8 @@ public final class CASTErrorListener implements ANTLRErrorListener
 
     @Override
     public void reportContextSensitivity( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
-            final int p_prediction,
-            final ATNConfigSet p_configuration
+                                          final int p_prediction,
+                                          final ATNConfigSet p_configuration
     )
     {
 

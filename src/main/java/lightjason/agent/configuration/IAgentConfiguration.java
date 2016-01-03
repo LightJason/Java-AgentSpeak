@@ -26,7 +26,6 @@ package lightjason.agent.configuration;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.score.IAggregation;
-import lightjason.language.score.ISelector;
 
 
 /**
@@ -56,13 +55,5 @@ public interface IAgentConfiguration extends IConfiguration
      * @return aggregate function
      */
     IAggregation getAggregate();
-
-    /**
-     * returns the selector function
-     * of plan scoring
-     *
-     * @return selector function
-     */
-    ISelector getSelector();
 
 }
