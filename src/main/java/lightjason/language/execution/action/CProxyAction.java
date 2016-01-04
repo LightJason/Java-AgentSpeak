@@ -48,6 +48,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -55,8 +56,7 @@ import java.util.stream.Collectors;
  *
  * @note inner annotations cannot be used on the
  * grammer definition, so the inner annotations are ignored
- * @bug check ordering of arguments on parallel streams
- * @bug set return value depend on execution results
+ * @todo check parallel stream for arguments - checking if calls are run in parallel
  */
 public final class CProxyAction implements IExecution
 {
@@ -246,9 +246,11 @@ public final class CProxyAction implements IExecution
          */
         private final IAction m_action;
         /**
-         * arguments
+         * arguments as map with index for prevent
+         * result order on parallel execution
          */
-        private final List<IProxyExecution> m_arguments;
+        private final Map<Integer, IProxyExecution> m_arguments;
+
 
         /**
          * ctor
@@ -261,7 +263,8 @@ public final class CProxyAction implements IExecution
         {
             m_parallel = p_parallel;
             m_action = p_action;
-            m_arguments = p_arguments;
+            m_arguments = Collections.unmodifiableMap( IntStream.range( 0, p_arguments.size() ).boxed()
+                                                                .collect( Collectors.toMap( i -> i, i -> p_arguments.get( i ) ) ) );
         }
 
         @Override
@@ -273,10 +276,9 @@ public final class CProxyAction implements IExecution
                     p_context,
                     p_annotation,
                     Collections.unmodifiableList(
-                            ( m_parallel
-                              ? m_arguments.parallelStream()
-                              : m_arguments.stream()
-                            ).flatMap( i -> i.execute( p_context, p_annotation ).stream() ).collect( Collectors.toList() ) ),
+                            ( m_parallel ? m_arguments.entrySet().parallelStream() : m_arguments.entrySet().stream() )
+                                    .flatMap( i -> i.getValue().execute( p_context, p_annotation ).stream() ).collect( Collectors.toList() )
+                    ),
                     l_return
             );
             return l_return;
