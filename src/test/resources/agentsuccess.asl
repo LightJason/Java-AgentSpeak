@@ -7,7 +7,6 @@ anno(3)[self("blub"), value(true), xxx(success)].
 !drive.
 
 // setSpeed(X) :- setProperty("speed", X, Y).
-/*
 @fuzzy(0.8)
 @score(0.2)
 +!accelerate
@@ -27,7 +26,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
         setProperty( Speed, "", "" );
         print(1,2,3,4);
         !!drive.
-*/
+
 @atomic
 @score(0.6)
 +!decelerate
@@ -36,8 +35,6 @@ anno(3)[self("blub"), value(true), xxx(success)].
         -blub(Speed);
         !!decelerate.
 
-/*
 @fuzzy(0.7)
 @score(infinity)
 +!drive <- !!accelerate.
-*/
