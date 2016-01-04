@@ -4,9 +4,13 @@ target( longitude(53.3), latitude(-9.3) ).
 anno(3)[self("blub"), value(true), xxx(success)].
 ~neg(5).
 
+
 !drive.
 
+
 // setSpeed(X) :- setProperty("speed", X, Y).
+
+
 @fuzzy(0.8)
 @score(0.2)
 +!accelerate

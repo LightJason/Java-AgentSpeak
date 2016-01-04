@@ -266,9 +266,6 @@ public final class CProxyAction implements IExecution
                                                                 .collect( Collectors.toMap( i -> i, i -> p_arguments.get( i ) ) ) );
         }
 
-        /*
-         * @todo check parallel stream for arguments - checking if calls are run in parallel
-         */
         @Override
         public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
