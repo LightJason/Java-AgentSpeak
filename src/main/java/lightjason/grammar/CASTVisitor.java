@@ -39,6 +39,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoal;
+import lightjason.language.execution.action.CAssignment;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
@@ -600,15 +601,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
-        return this.visitChildren( p_context );
-        //return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), (IExecution) this.visitTerm( p_context.term() ) );
+        return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
     }
 
     @Override
     public Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
-        return this.visitChildren( p_context );
-        //return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), (IExecution) this.visitTerm( p_context.term() ) );
+        return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
     }
 
     @Override
