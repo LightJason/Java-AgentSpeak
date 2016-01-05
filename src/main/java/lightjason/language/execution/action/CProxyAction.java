@@ -159,9 +159,9 @@ public final class CProxyAction implements IExecution
     }
 
     /**
-     * base class for encapsulation execution content
+     * interface for encapsulation execution content
      */
-    private static abstract class IProxyExecution
+    private interface IProxyExecution
     {
         /**
          * execute method
@@ -170,26 +170,14 @@ public final class CProxyAction implements IExecution
          * @param p_annotation arguments
          * @return list of returning arguments
          */
-        public abstract Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation );
-
-        /**
-         * helper method to replace variables with context variables
-         *
-         * @param p_context execution context
-         * @param p_terms replacing term list
-         * @return result term list
-         */
-        protected final List<ITerm> replaceFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
-        {
-            return CCommon.replaceVariableFromContext( p_context, p_terms );
-        }
+        public Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation );
 
     }
 
     /**
      * inner class for encapsulating values
      */
-    private static class CStatic extends IProxyExecution
+    private static class CStatic implements IProxyExecution
     {
         /**
          * value list
@@ -209,7 +197,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
-            return Collections.unmodifiableList( this.replaceFromContext( p_context, m_values ) );
+            return Collections.unmodifiableList( CCommon.replaceVariableFromContext( p_context, m_values ) );
         }
 
         @Override
@@ -234,7 +222,7 @@ public final class CProxyAction implements IExecution
     /**
      * inner class for encapsulating action execution
      */
-    private static class CExecution extends IProxyExecution
+    private static class CExecution implements IProxyExecution
     {
         /**
          * parallel execution flag
