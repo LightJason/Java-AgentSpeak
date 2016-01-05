@@ -315,8 +315,6 @@ term :
     | literal
     | variable
     | variablelist
-    | logical_expression
-    | arithmetic_expression
     | LANGULARBRACKET termlist RANGULARBRACKET
     ;
 
