@@ -177,13 +177,12 @@ body_formula :
     | achievement_goal_action
     | test_goal_action
     | unary_expression
-    | logical_expression
     | assignment_expression
     | deconstruct_expression
-    | foreach_loop
-    | while_loop
-    | for_loop
-    | if_else
+    //| foreach_loop
+    //| while_loop
+    //| for_loop
+    //| if_else
     | term
     ;
 
@@ -315,8 +314,8 @@ term :
     | literal
     | variable
     | variablelist
-    | arithmetic_expression
     | logical_expression
+    | arithmetic_expression
     | LANGULARBRACKET termlist RANGULARBRACKET
     ;
 

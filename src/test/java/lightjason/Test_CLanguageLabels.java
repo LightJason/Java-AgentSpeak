@@ -395,7 +395,8 @@ public class Test_CLanguageLabels
                 l_return[0] = l_return[0].replace( ".class", "" );
                 if ( !l_return[0].contains( ClassUtils.PACKAGE_SEPARATOR ) )
                     l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ?
-                            ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
+                                                ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR
+                                                                                     : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
             }
 
             return l_return;
