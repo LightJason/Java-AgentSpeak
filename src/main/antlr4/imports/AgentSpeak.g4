@@ -311,6 +311,7 @@ literal :
 term :
     string
     | number
+    | logicalvalue
     | literal
     | variable
     | variablelist

@@ -851,14 +851,21 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return this.visitString( p_context.string() );
         if ( p_context.number() != null )
             return this.visitNumber( p_context.number() );
+        if ( p_context.logicalvalue() != null )
+            return this.visitLogicalvalue( p_context.logicalvalue() );
+
         if ( p_context.literal() != null )
             return this.visitLiteral( p_context.literal() );
         if ( p_context.variable() != null )
             return this.visitVariable( p_context.variable() );
+
+        /*
         if ( p_context.arithmetic_expression() != null )
             return this.visitArithmetic_expression( p_context.arithmetic_expression() );
         if ( p_context.logical_expression() != null )
             return this.visitLogical_expression( p_context.logical_expression() );
+        */
+
         if ( p_context.termlist() != null )
             return this.visitTermlist( p_context.termlist() );
 
@@ -872,14 +879,21 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return this.visitString( p_context.string() );
         if ( p_context.number() != null )
             return this.visitNumber( p_context.number() );
+        if ( p_context.logicalvalue() != null )
+            return this.visitLogicalvalue( p_context.logicalvalue() );
+
         if ( p_context.literal() != null )
             return this.visitLiteral( p_context.literal() );
         if ( p_context.variable() != null )
             return this.visitVariable( p_context.variable() );
+
+        /*
         if ( p_context.arithmetic_expression() != null )
             return this.visitArithmetic_expression( p_context.arithmetic_expression() );
         if ( p_context.logical_expression() != null )
             return this.visitLogical_expression( p_context.logical_expression() );
+        */
+
         if ( p_context.termlist() != null )
             return this.visitTermlist( p_context.termlist() );
 
