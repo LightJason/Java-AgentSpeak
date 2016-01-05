@@ -461,59 +461,21 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return p_context == null ? "" : p_context.getText();
     }
 
-
-
     @Override
     public Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> {
-
-            final Object l_item = this.visitBody_formula( i );
-
-            // body actions directly return
-            if ( l_item instanceof IExecution )
-                return l_item;
-
-            // literals are actions
-            if ( l_item instanceof ILiteral )
-            {
-                final ILiteral l_literal = (ILiteral) l_item;
-                return new CProxyAction( m_actions, l_literal );
-            }
-
-            // otherwise only simple types encapsulate
-            return new CRawAction<>( l_item );
-
-        } ).collect( Collectors.toList() );
+        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).collect(
+                Collectors.toList() );
     }
 
     @Override
     public Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> {
-
-            final Object l_item = this.visitBody_formula( i );
-
-            // body actions directly return
-            if ( l_item instanceof IExecution )
-                return l_item;
-
-            // literals are actions
-            if ( l_item instanceof ILiteral )
-            {
-                final ILiteral l_literal = (ILiteral) l_item;
-                return new CProxyAction( m_actions, l_literal );
-            }
-
-            // otherwise only simple types encapsulate
-            return new CRawAction<>( l_item );
-
-        } ).collect( Collectors.toList() );
+        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).collect(
+                Collectors.toList() );
     }
-
-
 
     @Override
     public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
@@ -527,8 +489,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public final Object visitPrinciples( final PlanBundleParser.PrinciplesContext p_context )
     {
@@ -540,8 +500,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
@@ -555,8 +513,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public Object visitIf_else( final AgentParser.If_elseContext p_context )
     {
@@ -568,8 +524,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public Object visitWhile_loop( final AgentParser.While_loopContext p_context )
@@ -583,8 +537,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public Object visitFor_loop( final AgentParser.For_loopContext p_context )
     {
@@ -596,8 +548,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public Object visitForeach_loop( final AgentParser.Foreach_loopContext p_context )
@@ -611,8 +561,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public Object visitLogical_expression( final AgentParser.Logical_expressionContext p_context )
     {
@@ -624,8 +572,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public Object visitComparison_expression( final AgentParser.Comparison_expressionContext p_context )
@@ -639,8 +585,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public Object visitArithmetic_expression( final AgentParser.Arithmetic_expressionContext p_context )
     {
@@ -652,8 +596,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
@@ -668,8 +610,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
         //return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), (IExecution) this.visitTerm( p_context.term() ) );
     }
-
-
 
     @Override
     public Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
@@ -703,8 +643,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         }
     }
 
-
-
     @Override
     public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
@@ -717,8 +655,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
     }
 
-
-
     @Override
     public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
     {
@@ -730,8 +666,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
-
-
 
     @Override
     public Object visitBelief_action( final AgentParser.Belief_actionContext p_context )
@@ -763,8 +697,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
     }
 
-
-
     @Override
     public Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
     {
@@ -777,11 +709,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
-
     @Override
     public Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
@@ -793,6 +720,11 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
     {
@@ -803,8 +735,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
     }
-
-
 
     @Override
     public Object visitLiteralset( final AgentParser.LiteralsetContext p_context )
@@ -823,8 +753,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
     }
-
-
 
     @Override
     public Object visitTerm( final AgentParser.TermContext p_context )
@@ -868,8 +796,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
 
-
-
     @Override
     public Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
@@ -892,8 +818,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         ).collect( Collectors.toList() );
     }
 
-
-
     @Override
     public Object visitVariablelist( final AgentParser.VariablelistContext p_context )
     {
@@ -906,24 +830,22 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
-
     @Override
     public final Object visitNumber( final AgentParser.NumberContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitNumber( final PlanBundleParser.NumberContext p_context )
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public final Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
@@ -936,8 +858,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return Long.valueOf( p_context.getText() );
     }
-
-
 
     @Override
     public Object visitFloatnumber( final AgentParser.FloatnumberContext p_context )
@@ -1001,8 +921,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         }
     }
 
-
-
     @Override
     public final Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
     {
@@ -1014,8 +932,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return p_context.TRUE() != null ? true : false;
     }
-
-
 
     @Override
     public final Object visitConstant( final AgentParser.ConstantContext p_context )
@@ -1029,8 +945,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public final Object visitString( final AgentParser.StringContext p_context )
     {
@@ -1042,8 +956,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return p_context.getText();
     }
-
-
 
     @Override
     public Object visitAtom( final AgentParser.AtomContext p_context )
@@ -1057,8 +969,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return p_context.getText();
     }
 
-
-
     @Override
     public Object visitVariable( final AgentParser.VariableContext p_context )
     {
@@ -1070,8 +980,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
-
-
 
     @Override
     public final Object visitComparator( final AgentParser.ComparatorContext p_context )
@@ -1085,8 +993,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public final Object visitArithmeticoperator( final AgentParser.ArithmeticoperatorContext p_context )
     {
@@ -1098,8 +1004,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
-
-
 
     @Override
     public final Object visitUnaryoperator( final AgentParser.UnaryoperatorContext p_context )
@@ -1113,8 +1017,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-
-
     @Override
     public Object visitBinaryoperator( final AgentParser.BinaryoperatorContext p_context )
     {
@@ -1127,18 +1029,16 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
-
     @Override
     public final Set<ILiteral> getInitialBeliefs()
     {
         return m_InitialBeliefs;
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+    // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final SetMultimap<ITrigger<?>, IPlan> getPlans()
@@ -1146,20 +1046,39 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return m_plans;
     }
 
-
-
     @Override
     public final Map<String, Object> getRules()
     {
         return null;
     }
 
-
-
     @Override
     public final ILiteral getInitialGoal()
     {
         return m_InitialGoal;
+    }
+
+    /**
+     * creates an executable structure of a parsed item
+     *
+     * @param p_item any parsed item
+     * @return execution structure
+     */
+    protected IExecution createExecution( final Object p_item )
+    {
+        // body actions directly return
+        if ( p_item instanceof IExecution )
+            return (IExecution) p_item;
+
+        // literals are actions
+        if ( p_item instanceof ILiteral )
+        {
+            final ILiteral l_literal = (ILiteral) p_item;
+            return new CProxyAction( m_actions, l_literal );
+        }
+
+        // otherwise only simple types encapsulate
+        return new CRawAction<>( p_item );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
