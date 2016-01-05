@@ -29,21 +29,11 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 import lightjason.language.IVariable;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.expression.arithmetic.operator.CAbs;
-import lightjason.language.execution.expression.arithmetic.operator.CCeil;
-import lightjason.language.execution.expression.arithmetic.operator.CCos;
 import lightjason.language.execution.expression.arithmetic.operator.CDivide;
-import lightjason.language.execution.expression.arithmetic.operator.CExp;
-import lightjason.language.execution.expression.arithmetic.operator.CFloor;
 import lightjason.language.execution.expression.arithmetic.operator.CMinus;
-import lightjason.language.execution.expression.arithmetic.operator.CModulo;
 import lightjason.language.execution.expression.arithmetic.operator.CMultiply;
 import lightjason.language.execution.expression.arithmetic.operator.CPlus;
 import lightjason.language.execution.expression.arithmetic.operator.CPow;
-import lightjason.language.execution.expression.arithmetic.operator.CSignum;
-import lightjason.language.execution.expression.arithmetic.operator.CSin;
-import lightjason.language.execution.expression.arithmetic.operator.CSqrt;
-import lightjason.language.execution.expression.arithmetic.operator.CTan;
 import lightjason.language.execution.expression.arithmetic.operator.IArithmeticOperator;
 
 import java.util.Collections;
@@ -70,10 +60,7 @@ public final class CExpression implements IExpression<Number>
     public static final Map<String, IArithmeticOperator> DEFAULTOPERATOR = Collections.unmodifiableMap( new HashMap<String, IArithmeticOperator>()
     {{
         for ( final IArithmeticOperator l_operator : new IArithmeticOperator[]{
-                new CAbs(), new CCeil(), new CCos(), new CDivide(), new CExp(),
-                new CFloor(), new CMinus(), new CModulo(), new CMultiply(),
-                new CPlus(), new CPow(), new CSignum(), new CSin(), new CSqrt(),
-                new CTan()
+                new CPow(), new CDivide(), new CMultiply(), new CMinus(), new CPlus()
         } )
             put( l_operator.getToken(), l_operator );
     }} );
