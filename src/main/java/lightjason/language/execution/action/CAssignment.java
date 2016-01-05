@@ -26,6 +26,7 @@ package lightjason.language.execution.action;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
@@ -35,17 +36,23 @@ import java.util.Collection;
 /**
  * assignment action
  */
-public class CAssignment<T> extends IBaseExecution<IVariable<T>>
+public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariable<N>>
 {
+    /**
+     * right-hand argument
+     */
+    private final M m_righthand;
 
     /**
      * ctor
      *
-     * @param p_value assign variable
+     * @param p_lefthand left-hand argument (variable)
+     * @param p_righthand right-hand argument
      */
-    public CAssignment( final IVariable<T> p_value )
+    public CAssignment( final IVariable<N> p_lefthand, final M p_righthand )
     {
-        super( p_value );
+        super( p_lefthand );
+        m_righthand = p_righthand;
     }
 
     @Override

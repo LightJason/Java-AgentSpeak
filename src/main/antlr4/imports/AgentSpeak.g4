@@ -176,15 +176,15 @@ body_formula :
     belief_action
     | achievement_goal_action
     | test_goal_action
-    | literal
-    | if_else
-    | while_loop
-    | for_loop
-    | foreach_loop
-    | assignment_expression
     | unary_expression
     | logical_expression
+    | assignment_expression
     | deconstruct_expression
+    | foreach_loop
+    | while_loop
+    | for_loop
+    | if_else
+    | term
     ;
 
 block_formula :
