@@ -90,7 +90,7 @@ public final class CProxyAction implements IExecution
         final Multiset<IAction> l_scoringcache = HashMultiset.create();
 
         m_execution = this.createCaller( p_literal, p_actions, l_scoringcache );
-        m_annotationexecution = p_literal.getAnnotation().entries().stream().map( i -> this.createCaller( i.getValue(), p_actions, l_scoringcache ) ).collect(
+        m_annotationexecution = p_literal.getAnnotation().values().stream().map( i -> this.createCaller( i, p_actions, l_scoringcache ) ).collect(
                 Collectors.toList() );
 
         // scoring set is created so build-up to an unmodifieable set
