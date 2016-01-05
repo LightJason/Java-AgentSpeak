@@ -481,15 +481,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 final ILiteral l_literal = (ILiteral) l_item;
                 return new CProxyAction( m_actions, l_literal );
             }
-                /*
-            {
-                final IExecution l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
-                if ( l_action == null )
-                    throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", l_item ) );
-
-                return l_action;
-            }
-            */
 
             // otherwise only simple types encapsulate
             return new CRawAction<>( l_item );
@@ -515,15 +506,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 final ILiteral l_literal = (ILiteral) l_item;
                 return new CProxyAction( m_actions, l_literal );
             }
-                /*
-            {
-                final IExecution l_action = m_actions.get( ( (ILiteral) l_item ).getFQNFunctor() );
-                if ( l_action == null )
-                    throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", l_item ) );
-
-                return l_action;
-            }
-            */
 
             // otherwise only simple types encapsulate
             return new CRawAction<>( l_item );
