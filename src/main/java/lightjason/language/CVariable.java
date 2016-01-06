@@ -31,7 +31,7 @@ import java.text.MessageFormat;
 /**
  * default variable definition
  *
- * @note variable set is not thread-safe
+ * @note variable set is not thread-safe on default
  */
 public class CVariable<T> implements IVariable<T>
 {
@@ -89,14 +89,16 @@ public class CVariable<T> implements IVariable<T>
     {
         m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );
         m_functor = p_functor;
-        m_value = p_value;
+        this.set( p_value );
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public IVariable<T> set( final T p_value )
     {
         if ( !m_any )
-            m_value = p_value;
+            // value can be a raw-term (depend on AST access), so unpack a raw-term to the native value
+            m_value = p_value instanceof CRawTerm<?> ? (T) ( (CRawTerm<?>) p_value ).getValue() : p_value;
         return this;
     }
 
