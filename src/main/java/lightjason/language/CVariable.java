@@ -32,6 +32,7 @@ import java.text.MessageFormat;
  * default variable definition
  *
  * @note variable set is not thread-safe on default
+ * @todo replace instanceof with generic
  */
 public class CVariable<T> implements IVariable<T>
 {
