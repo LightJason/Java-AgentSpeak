@@ -89,7 +89,7 @@ public abstract class IBaseExecution<T> implements IExecution
     }
 
     @Override
-    public Set<IVariable<?>> getVariables()
+    public Set<IVariable<?>> getVariables() throws CloneNotSupportedException
     {
         return Collections.<IVariable<?>>emptySet();
     }

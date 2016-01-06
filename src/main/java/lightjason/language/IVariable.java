@@ -59,4 +59,13 @@ public interface IVariable<T> extends ITerm, Cloneable
      */
     boolean isValueAssignableTo( final Class<?> p_class );
 
+    /**
+     * override clonable interface definition
+     *
+     * @return clones variables
+     *
+     * @throws CloneNotSupportedException is thrown on clonable error
+     */
+    IVariable<T> clone() throws CloneNotSupportedException;
+
 }

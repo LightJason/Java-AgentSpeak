@@ -124,7 +124,7 @@ public final class CProxyAction implements IExecution
      * @bug incomplete
      */
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
     {
         return Collections.emptySet();
     }

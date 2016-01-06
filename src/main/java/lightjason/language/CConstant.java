@@ -83,7 +83,7 @@ public final class CConstant<T> extends CVariable<T>
     }
 
     @Override
-    protected final Object clone() throws CloneNotSupportedException
+    public final IVariable<T> clone() throws CloneNotSupportedException
     {
         return new CConstant<T>( m_functor.toString(), m_value );
     }

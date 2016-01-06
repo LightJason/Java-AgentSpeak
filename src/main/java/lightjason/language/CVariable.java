@@ -155,7 +155,7 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException
+    public IVariable<T> clone() throws CloneNotSupportedException
     {
         return new CVariable<T>( m_functor.toString(), m_value );
     }

@@ -95,7 +95,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
     {
         return new HashSet()
         {{

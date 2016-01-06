@@ -98,11 +98,11 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
     {
         return new HashSet()
         {{
-            add( m_value );
+            add( m_value.clone() );
             addAll( m_righthand.getVariables() );
         }};
     }

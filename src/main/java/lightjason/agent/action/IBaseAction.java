@@ -57,7 +57,7 @@ public abstract class IBaseAction implements IAction
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
     {
         return Collections.emptySet();
     }
