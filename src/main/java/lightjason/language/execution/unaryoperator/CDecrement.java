@@ -95,9 +95,10 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return new HashSet()
+        return new HashSet<IVariable<?>>()
         {{
             add( m_variable.clone() );
         }};

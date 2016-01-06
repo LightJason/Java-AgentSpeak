@@ -123,6 +123,7 @@ public final class CProxyAction implements IExecution
 
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
         return new HashSet<IVariable<?>>()

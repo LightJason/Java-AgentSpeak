@@ -63,6 +63,7 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
                                          final Collection<ITerm> p_return
     )
@@ -96,9 +97,10 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return new HashSet()
+        return new HashSet<IVariable<?>>()
         {{
             add( m_value.clone() );
             addAll( m_righthand.getVariables() );
