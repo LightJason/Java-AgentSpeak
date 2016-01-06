@@ -32,6 +32,7 @@ import lightjason.language.IVariable;
 import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public final class CContext<T> implements IContext<T>
 
         m_agent = p_agent;
         m_instance = p_instance;
-        m_variables = p_variables.parallelStream().collect( Collectors.toMap( IVariable::getFQNFunctor, i -> i ) );
+        m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::getFQNFunctor, i -> i ) ) );
         m_runningplans = p_runningplans;
     }
 
