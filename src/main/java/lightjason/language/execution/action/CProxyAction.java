@@ -191,7 +191,7 @@ public final class CProxyAction implements IExecution
          *
          * @return variable set
          *
-         * @see {IVariable.clone}
+         * @see IVariable.clone
          */
         Set<IVariable<?>> getVariables();
 
