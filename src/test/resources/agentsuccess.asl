@@ -18,6 +18,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
         Speed = 5;
         Speed++;
         setProperty( Speed, min(5, 9, 3), "test" )[ min(1,2), min(9,8) ];
+        print(Speed);
         !!drive;
         -+baz("hallo")
     <- true.
@@ -31,6 +32,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
         +foo(min(5));
         setProperty( Speed, "", "" );
         print(1,2,3,4);
+        print(Speed);
         !!drive.
 
 @atomic

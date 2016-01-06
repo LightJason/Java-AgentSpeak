@@ -26,7 +26,7 @@ package lightjason.language;
 /**
  * variable defintion
  */
-public interface IVariable<T> extends ITerm, Cloneable
+public interface IVariable<T> extends ITerm
 {
 
     /**
@@ -63,9 +63,7 @@ public interface IVariable<T> extends ITerm, Cloneable
      * override clonable interface definition
      *
      * @return clones variables
-     *
-     * @throws CloneNotSupportedException is thrown on clonable error
      */
-    IVariable<T> clone() throws CloneNotSupportedException;
+    IVariable<T> clone();
 
 }

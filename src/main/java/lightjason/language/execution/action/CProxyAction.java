@@ -45,6 +45,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -120,13 +121,15 @@ public final class CProxyAction implements IExecution
         return p_aggregate.evaluate( p_agent, m_scoringcache );
     }
 
-    /**
-     * @bug incomplete
-     */
+
     @Override
-    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
+    public final Set<IVariable<?>> getVariables()
     {
-        return Collections.emptySet();
+        return new HashSet<IVariable<?>>()
+        {{
+            addAll( m_execution.getVariables() );
+            addAll( m_annotationexecution.parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() ) );
+        }};
     }
 
     @Override
@@ -183,6 +186,15 @@ public final class CProxyAction implements IExecution
          */
         public Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation );
 
+        /**
+         * clone variables
+         *
+         * @return variable set
+         *
+         * @see {IVariable.clone}
+         */
+        Set<IVariable<?>> getVariables();
+
     }
 
     /**
@@ -209,6 +221,12 @@ public final class CProxyAction implements IExecution
         public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
             return Collections.unmodifiableList( CCommon.replaceVariableFromContext( p_context, m_values ) );
+        }
+
+        @Override
+        public Set<IVariable<?>> getVariables()
+        {
+            return m_values.stream().filter( i -> i instanceof IVariable<?> ).map( i -> ( (IVariable<?>) i ).clone() ).collect( Collectors.toSet() );
         }
 
         @Override
@@ -280,6 +298,12 @@ public final class CProxyAction implements IExecution
                     l_return
             );
             return l_return;
+        }
+
+        @Override
+        public Set<IVariable<?>> getVariables()
+        {
+            return m_arguments.values().parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() );
         }
 
         @Override

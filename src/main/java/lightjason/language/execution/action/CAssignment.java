@@ -98,7 +98,7 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
+    public final Set<IVariable<?>> getVariables()
     {
         return new HashSet()
         {{

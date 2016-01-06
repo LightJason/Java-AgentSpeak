@@ -194,20 +194,15 @@ public class CAgent implements IAgent
             } );
             System.out.println();
             */
-            try
-            {
-                System.out.println(
-                        "\n--> " +
-                        i.execute(
-                                new CContext<>( this, i, i.getVariables(),
-                                                Collections.unmodifiableMap( new HashMap<>() )
-                                ), null, null, null
-                        )        +      " <--\n" );
-            }
-            catch ( CloneNotSupportedException p_e )
-            {
-                p_e.printStackTrace();
-            }
+
+            System.out.println(
+                    "\n--> " +
+                    i.execute(
+                            new CContext<>( this, i, i.getVariables(),
+                                            Collections.unmodifiableMap( new HashMap<>() )
+                            ), null, null, null
+                    )        + " <--\n" );
+
             System.out.println( "===================================================================" );
 
         } );

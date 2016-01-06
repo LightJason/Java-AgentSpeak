@@ -166,18 +166,9 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables() throws CloneNotSupportedException
+    public final Set<IVariable<?>> getVariables()
     {
-        return m_action.parallelStream().flatMap( i -> {
-            try
-            {
-                return i.getVariables().stream();
-            }
-            catch ( final CloneNotSupportedException l_exception )
-            {
-                return null;
-            }
-        } ).collect( Collectors.toSet() );
+        return m_action.parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() );
     }
 
     /**

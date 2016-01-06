@@ -66,8 +66,8 @@ public interface IExecution
      *
      * @return variable map
      *
-     * @warning must create an individual / local map, because
+     * @warning must create an individual / local set, because
      * variables will be instantiate locally, so variables must be cloned
      */
-    Set<IVariable<?>> getVariables() throws CloneNotSupportedException;
+    Set<IVariable<?>> getVariables();
 }
