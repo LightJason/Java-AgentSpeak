@@ -280,7 +280,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final String toString()
         {
-            return MessageFormat.format( "{0}({1})", m_action, StringUtils.join( m_arguments, ", " ) );
+            return MessageFormat.format( "{0}({1})", m_action, StringUtils.join( m_arguments.values(), ", " ) );
         }
 
         @Override

@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -62,22 +63,23 @@ public final class CRawAction<T> extends IBaseExecution<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
                                                final Collection<ITerm> p_return
     )
     {
-        return this.getTypedResult( m_value );
+        return this.getTypedResult( m_value, p_return );
     }
 
     /**
      * fixed type result
      *
      * @param p_value boolean value
+     * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final Boolean p_value )
+    private CBoolean getTypedResult( final Boolean p_value, final Collection<ITerm> p_return )
     {
+        p_return.add( new CRawTerm<>( m_value ) );
         return CBoolean.from( p_value );
     }
 
@@ -85,9 +87,10 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * fixed type result
      *
      * @param p_value variable value
+     * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final IVariable<?> p_value )
+    private CBoolean getTypedResult( final IVariable<?> p_value, final Collection<ITerm> p_return )
     {
         return CBoolean.from( p_value.isAllocated() );
     }
@@ -96,10 +99,12 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * fixed type result
      *
      * @param p_value any other value
+     * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final T p_value )
+    private CBoolean getTypedResult( final T p_value, final Collection<ITerm> p_return )
     {
+        p_return.add( new CRawTerm<>( m_value ) );
         return CBoolean.from( true );
     }
 }

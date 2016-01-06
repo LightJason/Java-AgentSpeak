@@ -40,6 +40,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -137,12 +138,14 @@ public class CPlan implements IPlan
                                                final Collection<ITerm> p_return
     )
     {
-        // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked
+        // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
+        // each item gets its own parameters, annotation and returns stack, so it will be created locally
         return CBoolean.from(
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
                   : m_action.stream()
-                ).map( i -> i.execute( p_context, p_annotation, p_parameter, p_return ) ).allMatch( CBoolean.isTrue() )
+                ).map( i -> i.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), new LinkedList<>() ) )
+                 .allMatch( CBoolean.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );
     }

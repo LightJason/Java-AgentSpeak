@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.common.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -30,7 +31,11 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -62,6 +67,31 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
                                          final Collection<ITerm> p_return
     )
     {
+        final List<ITerm> l_return = new LinkedList<>();
+        final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_return );
+        if ( ( !l_rightreturn.getValue() ) || ( l_return.isEmpty() ) )
+            return CBoolean.from( false );
+
+        ( (IVariable<N>) CCommon.replaceVariableFromContext( p_context, m_value ) ).set( (N) l_return.get( 0 ) );
+
         return CBoolean.from( true );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_value.hashCode() + m_righthand.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0} = {1}", m_value, m_righthand );
     }
 }
