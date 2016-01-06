@@ -42,8 +42,6 @@ import java.util.Set;
 
 /**
  * assignment action
- *
- * @bug execution of the rhs argument not working
  */
 public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariable<N>>
 {

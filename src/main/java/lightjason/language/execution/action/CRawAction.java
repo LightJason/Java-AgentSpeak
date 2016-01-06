@@ -35,8 +35,6 @@ import java.util.Collection;
 
 /**
  * encapsulate class for any non-executable data type e.g. boolean
- *
- * @bug value must be returned
  */
 public final class CRawAction<T> extends IBaseExecution<T>
 {
