@@ -25,7 +25,11 @@ package lightjason.agent.action;
 
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
+import lightjason.language.IVariable;
 import lightjason.language.score.IAggregation;
+
+import java.util.Collections;
+import java.util.Set;
 
 
 /**
@@ -50,5 +54,11 @@ public abstract class IBaseAction implements IAction
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
         return p_aggregate.evaluate( p_agent, ImmutableMultiset.of( this ) );
+    }
+
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return Collections.emptySet();
     }
 }

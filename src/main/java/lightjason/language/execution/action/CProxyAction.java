@@ -33,6 +33,7 @@ import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -47,6 +48,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -116,6 +118,15 @@ public final class CProxyAction implements IExecution
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
         return p_aggregate.evaluate( p_agent, m_scoringcache );
+    }
+
+    /**
+     * @bug incomplete
+     */
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return Collections.emptySet();
     }
 
     @Override

@@ -34,8 +34,10 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -93,5 +95,15 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
     public final String toString()
     {
         return MessageFormat.format( "{0} = {1}", m_value, m_righthand );
+    }
+
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet()
+        {{
+            add( m_value );
+            addAll( m_righthand.getVariables() );
+        }};
     }
 }

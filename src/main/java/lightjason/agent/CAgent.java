@@ -197,10 +197,10 @@ public class CAgent implements IAgent
             System.out.println(
                     "\n--> " +
                     i.execute(
-                            new CContext<>( this, i, Collections.unmodifiableMap( new ConcurrentHashMap<>() ),
+                            new CContext<>( this, i, i.getVariables(),
                                             Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null
-                    )        + " <--\n" );
+                    )        +      " <--\n" );
             System.out.println( "===================================================================" );
 
         } );

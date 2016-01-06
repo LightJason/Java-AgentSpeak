@@ -42,34 +42,34 @@ public interface IPlan extends IExecution
      *
      * @return trigger event
      */
-    public ITrigger<?> getTrigger();
+    ITrigger<?> getTrigger();
 
     /**
      * returns plan state
      *
      * @return state
      */
-    public EState getState();
+    EState getState();
 
     /**
      * return unmodifieable annotation set
      *
      * @return set with annotation
      */
-    public Collection<IAnnotation<?>> getAnnotations();
+    Collection<IAnnotation<?>> getAnnotations();
 
     /**
      * returns unmodifieable list with plan actions
      *
      * @return action list;
      */
-    public List<IExecution> getBodyActions();
+    List<IExecution> getBodyActions();
 
 
     /**
      * execution state of a plan
      */
-    public enum EState
+    enum EState
     {
         SUCCESS,
         FAIL,

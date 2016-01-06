@@ -41,20 +41,20 @@ public interface IContext<T>
      *
      * @return agent
      */
-    public IAgent getAgent();
+    IAgent getAgent();
 
     /**
      * returns the instance object
      *
      * @return instance object plan or rule
      */
-    public T getInstance();
+    T getInstance();
 
     /**
      * returns the variables names and their current value
      *
      * @return variable names and their current value
      */
-    public Map<CPath, IVariable<?>> getInstanceVariables();
+    Map<CPath, IVariable<?>> getInstanceVariables();
 
 }

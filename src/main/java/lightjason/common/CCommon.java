@@ -286,11 +286,14 @@ public final class CCommon
      */
     public static ITerm replaceVariableFromContext( final IContext<?> p_context, final ITerm p_term )
     {
-        final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.getFQNFunctor() );
-        if ( l_variable != null )
-            return l_variable;
+        if ( !( p_term instanceof IVariable ) )
+            return p_term;
 
-        return p_term;
+        final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.getFQNFunctor() );
+        if ( l_variable == null )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() ) );
+
+        return l_variable;
     }
 
 

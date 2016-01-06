@@ -15,8 +15,8 @@ anno(3)[self("blub"), value(true), xxx(success)].
 @score(0.2)
 +!accelerate
     : current_speed(Speed) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
-        //Speed++;
         Speed = 5;
+        Speed++;
         setProperty( Speed, min(5, 9, 3), "test" )[ min(1,2), min(9,8) ];
         !!drive;
         -+baz("hallo")
@@ -26,7 +26,8 @@ anno(3)[self("blub"), value(true), xxx(success)].
 @score(0.4)
 +!decelerate
     : current_speed(Speed) && Speed > 10 <-
-        //Speed--;
+        Speed = 5;
+        Speed--;
         +foo(min(5));
         setProperty( Speed, "", "" );
         print(1,2,3,4);

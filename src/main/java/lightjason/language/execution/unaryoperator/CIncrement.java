@@ -34,6 +34,8 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -87,9 +89,18 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
         return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+    }
+
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet()
+        {{
+            add( m_variable );
+        }};
     }
 
 }

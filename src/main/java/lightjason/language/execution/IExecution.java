@@ -25,10 +25,12 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
+import java.util.Set;
 
 
 /**
@@ -46,8 +48,8 @@ public interface IExecution
      * @param p_return return values
      * @return fuzzy boolean
      */
-    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                         final Collection<ITerm> p_return
+    IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
+                                  final Collection<ITerm> p_return
     );
 
     /**
@@ -57,6 +59,15 @@ public interface IExecution
      * @param p_agent agent for which calculates the score value
      * @return score value
      */
-    public double score( final IAggregation p_aggregate, final IAgent p_agent );
+    double score( final IAggregation p_aggregate, final IAgent p_agent );
 
+    /**
+     * returns a map with all used variables
+     *
+     * @return variable map
+     *
+     * @warning must create an individual / local map, because
+     * variables will be instantiate locally, so variables must be cloned
+     */
+    Set<IVariable<?>> getVariables();
 }

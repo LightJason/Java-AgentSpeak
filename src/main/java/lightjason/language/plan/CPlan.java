@@ -26,6 +26,7 @@ package lightjason.language.plan;
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.annotation.CNumberAnnotation;
@@ -162,6 +163,12 @@ public class CPlan implements IPlan
             l_values.add( l_planscore.getData().doubleValue() );
 
         return p_aggregate.evaluate( Collections.unmodifiableCollection( l_values ) );
+    }
+
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return m_action.parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() );
     }
 
     /**

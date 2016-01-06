@@ -33,6 +33,8 @@ import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -62,17 +64,17 @@ public final class CContext<T> implements IContext<T>
      *
      * @param p_agent agent
      * @param p_instance instance object
-     * @param p_variables variables with number
+     * @param p_variables instance variables
      * @param p_runningplans current running plans
      */
-    public CContext( final IAgent p_agent, final T p_instance, final Map<CPath, IVariable<?>> p_variables, final Map<ILiteral, IPlan> p_runningplans )
+    public CContext( final IAgent p_agent, final T p_instance, final Set<IVariable<?>> p_variables, final Map<ILiteral, IPlan> p_runningplans )
     {
         if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) || ( p_runningplans == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
 
         m_agent = p_agent;
         m_instance = p_instance;
-        m_variables = p_variables;
+        m_variables = p_variables.parallelStream().collect( Collectors.toMap( IVariable::getFQNFunctor, i -> i ) );
         m_runningplans = p_runningplans;
     }
 
