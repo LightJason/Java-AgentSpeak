@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.IntStream;
 
 
 /**
@@ -139,15 +140,16 @@ public final class CInconsistency implements Callable<CInconsistency>
 
         // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
-        for ( int i = 0; i < l_keys.size(); ++i )
-        {
+        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> {
+
             final IAgent l_item = l_keys.get( i );
-            for ( int j = i + 1; j < l_keys.size(); ++j )
-            {
+            IntStream.range( i + 1, l_keys.size() ).boxed().forEach( j -> {
+
                 final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
                 l_matrix.setQuick( i, j, l_value );
                 l_matrix.setQuick( j, i, l_value );
-            }
+
+            } );
 
             // row-wise normalization for getting probabilities
             final double l_norm = c_algebra.norm1( l_matrix.viewRow( i ) );
@@ -156,7 +158,7 @@ public final class CInconsistency implements Callable<CInconsistency>
 
             // set epsilon slope for preventing periodic markov chains
             l_matrix.setQuick( i, i, m_epsilon );
-        }
+        } );
 
         final DoubleMatrix1D l_eigenvector;
         if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
@@ -165,8 +167,7 @@ public final class CInconsistency implements Callable<CInconsistency>
             l_eigenvector = this.getStationaryDistribution( l_matrix );
 
         // set inconsistency value for each entry
-        for ( int i = 0; i < l_keys.size(); ++i )
-            m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
+        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), l_eigenvector.get( i ) ) );
 
         return this;
     }
