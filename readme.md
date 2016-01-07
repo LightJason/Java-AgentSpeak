@@ -21,7 +21,7 @@ structure to describe an optimizing process.
 
 ## Base Definitions
 
-### <a name="belief"></a> Beliefs
+### <a name="belief">Beliefs</a>
 
 * Beliefs implicitly describe the current state of the agent
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
@@ -31,7 +31,7 @@ structure to describe an optimizing process.
 * If a literal of a belief is named equal to an [action](#action) the action will not be executed (store the value of the action within a variable, which is used within the belief literal)
 * [Variables](#variable) within a belief literal will be unified before the belief is added to the beliefbase
 
-### <a name="action"></a> Actions
+### <a name="action">Actions</a>
 
 * Actions will be run immediately
 * Actions can fail (false) or succeed (true)
@@ -40,7 +40,7 @@ structure to describe an optimizing process.
 * actions with ```@```-prefix wil be executed in parallel (each inner action will be run in parallel)
 
 
-### <a name="plan"></a> Plans
+### <a name="plan">Plans</a>
 
 * Plans are _sequences of [actions](#action), [rules](#rule) and/or achievement / test [goals](#goal)_
 * Plans has got an optional context, that defines a constraint for execution (default is true and matches always)
@@ -51,7 +51,7 @@ structure to describe an optimizing process.
 * If the plan calls an _achievement [goal](#goal) deletion_, the [goal](#goal) is removed from the global [goal](#goal) list iif exists and returns true otherwise it returns false and the plan can fail
 * All items results will be concatenated with a logical _and_ to calculate the plan result value
     
-#### <a name="planinternal"></a> Internals Constants
+#### <a name="planinternal">Internals Constants</a>
  
 * The plan has got additional [constant variables](#variable), that are added in the context condition (values are calculated before plan execution is started)
     * _Score_ returns the current score-value of the plan
@@ -59,7 +59,7 @@ structure to describe an optimizing process.
     * _Successrun_ stores the number of successful runs
     * _Runs_ number of runs of the plan (fail + successful runs)
     
-#### <a name="fuzzy"></a> Fuzziness
+#### <a name="fuzzy">Fuzziness</a>
 
 * Fuzzy value must be in [0,1]
 * Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
@@ -68,7 +68,7 @@ structure to describe an optimizing process.
 * If a test or achievement [goal](#goal) is called it triggers all [plans](#plan) which are matched by the calculated fuzzy value
 
 
-### <a name="rule"></a> Rules
+### <a name="rule">Rules</a>
 
 * Rules are similar to [plans](#plan) without the context condition
 * Rules cannot be triggered by a goal, so they must be called from a plan
@@ -78,7 +78,7 @@ structure to describe an optimizing process.
 * All items results will be concatinate with a logical _and_ to calculate the plan result value
 * [Variables](#variable) will be unified
 
-### <a name="annotation"></a> Rule / Plan Annotation
+### <a name="annotation">Rule / Plan Annotation</a>
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
 * The following annotation can be used
@@ -90,7 +90,7 @@ structure to describe an optimizing process.
     * ```@Parallel``` all items will be run in parallel
 
  
-### <a name="goal"></a> Goals
+### <a name="goal">Goals</a>
 
 * Semantically a goal marks a certain state of the world an agent _wishes to bring about_ [AgentSpeak, p.40]
 * New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition/deletion_ which leads to the execution of a corresponding [plan](#plan)
@@ -103,31 +103,31 @@ structure to describe an optimizing process.
 * A goal is part of exactly one [intention](#intention)
 * if a goal can match a [desire](#desire) (the goal is near to the desire) it can add an event to match the desire [belief](#belief)
 
-#### <a name="testgoal"></a> Test Goals
+#### <a name="testgoal">Test Goals</a>
 
 * A test goal is a literal with the definition ```?literal``` 
 * The test return true iif a plan with an equal literal is within the current execution (current running or supsending)
 
 
-### <a name="intention"></a> Intentions
+### <a name="intention">Intentions</a>
 
 * An intention is the _convex hull_ of its [goals](#goal)
 * The intention is set of of goals, which must exist simultaneously 
 * Intentions cannot be in conflict with other intentions, so there dies not exists any overlaping
 
-### <a name="desire"></a> Desires
+### <a name="desire">Desires</a>
 
 * A Desire is a vertex of the edge of all intentions
 * Desires are defined by a set of beliefs
 * Desires can be in conflict with other desires, represented that the desires have got a large distance (much as possible) 
 * The desire is successfully reached, iif all beliefs are existing anytime
 
-### <a name="variable"></a> Variables
+### <a name="variable">Variables</a>
 
 * Variables are written with an upper-case letter at begin
 * Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
 
-### <a name="buldinaction"></a> Build-in Actions
+### <a name="buldinaction">Build-in Actions</a>
 
 #### Math
 
@@ -163,7 +163,7 @@ structure to describe an optimizing process.
 
 
 
-## <a name="graphic"></a> Graphical Representation 
+## <a name="graphic">Graphical Representation</a> 
 
 ![Structure](bdi.png)
 
@@ -181,7 +181,7 @@ structure to describe an optimizing process.
 
 ## Running Semantics
 
-### <a name="cycle"></a> Agent-Cycle
+### <a name="cycle">Agent-Cycle</a>
 
 Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
@@ -214,7 +214,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 4. increment cycle value
 
-### <a name="buildinbelief"></a> Build-in Beliefs
+### <a name="buildinbelief">Build-in Beliefs</a>
 
 * ```my/cycle``` current agent cylce, generates no event
 * ```my/awake``` exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
