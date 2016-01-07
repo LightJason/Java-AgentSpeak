@@ -126,9 +126,6 @@ public final class CInconsistency implements Callable<CInconsistency>
         return m_data.putIfAbsent( p_object, new Double( 0 ) ) == null;
     }
 
-    /**
-     * @bug run it with parallel stream
-     */
     @Override
     public final CInconsistency call() throws Exception
     {

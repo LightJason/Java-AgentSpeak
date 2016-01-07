@@ -24,6 +24,7 @@
 package lightjason.common;
 
 import lightjason.error.CIllegalArgumentException;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -294,6 +295,17 @@ public final class CCommon
             throw new CIllegalArgumentException( CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() ) );
 
         return l_variable;
+    }
+
+    /**
+     * returns a native / raw value of a term
+     *
+     * @return term value or raw value
+     */
+    @SuppressWarnings( "unchecked" )
+    public static <T, N> T getRawValue( final N p_term )
+    {
+        return (T) ( p_term instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_term ).getValue() : p_term );
     }
 
 

@@ -23,6 +23,7 @@
 
 package lightjason.language;
 
+import lightjason.common.CCommon;
 import lightjason.common.CPath;
 
 import java.text.MessageFormat;
@@ -94,12 +95,11 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public IVariable<T> set( final T p_value )
     {
         if ( !m_any )
             // value can be a raw-term (depend on AST access), so unpack a raw-term to the native value
-            m_value = p_value instanceof CRawTerm<?> ? (T) ( (CRawTerm<?>) p_value ).getValue() : p_value;
+            m_value = CCommon.getRawValue( p_value );
         return this;
     }
 

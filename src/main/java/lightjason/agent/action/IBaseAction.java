@@ -57,8 +57,9 @@ public abstract class IBaseAction implements IAction
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public Set<IVariable<?>> getVariables()
     {
         return Collections.emptySet();
     }
+
 }
