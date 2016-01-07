@@ -79,9 +79,9 @@ public class CAgent implements IAgent
      */
     protected final IAggregation m_aggregation;
     /**
-     * suspending state
+     * hibernate state
      */
-    private volatile boolean m_suspend = false;
+    private volatile boolean m_hibernate = false;
 
 
     /**
@@ -101,12 +101,6 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final long getCycle()
-    {
-        return m_cycle;
-    }
-
-    @Override
     public final IMask getBeliefBase()
     {
         return m_beliefbase;
@@ -119,33 +113,22 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final synchronized void suspend()
-    {
-        m_suspend = true;
-    }
-
-    @Override
-    public final boolean isSuspending()
-    {
-        return m_suspend;
-    }
-
-    @Override
-    public final synchronized void resume()
-    {
-        m_suspend = false;
-    }
-
-    @Override
     public final SetMultimap<ILiteral, IPlan> getRunningPlans()
     {
         return m_runningplans;
     }
 
     @Override
-    public final SetMultimap<ITrigger<?>, IPlan> getPlans()
+    public final boolean hibernate()
     {
-        return m_plans;
+        return m_hibernate;
+    }
+
+    @Override
+    public final boolean hibernate( final boolean p_value )
+    {
+        m_hibernate = p_value;
+        return p_value;
     }
 
     @Override
@@ -165,7 +148,7 @@ public class CAgent implements IAgent
     {
         // run beliefbase update, because environment can be changed
         m_beliefbase.update();
-        if ( m_suspend )
+        if ( m_hibernate )
             // check wakup-event otherwise suspend
             return this;
 

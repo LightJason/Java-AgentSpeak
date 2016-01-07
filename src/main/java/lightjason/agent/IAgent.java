@@ -38,12 +38,6 @@ import java.util.concurrent.Callable;
  */
 public interface IAgent extends Callable<IAgent>
 {
-    /**
-     * returns the current cycle
-     *
-     * @return cycle number
-     */
-    long getCycle();
 
     /**
      * returns the beliefbase
@@ -60,30 +54,6 @@ public interface IAgent extends Callable<IAgent>
     void trigger( final ITrigger<?> p_event );
 
     /**
-     * sets the agent to a suspend state
-     *
-     * @note only the beliefbase update is called
-     * but the agent cycle is not run, but before
-     * the suspeding state is reached the plan "+!sleep"
-     * is called
-     */
-    void suspend();
-
-    /**
-     * returns a boolean if the agent is suspending
-     *
-     * @return boolean for suspending
-     */
-    boolean isSuspending();
-
-    /**
-     * wakes-up the agent from the suspend state
-     *
-     * @note the plan "+!wakeup" will be triggered
-     */
-    void resume();
-
-    /**
      * returns a map of the current running plans
      *
      * @return map with running plans
@@ -91,11 +61,19 @@ public interface IAgent extends Callable<IAgent>
     SetMultimap<ILiteral, IPlan> getRunningPlans();
 
     /**
-     * returns a map of all plans
+     * returns the hibernate state
      *
-     * @return map with plans
+     * @return boolean state value
      */
-    SetMultimap<ITrigger<?>, IPlan> getPlans();
+    boolean hibernate();
+
+    /**
+     * returns and sets the hibernate state
+     *
+     * @param p_value new hibernate state
+     * @return boolean new state value
+     */
+    boolean hibernate( final boolean p_value );
 
     /**
      * storage access

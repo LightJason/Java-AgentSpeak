@@ -32,6 +32,8 @@ import java.util.Map;
 
 /**
  * configuration for plan bundle and agent
+ *
+ * @todo add inspector structure for logging structure
  */
 public interface IConfiguration
 {
