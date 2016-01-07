@@ -252,8 +252,8 @@ public final class CInconsistency implements Callable<CInconsistency>
     /**
      * returns metric value
      *
-     * @param p_first
-     * @param p_second
+     * @param p_first first element
+     * @param p_second secend element
      * @return metric value
      */
     private final double getMetricValue( final IAgent p_first, final IAgent p_second )
