@@ -24,10 +24,6 @@
 package lightjason.common;
 
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.CRawTerm;
-import lightjason.language.ITerm;
-import lightjason.language.IVariable;
-import lightjason.language.execution.IContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,14 +37,12 @@ import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 
 /**
@@ -262,50 +256,6 @@ public final class CCommon
 
 
         return l_return;
-    }
-
-
-    /**
-     * helper method to replace variables with context variables
-     *
-     * @param p_context execution context
-     * @param p_terms replacing term list
-     * @return result term list
-     */
-    public static List<ITerm> replaceVariableFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
-    {
-        return p_terms.stream().map( i -> replaceVariableFromContext( p_context, i ) ).collect( Collectors.toList() );
-    }
-
-    /**
-     * helper method to replace variable with context variable
-     * other values will be passed
-     *
-     * @param p_context execution context
-     * @param p_term term
-     * @return replaces variable object
-     */
-    public static ITerm replaceVariableFromContext( final IContext<?> p_context, final ITerm p_term )
-    {
-        if ( !( p_term instanceof IVariable ) )
-            return p_term;
-
-        final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.getFQNFunctor() );
-        if ( l_variable == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() ) );
-
-        return l_variable;
-    }
-
-    /**
-     * returns a native / raw value of a term
-     *
-     * @return term value or raw value
-     */
-    @SuppressWarnings( "unchecked" )
-    public static <T, N> T getRawValue( final N p_term )
-    {
-        return (T) ( p_term instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_term ).getValue() : p_term );
     }
 
 

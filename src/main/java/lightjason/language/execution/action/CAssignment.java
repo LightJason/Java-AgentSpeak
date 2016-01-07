@@ -23,7 +23,7 @@
 
 package lightjason.language.execution.action;
 
-import lightjason.common.CCommon;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;

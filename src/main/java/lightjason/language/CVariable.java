@@ -23,7 +23,6 @@
 
 package lightjason.language;
 
-import lightjason.common.CCommon;
 import lightjason.common.CPath;
 
 import java.text.MessageFormat;

@@ -71,7 +71,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
                                                final Collection<ITerm> p_return
     )
     {
-        final IVariable<T> l_variable = (IVariable<T>) CCommon.replaceVariableFromContext( p_context, m_variable );
+        final IVariable<T> l_variable = (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable );
 
         if ( !l_variable.isAllocated() )
             throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", l_variable ) );
