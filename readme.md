@@ -127,8 +127,46 @@ structure to describe an optimizing process.
 * Variables are written with an upper-case letter at begin
 * Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
 
+### <a name="buldinaction"></a> Build-in Actions
+
+#### Math
+
+* min / max
+* sin / cos / tan / exp
+* frac / round / ceil / abs / sgn
+
+#### String
+
+* concat / substring / reverse
+* upper / lower
+* beginswith / endswith
+* count / length
+
+#### List
+
+* get / add
+* concat
+* replace / sublist / reverse / delete
+* empty / count
+* has
+* difference / union / sort / range
+
+#### Date / Time
+
+* date / time / datetime / datetimeutc
+* datedifference / timedifference
+
+#### Generic
+
+* random (with different random generators)
+* hash algorithms (different hash functions)
+
+
+
+## <a name="graphic"></a> Graphical Representation 
 
 ![Structure](bdi.png)
+
 
 
 ## Coding

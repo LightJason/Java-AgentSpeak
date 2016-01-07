@@ -188,8 +188,8 @@ public final class CMain
         }
 
         @Override
-        public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                             final Collection<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
+                                                   final Collection<ITerm> p_return
         )
         {
             if ( p_parameter.size() < this.getMinimalArgumentNumber() )

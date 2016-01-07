@@ -23,9 +23,25 @@
 
 package lightjason.agent;
 
+import com.google.common.collect.Multiset;
+import lightjason.agent.action.IAction;
+import lightjason.agent.action.IBaseAction;
+import lightjason.agent.generator.CDefaultAgentGenerator;
+import lightjason.common.CPath;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,6 +51,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class Test_CAgent
 {
+
+    private static final Map<IAction, Double> c_actions = new HashMap<IAction, Double>()
+    {{
+        put( new CGeneric( "setProperty", 3 ), 1.0 );
+        put( new CGeneric( "min", 1 ), 2.0 );
+        put( new CGeneric( "print", 1 ), 3.0 );
+    }};
+
 
     @Test
     public void test_ComplexAgent() throws IOException
@@ -48,15 +72,22 @@ public class Test_CAgent
         assertTrue( testAgent( "src/test/resources/agentsimple.asl", "simple agent" ) );
     }
 
+    /**
+     * static function to run an agent
+     *
+     * @param p_script script path
+     * @param p_name agent name
+     * @return boolean
+     */
     private static boolean testAgent( final String p_script, final String p_name )
     {
-        /*
-        IAgent l_agent = null;
+
+        final IAgent l_agent;
         try (
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultGenerator( l_stream ).generate();
+            l_agent = new CDefaultAgentGenerator( l_stream, c_actions.keySet(), new CAggregation( c_actions ) ).generate().call();
         }
         catch ( final Exception l_exception )
         {
@@ -65,8 +96,85 @@ public class Test_CAgent
         }
 
         System.out.println( MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
-        */
         return true;
+    }
+
+
+    /**
+     * generic action to define any action
+     */
+    private final static class CGeneric extends IBaseAction
+    {
+        /**
+         * name of the action
+         **/
+        private final CPath m_name;
+
+        /**
+         * number of arguments
+         */
+        private final int m_arguments;
+
+
+        public CGeneric( final String p_name, final int p_arguments )
+        {
+            m_name = CPath.from( p_name );
+            m_arguments = p_arguments;
+        }
+
+        @Override
+        public CPath getName()
+        {
+            return m_name;
+        }
+
+        @Override
+        public final int getMinimalArgumentNumber()
+        {
+            return m_arguments;
+        }
+
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
+                                                   final Collection<ITerm> p_return
+        )
+        {
+            return CBoolean.from( true );
+        }
+    }
+
+
+    /**
+     * aggregation function
+     */
+    private final static class CAggregation implements IAggregation
+    {
+        /**
+         * action & score value
+         */
+        private final Map<IAction, Double> m_actions;
+
+        /**
+         * ctor
+         *
+         * @param p_actions action score map
+         */
+        public CAggregation( final Map<IAction, Double> p_actions )
+        {
+            m_actions = p_actions;
+        }
+
+        @Override
+        public double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+        {
+            return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( i -> m_actions.get( i ) ).sum();
+        }
+
+        @Override
+        public double evaluate( final Collection<Double> p_values )
+        {
+            return p_values.parallelStream().mapToDouble( i -> i ).sum();
+        }
     }
 
 }
