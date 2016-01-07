@@ -68,7 +68,6 @@ public interface IExecution
      *
      * @warning must create an individual / local set, because
      * variables will be instantiate locally, so variables must be cloned
-     * @bug add calls overwrite variables within the set, change it to if a variable exists, it will not be replaced
      */
     Set<IVariable<?>> getVariables();
 }
