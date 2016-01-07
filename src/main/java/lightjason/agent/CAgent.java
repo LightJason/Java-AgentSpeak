@@ -186,7 +186,7 @@ public class CAgent implements IAgent
                             new CContext<>( this, i, i.getVariables(),
                                             Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null
-                    )        + " <--\n" );
+                    )        +      " <--\n" );
             System.out.println( "===================================================================" );
 
         } );

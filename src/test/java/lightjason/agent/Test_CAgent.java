@@ -49,6 +49,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * test agent structure
  */
+@SuppressWarnings( "serial" )
 public class Test_CAgent
 {
 
