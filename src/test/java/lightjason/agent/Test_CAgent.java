@@ -33,6 +33,8 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -52,7 +54,9 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings( "serial" )
 public class Test_CAgent
 {
-
+    /**
+     * list with default (non-working) actions
+     */
     private static final Map<IAction, Double> c_actions = new HashMap<IAction, Double>()
     {{
         put( new CGeneric( "setProperty", 3 ), 1.0 );
@@ -62,27 +66,35 @@ public class Test_CAgent
 
 
     @Test
-    public void test_ComplexAgent() throws IOException
+    public void test_asl() throws IOException
     {
-        assertTrue( testAgent( "src/test/resources/agentsuccess.asl", "complex successful agent" ) );
+        final Map<String, String> l_testing = new HashMap<String, String>()
+        {{
+
+            put( "src/test/resources/agentsuccess.asl", "complex successful agent" );
+            put( "src/test/resources/agentsimple.asl", "simple agent" );
+
+        }};
+
+
+        l_testing.entrySet().stream().forEach( i -> {
+            final Pair<Boolean, String> l_result = this.testAgent( i.getKey(), i.getValue() );
+
+            assertTrue( l_result.getRight(), l_result.getLeft() );
+            System.out.println( l_result.getValue() );
+        } );
     }
 
-    @Test
-    public void test_SimpleAgent() throws IOException
-    {
-        assertTrue( testAgent( "src/test/resources/agentsimple.asl", "simple agent" ) );
-    }
 
     /**
      * static function to run an agent
      *
      * @param p_script script path
      * @param p_name agent name
-     * @return boolean
+     * @return tupel & string
      */
-    private static boolean testAgent( final String p_script, final String p_name )
+    private Pair<Boolean, String> testAgent( final String p_script, final String p_name )
     {
-
         final IAgent l_agent;
         try (
                 final InputStream l_stream = new FileInputStream( p_script );
@@ -92,12 +104,10 @@ public class Test_CAgent
         }
         catch ( final Exception l_exception )
         {
-            System.err.println( MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
-            return false;
+            return new ImmutablePair<>( false, MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
         }
 
-        System.out.println( MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
-        return true;
+        return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
     }
 
 
