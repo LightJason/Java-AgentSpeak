@@ -134,6 +134,8 @@ structure to describe an optimizing process.
 * min / max
 * sin / cos / tan / exp
 * frac / round / ceil / abs / sgn
+* BLAS structure & algorithms
+* random generators (uniform, normal, pareto, beta, bernoulli, ...)
 
 #### String
 
@@ -156,10 +158,17 @@ structure to describe an optimizing process.
 * date / time / datetime / datetimeutc
 * datedifference / timedifference
 
-#### Generic
+#### Cryptographic
 
-* random (with different random generators)
-* hash algorithms (different hash functions)
+* hash algorithms (md-?, sha-?, ...)
+* signature algorithm
+* encryption algorithms
+
+#### Web-Access
+
+* HTTP(s) client
+* REST-API client
+* SOAP client
 
 
 
