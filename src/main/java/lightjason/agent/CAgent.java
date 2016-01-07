@@ -179,22 +179,7 @@ public class CAgent implements IAgent
         m_plans.values().stream().forEach( i -> {
 
             System.out.println( "=====>> " + i + " ===\n" );
-
             System.out.println( "Score " + i.score( m_aggregation, this ) + "\n" );
-
-            /*
-            i.getBodyActions().stream().forEachOrdered( n -> {
-                System.out.print( n + "\t" + n.getClass() );
-                if ( n.getClass().equals( CRawAction.class ) )
-                {
-                    final CRawAction<?> l_raw = ( (CRawAction) n );
-                    System.out.print( "\t" + l_raw.getValue().getClass() );
-                }
-                System.out.println();
-            } );
-            System.out.println();
-            */
-
             System.out.println(
                     "\n--> " +
                     i.execute(
@@ -202,7 +187,6 @@ public class CAgent implements IAgent
                                             Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null
                     )        + " <--\n" );
-
             System.out.println( "===================================================================" );
 
         } );
