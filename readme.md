@@ -3,9 +3,10 @@
 [![Circle CI](https://circleci.com/gh/flashpixx/Light-Jason.svg?style=shield)](https://circleci.com/gh/flashpixx/Light-Jason)
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini
-a Java 8 implementation has been created. The version defines an additional AgentSpeak grammar with
-[AntLR](http://www.antlr.org/) and a fuzzy-based logical calculus and unification based on a mathematical
-structure to describe an optimizing process.
+a Java 8 implementation has been build-up. The version defines an additional AgentSpeak(L) grammar based on
+[AntLR](http://www.antlr.org/) for simulating a [multi-agent system](https://en.wikipedia.org/wiki/Multi-agent_system)
+with a fuzzy-based logical calculus. Agent execution based on a mathematical structure to describe an optimizing process.
+
 
 
 ## Requirements
@@ -19,6 +20,7 @@ structure to describe an optimizing process.
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
 
 
+
 ## Base Definitions
 
 ### <a name="belief">Beliefs</a>
@@ -30,6 +32,7 @@ structure to describe an optimizing process.
 * Belief retraction triggers a plan with the definition ```-belief```
 * If a literal of a belief is named equal to an [action](#action) the action will not be executed (store the value of the action within a variable, which is used within the belief literal)
 * [Variables](#variable) within a belief literal will be unified before the belief is added to the beliefbase
+
 
 ### <a name="action">Actions</a>
 
@@ -78,6 +81,7 @@ structure to describe an optimizing process.
 * All items results will be concatinate with a logical _and_ to calculate the plan result value
 * [Variables](#variable) will be unified
 
+
 ### <a name="annotation">Rule / Plan Annotation</a>
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
@@ -115,6 +119,7 @@ structure to describe an optimizing process.
 * The intention is set of of goals, which must exist simultaneously 
 * Intentions cannot be in conflict with other intentions, so there dies not exists any overlaping
 
+
 ### <a name="desire">Desires</a>
 
 * A Desire is a vertex of the edge of all intentions
@@ -122,10 +127,12 @@ structure to describe an optimizing process.
 * Desires can be in conflict with other desires, represented that the desires have got a large distance (much as possible) 
 * The desire is successfully reached, iif all beliefs are existing anytime
 
+
 ### <a name="variable">Variables</a>
 
 * Variables are written with an upper-case letter at begin
 * Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
+
 
 ### <a name="buldinaction">Build-in Actions</a>
 
@@ -223,6 +230,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 4. increment cycle value
 
+
 ### <a name="buildinbelief">Build-in Beliefs</a>
 
 * ```my/cycle``` current agent cylce, generates no event
@@ -232,7 +240,8 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
 
-## Todos
+
+## <a name="todo">Todos</a>
 
 * Beliefs:
     * (?) define annotations describing the origin/state/reason/... of a belief, including fixed ones like: _source_
@@ -244,4 +253,3 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
-
