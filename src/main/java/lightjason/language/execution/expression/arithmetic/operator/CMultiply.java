@@ -76,7 +76,7 @@ public final class CMultiply implements IArithmeticOperator
     @Override
     public final int hashCode()
     {
-        return getToken().hashCode();
+        return this.getToken().hashCode();
     }
 
     @Override

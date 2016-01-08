@@ -286,7 +286,9 @@
 
         <module name = "ModifierOrder" />
 
-        <module name = "MultipleStringLiterals" />
+        <module name = "MultipleStringLiterals">
+            <property name = "allowedDuplicates" value = "2" />
+        </module>
 
         <module name = "MultipleVariableDeclarations" />
 

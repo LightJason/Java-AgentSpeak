@@ -26,7 +26,7 @@ package lightjason.language;
 /**
  * variable defintion
  *
- * @param T data type
+ * @tparam T data type
  */
 public interface IVariable<T> extends ITerm
 {
@@ -34,7 +34,7 @@ public interface IVariable<T> extends ITerm
     /**
      * sets the value
      *
-     * @param p_value
+     * @param p_value value
      * @return the object itself
      */
     IVariable<T> set( final T p_value );

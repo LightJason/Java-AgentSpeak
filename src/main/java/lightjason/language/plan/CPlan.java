@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
  * plan structure
  *
  * @todo hashcode / equals are missing
+ * @todo annotation handling is incomplete
  */
 public class CPlan implements IPlan
 {
@@ -131,9 +132,6 @@ public class CPlan implements IPlan
                 "{0} ({1} | {2} |- {3} ==>> {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, StringUtils.join( m_action, "; " ) );
     }
 
-    /**
-     * @todo annotation handling is missing
-     */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
                                                final Collection<ITerm> p_return
