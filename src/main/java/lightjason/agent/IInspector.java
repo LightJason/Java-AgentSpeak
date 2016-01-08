@@ -23,70 +23,31 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IMask;
-import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
-
-import java.util.Map;
-import java.util.concurrent.Callable;
+import com.google.common.collect.Multimap;
 
 
 /**
- * agent interface
+ * inspector interface to read agent internal data
  */
-public interface IAgent extends Callable<IAgent>
+public interface IInspector
 {
-
     /**
      * inspector method
      *
-     * @param p_inspector inspector object
+     * @param p_data agent data
      */
-    void inspect( final IInspector... p_inspector );
+    void inspect( final Multimap<EValue, ?> p_data );
 
     /**
-     * trigger an event
-     *
-     * @param p_event event
+     * value types of the inspector map
      */
-    void trigger( final ITrigger<?> p_event );
-
-    /**
-     * returns the beliefbase
-     *
-     * @return beliefbase
-     */
-    IMask getBeliefBase();
-
-    /**
-     * returns a map of the current running plans
-     *
-     * @return map with running plans
-     */
-    SetMultimap<ILiteral, IPlan> getRunningPlans();
-
-    /**
-     * returns the hibernate state
-     *
-     * @return boolean state value
-     */
-    boolean hibernate();
-
-    /**
-     * returns and sets the hibernate state
-     *
-     * @param p_value new hibernate state
-     * @return boolean new state value
-     */
-    boolean hibernate( final boolean p_value );
-
-    /**
-     * storage access
-     *
-     * @return storage map
-     */
-    Map<String, ?> getStorage();
+    enum EValue
+    {
+        CYCLE,
+        BELIEF,
+        RUNNINGPLAN,
+        HIBERNATE,
+        STORAGE
+    }
 
 }

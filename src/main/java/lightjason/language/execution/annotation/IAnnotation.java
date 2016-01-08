@@ -33,20 +33,20 @@ public interface IAnnotation<T>
      *
      * @return type
      */
-    public EType getID();
+    EType getID();
 
     /**
      * returns the data of the annotation if exists
      *
      * @return data or null
      */
-    public T getData();
+    T getData();
 
 
     /**
      * annotation types
      */
-    public enum EType
+    enum EType
     {
         FUZZY( "@Fuzzy" ),
         SCORE( "@Score" ),
@@ -65,7 +65,7 @@ public interface IAnnotation<T>
          *
          * @param p_name text name
          */
-        private EType( final String p_name )
+        EType( final String p_name )
         {
             m_name = p_name;
         }

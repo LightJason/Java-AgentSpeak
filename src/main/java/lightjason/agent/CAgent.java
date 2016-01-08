@@ -24,6 +24,9 @@
 package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IMask;
@@ -34,11 +37,13 @@ import lightjason.language.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 
 /**
@@ -107,6 +112,22 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public void inspect( final IInspector... p_inspector )
+    {
+        if ( p_inspector == null )
+            return;
+
+        final Multimap<IInspector.EValue, Object> l_map = new ImmutableSetMultimap.Builder()
+                .put( IInspector.EValue.CYCLE, m_cycle )
+                .put( IInspector.EValue.HIBERNATE, m_hibernate )
+                .putAll( IInspector.EValue.STORAGE, m_storage.entrySet().stream().collect( Collectors.toList() ).iterator() )
+                .putAll( IInspector.EValue.RUNNINGPLAN, m_storage.entrySet().stream().collect( Collectors.toList() ).iterator() )
+                .build();
+
+        Arrays.stream( p_inspector ).forEach( i -> i.inspect( ImmutableMultimap.copyOf( l_map ) ) );
+    }
+
+    @Override
     public void trigger( final ITrigger<?> p_event )
     {
 
@@ -169,7 +190,7 @@ public class CAgent implements IAgent
                             new CContext<>( this, i, i.getVariables(),
                                             Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null
-                    )        +      " <--\n" );
+                    )        + " <--\n" );
             System.out.println( "===================================================================" );
 
         } );

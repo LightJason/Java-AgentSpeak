@@ -34,20 +34,20 @@ public interface ITrigger<T>
      *
      * @return type
      */
-    public EType getID();
+    EType getID();
 
     /**
      * returns the data or null
      *
      * @return data
      */
-    public T getData();
+    T getData();
 
 
     /**
      * event types
      */
-    public enum EType
+    enum EType
     {
         ADDBELIEF( "+" ),
         DELETEBELIEF( "-" ),
