@@ -28,6 +28,8 @@ import lightjason.common.CPath;
 
 /**
  * thread-safe variable
+ *
+ * @tparam T data type
  */
 public final class CMutexVariable<T> extends CVariable<T>
 {

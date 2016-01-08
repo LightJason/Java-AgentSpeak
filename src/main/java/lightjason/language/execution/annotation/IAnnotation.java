@@ -25,6 +25,8 @@ package lightjason.language.execution.annotation;
 
 /**
  * annotation interface
+ *
+ * @tparam T annotation data type
  */
 public interface IAnnotation<T>
 {

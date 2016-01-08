@@ -30,6 +30,8 @@ import lightjason.error.CIllegalStateException;
 
 /**
  * constant definition
+ *
+ * @tparam T data type
  */
 public final class CConstant<T> extends CVariable<T>
 {

@@ -61,6 +61,8 @@ public interface IStructure
      *
      * @param p_name name of the mask
      * @return mask
+     *
+     * @tparam E typecast
      */
     <E extends IMask> E create( final String p_name );
 

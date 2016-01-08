@@ -25,6 +25,8 @@ package lightjason.language.plan.trigger;
 
 /**
  * event definition
+ *
+ * @param T data type
  */
 public interface ITrigger<T>
 {

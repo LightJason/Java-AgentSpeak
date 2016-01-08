@@ -25,6 +25,8 @@ package lightjason.language.execution.fuzzy;
 
 /**
  * result for a fuzzy value
+ *
+ * @tparam T value type
  */
 public interface IFuzzyValue<T>
 {

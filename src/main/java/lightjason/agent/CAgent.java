@@ -117,7 +117,7 @@ public class CAgent implements IAgent
         if ( p_inspector == null )
             return;
 
-        final Multimap<IInspector.EValue, Object> l_map = new ImmutableSetMultimap.Builder()
+        final Multimap<IInspector.EValue, Object> l_map = new ImmutableSetMultimap.Builder<IInspector.EValue, Object>()
                 .put( IInspector.EValue.CYCLE, m_cycle )
                 .put( IInspector.EValue.HIBERNATE, m_hibernate )
                 .putAll( IInspector.EValue.STORAGE, m_storage.entrySet().stream().collect( Collectors.toList() ).iterator() )

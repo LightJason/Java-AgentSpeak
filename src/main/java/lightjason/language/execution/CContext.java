@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 
 /**
  * execution context
+ *
+ * @tparam T instance type (plan or rule)
  */
 public final class CContext<T> implements IContext<T>
 {

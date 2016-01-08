@@ -70,11 +70,11 @@ public class CPlan implements IPlan
     /**
      * number of runs
      */
-    protected long m_runs = 0;
+    protected long m_runs;
     /**
      * number of fail runs
      */
-    protected long m_failruns = 0;
+    protected long m_failruns;
     /**
      * action list
      */

@@ -25,6 +25,8 @@ package lightjason.language;
 
 /**
  * variable defintion
+ *
+ * @param T data type
  */
 public interface IVariable<T> extends ITerm
 {

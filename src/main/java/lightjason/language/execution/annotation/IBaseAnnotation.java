@@ -26,6 +26,8 @@ package lightjason.language.execution.annotation;
 
 /**
  * annotation base
+ *
+ * @tparam T annotation data
  */
 public abstract class IBaseAnnotation<T> implements IAnnotation<T>
 {

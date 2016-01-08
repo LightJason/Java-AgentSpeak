@@ -109,7 +109,7 @@
         </module>
 
         <module name = "ConstantName">
-            <property name = "format" value = "c_[a-zA-Z0-9]{3,}$" />
+            <property name = "format" value = "[A-Z0-9_]{3,}$" />
         </module>
 
         <module name = "CovariantEquals" />
@@ -218,9 +218,8 @@
             <property name = "allowUnknownTags" value = "true" />
         </module>
 
-        <module name = "JavadocVariable">
-            <property name = "scope" value = "public" />
-        </module>
+        <!-- disables because Doxygen command are not supported
+        <module name = "JavadocVariable"/> -->
 
         <module name = "LeftCurly">
             <property name = "option" value = "nl" />
@@ -231,18 +230,18 @@
         </module>
 
         <module name = "LocalFinalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9]{1,}$" />
+            <property name = "format" value = "^l_[a-zA-Z0-9_]{2,}$" />
         </module>
 
         <module name = "LocalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9_]{1,}$|i|j" />
+            <property name = "format" value = "^l_[a-zA-Z0-9_]{2,}$|i|j" />
             <property name = "allowOneCharVarInForLoop" value = "true" />
         </module>
 
         <module name = "MagicNumber" />
 
         <module name = "MemberName">
-            <property name = "format" value = "^m_[a-zA-Z0-9]{2,}$" />
+            <property name = "format" value = "^m_[a-zA-Z0-9_]{2,}$" />
         </module>
 
         <module name = "MethodCount">
@@ -301,7 +300,7 @@
 
         <module name = "NestedTryDepth" />
 
-        <module name = "NoClone" />
+        <!-- <module name = "NoClone" /> -->
 
         <module name = "NoFinalizer" />
 
@@ -328,13 +327,13 @@
         <module name = "PackageDeclaration" />
 
         <module name = "PackageName">
-            <property name = "format" value = "^[a-z]{2}(\.[a-z]{2}[a-z_]*)*$" />
+            <property name = "format" value = "^[a-z]{3,}(\.[a-z]{2,}[a-z0-9]*)*$" />
         </module>
 
         <module name = "ParameterAssignment" />
 
         <module name = "ParameterName">
-            <property name = "format" value = "^p_[a-zA-Z0-9]{2,}$" />
+            <property name = "format" value = "^p_[a-zA-Z0-9_]{2,}$" />
         </module>
 
         <module name = "ParameterNumber">
@@ -373,14 +372,14 @@
         <module name = "SimplifyBooleanReturn" />
 
         <module name = "StaticVariableName">
-            <property name = "format" value = "^s_[a-zA-Z0-9]{3,}$" />
+            <property name = "format" value = "^s_[a-zA-Z0-9_]{2,}$" />
         </module>
 
         <module name = "StringLiteralEquality" />
 
         <!-- <module name="SummaryJavadocCheck"/> -->
 
-        <module name = "SuperClone" />
+        <!-- <module name = "SuperClone" /> -->
 
         <module name = "SuperFinalize" />
 

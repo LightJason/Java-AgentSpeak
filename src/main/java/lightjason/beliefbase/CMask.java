@@ -41,8 +41,6 @@ import java.util.stream.Collectors;
 
 /**
  * mask of a beliefbase
- *
- * @tparam P type of the beliefbase element
  */
 @SuppressWarnings( "serial" )
 public class CMask implements IMask
@@ -421,8 +419,8 @@ public class CMask implements IMask
      * @param p_generator generator object for new masks
      * @return mask
      *
-     * @note a path can contains ".." to use the parent object
      * @tparam Q literal type
+     * @note a path can contains ".." to use the parent object
      */
     private static <Q> IMask walk( final CPath p_path, final IMask p_root, final IGenerator<Q> p_generator )
     {
