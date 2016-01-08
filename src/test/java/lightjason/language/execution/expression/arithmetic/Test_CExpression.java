@@ -16,7 +16,7 @@
  * # GNU Lesser General Public License for more details.                                #
  * #                                                                                    #
  * # You should have received a copy of the GNU Lesser General Public License           #
- * # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
  */
@@ -37,9 +37,12 @@ import static org.junit.Assert.assertTrue;
  * test arithmetic expression
  */
 @SuppressWarnings( "serial" )
-public class Test_CExpression
+public final class Test_CExpression
 {
 
+    /**
+     * test simple expression with random values
+     */
     @Test
     public void test_SimpleExpressionWithVariable()
     {
@@ -64,6 +67,9 @@ public class Test_CExpression
     }
 
 
+    /**
+     * test complex expression with fixed value
+     */
     @Test
     public void test_ComplexExpression()
     {

@@ -111,6 +111,7 @@ WARN_LOGFILE           =
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = src/main/java \
+                         src/test/java \
                          readme.md \
                          license.md
 INPUT_ENCODING         = UTF-8

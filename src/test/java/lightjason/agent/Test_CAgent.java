@@ -16,7 +16,7 @@
  * # GNU Lesser General Public License for more details.                                #
  * #                                                                                    #
  * # You should have received a copy of the GNU Lesser General Public License           #
- * # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
  */
@@ -38,7 +38,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -52,12 +51,12 @@ import static org.junit.Assert.assertTrue;
  * test agent structure
  */
 @SuppressWarnings( "serial" )
-public class Test_CAgent
+public final class Test_CAgent
 {
     /**
      * list with default (non-working) actions
      */
-    private static final Map<IAction, Double> c_actions = new HashMap<IAction, Double>()
+    private static final Map<IAction, Double> ACTIONS = new HashMap<IAction, Double>()
     {{
         put( new CGeneric( "setProperty", 3 ), 1.0 );
         put( new CGeneric( "min", 1 ), 2.0 );
@@ -65,8 +64,11 @@ public class Test_CAgent
     }};
 
 
+    /**
+     * asl parsing test
+     */
     @Test
-    public void test_asl() throws IOException
+    public void test_asl()
     {
         final Map<String, String> l_testing = new HashMap<String, String>()
         {{
@@ -100,7 +102,7 @@ public class Test_CAgent
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator( l_stream, c_actions.keySet(), new CAggregation( c_actions ) ).generate().call();
+            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ) ).generate().call();
         }
         catch ( final Exception l_exception )
         {
@@ -114,7 +116,7 @@ public class Test_CAgent
     /**
      * generic action to define any action
      */
-    private final static class CGeneric extends IBaseAction
+    private static final class CGeneric extends IBaseAction
     {
         /**
          * name of the action
@@ -158,7 +160,7 @@ public class Test_CAgent
     /**
      * aggregation function
      */
-    private final static class CAggregation implements IAggregation
+    private static final class CAggregation implements IAggregation
     {
         /**
          * action & score value

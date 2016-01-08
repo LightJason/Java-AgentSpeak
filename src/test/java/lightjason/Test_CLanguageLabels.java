@@ -16,7 +16,7 @@
  * # GNU Lesser General Public License for more details.                                #
  * #                                                                                    #
  * # You should have received a copy of the GNU Lesser General Public License           #
- * # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
  */
@@ -57,18 +57,18 @@ import static org.junit.Assert.fail;
  * @todo add ignore class definitions
  */
 @SuppressWarnings( "serial" )
-public class Test_CLanguageLabels
+public final class Test_CLanguageLabels
 {
     /**
      * search path
      **/
-    private static final URI c_search;
+    private static final URI SEARCHPATH;
     /**
      * list of all project packages for searching classes
      *
      * @note is needed on finding class-calls within other classes e.g. class a.b.c uses y.x.class
      */
-    private static final Set<String> c_searchpackages = new HashSet<String>()
+    private static final Set<String> SEARCHPACKAGES = new HashSet<String>()
     {{
         for ( String l_package : new String[]{
                 getPackagePath( "agent", "beliefbase", "common", "error", "language", "parser" )
@@ -79,7 +79,7 @@ public class Test_CLanguageLabels
     /**
      * skip list to ignore files
      */
-    private static final Set<String> c_skipfiles = new HashSet<String>()
+    private static final Set<String> SKIPFILES = new HashSet<String>()
     {{
         add( "lightjason/grammar/CASTErrorListener.java" );
     }};
@@ -107,7 +107,7 @@ public class Test_CLanguageLabels
         {
         }
 
-        c_search = l_uri;
+        SEARCHPATH = l_uri;
     }
 
     /**
@@ -122,7 +122,7 @@ public class Test_CLanguageLabels
         try
         {
             final List<Path> l_files = new ArrayList<>();
-            Files.walk( Paths.get( c_search ) ).filter( Files::isRegularFile ).forEach(
+            Files.walk( Paths.get( SEARCHPATH ) ).filter( Files::isRegularFile ).forEach(
                     i -> l_files.add( i )
             );
 
@@ -174,7 +174,7 @@ public class Test_CLanguageLabels
      */
     private void checkFile( final Path p_file ) throws IOException
     {
-        if ( ( !p_file.toString().endsWith( ".java" ) ) || ( c_skipfiles.contains( c_search.relativize( p_file.toUri() ).normalize().toString() ) ) )
+        if ( ( !p_file.toString().endsWith( ".java" ) ) || ( SKIPFILES.contains( SEARCHPATH.relativize( p_file.toUri() ).normalize().toString() ) ) )
             return;
 
         try
@@ -354,7 +354,7 @@ public class Test_CLanguageLabels
                     final String l_name = l_part[l_part.length - 1];
 
                     // try to load class within the defined search pathes
-                    for ( final String l_package : c_searchpackages )
+                    for ( final String l_package : SEARCHPACKAGES )
                         try
                         {
                             return this.getClass().getClassLoader().loadClass( getPackagePath( l_package, l_name ) );
@@ -394,9 +394,9 @@ public class Test_CLanguageLabels
             {
                 l_return[0] = l_return[0].replace( ".class", "" );
                 if ( !l_return[0].contains( ClassUtils.PACKAGE_SEPARATOR ) )
-                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ?
-                                                ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR
-                                                                                     : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
+                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass )
+                                                ? ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR
+                                                : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
             }
 
             return l_return;
