@@ -371,6 +371,9 @@ public final class Test_CLanguageLabels
          * gets the class name and label name
          *
          * @param p_line input timmed line
+         * @param p_package package name
+         * @param p_outerclass outer class
+         * @param p_innerclass inner class
          * @return null or array with class & label name
          */
         private String[] getParameter( final String p_line, final String p_package, final String p_outerclass, final String p_innerclass )
