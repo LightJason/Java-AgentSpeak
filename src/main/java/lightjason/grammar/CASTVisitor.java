@@ -76,7 +76,34 @@ import java.util.stream.Collectors;
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
 public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAgentVisitor, IPlanBundleVisitor
 {
-
+    /**
+     * lightspeed constant
+     */
+    protected static final double LIGHTSPEED = 299792458;
+    /**
+     * avogadro constant
+     */
+    protected static final double AVOGADRO = 6.0221412927e23;
+    /**
+     * boltzmann constant
+     */
+    protected static final double BOLTZMANN = 8.617330350e-15;
+    /**
+     * gravity constant
+     */
+    protected static final double GRAVITY = 6.67408e-11;
+    /**
+     * electron mass constant
+     */
+    protected static final double ELECTRON = 9.10938356e-31;
+    /**
+     * neuron mass constant
+     */
+    protected static final double NEURON = 1674927471214e-27;
+    /**
+     * proton mass constant
+     */
+    protected static final double PROTON = 1.6726219e-27;
     /**
      * initial goal
      */
@@ -868,19 +895,19 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             case "euler":
                 return ( p_context.MINUS() == null ? 1 : -1 ) * Math.E;
             case "lightspeed":
-                return (double) ( ( p_context.MINUS() == null ? 1 : -1 ) * 299792458 );
+                return ( p_context.MINUS() == null ? 1 : -1 ) * LIGHTSPEED;
             case "avogadro":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 6.0221412927e23;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * AVOGADRO;
             case "boltzmann":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 8.617330350e-15;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * BOLTZMANN;
             case "gravity":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 6.67408e-11;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * GRAVITY;
             case "electron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 9.10938356e-31;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * ELECTRON;
             case "neutron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 1674927471214e-27;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * NEURON;
             case "proton":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * PROTON;
             case "infinity":
                 return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
@@ -899,19 +926,19 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             case "euler":
                 return ( p_context.MINUS() == null ? 1 : -1 ) * Math.E;
             case "lightspeed":
-                return (double) ( ( p_context.MINUS() == null ? 1 : -1 ) * 299792458 );
+                return ( p_context.MINUS() == null ? 1 : -1 ) * LIGHTSPEED;
             case "avogadro":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 6.0221412927e23;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * AVOGADRO;
             case "boltzmann":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 8.617330350e-15;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * BOLTZMANN;
             case "gravity":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 6.67408e-11;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * GRAVITY;
             case "electron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 9.10938356e-31;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * ELECTRON;
             case "neutron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 1674927471214e-27;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * NEURON;
             case "proton":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * 1.6726219e-27;
+                return ( p_context.MINUS() == null ? 1 : -1 ) * PROTON;
             case "infinity":
                 return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 

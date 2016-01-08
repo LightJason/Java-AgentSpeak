@@ -138,7 +138,9 @@
             <property name = "option" value = "space" />
         </module>
 
-        <module name = "EmptyLineSeparator" />
+        <module name = "EmptyLineSeparator">
+            <property name = "allowNoEmptyLineBetweenFields" value = "true" />
+        </module>
 
         <module name = "EmptyStatement" />
 
@@ -152,7 +154,7 @@
 
         <module name = "FallThrough" />
 
-        <!-- <module name="FinalClass"/> -->
+        <module name = "FinalClass" />
 
         <module name = "FinalLocalVariable" />
 
@@ -216,6 +218,8 @@
         <module name = "JavadocType">
             <property name = "scope" value = "public" />
             <property name = "allowUnknownTags" value = "true" />
+            <!-- Doxygen @tparam tag must be ignored -->
+            <property name = "allowMissingParamTags" value = "true" />
         </module>
 
         <!-- disables because Doxygen command are not supported
@@ -238,7 +242,10 @@
             <property name = "allowOneCharVarInForLoop" value = "true" />
         </module>
 
-        <module name = "MagicNumber" />
+        <module name = "MagicNumber">
+            <property name = "ignoreAnnotation" value = "true" />
+            <property name = "ignoreHashCodeMethod" value = "true" />
+        </module>
 
         <module name = "MemberName">
             <property name = "format" value = "^m_[a-zA-Z0-9_]{2,}$" />
@@ -363,7 +370,10 @@
             <property name = "option" value = "alone" />
         </module>
 
-        <module name = "SeparatorWrap" />
+        <module name = "SeparatorWrap">
+            <property name = "tokens" value = "DOT" />
+            <property name = "option" value = "nl" />
+        </module>
 
         <module name = "SingleLineJavadoc" />
 

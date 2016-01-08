@@ -53,11 +53,11 @@ public final class CCommon
     /**
      * properties of the package
      */
-    private static final Properties c_properties;
+    private static final Properties PROPERTIES;
     /**
      * package name
      **/
-    private static final String c_packageroot;
+    private static final String PACKAGEROOT;
     /**
      * language resource bundle
      **/
@@ -66,18 +66,18 @@ public final class CCommon
     static
     {
         String l_packageroot = "";
-        c_properties = new Properties();
+        PROPERTIES = new Properties();
         ;
         try
         {
-            c_properties.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
-            l_packageroot = c_properties.getProperty( "rootpackage" );
+            PROPERTIES.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
+            l_packageroot = PROPERTIES.getProperty( "rootpackage" );
         }
         catch ( final IOException l_exception )
         {
         }
 
-        c_packageroot = l_packageroot;
+        PACKAGEROOT = l_packageroot;
     }
 
     /**
@@ -104,7 +104,7 @@ public final class CCommon
      */
     public static Properties getConfiguration()
     {
-        return c_properties;
+        return PROPERTIES;
     }
 
     /**
@@ -114,7 +114,7 @@ public final class CCommon
      */
     public static String getPackage()
     {
-        return c_packageroot;
+        return PACKAGEROOT;
     }
 
     /**
@@ -213,7 +213,7 @@ public final class CCommon
     public static String getLanguageLabel( final Class<?> p_class, final String p_label )
     {
         return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
-                c_packageroot + ".", "" );
+                PACKAGEROOT + ".", "" );
     }
 
 

@@ -78,7 +78,7 @@ public class CAgent implements IAgent
     /**
      * curent agent cycle
      */
-    protected long m_cycle = 0;
+    protected long m_cycle;
     /**
      * aggregation function
      */
@@ -185,12 +185,13 @@ public class CAgent implements IAgent
             System.out.println( "=====>> " + i + " ===\n" );
             System.out.println( "Score " + i.score( m_aggregation, this ) + "\n" );
             System.out.println(
-                    "\n--> " +
-                    i.execute(
+                    "\n--> "
+                    + i.execute(
                             new CContext<>( this, i, i.getVariables(),
                                             Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null
-                    )        + " <--\n" );
+                    )
+                    + " <--\n" );
             System.out.println( "===================================================================" );
 
         } );
