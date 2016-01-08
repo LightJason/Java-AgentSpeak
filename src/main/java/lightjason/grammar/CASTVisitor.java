@@ -628,13 +628,45 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
-        return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+        if ( p_context.arithmetic_expression() != null )
+            return new CAssignment<>(
+                    (IVariable<?>) this.visitVariable( p_context.variable() ),
+                    this.createExecution( this.visitArithmetic_expression( p_context.arithmetic_expression() ) )
+            );
+
+        if ( p_context.logical_expression() != null )
+            return new CAssignment<>(
+                    (IVariable<?>) this.visitVariable( p_context.variable() ),
+                    this.createExecution( this.visitLogical_expression( p_context.logical_expression() ) )
+            );
+
+        if ( p_context.term() != null )
+            return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
     }
 
     @Override
     public Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
-        return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+        if ( p_context.arithmetic_expression() != null )
+            return new CAssignment<>(
+                    (IVariable<?>) this.visitVariable( p_context.variable() ),
+                    this.createExecution( this.visitArithmetic_expression( p_context.arithmetic_expression() ) )
+            );
+
+        if ( p_context.logical_expression() != null )
+            return new CAssignment<>(
+                    (IVariable<?>) this.visitVariable( p_context.variable() ),
+                    this.createExecution( this.visitLogical_expression( p_context.logical_expression() ) )
+            );
+
+        if ( p_context.term() != null )
+            return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
     }
 
     @Override
@@ -950,13 +982,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public final Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
     {
-        return p_context.TRUE() != null ? true : false;
+        return p_context.TRUE() != null;
     }
 
     @Override
     public Object visitLogicalvalue( final PlanBundleParser.LogicalvalueContext p_context )
     {
-        return p_context.TRUE() != null ? true : false;
+        return p_context.TRUE() != null;
     }
 
     @Override

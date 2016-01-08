@@ -17,6 +17,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
     : current_speed(Speed) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
         Speed = 5;
         Speed++;
+        X = 5 + Speed * 3;
         setProperty( Speed, min(5, 9, 3), "test" )[ min(1,2), min(9,8) ];
         print(Speed);
         !!drive;

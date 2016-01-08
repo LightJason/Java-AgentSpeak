@@ -248,7 +248,7 @@ arithmetic_expression :
 assignment_expression :
     variable
     ASSIGN
-    term
+    ( term | logical_expression | arithmetic_expression )
     ;
 
 /**
