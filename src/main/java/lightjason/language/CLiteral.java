@@ -191,10 +191,11 @@ public final class CLiteral implements ILiteral
     @Override
     public final int hashCode()
     {
-        return m_functor.hashCode() +
-               m_values.values().stream().mapToInt( i -> i.hashCode() ).sum() +
-               m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum() +
-               ( m_negated ? 17737 : 55529 ) + ( m_at ? 2741 : 8081 );
+        return m_functor.hashCode()
+               + m_values.values().stream().mapToInt( i -> i.hashCode() ).sum()
+               + m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
+               + ( m_negated ? 17737 : 55529 )
+               + ( m_at ? 2741 : 8081 );
     }
 
     @Override

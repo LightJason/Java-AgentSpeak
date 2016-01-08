@@ -79,7 +79,7 @@
 
         <module name = "AtclauseOrder">
             <property name = "tagOrder"
-                      value = "@author, @version, @see, @since, @param, @return, @throws, @bug, @todo, @exception, @serial, @serialField, @serialData, @deprecated" />
+                      value = " @param, @return, @exception, @throws, @see, @deprecated, @bug, @todo, @author, @version,  @since, @serial, @serialField, @serialData" />
         </module>
 
         <module name = "AvoidEscapedUnicodeCharacters" />

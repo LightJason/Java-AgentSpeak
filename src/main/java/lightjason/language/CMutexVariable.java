@@ -77,49 +77,49 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public synchronized final IVariable<T> set( final T p_value )
+    public final synchronized IVariable<T> set( final T p_value )
     {
         return super.set( p_value );
     }
 
     @Override
-    public synchronized final T get()
+    public final synchronized T get()
     {
         return super.get();
     }
 
     @Override
-    public synchronized final boolean isAllocated()
+    public final synchronized boolean isAllocated()
     {
         return super.isAllocated();
     }
 
     @Override
-    public synchronized final boolean isValueAssignableTo( final Class<?> p_class )
+    public final synchronized boolean isValueAssignableTo( final Class<?> p_class )
     {
         return super.isValueAssignableTo( p_class );
     }
 
     @Override
-    public synchronized final int hashCode()
+    public final synchronized int hashCode()
     {
         return super.hashCode();
     }
 
     @Override
-    public synchronized final boolean equals( final Object p_object )
+    public final synchronized boolean equals( final Object p_object )
     {
         return super.equals( p_object );
     }
 
     @Override
-    public synchronized final String toString()
+    public final synchronized String toString()
     {
         return super.toString();
     }
 
     @Override
-    public synchronized final IVariable<T> clone()
+    public final synchronized IVariable<T> clone()
     {
         return new CMutexVariable<T>( m_functor.toString(), m_value );
     }
