@@ -37,14 +37,14 @@ import static org.junit.Assert.assertTrue;
  * test arithmetic expression
  */
 @SuppressWarnings( "serial" )
-public final class Test_CExpression
+public final class TestCExpression
 {
 
     /**
      * test simple expression with random values
      */
     @Test
-    public void test_SimpleExpressionWithVariable()
+    public void testSimpleExpressionWithVariable()
     {
         final Random l_random = new Random();
         final CExpression l_expression = new CExpression();
@@ -71,7 +71,7 @@ public final class Test_CExpression
      * test complex expression with fixed value
      */
     @Test
-    public void test_ComplexExpression()
+    public void testComplexExpression()
     {
         // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
         final CExpression l_expression1 = new CExpression();

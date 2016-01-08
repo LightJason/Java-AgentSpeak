@@ -87,6 +87,8 @@ public final class CLiteral implements ILiteral
     }
 
     /**
+     * ctor
+     *
      * @param p_at @ prefix is set
      * @param p_functor functor of the literal
      * @param p_values negated flag
@@ -98,6 +100,8 @@ public final class CLiteral implements ILiteral
     }
 
     /**
+     * ctor
+     *
      * @param p_at @ prefix is set
      * @param p_functor functor of the literal
      * @param p_negated negated flag

@@ -86,7 +86,7 @@ public class CAgent implements IAgent
     /**
      * hibernate state
      */
-    private volatile boolean m_hibernate = false;
+    private volatile boolean m_hibernate;
 
 
     /**

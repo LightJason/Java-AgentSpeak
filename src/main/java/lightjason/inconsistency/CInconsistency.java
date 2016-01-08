@@ -54,7 +54,7 @@ public final class CInconsistency implements Callable<CInconsistency>
     /**
      * algebra object
      */
-    private static final Algebra c_algebra = new Algebra();
+    private static final Algebra ALGEBRA = new Algebra();
     /**
      * algorithm to calculate stationary probability
      **/
@@ -149,7 +149,7 @@ public final class CInconsistency implements Callable<CInconsistency>
             } );
 
             // row-wise normalization for getting probabilities
-            final double l_norm = c_algebra.norm1( l_matrix.viewRow( i ) );
+            final double l_norm = ALGEBRA.norm1( l_matrix.viewRow( i ) );
             if ( l_norm != 0 )
                 l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 
@@ -236,10 +236,10 @@ public final class CInconsistency implements Callable<CInconsistency>
         DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
         for ( int i = 0; i < p_iteration; ++i )
         {
-            l_probability = c_algebra.mult( p_matrix, l_probability );
+            l_probability = ALGEBRA.mult( p_matrix, l_probability );
             l_probability.assign(
                     Mult.div(
-                            c_algebra.norm2( l_probability )
+                            ALGEBRA.norm2( l_probability )
                     )
             );
         }
@@ -287,7 +287,7 @@ public final class CInconsistency implements Callable<CInconsistency>
         }
 
         // normalize eigenvector and create positiv oriantation
-        l_eigenvector.assign( Mult.div( c_algebra.norm1( l_eigenvector ) ) );
+        l_eigenvector.assign( Mult.div( ALGEBRA.norm1( l_eigenvector ) ) );
         l_eigenvector.assign(
                 new DoubleFunction()
                 {

@@ -51,7 +51,7 @@ import static org.junit.Assert.assertTrue;
  * test agent structure
  */
 @SuppressWarnings( "serial" )
-public final class Test_CAgent
+public final class TestCAgent
 {
     /**
      * list with default (non-working) actions
@@ -68,7 +68,7 @@ public final class Test_CAgent
      * asl parsing test
      */
     @Test
-    public void test_asl()
+    public void testASL()
     {
         final Map<String, String> l_testing = new HashMap<String, String>()
         {{

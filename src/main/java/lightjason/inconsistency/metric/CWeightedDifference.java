@@ -97,8 +97,9 @@ public final class CWeightedDifference extends IBaseMetric
 
         // return distance
         return new Double(
-                ( ( l_unionSize - l_firstLiterals.size() ) +
-                  ( l_unionSize - l_secondLiterals.size() ) ) * l_unionSize / l_intersectionSize
+                ( ( l_unionSize - l_firstLiterals.size() )
+                  + ( l_unionSize - l_secondLiterals.size() )
+                ) * l_unionSize / l_intersectionSize
         );
     }
 }

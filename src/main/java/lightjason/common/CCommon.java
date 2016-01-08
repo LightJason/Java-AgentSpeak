@@ -61,13 +61,12 @@ public final class CCommon
     /**
      * language resource bundle
      **/
-    private static final ResourceBundle c_language = ResourceBundle.getBundle( "language", Locale.getDefault(), new UTF8Control() );
+    private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle( "language", Locale.getDefault(), new CUTF8Control() );
 
     static
     {
         String l_packageroot = "";
         PROPERTIES = new Properties();
-        ;
         try
         {
             PROPERTIES.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
@@ -94,7 +93,7 @@ public final class CCommon
      */
     public static ResourceBundle getLanguageBundle()
     {
-        return c_language;
+        return LANGUAGE;
     }
 
     /**
@@ -158,6 +157,9 @@ public final class CCommon
      *
      * @param p_file file relative to the CMain
      * @return URL of file or null
+     *
+     * @throws URISyntaxException is thrown on URI errors
+     * @throws MalformedURLException is thrown on malformat
      */
     public static URL getResourceURL( final File p_file ) throws URISyntaxException, MalformedURLException
     {
@@ -194,7 +196,7 @@ public final class CCommon
     {
         try
         {
-            return MessageFormat.format( c_language.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
+            return MessageFormat.format( LANGUAGE.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
         }
         catch ( final MissingResourceException l_exception )
         {
@@ -265,7 +267,7 @@ public final class CCommon
      *
      * @note Java default encoding for property files is ISO-Latin-1
      */
-    private static final class UTF8Control extends ResourceBundle.Control
+    private static final class CUTF8Control extends ResourceBundle.Control
     {
 
         public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,

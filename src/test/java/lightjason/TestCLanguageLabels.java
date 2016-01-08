@@ -57,7 +57,7 @@ import static org.junit.Assert.fail;
  * @todo add ignore class definitions
  */
 @SuppressWarnings( "serial" )
-public final class Test_CLanguageLabels
+public final class TestCLanguageLabels
 {
     /**
      * search path
@@ -182,7 +182,7 @@ public final class Test_CLanguageLabels
                         final FileInputStream l_stream = new FileInputStream( p_file.toFile() )
                 )
         {
-            new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
+            new CJavaVistor().visit( JavaParser.parse( l_stream ), null );
         }
         catch ( final ParseException l_exception )
         {
@@ -193,7 +193,7 @@ public final class Test_CLanguageLabels
     /**
      * AST visitor class
      */
-    private class MyMethodVisitor extends VoidVisitorAdapter<Object>
+    private class CJavaVistor extends VoidVisitorAdapter<Object>
     {
         /**
          * inner class name *
@@ -338,7 +338,7 @@ public final class Test_CLanguageLabels
                 // try to load class with default behaviour
                 return Class.forName( p_name );
             }
-            catch ( final ClassNotFoundException l_forname_exception )
+            catch ( final ClassNotFoundException l_fornameexception )
             {
                 // --- second load try ---
                 try
@@ -346,7 +346,7 @@ public final class Test_CLanguageLabels
                     // try to load class depended on the current classloader
                     return this.getClass().getClassLoader().loadClass( p_name );
                 }
-                catch ( final ClassNotFoundException l_loader_exception )
+                catch ( final ClassNotFoundException l_loaderexception )
                 {
                     // --- third load try ---
                     // create a name without package
@@ -359,7 +359,7 @@ public final class Test_CLanguageLabels
                         {
                             return this.getClass().getClassLoader().loadClass( getPackagePath( l_package, l_name ) );
                         }
-                        catch ( final ClassNotFoundException l_iterating_exception )
+                        catch ( final ClassNotFoundException l_iteratingexception )
                         {
                         }
                     throw new ClassNotFoundException();

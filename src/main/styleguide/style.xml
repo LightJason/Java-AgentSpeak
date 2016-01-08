@@ -111,7 +111,7 @@
         </module>
 
         <module name = "ConstantName">
-            <property name = "format" value = "[A-Z0-9_]{3,}$" />
+            <property name = "format" value = "[A-Z0-9]{3,}$" />
         </module>
 
         <module name = "CovariantEquals" />
@@ -236,11 +236,11 @@
         </module>
 
         <module name = "LocalFinalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9_]{2,}$" />
+            <property name = "format" value = "^l_[a-zA-Z0-9]{2,}$" />
         </module>
 
         <module name = "LocalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9_]{2,}$|i|j" />
+            <property name = "format" value = "^l_[a-zA-Z0-9]{2,}$|i|j" />
             <property name = "allowOneCharVarInForLoop" value = "true" />
         </module>
 
@@ -250,7 +250,7 @@
         </module>
 
         <module name = "MemberName">
-            <property name = "format" value = "^m_[a-zA-Z0-9_]{2,}$" />
+            <property name = "format" value = "^m_[a-zA-Z0-9]{2,}$" />
         </module>
 
         <module name = "MethodCount">
@@ -263,7 +263,7 @@
         </module>
 
         <module name = "MethodName">
-            <property name = "format" value = "^[a-z]{2}[a-zA-Z0-9_]*$" />
+            <property name = "format" value = "^[a-z]{2}[a-zA-Z0-9]*$" />
         </module>
 
         <module name = "MethodParamPad">
@@ -344,7 +344,7 @@
         <module name = "ParameterAssignment" />
 
         <module name = "ParameterName">
-            <property name = "format" value = "^p_[a-zA-Z0-9_]{2,}$" />
+            <property name = "format" value = "^p_[a-zA-Z0-9]{2,}$" />
         </module>
 
         <module name = "ParameterNumber">
@@ -386,7 +386,7 @@
         <module name = "SimplifyBooleanReturn" />
 
         <module name = "StaticVariableName">
-            <property name = "format" value = "^s_[a-zA-Z0-9_]{2,}$" />
+            <property name = "format" value = "^s_[a-zA-Z0-9]{2,}$" />
         </module>
 
         <module name = "StringLiteralEquality" />
@@ -410,7 +410,18 @@
         <module name = "TrailingComment" />
 
         <module name = "TypeName">
-            <property name = "format" value = "^[A-Z][a-zA-Z0-9_]*$" />
+            <property name = "tokens" value = "INTERFACE_DEF" />
+            <property name = "format" value = "^I[A-Z][a-zA-Z0-9]*$" />
+        </module>
+
+        <module name = "TypeName">
+            <property name = "tokens" value = "CLASS_DEF" />
+            <property name = "format" value = "^(((Test)?C)|I)[A-Z][a-zA-Z0-9]*$" />
+        </module>
+
+        <module name = "TypeName">
+            <property name = "tokens" value = "ENUM_DEF" />
+            <property name = "format" value = "^E[A-Z][a-zA-Z0-9]*$" />
         </module>
 
         <module name = "TypecastParenPad" />
@@ -425,7 +436,10 @@
 
         <module name = "VariableDeclarationUsageDistance" />
 
-        <module name = "VisibilityModifier" />
+        <module name = "VisibilityModifier">
+            <property name = "allowPublicImmutableFields" value = "false" />
+            <property name = "protectedAllowed" value = "true" />
+        </module>
 
         <module name = "WhitespaceAfter">
             <property name = "tokens" value = "COMMA" />
