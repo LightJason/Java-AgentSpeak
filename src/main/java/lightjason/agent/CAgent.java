@@ -72,7 +72,7 @@ public class CAgent implements IAgent
     /**
      * execution goal list
      *
-     * @bug incompelete / unusable
+     * @todo incompelete usage
      */
     protected final Set<ILiteral> m_goals = Collections.newSetFromMap( new ConcurrentHashMap<>() );
     /**
