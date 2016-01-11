@@ -10,6 +10,8 @@ machine:
     environment:
       GIT_AUTHOR_NAME: CircleCI
       GIT_AUTHOR_EMAIL: info@flashpixx.de
+      GIT_COMMITTER_NAME: CircleCI
+      GIT_COMMITTER_EMAIL: info@flashpixx.de
 
     java:
       version: oraclejdk8
@@ -32,5 +34,5 @@ test:
       - mv /tmp/.gitignore .
       - mv /tmp/circle.yml .
       - mv /tmp/html/* .
-      - git add .
+      - git add --all .
       - git commit -m "current documentation"
