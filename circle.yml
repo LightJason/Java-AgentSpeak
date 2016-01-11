@@ -36,4 +36,4 @@ test:
       - mv /tmp/html/* .
       - git add --all .
       - git commit -m "current documentation"
-      - git push
+      - git push origin gh-pages
