@@ -20,6 +20,9 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
 
 
+* [Source code documentation (master branch)](http://flashpixx.github.io/Light-Jason/)
+
+
 
 ## Base Definitions
 

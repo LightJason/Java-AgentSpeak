@@ -6,7 +6,7 @@
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "Light-Jason"
 PROJECT_NUMBER         =
-PROJECT_BRIEF          = "AgentSpeak(L) light version"
+PROJECT_BRIEF          = "AgentSpeak(L) Light Version"
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = target/documentation
 CREATE_SUBDIRS         = YES
