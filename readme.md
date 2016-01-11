@@ -146,7 +146,7 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
 
 #### String
 
-* concat / substring / reverse
+* concat / substring / reverse / contains
 * upper / lower
 * beginswith / endswith
 * count / length
