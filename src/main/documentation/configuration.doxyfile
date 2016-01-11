@@ -31,16 +31,16 @@ FULL_PATH_NAMES        = NO
 STRIP_FROM_PATH        =
 STRIP_FROM_INC_PATH    =
 SHORT_NAMES            = YES
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
-TAB_SIZE               = 1
+TAB_SIZE               = 4
 ALIASES                =
 TCL_SUBST              =
-OPTIMIZE_OUTPUT_FOR_C  = YES
-OPTIMIZE_OUTPUT_JAVA   = NO
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_JAVA   = YES
 OPTIMIZE_FOR_FORTRAN   = NO
 OPTIMIZE_OUTPUT_VHDL   = NO
 EXTENSION_MAPPING      =
@@ -50,11 +50,11 @@ BUILTIN_STL_SUPPORT    = YES
 CPP_CLI_SUPPORT        = YES
 SIP_SUPPORT            = NO
 IDL_PROPERTY_SUPPORT   = NO
-DISTRIBUTE_GROUP_DOC   = NO
-GROUP_NESTED_COMPOUNDS = NO
+DISTRIBUTE_GROUP_DOC   = YES
+GROUP_NESTED_COMPOUNDS = YES
 SUBGROUPING            = YES
-INLINE_GROUPED_CLASSES = NO
-INLINE_SIMPLE_STRUCTS  = NO
+INLINE_GROUPED_CLASSES = YES
+INLINE_SIMPLE_STRUCTS  = YES
 TYPEDEF_HIDES_STRUCT   = YES
 LOOKUP_CACHE_SIZE      = 0
 #---------------------------------------------------------------------------
@@ -134,8 +134,8 @@ USE_MDFILE_AS_MAINPAGE = readme.md
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
 #---------------------------------------------------------------------------
-SOURCE_BROWSER         = NO
-INLINE_SOURCES         = YES
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
 STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
@@ -154,7 +154,7 @@ IGNORE_PREFIX          =
 #---------------------------------------------------------------------------
 GENERATE_HTML          = YES
 HTML_OUTPUT            =
-HTML_FILE_EXTENSION    = .htm
+HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =
 HTML_FOOTER            = src/main/documentation/footer.htm
 HTML_STYLESHEET        =
