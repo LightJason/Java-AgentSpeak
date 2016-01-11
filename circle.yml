@@ -7,6 +7,10 @@ machine:
     timezone:
       Europe/Berlin
 
+    environment:
+      GIT_AUTHOR_NAME: CircleCI
+      GIT_AUTHOR_EMAIL: info@flashpixx.de
+
     java:
       version: oraclejdk8
 
