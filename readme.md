@@ -1,6 +1,6 @@
 # Light-Jason - Lightwire version of AgentSpeak(L)
 
-[![Circle CI](https://circleci.com/gh/flashpixx/Light-Jason.svg?style=shield)](https://circleci.com/gh/flashpixx/Light-Jason)
+![Circle CI](https://circleci.com/gh/flashpixx/Light-Jason.svg?style=shield)
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini
 a Java 8 implementation has been build-up. The version defines an additional AgentSpeak(L) grammar based on
