@@ -5,11 +5,21 @@ general:
 
 machine:
     timezone:
-        Europe/Berlin
+      Europe/Berlin
 
     java:
-        version: oraclejdk8
+      version: oraclejdk8
 
 dependencies:
     pre:
-        - sudo apt-get install doxygen
+      - sudo apt-get install doxygen
+
+test:
+    post:
+      - mv target/documentation/html /tmp
+      - git clean -xdf
+      - git checkout gh-pages
+      - mv circle.yml /tmp
+      - rm -Rf *
+      - mv /tmp/circle.yml .
+      - mv /tmp/html/* .
