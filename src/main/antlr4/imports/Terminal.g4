@@ -68,7 +68,6 @@ RANGULARBRACKET            : ']';
 LCURVEDBRACKET             : '{';
 RCURVEDBRACKET             : '}';
 
-NEGATION                   : 'not';
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
 

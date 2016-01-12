@@ -245,8 +245,8 @@ expression :
  * logical expression
  **/
 expression_logic :
-    expression_logic_or
-    | NEGATION? LROUNDBRACKET expression RROUNDBRACKET
+    EXCLAMATIONMARK? LROUNDBRACKET expression RROUNDBRACKET
+    | expression_logic_or
     ;
 
 /**
@@ -258,9 +258,10 @@ expression_logic_or :
 
 /**
  * logical and- / xor-expression
+ * @bug logical literals and variables not working
  **/
 expression_logic_and :
-    ( expression_numeric | expression_logical_element ) ( ( AND | XOR ) expression )*
+    ( expression_logical_element | expression_numeric ) ( ( AND | XOR ) expression )*
     ;
 
 /**
