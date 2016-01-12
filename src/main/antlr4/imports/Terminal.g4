@@ -93,16 +93,16 @@ LISTSEPARATOR              : '|';
  * allow on logical and-concationation
  * also c-style-based & / and
  **/
-AND                        : '&&';
+AND                        : '&&' | 'and';
 /**
  * allow on logical or-concationation
  * also c-style-based
  **/
-OR                         : '||';
+OR                         : '||' | 'or';
 /**
  * define an logical xor-definition
  **/
-XOR                        : '^';
+XOR                        : '^' | 'xor';
 
 /**
  * variable operators

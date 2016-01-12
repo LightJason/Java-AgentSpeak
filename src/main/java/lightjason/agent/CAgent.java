@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
  * agent class
  *
  * @bug remove test plan execution
+ * @bug inspector call incomplete
  */
 public class CAgent implements IAgent
 {
