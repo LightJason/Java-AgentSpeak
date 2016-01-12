@@ -73,8 +73,8 @@ public final class TestCAgent
         final Map<String, String> l_testing = new HashMap<String, String>()
         {{
 
-            put( "src/test/resources/agentsuccess.asl", "complex successful agent" );
-            put( "src/test/resources/agentsimple.asl", "simple agent" );
+            //put( "src/test/resources/agentsuccess.asl", "successful agent" );
+            //put( "src/test/resources/agentsimple.asl", "simple agent" );
 
         }};
 

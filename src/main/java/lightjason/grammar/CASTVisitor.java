@@ -39,7 +39,6 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoal;
-import lightjason.language.execution.action.CAssignment;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
@@ -60,6 +59,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -77,33 +77,22 @@ import java.util.stream.Collectors;
 public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAgentVisitor, IPlanBundleVisitor
 {
     /**
-     * lightspeed constant
+     * numeric constant values - infinity is defined manually
      */
-    protected static final double LIGHTSPEED = 299792458;
-    /**
-     * avogadro constant
-     */
-    protected static final double AVOGADRO = 6.0221412927e23;
-    /**
-     * boltzmann constant
-     */
-    protected static final double BOLTZMANN = 8.617330350e-15;
-    /**
-     * gravity constant
-     */
-    protected static final double GRAVITY = 6.67408e-11;
-    /**
-     * electron mass constant
-     */
-    protected static final double ELECTRON = 9.10938356e-31;
-    /**
-     * neuron mass constant
-     */
-    protected static final double NEURON = 1674927471214e-27;
-    /**
-     * proton mass constant
-     */
-    protected static final double PROTON = 1.6726219e-27;
+    protected static final Map<String, Double> NUMERICCONSTANT = new HashMap<String, Double>()
+    {{
+
+        put( "pi", Math.PI );
+        put( "euler", Math.E );
+        put( "lightspeed", 299792458.0 );
+        put( "avogadro", 6.0221412927e23 );
+        put( "boltzmann", 8.617330350e-15 );
+        put( "gravity", 6.67408e-11 );
+        put( "electron", 9.10938356e-31 );
+        put( "neutron", 1674927471214e-27 );
+        put( "proton", 1.6726219e-27 );
+
+    }};
     /**
      * initial goal
      */
@@ -590,83 +579,24 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
     @Override
-    public Object visitLogical_expression( final AgentParser.Logical_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitLogical_expression( final PlanBundleParser.Logical_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitComparison_expression( final AgentParser.Comparison_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitComparison_expression( final PlanBundleParser.Comparison_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitArithmetic_expression( final AgentParser.Arithmetic_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitArithmetic_expression( final PlanBundleParser.Arithmetic_expressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
-        if ( p_context.arithmetic_expression() != null )
-            return new CAssignment<>(
-                    (IVariable<?>) this.visitVariable( p_context.variable() ),
-                    this.createExecution( this.visitArithmetic_expression( p_context.arithmetic_expression() ) )
-            );
-
-        if ( p_context.logical_expression() != null )
-            return new CAssignment<>(
-                    (IVariable<?>) this.visitVariable( p_context.variable() ),
-                    this.createExecution( this.visitLogical_expression( p_context.logical_expression() ) )
-            );
-
+        /*
         if ( p_context.term() != null )
             return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
-
-
+        */
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
     }
 
     @Override
     public Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
-        if ( p_context.arithmetic_expression() != null )
-            return new CAssignment<>(
-                    (IVariable<?>) this.visitVariable( p_context.variable() ),
-                    this.createExecution( this.visitArithmetic_expression( p_context.arithmetic_expression() ) )
-            );
-
-        if ( p_context.logical_expression() != null )
-            return new CAssignment<>(
-                    (IVariable<?>) this.visitVariable( p_context.variable() ),
-                    this.createExecution( this.visitLogical_expression( p_context.logical_expression() ) )
-            );
-
+        /*
         if ( p_context.term() != null )
             return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
-
-
+        */
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
+
     }
 
     @Override
@@ -920,63 +850,27 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitFloatnumber( final AgentParser.FloatnumberContext p_context )
     {
-        switch ( p_context.getText() )
-        {
-            case "pi":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * Math.PI;
-            case "euler":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * Math.E;
-            case "lightspeed":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * LIGHTSPEED;
-            case "avogadro":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * AVOGADRO;
-            case "boltzmann":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * BOLTZMANN;
-            case "gravity":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * GRAVITY;
-            case "electron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * ELECTRON;
-            case "neutron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * NEURON;
-            case "proton":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * PROTON;
-            case "infinity":
-                return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
+        if ( p_context.getText().equals( "infinity" ) )
+            return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
-            default:
-                return Double.valueOf( p_context.getText() );
-        }
+        final Double l_constant = NUMERICCONSTANT.get( p_context.getText() );
+        if ( l_constant != null )
+            return l_constant;
+
+        return Double.valueOf( p_context.getText() );
     }
 
     @Override
     public Object visitFloatnumber( final PlanBundleParser.FloatnumberContext p_context )
     {
-        switch ( p_context.getText() )
-        {
-            case "pi":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * Math.PI;
-            case "euler":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * Math.E;
-            case "lightspeed":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * LIGHTSPEED;
-            case "avogadro":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * AVOGADRO;
-            case "boltzmann":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * BOLTZMANN;
-            case "gravity":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * GRAVITY;
-            case "electron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * ELECTRON;
-            case "neutron":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * NEURON;
-            case "proton":
-                return ( p_context.MINUS() == null ? 1 : -1 ) * PROTON;
-            case "infinity":
-                return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
+        if ( p_context.getText().equals( "infinity" ) )
+            return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
-            default:
-                return Double.valueOf( p_context.getText() );
-        }
+        final Double l_constant = NUMERICCONSTANT.get( p_context.getText() );
+        if ( l_constant != null )
+            return l_constant;
+
+        return Double.valueOf( p_context.getText() );
     }
 
     @Override
@@ -1040,25 +934,121 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
     @Override
-    public final Object visitComparator( final AgentParser.ComparatorContext p_context )
+    public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitComparator( final PlanBundleParser.ComparatorContext p_context )
+    public Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public final Object visitArithmeticoperator( final AgentParser.ArithmeticoperatorContext p_context )
+    public Object visitExpression_logic_negation( final PlanBundleParser.Expression_logic_negationContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitArithmeticoperator( final PlanBundleParser.ArithmeticoperatorContext p_context )
+    public Object visitExpression_logic_negation( final AgentParser.Expression_logic_negationContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_logic_or( final PlanBundleParser.Expression_logic_orContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_logic_or( final AgentParser.Expression_logic_orContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_logic_and( final PlanBundleParser.Expression_logic_andContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_logic_and( final AgentParser.Expression_logic_andContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_equal( final PlanBundleParser.Expression_equalContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_equal( final AgentParser.Expression_equalContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_relation( final PlanBundleParser.Expression_relationContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_relation( final AgentParser.Expression_relationContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_numeric_additive( final PlanBundleParser.Expression_numeric_additiveContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_numeric_additive( final AgentParser.Expression_numeric_additiveContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_numeric_multiply( final PlanBundleParser.Expression_numeric_multiplyContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_numeric_multiply( final AgentParser.Expression_numeric_multiplyContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitLogical_element( final AgentParser.Logical_elementContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitLogical_element( final PlanBundleParser.Logical_elementContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitNumeric_element( final AgentParser.Numeric_elementContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitNumeric_element( final PlanBundleParser.Numeric_elementContext p_context )
     {
         return this.visitChildren( p_context );
     }

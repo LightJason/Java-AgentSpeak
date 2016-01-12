@@ -4,7 +4,6 @@ second(true).
 !drive.
 
 +!drive
-: true
-<-
-	print("drive default");
-    !!drive.
+    <-
+	    print("drive default");
+        !!drive.

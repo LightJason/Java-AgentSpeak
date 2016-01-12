@@ -157,7 +157,7 @@ plan_belief_trigger :
  * logical context for plan matching
  **/
 plan_context :
-    logical_expression
+    expression
     ;
 
 /**
@@ -186,77 +186,11 @@ body_formula :
     | term
     ;
 
-block_formula :
-    LCURVEDBRACKET body RCURVEDBRACKET
-    | body_formula
-    ;
-
-if_else :
-    IF LROUNDBRACKET logical_expression RROUNDBRACKET
-    block_formula
-    ( ELSE block_formula )?
-    ;
-
-while_loop :
-    WHILE LROUNDBRACKET logical_expression RROUNDBRACKET
-    block_formula
-    ;
-
-for_loop :
-    FOR LROUNDBRACKET assignment_expression? SEMICOLON logical_expression SEMICOLON assignment_expression? RROUNDBRACKET
-    block_formula
-    ;
-
-foreach_loop :
-    FOR LROUNDBRACKET term RROUNDBRACKET
-    block_formula
-    ;
-
 /**
- * logical expression
+ * belief-action operator
  **/
-logical_expression :
-    NEGATION logical_expression
-    | LROUNDBRACKET logical_expression RROUNDBRACKET
-    | logical_expression (XOR | AND | OR) logical_expression
-    | comparison_expression
-    | logicalvalue
-    | literal
-    ;
-
-/**
- * comparision expression
- **/
-comparison_expression :
-    arithmetic_expression comparator arithmetic_expression
-    ;
-
-/**
- * arithmetic expression
- **/
-arithmetic_expression :
-    MINUS? LROUNDBRACKET arithmetic_expression RROUNDBRACKET
-    | arithmetic_expression arithmeticoperator arithmetic_expression
-    | number
-    | variable
-    | literal
-    ;
-
-/**
- * assignment expression (for assignin a variable)
- **/
-assignment_expression :
-    variable
-    ASSIGN
-    ( term | logical_expression | arithmetic_expression )
-    ;
-
-/**
- * unary expression
- **/
-unary_expression :
-    variable
-    unaryoperator
+belief_action :
+    ( PLUS | MINUS | MINUSPLUS ) literal
     ;
 
 /**
@@ -274,10 +208,11 @@ test_goal_action :
     ;
 
 /**
- * belief-action operator
+ * unary expression
  **/
-belief_action :
-    ( PLUS | MINUS | MINUSPLUS ) literal
+unary_expression :
+    variable
+    unaryoperator
     ;
 
 /**
@@ -287,6 +222,109 @@ deconstruct_expression :
     variablelist
     DECONSTRUCT
     ( literal | variable )
+    ;
+
+/**
+ * assignment expression (for assignin a variable)
+ **/
+assignment_expression :
+    variable
+    ASSIGN
+    ( term | expression )
+    ;
+
+/**
+ * numerical / logical expression
+ **/
+expression :
+    LROUNDBRACKET expression_logic_or RROUNDBRACKET
+    ;
+
+/**
+ * logical negotiation
+ **/
+expression_logic_negation :
+    NEGATION? expression
+    ;
+
+/**
+ * logical or expression
+ **/
+expression_logic_or :
+    expression_logic_and ( OR expression_logic_and )*
+    ;
+
+/**
+ * logical and expression
+ **/
+expression_logic_and :
+    expression_equal ( AND expression_equal )*
+    ;
+
+/**
+ * equal expression
+ **/
+expression_equal :
+    expression_relation ( (EQUAL | NOTEQUAL) expression_relation )*
+    ;
+
+/**
+ * relation expression
+ **/
+expression_relation :
+    expression_numeric_additive ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL) expression_numeric_additive )*
+    ;
+
+/**
+ * numeric addition expression
+ **/
+expression_numeric_additive :
+    expression_numeric_multiply ( (PLUS | MINUS) expression_numeric_multiply )*
+    ;
+
+/**
+ * numeric multiply expression
+ **/
+expression_numeric_multiply :
+    numeric_element ( (MULTIPLY | DIVIDE | MODULO ) numeric_element )*
+    ;
+
+logical_element :
+    logicalvalue
+    | variable
+    | literal
+    ;
+
+numeric_element :
+    number
+    | variable
+    | literal
+    ;
+
+block_formula :
+    LCURVEDBRACKET body RCURVEDBRACKET
+    | body_formula
+    ;
+
+if_else :
+    IF LROUNDBRACKET expression RROUNDBRACKET
+    block_formula
+    ( ELSE block_formula )?
+    ;
+
+while_loop :
+    WHILE LROUNDBRACKET expression RROUNDBRACKET
+    block_formula
+    ;
+
+for_loop :
+    FOR LROUNDBRACKET assignment_expression? SEMICOLON expression SEMICOLON assignment_expression? RROUNDBRACKET
+    block_formula
+    ;
+
+foreach_loop :
+    FOR LROUNDBRACKET term RROUNDBRACKET
+    block_formula
     ;
 // ---------------------------------------------------------------------------------------
 
@@ -313,6 +351,7 @@ term :
     | number
     | logicalvalue
     | literal
+    | expression
     | variable
     | variablelist
     | LANGULARBRACKET termlist RANGULARBRACKET
@@ -358,31 +397,6 @@ variable :
     AT?
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT | SLASH )*
-    ;
-
-/**
- * comperator
- **/
-comparator :
-    LESS
-    | LESSEQUAL
-    | EQUAL
-    | NOTEQUAL
-    | GREATER
-    | GREATEREQUAL
-    ;
-
-/**
- * arithmetic operator
- **/
-arithmeticoperator :
-    LOWERCASELETTER+
-    | PLUS
-    | MINUS
-    | MULTIPLY
-    | DIVIDE
-    | MODULO
-    | POW
     ;
 
 /**
