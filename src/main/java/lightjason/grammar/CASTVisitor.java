@@ -478,6 +478,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return p_context == null ? "" : p_context.getText();
     }
 
+
+
     @Override
     public Object visitBody( final AgentParser.BodyContext p_context )
     {
@@ -494,6 +496,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 Collectors.toList() );
     }
 
+
+
     @Override
     public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
     {
@@ -505,6 +509,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
+
+
 
     @Override
     public final Object visitPrinciples( final PlanBundleParser.PrinciplesContext p_context )
@@ -518,6 +524,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
     {
@@ -529,6 +537,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
+
+
 
     @Override
     public Object visitIf_else( final AgentParser.If_elseContext p_context )
@@ -542,6 +552,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
     public Object visitWhile_loop( final AgentParser.While_loopContext p_context )
     {
@@ -553,6 +565,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
+
+
 
     @Override
     public Object visitFor_loop( final AgentParser.For_loopContext p_context )
@@ -566,6 +580,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
     public Object visitForeach_loop( final AgentParser.Foreach_loopContext p_context )
     {
@@ -577,6 +593,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return this.visitChildren( p_context );
     }
+
+
 
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
@@ -598,6 +616,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
 
     }
+
+
 
     @Override
     public Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
@@ -631,6 +651,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         }
     }
 
+
+
     @Override
     public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
@@ -643,6 +665,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
     }
 
+
+
     @Override
     public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
     {
@@ -654,6 +678,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
+
+
 
     @Override
     public Object visitBelief_action( final AgentParser.Belief_actionContext p_context )
@@ -685,6 +711,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
     }
 
+
+
     @Override
     public Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
     {
@@ -697,6 +725,11 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
@@ -708,11 +741,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
-
     @Override
     public Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
     {
@@ -723,6 +751,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
     }
+
+
 
     @Override
     public Object visitLiteralset( final AgentParser.LiteralsetContext p_context )
@@ -741,6 +771,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
     }
+
+
 
     @Override
     public Object visitTerm( final AgentParser.TermContext p_context )
@@ -784,6 +816,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
 
+
+
     @Override
     public Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
@@ -806,6 +840,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         ).collect( Collectors.toList() );
     }
 
+
+
     @Override
     public Object visitVariablelist( final AgentParser.VariablelistContext p_context )
     {
@@ -818,22 +854,24 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
-    @Override
-    public final Object visitNumber( final AgentParser.NumberContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
+    public final Object visitNumber( final AgentParser.NumberContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
     public Object visitNumber( final PlanBundleParser.NumberContext p_context )
     {
         return this.visitChildren( p_context );
     }
+
+
 
     @Override
     public final Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
@@ -846,6 +884,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return Long.valueOf( p_context.getText() );
     }
+
+
 
     @Override
     public Object visitFloatnumber( final AgentParser.FloatnumberContext p_context )
@@ -873,6 +913,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return Double.valueOf( p_context.getText() );
     }
 
+
+
     @Override
     public final Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
     {
@@ -884,6 +926,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return p_context.TRUE() != null;
     }
+
+
 
     @Override
     public final Object visitConstant( final AgentParser.ConstantContext p_context )
@@ -897,6 +941,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
     public final Object visitString( final AgentParser.StringContext p_context )
     {
@@ -908,6 +954,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return p_context.getText();
     }
+
+
 
     @Override
     public Object visitAtom( final AgentParser.AtomContext p_context )
@@ -921,6 +969,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return p_context.getText();
     }
 
+
+
     @Override
     public Object visitVariable( final AgentParser.VariableContext p_context )
     {
@@ -933,11 +983,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
 
-    @Override
-    public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
+
 
     @Override
     public Object visitExpression( final AgentParser.ExpressionContext p_context )
@@ -946,13 +992,29 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
     @Override
-    public Object visitExpression_logic_negation( final PlanBundleParser.Expression_logic_negationContext p_context )
+    public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_logic( final AgentParser.Expression_logicContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_logic_negation( final AgentParser.Expression_logic_negationContext p_context )
+    public Object visitExpression_logic( final PlanBundleParser.Expression_logicContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_logic_or( final AgentParser.Expression_logic_orContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -963,8 +1025,10 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
-    public Object visitExpression_logic_or( final AgentParser.Expression_logic_orContext p_context )
+    public Object visitExpression_logic_and( final AgentParser.Expression_logic_andContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -975,32 +1039,66 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
-    public Object visitExpression_logic_and( final AgentParser.Expression_logic_andContext p_context )
+    public Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_equal( final PlanBundleParser.Expression_equalContext p_context )
+    public Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_numeric( final AgentParser.Expression_numericContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_equal( final AgentParser.Expression_equalContext p_context )
+    public Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_numeric_equal( final AgentParser.Expression_numeric_equalContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_relation( final PlanBundleParser.Expression_relationContext p_context )
+    public Object visitExpression_numeric_equal( final PlanBundleParser.Expression_numeric_equalContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_numeric_relation( final AgentParser.Expression_numeric_relationContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_relation( final AgentParser.Expression_relationContext p_context )
+    public Object visitExpression_numeric_relation( final PlanBundleParser.Expression_numeric_relationContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_numeric_additive( final AgentParser.Expression_numeric_additiveContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1011,47 +1109,49 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         return this.visitChildren( p_context );
     }
 
+
+
     @Override
-    public Object visitExpression_numeric_additive( final AgentParser.Expression_numeric_additiveContext p_context )
+    public Object visitExpression_numeric_multiplicative( final AgentParser.Expression_numeric_multiplicativeContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_numeric_multiply( final PlanBundleParser.Expression_numeric_multiplyContext p_context )
+    public Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_numeric_pow( final AgentParser.Expression_numeric_powContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitExpression_numeric_multiply( final AgentParser.Expression_numeric_multiplyContext p_context )
+    public Object visitExpression_numeric_pow( final PlanBundleParser.Expression_numeric_powContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitExpression_numeric_element( final AgentParser.Expression_numeric_elementContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitLogical_element( final AgentParser.Logical_elementContext p_context )
+    public Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
-    @Override
-    public Object visitLogical_element( final PlanBundleParser.Logical_elementContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
 
-    @Override
-    public Object visitNumeric_element( final AgentParser.Numeric_elementContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitNumeric_element( final PlanBundleParser.Numeric_elementContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
 
     @Override
     public final Object visitUnaryoperator( final AgentParser.UnaryoperatorContext p_context )
@@ -1060,33 +1160,35 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
     @Override
-    public Object visitUnaryoperator( final PlanBundleParser.UnaryoperatorContext p_context )
+    public final Object visitUnaryoperator( final PlanBundleParser.UnaryoperatorContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public final Object visitBinaryoperator( final AgentParser.BinaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitBinaryoperator( final AgentParser.BinaryoperatorContext p_context )
+    public final Object visitBinaryoperator( final PlanBundleParser.BinaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
-    @Override
-    public Object visitBinaryoperator( final PlanBundleParser.BinaryoperatorContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- getter and helper structure -------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final Set<ILiteral> getInitialBeliefs()
     {
         return m_InitialBeliefs;
     }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final SetMultimap<ITrigger<?>, IPlan> getPlans()

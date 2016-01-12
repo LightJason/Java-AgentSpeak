@@ -91,12 +91,12 @@ LISTSEPARATOR              : '|';
 
 /**
  * allow on logical and-concationation
- * also c- and pascal-style-based & / and
+ * also c-style-based & / and
  **/
 AND                        : '&&';
 /**
  * allow on logical or-concationation
- * also c- and pascal-style-based | / or
+ * also c-style-based
  **/
 OR                         : '||';
 /**

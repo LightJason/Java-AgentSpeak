@@ -237,65 +237,88 @@ assignment_expression :
  * numerical / logical expression
  **/
 expression :
-    LROUNDBRACKET expression_logic_or RROUNDBRACKET
+    expression_logic
+    | expression_numeric
     ;
 
 /**
- * logical negotiation
+ * logical expression
  **/
-expression_logic_negation :
-    NEGATION? expression
+expression_logic :
+    expression_logic_or
+    | NEGATION? LROUNDBRACKET expression RROUNDBRACKET
     ;
 
 /**
- * logical or expression
+ * logical or-expression
  **/
 expression_logic_or :
-    expression_logic_and ( OR expression_logic_and )*
+    expression_logic_and ( OR expression )*
     ;
 
 /**
- * logical and expression
+ * logical and- / xor-expression
  **/
 expression_logic_and :
-    expression_equal ( AND expression_equal )*
+    ( expression_numeric | expression_logical_element ) ( ( AND | XOR ) expression )*
     ;
 
 /**
- * equal expression
+ * logic element for expressions
  **/
-expression_equal :
-    expression_relation ( (EQUAL | NOTEQUAL) expression_relation )*
-    ;
-
-/**
- * relation expression
- **/
-expression_relation :
-    expression_numeric_additive ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL) expression_numeric_additive )*
-    ;
-
-/**
- * numeric addition expression
- **/
-expression_numeric_additive :
-    expression_numeric_multiply ( (PLUS | MINUS) expression_numeric_multiply )*
-    ;
-
-/**
- * numeric multiply expression
- **/
-expression_numeric_multiply :
-    numeric_element ( (MULTIPLY | DIVIDE | MODULO ) numeric_element )*
-    ;
-
-logical_element :
+expression_logical_element :
     logicalvalue
     | variable
     | literal
     ;
 
-numeric_element :
+/**
+ * numerical expression
+ **/
+expression_numeric :
+    LROUNDBRACKET expression_numeric RROUNDBRACKET
+    | expression_numeric_equal
+    ;
+
+/**
+ * equal expression
+ **/
+expression_numeric_equal :
+    expression_numeric_relation ( (EQUAL | NOTEQUAL) expression_numeric )*
+    ;
+
+/**
+ * relation expression
+ **/
+expression_numeric_relation :
+    expression_numeric_additive ( (LESSEQUAL | LESS | GREATER | GREATEREQUAL) expression_numeric )*
+    ;
+
+/**
+ * numeric addition-expression
+ **/
+expression_numeric_additive :
+    expression_numeric_multiplicative ( (PLUS | MINUS) expression_numeric )*
+    ;
+
+/**
+ * numeric multiply-expression
+ **/
+expression_numeric_multiplicative :
+    expression_numeric_pow ( (MULTIPLY | DIVIDE | MODULO ) expression_numeric )*
+    ;
+
+/**
+ * numeric pow-expression
+ **/
+expression_numeric_pow :
+    expression_numeric_element ( POW expression_numeric )*
+    ;
+
+/**
+ * numeric element for expression
+ **/
+expression_numeric_element :
     number
     | variable
     | literal
@@ -351,7 +374,6 @@ term :
     | number
     | logicalvalue
     | literal
-    | expression
     | variable
     | variablelist
     | LANGULARBRACKET termlist RANGULARBRACKET
