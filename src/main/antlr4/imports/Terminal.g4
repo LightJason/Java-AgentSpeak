@@ -90,19 +90,17 @@ INFINITY                   : 'infinity';
 LISTSEPARATOR              : '|';
 
 /**
- * allow on logical and-concationation
- * also c-style-based & / and
+ * logical and-concationation (c-style)
  **/
-AND                        : '&&' | 'and';
+AND                        : '&&';
 /**
- * allow on logical or-concationation
- * also c-style-based
+ * logical or-concationation (c-style)
  **/
-OR                         : '||' | 'or';
+OR                         : '||';
 /**
- * define an logical xor-definition
+ * logical xor-concationation (c-style)
  **/
-XOR                        : '^' | 'xor';
+XOR                        : '^';
 
 /**
  * variable operators
