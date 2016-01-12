@@ -191,13 +191,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public final Object visitPrinciples( final AgentParser.PrinciplesContext p_context )
+    public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitPrinciple( final AgentParser.PrincipleContext p_context )
+    public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -513,13 +513,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public final Object visitPrinciples( final PlanBundleParser.PrinciplesContext p_context )
+    public Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitPrinciple( final PlanBundleParser.PrincipleContext p_context )
+    public Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
     {
         return this.visitChildren( p_context );
     }

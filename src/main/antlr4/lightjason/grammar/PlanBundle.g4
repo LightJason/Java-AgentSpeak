@@ -36,7 +36,7 @@ import AgentSpeak;
  **/
 planbundle :
     belief*
-    principles?
+    logicrules?
     plans
     ;
 

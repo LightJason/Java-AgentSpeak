@@ -49,8 +49,8 @@ plans :
 /**
  * optional (prolog) rules
  **/
-principles :
-    principle+
+logicrules :
+    logicrule+
     ;
 
 /**
@@ -80,7 +80,7 @@ plandefinition :
  * rules are similar to plans
  * but without context and trigger event
  **/
-principle :
+logicrule :
     annotations?
     literal
     RULEOPERATOR

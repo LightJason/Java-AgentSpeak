@@ -37,7 +37,7 @@ import AgentSpeak;
 agent :
     initial_beliefs?
     initial_goal?
-    principles?
+    logicrules?
     plans
     ;
 
