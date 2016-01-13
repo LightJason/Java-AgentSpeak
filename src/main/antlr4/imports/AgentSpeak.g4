@@ -254,8 +254,7 @@ unary_expression :
  * numerical / logical expression
  **/
 expression :
-    EXCLAMATIONMARK? LROUNDBRACKET expression RROUNDBRACKET
-    | expression_logic_or
+    expression_logic_or
     ;
 
 /**
@@ -269,16 +268,23 @@ expression_logic_or :
  * logical and- / xor-expression
  **/
 expression_logic_and :
-    ( expression_logical_element | expression_numeric ) ( ( AND | XOR ) expression )*
+    ( expression_logical_negation | expression_logical_element | expression_numeric ) ( ( AND | XOR ) expression )*
     ;
 
 /**
  * logic element for expressions
  **/
 expression_logical_element :
-    logicalvalue
+    | logicalvalue
     | variable
     | literal
+    ;
+
+/**
+ * negated expression
+ **/
+expression_logical_negation :
+    EXCLAMATIONMARK LROUNDBRACKET expression RROUNDBRACKET
     ;
 
 /**

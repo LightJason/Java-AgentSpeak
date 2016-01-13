@@ -1028,6 +1028,20 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
+    public Object visitExpression_logical_negation( final AgentParser.Expression_logical_negationContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
     public Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
     {
         return this.visitChildren( p_context );
