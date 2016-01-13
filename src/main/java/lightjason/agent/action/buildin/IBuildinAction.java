@@ -26,6 +26,9 @@ package lightjason.agent.action.buildin;
 import lightjason.agent.action.IBaseAction;
 import lightjason.common.CPath;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * base class of build-in actions for setting name
@@ -43,8 +46,20 @@ public abstract class IBuildinAction extends IBaseAction
      */
     protected IBuildinAction()
     {
-        final String[] l_name = this.getClass().getCanonicalName().split( "\\." );
-        m_name = new CPath( l_name[l_name.length - 2], l_name[l_name.length - 1].substring( 1 ) ).toLower();
+        this( 2 );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_length length of package parts
+     */
+    protected IBuildinAction( final int p_length )
+    {
+        final List<String> l_names = Arrays.asList( this.getClass().getCanonicalName().split( "\\." ) );
+        l_names.set( l_names.size() - 1, l_names.get( l_names.size() - 1 ).substring( 1 ) );
+
+        m_name = new CPath( l_names.subList( Math.max( 0, l_names.size() - p_length ), l_names.size() ) ).toLower();
     }
 
 
