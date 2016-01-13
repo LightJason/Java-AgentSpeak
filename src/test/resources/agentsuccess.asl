@@ -8,7 +8,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
 !drive.
 
 
-// setSpeed(X) :- setProperty("speed", X, Y).
+setSpeed(X) :- setProperty("speed", X, Y).
 
 
 @fuzzy(0.8)

@@ -7,33 +7,43 @@ blub(123).
 xxx("hallo").
 complex( first(true), second("xxx"), third(pi) ).
 
-// initial goal
+
+/**
+ * initial goal
+ **/
 !drive.
 
-// acceleration
+/**
+ * acceleration
+ **/
 +!accelerate
-   :    root_bind_speed(Speed) &&
+   :
+        root_bind_speed(Speed) &&
         root_bind_acceleration(Accelerate) &&
         root_bind_maxspeed(MaxSpeed)
-
-   <-   min([MaxSpeed, Speed+Accelerate], NewSpeed);
+   <-
+        NewSpeed = min(MaxSpeed, Speed+Accelerate);
         mecsim_propertyset(self, m_speed, NewSpeed);
         !!drive.
 
 
-// deceleration
+/**
+ * deceleration
+ **/
 +!decelerate
    :    root_bind_speed(Speed) &&
         root_bind_deceleration(Decelerate) &&
         Decelerate > 0
 
    <-
-        max([5, Speed-Decelerate], NewSpeed);
+        NewSpeed = max(5, Speed-Decelerate);
         mecsim_propertyset(self, m_speed, NewSpeed);
         !!drive.
 
-// driving call if a predecessor exists
-// check distance and decelerate otherwise accelerate
+/**
+ * driving call if a predecessor exists
+ * check distance and decelerate otherwise accelerate
+ **/
 +!drive
     :    root_bind_speed(Speed) &&
          root_bind_deceleration(Deceleration) &&
@@ -58,9 +68,10 @@ complex( first(true), second("xxx"), third(pi) ).
         if ( BrakingDistance > Scramble*Distance )
              !!decelerate
         else
-             !!accelerate
-        .
+             !!accelerate.
 
 
-// default behaviour - accelerate
+/**
+ * default behaviour - accelerate
+ **/
 +!drive <- !!accelerate.
