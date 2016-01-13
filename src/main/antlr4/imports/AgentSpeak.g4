@@ -237,14 +237,6 @@ assignment_expression :
  * numerical / logical expression
  **/
 expression :
-    expression_logic
-    | expression_numeric
-    ;
-
-/**
- * logical expression
- **/
-expression_logic :
     EXCLAMATIONMARK? LROUNDBRACKET expression RROUNDBRACKET
     | expression_logic_or
     ;
@@ -258,7 +250,6 @@ expression_logic_or :
 
 /**
  * logical and- / xor-expression
- * @bug logical literals and variables not working
  **/
 expression_logic_and :
     ( expression_logical_element | expression_numeric ) ( ( AND | XOR ) expression )*
@@ -277,8 +268,8 @@ expression_logical_element :
  * numerical expression
  **/
 expression_numeric :
-    LROUNDBRACKET expression_numeric RROUNDBRACKET
-    | expression_numeric_equal
+    expression_numeric_equal
+    | LROUNDBRACKET expression_numeric RROUNDBRACKET
     ;
 
 /**
