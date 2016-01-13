@@ -25,9 +25,16 @@ package lightjason.agent.action.buildin;
 
 import lightjason.agent.action.IBaseAction;
 import lightjason.common.CPath;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
+import lightjason.language.ITerm;
+import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -67,5 +74,18 @@ public abstract class IBuildinAction extends IBaseAction
     public final CPath getName()
     {
         return m_name;
+    }
+
+    /**
+     * creates a filtered term stream with variables and raw terms
+     *
+     * @param p_context context variable
+     * @param p_termlist term list
+     * @return term stream
+     */
+    protected final static Stream<ITerm> getTermStream( final IContext<?> p_context, final Collection<ITerm> p_termlist )
+    {
+        return CCommon.replaceVariableFromContext( p_context, p_termlist ).stream().filter(
+                i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) );
     }
 }

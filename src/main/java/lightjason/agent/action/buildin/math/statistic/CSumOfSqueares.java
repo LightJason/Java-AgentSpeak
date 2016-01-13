@@ -24,7 +24,6 @@
 package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -64,18 +63,17 @@ public final class CSumOfSqueares extends IBuildinAction
     {
         final SummaryStatistics l_statistics = new SummaryStatistics();
 
-        CCommon.replaceVariableFromContext( p_context, p_parameter ).stream().filter( i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) )
-               .mapToDouble( i -> {
+        getTermStream( p_context, p_parameter ).mapToDouble( i -> {
 
-                   if ( i instanceof IVariable<?> )
-                       return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+            if ( i instanceof IVariable<?> )
+                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
 
-                   if ( i instanceof CRawTerm<?> )
-                       return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+            if ( i instanceof CRawTerm<?> )
+                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
 
-                   // filter avoid this value
-                   return 0;
-               } ).forEach( i -> l_statistics.addValue( i ) );
+            // filter avoid this value
+            return 0;
+        } ).forEach( i -> l_statistics.addValue( i ) );
 
         p_parameter.add( new CRawTerm<>( l_statistics.getSumsq() ) );
 

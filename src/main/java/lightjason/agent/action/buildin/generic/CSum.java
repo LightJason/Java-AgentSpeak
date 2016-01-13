@@ -24,7 +24,6 @@
 package lightjason.agent.action.buildin.generic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -53,8 +52,7 @@ public final class CSum extends IBuildinAction
                                                final Collection<ITerm> p_return
     )
     {
-        p_return.add( new CRawTerm<>( CCommon.replaceVariableFromContext( p_context, p_parameter ).stream().filter(
-                i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) ).mapToDouble( i -> {
+        p_return.add( new CRawTerm<>( getTermStream( p_context, p_parameter ).mapToDouble( i -> {
 
             if ( i instanceof IVariable<?> )
                 return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
