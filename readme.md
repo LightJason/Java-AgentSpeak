@@ -145,6 +145,7 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
 * frac / round / ceil / abs / sgn
 * BLAS structure & algorithms
 * random generators (uniform, normal, pareto, beta, bernoulli, ...)
+* statistical analysing (mean, average, median, quantile, expection value, standard deviation, ...)
 
 #### String
 
