@@ -48,7 +48,6 @@ SLASH                      : '/';
 
 IF                         : 'if';
 ELSE                       : 'else';
-WHILE                      : 'while';
 FOR                        : 'for';
 
 PI                         : 'pi';

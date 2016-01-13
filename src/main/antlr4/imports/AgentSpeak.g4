@@ -189,7 +189,6 @@ body_formula :
 
 /**
  * terms are predictable structures
- * @bug expression creates an epsilon rule
  **/
 term :
     string
@@ -202,7 +201,7 @@ term :
     | variablelist
     | LANGULARBRACKET termlist RANGULARBRACKET
 
-    //| expression
+    | expression
     ;
 
 /**
@@ -277,7 +276,7 @@ expression_logic_and :
  * logic element for expressions
  **/
 expression_logical_element :
-    | logicalvalue
+    logicalvalue
     | variable
     | literal
     ;
