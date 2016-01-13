@@ -1000,20 +1000,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public Object visitExpression_logic( final AgentParser.Expression_logicContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitExpression_logic( final PlanBundleParser.Expression_logicContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-
-
-    @Override
     public Object visitExpression_logic_or( final AgentParser.Expression_logic_orContext p_context )
     {
         return this.visitChildren( p_context );
