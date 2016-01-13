@@ -24,6 +24,8 @@
 package lightjason.language;
 
 import lightjason.common.CPath;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.error.CIllegalStateException;
 
 
 /**
@@ -93,8 +95,79 @@ public final class CRawTerm<T> implements ITerm
      *
      * @return value
      */
-    public final T getValue()
+    public final T get()
     {
         return m_value;
     }
+
+    /**
+     * gets the value with cast
+     *
+     * @return casted value
+     *
+     * @tparam N casted type
+     */
+    @SuppressWarnings( "unchecked" )
+    public final <N> N getTyped()
+    {
+        return (N) m_value;
+    }
+
+    ;
+
+    /**
+     * returns allocated state
+     *
+     * @return boolean flag
+     */
+    public final boolean isAllocated()
+    {
+        return m_value != null;
+    }
+
+    /**
+     * throws an illegal state exception
+     * iif the raw term is not allocated
+     *
+     * @return object itself
+     *
+     * @throws IllegalStateException on non-allocated
+     */
+    public final CRawTerm<T> throwNotAllocated() throws IllegalStateException
+    {
+        if ( !this.isAllocated() )
+            throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "notallocated", this ) );
+
+        return this;
+    }
+
+    /**
+     * checkes assignable of the value
+     *
+     * @param p_class class
+     * @return assignable (on null always true)
+     */
+    public final boolean isValueAssignableTo( final Class<?> p_class )
+    {
+        return m_value == null ? true : p_class.isAssignableFrom( m_value.getClass() );
+    }
+
+    /**
+     * throws an illegal argument exception
+     * iif the value is not assignable to the
+     * class
+     *
+     * @param p_class assignable class
+     * @return object itself
+     *
+     * @throws IllegalArgumentException on assignable error
+     */
+    public final CRawTerm<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException
+    {
+        if ( !this.isValueAssignableTo( p_class ) )
+            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "notassignable", this, p_class ) );
+
+        return this;
+    }
+
 }

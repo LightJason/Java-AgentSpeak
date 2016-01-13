@@ -25,7 +25,6 @@ package lightjason.language.execution.unaryoperator;
 
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
-import lightjason.common.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -71,10 +70,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
                                                final Collection<ITerm> p_return
     )
     {
-        final IVariable<T> l_variable = (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable );
-
-        if ( !l_variable.isAllocated() )
-            throw new IllegalArgumentException( CCommon.getLanguageString( this, "notallocated", l_variable ) );
+        final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable ) ).throwNotAllocated();
 
         if ( l_variable.isValueAssignableTo( Double.class ) )
             l_variable.set( (T) new Double( l_variable.get().doubleValue() - 1 ) );

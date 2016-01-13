@@ -27,7 +27,6 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.IContext;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -51,7 +50,7 @@ public final class CCommon
     @SuppressWarnings( "unchecked" )
     public static <T, N> T getRawValue( final N p_term )
     {
-        return (T) ( p_term instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_term ).getValue() : p_term );
+        return (T) ( p_term instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_term ).get() : p_term );
     }
 
     /**
@@ -61,7 +60,7 @@ public final class CCommon
      * @param p_terms replacing term list
      * @return result term list
      */
-    public static List<ITerm> replaceVariableFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
+    public static Collection<ITerm> replaceVariableFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
     {
         return p_terms.stream().map( i -> replaceVariableFromContext( p_context, i ) ).collect( Collectors.toList() );
     }
@@ -76,7 +75,7 @@ public final class CCommon
      */
     public static ITerm replaceVariableFromContext( final IContext<?> p_context, final ITerm p_term )
     {
-        if ( !( p_term instanceof IVariable ) )
+        if ( !( p_term instanceof IVariable<?> ) )
             return p_term;
 
         final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.getFQNFunctor() );

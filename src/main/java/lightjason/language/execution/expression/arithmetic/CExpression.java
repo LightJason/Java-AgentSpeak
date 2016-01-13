@@ -226,10 +226,7 @@ public final class CExpression implements IExpression<Number>
             if ( m_value != null )
                 return m_value;
 
-            if ( !m_variable.isAllocated() )
-                throw new CIllegalStateException( CCommon.getLanguageString( this, "variablenotresolve", m_variable.getFQNFunctor() ) );
-
-            return m_variable.get();
+            return m_variable.throwNotAllocated().get();
         }
     }
 

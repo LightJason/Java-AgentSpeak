@@ -95,6 +95,18 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
+    public final synchronized IVariable<T> throwNotAllocated() throws IllegalStateException
+    {
+        return super.throwNotAllocated();
+    }
+
+    @Override
+    public final synchronized IVariable<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException
+    {
+        return super.throwValueNotAssignableTo( p_class );
+    }
+
+    @Override
     public final synchronized boolean isAllocated()
     {
         return super.isAllocated();

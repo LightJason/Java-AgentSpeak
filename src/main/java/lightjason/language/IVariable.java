@@ -63,12 +63,34 @@ public interface IVariable<T> extends ITerm
     boolean isAllocated();
 
     /**
-     * checkes assinable of the value
+     * throws an illegal state exception
+     * iif the variable is not allocated
+     *
+     * @return object itself
+     *
+     * @throws IllegalStateException on non-allocated
+     */
+    IVariable<T> throwNotAllocated() throws IllegalStateException;
+
+    /**
+     * checkes assignable of the value
      *
      * @param p_class class
      * @return assignable (on null always true)
      */
     boolean isValueAssignableTo( final Class<?> p_class );
+
+    /**
+     * throws an illegal argument exception
+     * iif the value is not assignable to the
+     * class
+     *
+     * @param p_class assignable class
+     * @return object itself
+     *
+     * @throws IllegalArgumentException on assignable error
+     */
+    IVariable<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException;
 
     /**
      * override clonable interface definition

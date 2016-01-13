@@ -168,7 +168,6 @@ public final class CCommon
         return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
     }
 
-
     /**
      * returns the language depend string on any object
      *

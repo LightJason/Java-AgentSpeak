@@ -24,6 +24,8 @@
 package lightjason.language;
 
 import lightjason.common.CPath;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.error.CIllegalStateException;
 
 import java.text.MessageFormat;
 
@@ -122,9 +124,27 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    public IVariable<T> throwNotAllocated() throws IllegalStateException
+    {
+        if ( !this.isAllocated() )
+            throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( CVariable.class, "notallocated", this ) );
+
+        return this;
+    }
+
+    @Override
     public boolean isValueAssignableTo( final Class<?> p_class )
     {
         return m_value == null ? true : p_class.isAssignableFrom( m_value.getClass() );
+    }
+
+    @Override
+    public IVariable<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException
+    {
+        if ( !this.isValueAssignableTo( p_class ) )
+            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CVariable.class, "notassignable", this, p_class ) );
+
+        return this;
     }
 
     @Override

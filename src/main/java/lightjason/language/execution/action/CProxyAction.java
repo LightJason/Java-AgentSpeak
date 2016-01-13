@@ -221,7 +221,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
         {
-            return Collections.unmodifiableList( lightjason.language.CCommon.replaceVariableFromContext( p_context, m_values ) );
+            return Collections.unmodifiableCollection( lightjason.language.CCommon.replaceVariableFromContext( p_context, m_values ) );
         }
 
         @Override

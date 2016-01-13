@@ -21,83 +21,62 @@
  * @endcond
  */
 
-package lightjason.language.execution.unaryoperator;
+package lightjason.agent.action.buildin.generic;
 
-import com.google.common.collect.ImmutableMultiset;
-import lightjason.agent.IAgent;
+import lightjason.agent.action.IBaseAction;
+import lightjason.common.CPath;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
- * unary increment
+ * action for minimum
  */
-public final class CIncrement<T extends Number> implements IOperator<T>
+public final class CMin extends IBaseAction
 {
     /**
-     * variable
+     * action name
      */
-    private final IVariable<T> m_variable;
+    private final static CPath NAME = CPath.from( "generic/min" ).toLower();
 
-    /**
-     * ctor
-     *
-     * @param p_variable variable
-     */
-    public CIncrement( final IVariable<T> p_variable )
+    @Override
+    public final CPath getName()
     {
-        m_variable = p_variable;
+        return NAME;
     }
 
     @Override
-    public final String toString()
+    public final int getMinimalArgumentNumber()
     {
-        return m_variable.toString() + "++";
+        return 1;
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context,
-                                               final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
                                                final Collection<ITerm> p_return
     )
     {
-        final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable ) ).throwNotAllocated();
+        final Collection<ITerm> l_parameter = CCommon.replaceVariableFromContext( p_context, p_parameter );
+        p_return.add( new CRawTerm<>( p_parameter.stream().filter( i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) ).mapToDouble( i -> {
 
-        if ( l_variable.isValueAssignableTo( Double.class ) )
-            l_variable.set( (T) new Double( l_variable.get().doubleValue() + 1 ) );
-        if ( l_variable.isValueAssignableTo( Long.class ) )
-            l_variable.set( (T) new Long( l_variable.get().longValue() + 1 ) );
-        if ( l_variable.isValueAssignableTo( Float.class ) )
-            l_variable.set( (T) new Float( l_variable.get().floatValue() + 1 ) );
-        if ( l_variable.isValueAssignableTo( Integer.class ) )
-            l_variable.set( (T) new Integer( l_variable.get().intValue() + 1 ) );
+            if ( i instanceof IVariable<?> )
+                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+
+            if ( i instanceof CRawTerm<?> )
+                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+
+            // filter avoid this value
+            return 0;
+        } ).min() ) );
 
         return CBoolean.from( true );
     }
-
-    @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
-    {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
-    }
-
-    @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
-    {
-        return new HashSet<IVariable<?>>()
-        {{
-            add( m_variable.clone() );
-        }};
-    }
-
 }
