@@ -182,25 +182,27 @@ body_formula :
     | deconstruct_expression
     | assignment_expression
     | unary_expression
-    | expression
 
-    //| foreach_loop
-    //| while_loop
-    //| for_loop
-    //| if_else
+    | for_loop
+    | if_else
     ;
 
 /**
  * terms are predictable structures
+ * @bug expression creates an epsilon rule
  **/
 term :
     string
     | number
     | logicalvalue
+
     | literal
     | variable
+
     | variablelist
     | LANGULARBRACKET termlist RANGULARBRACKET
+
+    //| expression
     ;
 
 /**
@@ -268,7 +270,7 @@ expression_logic_or :
  * logical and- / xor-expression
  **/
 expression_logic_and :
-    ( expression_logical_negation | expression_logical_element | expression_numeric ) ( ( AND | XOR ) expression )*
+    ( expression_logical_element | expression_logical_negation | expression_numeric ) ( ( AND | XOR ) expression )*
     ;
 
 /**
@@ -339,31 +341,41 @@ expression_numeric_element :
     | literal
     ;
 
+/**
+ * block-formula of subsection
+ **/
 block_formula :
     LCURVEDBRACKET body RCURVEDBRACKET
     | body_formula
     ;
 
+/**
+ * for-loop
+ **/
+for_loop :
+    FOR LROUNDBRACKET for_loop_condition RROUNDBRACKET
+    block_formula
+    ;
+
+/**
+ * loop-condition, term or variable is used by collection structure,
+ * assignment structure of default behaviour
+ **/
+for_loop_condition :
+    term
+    | variable
+    | assignment_expression? SEMICOLON expression SEMICOLON assignment_expression?
+    ;
+
+/**
+ * if-else structure
+ **/
 if_else :
     IF LROUNDBRACKET expression RROUNDBRACKET
     block_formula
     ( ELSE block_formula )?
     ;
 
-while_loop :
-    WHILE LROUNDBRACKET expression RROUNDBRACKET
-    block_formula
-    ;
-
-for_loop :
-    FOR LROUNDBRACKET assignment_expression? SEMICOLON expression SEMICOLON assignment_expression? RROUNDBRACKET
-    block_formula
-    ;
-
-foreach_loop :
-    FOR LROUNDBRACKET term RROUNDBRACKET
-    block_formula
-    ;
 // ---------------------------------------------------------------------------------------
 
 
