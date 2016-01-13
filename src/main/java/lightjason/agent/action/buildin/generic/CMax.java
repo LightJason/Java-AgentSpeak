@@ -53,8 +53,8 @@ public final class CMax extends IBuildinAction
                                                final Collection<ITerm> p_return
     )
     {
-        final Collection<ITerm> l_parameter = CCommon.replaceVariableFromContext( p_context, p_parameter );
-        p_return.add( new CRawTerm<>( p_parameter.stream().filter( i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) ).mapToDouble( i -> {
+        p_return.add( new CRawTerm<>( CCommon.replaceVariableFromContext( p_context, p_parameter ).stream().filter(
+                i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) ).mapToDouble( i -> {
 
             if ( i instanceof IVariable<?> )
                 return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();

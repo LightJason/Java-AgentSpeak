@@ -44,6 +44,8 @@
     </properties>
 
     <dependencies>
+
+        <!-- base structures -->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
@@ -65,12 +67,22 @@
             <scope>compile</scope>
         </dependency>
 
+
+        <!-- math structures -->
         <dependency>
             <groupId>colt</groupId>
             <artifactId>colt</artifactId>
             <version>1.2.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6</version>
+
+        </dependency>
+
 
         <!-- test -->
         <dependency>

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.math.statistics;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
@@ -31,15 +31,24 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import java.util.Collection;
 
 
 /**
- * action for average
+ * action for standard deviation
  */
-public final class CAverage extends IBuildinAction
+public final class CStandardDeviation extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CStandardDeviation()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int getMinimalArgumentNumber()
@@ -53,19 +62,24 @@ public final class CAverage extends IBuildinAction
                                                final Collection<ITerm> p_return
     )
     {
-        p_return.add( new CRawTerm<>( CCommon.replaceVariableFromContext( p_context, p_parameter ).stream().filter(
-                i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) ).mapToDouble( i -> {
+        final SummaryStatistics l_statistics = new SummaryStatistics();
 
-            if ( i instanceof IVariable<?> )
-                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+        CCommon.replaceVariableFromContext( p_context, p_parameter ).stream().filter( i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) )
+               .mapToDouble( i -> {
 
-            if ( i instanceof CRawTerm<?> )
-                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+                   if ( i instanceof IVariable<?> )
+                       return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
 
-            // filter avoid this value
-            return 0;
-        } ).average() ) );
+                   if ( i instanceof CRawTerm<?> )
+                       return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
+
+                   // filter avoid this value
+                   return 0;
+               } ).forEach( i -> l_statistics.addValue( i ) );
+
+        p_parameter.add( new CRawTerm<>( l_statistics.getStandardDeviation() ) );
 
         return CBoolean.from( true );
     }
+
 }
