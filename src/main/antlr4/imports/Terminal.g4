@@ -125,7 +125,6 @@ NOTEQUAL                   : '\\==';
 
 POW                        : '**';
 MULTIPLY                   : '*';
-DIVIDE                     : '/';
 MODULO                     : '%';
 
 /**

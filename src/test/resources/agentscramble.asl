@@ -25,11 +25,11 @@ friction(0.5).                                                  // the coefficie
         E = mecsim_getExpectation(Distr, Par1, Par2);           // get expectation of given distribution
         +scramble(R);                                           // set scramble value into beliefbase
         +expectation(E);                                        // set expectation into beliefbase
-        +scramblingRatio( 1 / (1 - R + E) );                    // calculate scrambling ratio to determine driving behaviour
+        +scramblingRatio( (1 / (1 - R + E)) );                    // calculate scrambling ratio to determine driving behaviour
         ?scramblingRatio(SR);
 
         for( range( I, 0, mathceil( SR * 10 ) ) )               // perform a discretization of the srambling ratio
-            +level( I )                                         // discretization of the scrambling ratio
+            +level( I );                                        // discretization of the scrambling ratio
 
         !drive.                                                 // start driving
 
@@ -46,7 +46,7 @@ friction(0.5).                                                  // the coefficie
         root_bind_speed(Speed)                                    // current speed
     <-
         +percentage(Index/Size);
-        if ( (Index + Speed) / Size >= 0.95 )                     // if the agent reaches its destination in the next simulation step
+        if ( (Index + Speed) / Size >= 0.95)                     // if the agent reaches its destination in the next simulation step
             println("arrived at destination").                    // TODO: perform a re-routing so that the agent will not be removed from the map
 
 
@@ -58,7 +58,7 @@ friction(0.5).                                                  // the coefficie
         root_bind_speed(V) &&                                   // current speed
         root_friction(F)                                        // current friction
     <-
-        +brakingDistance(V * V / (2 * F * gravity)).            // calculate and set the current braking distance
+        +brakingDistance( V * V / (2 * F * gravity) ).            // calculate and set the current braking distance
 
 /**
  * checks if there is a predecessor in front of the car
@@ -125,4 +125,3 @@ friction(0.5).                                                  // the coefficie
         !checkPredecessor;                                      // check if the agent has a predecessor in front
         !react;                                                 // react on the environmental perceptions
         !drive.                                                 // continue driving
-

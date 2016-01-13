@@ -321,7 +321,7 @@ expression_numeric_additive :
  * numeric multiply-expression
  **/
 expression_numeric_multiplicative :
-    expression_numeric_pow ( (MULTIPLY | DIVIDE | MODULO ) expression_numeric )*
+    expression_numeric_pow ( (MULTIPLY | SLASH | MODULO ) expression_numeric )*
     ;
 
 /**
