@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -266,6 +267,28 @@ public final class CPath implements Iterable<CPath>
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "separatornotempty" ) );
 
         m_separator = p_separator;
+        return this;
+    }
+
+    /**
+     * changes all elements to lower-case
+     *
+     * @return object
+     */
+    public final CPath toLower()
+    {
+        m_path = m_path.stream().map( i -> i.toLowerCase() ).collect( Collectors.toList() );
+        return this;
+    }
+
+    /**
+     * changes all elements to uppercase
+     *
+     * @return object
+     */
+    public final CPath toUpper()
+    {
+        m_path = m_path.stream().map( i -> i.toUpperCase() ).collect( Collectors.toList() );
         return this;
     }
 
