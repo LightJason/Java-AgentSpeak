@@ -23,8 +23,7 @@
 
 package lightjason.agent.action.buildin.generic;
 
-import lightjason.agent.action.IBaseAction;
-import lightjason.common.CPath;
+import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
@@ -39,18 +38,8 @@ import java.util.Collection;
 /**
  * action for average
  */
-public final class CAverage extends IBaseAction
+public final class CAverage extends IBuildinAction
 {
-    /**
-     * action name
-     */
-    private final static CPath NAME = CPath.from( "generic/average" ).toLower();
-
-    @Override
-    public final CPath getName()
-    {
-        return NAME;
-    }
 
     @Override
     public final int getMinimalArgumentNumber()

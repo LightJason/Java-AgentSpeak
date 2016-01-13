@@ -23,8 +23,7 @@
 
 package lightjason.agent.action.buildin.generic;
 
-import lightjason.agent.action.IBaseAction;
-import lightjason.common.CPath;
+import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
@@ -39,18 +38,8 @@ import java.util.Collection;
 /**
  * action for minimum
  */
-public final class CMin extends IBaseAction
+public final class CMin extends IBuildinAction
 {
-    /**
-     * action name
-     */
-    private final static CPath NAME = CPath.from( "generic/min" ).toLower();
-
-    @Override
-    public final CPath getName()
-    {
-        return NAME;
-    }
 
     @Override
     public final int getMinimalArgumentNumber()

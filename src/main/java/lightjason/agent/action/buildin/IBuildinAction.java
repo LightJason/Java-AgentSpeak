@@ -21,51 +21,36 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin;
 
-import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
-import lightjason.language.ITerm;
-import lightjason.language.IVariable;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
-
-import java.util.Collection;
+import lightjason.agent.action.IBaseAction;
+import lightjason.common.CPath;
 
 
 /**
- * action for sum of elements
+ * base class of build-in actions for setting name
+ * by package/classname (without prefix character)
  */
-public final class CSum extends IBuildinAction
+public abstract class IBuildinAction extends IBaseAction
 {
+    /**
+     * action name
+     */
+    private final CPath m_name;
 
-    @Override
-    public final int getMinimalArgumentNumber()
+    /**
+     * ctor
+     */
+    protected IBuildinAction()
     {
-        return 1;
+        final String[] l_name = this.getClass().getCanonicalName().split( "\\." );
+        m_name = new CPath( l_name[l_name.length - 2], l_name[l_name.length - 1].substring( 1 ) ).toLower();
     }
 
+
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
-    )
+    public final CPath getName()
     {
-        final Collection<ITerm> l_parameter = CCommon.replaceVariableFromContext( p_context, p_parameter );
-        p_return.add( new CRawTerm<>( p_parameter.stream().filter( i -> ( i instanceof IVariable<?> ) || ( i instanceof CRawTerm<?> ) ).mapToDouble( i -> {
-
-            if ( i instanceof IVariable<?> )
-                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            if ( i instanceof CRawTerm<?> )
-                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            // filter avoid this value
-            return 0;
-        } ).sum() ) );
-
-        return CBoolean.from( true );
+        return m_name;
     }
 }
