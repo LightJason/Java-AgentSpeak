@@ -173,17 +173,34 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    belief_action
-    | achievement_goal_action
+    | term
+
+    | belief_action
     | test_goal_action
-    | unary_expression
-    | assignment_expression
+    | achievement_goal_action
+
     | deconstruct_expression
+    | assignment_expression
+    | unary_expression
+    | expression
+
     //| foreach_loop
     //| while_loop
     //| for_loop
     //| if_else
-    | term
+    ;
+
+/**
+ * terms are predictable structures
+ **/
+term :
+    string
+    | number
+    | logicalvalue
+    | literal
+    | variable
+    | variablelist
+    | LANGULARBRACKET termlist RANGULARBRACKET
     ;
 
 /**
@@ -194,13 +211,6 @@ belief_action :
     ;
 
 /**
- * achivement-goal action
- **/
-achievement_goal_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) literal
-    ;
-
-/**
  * test-goal action
  **/
 test_goal_action :
@@ -208,11 +218,10 @@ test_goal_action :
     ;
 
 /**
- * unary expression
+ * achivement-goal action
  **/
-unary_expression :
-    variable
-    unaryoperator
+achievement_goal_action :
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) literal
     ;
 
 /**
@@ -231,6 +240,14 @@ assignment_expression :
     variable
     ASSIGN
     ( term | expression )
+    ;
+
+/**
+ * unary expression
+ **/
+unary_expression :
+    variable
+    unaryoperator
     ;
 
 /**
@@ -356,19 +373,6 @@ literal :
     atom
     ( LROUNDBRACKET termlist? RROUNDBRACKET )?
     ( LANGULARBRACKET literalset? RANGULARBRACKET )?
-    ;
-
-/**
- * terms are predictable structures
- **/
-term :
-    string
-    | number
-    | logicalvalue
-    | literal
-    | variable
-    | variablelist
-    | LANGULARBRACKET termlist RANGULARBRACKET
     ;
 
 /**
