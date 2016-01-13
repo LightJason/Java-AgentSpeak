@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.statistics;
+package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;

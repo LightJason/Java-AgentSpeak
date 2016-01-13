@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.statistics;
+package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
@@ -37,15 +37,15 @@ import java.util.Collection;
 
 
 /**
- * action for standard deviation
+ * action for variance
  */
-public final class CStandardDeviation extends IBuildinAction
+public final class CVariance extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CStandardDeviation()
+    public CVariance()
     {
         super( 3 );
     }
@@ -77,7 +77,7 @@ public final class CStandardDeviation extends IBuildinAction
                    return 0;
                } ).forEach( i -> l_statistics.addValue( i ) );
 
-        p_parameter.add( new CRawTerm<>( l_statistics.getStandardDeviation() ) );
+        p_parameter.add( new CRawTerm<>( l_statistics.getVariance() ) );
 
         return CBoolean.from( true );
     }

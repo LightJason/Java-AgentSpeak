@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.statistics;
+package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
@@ -37,15 +37,15 @@ import java.util.Collection;
 
 
 /**
- * action for geometric mean
+ * action for standard deviation
  */
-public final class CGeometricMean extends IBuildinAction
+public final class CStandardDeviation extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CGeometricMean()
+    public CStandardDeviation()
     {
         super( 3 );
     }
@@ -77,7 +77,7 @@ public final class CGeometricMean extends IBuildinAction
                    return 0;
                } ).forEach( i -> l_statistics.addValue( i ) );
 
-        p_parameter.add( new CRawTerm<>( l_statistics.getGeometricMean() ) );
+        p_parameter.add( new CRawTerm<>( l_statistics.getStandardDeviation() ) );
 
         return CBoolean.from( true );
     }
