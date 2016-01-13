@@ -109,6 +109,13 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
+    public <N> N getTyped()
+    {
+        return (N) m_value;
+    }
+
+    @Override
     public boolean isAllocated()
     {
         return m_value != null;

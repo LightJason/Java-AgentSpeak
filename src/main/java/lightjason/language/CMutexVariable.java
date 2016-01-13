@@ -89,6 +89,12 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
+    public final synchronized <N> N getTyped()
+    {
+        return super.getTyped();
+    }
+
+    @Override
     public final synchronized boolean isAllocated()
     {
         return super.isAllocated();

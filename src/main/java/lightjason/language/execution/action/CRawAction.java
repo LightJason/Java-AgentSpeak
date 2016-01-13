@@ -90,7 +90,13 @@ public final class CRawAction<T> extends IBaseExecution<T>
      */
     private CBoolean getTypedResult( final IVariable<?> p_value, final Collection<ITerm> p_return )
     {
-        return CBoolean.from( p_value.isAllocated() );
+        if ( !p_value.isAllocated() )
+            return CBoolean.from( false );
+
+        if ( p_value.isValueAssignableTo( Boolean.class ) )
+            return CBoolean.from( p_value.getTyped() );
+
+        return CBoolean.from( true );
     }
 
     /**

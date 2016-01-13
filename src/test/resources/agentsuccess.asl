@@ -14,7 +14,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
 @fuzzy(0.8)
 @score(0.2)
 +!accelerate
-    : current_speed(Speed) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
+    : !(current_speed(Speed)) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
         Speed = 5;
         Speed++;
         X = 5 + Speed * 3;
@@ -27,7 +27,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
 @fuzzy(0.5)
 @score(0.4)
 +!decelerate
-    : current_speed(Speed)  Speed > 10 <-
+    : current_speed(Speed) ^ Speed > 10 <-
         Speed = 5;
         Speed--;
         +foo(min(5));

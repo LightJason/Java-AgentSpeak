@@ -47,6 +47,15 @@ public interface IVariable<T> extends ITerm
     T get();
 
     /**
+     * gets the value with cast
+     *
+     * @return casted value
+     *
+     * @tparam N casted type
+     */
+    <N> N getTyped();
+
+    /**
      * returns allocated state
      *
      * @return boolean flag
