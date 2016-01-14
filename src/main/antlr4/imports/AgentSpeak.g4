@@ -272,8 +272,8 @@ unary_expression :
  * numerical / logical expression
  **/
 expression :
-    expression_logic_or
-    | LROUNDBRACKET expression_logic_or RROUNDBRACKET
+    LROUNDBRACKET expression RROUNDBRACKET
+    | expression_logic_or
     ;
 
 /**
@@ -311,7 +311,6 @@ expression_logical_negation :
  **/
 expression_numeric :
     expression_numeric_equal
-    | LROUNDBRACKET expression_numeric_equal RROUNDBRACKET
     ;
 
 /**
@@ -325,7 +324,7 @@ expression_numeric_equal :
  * relation expression
  **/
 expression_numeric_relation :
-    expression_numeric_additive ( (LESSEQUAL | LESS | GREATER | GREATEREQUAL) expression_numeric )*
+    expression_numeric_additive ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL) expression_numeric )*
     ;
 
 /**
@@ -339,7 +338,7 @@ expression_numeric_additive :
  * numeric multiply-expression
  **/
 expression_numeric_multiplicative :
-    expression_numeric_pow ( (MULTIPLY | SLASH | MODULO ) expression_numeric )*
+    expression_numeric_pow ( (SLASH | MODULO | MULTIPLY ) expression_numeric )*
     ;
 
 /**
@@ -356,6 +355,14 @@ expression_numeric_element :
     number
     | variable
     | literal
+    | expression_numeric_bracket
+    ;
+
+/**
+ * numeric bracket-expression
+ **/
+expression_numeric_bracket :
+    LROUNDBRACKET expression_numeric RROUNDBRACKET
     ;
 
 /**

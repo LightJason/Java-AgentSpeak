@@ -1168,6 +1168,20 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
+    public Object visitExpression_numeric_bracket( final AgentParser.Expression_numeric_bracketContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitExpression_numeric_bracket( final PlanBundleParser.Expression_numeric_bracketContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
     public final Object visitUnaryoperator( final AgentParser.UnaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
