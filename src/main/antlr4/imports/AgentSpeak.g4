@@ -429,7 +429,7 @@ literalset :
  **/
 variablelist :
     LANGULARBRACKET
-    variable (LISTSEPARATOR variable)+
+    variable (LISTSEPARATOR variable)*
     RANGULARBRACKET
     ;
 
