@@ -246,13 +246,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ## <a name="todo">Todos</a>
 
-* Beliefs:
-    * (?) define annotations describing the origin/state/reason/... of a belief, including fixed ones like: _source_
-    * (?) also non-fixed for _Mental Notes_
-    * (?) -> needs grammar update beliefs, similar to ```atomic_formula```, but has to be be more like ```[ list ]``` (this would also allow nested annotations (see p. 38)
-    * (see p. 37ff for comparison w/ Jason)
 * parallel / SIMD unification with [type inhertitance](http://stackoverflow.com/questions/1396558/how-can-i-implement-the-unification-algorithm-in-a-language-like-java-or-c) or [Java Unification](https://code.google.com/p/kawala/source/browse/trunk/src/com/kaching/platform/common/types/Unification.java?r=265)
-* expression grammar [AntLR](http://stackoverflow.com/questions/16469023/antlr-left-recursion-for-nesting-boolean-expressions), [C#](http://www.codeproject.com/Articles/18880/State-of-the-Art-Expression-Evaluation), [Expression Grammar](https://ivanyu.me/blog/2014/09/13/creating-a-simple-parser-with-antlr/)
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
