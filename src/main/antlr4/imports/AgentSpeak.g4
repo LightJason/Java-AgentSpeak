@@ -238,9 +238,8 @@ deconstruct_expression :
  * assignment expression (for assignin a variable)
  **/
 assignment_expression :
-    variable
-    ASSIGN
-    ( term | expression )
+    variable ASSIGN ( term | expression | ( LANGULARBRAKET term RANGULARBRACKET ) )
+    | variablelist ASSIGN ( term | ( LANGULARBRAKET term RANGULARBRACKET ) )
     ;
 
 /**

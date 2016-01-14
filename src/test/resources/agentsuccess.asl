@@ -18,6 +18,8 @@ setSpeed(X) :- setProperty("speed", X, Y).
         Speed = 5;
         Speed++;
         X = 5 + Speed * 3;
+        [H|T|V] = min(3,4);
+        [A|_|C] = [1,2,3];
         setProperty( Speed, min(5, 9, 3), "test" )[ min(1,2), min(9,8) ];
         print(Speed);
         !!drive;
