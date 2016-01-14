@@ -16,6 +16,17 @@
         </license>
     </licenses>
 
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/flashpixx/Light-Jason/issues</url>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/flashpixx/Light-Jason</url>
+        <connection>scm:git:git://github.com:flashpixx/Light-Jason.git</connection>
+        <developerConnection>scm:git:git@github.com:flashpixx/Light-Jason.git</developerConnection>
+    </scm>
+
     <developers>
         <developer>
             <id>pkr</id>
