@@ -43,8 +43,8 @@
             <name>Malte Aschermann</name>
             <email>malte.aschermann@tu-clausthal.de</email>
             <roles>
-                <role>test designer</role>
-                <role>tester</role>
+                <role>conceptual design</role>
+                <role>test design</role>
             </roles>
             <timezone>Europe/Berlin</timezone>
         </developer>

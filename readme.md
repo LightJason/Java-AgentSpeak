@@ -41,7 +41,7 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
 * Actions can fail (false) or succeed (true)
 * There is no difference between internal and external actions
 * Actions can be also a logical or assignment expression (these are always true)
-* actions with ```@```-prefix wil be executed in parallel (each inner action will be run in parallel)
+* Actions with ```@```-prefix wil be executed in parallel (each inner action will be run in parallel)
 
 
 ### <a name="plan">Plans</a>
@@ -106,7 +106,7 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
 * Goals are run in parallel independed from other goals
 * A goal is a sequence of [plans](#plan) which must all finished successfully
 * A goal is part of exactly one [intention](#intention)
-* if a goal can match a [desire](#desire) (the goal is near to the desire) it can add an event to match the desire [belief](#belief)
+* If a goal can match a [desire](#desire) (the goal is near to the desire) it can add an event to match the desire [belief](#belief)
 
 #### <a name="testgoal">Test Goals</a>
 
