@@ -14,10 +14,10 @@ setSpeed(X) :- setProperty("speed", X, Y).
 @fuzzy(0.8)
 @score(0.2)
 +!accelerate
-    : !(current_speed(Speed)) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
+    : !current_speed(Speed) && distance_predecessor([Distance]) && Distance > Speed && Score > 0.3 <-
         Speed = 5;
         Speed++;
-        X = 5 + Speed * 3;
+        X = 3 * (5 + Speed);
         [H|T|V] = min(3,4);
         [A|_|C] = [1,2,3];
         setProperty( Speed, min(5, 9, 3), "test" )[ min(1,2), min(9,8) ];

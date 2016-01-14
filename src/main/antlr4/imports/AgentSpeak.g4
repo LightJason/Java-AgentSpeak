@@ -273,6 +273,7 @@ unary_expression :
  **/
 expression :
     expression_logic_or
+    | LROUNDBRACKET expression_logic_or RROUNDBRACKET
     ;
 
 /**
@@ -302,7 +303,7 @@ expression_logical_element :
  * negated expression
  **/
 expression_logical_negation :
-    EXCLAMATIONMARK LROUNDBRACKET expression RROUNDBRACKET
+    EXCLAMATIONMARK expression
     ;
 
 /**
@@ -310,7 +311,7 @@ expression_logical_negation :
  **/
 expression_numeric :
     expression_numeric_equal
-    | LROUNDBRACKET expression_numeric RROUNDBRACKET
+    | LROUNDBRACKET expression_numeric_equal RROUNDBRACKET
     ;
 
 /**
@@ -527,7 +528,3 @@ string :
     | DOUBLEQUOTESTRING
     ;
 // ---------------------------------------------------------------------------------------
-
-
-
-
