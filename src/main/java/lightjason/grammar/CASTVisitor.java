@@ -606,6 +606,34 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
+    public Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
     public Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
     {
         switch ( p_context.unaryoperator().getText() )
