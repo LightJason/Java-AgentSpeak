@@ -27,6 +27,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.IContext;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -60,7 +61,7 @@ public final class CCommon
      * @param p_terms replacing term list
      * @return result term list
      */
-    public static Collection<ITerm> replaceVariableFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
+    public static List<ITerm> replaceVariableFromContext( final IContext<?> p_context, final Collection<ITerm> p_terms )
     {
         return p_terms.stream().map( i -> replaceVariableFromContext( p_context, i ) ).collect( Collectors.toList() );
     }
