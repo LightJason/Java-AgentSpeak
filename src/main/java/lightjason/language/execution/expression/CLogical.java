@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.expression;
 
+import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -51,7 +52,7 @@ public final class CLogical extends IBinary
         super( p_operator, p_lefthandside, p_righthandside );
 
         if ( !m_operator.isLogical() )
-            throw new CIllegalArgumentException();
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "incorrect", m_operator ) );
     }
 
     @Override

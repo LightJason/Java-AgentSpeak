@@ -73,7 +73,7 @@ public interface IAnnotation<T>
         }
 
         @Override
-        public String toString()
+        public final String toString()
         {
             return m_name;
         }

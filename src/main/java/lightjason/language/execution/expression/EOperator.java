@@ -30,19 +30,26 @@ public enum EOperator
 {
     PLUS( "+" ),
     MINUS( "-" ),
+
     MULTIPLY( "*" ),
     DIVIDE( "/" ),
     MODULO( "%" ),
     POW( "**" ),
-    AND( "&&" ),
+
+
     OR( "||" ),
+    AND( "&&" ),
     XOR( "^" ),
+
     EQUAL( "==" ),
     NOTEQUAL( "\\==" ),
+
     LESS( "<" ),
     LESSEQUAL( "<=" ),
     GREATER( ">" ),
     GREATEREQUAL( ">=" );
+
+
 
     /**
      * text name of the enum
@@ -60,7 +67,7 @@ public enum EOperator
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return m_name;
     }

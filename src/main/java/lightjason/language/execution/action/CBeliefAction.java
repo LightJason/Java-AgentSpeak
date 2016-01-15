@@ -115,7 +115,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
         }
 
         @Override
-        public String toString()
+        public final String toString()
         {
             return m_name;
         }
