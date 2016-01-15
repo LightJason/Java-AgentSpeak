@@ -23,34 +23,52 @@
 
 package lightjason.language.execution.expression;
 
-import lightjason.language.execution.IExecution;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.language.ITerm;
+import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * interface of any expression type
+ * binary logical expression
  */
-public interface IExpression extends IExecution
+public final class CLogical extends IBinary
 {
-
     /**
-     * returns the left-hand expression side
+     * ctor
      *
-     * @return left-hand-side
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side argument
+     * @param p_righthandside right-hand-side
      */
-    IExpression getLeftHandSide();
+    public CLogical( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    {
+        super( p_operator, p_lefthandside, p_righthandside );
 
-    /**
-     * returns the right-hand expression side
-     *
-     * @return right-hand-side
-     */
-    IExpression getRightHandSide();
+        if ( !m_operator.isLogical() )
+            throw new CIllegalArgumentException();
+    }
 
-    /**
-     * return expression operator
-     *
-     * @return operator
-     */
-    EOperator getOperator();
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
+                                               final Collection<ITerm> p_return
+    )
+    {
+        return null;
+    }
 
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet<IVariable<?>>()
+        {{
+            addAll( m_lefthandside.getVariables() );
+            addAll( m_righthandside.getVariables() );
+        }};
+    }
 }

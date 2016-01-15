@@ -23,34 +23,85 @@
 
 package lightjason.language.execution.expression;
 
-import lightjason.language.execution.IExecution;
-
-
 /**
- * interface of any expression type
+ * expression operator
  */
-public interface IExpression extends IExecution
+public enum EOperator
 {
+    PLUS( "+" ),
+    MINUS( "-" ),
+    MULTIPLY( "*" ),
+    DIVIDE( "/" ),
+    MODULO( "%" ),
+    POW( "**" ),
+    AND( "&&" ),
+    OR( "||" ),
+    XOR( "^" ),
+    EQUAL( "==" ),
+    NOTEQUAL( "\\==" ),
+    LESS( "<" ),
+    LESSEQUAL( "<=" ),
+    GREATER( ">" ),
+    GREATEREQUAL( ">=" );
 
     /**
-     * returns the left-hand expression side
-     *
-     * @return left-hand-side
+     * text name of the enum
      */
-    IExpression getLeftHandSide();
+    private final String m_name;
 
     /**
-     * returns the right-hand expression side
+     * ctor
      *
-     * @return right-hand-side
+     * @param p_name text name
      */
-    IExpression getRightHandSide();
+    EOperator( final String p_name )
+    {
+        m_name = p_name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return m_name;
+    }
 
     /**
-     * return expression operator
+     * check of a logical operator
      *
-     * @return operator
+     * @return boolean for logical operator
      */
-    EOperator getOperator();
+    public final boolean isLogical()
+    {
+        return ( this == AND ) || ( this == OR ) || ( this == XOR );
+    }
 
+    /**
+     * check of a numeric operator
+     *
+     * @return boolean for numeric operator
+     */
+    public final boolean isNumerical()
+    {
+        return ( this == PLUS ) || ( this == MINUS ) || ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO ) || ( this == POW );
+    }
+
+    /**
+     * check of a comparable operator
+     *
+     * @return boolean for comparable operator
+     */
+    public final boolean isComparable()
+    {
+        return ( this == EQUAL ) || ( this == NOTEQUAL );
+    }
+
+    /**
+     * check of a relational operator
+     *
+     * @return boolean for relational operator
+     */
+    public final boolean isRelational()
+    {
+        return ( this == LESS ) || ( this == LESSEQUAL ) || ( this == GREATER ) || ( this == GREATEREQUAL );
+    }
 }

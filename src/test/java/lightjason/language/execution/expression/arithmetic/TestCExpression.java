@@ -23,16 +23,6 @@
 
 package lightjason.language.execution.expression.arithmetic;
 
-import lightjason.common.CPath;
-import lightjason.language.CVariable;
-import org.junit.Test;
-
-import java.text.MessageFormat;
-import java.util.Random;
-
-import static org.junit.Assert.assertTrue;
-
-
 /**
  * test arithmetic expression
  */
@@ -43,7 +33,7 @@ public final class TestCExpression
     /**
      * test simple expression with random values
      */
-    @Test
+    /*@Test
     public void testSimpleExpressionWithVariable()
     {
         final Random l_random = new Random();
@@ -65,12 +55,13 @@ public final class TestCExpression
         }
 
     }
+    */
 
 
     /**
      * test complex expression with fixed value
      */
-    @Test
+    /*@Test
     public void testComplexExpression()
     {
         // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
@@ -80,5 +71,6 @@ public final class TestCExpression
         final int l_value1 = l_expression1.evaluate().intValue();
         assertTrue( MessageFormat.format( "value should be [{0}] but is [{1}]", 162, l_value1 ), l_value1 == 162 );
     }
+    */
 
 }

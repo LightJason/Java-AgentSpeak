@@ -23,34 +23,84 @@
 
 package lightjason.language.execution.expression;
 
-import lightjason.language.execution.IExecution;
+import lightjason.agent.IAgent;
+import lightjason.language.score.IAggregation;
+
+import java.text.MessageFormat;
 
 
 /**
- * interface of any expression type
+ * binary expression
  */
-public interface IExpression extends IExecution
+public abstract class IBinary implements IExpression
 {
+    /**
+     * expression operator
+     */
+    protected final EOperator m_operator;
+    /**
+     * left-hand-side argument
+     */
+    protected final IExpression m_lefthandside;
+    /**
+     * right-hand-side argument
+     */
+    protected final IExpression m_righthandside;
+
 
     /**
-     * returns the left-hand expression side
+     * ctor
      *
-     * @return left-hand-side
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side argument
+     * @param p_righthandside right-hand-side
      */
-    IExpression getLeftHandSide();
+    protected IBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    {
+        m_operator = p_operator;
+        m_lefthandside = p_lefthandside;
+        m_righthandside = p_righthandside;
+    }
 
-    /**
-     * returns the right-hand expression side
-     *
-     * @return right-hand-side
-     */
-    IExpression getRightHandSide();
+    @Override
+    public final IExpression getLeftHandSide()
+    {
+        return m_lefthandside;
+    }
 
-    /**
-     * return expression operator
-     *
-     * @return operator
-     */
-    EOperator getOperator();
+    @Override
+    public final IExpression getRightHandSide()
+    {
+        return m_righthandside;
+    }
 
+    @Override
+    public final EOperator getOperator()
+    {
+        return m_operator;
+    }
+
+    @Override
+    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return 0;
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_lefthandside.hashCode() + m_righthandside.hashCode() + m_operator.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0} {1} {2}", m_lefthandside, m_operator, m_righthandside );
+    }
 }

@@ -39,6 +39,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoal;
+import lightjason.language.execution.action.CAssignment;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
@@ -585,22 +586,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
-        /*
-        if ( p_context.term() != null )
-            return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
-        */
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
+        return this.visitChildren( p_context );
     }
 
     @Override
     public Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
-        /*
-        if ( p_context.term() != null )
-            return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
-        */
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "assignment", p_context.getText() ) );
-
+        return this.visitChildren( p_context );
     }
 
 
@@ -608,19 +600,19 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
     }
-
-    @Override
-    public Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-
 
     @Override
     public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
+    {
+        return new CAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+    }
+
+
+
+    @Override
+    public Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -805,6 +797,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         if ( p_context.termlist() != null )
             return this.visitTermlist( p_context.termlist() );
+        if ( p_context.expression() != null )
+            return this.visitExpression( p_context.expression() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
@@ -826,6 +820,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         if ( p_context.termlist() != null )
             return this.visitTermlist( p_context.termlist() );
+        if ( p_context.expression() != null )
+            return this.visitExpression( p_context.expression() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
@@ -1002,6 +998,9 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
+        // left-hand-side
+        //this.visitExpression_logic_and( p_context.expression_logic_and() )
+
         return this.visitChildren( p_context );
     }
 

@@ -248,7 +248,7 @@ assignment_expression :
 assignment_expression_singlevariable :
     variable
     ASSIGN
-    ( term | expression | ( LANGULARBRACKET term RANGULARBRACKET ) )
+    term
     ;
 
 /**
@@ -257,7 +257,7 @@ assignment_expression_singlevariable :
 assignment_expression_multivariable :
     variablelist
     ASSIGN
-    ( term | ( LANGULARBRACKET term RANGULARBRACKET ) )
+    term
     ;
 
 /**

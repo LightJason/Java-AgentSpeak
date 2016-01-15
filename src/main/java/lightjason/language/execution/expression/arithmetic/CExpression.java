@@ -26,9 +26,7 @@ package lightjason.language.execution.expression.arithmetic;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.error.CIllegalStateException;
 import lightjason.language.IVariable;
-import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.expression.arithmetic.operator.CDivide;
 import lightjason.language.execution.expression.arithmetic.operator.CMinus;
 import lightjason.language.execution.expression.arithmetic.operator.CMultiply;
@@ -42,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 
 /**
@@ -52,7 +49,7 @@ import java.util.stream.Collectors;
  * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
 @SuppressWarnings( "serial" )
-public final class CExpression implements IExpression<Number>
+public final class CExpression
 {
     /**
      * map with default operators
@@ -99,7 +96,7 @@ public final class CExpression implements IExpression<Number>
     {
         m_operatordefinition = p_operator;
     }
-
+/*
     @Override
     public final Map<CPath, IVariable<Number>> getVariables()
     {
@@ -173,6 +170,7 @@ public final class CExpression implements IExpression<Number>
 
         return l_elements.get( 0 ).get();
     }
+    */
 
 
     /**
