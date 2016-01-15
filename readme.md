@@ -249,3 +249,6 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
+* Examples in separate git project, simple UI via [jetty](http://www.eclipse.org/jetty/)
+* Meta-language for data/plan exchange with [jaxb](https://jaxb.java.net) via JSON. Problem: Specification Jason vs. LightJason (vs. Goal) -> generic exchange format
+* Communication (Contract Net Protocol) -> Threadpool/Semaphore/Cycle synchronisation
