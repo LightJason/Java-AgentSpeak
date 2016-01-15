@@ -269,18 +269,11 @@ unary_expression :
     ;
 
 /**
- * numerical / logical expression
+ * logical & numeric entry rule for or-expression
  **/
 expression :
     LROUNDBRACKET expression RROUNDBRACKET
-    | expression_logic_or
-    ;
-
-/**
- * logical or-expression
- **/
-expression_logic_or :
-    expression_logic_and ( OR expression )*
+    | expression_logic_and ( OR expression )*
     ;
 
 /**
@@ -307,16 +300,9 @@ expression_logical_negation :
     ;
 
 /**
- * numerical expression
+ * numerical entry rule for equal expression
  **/
 expression_numeric :
-    expression_numeric_equal
-    ;
-
-/**
- * equal expression
- **/
-expression_numeric_equal :
     expression_numeric_relation ( (EQUAL | NOTEQUAL) expression_numeric )*
     ;
 
@@ -355,14 +341,7 @@ expression_numeric_element :
     number
     | variable
     | literal
-    | expression_numeric_bracket
-    ;
-
-/**
- * numeric bracket-expression
- **/
-expression_numeric_bracket :
-    LROUNDBRACKET expression_numeric RROUNDBRACKET
+    | LROUNDBRACKET expression_numeric RROUNDBRACKET
     ;
 
 /**

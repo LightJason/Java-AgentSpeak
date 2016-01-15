@@ -1014,20 +1014,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public Object visitExpression_logic_or( final AgentParser.Expression_logic_orContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitExpression_logic_or( final PlanBundleParser.Expression_logic_orContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-
-
-    @Override
     public Object visitExpression_logic_and( final AgentParser.Expression_logic_andContext p_context )
     {
         return this.visitChildren( p_context );
@@ -1077,20 +1063,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
     @Override
     public Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-
-
-    @Override
-    public Object visitExpression_numeric_equal( final AgentParser.Expression_numeric_equalContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitExpression_numeric_equal( final PlanBundleParser.Expression_numeric_equalContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1161,20 +1133,6 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
     @Override
     public Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-
-
-    @Override
-    public Object visitExpression_numeric_bracket( final AgentParser.Expression_numeric_bracketContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitExpression_numeric_bracket( final PlanBundleParser.Expression_numeric_bracketContext p_context )
     {
         return this.visitChildren( p_context );
     }
