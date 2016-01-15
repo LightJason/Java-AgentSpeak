@@ -269,9 +269,9 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
         if ( p_context.annotation_atom() != null )
-            p_context.annotation_atom().stream().map( i -> (IAnnotation) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
+            p_context.annotation_atom().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
         if ( p_context.annotation_literal() != null )
-            p_context.annotation_literal().stream().map( i -> (IAnnotation) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
+            p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
 
         return l_annotation.isEmpty() ? Collections.EMPTY_SET : l_annotation;
     }
@@ -284,9 +284,9 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
         if ( p_context.annotation_atom() != null )
-            p_context.annotation_atom().stream().map( i -> (IAnnotation) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
+            p_context.annotation_atom().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
         if ( p_context.annotation_literal() != null )
-            p_context.annotation_literal().stream().map( i -> (IAnnotation) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
+            p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
 
         return l_annotation.isEmpty() ? Collections.EMPTY_SET : l_annotation;
     }
