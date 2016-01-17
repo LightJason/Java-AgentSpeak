@@ -23,8 +23,8 @@
 
 package lightjason.agent.action.buildin.math.blas;
 
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -37,14 +37,14 @@ import java.util.List;
 
 
 /**
- * creates a dens or sparse matrix
+ * creates a dense- or sparse-vector
  */
-public final class CCreateMatrix extends IBuildinAction
+public final class CVector extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCreateMatrix()
+    public CVector()
     {
         super( 3 );
     }
@@ -52,7 +52,7 @@ public final class CCreateMatrix extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -60,21 +60,21 @@ public final class CCreateMatrix extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument is row-size, second colum-size
-        // optional third argument is matrix type (default dense-matrix)
+        // first argument is the element size,
+        // optional second argument is matrix type (default dense-matrix)
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
-        switch ( l_argument.size() > 2 ? EMatrixType.valueOf( CCommon.getRawValue( l_argument.get( 3 ) ) ) : EMatrixType.DENSE )
+        switch ( l_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( l_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add(
-                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( l_argument.get( 0 ) ), CCommon.getRawValue( l_argument.get( 1 ) ) ) )
+                        new CRawTerm<>( new DenseDoubleMatrix1D( CCommon.getRawValue( l_argument.get( 0 ) ) ) )
                 );
                 break;
 
             case SPARSE:
                 p_return.add(
-                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( l_argument.get( 0 ) ), CCommon.getRawValue( l_argument.get( 1 ) ) ) )
+                        new CRawTerm<>( new SparseDoubleMatrix1D( CCommon.getRawValue( l_argument.get( 0 ) ) ) )
                 );
                 break;
 
@@ -88,7 +88,7 @@ public final class CCreateMatrix extends IBuildinAction
     /**
      * matrix type
      */
-    private enum EMatrixType
+    private enum EType
     {
         SPARSE,
         DENSE;
