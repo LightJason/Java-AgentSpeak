@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.math.blas;
 
+import cern.colt.matrix.DoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -31,29 +32,35 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action for average
+ * returns a single row of a matrix
  */
-public final class CAverage extends IBuildinAction
+public final class CColumn extends IBuildinAction
 {
-
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).average() ) );
+        // first argument must be a term with a matrix object, second column index
+
+        p_return.addAll(
+                Arrays.stream(
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ).viewColumn( CCommon.getRawValue( p_argument.get( 1 ) ) ).toArray()
+                ).mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
+        );
+
         return CBoolean.from( true );
     }
-
 }

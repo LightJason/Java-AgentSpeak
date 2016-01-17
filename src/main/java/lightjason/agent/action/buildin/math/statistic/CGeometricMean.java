@@ -24,9 +24,9 @@
 package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
@@ -63,19 +63,8 @@ public final class CGeometricMean extends IBuildinAction
     {
         final SummaryStatistics l_statistics = new SummaryStatistics();
 
-        getTermStream( p_context, p_argument ).mapToDouble( i -> {
-
-            if ( i instanceof IVariable<?> )
-                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            if ( i instanceof CRawTerm<?> )
-                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            // filter avoid this value
-            return 0;
-        } ).forEach( i -> l_statistics.addValue( i ) );
-
-        p_argument.add( new CRawTerm<>( l_statistics.getGeometricMean() ) );
+        getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).forEach( i -> l_statistics.addValue( i ) );
+        p_argument.add( CRawTerm.from( l_statistics.getGeometricMean() ) );
 
         return CBoolean.from( true );
     }

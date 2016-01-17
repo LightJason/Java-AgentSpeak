@@ -23,7 +23,11 @@
 
 package lightjason.agent.action.buildin.math.blas;
 
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -33,32 +37,48 @@ import java.util.List;
 
 
 /**
- * creates a matrix
+ * creates a dens or sparse matrix
  */
-public class CCreateMatrix extends IBuildinAction
+public final class CCreateMatrix extends IBuildinAction
 {
     @Override
-    public int getMinimalArgumentNumber()
+    public final int getMinimalArgumentNumber()
     {
         return 2;
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                         final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         // first argument is row-size, second colum-size
         // optional third argument is matrix type (default dense-matrix)
-        //final EMatrixType l_type = (p_argument.size() > 2) ? EMatrixType.valueOf( ((CRawTerm<?>) p_argument.get )
 
+        switch ( p_argument.size() > 2 ? EMatrixType.valueOf( CCommon.getRawValue( p_argument.get( 3 ) ) ) : EMatrixType.DENSE )
+        {
+            case DENSE:
+                p_return.add(
+                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
+                );
+                break;
 
-        //p_return.add( new CRawTerm<>(  ) );
+            case SPARSE:
+                p_return.add(
+                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
+                );
+                break;
+
+            default:
+        }
 
         return CBoolean.from( true );
     }
 
 
+    /**
+     * matrix type
+     */
     private enum EMatrixType
     {
         SPARSE,

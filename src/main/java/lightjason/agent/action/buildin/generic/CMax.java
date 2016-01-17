@@ -24,9 +24,9 @@
 package lightjason.agent.action.buildin.generic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
@@ -52,18 +52,7 @@ public final class CMax extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( new CRawTerm<>( getTermStream( p_context, p_argument ).mapToDouble( i -> {
-
-            if ( i instanceof IVariable<?> )
-                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            if ( i instanceof CRawTerm<?> )
-                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            // filter avoid this value
-            return 0;
-        } ).max() ) );
-
+        p_return.add( CRawTerm.from( getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).max() ) );
         return CBoolean.from( true );
     }
 }

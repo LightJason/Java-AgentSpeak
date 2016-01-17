@@ -67,6 +67,20 @@ public final class CRawTerm<T> implements ITerm
 
     }
 
+    /**
+     * factory for a raw term
+     *
+     * @param p_value any value
+     * @return raw term
+     *
+     * @tparam N type
+     */
+    public static <N> CRawTerm<N> from( final N p_value )
+    {
+        return new CRawTerm<N>( p_value );
+    }
+
+
     @Override
     public final int hashCode()
     {

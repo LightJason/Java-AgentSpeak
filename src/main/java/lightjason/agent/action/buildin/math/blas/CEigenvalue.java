@@ -21,25 +21,26 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.math.blas;
 
+import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action for average
+ * creates the eigenvalues of a matrix
  */
-public final class CAverage extends IBuildinAction
+public final class CEigenvalue extends IBuildinAction
 {
-
     @Override
     public final int getMinimalArgumentNumber()
     {
@@ -47,13 +48,18 @@ public final class CAverage extends IBuildinAction
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).average() ) );
-        return CBoolean.from( true );
-    }
+        // argument must be a term with a matrix object
 
+        p_return.addAll(
+                Arrays.stream(
+                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+                ).sorted().mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
+        );
+
+        return null;
+    }
 }
