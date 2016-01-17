@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -32,22 +33,20 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns a single row of a matrix
+ * creates a dense- or sparse-matrix
  */
-public final class CRow extends IBuildinAction
+public final class CCreate extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CRow()
+    public CCreate()
     {
-        super( 3 );
+        super( 4 );
     }
 
     @Override
@@ -61,15 +60,37 @@ public final class CRow extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument must be a term with a matrix object, second row index
+        // first argument is row-size, second colum-size
+        // optional third argument is matrix type (default dense-matrix)
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
-        p_return.addAll(
-                Arrays.stream(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) ).viewRow( CCommon.getRawValue( l_argument.get( 1 ) ) ).toArray()
-                ).mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
-        );
+        switch ( l_argument.size() > 2 ? EType.valueOf( CCommon.getRawValue( l_argument.get( 3 ) ) ) : EType.DENSE )
+        {
+            case DENSE:
+                p_return.add(
+                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( l_argument.get( 0 ) ), CCommon.getRawValue( l_argument.get( 1 ) ) ) )
+                );
+                break;
+
+            case SPARSE:
+                p_return.add(
+                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( l_argument.get( 0 ) ), CCommon.getRawValue( l_argument.get( 1 ) ) ) )
+                );
+                break;
+
+            default:
+        }
 
         return CBoolean.from( true );
+    }
+
+
+    /**
+     * matrix type
+     */
+    private enum EType
+    {
+        SPARSE,
+        DENSE;
     }
 }

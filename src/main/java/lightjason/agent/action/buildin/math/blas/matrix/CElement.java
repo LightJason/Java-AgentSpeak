@@ -21,38 +21,37 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import cern.colt.matrix.DoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * returns a single row of a matrix
  */
-public final class CEigenvalue extends IBuildinAction
+public final class CElement extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CEigenvalue()
+    public CElement()
     {
-        super( 3 );
+        super( 4 );
     }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 3;
     }
 
     @Override
@@ -60,15 +59,16 @@ public final class CEigenvalue extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // argument must be a term with a matrix object
+        // first argument must be a term with a matrix object, second row index, third column index
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
-        p_return.addAll(
-                Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( l_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                ).sorted().mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
+        p_return.add(
+                CRawTerm.from(
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .get( CCommon.getRawValue( l_argument.get( 1 ) ), CCommon.getRawValue( l_argument.get( 2 ) ) )
+                )
         );
 
-        return null;
+        return CBoolean.from( true );
     }
 }

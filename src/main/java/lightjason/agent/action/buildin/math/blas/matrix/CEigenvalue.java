@@ -21,32 +21,32 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.SparseDoubleMatrix1D;
+import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a dense- or sparse-vector
+ * creates the eigenvalues of a matrix
  */
-public final class CVector extends IBuildinAction
+public final class CEigenvalue extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CVector()
+    public CEigenvalue()
     {
-        super( 3 );
+        super( 4 );
     }
 
     @Override
@@ -60,37 +60,15 @@ public final class CVector extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument is the element size,
-        // optional second argument is matrix type (default dense-matrix)
+        // argument must be a term with a matrix object
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
-        switch ( l_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( l_argument.get( 1 ) ) ) : EType.DENSE )
-        {
-            case DENSE:
-                p_return.add(
-                        new CRawTerm<>( new DenseDoubleMatrix1D( CCommon.getRawValue( l_argument.get( 0 ) ) ) )
-                );
-                break;
+        p_return.addAll(
+                Arrays.stream(
+                        new EigenvalueDecomposition( CCommon.getRawValue( l_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+                ).sorted().mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
+        );
 
-            case SPARSE:
-                p_return.add(
-                        new CRawTerm<>( new SparseDoubleMatrix1D( CCommon.getRawValue( l_argument.get( 0 ) ) ) )
-                );
-                break;
-
-            default:
-        }
-
-        return CBoolean.from( true );
-    }
-
-
-    /**
-     * matrix type
-     */
-    private enum EType
-    {
-        SPARSE,
-        DENSE;
+        return null;
     }
 }

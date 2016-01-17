@@ -21,9 +21,9 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas;
+package lightjason.agent.action.buildin.math.blas.vector;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.DoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -38,20 +38,20 @@ import java.util.List;
 /**
  * returns a single row of a matrix
  */
-public final class CMatrixElement extends IBuildinAction
+public final class CElement extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CMatrixElement()
+    public CElement()
     {
-        super( 3 );
+        super( 4 );
     }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -59,13 +59,14 @@ public final class CMatrixElement extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument must be a term with a matrix object, second row index, third column index
+        // first argument must be a term with a matrix object, second index of the element
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get( CCommon.getRawValue( l_argument.get( 1 ) ), CCommon.getRawValue( l_argument.get( 2 ) ) )
+                        CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .get( CCommon.getRawValue( l_argument.get( 1 ) )
+                                )
                 )
         );
 
