@@ -32,7 +32,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
-import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -57,13 +57,13 @@ public final class CStandardDeviation extends IBuildinAction
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         final SummaryStatistics l_statistics = new SummaryStatistics();
 
-        getTermStream( p_context, p_parameter ).mapToDouble( i -> {
+        getTermStream( p_context, p_argument ).mapToDouble( i -> {
 
             if ( i instanceof IVariable<?> )
                 return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
@@ -75,7 +75,7 @@ public final class CStandardDeviation extends IBuildinAction
             return 0;
         } ).forEach( i -> l_statistics.addValue( i ) );
 
-        p_parameter.add( new CRawTerm<>( l_statistics.getStandardDeviation() ) );
+        p_argument.add( new CRawTerm<>( l_statistics.getStandardDeviation() ) );
 
         return CBoolean.from( true );
     }

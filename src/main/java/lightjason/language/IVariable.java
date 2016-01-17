@@ -78,7 +78,7 @@ public interface IVariable<T> extends ITerm
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean isValueAssignableTo( final Class<?> p_class );
+    boolean isValueAssignableTo( final Class<?>... p_class );
 
     /**
      * throws an illegal argument exception
@@ -90,7 +90,7 @@ public interface IVariable<T> extends ITerm
      *
      * @throws IllegalArgumentException on assignable error
      */
-    IVariable<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException;
+    IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
 
     /**
      * override clonable interface definition

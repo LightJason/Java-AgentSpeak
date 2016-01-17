@@ -21,12 +21,10 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.math.blas;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
@@ -35,35 +33,35 @@ import java.util.List;
 
 
 /**
- * action for maximum
+ * creates a matrix
  */
-public final class CMax extends IBuildinAction
+public class CCreateMatrix extends IBuildinAction
 {
-
     @Override
-    public final int getMinimalArgumentNumber()
+    public int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                         final List<ITerm> p_return
     )
     {
-        p_return.add( new CRawTerm<>( getTermStream( p_context, p_argument ).mapToDouble( i -> {
+        // first argument is row-size, second colum-size
+        // optional third argument is matrix type (default dense-matrix)
+        //final EMatrixType l_type = (p_argument.size() > 2) ? EMatrixType.valueOf( ((CRawTerm<?>) p_argument.get )
 
-            if ( i instanceof IVariable<?> )
-                return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
 
-            if ( i instanceof CRawTerm<?> )
-                return ( (CRawTerm<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
-
-            // filter avoid this value
-            return 0;
-        } ).max() ) );
+        //p_return.add( new CRawTerm<>(  ) );
 
         return CBoolean.from( true );
+    }
+
+
+    private enum EMatrixType
+    {
+        SPARSE,
+        DENSE;
     }
 }

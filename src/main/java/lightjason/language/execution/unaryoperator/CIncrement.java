@@ -32,8 +32,8 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -66,8 +66,8 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context,
-                                               final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+                                               final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable ) ).throwNotAllocated();

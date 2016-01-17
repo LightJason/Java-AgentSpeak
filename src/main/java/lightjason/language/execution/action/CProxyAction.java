@@ -101,8 +101,8 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         m_execution.execute(
@@ -185,7 +185,7 @@ public final class CProxyAction implements IExecution
          * @param p_annotation arguments
          * @return list of returning arguments
          */
-        public Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation );
+        public Collection<ITerm> execute( final IContext<?> p_context, final List<ITerm> p_annotation );
 
         /**
          * clone variables
@@ -219,7 +219,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
+        public final Collection<ITerm> execute( final IContext<?> p_context, final List<ITerm> p_annotation )
         {
             return Collections.unmodifiableCollection( lightjason.language.CCommon.replaceVariableFromContext( p_context, m_values ) );
         }
@@ -285,7 +285,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Collection<ITerm> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation )
+        public final Collection<ITerm> execute( final IContext<?> p_context, final List<ITerm> p_annotation )
         {
             // allocate return values (can be set only with types within the current execution context
             final List<ITerm> l_return = new LinkedList<>();

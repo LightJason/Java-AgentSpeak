@@ -27,6 +27,8 @@ import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 
+import java.util.Arrays;
+
 
 /**
  * term structure for simple datatypes
@@ -42,16 +44,27 @@ public final class CRawTerm<T> implements ITerm
      */
     private final CPath m_functor;
 
-
     /**
      * ctor
      *
-     * @param p_value data
+     * @param p_value any value tue
+     * @tparam N value type
      */
-    public CRawTerm( final T p_value )
+    @SuppressWarnings( "unchecked" )
+    public <N> CRawTerm( final N p_value )
     {
-        m_value = p_value;
-        m_functor = new CPath( m_value.toString() );
+        if ( p_value instanceof CRawTerm<?> )
+        {
+            final CRawTerm<?> l_term = (CRawTerm<?>) p_value;
+            m_value = l_term.getTyped();
+            m_functor = l_term.getFQNFunctor();
+        }
+        else
+        {
+            m_value = (T) p_value;
+            m_functor = CPath.from( p_value.toString() );
+        }
+
     }
 
     @Override
@@ -147,9 +160,9 @@ public final class CRawTerm<T> implements ITerm
      * @param p_class class
      * @return assignable (on null always true)
      */
-    public final boolean isValueAssignableTo( final Class<?> p_class )
+    public final boolean isValueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : p_class.isAssignableFrom( m_value.getClass() );
+        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> true );
     }
 
     /**
@@ -162,7 +175,7 @@ public final class CRawTerm<T> implements ITerm
      *
      * @throws IllegalArgumentException on assignable error
      */
-    public final CRawTerm<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException
+    public final CRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.isValueAssignableTo( p_class ) )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "notassignable", this, p_class ) );

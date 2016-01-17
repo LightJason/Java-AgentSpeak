@@ -32,7 +32,6 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,16 +58,17 @@ public final class CLogical extends IBinary
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_parameter = lightjason.language.CCommon.replaceVariableFromContext( p_context, p_parameter );
+        final List<ITerm> l_parameter = lightjason.language.CCommon.replaceVariableFromContext( p_context, p_argument );
         if ( l_parameter.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
 
         final IVariable<Boolean> l_lhs = ( (IVariable<?>) l_parameter.get( 0 ) ).throwNotAllocated().throwValueNotAssignableTo( Boolean.class ).getTyped();
         final IVariable<Boolean> l_rhs = ( (IVariable<?>) l_parameter.get( 1 ) ).throwNotAllocated().throwValueNotAssignableTo( Boolean.class ).getTyped();
+
         switch ( m_operator )
         {
 

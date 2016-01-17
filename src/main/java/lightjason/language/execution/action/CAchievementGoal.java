@@ -33,7 +33,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
-import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -65,8 +65,8 @@ public final class CAchievementGoal extends IBaseExecution<ILiteral>
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         return CBoolean.from( false );

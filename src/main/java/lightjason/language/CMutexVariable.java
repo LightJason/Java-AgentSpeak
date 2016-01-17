@@ -101,7 +101,7 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized IVariable<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException
+    public final synchronized IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
         return super.throwValueNotAssignableTo( p_class );
     }
@@ -113,7 +113,7 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized boolean isValueAssignableTo( final Class<?> p_class )
+    public final synchronized boolean isValueAssignableTo( final Class<?>... p_class )
     {
         return super.isValueAssignableTo( p_class );
     }

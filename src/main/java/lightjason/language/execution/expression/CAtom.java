@@ -21,65 +21,48 @@
  * @endcond
  */
 
-package lightjason.language.execution.unaryoperator;
+package lightjason.language.execution.expression;
 
-import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
+import lightjason.error.CIllegalStateException;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
 /**
- * unary increment
+ * atom element within an expression
  */
-public final class CDecrement<T extends Number> implements IOperator<T>
+public class CAtom<T extends ITerm> implements IExecution
 {
-    /**
-     * variable
-     */
-    private final IVariable<T> m_variable;
+    private final T m_value;
 
-    /**
-     * ctor
-     *
-     * @param p_variable variable
-     */
-    public CDecrement( final IVariable<T> p_variable )
+
+
+    public <N> CAtom( final N p_value )
     {
-        m_variable = p_variable;
+        //m_value = new CRawTerm<>( p_value );
+        m_value = null;
     }
 
-    @Override
-    public final String toString()
-    {
-        return m_variable.toString() + "--";
-    }
+
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context,
-                                               final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                         final List<ITerm> p_return
     )
     {
-        final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable ) ).throwNotAllocated();
-
-        if ( l_variable.isValueAssignableTo( Double.class ) )
-            l_variable.set( (T) new Double( l_variable.get().doubleValue() - 1 ) );
-        if ( l_variable.isValueAssignableTo( Long.class ) )
-            l_variable.set( (T) new Long( l_variable.get().longValue() - 1 ) );
-        if ( l_variable.isValueAssignableTo( Float.class ) )
-            l_variable.set( (T) new Float( l_variable.get().floatValue() - 1 ) );
-        if ( l_variable.isValueAssignableTo( Integer.class ) )
-            l_variable.set( (T) new Integer( l_variable.get().intValue() - 1 ) );
+        //CCommon.replaceVariableFromContext( p_context, m_value )
 
         return CBoolean.from( true );
     }
@@ -87,16 +70,56 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     @Override
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+        return 0;
     }
 
     @Override
-    @SuppressWarnings( "serial" )
+    @SuppressWarnings( "unchecked" )
     public final Set<IVariable<?>> getVariables()
+    {
+        return this.getVariables( m_value );
+    }
+
+    private final Set<IVariable<?>> getVariables( final IVariable<?> p_value )
     {
         return new HashSet<IVariable<?>>()
         {{
-            add( m_variable.clone() );
+            add( p_value );
         }};
+    }
+
+    private final Set<IVariable<?>> getVariables( final T p_value )
+    {
+        return Collections.<IVariable<?>>emptySet();
+    }
+
+    private final ITerm getValue( final IVariable<?> p_value )
+    {
+        return new CRawTerm<>( p_value.throwNotAllocated().throwValueNotAssignableTo( Number.class, Boolean.class ).getTyped() );
+    }
+
+    private final ITerm getValue( final Double p_value )
+    {
+        return new CRawTerm<>( p_value );
+    }
+
+    private final ITerm getValue( final Long p_value )
+    {
+        return new CRawTerm<>( p_value );
+    }
+
+    private final ITerm getValue( final Integer p_value )
+    {
+        return new CRawTerm<>( p_value );
+    }
+
+    private final ITerm getValue( final Boolean p_value )
+    {
+        return new CRawTerm<>( p_value );
+    }
+
+    private final ITerm getValue( final T p_value )
+    {
+        throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "valueincorrect", m_value ) );
     }
 }

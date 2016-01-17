@@ -42,6 +42,7 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
@@ -148,8 +149,8 @@ public final class TestCAgent
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                                   final Collection<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             return CBoolean.from( true );

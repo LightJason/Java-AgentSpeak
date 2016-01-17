@@ -133,8 +133,8 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,

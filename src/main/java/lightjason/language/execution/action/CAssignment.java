@@ -32,7 +32,6 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -64,8 +63,8 @@ public class CAssignment<N, M extends IExecution> extends IBaseExecution<IVariab
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                         final Collection<ITerm> p_return
+    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                         final List<ITerm> p_return
     )
     {
         final List<ITerm> l_return = new LinkedList<>();

@@ -29,7 +29,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 
@@ -44,12 +44,12 @@ public interface IExecution
      *
      * @param p_context current execution context
      * @param p_annotation annotation
-     * @param p_parameter parameter of the action
+     * @param p_argument parameter of the action
      * @param p_return return values
      * @return fuzzy boolean
      */
-    IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                  final Collection<ITerm> p_return
+    IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                  final List<ITerm> p_return
     );
 
     /**

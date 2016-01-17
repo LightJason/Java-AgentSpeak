@@ -28,6 +28,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 
 /**
@@ -133,16 +134,18 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public boolean isValueAssignableTo( final Class<?> p_class )
+    public boolean isValueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : p_class.isAssignableFrom( m_value.getClass() );
+        return m_value == null ? true : m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) )
+                                                                       .anyMatch( i -> true );
     }
 
     @Override
-    public IVariable<T> throwValueNotAssignableTo( final Class<?> p_class ) throws IllegalArgumentException
+    public IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.isValueAssignableTo( p_class ) )
-            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CVariable.class, "notassignable", this, p_class ) );
+            throw new CIllegalArgumentException(
+                    lightjason.common.CCommon.getLanguageString( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
 
         return this;
     }

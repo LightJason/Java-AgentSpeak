@@ -24,9 +24,17 @@
 package lightjason.language.execution.expression;
 
 import lightjason.agent.IAgent;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
 import lightjason.language.score.IAggregation;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -103,4 +111,17 @@ public abstract class IBinary implements IExpression
     {
         return MessageFormat.format( "{0} {1} {2}", m_lefthandside, m_operator, m_righthandside );
     }
+
+    protected final <T> Pair<T, T> getArguments( final Class<?> p_class, final IContext<?> p_context, final Collection<ITerm> p_parameter )
+    {
+        final List<ITerm> l_parameter = lightjason.language.CCommon.replaceVariableFromContext( p_context, p_parameter );
+        if ( l_parameter.size() != 2 )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( IBinary.class, "argumentnumber" ) );
+
+        return new ImmutablePair<>(
+                lightjason.language.CCommon.getTermValue( p_class, l_parameter.get( 0 ) ),
+                lightjason.language.CCommon.getTermValue( p_class, l_parameter.get( 1 ) )
+        );
+    }
+
 }

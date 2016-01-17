@@ -46,12 +46,13 @@ public final class CCommon
     /**
      * returns a native / raw value of a term
      *
+     * @param p_value any value type
      * @return term value or raw value
      */
     @SuppressWarnings( "unchecked" )
-    public static <T, N> T getRawValue( final N p_term )
+    public static <T, N> T getRawValue( final N p_value )
     {
-        return (T) ( p_term instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_term ).get() : p_term );
+        return (T) ( p_value instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_value ).get() : p_value );
     }
 
     /**
@@ -86,5 +87,21 @@ public final class CCommon
                                                                  lightjason.common.CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() ) );
 
         return l_variable;
+    }
+
+
+    /**
+     * returns the value of a term
+     *
+     * @return value
+     */
+    public static <T> T getTermValue( final Class<?> p_class, final ITerm p_term )
+    {
+        if ( p_term instanceof IVariable<?> )
+            return ( (IVariable<?>) p_term ).throwNotAllocated().throwValueNotAssignableTo( p_class ).getTyped();
+        if ( p_term instanceof CRawTerm<?> )
+            return ( (CRawTerm<?>) p_term ).throwNotAllocated().throwValueNotAssignableTo( p_class ).getTyped();
+
+        throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notconvertable", p_term ) );
     }
 }

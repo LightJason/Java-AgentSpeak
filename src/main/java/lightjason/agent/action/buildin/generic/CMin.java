@@ -31,7 +31,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -48,11 +48,11 @@ public final class CMin extends IBuildinAction
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Collection<ITerm> p_annotation, final Collection<ITerm> p_parameter,
-                                               final Collection<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
-        p_return.add( new CRawTerm<>( getTermStream( p_context, p_parameter ).mapToDouble( i -> {
+        p_return.add( new CRawTerm<>( getTermStream( p_context, p_argument ).mapToDouble( i -> {
 
             if ( i instanceof IVariable<?> )
                 return ( (IVariable<?>) i ).throwNotAllocated().throwValueNotAssignableTo( Double.class ).<Double>getTyped();
