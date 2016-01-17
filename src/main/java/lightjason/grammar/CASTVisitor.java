@@ -956,13 +956,17 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public final Object visitString( final AgentParser.StringContext p_context )
     {
-        return p_context.getText();
+        // remove quotes
+        final String l_text = p_context.getText();
+        return l_text.length() < 3 ? "" : l_text.substring( 1, l_text.length() - 1 );
     }
 
     @Override
     public Object visitString( final PlanBundleParser.StringContext p_context )
     {
-        return p_context.getText();
+        // remove quotes
+        final String l_text = p_context.getText();
+        return l_text.length() < 3 ? "" : l_text.substring( 1, l_text.length() - 1 );
     }
 
 
