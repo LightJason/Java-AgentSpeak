@@ -25,14 +25,8 @@ package lightjason.agent;
 
 import com.google.common.collect.Multiset;
 import lightjason.agent.action.IAction;
-import lightjason.agent.action.IBaseAction;
 import lightjason.agent.generator.CDefaultAgentGenerator;
-import lightjason.common.CPath;
 import lightjason.language.CCommon;
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -45,7 +39,6 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -127,50 +120,6 @@ public final class TestCAgent
         }
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
-    }
-
-
-    /**
-     * generic action to define any action
-     */
-    private static final class CGeneric extends IBaseAction
-    {
-        /**
-         * name of the action
-         **/
-        private final CPath m_name;
-
-        /**
-         * number of arguments
-         */
-        private final int m_arguments;
-
-
-        public CGeneric( final String p_name, final int p_arguments )
-        {
-            m_name = CPath.from( p_name );
-            m_arguments = p_arguments;
-        }
-
-        @Override
-        public CPath getName()
-        {
-            return m_name;
-        }
-
-        @Override
-        public final int getMinimalArgumentNumber()
-        {
-            return m_arguments;
-        }
-
-        @Override
-        public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
-        )
-        {
-            return CBoolean.from( true );
-        }
     }
 
 
