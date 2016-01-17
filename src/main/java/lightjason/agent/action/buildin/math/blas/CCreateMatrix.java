@@ -54,18 +54,19 @@ public final class CCreateMatrix extends IBuildinAction
     {
         // first argument is row-size, second colum-size
         // optional third argument is matrix type (default dense-matrix)
+        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
-        switch ( p_argument.size() > 2 ? EMatrixType.valueOf( CCommon.getRawValue( p_argument.get( 3 ) ) ) : EMatrixType.DENSE )
+        switch ( l_argument.size() > 2 ? EMatrixType.valueOf( CCommon.getRawValue( l_argument.get( 3 ) ) ) : EMatrixType.DENSE )
         {
             case DENSE:
                 p_return.add(
-                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
+                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( l_argument.get( 0 ) ), CCommon.getRawValue( l_argument.get( 1 ) ) ) )
                 );
                 break;
 
             case SPARSE:
                 p_return.add(
-                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
+                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( l_argument.get( 0 ) ), CCommon.getRawValue( l_argument.get( 1 ) ) ) )
                 );
                 break;
 
