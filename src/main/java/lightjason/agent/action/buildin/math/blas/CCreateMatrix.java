@@ -41,6 +41,14 @@ import java.util.List;
  */
 public final class CCreateMatrix extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CCreateMatrix()
+    {
+        super( 3 );
+    }
+
     @Override
     public final int getMinimalArgumentNumber()
     {

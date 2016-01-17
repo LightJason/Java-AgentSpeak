@@ -42,6 +42,14 @@ import java.util.stream.Collectors;
  */
 public final class CRow extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CRow()
+    {
+        super( 3 );
+    }
+
     @Override
     public final int getMinimalArgumentNumber()
     {

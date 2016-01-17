@@ -42,6 +42,15 @@ import java.util.stream.Collectors;
  */
 public final class CColumn extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CColumn()
+    {
+        super( 3 );
+    }
+
     @Override
     public final int getMinimalArgumentNumber()
     {

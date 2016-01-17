@@ -41,6 +41,14 @@ import java.util.stream.Collectors;
  */
 public final class CEigenvalue extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CEigenvalue()
+    {
+        super( 3 );
+    }
+
     @Override
     public final int getMinimalArgumentNumber()
     {
