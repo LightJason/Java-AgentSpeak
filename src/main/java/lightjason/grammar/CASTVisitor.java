@@ -1198,6 +1198,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
      *
      * @param p_item any parsed item
      * @return execution structure
+     * @bug literal call must be changes, literals which does not match an action must be an unifying call
      */
     protected IExecution createExecution( final Object p_item )
     {
