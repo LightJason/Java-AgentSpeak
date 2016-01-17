@@ -86,7 +86,7 @@ public final class CPrint extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        System.out.println( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
+        m_stream.print( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
         return CBoolean.from( true );
     }
 
