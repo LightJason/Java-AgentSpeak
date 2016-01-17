@@ -105,9 +105,9 @@ public final class TestCAgent
         {
             l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ) ).generate().call();
         }
-        catch ( final Exception l_exception )
+        catch ( final Exception p_exception )
         {
-            return new ImmutablePair<>( false, MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
+            return new ImmutablePair<>( false, MessageFormat.format( "{0} passed with failure: {1}", p_name, p_exception ) );
         }
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );

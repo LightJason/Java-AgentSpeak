@@ -88,7 +88,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
             {
                 return this.generate( p_data );
             }
-            catch ( final Exception l_exception )
+            catch ( final Exception p_exception )
             {
                 return null;
             }

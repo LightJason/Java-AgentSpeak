@@ -24,21 +24,56 @@
 package lightjason.agent.action.buildin.generic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.PrintStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * action for sum of elements
  */
-public final class CSum extends IBuildinAction
+public final class CPrint extends IBuildinAction
 {
+
+    /**
+     * output stream
+     */
+    private final PrintStream m_stream;
+    /**
+     * argument seperator
+     */
+    private final String m_seperator;
+
+    /**
+     * ctor
+     *
+     * @note generates an output stream to system.out
+     */
+    public CPrint()
+    {
+        this( "   ", System.out );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_stream any byte output stream
+     */
+    public CPrint( final String p_seperator, final PrintStream p_stream )
+    {
+        super( 2 );
+        m_stream = p_stream;
+        m_seperator = p_seperator;
+
+        System.setOut( m_stream );
+    }
+
 
     @Override
     public final int getMinimalArgumentNumber()
@@ -51,7 +86,8 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).sum() ) );
+        System.out.println( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
         return CBoolean.from( true );
     }
+
 }

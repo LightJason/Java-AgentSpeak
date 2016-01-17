@@ -47,7 +47,6 @@ public final class CAverage extends IBuildinAction
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                final List<ITerm> p_return
     )

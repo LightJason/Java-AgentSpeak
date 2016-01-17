@@ -103,7 +103,7 @@ public final class TestCLanguageLabels
         {
             l_uri = CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI();
         }
-        catch ( final Exception l_exception )
+        catch ( final Exception p_exception )
         {
         }
 
@@ -130,9 +130,9 @@ public final class TestCLanguageLabels
                 this.checkFile( l_item );
 
         }
-        catch ( final Exception l_exception )
+        catch ( final Exception p_exception )
         {
-            fail( l_exception.getMessage() );
+            fail( p_exception.getMessage() );
             return;
         }
 
@@ -184,9 +184,9 @@ public final class TestCLanguageLabels
         {
             new CJavaVistor().visit( JavaParser.parse( l_stream ), null );
         }
-        catch ( final ParseException l_exception )
+        catch ( final ParseException p_exception )
         {
-            fail( p_file.toFile() + ": " + l_exception.getMessage() );
+            fail( p_file.toFile() + ": " + p_exception.getMessage() );
         }
     }
 
@@ -292,7 +292,7 @@ public final class TestCLanguageLabels
             {
                 l_class = this.getClass( p_classname );
             }
-            catch ( final ClassNotFoundException l_exception )
+            catch ( final ClassNotFoundException p_exception )
             {
                 fail( String.format( "class [%s] not found", p_classname ) );
                 return;
@@ -314,7 +314,7 @@ public final class TestCLanguageLabels
                     );
                     l_used.add( l_translation );
                 }
-                catch ( final IllegalStateException l_exception )
+                catch ( final IllegalStateException p_exception )
                 {
                     return;
                 }

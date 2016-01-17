@@ -72,7 +72,7 @@ public final class CCommon
             PROPERTIES.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
             l_packageroot = PROPERTIES.getProperty( "rootpackage" );
         }
-        catch ( final IOException l_exception )
+        catch ( final IOException p_exception )
         {
         }
 
@@ -197,7 +197,7 @@ public final class CCommon
         {
             return MessageFormat.format( LANGUAGE.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
         }
-        catch ( final MissingResourceException l_exception )
+        catch ( final MissingResourceException p_exception )
         {
         }
 
@@ -298,7 +298,7 @@ public final class CCommon
                 return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
 
             }
-            catch ( final Exception l_exception )
+            catch ( final Exception p_exception )
             {
             }
             finally
