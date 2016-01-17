@@ -70,8 +70,6 @@ public final class CPrint extends IBuildinAction
         super( 2 );
         m_stream = p_stream;
         m_seperator = p_seperator;
-
-        System.setOut( m_stream );
     }
 
 
@@ -86,7 +84,7 @@ public final class CPrint extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        m_stream.print( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
+        m_stream.println( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
         return CBoolean.from( true );
     }
 
