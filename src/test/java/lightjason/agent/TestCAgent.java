@@ -28,6 +28,7 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
 import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.common.CPath;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -38,12 +39,16 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
 
@@ -57,13 +62,24 @@ public final class TestCAgent
     /**
      * list with default (non-working) actions
      */
-    private static final Map<IAction, Double> ACTIONS = new HashMap<IAction, Double>()
-    {{
-        put( new CGeneric( "setProperty", 3 ), 1.0 );
-        put( new CGeneric( "min", 1 ), 2.0 );
-        put( new CGeneric( "print", 1 ), 3.0 );
-    }};
+    private static final Map<IAction, Double> ACTIONS;
 
+    static
+    {
+        final Random l_random = new Random();
+        Map<IAction, Double> l_map = new HashMap<>();
+        try
+        {
+            l_map = CCommon.getActionsFromPackage( "lightjason.agent.action.buildin" ).stream().collect(
+                    Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
+        }
+        catch ( final IOException p_exception )
+        {
+            l_map = Collections.emptyMap();
+        }
+
+        ACTIONS = l_map;
+    }
 
     /**
      * asl parsing test
@@ -75,7 +91,7 @@ public final class TestCAgent
         {{
 
             //put( "src/test/resources/agentsuccess.asl", "successful agent" );
-            //put( "src/test/resources/agentsimple.asl", "simple agent" );
+            put( "src/test/resources/agentsimple.asl", "simple agent" );
 
         }};
 

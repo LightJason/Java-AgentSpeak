@@ -8,7 +8,7 @@ anno(3)[self("blub"), value(true), xxx(success)].
 !drive.
 
 
-setSpeed(X) :- setProperty("speed", X, Y).
+setSpeed(X) :- generic/print("speed", X, Y).
 
 
 @fuzzy(0.8)
@@ -18,10 +18,10 @@ setSpeed(X) :- setProperty("speed", X, Y).
         Speed = 5;
         Speed++;
         X = 3 * (5 + Speed);
-        [H|T|V] = min(3,4);
+        [H|T|V] = generic/min(3,4);
         [A|_|C] = [1,2,3];
-        setProperty( Speed, min(5, 9, 3), "test" )[ min(1,2), min(9,8) ];
-        print(Speed);
+        generic/print( Speed, generic/min(5, 9, 3), "test" )[ generic/min(1,2), generic/min(9,8) ];
+        generic/print(Speed);
         !!drive;
         -+baz("hallo")
     <- true.
@@ -32,17 +32,17 @@ setSpeed(X) :- setProperty("speed", X, Y).
     : current_speed(Speed) ^ Speed > 10 <-
         Speed = 5;
         Speed--;
-        +foo(min(5));
-        setProperty( Speed, "", "" );
-        print(1,2,3,4);
-        print(Speed);
+        +foo( generic/min(5) );
+        generic/print( Speed, "", "" );
+        generic/print(1,2,3,4);
+        generic/print(Speed);
         !!drive.
 
 @atomic
 @score(0.6)
 +!decelerate
     : current_speed(Speed) || routingtype(Type) && Speed <= 10 <-
-        @print( min(101, 102, 103, 104, 105), min(1, 2, 3), min(4, 5), min(6, 7) );
+        @generic/print( generic/min(101, 102, 103, 104, 105), generic/min(1, 2, 3), generic/min(4, 5), generic/min(6, 7) );
         -blub(Speed);
         !!decelerate.
 

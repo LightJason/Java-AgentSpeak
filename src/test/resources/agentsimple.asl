@@ -5,5 +5,5 @@ second(true).
 
 +!drive
     <-
-        print("drive default");
+        generic/print("drive default");
         !!drive.

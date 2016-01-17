@@ -63,6 +63,7 @@ public final class CPrint extends IBuildinAction
     /**
      * ctor
      *
+     * @param p_seperator argument seperator
      * @param p_stream any byte output stream
      */
     public CPrint( final String p_seperator, final PrintStream p_stream )

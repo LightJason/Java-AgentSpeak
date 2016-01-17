@@ -23,11 +23,16 @@
 
 package lightjason.language;
 
+import com.google.common.reflect.ClassPath;
+import lightjason.agent.action.IAction;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.IContext;
 
+import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -41,6 +46,34 @@ public final class CCommon
      */
     private CCommon()
     {
+    }
+
+    /**
+     * get all classes within an Java package as action
+     *
+     * @param p_package full-qualified package name
+     * @return action set
+     *
+     * @todo can be moved to an own class
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Set<IAction> getActionsFromPackage( final String p_package ) throws IOException
+    {
+        return ClassPath.from( Thread.currentThread().getContextClassLoader() ).getTopLevelClassesRecursive( p_package ).parallelStream().map( i -> {
+
+            try
+            {
+                final Class<?> l_class = i.load();
+                if ( ( !Modifier.isAbstract( l_class.getModifiers() ) ) && ( !Modifier.isInterface( l_class.getModifiers() ) ) &&
+                     ( Modifier.isPublic( l_class.getModifiers() ) ) && ( IAction.class.isAssignableFrom( l_class ) ) )
+                    return (IAction) l_class.newInstance();
+            }
+            catch ( final IllegalAccessException | InstantiationException p_exception )
+            {
+            }
+
+            return null;
+        } ).filter( i -> i != null ).collect( Collectors.toSet() );
     }
 
     /**
