@@ -249,6 +249,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
+* add package action loader for action class instantiation within a package (use [reflections](https://github.com/ronmamo/reflections))
 * Examples in separate Git project, simple Web-UI with [Jetty](http://www.eclipse.org/jetty/)
 * Prettyfier component for source code layout
 * Meta-language for data/plan exchange with [Jaxb](https://jaxb.java.net) or [Jaxb JSON](https://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html#gmfnu). 
