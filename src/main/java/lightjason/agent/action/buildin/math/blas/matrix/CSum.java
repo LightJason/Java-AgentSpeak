@@ -21,9 +21,9 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.vector;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -36,14 +36,14 @@ import java.util.List;
 
 
 /**
- * returns a single element of a vector
+ * returns sum of a matrix
  */
-public final class CElement extends IBuildinAction
+public final class CSum extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CElement()
+    public CSum()
     {
         super( 4 );
     }
@@ -51,7 +51,7 @@ public final class CElement extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -64,9 +64,7 @@ public final class CElement extends IBuildinAction
 
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get( CCommon.getRawValue( l_argument.get( 1 ) )
-                                )
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) ).zSum()
                 )
         );
 

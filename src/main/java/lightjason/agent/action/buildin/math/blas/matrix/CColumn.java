@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * returns a single row of a matrix
+ * returns a single column of a matrix
  */
 public final class CColumn extends IBuildinAction
 {

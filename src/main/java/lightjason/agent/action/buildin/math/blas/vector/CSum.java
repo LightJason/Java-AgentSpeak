@@ -36,14 +36,14 @@ import java.util.List;
 
 
 /**
- * returns a single element of a vector
+ * returns sum of a vector
  */
-public final class CElement extends IBuildinAction
+public final class CSum extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CElement()
+    public CSum()
     {
         super( 4 );
     }
@@ -51,7 +51,7 @@ public final class CElement extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -64,9 +64,7 @@ public final class CElement extends IBuildinAction
 
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get( CCommon.getRawValue( l_argument.get( 1 ) )
-                                )
+                        CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) ).zSum()
                 )
         );
 

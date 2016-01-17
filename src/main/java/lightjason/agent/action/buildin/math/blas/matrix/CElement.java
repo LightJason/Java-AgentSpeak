@@ -36,7 +36,7 @@ import java.util.List;
 
 
 /**
- * returns a single row of a matrix
+ * returns a single element of a matrix
  */
 public final class CElement extends IBuildinAction
 {
