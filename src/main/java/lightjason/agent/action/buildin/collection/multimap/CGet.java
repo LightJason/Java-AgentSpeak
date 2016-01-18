@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.collection.multimap;
 
+import com.google.common.collect.HashMultimap;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -32,18 +33,26 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action for average
+ * get a element-list of the multimap by key
  */
-public final class CAverage extends IBuildinAction
+public final class CGet extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CGet()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -51,9 +60,25 @@ public final class CAverage extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble( i -> CCommon.getRawValue( i ) )
-                                            .average() ) );
+        // first argument map reference, second key name
+        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
+
+        p_return.addAll(
+                CCommon.<HashMultimap<?, ?>, ITerm>getRawValue( l_argument.get( 0 ) )
+                        .asMap().get(
+                        CCommon.getRawValue( l_argument.get( 1 ) )
+                ).stream().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+        );
         return CBoolean.from( true );
     }
 
+
+    /**
+     * matrix type
+     */
+    private enum EType
+    {
+        SPARSE,
+        DENSE;
+    }
 }

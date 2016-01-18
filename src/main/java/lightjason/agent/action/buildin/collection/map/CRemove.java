@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.collection.map;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
@@ -32,18 +32,26 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * action for sum of elements
+ * removes an element of the map
  */
-public final class CSum extends IBuildinAction
+public final class CRemove extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CRemove()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -51,8 +59,25 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble( i -> CCommon.getRawValue( i ) )
-                                            .sum() ) );
+        // first argument map reference, second key-value
+        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
+
+        p_return.add(
+                CRawTerm.from(
+                        CCommon.<Map<?, ?>, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .remove( CCommon.getRawValue( l_argument.get( 1 ) ) )
+                )
+        );
         return CBoolean.from( true );
+    }
+
+
+    /**
+     * matrix type
+     */
+    private enum EType
+    {
+        SPARSE,
+        DENSE;
     }
 }

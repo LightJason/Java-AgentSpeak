@@ -64,6 +64,8 @@ public class CAgent implements IAgent
     protected final SetMultimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
     /**
      * storage map
+     *
+     * @note must be thread-safe
      */
     protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
     /**
