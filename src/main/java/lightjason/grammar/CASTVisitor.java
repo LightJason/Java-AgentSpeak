@@ -30,6 +30,7 @@ import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
+import lightjason.error.CSyntaxErrorException;
 import lightjason.language.CLiteral;
 import lightjason.language.CMutexVariable;
 import lightjason.language.CRawTerm;
@@ -835,7 +836,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return Collections.EMPTY_LIST;
 
         return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : new CRawTerm<>( i )
+                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
         ).collect( Collectors.toList() );
     }
 
@@ -846,7 +847,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return Collections.EMPTY_LIST;
 
         return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : new CRawTerm<>( i )
+                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
         ).collect( Collectors.toList() );
     }
 
@@ -1047,13 +1048,31 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.logicalvalue() != null )
+            return this.visitLogicalvalue( p_context.logicalvalue() );
+
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+
+        if ( p_context.literal() != null )
+            return this.createExecution( p_context.literal() );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicalelement", p_context.getText() ) );
     }
 
     @Override
     public Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.logicalvalue() != null )
+            return this.visitLogicalvalue( p_context.logicalvalue() );
+
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+
+        if ( p_context.literal() != null )
+            return this.createExecution( p_context.literal() );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicalelement", p_context.getText() ) );
     }
 
 
@@ -1131,13 +1150,32 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_numeric_element( final AgentParser.Expression_numeric_elementContext p_context )
     {
-        return this.visitChildren( p_context );
+
+        if ( p_context.number() != null )
+            return this.visitNumber( p_context.number() );
+
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+
+        if ( p_context.literal() != null )
+            return this.createExecution( p_context.literal() );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notnumericelement", p_context.getText() ) );
     }
 
     @Override
     public Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.number() != null )
+            return this.visitNumber( p_context.number() );
+
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+
+        if ( p_context.literal() != null )
+            return this.createExecution( p_context.literal() );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notnumericelement", p_context.getText() ) );
     }
 
 
