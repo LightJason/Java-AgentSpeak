@@ -67,7 +67,8 @@ public final class CColumn extends IBuildinAction
 
         p_return.addAll(
                 Arrays.stream(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) ).viewColumn( CCommon.getRawValue( l_argument.get( 1 ) ) ).toArray()
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .viewColumn( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() ).toArray()
                 ).mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
         );
 

@@ -733,7 +733,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return new CDeconstruct<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                (ILiteral) this.visitLiteral( p_context.literal() )
+                (ITerm) ( p_context.literal() != null ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
         );
     }
 
@@ -742,7 +742,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
         return new CDeconstruct<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                (ILiteral) this.visitLiteral( p_context.literal() )
+                (ITerm) ( p_context.literal() != null ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
         );
     }
 

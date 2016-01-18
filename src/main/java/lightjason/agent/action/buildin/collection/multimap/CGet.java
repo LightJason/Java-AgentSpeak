@@ -72,13 +72,4 @@ public final class CGet extends IBuildinAction
         return CBoolean.from( true );
     }
 
-
-    /**
-     * matrix type
-     */
-    private enum EType
-    {
-        SPARSE,
-        DENSE;
-    }
 }

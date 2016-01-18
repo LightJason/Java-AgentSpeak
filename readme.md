@@ -173,12 +173,12 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
 * signature algorithm
 * encryption algorithms
 
-#### Web-Access
+#### External-Access
 
 * HTTP(s) client
 * REST-API client
 * SOAP client
-
+* SQL with JDBC (and connection-pool)
 
 
 ## <a name="graphic">Graphical Representation</a> 

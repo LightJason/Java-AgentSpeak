@@ -21,9 +21,8 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.matrix;
+package lightjason.agent.action.buildin.collection.list;
 
-import cern.colt.matrix.DoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -36,22 +35,22 @@ import java.util.List;
 
 
 /**
- * returns a single element of a matrix
+ * returns an element of the list by the index
  */
-public final class CGet extends IBuildinAction
+public final class CRemove extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CGet()
+    public CRemove()
     {
-        super( 4 );
+        super( 3 );
     }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -59,19 +58,16 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument must be a term with a matrix object, second row index, third column index
+        // first argument list reference, second key-value
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get(
-                                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue(),
-                                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 2 ) ).intValue()
-                                )
+                        CCommon.<List<?>, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .remove( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() )
                 )
         );
-
         return CBoolean.from( true );
     }
+
 }

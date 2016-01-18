@@ -58,7 +58,7 @@ public final class CPut extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument map reference, second key-value
+        // first argument map reference, second key-value, third value
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
         CCommon.<Map<?, ?>, ITerm>getRawValue( l_argument.get( 0 ) ).put(
@@ -68,13 +68,4 @@ public final class CPut extends IBuildinAction
         return CBoolean.from( true );
     }
 
-
-    /**
-     * matrix type
-     */
-    private enum EType
-    {
-        SPARSE,
-        DENSE;
-    }
 }

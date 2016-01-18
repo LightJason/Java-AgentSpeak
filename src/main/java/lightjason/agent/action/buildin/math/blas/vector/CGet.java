@@ -65,8 +65,7 @@ public final class CGet extends IBuildinAction
         p_return.add(
                 CRawTerm.from(
                         CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get( CCommon.getRawValue( l_argument.get( 1 ) )
-                                )
+                                .get( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() )
                 )
         );
 

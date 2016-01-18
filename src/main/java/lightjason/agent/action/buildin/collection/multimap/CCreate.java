@@ -63,13 +63,4 @@ public final class CCreate extends IBuildinAction
         return CBoolean.from( true );
     }
 
-
-    /**
-     * matrix type
-     */
-    private enum EType
-    {
-        SPARSE,
-        DENSE;
-    }
 }

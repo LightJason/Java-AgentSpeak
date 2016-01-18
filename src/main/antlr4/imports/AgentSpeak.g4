@@ -231,7 +231,7 @@ achievement_goal_action :
 deconstruct_expression :
     variablelist
     DECONSTRUCT
-    literal
+    ( literal | variable )
     ;
 
 /**

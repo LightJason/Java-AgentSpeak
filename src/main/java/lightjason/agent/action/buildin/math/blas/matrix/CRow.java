@@ -66,7 +66,8 @@ public final class CRow extends IBuildinAction
 
         p_return.addAll(
                 Arrays.stream(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) ).viewRow( CCommon.getRawValue( l_argument.get( 1 ) ) ).toArray()
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .viewRow( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() ).toArray()
                 ).mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
         );
 

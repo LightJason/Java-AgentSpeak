@@ -129,6 +129,19 @@ public final class CCommon
 
 
     /**
+     * @param p_context
+     * @param p_terms
+     * @return
+     *
+     * @bug not working
+     */
+    public static List<ITerm> flatCollection( final IContext<?> p_context, final Collection<? extends ITerm> p_terms )
+    {
+        return replaceVariableFromContext( p_context, p_terms ).stream().collect( Collectors.toList() );
+    }
+
+
+    /**
      * returns the value of a term
      *
      * @return value

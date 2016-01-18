@@ -21,12 +21,10 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.matrix;
+package lightjason.agent.action.buildin.collection.list;
 
-import cern.colt.matrix.DoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -36,16 +34,16 @@ import java.util.List;
 
 
 /**
- * returns a single element of a matrix
+ * adds an element to the list
  */
-public final class CGet extends IBuildinAction
+public final class CSet extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CGet()
+    public CSet()
     {
-        super( 4 );
+        super( 3 );
     }
 
     @Override
@@ -59,19 +57,14 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument must be a term with a matrix object, second row index, third column index
+        // first argument set reference, second index, third value
         final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
 
-        p_return.add(
-                CRawTerm.from(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get(
-                                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue(),
-                                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 2 ) ).intValue()
-                                )
-                )
+        CCommon.<List<?>, ITerm>getRawValue( l_argument.get( 0 ) ).set(
+                CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue(),
+                CCommon.getRawValue( l_argument.get( 2 ) )
         );
-
         return CBoolean.from( true );
     }
+
 }

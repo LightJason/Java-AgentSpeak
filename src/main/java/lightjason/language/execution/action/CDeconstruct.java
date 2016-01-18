@@ -33,6 +33,8 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,7 +45,7 @@ import java.util.stream.Collectors;
  *
  * @todo check right-hand-side if a variable can store a literal
  */
-public final class CDeconstruct<M extends ILiteral> extends IBaseExecution<List<IVariable<?>>>
+public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
      * right-hand argument (literal)
@@ -67,15 +69,7 @@ public final class CDeconstruct<M extends ILiteral> extends IBaseExecution<List<
                                                final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_assignment = CCommon.replaceVariableFromContext( p_context, m_value );
-
-        if ( l_assignment.size() >= 1 )
-            ( (IVariable<Object>) l_assignment.get( 0 ) ).set( m_righthand.getFQNFunctor().toString() );
-        if ( l_assignment.size() >= 2 )
-            ( (IVariable<Object>) l_assignment.get( 1 ) ).set( m_righthand.getValues().values() );
-        if ( l_assignment.size() >= 3 )
-            ( (IVariable<Object>) l_assignment.get( 2 ) ).set( m_righthand.getAnnotation().values() );
-
+        this.set( CCommon.replaceVariableFromContext( p_context, m_value ), CCommon.getRawValue( m_righthand ) );
         return CBoolean.from( true );
     }
 
@@ -101,5 +95,22 @@ public final class CDeconstruct<M extends ILiteral> extends IBaseExecution<List<
     public final Set<IVariable<?>> getVariables()
     {
         return m_value.stream().map( i -> i.clone() ).collect( Collectors.toSet() );
+    }
+
+    /**
+     * sets the values
+     *
+     * @param p_assignment variable list
+     * @param p_term term
+     */
+    @SuppressWarnings( "unchecked" )
+    private void set( final List<ITerm> p_assignment, final ILiteral p_term )
+    {
+        if ( p_assignment.size() >= 1 )
+            ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.getFQNFunctor().toString() );
+        if ( p_assignment.size() >= 2 )
+            ( (IVariable<Object>) p_assignment.get( 1 ) ).set( Collections.synchronizedList( new LinkedList<>( p_term.getValues().values() ) ) );
+        if ( p_assignment.size() >= 3 )
+            ( (IVariable<Object>) p_assignment.get( 2 ) ).set( Collections.synchronizedList( new LinkedList<>( p_term.getAnnotation().values() ) ) );
     }
 }

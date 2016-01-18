@@ -12,9 +12,11 @@ second(true).
         Y = 10;
 
         [A|B|C] = [1,2,3];
-        generic/print(A,B,C);
 
         [O|P] =.. foo( blub(1) );
-        generic/print(O, P);
+        H = 1;
+        //H = collection/list/get(P, 0);
+
+        generic/print(X,Y, A,B,C, O,P,H);
 
         !!drive.
