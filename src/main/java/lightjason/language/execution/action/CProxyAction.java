@@ -59,6 +59,10 @@ import java.util.stream.IntStream;
  *
  * @note inner annotations cannot be used on the
  * grammer definition, so the inner annotations are ignored
+ * @bug return values must be passed down in proxy-execution object,
+ * refactor "caller" structur and build a more flat execution defintion
+ * remove CStatic class with variable setting, because each action must
+ * run its own variable replacing
  */
 public final class CProxyAction implements IExecution
 {
@@ -225,7 +229,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public Set<IVariable<?>> getVariables()
+        public final Set<IVariable<?>> getVariables()
         {
             return m_values.stream().filter( i -> i instanceof IVariable<?> ).map( i -> ( (IVariable<?>) i ).clone() ).collect( Collectors.toSet() );
         }
@@ -302,7 +306,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public Set<IVariable<?>> getVariables()
+        public final Set<IVariable<?>> getVariables()
         {
             return m_arguments.values().parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() );
         }
