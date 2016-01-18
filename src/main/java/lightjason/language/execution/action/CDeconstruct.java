@@ -25,32 +25,28 @@
 package lightjason.language.execution.action;
 
 import lightjason.language.CCommon;
+import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 /**
- * assignment action of a multi-variable list
+ * deconstruct assignment
  *
- * @bug list unpack incomplete (flatmap)
+ * @todo check right-hand-side if a variable can store a literal
  */
-public final class CMultiAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
+public final class CDeconstruct<M extends ILiteral> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
-     * right-hand argument
+     * right-hand argument (literal)
      */
     private final M m_righthand;
 
@@ -60,7 +56,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
      * @param p_lefthand left-hand variable list
      * @param p_righthand right-hand argument
      */
-    public CMultiAssignment( final List<IVariable<?>> p_lefthand, final M p_righthand )
+    public CDeconstruct( final List<IVariable<?>> p_lefthand, final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;
@@ -71,24 +67,14 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
                                                final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_return = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_return ).getValue() ) ||
-             ( l_return.isEmpty() ) )
-            return CBoolean.from( false );
+        final List<ITerm> l_assignment = CCommon.replaceVariableFromContext( p_context, m_value );
 
-        // position matching
-        final List<ITerm> l_assign = CCommon.replaceVariableFromContext( p_context, m_value );
-        IntStream.range( 0, Math.min( l_assign.size(), l_return.size() ) ).boxed().forEach(
-                i -> ( (IVariable<?>) l_assign.get( i ) ).set(
-                        CCommon.getRawValue( l_return.get( i ) )
-                )
-        );
-
-        // tail matching
-        if ( l_assign.size() < l_return.size() )
-            ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
-                    CCommon.getRawValue( l_return.subList( l_assign.size() - 1, l_return.size() ) )
-            );
+        if ( l_assignment.size() >= 1 )
+            ( (IVariable<Object>) l_assignment.get( 0 ) ).set( m_righthand.getFQNFunctor().toString() );
+        if ( l_assignment.size() >= 2 )
+            ( (IVariable<Object>) l_assignment.get( 1 ) ).set( m_righthand.getValues().values() );
+        if ( l_assignment.size() >= 3 )
+            ( (IVariable<Object>) l_assignment.get( 2 ) ).set( m_righthand.getAnnotation().values() );
 
         return CBoolean.from( true );
     }
@@ -108,17 +94,12 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} = {1}", m_value, m_righthand );
+        return MessageFormat.format( "{0} =.. {1}", m_value, m_righthand );
     }
 
     @Override
-    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_value.stream().map( i -> i.clone() ).collect( Collectors.toList() ) );
-            addAll( m_righthand.getVariables() );
-        }};
+        return m_value.stream().map( i -> i.clone() ).collect( Collectors.toSet() );
     }
 }
