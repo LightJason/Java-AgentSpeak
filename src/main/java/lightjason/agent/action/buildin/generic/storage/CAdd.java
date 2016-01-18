@@ -21,52 +21,46 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin;
+package lightjason.agent.action.buildin.generic.storage;
 
-import lightjason.agent.action.IBaseAction;
-import lightjason.common.CPath;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
 import java.util.List;
 
 
 /**
- * base class of build-in actions for setting name
- * by package/classname (without prefix character)
+ * adds or overwrites an element in the agent-storage
  */
-public abstract class IBuildinAction extends IBaseAction
+public final class CAdd extends IBuildinAction
 {
-    /**
-     * action name
-     */
-    private final CPath m_name;
 
     /**
      * ctor
      */
-    protected IBuildinAction()
+    public CAdd()
     {
-        this( 2 );
+        super( 3 );
     }
-
-    /**
-     * ctor
-     *
-     * @param p_length length of package parts
-     */
-    protected IBuildinAction( final int p_length )
-    {
-        final List<String> l_names = Arrays.asList( this.getClass().getCanonicalName().split( "\\." ) );
-        l_names.set( l_names.size() - 1, l_names.get( l_names.size() - 1 ).substring( 1 ) );
-
-        m_name = new CPath( l_names.subList( Math.max( 0, l_names.size() - p_length ), l_names.size() ) ).toLower();
-    }
-
 
     @Override
-    public final CPath getName()
+    public final int getMinimalArgumentNumber()
     {
-        return m_name;
+        return 2;
     }
 
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
+    )
+    {
+        final List<ITerm> l_arguments = CCommon.replaceVariableFromContext( p_context, p_argument );
+        p_context.getAgent().getStorage().put( CCommon.getRawValue( l_arguments.get( 0 ) ), CCommon.getRawValue( l_arguments.get( 1 ) ) );
+
+        return CBoolean.from( true );
+    }
 }

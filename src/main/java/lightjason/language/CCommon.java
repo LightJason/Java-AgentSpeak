@@ -85,7 +85,12 @@ public final class CCommon
     @SuppressWarnings( "unchecked" )
     public static <T, N> T getRawValue( final N p_value )
     {
-        return (T) ( p_value instanceof CRawTerm<?> ? ( (CRawTerm<?>) p_value ).get() : p_value );
+        if ( p_value instanceof IVariable<?> )
+            return ( (IVariable<?>) p_value ).getTyped();
+        if ( p_value instanceof CRawTerm<?> )
+            return ( (CRawTerm<?>) p_value ).getTyped();
+
+        return (T) p_value;
     }
 
     /**
@@ -128,6 +133,7 @@ public final class CCommon
      *
      * @return value
      */
+    @Deprecated
     public static <T> T getTermValue( final Class<?> p_class, final ITerm p_term )
     {
         if ( p_term instanceof IVariable<?> )

@@ -51,7 +51,8 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).sum() ) );
+        p_return.add( CRawTerm.from( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble( i -> CCommon.getRawValue( i ) )
+                                            .sum() ) );
         return CBoolean.from( true );
     }
 }

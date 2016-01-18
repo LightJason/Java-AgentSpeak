@@ -21,52 +21,55 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin;
+package lightjason.agent.action.buildin.math.blas.vector;
 
-import lightjason.agent.action.IBaseAction;
-import lightjason.common.CPath;
+import cern.colt.matrix.DoubleMatrix1D;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
 import java.util.List;
 
 
 /**
- * base class of build-in actions for setting name
- * by package/classname (without prefix character)
+ * returns a single element of a vector
  */
-public abstract class IBuildinAction extends IBaseAction
+public final class CGet extends IBuildinAction
 {
     /**
-     * action name
-     */
-    private final CPath m_name;
-
-    /**
      * ctor
      */
-    protected IBuildinAction()
+    public CGet()
     {
-        this( 2 );
+        super( 4 );
     }
-
-    /**
-     * ctor
-     *
-     * @param p_length length of package parts
-     */
-    protected IBuildinAction( final int p_length )
-    {
-        final List<String> l_names = Arrays.asList( this.getClass().getCanonicalName().split( "\\." ) );
-        l_names.set( l_names.size() - 1, l_names.get( l_names.size() - 1 ).substring( 1 ) );
-
-        m_name = new CPath( l_names.subList( Math.max( 0, l_names.size() - p_length ), l_names.size() ) ).toLower();
-    }
-
 
     @Override
-    public final CPath getName()
+    public final int getMinimalArgumentNumber()
     {
-        return m_name;
+        return 2;
     }
 
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
+    )
+    {
+        // first argument must be a term with a matrix object, second index of the element
+        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
+
+        p_return.add(
+                CRawTerm.from(
+                        CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) )
+                                .get( CCommon.getRawValue( l_argument.get( 1 ) )
+                                )
+                )
+        );
+
+        return CBoolean.from( true );
+    }
 }

@@ -24,6 +24,7 @@
 package lightjason.agent.action.buildin.generic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -85,7 +86,8 @@ public final class CPrint extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        m_stream.println( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
+        m_stream.println( StringUtils.join( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().map( i -> i.toString() )
+                                                   .collect( Collectors.toList() ), m_seperator ) );
         return CBoolean.from( true );
     }
 

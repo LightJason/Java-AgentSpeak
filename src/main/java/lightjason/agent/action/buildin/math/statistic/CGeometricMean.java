@@ -63,7 +63,8 @@ public final class CGeometricMean extends IBuildinAction
     {
         final SummaryStatistics l_statistics = new SummaryStatistics();
 
-        getTermStream( p_context, p_argument ).mapToDouble( i -> CCommon.getRawValue( i ) ).forEach( i -> l_statistics.addValue( i ) );
+        CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble( i -> CCommon.getRawValue( i ) ).forEach(
+                i -> l_statistics.addValue( i ) );
         p_argument.add( CRawTerm.from( l_statistics.getGeometricMean() ) );
 
         return CBoolean.from( true );
