@@ -21,9 +21,9 @@
  * @endcond
  */
 
+
 package lightjason.language.execution.action;
 
-import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -37,12 +37,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
- * assignment action of a single-variable
+ * assignment action of a multi-variable list
  */
-public final class CAssignment<M extends IExecution> extends IBaseExecution<IVariable<?>>
+public final class CListAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
      * right-hand argument
@@ -52,10 +53,10 @@ public final class CAssignment<M extends IExecution> extends IBaseExecution<IVar
     /**
      * ctor
      *
-     * @param p_lefthand left-hand argument (variable)
+     * @param p_lefthand left-hand variable list
      * @param p_righthand right-hand argument
      */
-    public CAssignment( final IVariable<?> p_lefthand, final M p_righthand )
+    public CListAssignment( final List<IVariable<?>> p_lefthand, final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;
@@ -71,7 +72,8 @@ public final class CAssignment<M extends IExecution> extends IBaseExecution<IVar
         if ( ( !l_rightreturn.getValue() ) || ( l_return.isEmpty() ) )
             return CBoolean.from( false );
 
-        ( (IVariable<?>) CCommon.replaceVariableFromContext( p_context, m_value ) ).set( CCommon.getRawValue( l_return.get( 0 ) ) );
+        //final List<ITerm> l_assign = CCommon.replaceVariableFromContext( p_context,  );
+
         return CBoolean.from( true );
     }
 
@@ -99,7 +101,7 @@ public final class CAssignment<M extends IExecution> extends IBaseExecution<IVar
     {
         return new HashSet<IVariable<?>>()
         {{
-            add( m_value.clone() );
+            addAll( m_value.stream().map( i -> i.clone() ).collect( Collectors.toList() ) );
             addAll( m_righthand.getVariables() );
         }};
     }
