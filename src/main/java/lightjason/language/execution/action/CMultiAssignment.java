@@ -24,6 +24,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -38,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -72,7 +74,19 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         if ( ( !l_rightreturn.getValue() ) || ( l_return.isEmpty() ) )
             return CBoolean.from( false );
 
-        //final List<ITerm> l_assign = CCommon.replaceVariableFromContext( p_context,  );
+        // position matching
+        final List<ITerm> l_assign = CCommon.replaceVariableFromContext( p_context, m_value );
+        IntStream.range( 0, Math.min( l_assign.size(), l_return.size() ) ).boxed().forEach(
+                i -> ( (IVariable<?>) l_assign.get( i ) ).set(
+                        CCommon.getRawValue( l_return.get( i ) )
+                )
+        );
+
+        // tail matching
+        if ( l_assign.size() < l_return.size() )
+            ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
+                    CCommon.getRawValue( l_return.subList( l_assign.size() - 1, l_return.size() ) )
+            );
 
         return CBoolean.from( true );
     }

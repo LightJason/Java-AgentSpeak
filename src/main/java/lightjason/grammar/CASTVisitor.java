@@ -41,6 +41,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoal;
 import lightjason.language.execution.action.CBeliefAction;
+import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CSingleAssignment;
@@ -615,13 +616,19 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CMultiAssignment<>(
+                p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
+                this.createExecution( this.visitTerm( p_context.term() ) )
+        );
     }
 
     @Override
     public Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CMultiAssignment<>(
+                p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
+                this.createExecution( this.visitTerm( p_context.term() ) )
+        );
     }
 
 
