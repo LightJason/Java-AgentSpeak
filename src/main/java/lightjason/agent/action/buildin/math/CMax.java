@@ -51,8 +51,9 @@ public final class CMax extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble( i -> CCommon.getRawValue( i ) )
-                                            .max() ) );
+        p_return.add( CRawTerm.from( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble(
+                i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                                            .max().getAsDouble() ) );
         return CBoolean.from( true );
     }
 }
