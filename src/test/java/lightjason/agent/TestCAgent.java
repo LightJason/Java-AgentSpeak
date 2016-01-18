@@ -97,6 +97,16 @@ public final class TestCAgent
         } );
     }
 
+    /**
+     * manuell running test
+     *
+     * @param p_args arguments
+     */
+    public static void main( final String[] p_args )
+    {
+        final TestCAgent l_test = new TestCAgent();
+        l_test.testASL();
+    }
 
     /**
      * static function to run an agent
@@ -121,7 +131,6 @@ public final class TestCAgent
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
     }
-
 
     /**
      * aggregation function
