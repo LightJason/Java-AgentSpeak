@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 /**
  * assignment action of a multi-variable list
  */
-public final class CListAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
+public final class CMultiAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
      * right-hand argument
@@ -56,7 +56,7 @@ public final class CListAssignment<M extends IExecution> extends IBaseExecution<
      * @param p_lefthand left-hand variable list
      * @param p_righthand right-hand argument
      */
-    public CListAssignment( final List<IVariable<?>> p_lefthand, final M p_righthand )
+    public CMultiAssignment( final List<IVariable<?>> p_lefthand, final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;

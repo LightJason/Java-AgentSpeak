@@ -42,7 +42,7 @@ import java.util.Set;
 /**
  * assignment action of a single-variable
  */
-public final class CAssignment<M extends IExecution> extends IBaseExecution<IVariable<?>>
+public final class CSingleAssignment<M extends IExecution> extends IBaseExecution<IVariable<?>>
 {
     /**
      * right-hand argument
@@ -55,7 +55,7 @@ public final class CAssignment<M extends IExecution> extends IBaseExecution<IVar
      * @param p_lefthand left-hand argument (variable)
      * @param p_righthand right-hand argument
      */
-    public CAssignment( final IVariable<?> p_lefthand, final M p_righthand )
+    public CSingleAssignment( final IVariable<?> p_lefthand, final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;
