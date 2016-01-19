@@ -60,13 +60,11 @@ public final class CSubList extends IBuildinAction
     )
     {
         // first argument set reference, second key-value
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
         p_return.addAll(
-                CCommon.<List<?>, ITerm>getRawValue( l_argument.get( 0 ) )
+                CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
                         .subList(
-                                CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue(),
-                                CCommon.<Number, ITerm>getRawValue( l_argument.get( 2 ) ).intValue()
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue()
                         )
                         .stream().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
         );

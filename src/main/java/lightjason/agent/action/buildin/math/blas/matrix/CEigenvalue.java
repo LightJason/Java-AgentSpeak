@@ -61,11 +61,9 @@ public final class CEigenvalue extends IBuildinAction
     )
     {
         // argument must be a term with a matrix object
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
         p_return.addAll(
                 Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( l_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
                 ).sorted().mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
         );
 

@@ -127,32 +127,32 @@ public final class CProxyAction implements IExecution
      * @param p_actions map with action definition
      * @param p_scoringcache cache for action references to calculate scoring value
      *
-     @SuppressWarnings( "unchecked" )
-     private final IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions, final Multiset<IAction> p_scoringcache )
-     {
-     // resolve action
-     final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
-     if ( l_action == null )
-     throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
+    SuppressWarnings( "unchecked" )
+    private final IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions, final Multiset<IAction> p_scoringcache )
+    {
+    // resolve action
+    final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
+    if ( l_action == null )
+    throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 
-     // check number of arguments
-     if ( l_action.getMinimalArgumentNumber() > p_literal.getValues().size() )
-     throw new CIllegalArgumentException(
-     CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
+    // check number of arguments
+    if ( l_action.getMinimalArgumentNumber() > p_literal.getValues().size() )
+    throw new CIllegalArgumentException(
+    CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
 
 
-     // build argument list, create action (argument list defines only executable statements to
-     // generate allocation for arguments and return lists) and cache action reference for scoring calculation
-     p_scoringcache.add( l_action );
-     return new CExecution( p_literal.hasAt(), l_action, p_literal.getValues().entries().stream().map( i -> {
+    // build argument list, create action (argument list defines only executable statements to
+    // generate allocation for arguments and return lists) and cache action reference for scoring calculation
+    p_scoringcache.add( l_action );
+    return new CExecution( p_literal.hasAt(), l_action, p_literal.getValues().entries().stream().map( i -> {
 
-     if ( i.getValue() instanceof ILiteral )
-     return this.createCaller( (ILiteral) i.getValue(), p_actions, p_scoringcache );
+    if ( i.getValue() instanceof ILiteral )
+    return this.createCaller( (ILiteral) i.getValue(), p_actions, p_scoringcache );
 
-     return new CTermProx( i.getValue() );
+    return new CTermProx( i.getValue() );
 
-     } ).collect( Collectors.toList() ) );
-     }
+    } ).collect( Collectors.toList() ) );
+    }
      */
 
     /**
@@ -248,10 +248,6 @@ public final class CProxyAction implements IExecution
     private static class CActionWrapper implements IExecution
     {
         /**
-         * inner encapsulating execution flag
-         */
-        private final boolean m_innerexecution;
-        /**
          * parallel execution flag
          */
         private final boolean m_parallel;
@@ -276,27 +272,11 @@ public final class CProxyAction implements IExecution
          * @param p_literal action literal
          * @param p_scorecache score cache
          */
-        public CActionWrapper( final Map<CPath, IAction> p_actions, final ILiteral p_literal, final Multiset<IAction> p_scorecache )
-        {
-            this( p_actions, p_literal, p_scorecache, false );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_actions actions
-         * @param p_literal action literal
-         * @param p_scorecache score cache
-         * @param p_innerexecution boolean of inner encapsulating execution
-         */
         @SuppressWarnings( "unchecked" )
-        private CActionWrapper( final Map<CPath, IAction> p_actions, final ILiteral p_literal, final Multiset<IAction> p_scorecache,
-                                final boolean p_innerexecution
-        )
+        public CActionWrapper( final Map<CPath, IAction> p_actions, final ILiteral p_literal, final Multiset<IAction> p_scorecache )
         {
             // check parallel and inner execution
             m_parallel = p_literal.hasAt();
-            m_innerexecution = p_innerexecution;
 
 
             // resolve action
@@ -318,14 +298,12 @@ public final class CProxyAction implements IExecution
                     IntStream.range( 0, l_arguments.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
                         final ITerm l_term = l_arguments.get( i ).getValue();
                         if ( l_term instanceof ILiteral )
-                            return new CActionWrapper( p_actions, (ILiteral) l_term, p_scorecache, true );
+                            return new CActionWrapper( p_actions, (ILiteral) l_term, p_scorecache );
 
                         return new CTermWrapper<>( l_term );
                     } ) )
             );
-
         }
-
 
 
         @Override
@@ -359,7 +337,7 @@ public final class CProxyAction implements IExecution
             return m_action.execute(
                     p_context,
                     lightjason.language.CCommon.replaceVariableFromContext( p_context, p_annotation ),
-                    lightjason.language.CCommon.replaceVariableFromContext( p_context, p_argument ),
+                    this.subexecute( p_context, m_arguments ),
                     p_return
             );
         }
@@ -374,6 +352,21 @@ public final class CProxyAction implements IExecution
         public final Set<IVariable<?>> getVariables()
         {
             return m_action.getVariables();
+        }
+
+        private List<ITerm> subexecute( final IContext<?> p_context, final Map<Integer, IExecution> p_execution )
+        {
+            return Collections.unmodifiableList( lightjason.language.CCommon.replaceVariableFromContext(
+                    p_context,
+                    ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
+                            .flatMap( i -> {
+
+                                final List<ITerm> l_return = new LinkedList<ITerm>();
+                                i.getValue().execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_return );
+                                return l_return.stream();
+
+                            } ).collect( Collectors.toList() )
+            ) );
         }
     }
 

@@ -58,9 +58,7 @@ public final class CAdd extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = CCommon.replaceVariableFromContext( p_context, p_argument );
-        p_context.getAgent().getStorage().put( CCommon.getRawValue( l_arguments.get( 0 ) ), CCommon.getRawValue( l_arguments.get( 1 ) ) );
-
+        p_context.getAgent().getStorage().put( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) );
         return CBoolean.from( true );
     }
 }

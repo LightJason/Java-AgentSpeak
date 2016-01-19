@@ -59,9 +59,7 @@ public final class CExists extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = CCommon.replaceVariableFromContext( p_context, p_argument );
-        p_return.add( CRawTerm.from( p_context.getAgent().getStorage().containsKey( CCommon.getRawValue( l_arguments.get( 0 ) ) ) ) );
-
+        p_return.add( CRawTerm.from( p_context.getAgent().getStorage().containsKey( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
         return CBoolean.from( true );
     }
 }

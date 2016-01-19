@@ -51,9 +51,7 @@ public final class CAverage extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble(
-                i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
-                                            .average().getAsDouble() ) );
+        p_return.add( CRawTerm.from( p_argument.stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).average().getAsDouble() ) );
         return CBoolean.from( true );
     }
 

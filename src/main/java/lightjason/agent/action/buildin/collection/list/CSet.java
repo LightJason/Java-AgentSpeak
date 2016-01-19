@@ -58,11 +58,9 @@ public final class CSet extends IBuildinAction
     )
     {
         // first argument set reference, second index, third value
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
-        CCommon.<List<?>, ITerm>getRawValue( l_argument.get( 0 ) ).set(
-                CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue(),
-                CCommon.getRawValue( l_argument.get( 2 ) )
+        CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) ).set(
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                CCommon.getRawValue( p_argument.get( 2 ) )
         );
         return CBoolean.from( true );
     }

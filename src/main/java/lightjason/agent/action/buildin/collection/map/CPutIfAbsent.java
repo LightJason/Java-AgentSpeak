@@ -59,11 +59,9 @@ public final class CPutIfAbsent extends IBuildinAction
     )
     {
         // first argument map reference, second key-value
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
-        CCommon.<Map<?, ?>, ITerm>getRawValue( l_argument.get( 0 ) ).putIfAbsent(
-                CCommon.getRawValue( l_argument.get( 1 ) ),
-                CCommon.getRawValue( l_argument.get( 2 ) )
+        CCommon.<Map<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) ).putIfAbsent(
+                CCommon.getRawValue( p_argument.get( 1 ) ),
+                CCommon.getRawValue( p_argument.get( 2 ) )
         );
         return CBoolean.from( true );
     }

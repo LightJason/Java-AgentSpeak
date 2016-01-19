@@ -60,14 +60,12 @@ public final class CGet extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second row index, third column index
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
                                 .get(
-                                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue(),
-                                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 2 ) ).intValue()
+                                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue()
                                 )
                 )
         );

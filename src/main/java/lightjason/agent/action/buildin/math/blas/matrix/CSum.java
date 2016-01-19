@@ -60,14 +60,7 @@ public final class CSum extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second index of the element
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
-        p_return.add(
-                CRawTerm.from(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) ).zSum()
-                )
-        );
-
+        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ).zSum() ) );
         return CBoolean.from( true );
     }
 }

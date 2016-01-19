@@ -63,12 +63,10 @@ public final class CColumn extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second column index
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
         p_return.addAll(
                 Arrays.stream(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .viewColumn( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() ).toArray()
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
+                                .viewColumn( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
                 ).mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
         );
 

@@ -60,12 +60,10 @@ public final class CRemove extends IBuildinAction
     )
     {
         // first argument map reference, second key-value
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<Map<?, ?>, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .remove( CCommon.getRawValue( l_argument.get( 1 ) ) )
+                        CCommon.<Map<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) )
+                                .remove( CCommon.getRawValue( p_argument.get( 1 ) ) )
                 )
         );
         return CBoolean.from( true );

@@ -62,11 +62,8 @@ public final class CVariance extends IBuildinAction
     )
     {
         final SummaryStatistics l_statistics = new SummaryStatistics();
-
-        CCommon.replaceVariableFromContext( p_context, p_argument ).stream().mapToDouble( i -> CCommon.getRawValue( i ) ).forEach(
-                i -> l_statistics.addValue( i ) );
+        p_argument.stream().mapToDouble( i -> CCommon.getRawValue( i ) ).forEach( i -> l_statistics.addValue( i ) );
         p_argument.add( CRawTerm.from( l_statistics.getVariance() ) );
-
         return CBoolean.from( true );
     }
 

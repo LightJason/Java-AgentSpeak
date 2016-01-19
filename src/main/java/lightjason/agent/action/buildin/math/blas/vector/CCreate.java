@@ -62,25 +62,22 @@ public final class CCreate extends IBuildinAction
     {
         // first argument is the element size,
         // optional second argument is matrix type (default dense-matrix)
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
-        switch ( l_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( l_argument.get( 1 ) ) ) : EType.DENSE )
+        switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add(
-                        new CRawTerm<>( new DenseDoubleMatrix1D( CCommon.getRawValue( l_argument.get( 0 ) ) ) )
+                        new CRawTerm<>( new DenseDoubleMatrix1D( CCommon.getRawValue( p_argument.get( 0 ) ) ) )
                 );
                 break;
 
             case SPARSE:
                 p_return.add(
-                        new CRawTerm<>( new SparseDoubleMatrix1D( CCommon.getRawValue( l_argument.get( 0 ) ) ) )
+                        new CRawTerm<>( new SparseDoubleMatrix1D( CCommon.getRawValue( p_argument.get( 0 ) ) ) )
                 );
                 break;
 
             default:
         }
-
         return CBoolean.from( true );
     }
 

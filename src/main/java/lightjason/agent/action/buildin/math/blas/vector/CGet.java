@@ -60,15 +60,8 @@ public final class CGet extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second index of the element
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
-        p_return.add(
-                CRawTerm.from(
-                        CCommon.<DoubleMatrix1D, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .get( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() )
-                )
-        );
-
+        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) )
+                                             .get( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ) ) );
         return CBoolean.from( true );
     }
 }

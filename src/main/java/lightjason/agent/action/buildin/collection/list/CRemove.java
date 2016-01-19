@@ -59,12 +59,10 @@ public final class CRemove extends IBuildinAction
     )
     {
         // first argument list reference, second key-value
-        final List<ITerm> l_argument = CCommon.replaceVariableFromContext( p_context, p_argument );
-
         p_return.add(
                 CRawTerm.from(
-                        CCommon.<List<?>, ITerm>getRawValue( l_argument.get( 0 ) )
-                                .remove( CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).intValue() )
+                        CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
+                                .remove( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
                 )
         );
         return CBoolean.from( true );
