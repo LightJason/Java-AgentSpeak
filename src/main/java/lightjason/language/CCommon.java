@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -129,17 +130,15 @@ public final class CCommon
 
 
     /**
-     * @param p_context
-     * @param p_terms
-     * @return
+     * flat term map into flat term list
      *
-     * @bug not working
+     * @param p_terms term collection
+     * @return flat term map
      */
-    public static List<ITerm> flatCollection( final IContext<?> p_context, final Collection<? extends ITerm> p_terms )
+    public static List<ITerm> flatList( final List<? extends ITerm> p_terms )
     {
-        return replaceVariableFromContext( p_context, p_terms ).stream().collect( Collectors.toList() );
+        return flattenToStream( p_terms ).collect( Collectors.toList() );
     }
-
 
     /**
      * returns the value of a term
@@ -155,5 +154,18 @@ public final class CCommon
             return ( (CRawTerm<?>) p_term ).throwNotAllocated().throwValueNotAssignableTo( p_class ).getTyped();
 
         throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notconvertable", p_term ) );
+    }
+
+    /*
+     * @bug incomplete- raw / variable term not unpacked
+     */
+    @SuppressWarnings( "unchecked" )
+    private static Stream<ITerm> flattenToStream( final List<? extends ITerm> p_list )
+    {
+        return p_list.stream().flatMap(
+                i -> i instanceof List<?>
+                     ? flattenToStream( (List<? extends ITerm>) i )
+                     : Stream.of( i )
+        );
     }
 }

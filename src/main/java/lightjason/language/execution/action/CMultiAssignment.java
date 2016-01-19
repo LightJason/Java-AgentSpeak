@@ -72,22 +72,25 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_return ).getValue() ) ||
-             ( l_return.isEmpty() ) )
+        if ( ( !m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_return ).getValue() )
+             || ( l_return.isEmpty() ) )
             return CBoolean.from( false );
 
+
         // position matching
+        final List<ITerm> l_flatreturn = CCommon.flatList( l_return );
         final List<ITerm> l_assign = CCommon.replaceVariableFromContext( p_context, m_value );
-        IntStream.range( 0, Math.min( l_assign.size(), l_return.size() ) ).boxed().forEach(
+
+        IntStream.range( 0, Math.min( l_assign.size(), l_flatreturn.size() ) ).boxed().forEach(
                 i -> ( (IVariable<?>) l_assign.get( i ) ).set(
-                        CCommon.getRawValue( l_return.get( i ) )
+                        CCommon.getRawValue( l_flatreturn.get( i ) )
                 )
         );
 
         // tail matching
-        if ( l_assign.size() < l_return.size() )
+        if ( l_assign.size() < l_flatreturn.size() )
             ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
-                    CCommon.getRawValue( l_return.subList( l_assign.size() - 1, l_return.size() ) )
+                    CCommon.getRawValue( l_flatreturn.subList( l_assign.size() - 1, l_flatreturn.size() ) )
             );
 
         return CBoolean.from( true );

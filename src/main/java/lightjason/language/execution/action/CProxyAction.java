@@ -314,16 +314,14 @@ public final class CProxyAction implements IExecution
          * @return ordered execution structure
          */
         @SuppressWarnings( "unchecked" )
-        private Map<Integer, IExecution> createSubExecutions( final SetMultimap<CPath, ? super ILiteral> p_elements, final Map<CPath, IAction> p_actions,
+        private Map<Integer, IExecution> createSubExecutions( final SetMultimap<CPath, ? extends ITerm> p_elements, final Map<CPath, IAction> p_actions,
                                                               final Multiset<IAction> p_scorecache
         )
         {
-            final List<Map.Entry<CPath, ? super ITerm>> l_arguments = new LinkedList<>();
-
-            p_elements.entries().stream().forEach( i -> l_arguments.add( (Map.Entry<CPath, ? super ITerm>) i ) );
+            final List<Map.Entry<CPath, ? extends ITerm>> l_arguments = new LinkedList<>( p_elements.entries() );
 
             return IntStream.range( 0, l_arguments.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
-                final ITerm l_term = (ITerm) l_arguments.get( i ).getValue();
+                final ITerm l_term = l_arguments.get( i ).getValue();
                 if ( l_term instanceof ILiteral )
                     return new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache );
 
