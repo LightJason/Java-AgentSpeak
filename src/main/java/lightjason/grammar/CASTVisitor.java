@@ -40,6 +40,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoal;
+import lightjason.language.execution.action.CBarrier;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
 import lightjason.language.execution.action.CMultiAssignment;
@@ -501,6 +502,29 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     }
 
 
+    @Override
+    public Object visitBarrier( final AgentParser.BarrierContext p_context )
+    {
+        return p_context.integernumber_positive() == null
+               ? new CBarrier( this.visitExpression( p_context.expression() ).toString() )
+               : new CBarrier(
+                       this.visitExpression( p_context.expression() ).toString(),
+                       (Long) this.visitIntegernumber_positive( p_context.integernumber_positive() )
+               );
+    }
+
+    @Override
+    public Object visitBarrier( final PlanBundleParser.BarrierContext p_context )
+    {
+        return p_context.integernumber_positive() == null
+               ? new CBarrier( this.visitExpression( p_context.expression() ).toString() )
+               : new CBarrier(
+                       this.visitExpression( p_context.expression() ).toString(),
+                       (Long) this.visitIntegernumber_positive( p_context.integernumber_positive() )
+               );
+    }
+
+
 
     @Override
     public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
@@ -901,11 +925,37 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public final Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
     {
-        return Long.valueOf( p_context.getText() );
+        return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
+                                                          : this.visitIntegernumber_positive( p_context.integernumber_positive() );
     }
 
     @Override
     public Object visitIntegernumber( final PlanBundleParser.IntegernumberContext p_context )
+    {
+        return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
+                                                          : this.visitIntegernumber_positive( p_context.integernumber_positive() );
+    }
+
+    @Override
+    public Object visitIntegernumber_positive( final AgentParser.Integernumber_positiveContext p_context )
+    {
+        return Long.valueOf( p_context.getText() );
+    }
+
+    @Override
+    public Object visitIntegernumber_negative( final AgentParser.Integernumber_negativeContext p_context )
+    {
+        return Long.valueOf( p_context.getText() );
+    }
+
+    @Override
+    public Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
+    {
+        return Long.valueOf( p_context.getText() );
+    }
+
+    @Override
+    public Object visitIntegernumber_negative( final PlanBundleParser.Integernumber_negativeContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }

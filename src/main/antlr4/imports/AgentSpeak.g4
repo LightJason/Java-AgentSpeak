@@ -175,6 +175,8 @@ body :
 body_formula :
     | term
 
+    | barrier
+
     | belief_action
     | test_goal_action
     | achievement_goal_action
@@ -232,6 +234,13 @@ deconstruct_expression :
     variablelist
     DECONSTRUCT
     ( literal | variable )
+    ;
+
+/**
+ * barrier expression (synchronization)
+ **/
+barrier :
+    LESS expression ( COMMA integernumber_positive )? GREATER
     ;
 
 /**
@@ -479,7 +488,22 @@ floatnumber :
  * integer number
  **/
 integernumber :
-    MINUS? DIGIT+
+    integernumber_positive
+    | integernumber_negative
+    ;
+
+/**
+ * positive integer number
+ **/
+integernumber_positive :
+    PLUS? DIGIT+
+    ;
+
+/**
+ * negative integer number
+ **/
+integernumber_negative :
+    MINUS DIGIT+
     ;
 
 /**
