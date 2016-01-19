@@ -1,8 +1,6 @@
 hallo(123).
 second(true).
 
-!drive.
-
 +!drive
     <-
         generic/print("drive default");
@@ -15,8 +13,7 @@ second(true).
         [A|B|C] = [1,2,3];
 
         [O|P] =.. foo( blub(1) );
-        H = 1;
-        //H = collection/list/get(P, 0);
+        H = collection/list/get(P, 0);
 
         < true, 3 >;
 

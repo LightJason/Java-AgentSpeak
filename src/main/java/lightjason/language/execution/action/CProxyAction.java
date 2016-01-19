@@ -26,6 +26,7 @@ package lightjason.language.execution.action;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
+import com.google.common.collect.SetMultimap;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
@@ -57,10 +58,8 @@ import java.util.stream.IntStream;
  *
  * @note inner annotations cannot be used on the
  * grammer definition, so the inner annotations are ignored
- * @bug return values must be passed down in proxy-execution object,
- * refactor "caller" structur and build a more flat execution defintion
- * remove CStatic class with variable setting, because each action must
- * run its own variable replacing
+ * @todo reducing subexpression return value
+ * @todo check subexecution order and results
  */
 public final class CProxyAction implements IExecution
 {
@@ -83,7 +82,7 @@ public final class CProxyAction implements IExecution
     {
         // create cache for scoring action and define action
         final Multiset<IAction> l_scoringcache = HashMultiset.create();
-        m_execution = new CActionWrapper( p_actions, p_literal, l_scoringcache );
+        m_execution = new CActionWrapper( p_literal, p_actions, l_scoringcache );
 
         // scoring set is created so build-up to an unmodifieable set
         m_scoringcache = ImmutableMultiset.copyOf( l_scoringcache );
@@ -119,41 +118,6 @@ public final class CProxyAction implements IExecution
     {
         return MessageFormat.format( "{0}", m_execution );
     }
-
-    /**
-     * create execution stack of function and arguments
-     *
-     * @param p_literal literal
-     * @param p_actions map with action definition
-     * @param p_scoringcache cache for action references to calculate scoring value
-     *
-    SuppressWarnings( "unchecked" )
-    private final IProxyExecution createCaller( final ILiteral p_literal, final Map<CPath, IAction> p_actions, final Multiset<IAction> p_scoringcache )
-    {
-    // resolve action
-    final IAction l_action = p_actions.get( p_literal.getFQNFunctor() );
-    if ( l_action == null )
-    throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
-
-    // check number of arguments
-    if ( l_action.getMinimalArgumentNumber() > p_literal.getValues().size() )
-    throw new CIllegalArgumentException(
-    CCommon.getLanguageString( this, "argumentnumber", p_literal, l_action.getMinimalArgumentNumber() ) );
-
-
-    // build argument list, create action (argument list defines only executable statements to
-    // generate allocation for arguments and return lists) and cache action reference for scoring calculation
-    p_scoringcache.add( l_action );
-    return new CExecution( p_literal.hasAt(), l_action, p_literal.getValues().entries().stream().map( i -> {
-
-    if ( i.getValue() instanceof ILiteral )
-    return this.createCaller( (ILiteral) i.getValue(), p_actions, p_scoringcache );
-
-    return new CTermProx( i.getValue() );
-
-    } ).collect( Collectors.toList() ) );
-    }
-     */
 
     /**
      * inner class for encapsulating term values (variable / raw terms)
@@ -261,19 +225,20 @@ public final class CProxyAction implements IExecution
          */
         private final Map<Integer, IExecution> m_arguments;
         /**
-         * annotation as map with ?
+         * annotation as map with index for prevent
+         * result order on parallel execution
          */
+        private final Map<Integer, IExecution> m_annotation;
 
 
         /**
          * ctor
          *
-         * @param p_actions actions
          * @param p_literal action literal
+         * @param p_actions actions
          * @param p_scorecache score cache
          */
-        @SuppressWarnings( "unchecked" )
-        public CActionWrapper( final Map<CPath, IAction> p_actions, final ILiteral p_literal, final Multiset<IAction> p_scorecache )
+        public CActionWrapper( final ILiteral p_literal, final Map<CPath, IAction> p_actions, final Multiset<IAction> p_scorecache )
         {
             // check parallel and inner execution
             m_parallel = p_literal.hasAt();
@@ -292,19 +257,10 @@ public final class CProxyAction implements IExecution
             p_scorecache.add( m_action );
 
 
-            // resolve action arguments
-            final List<Map.Entry<CPath, ITerm>> l_arguments = new LinkedList<>( p_literal.getValues().entries() );
-            m_arguments = Collections.unmodifiableMap(
-                    IntStream.range( 0, l_arguments.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
-                        final ITerm l_term = l_arguments.get( i ).getValue();
-                        if ( l_term instanceof ILiteral )
-                            return new CActionWrapper( p_actions, (ILiteral) l_term, p_scorecache );
-
-                        return new CTermWrapper<>( l_term );
-                    } ) )
-            );
+            // resolve action arguments and annotation
+            m_arguments = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getValues(), p_actions, p_scorecache ) );
+            m_annotation = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getAnnotation(), p_actions, p_scorecache ) );
         }
-
 
         @Override
         public final int hashCode()
@@ -329,14 +285,9 @@ public final class CProxyAction implements IExecution
                                              final List<ITerm> p_return
         )
         {
-            // argument execution
-            // annotation execution
-            // replacing arguments & annotation
-            // execution
-
             return m_action.execute(
                     p_context,
-                    lightjason.language.CCommon.replaceVariableFromContext( p_context, p_annotation ),
+                    this.subexecute( p_context, m_annotation ),
                     this.subexecute( p_context, m_arguments ),
                     p_return
             );
@@ -354,6 +305,39 @@ public final class CProxyAction implements IExecution
             return m_action.getVariables();
         }
 
+        /**
+         * builds the map of execution arguments
+         *
+         * @param p_elements set with literal elements (term- / literal list of attributes & annotations)
+         * @param p_actions map with actions
+         * @param p_scorecache store cache
+         * @return ordered execution structure
+         */
+        @SuppressWarnings( "unchecked" )
+        private Map<Integer, IExecution> createSubExecutions( final SetMultimap<CPath, ? super ILiteral> p_elements, final Map<CPath, IAction> p_actions,
+                                                              final Multiset<IAction> p_scorecache
+        )
+        {
+            final List<Map.Entry<CPath, ? super ITerm>> l_arguments = new LinkedList<>();
+
+            p_elements.entries().stream().forEach( i -> l_arguments.add( (Map.Entry<CPath, ? super ITerm>) i ) );
+
+            return IntStream.range( 0, l_arguments.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
+                final ITerm l_term = (ITerm) l_arguments.get( i ).getValue();
+                if ( l_term instanceof ILiteral )
+                    return new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache );
+
+                return new CTermWrapper<>( l_term );
+            } ) );
+        }
+
+        /**
+         * execute inner structures
+         *
+         * @param p_context context structure
+         * @param p_execution map with execution elements
+         * @return return arguments of execution (flat list)
+         */
         private List<ITerm> subexecute( final IContext<?> p_context, final Map<Integer, IExecution> p_execution )
         {
             return Collections.unmodifiableList( lightjason.language.CCommon.replaceVariableFromContext(

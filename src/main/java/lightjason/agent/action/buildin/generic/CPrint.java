@@ -31,6 +31,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,20 @@ public final class CPrint extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        m_stream.println( StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ) );
+        m_stream.println(
+                MessageFormat.format(
+                        "{0}{1}",
+                        StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ),
+                        ( p_annotation.isEmpty()
+                          ? ""
+                          : MessageFormat.format(
+                                  "{0}{1}",
+                                  m_seperator,
+                                  StringUtils.join( p_annotation.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator )
+                          )
+                        )
+                )
+        );
         return CBoolean.from( true );
     }
 
