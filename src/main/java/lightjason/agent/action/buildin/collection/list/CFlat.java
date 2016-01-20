@@ -34,14 +34,14 @@ import java.util.List;
 
 
 /**
- * adds an element to the list
+ * returns a flat list of any term data
  */
-public final class CSet extends IBuildinAction
+public final class CFlat extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CSet()
+    public CFlat()
     {
         super( 3 );
     }
@@ -49,7 +49,7 @@ public final class CSet extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 3;
+        return 1;
     }
 
     @Override
@@ -57,11 +57,8 @@ public final class CSet extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        // first argument list reference, second index, third value
-        CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) ).set(
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
-                CCommon.getRawValue( p_argument.get( 2 ) )
-        );
+        // first argument list reference
+        p_return.addAll( CCommon.flatList( p_argument ) );
         return CBoolean.from( true );
     }
 

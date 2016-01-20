@@ -157,15 +157,21 @@ public final class CCommon
     }
 
     /*
-     * @bug incomplete- raw / variable term not unpacked
+     * recursive flattering of a list structure
+     *
+     * @param p_list any collection type
+     * @return term stream
      */
     @SuppressWarnings( "unchecked" )
-    private static Stream<ITerm> flattenToStream( final List<? extends ITerm> p_list )
+    private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
     {
         return p_list.stream().flatMap(
-                i -> i instanceof List<?>
-                     ? flattenToStream( (List<? extends ITerm>) i )
-                     : Stream.of( i )
-        );
+                i -> {
+                    final Object l_value = getRawValue( i );
+                    return l_value instanceof Collection<?>
+                           ? flattenToStream( (List<?>) l_value )
+                           : Stream.of( CRawTerm.from( l_value ) );
+
+                } );
     }
 }
