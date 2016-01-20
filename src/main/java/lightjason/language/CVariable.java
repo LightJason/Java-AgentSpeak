@@ -136,8 +136,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public boolean isValueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) )
-                                                                       .anyMatch( i -> true );
+        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
     @Override

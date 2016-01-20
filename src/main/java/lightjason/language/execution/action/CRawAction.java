@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -30,7 +31,6 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -62,10 +62,16 @@ public final class CRawAction<T> extends IBaseExecution<T>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                final List<ITerm> p_return
     )
     {
+        if ( m_value instanceof Boolean )
+            return this.getTypedResult( (Boolean) m_value, p_return );
+        if ( m_value instanceof IVariable<?> )
+            return this.getTypedResult( (IVariable<?>) m_value, p_return, p_context );
+
         return this.getTypedResult( m_value, p_return );
     }
 
@@ -76,7 +82,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final Boolean p_value, final Collection<ITerm> p_return )
+    private CBoolean getTypedResult( final Boolean p_value, final List<ITerm> p_return )
     {
         p_return.add( new CRawTerm<>( m_value ) );
         return CBoolean.from( p_value );
@@ -87,16 +93,20 @@ public final class CRawAction<T> extends IBaseExecution<T>
      *
      * @param p_value variable value
      * @param p_return native return
+     * @param p_context context
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final IVariable<?> p_value, final Collection<ITerm> p_return )
+    private CBoolean getTypedResult( final IVariable<?> p_value, final List<ITerm> p_return, final IContext<?> p_context )
     {
-        if ( !p_value.isAllocated() )
+        final IVariable<?> l_value = (IVariable<?>) CCommon.replaceVariableFromContext( p_context, p_value );
+
+        if ( !l_value.isAllocated() )
             return CBoolean.from( false );
 
-        if ( p_value.isValueAssignableTo( Boolean.class ) )
-            return CBoolean.from( p_value.getTyped() );
+        if ( l_value.isValueAssignableTo( Boolean.class ) )
+            return CBoolean.from( l_value.getTyped() );
 
+        p_return.add( CRawTerm.from( l_value.get() ) );
         return CBoolean.from( true );
     }
 
@@ -107,9 +117,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final T p_value, final Collection<ITerm> p_return )
+    private CBoolean getTypedResult( final T p_value, final List<ITerm> p_return )
     {
-        p_return.add( new CRawTerm<>( m_value ) );
+        p_return.add( CRawTerm.from( m_value ) );
         return CBoolean.from( true );
     }
 }

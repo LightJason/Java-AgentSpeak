@@ -3,20 +3,10 @@ second(true).
 
 +!drive
     <-
-        generic/print("drive default");
-
-        generic/print( math/min(200,3,4,5,67) );
-
-        X = true;
-        Y = 10;
-
         [A|B|C] = [1,2,3];
 
-        [O|P] =.. foo( blub(1) );
-        H = collection/list/get(P, 0);
-
-        < true, 3 >;
-
-        generic/print(X,Y, A,B,C, O,P,H);
+        [O|P] =.. foo( blub(1), blah(3) );
+        [H|I] = P;
+        generic/print(A,B,C,  O,P,H,I);
 
         !!drive.

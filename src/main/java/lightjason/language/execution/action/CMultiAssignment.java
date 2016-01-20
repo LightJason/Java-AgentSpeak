@@ -71,26 +71,26 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
                                                final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_return = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_return ).getValue() )
-             || ( l_return.isEmpty() ) )
+        final List<ITerm> l_result = new LinkedList<>();
+        if ( ( !m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_result ).getValue() ) ||
+             ( l_result.isEmpty() ) )
             return CBoolean.from( false );
 
 
-        // position matching
-        final List<ITerm> l_flatreturn = CCommon.flatList( l_return );
+        // position matching on list index
+        final List<ITerm> l_flatresult = CCommon.flatList( l_result );
         final List<ITerm> l_assign = CCommon.replaceVariableFromContext( p_context, m_value );
 
-        IntStream.range( 0, Math.min( l_assign.size(), l_flatreturn.size() ) ).boxed().forEach(
-                i -> ( (IVariable<?>) l_assign.get( i ) ).set(
-                        CCommon.getRawValue( l_flatreturn.get( i ) )
-                )
+
+        IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) ).boxed().forEach(
+                i -> ( (IVariable<?>) l_assign.get( i ) ).set( CCommon.getRawValue( l_flatresult.get( i ) ) )
         );
 
+
         // tail matching
-        if ( l_assign.size() < l_flatreturn.size() )
+        if ( l_assign.size() < l_flatresult.size() )
             ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
-                    CCommon.getRawValue( l_flatreturn.subList( l_assign.size() - 1, l_flatreturn.size() ) )
+                    CCommon.getRawValue( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
             );
 
         return CBoolean.from( true );

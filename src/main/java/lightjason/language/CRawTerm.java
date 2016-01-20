@@ -59,13 +59,20 @@ public final class CRawTerm<T> implements ITerm
             m_value = l_term.getTyped();
             m_functor = l_term.getFQNFunctor();
         }
+        else if ( p_value instanceof IVariable<?> )
+        {
+            final IVariable<?> l_variable = (IVariable<?>) p_value;
+            m_value = (T) l_variable.get();
+            m_functor = l_variable.getFQNFunctor();
+        }
         else
         {
             m_value = (T) p_value;
-            m_functor = CPath.from( p_value.toString() );
+            m_functor = p_value == null ? CPath.EMPTY : CPath.from( p_value.toString() );
         }
-
     }
+
+
 
     /**
      * factory for a raw term
@@ -176,7 +183,7 @@ public final class CRawTerm<T> implements ITerm
      */
     public final boolean isValueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> true );
+        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
     /**
