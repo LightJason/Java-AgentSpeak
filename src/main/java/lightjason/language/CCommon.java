@@ -140,21 +140,6 @@ public final class CCommon
         return flattenToStream( p_terms ).collect( Collectors.toList() );
     }
 
-    /**
-     * returns the value of a term
-     *
-     * @return value
-     */
-    @Deprecated
-    public static <T> T getTermValue( final Class<?> p_class, final ITerm p_term )
-    {
-        if ( p_term instanceof IVariable<?> )
-            return ( (IVariable<?>) p_term ).throwNotAllocated().throwValueNotAssignableTo( p_class ).getTyped();
-        if ( p_term instanceof CRawTerm<?> )
-            return ( (CRawTerm<?>) p_term ).throwNotAllocated().throwValueNotAssignableTo( p_class ).getTyped();
-
-        throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notconvertable", p_term ) );
-    }
 
     /*
      * recursive flattering of a list structure

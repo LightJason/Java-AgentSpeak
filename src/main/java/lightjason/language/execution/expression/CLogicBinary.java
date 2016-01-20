@@ -27,21 +27,19 @@ import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
  * binary logical expression
  */
-public final class CLogical extends IBinary
+public final class CLogicBinary extends IBinary
 {
+
     /**
      * ctor
      *
@@ -49,11 +47,10 @@ public final class CLogical extends IBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CLogical( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    public CLogicBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-
-        if ( !m_operator.isLogical() )
+        if ( ( !m_operator.isLogical() ) || ( !m_operator.isBinary() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "incorrect", m_operator ) );
     }
 
@@ -62,39 +59,25 @@ public final class CLogical extends IBinary
                                                final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_parameter = lightjason.language.CCommon.replaceVariableFromContext( p_context, p_argument );
-        if ( l_parameter.size() != 2 )
+        if ( p_argument.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
-
-        final IVariable<Boolean> l_lhs = ( (IVariable<?>) l_parameter.get( 0 ) ).throwNotAllocated().throwValueNotAssignableTo( Boolean.class ).getTyped();
-        final IVariable<Boolean> l_rhs = ( (IVariable<?>) l_parameter.get( 1 ) ).throwNotAllocated().throwValueNotAssignableTo( Boolean.class ).getTyped();
 
         switch ( m_operator )
         {
 
             case AND:
-                p_return.add( new CRawTerm<>( l_lhs.get() && l_rhs.get() ) );
-                break;
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) ) &&
+                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 1 ) ) ) );
+                return CBoolean.from( true );
 
             case OR:
-                p_return.add( new CRawTerm<>( l_lhs.get() || l_rhs.get() ) );
-                break;
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) ) ||
+                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 1 ) ) ) );
+                return CBoolean.from( true );
 
             default:
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notimplement", m_operator ) );
+                return CBoolean.from( false );
         }
-
-
-        return CBoolean.from( true );
     }
 
-    @Override
-    public final Set<IVariable<?>> getVariables()
-    {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_lefthandside.getVariables() );
-            addAll( m_righthandside.getVariables() );
-        }};
-    }
 }

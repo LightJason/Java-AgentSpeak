@@ -111,4 +111,14 @@ public enum EOperator
     {
         return ( this == LESS ) || ( this == LESSEQUAL ) || ( this == GREATER ) || ( this == GREATEREQUAL );
     }
+
+    /**
+     * check of a binary operator
+     *
+     * @return boolean of binary flag
+     */
+    public final boolean isBinary()
+    {
+        return ( this != NOTEQUAL );
+    }
 }
