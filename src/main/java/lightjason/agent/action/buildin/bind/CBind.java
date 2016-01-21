@@ -35,9 +35,9 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,6 +60,7 @@ public final class CBind<T>
     }
 
 
+
     /**
      * returns a set of actions which are bind on an object
      *
@@ -68,9 +69,24 @@ public final class CBind<T>
      *
      * @tparam T any object type
      */
-    public static <T> Set<IAction> get( final T p_object )
+    public static <T> Set<IAction> get( final T p_object ) throws IllegalAccessException
     {
-        return get( p_object, new CFilter() );
+        return get( true, p_object, new CFilter() );
+    }
+
+
+    /**
+     * returns a set of actions which are bind on an object
+     *
+     * @param p_fqnpackage use full-qualified package name
+     * @param p_object object bind
+     * @return set with actions
+     *
+     * @tparam T any object type
+     */
+    public static <T> Set<IAction> get( final boolean p_fqnpackage, final T p_object ) throws IllegalAccessException
+    {
+        return get( p_fqnpackage, p_object, new CFilter() );
     }
 
     /**
@@ -82,38 +98,61 @@ public final class CBind<T>
      *
      * @tparam T any object type
      */
-    public static <T> Set<IAction> get( final T p_object, final CReflection.IFilter<Method> p_filter )
+    public static <T> Set<IAction> get( final T p_object, final CReflection.IFilter<Method> p_filter ) throws IllegalAccessException
     {
-        return Collections.<IAction>emptySet();
+        return CReflection.getClassMethods( p_object.getClass(), p_filter ).values().parallelStream().map(
+                i -> new CObjectAction<T>( true, i.getMethod(), p_object ) ).collect( Collectors.toSet() );
     }
+
+    /**
+     * returns a set of actions which are bind on an object
+     *
+     * @param p_fqnpackage use full-qualified package name
+     * @param p_object object bind
+     * @param p_filter method filter object
+     * @return set with actions
+     *
+     * @tparam T any object type
+     */
+    public static <T> Set<IAction> get( final boolean p_fqnpackage, final T p_object, final CReflection.IFilter<Method> p_filter ) throws IllegalAccessException
+    {
+        return CReflection.getClassMethods( p_object.getClass(), p_filter ).values().parallelStream().map(
+                i -> new CObjectAction<T>( p_fqnpackage, i.getMethod(), p_object ) ).collect( Collectors.toSet() );
+    }
+
 
 
     /**
      * returns a set of action which are bind on
      * an object within the agent storage with a fixed storage name
      *
+     * @param p_fqnpackage use full-qualified package name
      * @param p_class binding class
      * @param p_storagename storage names
      * @return set with actions
      */
-    public static Set<IAction> get( final Class<?> p_class, final String p_storagename )
+    public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class, final String p_storagename ) throws IllegalAccessException
     {
-        return get( p_class, p_storagename, new CFilter() );
+        return get( p_fqnpackage, p_class, p_storagename, new CFilter() );
     }
 
     /**
      * returns a set of action which are bind on
      * an object within the agent storage with a fixed storage name
      *
+     * @param p_fqnpackage use full-qualified package name
      * @param p_class binding class
      * @param p_storagename storage names
      * @param p_filter method filter object
      * @return set with actions
      */
-    public static Set<IAction> get( final Class<?> p_class, final String p_storagename, final CReflection.IFilter<Method> p_filter )
+    public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class, final String p_storagename, final CReflection.IFilter<Method> p_filter )
+    throws IllegalAccessException
     {
-        return Collections.<IAction>emptySet();
+        return CReflection.getClassMethods( p_class, p_filter ).values().parallelStream().map(
+                i -> new CStorageElementAction( true, p_class, i.getMethod(), p_storagename ) ).collect( Collectors.toSet() );
     }
+
 
 
     /**
@@ -123,9 +162,22 @@ public final class CBind<T>
      * @param p_class binding class
      * @return set with actions
      */
-    public static Set<IAction> get( final Class<?> p_class )
+    public static Set<IAction> get( final Class<?> p_class ) throws IllegalAccessException
     {
-        return get( p_class, new CFilter() );
+        return get( true, p_class, new CFilter() );
+    }
+
+    /**
+     * returns a set of action which are bind on
+     * an object within the agent storage name
+     *
+     * @param p_fqnpackage use full-qualified package name
+     * @param p_class binding class
+     * @return set with actions
+     */
+    public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class ) throws IllegalAccessException
+    {
+        return get( p_fqnpackage, p_class, new CFilter() );
     }
 
     /**
@@ -136,9 +188,25 @@ public final class CBind<T>
      * @param p_filter method filter object
      * @return set with actions
      */
-    public static Set<IAction> get( final Class<?> p_class, final CReflection.IFilter<Method> p_filter )
+    public static Set<IAction> get( final Class<?> p_class, final CReflection.IFilter<Method> p_filter ) throws IllegalAccessException
     {
-        return Collections.<IAction>emptySet();
+        return get( true, p_class, p_filter );
+    }
+
+    /**
+     * returns a set of action which are bind on
+     * an object within the agent storage name
+     *
+     * @param p_fqnpackage use full-qualified package name
+     * @param p_class binding class
+     * @param p_filter method filter object
+     * @return set with actions
+     */
+    public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class, final CReflection.IFilter<Method> p_filter )
+    throws IllegalAccessException
+    {
+        return CReflection.getClassMethods( p_class, p_filter ).values().parallelStream().map(
+                i -> new CStorageElementAction( p_fqnpackage, p_class, i.getMethod() ) ).collect( Collectors.toSet() );
     }
 
 
@@ -168,16 +236,19 @@ public final class CBind<T>
         /**
          * ctor
          *
+         * @param p_fqnpackage use full-qualified package name
          * @param p_method method bind
          * @param p_object object bind
          */
-        private CObjectAction( final Method p_method, final T p_object )
+        private CObjectAction( final boolean p_fqnpackage, final Method p_method, final T p_object )
         {
             m_bindobject = p_object;
 
             m_arguments = p_method.getParameterCount();
             m_name = CPath.createSplitPath(
-                    ClassUtils.PACKAGE_SEPARATOR, ACTIONPACKAGENAME, p_method.getDeclaringClass().getCanonicalName(), p_method.getName() ).toLower();
+                    ClassUtils.PACKAGE_SEPARATOR, ACTIONPACKAGENAME,
+                    p_fqnpackage ? p_object.getClass().getCanonicalName() : p_object.getClass().getSimpleName(), p_method.getName()
+            ).toLower();
         }
 
         @Override
@@ -201,6 +272,7 @@ public final class CBind<T>
         }
 
     }
+
 
 
     /**
@@ -228,26 +300,31 @@ public final class CBind<T>
         /**
          * ctor
          *
+         * @param p_fqnpackage use full-qualified package name
+         * @param p_class binding class
          * @param p_method method bind
          */
-        private CStorageElementAction( final Method p_method )
+        private CStorageElementAction( final boolean p_fqnpackage, final Class<?> p_class, final Method p_method )
         {
-            this( p_method, null );
+            this( p_fqnpackage, p_class, p_method, null );
         }
 
         /**
          * ctor
          *
+         * @param p_fqnpackage use full-qualified package name
+         * @param p_class binding class
          * @param p_method method bind
          * @param p_storagename storage names
          */
-        private CStorageElementAction( final Method p_method, final String p_storagename )
+        private CStorageElementAction( final boolean p_fqnpackage, final Class<?> p_class, final Method p_method, final String p_storagename )
         {
             m_storagename = p_storagename;
 
             m_arguments = p_method.getParameterCount();
             m_name = CPath.createSplitPath(
-                    ClassUtils.PACKAGE_SEPARATOR, ACTIONPACKAGENAME, p_method.getDeclaringClass().getCanonicalName(), p_method.getName() ).toLower();
+                    ClassUtils.PACKAGE_SEPARATOR, ACTIONPACKAGENAME, p_fqnpackage ? p_class.getCanonicalName() : p_class.getSimpleName(), p_method.getName() )
+                          .toLower();
         }
 
         @Override
@@ -259,7 +336,7 @@ public final class CBind<T>
         @Override
         public final int getMinimalArgumentNumber()
         {
-            return m_arguments + ( m_storagename != null ? 1 : 0 );
+            return m_arguments + ( m_storagename == null ? 1 : 0 );
         }
 
         @Override

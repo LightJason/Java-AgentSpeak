@@ -25,6 +25,7 @@ package lightjason.agent;
 
 import com.google.common.collect.Multiset;
 import lightjason.agent.action.IAction;
+import lightjason.agent.action.buildin.bind.IActionBind;
 import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.language.CCommon;
 import lightjason.language.score.IAggregation;
@@ -163,6 +164,56 @@ public final class TestCAgent
         {
             return p_values.parallelStream().mapToDouble( i -> i ).sum();
         }
+    }
+
+
+
+    private static class CBindingSuper
+    {
+
+        private void runsuper()
+        {
+
+        }
+    }
+
+    /**
+     * class for testing binding actions
+     */
+    private static final class CBinding extends CBindingSuper
+    {
+
+        /**
+         * protected method with parameter
+         */
+        protected final int calculate( final int p_a, final int p_b )
+        {
+            return p_a + p_b;
+        }
+
+        /**
+         * any public method
+         */
+        private final void first()
+        {
+        }
+
+        /**
+         * any private method
+         */
+        private void second()
+        {
+
+        }
+
+        /**
+         * annotation test
+         */
+        @IActionBind( bind = false )
+        private void notuse()
+        {
+        }
+
     }
 
 }

@@ -59,7 +59,7 @@ public final class CReflection
     throws IllegalArgumentException, NoSuchFieldException, IllegalAccessException
     {
         Field l_field = null;
-        for ( Class<?> l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+        for ( Class<?> l_class = p_class; ( l_field == null ) && ( l_class != Object.class ); l_class = l_class.getSuperclass() )
             l_field = l_class.getDeclaredField( p_field );
 
         if ( l_field == null )
@@ -90,7 +90,7 @@ public final class CReflection
     public static Map<String, CGetSet> getClassFields( final Class<?> p_class, final IFilter<Field> p_filter ) throws IllegalAccessException
     {
         final Map<String, CGetSet> l_fields = new HashMap<>();
-        for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
+        for ( Class<?> l_class = p_class; l_class != Object.class; l_class = l_class.getSuperclass() )
             for ( final Field l_field : l_class.getDeclaredFields() )
             {
                 l_field.setAccessible( true );
@@ -135,7 +135,7 @@ public final class CReflection
     throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException
     {
         Method l_method = null;
-        for ( Class<?> l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+        for ( Class<?> l_class = p_class; ( l_method == null ) && ( l_class != Object.class ); l_class = l_class.getSuperclass() )
             l_method = l_class.getDeclaredMethod( p_method, p_parameter );
 
         if ( l_method == null )
@@ -156,7 +156,7 @@ public final class CReflection
     public static Map<String, CMethod> getClassMethods( final Class<?> p_class, final IFilter<Method> p_filter ) throws IllegalAccessException
     {
         final Map<String, CMethod> l_methods = new HashMap<>();
-        for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
+        for ( Class<?> l_class = p_class; l_class != Object.class; l_class = l_class.getSuperclass() )
             for ( final Method l_method : l_class.getDeclaredMethods() )
             {
                 l_method.setAccessible( true );
@@ -191,7 +191,7 @@ public final class CReflection
     /**
      * structure for getter and setter method handles
      */
-    public static class CGetSet
+    public static final class CGetSet
     {
 
         /**
@@ -289,7 +289,7 @@ public final class CReflection
     /**
      * class for storing method access
      */
-    public static class CMethod
+    public static final class CMethod
     {
         /**
          * method handle *

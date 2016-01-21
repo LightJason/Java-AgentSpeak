@@ -59,7 +59,7 @@ public abstract class IStorage extends IBuildinAction
     protected IStorage( final Collection<String> p_fordbidden )
     {
         super( 3 );
-        m_forbidden = new ConcurrentSkipListSet( p_fordbidden );
+        m_forbidden = new ConcurrentSkipListSet<>( p_fordbidden );
     }
 
     /**
