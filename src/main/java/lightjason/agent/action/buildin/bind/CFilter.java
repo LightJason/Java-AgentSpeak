@@ -36,11 +36,12 @@ public final class CFilter implements IFilter
     public final boolean filter( final Method p_method )
     {
         boolean l_use = true;
-        if ( p_method.isAnnotationPresent( IActionBIND.class ) )
-            l_use = p_method.getAnnotation( IActionBIND.class ).bind();
+        if ( p_method.isAnnotationPresent( IActionBind.class ) )
+            l_use = p_method.getAnnotation( IActionBind.class ).bind();
 
-        return l_use && ( !( Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
-                p_method.getModifiers()
+        return l_use && ( !(
+                Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
+                        p_method.getModifiers()
         ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
     }
 
