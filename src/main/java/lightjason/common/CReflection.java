@@ -152,6 +152,7 @@ public final class CReflection
      * @param p_class class
      * @param p_filter filtering object
      * @return map with method name
+     * @todo check overloaded methods
      */
     public static Map<String, CMethod> getClassMethods( final Class<?> p_class, final IFilter<Method> p_filter ) throws IllegalAccessException
     {

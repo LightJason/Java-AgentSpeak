@@ -216,6 +216,7 @@ public final class CBind<T>
      *
      * @note useful for static object
      * @tparam T object type
+     * @todo check argument number on overloaded methods
      */
     public static class CObjectAction<T> extends IBaseAction
     {
@@ -263,6 +264,9 @@ public final class CBind<T>
             return m_arguments;
         }
 
+        /**
+         * @bug implement execution
+         */
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                    final List<ITerm> p_return
@@ -280,6 +284,7 @@ public final class CBind<T>
      *
      * @note usefull for dynammic binding depend on an element
      * within the agent storage
+     * @todo check argument number on overloaded methods
      */
     public static class CStorageElementAction extends IBaseAction
     {
@@ -339,6 +344,9 @@ public final class CBind<T>
             return m_arguments + ( m_storagename == null ? 1 : 0 );
         }
 
+        /**
+         * @bug implement execution
+         */
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                    final List<ITerm> p_return
