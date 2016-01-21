@@ -23,20 +23,23 @@
 
 package lightjason.agent.action.buildin.generic.storage;
 
-import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import static lightjason.language.CCommon.getRawValue;
 
 
 /**
  * adds or overwrites an element in the agent-storage
  */
-public final class CAdd extends IBuildinAction
+public final class CAdd extends IStorage
 {
 
     /**
@@ -44,7 +47,27 @@ public final class CAdd extends IBuildinAction
      */
     public CAdd()
     {
-        super( 3 );
+        super();
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CAdd( final String... p_forbidden )
+    {
+        super( Arrays.asList( p_forbidden ) );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden forbidden keys
+     */
+    public CAdd( final Collection<String> p_fordbidden )
+    {
+        super( p_fordbidden );
     }
 
     @Override
@@ -58,7 +81,12 @@ public final class CAdd extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
-        p_context.getAgent().getStorage().put( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) );
+        final String l_key = CCommon.getRawValue( p_argument.get( 0 ) );
+        if ( m_forbidden.contains( l_key ) )
+            return CBoolean.from( false );
+
+        p_context.getAgent().getStorage().put( getRawValue( l_key ), getRawValue( p_argument.get( 1 ) ) );
         return CBoolean.from( true );
     }
+
 }

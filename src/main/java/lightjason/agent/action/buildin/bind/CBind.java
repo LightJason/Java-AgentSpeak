@@ -26,6 +26,8 @@ package lightjason.agent.action.buildin.bind;
 import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
 import lightjason.common.CPath;
+import lightjason.common.CReflection;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -51,30 +53,94 @@ public final class CBind<T>
 
 
     /**
+     * ctor
+     */
+    private CBind()
+    {
+    }
+
+
+    /**
      * returns a set of actions which are bind on an object
      *
-     * @param p_object
+     * @param p_object object bind
      * @return set with actions
      *
      * @tparam T any object type
      */
     public static <T> Set<IAction> get( final T p_object )
     {
+        return get( p_object, new CFilter() );
+    }
+
+    /**
+     * returns a set of actions which are bind on an object
+     *
+     * @param p_object object bind
+     * @param p_filter method filter object
+     * @return set with actions
+     *
+     * @tparam T any object type
+     */
+    public static <T> Set<IAction> get( final T p_object, final CReflection.IFilter<Method> p_filter )
+    {
         return Collections.<IAction>emptySet();
+    }
+
+
+    /**
+     * returns a set of action which are bind on
+     * an object within the agent storage with a fixed storage name
+     *
+     * @param p_class binding class
+     * @param p_storagename storage names
+     * @return set with actions
+     */
+    public static Set<IAction> get( final Class<?> p_class, final String p_storagename )
+    {
+        return get( p_class, p_storagename, new CFilter() );
     }
 
     /**
      * returns a set of action which are bind on
-     * an object within the agent storage
+     * an object within the agent storage with a fixed storage name
      *
-     * @param p_class
-     * @param p_storagename
-     * @return
+     * @param p_class binding class
+     * @param p_storagename storage names
+     * @param p_filter method filter object
+     * @return set with actions
      */
-    public static Set<IAction> get( final Class<?> p_class, final String p_storagename )
+    public static Set<IAction> get( final Class<?> p_class, final String p_storagename, final CReflection.IFilter<Method> p_filter )
     {
         return Collections.<IAction>emptySet();
     }
+
+
+    /**
+     * returns a set of action which are bind on
+     * an object within the agent storage name
+     *
+     * @param p_class binding class
+     * @return set with actions
+     */
+    public static Set<IAction> get( final Class<?> p_class )
+    {
+        return get( p_class, new CFilter() );
+    }
+
+    /**
+     * returns a set of action which are bind on
+     * an object within the agent storage name
+     *
+     * @param p_class binding class
+     * @param p_filter method filter object
+     * @return set with actions
+     */
+    public static Set<IAction> get( final Class<?> p_class, final CReflection.IFilter<Method> p_filter )
+    {
+        return Collections.<IAction>emptySet();
+    }
+
 
 
     /**
@@ -102,10 +168,10 @@ public final class CBind<T>
         /**
          * ctor
          *
-         * @param p_object
-         * @param p_method
+         * @param p_method method bind
+         * @param p_object object bind
          */
-        private CObjectAction( final T p_object, final Method p_method )
+        private CObjectAction( final Method p_method, final T p_object )
         {
             m_bindobject = p_object;
 
@@ -162,9 +228,20 @@ public final class CBind<T>
         /**
          * ctor
          *
-         * @param p_storagename storage name
+         * @param p_method method bind
          */
-        private CStorageElementAction( final String p_storagename, final Method p_method )
+        private CStorageElementAction( final Method p_method )
+        {
+            this( p_method, null );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_method method bind
+         * @param p_storagename storage names
+         */
+        private CStorageElementAction( final Method p_method, final String p_storagename )
         {
             m_storagename = p_storagename;
 
@@ -182,7 +259,7 @@ public final class CBind<T>
         @Override
         public final int getMinimalArgumentNumber()
         {
-            return m_arguments;
+            return m_arguments + ( m_storagename != null ? 1 : 0 );
         }
 
         @Override
@@ -190,7 +267,8 @@ public final class CBind<T>
                                                    final List<ITerm> p_return
         )
         {
-            final Object l_reference = p_context.getAgent().getStorage().get( m_storagename );
+            final Object l_reference = p_context.getAgent().getStorage().get(
+                    m_storagename != null ? m_storagename : CCommon.getRawValue( p_argument.get( 0 ) ) );
             if ( l_reference == null )
                 return CBoolean.from( false );
 

@@ -21,22 +21,54 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.bind;
+package lightjason.agent.action.buildin.generic.storage;
 
-import java.lang.reflect.Method;
+import lightjason.agent.action.buildin.IBuildinAction;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 
 /**
- * interface of method filtering
+ * storage default definitions
  */
-public interface IFilter
+public abstract class IStorage extends IBuildinAction
 {
 
     /**
-     * filter method
-     *
-     * @param p_method method object
-     * @return true field will be added, false method will be ignored
+     * set with forbidden keys
      */
-    boolean filter( final Method p_method );
+    protected final Set<String> m_forbidden;
+
+    /**
+     * ctor
+     */
+    protected IStorage()
+    {
+        super( 3 );
+        m_forbidden = Collections.<String>emptySet();
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden forbidden keys
+     */
+    protected IStorage( final Collection<String> p_fordbidden )
+    {
+        super( 3 );
+        m_forbidden = new ConcurrentSkipListSet( p_fordbidden );
+    }
+
+    /**
+     * returns the set with forbidden keys
+     *
+     * @return set with keys
+     */
+    public final Set<String> getForbiddenKeys()
+    {
+        return m_forbidden;
+    }
 }

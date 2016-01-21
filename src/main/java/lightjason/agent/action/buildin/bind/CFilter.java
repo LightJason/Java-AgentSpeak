@@ -23,6 +23,8 @@
 
 package lightjason.agent.action.buildin.bind;
 
+import lightjason.common.CReflection;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -30,7 +32,7 @@ import java.lang.reflect.Modifier;
 /**
  * class to filter methods *
  */
-public final class CFilter implements IFilter
+public final class CFilter implements CReflection.IFilter<Method>
 {
     @Override
     public final boolean filter( final Method p_method )
@@ -42,7 +44,7 @@ public final class CFilter implements IFilter
         return l_use && ( !(
                 Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
                         p_method.getModifiers()
-        ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
+                ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
     }
 
 }

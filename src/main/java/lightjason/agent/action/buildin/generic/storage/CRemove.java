@@ -23,7 +23,6 @@
 
 package lightjason.agent.action.buildin.generic.storage;
 
-import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
@@ -31,13 +30,15 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 
 /**
  * removes an element by name from the agent-storage
  */
-public final class CRemove extends IBuildinAction
+public final class CRemove extends IStorage
 {
 
     /**
@@ -45,7 +46,27 @@ public final class CRemove extends IBuildinAction
      */
     public CRemove()
     {
-        super( 1 );
+        super();
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CRemove( final String... p_forbidden )
+    {
+        super( Arrays.asList( p_forbidden ) );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden forbidden keys
+     */
+    public CRemove( final Collection<String> p_fordbidden )
+    {
+        super( p_fordbidden );
     }
 
     @Override
@@ -59,7 +80,12 @@ public final class CRemove extends IBuildinAction
                                                final List<ITerm> p_return
     )
     {
+        final String l_key = CCommon.getRawValue( p_argument.get( 0 ) );
+        if ( m_forbidden.contains( l_key ) )
+            return CBoolean.from( false );
+
         p_return.add( CRawTerm.from( p_context.getAgent().getStorage().remove( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
         return CBoolean.from( true );
     }
+
 }
