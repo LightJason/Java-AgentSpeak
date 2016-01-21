@@ -9,4 +9,6 @@ second(true).
         [H|I] = P;
         generic/print(A,B,C,  O,P,H,I);
 
+        bind/cbinding/first();
+
         !!drive.

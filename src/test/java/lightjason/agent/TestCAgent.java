@@ -25,6 +25,7 @@ package lightjason.agent;
 
 import com.google.common.collect.Multiset;
 import lightjason.agent.action.IAction;
+import lightjason.agent.action.buildin.bind.CBind;
 import lightjason.agent.action.buildin.bind.IActionBind;
 import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.language.CCommon;
@@ -66,8 +67,10 @@ public final class TestCAgent
         {
             l_map = CCommon.getActionsFromPackage( "lightjason.agent.action.buildin" ).stream().collect(
                     Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
+
+            l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );
         }
-        catch ( final IOException p_exception )
+        catch ( final IOException | IllegalAccessException p_exception )
         {
             l_map = Collections.emptyMap();
         }
@@ -168,6 +171,9 @@ public final class TestCAgent
 
 
 
+    /**
+     * super-class for testing binding action
+     */
     private static class CBindingSuper
     {
 
