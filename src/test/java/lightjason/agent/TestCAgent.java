@@ -70,7 +70,7 @@ public final class TestCAgent
 
             l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );
         }
-        catch ( final IOException | IllegalAccessException p_exception )
+        catch ( final IOException p_exception )
         {
             l_map = Collections.emptyMap();
         }
@@ -202,6 +202,16 @@ public final class TestCAgent
          */
         private final void first()
         {
+        }
+
+        /**
+         * overloaded
+         *
+         * @param p_value string value
+         */
+        private final void first( final String p_value )
+        {
+
         }
 
         /**

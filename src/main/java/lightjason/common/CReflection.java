@@ -23,6 +23,8 @@
 
 package lightjason.common;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.error.CIllegalArgumentException;
 
 import java.lang.invoke.MethodHandle;
@@ -31,8 +33,10 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -152,11 +156,12 @@ public final class CReflection
      * @param p_class class
      * @param p_filter filtering object
      * @return map with method name
-     * @todo check overloaded methods
+     *
+     * @note overloaded methods use equal method objects
      */
-    public static Map<String, CMethod> getClassMethods( final Class<?> p_class, final IFilter<Method> p_filter ) throws IllegalAccessException
+    public static Map<String, CMethod> getClassMethods( final Class<?> p_class, final IFilter<Method> p_filter )
     {
-        final Map<String, CMethod> l_methods = new HashMap<>();
+        final Multimap<String, Method> l_methods = HashMultimap.create();
         for ( Class<?> l_class = p_class; l_class != Object.class; l_class = l_class.getSuperclass() )
             for ( final Method l_method : l_class.getDeclaredMethods() )
             {
@@ -164,9 +169,22 @@ public final class CReflection
                 if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) )
                     continue;
 
-                l_methods.put( l_method.getName(), new CMethod( l_method ) );
+                l_methods.put( l_method.getName(), l_method );
             }
-        return l_methods;
+
+        return l_methods.asMap().entrySet().stream()
+                        .map( i -> {
+                            try
+                            {
+                                return new CMethod( i.getValue() );
+                            }
+                            catch ( final IllegalAccessException p_exception )
+                            {
+                                return null;
+                            }
+                        } )
+                        .filter( i -> i != null )
+                        .collect( Collectors.toMap( i -> i.getMethod().getName(), i -> i ) );
     }
 
 
@@ -283,6 +301,20 @@ public final class CReflection
             return m_setter != null;
         }
 
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( this.hashCode() == p_object.hashCode() )
+                   || ( m_field.hashCode() == p_object.hashCode() )
+                   || ( ( m_setter != null ) && ( m_setter.hashCode() == p_object.hashCode() ) )
+                   || ( ( m_getter != null ) && ( m_getter.hashCode() == p_object.hashCode() ) );
+        }
+
+        @Override
+        public final String toString()
+        {
+            return m_field.toString();
+        }
     }
 
 
@@ -300,6 +332,10 @@ public final class CReflection
          * method object *
          */
         private final Method m_method;
+        /**
+         * min number of arguments
+         */
+        private int m_minimalarguments;
 
         /**
          * ctor
@@ -308,8 +344,30 @@ public final class CReflection
          */
         public CMethod( final Method p_method ) throws IllegalAccessException
         {
+            this( p_method, p_method.getParameterCount() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_methods collection of equal methods (equal name)
+         */
+        public CMethod( final Collection<Method> p_methods ) throws IllegalAccessException
+        {
+            this( p_methods.iterator().next(), p_methods.stream().mapToInt( j -> j.getParameterCount() ).min().getAsInt() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_method method object
+         * @param p_minimalarguments minimal number of arguments
+         */
+        public CMethod( final Method p_method, final int p_minimalarguments ) throws IllegalAccessException
+        {
             m_method = p_method;
             m_handle = MethodHandles.lookup().unreflect( m_method );
+            m_minimalarguments = p_minimalarguments;
         }
 
         /**
@@ -332,6 +390,28 @@ public final class CReflection
             return m_method;
         }
 
+        /**
+         * returns the minimal number of arguments
+         *
+         * @return minimal argument number
+         */
+        public final int getMinimalArgumentNumber()
+        {
+            return m_minimalarguments;
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( m_method.hashCode() == p_object.hashCode() ) || ( m_handle.hashCode() == p_object.hashCode() ) ||
+                   ( this.hashCode() == p_object.hashCode() );
+        }
+
+        @Override
+        public final String toString()
+        {
+            return m_method.toString();
+        }
     }
 
 }
