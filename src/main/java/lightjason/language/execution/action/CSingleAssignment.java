@@ -61,9 +61,6 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
         m_righthand = p_righthand;
     }
 
-    /**
-     * @bug test-action return empty list
-     */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
                                                final List<ITerm> p_return

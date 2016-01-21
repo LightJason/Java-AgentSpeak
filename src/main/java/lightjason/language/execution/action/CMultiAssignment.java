@@ -44,8 +44,6 @@ import java.util.stream.IntStream;
 
 /**
  * assignment action of a multi-variable list
- *
- * @bug list unpack incomplete (flatmap)
  */
 public final class CMultiAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
 {

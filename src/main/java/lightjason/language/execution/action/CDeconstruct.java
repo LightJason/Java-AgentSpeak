@@ -42,8 +42,6 @@ import java.util.stream.Collectors;
 
 /**
  * deconstruct assignment
- *
- * @todo check right-hand-side if a variable can store a literal
  */
 public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVariable<?>>>
 {
