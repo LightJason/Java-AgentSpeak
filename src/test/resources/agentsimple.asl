@@ -3,7 +3,7 @@ second(true).
 
 +!drive
     <-
-        [A|B|C] = [1,2,3];
+        [A|B|C] = collection/list/range(1, 6);
 
         [O|P] =.. foo( blub(1), blah(3) );
         [H|I] = P;
