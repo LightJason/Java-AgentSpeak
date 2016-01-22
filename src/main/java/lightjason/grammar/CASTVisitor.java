@@ -53,7 +53,8 @@ import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.CAtom;
-import lightjason.language.execution.expression.CLogicBinary;
+import lightjason.language.execution.expression.CLogicalBinary;
+import lightjason.language.execution.expression.CLogicalUnary;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.unaryoperator.CDecrement;
@@ -1162,7 +1163,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                     : Collections.<IExpression>emptyList()
             );
 
-        //p_context.expression_logical_negation()
+        if ( p_context.expression_logical_negation() != null )
+            return this.visitExpression_logical_negation( p_context.expression_logical_negation() );
 
         //p_context.expression_numeric()
 
@@ -1182,7 +1184,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
                     : Collections.<IExpression>emptyList()
             );
 
-        //p_context.expression_logical_negation()
+        if ( p_context.expression_logical_negation() != null )
+            return this.visitExpression_logical_negation( p_context.expression_logical_negation() );
 
         //p_context.expression_numeric()
 
@@ -1194,13 +1197,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_logical_negation( final AgentParser.Expression_logical_negationContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CLogicalUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
 
     @Override
     public Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CLogicalUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
 
 
@@ -1445,7 +1448,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         // otherwise creare concat expression
         while ( l_expression.size() > 1 )
-            l_expression.add( 0, new CLogicBinary( p_operator, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
+            l_expression.add( 0, new CLogicalBinary( p_operator, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
 
         return l_expression.get( 0 );
     }

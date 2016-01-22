@@ -31,4 +31,5 @@ import lightjason.language.execution.IExecution;
  */
 public interface IExpression extends IExecution
 {
+
 }

@@ -40,6 +40,7 @@ public enum EOperator
     OR( "||" ),
     AND( "&&" ),
     XOR( "^" ),
+    NEGATION( "!" ),
 
     EQUAL( "==" ),
     NOTEQUAL( "\\==" ),
@@ -79,7 +80,7 @@ public enum EOperator
      */
     public final boolean isLogical()
     {
-        return ( this == AND ) || ( this == OR ) || ( this == XOR );
+        return ( this == AND ) || ( this == OR ) || ( this == XOR ) || ( this == NEGATION );
     }
 
     /**
@@ -119,6 +120,16 @@ public enum EOperator
      */
     public final boolean isBinary()
     {
-        return ( this != NOTEQUAL );
+        return this != NEGATION;
+    }
+
+    /**
+     * check of a unary operator
+     *
+     * @return boolean of unary operator
+     */
+    public final boolean isUnary()
+    {
+        return this == NEGATION;
     }
 }

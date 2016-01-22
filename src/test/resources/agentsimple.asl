@@ -9,7 +9,10 @@ second(true).
         [H|I] = P;
         generic/print(A,B,C,  O,P,H,I);
 
-        X = false && false;
+        X = true && false ^ true ;
+        generic/print(X);
+
+        X = !true;
         generic/print(X);
 
         // sequencial lambda expression

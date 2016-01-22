@@ -23,50 +23,36 @@
 
 package lightjason.language.execution.expression;
 
-import lightjason.agent.IAgent;
-import lightjason.language.CCommon;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 
 /**
- * atom expression
+ * logical unary expression
  */
-public class CAtom implements IExpression
+public final class CLogicalUnary extends IBaseUnary
 {
-    /**
-     * value
-     */
-    private final ITerm m_value;
 
     /**
      * ctor
      *
-     * @param p_value variable
+     * @param p_operator operator
+     * @param p_expression expression
      */
-    public CAtom( final IVariable<?> p_value )
+    public CLogicalUnary( final EOperator p_operator, final IExpression p_expression )
     {
-        m_value = p_value;
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_value any atomic value
-     */
-    public <T> CAtom( final T p_value )
-    {
-        m_value = CRawTerm.from( p_value );
+        super( p_operator, p_expression );
+        if ( !m_operator.isLogical() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notlogical", m_operator ) );
     }
 
     @Override
@@ -74,40 +60,22 @@ public class CAtom implements IExpression
                                                final List<ITerm> p_return
     )
     {
-        p_return.add( CRawTerm.from( CCommon.getRawValue( CCommon.replaceVariableFromContext( p_context, m_value ) ) ) );
-        return CBoolean.from( true );
+        final List<ITerm> l_argument = new LinkedList<>();
+        if ( ( !m_expression.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() ) ||
+             ( l_argument.size() != 1 ) )
+            return CBoolean.from( false );
+
+        switch ( m_operator )
+        {
+            case NEGATION:
+                p_return.add( CRawTerm.from(
+                        !lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                ) );
+                return CBoolean.from( true );
+
+            default:
+                return CBoolean.from( false );
+        }
     }
 
-    @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
-    {
-        return 0;
-    }
-
-    @Override
-    public final Set<IVariable<?>> getVariables()
-    {
-        return m_value instanceof IVariable<?> ? new HashSet<IVariable<?>>()
-        {{
-            add( ( (IVariable<?>) m_value ).clone() );
-        }} : Collections.<IVariable<?>>emptySet();
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_value.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return m_value.equals( p_object );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_value.toString();
-    }
 }

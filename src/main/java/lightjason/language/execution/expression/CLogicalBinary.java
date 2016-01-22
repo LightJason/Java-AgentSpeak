@@ -37,9 +37,9 @@ import java.util.List;
 
 
 /**
- * binary logical expression
+ * logical binary expression
  */
-public final class CLogicBinary extends IBinary
+public final class CLogicalBinary extends IBaseBinary
 {
 
     /**
@@ -49,11 +49,11 @@ public final class CLogicBinary extends IBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CLogicBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    public CLogicalBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-        if ( ( !m_operator.isLogical() ) || ( !m_operator.isBinary() ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "incorrect", m_operator ) );
+        if ( !m_operator.isLogical() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notlogical", m_operator ) );
     }
 
     @Override

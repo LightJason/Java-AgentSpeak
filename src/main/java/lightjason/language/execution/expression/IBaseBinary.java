@@ -24,6 +24,8 @@
 package lightjason.language.execution.expression;
 
 import lightjason.agent.IAgent;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.IVariable;
 import lightjason.language.score.IAggregation;
 
@@ -35,7 +37,7 @@ import java.util.Set;
 /**
  * binary expression
  */
-public abstract class IBinary implements IBinaryExpression
+public abstract class IBaseBinary implements IBinaryExpression
 {
     /**
      * expression operator
@@ -58,8 +60,11 @@ public abstract class IBinary implements IBinaryExpression
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    protected IBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    protected IBaseBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
     {
+        if ( !p_operator.isBinary() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( IBaseBinary.class, "notbinary", p_operator ) );
+
         m_operator = p_operator;
         m_lefthandside = p_lefthandside;
         m_righthandside = p_righthandside;

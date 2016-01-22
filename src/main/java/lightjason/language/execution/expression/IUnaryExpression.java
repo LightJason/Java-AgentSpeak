@@ -24,24 +24,17 @@
 package lightjason.language.execution.expression;
 
 /**
- * interface of any binary expression type
+ * interface of unary expressions
  */
-public interface IBinaryExpression extends IExpression
+public interface IUnaryExpression extends IExpression
 {
 
     /**
-     * returns the left-hand expression side
+     * returns the expression
      *
-     * @return left-hand-side
+     * @return expression
      */
-    IExpression getLeftHandSide();
-
-    /**
-     * returns the right-hand expression side
-     *
-     * @return right-hand-side
-     */
-    IExpression getRightHandSide();
+    IExpression getExpression();
 
     /**
      * return expression operator
