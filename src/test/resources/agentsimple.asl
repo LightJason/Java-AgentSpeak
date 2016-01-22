@@ -14,5 +14,9 @@ second(true).
         X = true || true;
         generic/print(X);
 
+        // sequencial lambda expression
+        (O) -> Y | generic/print(Y);
+        // parallel lambda expression
+        @(O) -> Y | { generic/print(Y); generic/print(O); };
 
         !!drive.

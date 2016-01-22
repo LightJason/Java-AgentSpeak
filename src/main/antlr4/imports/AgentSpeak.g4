@@ -73,7 +73,7 @@ plan :
  **/
 plandefinition :
     ( COLON plan_context )?
-    ARROW body
+    LEFTARROW body
     ;
 
 /**
@@ -185,7 +185,7 @@ body_formula :
     | assignment_expression
     | unary_expression
 
-    | for_loop
+    | lambda
     | if_else
     ;
 
@@ -369,21 +369,21 @@ block_formula :
     ;
 
 /**
- * for-loop
+ * lambda expression for iteration
  **/
-for_loop :
-    FOR LROUNDBRACKET for_loop_condition RROUNDBRACKET
-    block_formula
+lambda :
+    AT? lambda_initialization
+    RIGHTARROW variable
+    VLINE block_formula
     ;
 
 /**
- * loop-condition, term or variable is used by collection structure,
- * assignment structure of default behaviour
+ * initialization of lambda expression
  **/
-for_loop_condition :
-    term
-    | variable
-    | assignment_expression? SEMICOLON expression SEMICOLON assignment_expression?
+lambda_initialization :
+    LROUNDBRACKET
+    ( variable | term )
+    RROUNDBRACKET
     ;
 
 /**
@@ -431,7 +431,7 @@ literalset :
  **/
 variablelist :
     LANGULARBRACKET
-    variable (LISTSEPARATOR variable)*
+    variable ( VLINE variable )*
     RANGULARBRACKET
     ;
 

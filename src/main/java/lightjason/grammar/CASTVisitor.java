@@ -587,13 +587,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public Object visitFor_loop( final AgentParser.For_loopContext p_context )
+    public Object visitLambda( final AgentParser.LambdaContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitFor_loop( final PlanBundleParser.For_loopContext p_context )
+    public Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -601,13 +601,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public Object visitFor_loop_condition( final AgentParser.For_loop_conditionContext p_context )
+    public Object visitLambda_initialization( final AgentParser.Lambda_initializationContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitFor_loop_condition( final PlanBundleParser.For_loop_conditionContext p_context )
+    public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
     {
         return this.visitChildren( p_context );
     }

@@ -37,7 +37,8 @@ MINUSPLUS                  : '-+';
 DOUBLEEXCLAMATIONMARK      : '!!';
 QUESTIONMARK               : '?';
 
-ARROW                      : '<-';
+LEFTARROW                  : '<-';
+RIGHTARROW                 : '->';
 RULEOPERATOR               : ':-';
 AT                         : '@';
 COLON                      : ':';
@@ -48,7 +49,6 @@ SLASH                      : '/';
 
 IF                         : 'if';
 ELSE                       : 'else';
-FOR                        : 'for';
 
 PI                         : 'pi';
 EULER                      : 'euler';
@@ -85,7 +85,7 @@ INFINITY                   : 'infinity';
 /**
  * prolog list seperator for head-tail definition
  **/
-LISTSEPARATOR              : '|';
+VLINE                      : '|';
 
 /**
  * logical and-concationation (c-style)
