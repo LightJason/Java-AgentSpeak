@@ -281,8 +281,15 @@ unary_expression :
  * logical & numeric entry rule for or-expression
  **/
 expression :
-    LROUNDBRACKET expression RROUNDBRACKET
+    expression_bracket
     | expression_logic_and ( OR expression )*
+    ;
+
+/**
+ * bracket expression
+ **/
+expression_bracket :
+    LROUNDBRACKET expression RROUNDBRACKET
     ;
 
 /**

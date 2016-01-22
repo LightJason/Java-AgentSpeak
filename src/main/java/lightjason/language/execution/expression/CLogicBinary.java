@@ -31,6 +31,8 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -59,20 +61,34 @@ public final class CLogicBinary extends IBinary
                                                final List<ITerm> p_return
     )
     {
-        if ( p_argument.size() != 2 )
+        // run left- and right-hand-expression
+        final List<ITerm> l_argument = new LinkedList<>();
+        if ( !m_lefthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() )
+            return CBoolean.from( false );
+        if ( !m_righthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() )
+            return CBoolean.from( false );
+
+        if ( l_argument.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
 
+
+        // calculate return of both expression results
         switch ( m_operator )
         {
 
             case AND:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) ) &&
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) &&
+                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CBoolean.from( true );
 
             case OR:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) ) ||
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) ||
+                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                return CBoolean.from( true );
+
+            case XOR:
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) ^
+                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CBoolean.from( true );
 
             default:

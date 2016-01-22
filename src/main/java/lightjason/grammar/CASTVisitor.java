@@ -1067,14 +1067,36 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
-        // left-hand-side
-        //this.visitExpression_logic_and( p_context.expression_logic_and() )
+        // bracket expression
+        if ( p_context.expression_bracket() != null )
+            return this.visitExpression_bracket( p_context.expression_bracket() );
+
+        // if no or-expression exists, return child element
+        if ( p_context.expression().isEmpty() )
+            return this.visitChildren( p_context );
+
+        // or-expression exists, create expression definition
+        //new CLogicBinary( EOperator.OR, (IExpression) this.visitExpression_logic_and( p_context.expression_logic_and() ), null );
 
         return this.visitChildren( p_context );
     }
 
     @Override
     public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public final Object visitExpression_bracket( final AgentParser.Expression_bracketContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public final Object visitExpression_bracket( final PlanBundleParser.Expression_bracketContext p_context )
     {
         return this.visitChildren( p_context );
     }
