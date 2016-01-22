@@ -1075,28 +1075,19 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_bracket() != null )
             return this.visitExpression_bracket( p_context.expression_bracket() );
 
+        final List<IExpression> l_expression = p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                Collectors.toList() );
+        l_expression.add( 0, (IExpression) this.visitExpression_logic_and( p_context.expression_logic_and() ) );
+
         // if no or-expression exists, return child element
-        if ( ( p_context.expression() == null ) || ( p_context.expression().isEmpty() ) )
-            return this.visitExpression_logic_and( p_context.expression_logic_and() );
+        if ( l_expression.size() == 1 )
+            return l_expression.get( 0 );
 
-        // or-expression exists, create expression definition
-        final IExpression l_begin = new CLogicBinary(
-                EOperator.OR,
-                (IExpression) this.visitExpression_logic_and( p_context.expression_logic_and() ),
-                (IExpression) this.visitExpression( p_context.expression().remove( 0 ) )
-        );
-/*
-        for ( IExpression l_expression = l_begin; !p_context.expression().isEmpty(); )
-            l_expression = new CLogicBinary(
-                    EOperator.OR,
-                    l_expression,
-                    (IExpression) this.visitExpression( p_context.expression().remove( 0 ) )
-            );
-*/
+        // or-expression exists, create concated expression definition
+        while ( l_expression.size() > 1 )
+            l_expression.add( 0, new CLogicBinary( EOperator.OR, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
 
-        System.out.println( "----> " + l_begin );
-
-        return l_begin;
+        return l_expression.get( 0 );
     }
 
     @Override
