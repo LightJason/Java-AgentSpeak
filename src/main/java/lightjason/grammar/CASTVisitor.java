@@ -70,6 +70,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1075,25 +1076,33 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_bracket() != null )
             return this.visitExpression_bracket( p_context.expression_bracket() );
 
-        final List<IExpression> l_expression = p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
-                Collectors.toList() );
-        l_expression.add( 0, (IExpression) this.visitExpression_logic_and( p_context.expression_logic_and() ) );
-
-        // if no or-expression exists, return child element
-        if ( l_expression.size() == 1 )
-            return l_expression.get( 0 );
-
-        // or-expression exists, create concated expression definition
-        while ( l_expression.size() > 1 )
-            l_expression.add( 0, new CLogicBinary( EOperator.OR, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
-
-        return l_expression.get( 0 );
+        // or-expression
+        return this.createLogicalBinaryExpression(
+                EOperator.OR,
+                (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
+                p_context.expression() != null
+                ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                        Collectors.toList() )
+                : Collections.<IExpression>emptyList()
+        );
     }
 
     @Override
     public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
-        return this.visitChildren( p_context );
+        // bracket expression
+        if ( p_context.expression_bracket() != null )
+            return this.visitExpression_bracket( p_context.expression_bracket() );
+
+        // or-expression
+        return this.createLogicalBinaryExpression(
+                EOperator.OR,
+                (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
+                p_context.expression() != null
+                ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                        Collectors.toList() )
+                : Collections.<IExpression>emptyList()
+        );
     }
 
 
@@ -1113,15 +1122,71 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public Object visitExpression_logic_and( final AgentParser.Expression_logic_andContext p_context )
+    public Object visitExpression_logical_and( final AgentParser.Expression_logical_andContext p_context )
     {
-        return this.visitChildren( p_context );
+        return this.createLogicalBinaryExpression(
+                EOperator.AND,
+                (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),
+                p_context.expression() != null
+                ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                        Collectors.toList() )
+                : Collections.<IExpression>emptyList()
+        );
     }
 
     @Override
-    public Object visitExpression_logic_and( final PlanBundleParser.Expression_logic_andContext p_context )
+    public Object visitExpression_logical_and( final PlanBundleParser.Expression_logical_andContext p_context )
     {
-        return this.visitChildren( p_context );
+        return this.createLogicalBinaryExpression(
+                EOperator.AND,
+                (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),
+                p_context.expression() != null
+                ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                        Collectors.toList() )
+                : Collections.<IExpression>emptyList()
+        );
+    }
+
+
+
+    @Override
+    public Object visitExpression_logical_xor( final AgentParser.Expression_logical_xorContext p_context )
+    {
+        if ( p_context.expression_logical_element() != null )
+            return this.createLogicalBinaryExpression(
+                    EOperator.XOR,
+                    (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),
+                    p_context.expression() != null
+                    ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                            Collectors.toList() )
+                    : Collections.<IExpression>emptyList()
+            );
+
+        //p_context.expression_logical_negation()
+
+        //p_context.expression_numeric()
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicallefthandside", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitExpression_logical_xor( final PlanBundleParser.Expression_logical_xorContext p_context )
+    {
+        if ( p_context.expression_logical_element() != null )
+            return this.createLogicalBinaryExpression(
+                    EOperator.XOR,
+                    (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),
+                    p_context.expression() != null
+                    ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
+                            Collectors.toList() )
+                    : Collections.<IExpression>emptyList()
+            );
+
+        //p_context.expression_logical_negation()
+
+        //p_context.expression_numeric()
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicallefthandside", p_context.getText() ) );
     }
 
 
@@ -1353,6 +1418,36 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         // otherwise only simple types encapsulate
         return new CRawAction<>( p_item );
+    }
+
+    /**
+     * creates a logical expression concationation with single operator
+     *
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side expression
+     * @param p_righthandside right-hand-side expressions
+     * @return concat expression
+     */
+    protected IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
+                                                         final Collection<IExpression> p_righthandside
+    )
+    {
+        if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )
+            throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notbinarylogicoperator", p_operator ) );
+
+        final List<IExpression> l_expression = new LinkedList<>();
+        l_expression.add( p_lefthandside );
+        l_expression.addAll( p_righthandside );
+
+        // only left-hand-side is existing
+        if ( l_expression.size() == 1 )
+            return l_expression.get( 0 );
+
+        // otherwise creare concat expression
+        while ( l_expression.size() > 1 )
+            l_expression.add( 0, new CLogicBinary( p_operator, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
+
+        return l_expression.get( 0 );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

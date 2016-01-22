@@ -61,13 +61,19 @@ public final class CLogicBinary extends IBinary
                                                final List<ITerm> p_return
     )
     {
-        // run left- and right-hand-expression
+        // get left-hand-side argument and run fastcheck
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !m_lefthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() )
-            return CBoolean.from( false );
-        if ( !m_righthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() )
+        if ( ( !m_lefthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() ) ||
+             ( l_argument.isEmpty() ) )
             return CBoolean.from( false );
 
+        if ( this.fastCheck( l_argument, p_return ) )
+            return CBoolean.from( true );
+
+
+        // get right-hand-side argument
+        if ( !m_righthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() )
+            return CBoolean.from( false );
         if ( l_argument.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
 
@@ -94,6 +100,36 @@ public final class CLogicBinary extends IBinary
             default:
                 return CBoolean.from( false );
         }
+    }
+
+    /**
+     * run a fast check on boolean operators to stop execution
+     *
+     * @param p_argument argument list
+     * @param p_return modified return list
+     * @return boolean flag if fast check result value
+     */
+    private boolean fastCheck( final List<ITerm> p_argument, final List<ITerm> p_return )
+    {
+        final boolean l_result;
+        switch ( m_operator )
+        {
+            case AND:
+                l_result = !lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) );
+                break;
+
+            case OR:
+                l_result = lightjason.language.CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) );
+                break;
+
+            default:
+                l_result = false;
+        }
+
+        if ( l_result )
+            p_return.addAll( p_argument );
+
+        return l_result;
     }
 
 }

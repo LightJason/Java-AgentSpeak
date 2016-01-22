@@ -282,7 +282,7 @@ unary_expression :
  **/
 expression :
     expression_bracket
-    | expression_logic_and ( OR expression )*
+    | expression_logical_and ( OR expression )*
     ;
 
 /**
@@ -293,10 +293,17 @@ expression_bracket :
     ;
 
 /**
- * logical and- / xor-expression
+ * logical and-expression
  **/
-expression_logic_and :
-    ( expression_logical_element | expression_logical_negation | expression_numeric ) ( ( AND | XOR ) expression )*
+expression_logical_and :
+    expression_logical_xor ( AND expression )*
+    ;
+
+/**
+ * logical xor-expression
+ **/
+expression_logical_xor :
+    ( expression_logical_element | expression_logical_negation | expression_numeric ) ( XOR expression )*
     ;
 
 /**
