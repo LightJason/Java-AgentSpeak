@@ -23,12 +23,31 @@
 
 package lightjason.language.execution.expression;
 
-import lightjason.language.execution.IExecution;
-
-
 /**
- * expression interface
+ * interface of any expression type
  */
-public interface IExpression extends IExecution
+public interface IBinaryExpression extends IExpression
 {
+
+    /**
+     * returns the left-hand expression side
+     *
+     * @return left-hand-side
+     */
+    IExpression getLeftHandSide();
+
+    /**
+     * returns the right-hand expression side
+     *
+     * @return right-hand-side
+     */
+    IExpression getRightHandSide();
+
+    /**
+     * return expression operator
+     *
+     * @return operator
+     */
+    EOperator getOperator();
+
 }

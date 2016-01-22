@@ -52,6 +52,10 @@ import lightjason.language.execution.annotation.CAtomAnnotation;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.execution.expression.CAtom;
+import lightjason.language.execution.expression.CLogicBinary;
+import lightjason.language.execution.expression.EOperator;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.unaryoperator.CDecrement;
 import lightjason.language.execution.unaryoperator.CIncrement;
 import lightjason.language.plan.CPlan;
@@ -1072,13 +1076,27 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return this.visitExpression_bracket( p_context.expression_bracket() );
 
         // if no or-expression exists, return child element
-        if ( p_context.expression().isEmpty() )
-            return this.visitChildren( p_context );
+        if ( ( p_context.expression() == null ) || ( p_context.expression().isEmpty() ) )
+            return this.visitExpression_logic_and( p_context.expression_logic_and() );
 
         // or-expression exists, create expression definition
-        //new CLogicBinary( EOperator.OR, (IExpression) this.visitExpression_logic_and( p_context.expression_logic_and() ), null );
+        final IExpression l_begin = new CLogicBinary(
+                EOperator.OR,
+                (IExpression) this.visitExpression_logic_and( p_context.expression_logic_and() ),
+                (IExpression) this.visitExpression( p_context.expression().remove( 0 ) )
+        );
+/*
+        for ( IExpression l_expression = l_begin; !p_context.expression().isEmpty(); )
+            l_expression = new CLogicBinary(
+                    EOperator.OR,
+                    l_expression,
+                    (IExpression) this.visitExpression( p_context.expression().remove( 0 ) )
+            );
+*/
 
-        return this.visitChildren( p_context );
+        System.out.println( "----> " + l_begin );
+
+        return l_begin;
     }
 
     @Override
@@ -1135,13 +1153,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
     {
         if ( p_context.logicalvalue() != null )
-            return this.visitLogicalvalue( p_context.logicalvalue() );
+            return new CAtom( this.visitLogicalvalue( p_context.logicalvalue() ) );
 
         if ( p_context.variable() != null )
-            return this.visitVariable( p_context.variable() );
+            return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
-            return this.createExecution( p_context.literal() );
+        //if ( p_context.literal() != null )
+        //    return this.createExecution( p_context.literal() );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicalelement", p_context.getText() ) );
     }
@@ -1150,13 +1168,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
     {
         if ( p_context.logicalvalue() != null )
-            return this.visitLogicalvalue( p_context.logicalvalue() );
+            return new CAtom( this.visitLogicalvalue( p_context.logicalvalue() ) );
 
         if ( p_context.variable() != null )
-            return this.visitVariable( p_context.variable() );
+            return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
-            return this.createExecution( p_context.literal() );
+        //if ( p_context.literal() != null )
+        //    return this.createExecution( p_context.literal() );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicalelement", p_context.getText() ) );
     }

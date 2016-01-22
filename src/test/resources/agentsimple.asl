@@ -11,4 +11,8 @@ second(true).
 
         bind/cbinding/first();
 
+        X = true || true;
+        generic/print(X);
+
+
         !!drive.

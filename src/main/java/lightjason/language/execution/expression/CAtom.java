@@ -24,63 +24,58 @@
 package lightjason.language.execution.expression;
 
 import lightjason.agent.IAgent;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
+import lightjason.language.ITerm;
 import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
-import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 /**
- * binary expression
+ * atom expression
  */
-public abstract class IBinary implements IBinaryExpression
+public class CAtom implements IExpression
 {
     /**
-     * expression operator
+     * value
      */
-    protected final EOperator m_operator;
-    /**
-     * left-hand-side argument
-     */
-    protected final IExpression m_lefthandside;
-    /**
-     * right-hand-side argument
-     */
-    protected final IExpression m_righthandside;
-
+    private final ITerm m_value;
 
     /**
      * ctor
      *
-     * @param p_operator operator
-     * @param p_lefthandside left-hand-side argument
-     * @param p_righthandside right-hand-side
+     * @param p_value variable
      */
-    protected IBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    public CAtom( final IVariable<?> p_value )
     {
-        m_operator = p_operator;
-        m_lefthandside = p_lefthandside;
-        m_righthandside = p_righthandside;
+        m_value = p_value;
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value any atomic value
+     */
+    public <T> CAtom( final T p_value )
+    {
+        m_value = CRawTerm.from( p_value );
     }
 
     @Override
-    public final IExpression getLeftHandSide()
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
+    )
     {
-        return m_lefthandside;
-    }
-
-    @Override
-    public final IExpression getRightHandSide()
-    {
-        return m_righthandside;
-    }
-
-    @Override
-    public final EOperator getOperator()
-    {
-        return m_operator;
+        p_return.add( CCommon.getRawValue( CCommon.replaceVariableFromContext( p_context, m_value ) ) );
+        return CBoolean.from( true );
     }
 
     @Override
@@ -90,30 +85,29 @@ public abstract class IBinary implements IBinaryExpression
     }
 
     @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return m_value instanceof IVariable<?> ? new HashSet<IVariable<?>>()
+        {{
+            add( ( (IVariable<?>) m_value ).clone() );
+        }} : Collections.<IVariable<?>>emptySet();
+    }
+
+    @Override
     public final int hashCode()
     {
-        return m_lefthandside.hashCode() + m_righthandside.hashCode() + m_operator.hashCode();
+        return m_value.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return this.hashCode() == p_object.hashCode();
+        return m_value.equals( p_object );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} {1} {2}", m_lefthandside, m_operator, m_righthandside );
-    }
-
-    @Override
-    public final Set<IVariable<?>> getVariables()
-    {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_lefthandside.getVariables() );
-            addAll( m_righthandside.getVariables() );
-        }};
+        return m_value.toString();
     }
 }
