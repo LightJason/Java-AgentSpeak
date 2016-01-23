@@ -98,7 +98,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
      */
     private CBoolean getTypedResult( final IVariable<?> p_value, final List<ITerm> p_return, final IContext<?> p_context )
     {
-        final IVariable<?> l_value = (IVariable<?>) CCommon.replaceVariableFromContext( p_context, p_value );
+        final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_value );
 
         if ( !l_value.isAllocated() )
             return CBoolean.from( false );

@@ -67,7 +67,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
                                                final List<ITerm> p_annotation
     )
     {
-        this.set( CCommon.replaceVariableFromContext( p_context, m_value ), CCommon.getRawValue( m_righthand ) );
+        this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.getRawValue( m_righthand ) );
         return CBoolean.from( true );
     }
 

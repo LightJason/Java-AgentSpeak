@@ -74,7 +74,7 @@ public class CAtom implements IExpression
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.getRawValue( CCommon.replaceVariableFromContext( p_context, m_value ) ) ) );
+        p_return.add( CRawTerm.from( CCommon.getRawValue( CCommon.replaceFromContext( p_context, m_value ) ) ) );
         return CBoolean.from( true );
     }
 

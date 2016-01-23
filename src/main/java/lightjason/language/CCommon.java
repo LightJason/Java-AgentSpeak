@@ -101,9 +101,9 @@ public final class CCommon
      * @param p_terms replacing term list
      * @return result term list
      */
-    public static List<ITerm> replaceVariableFromContext( final IContext<?> p_context, final Collection<? extends ITerm> p_terms )
+    public static List<ITerm> replaceFromContext( final IContext<?> p_context, final Collection<? extends ITerm> p_terms )
     {
-        return p_terms.stream().map( i -> replaceVariableFromContext( p_context, i ) ).collect( Collectors.toList() );
+        return p_terms.stream().map( i -> replaceFromContext( p_context, i ) ).collect( Collectors.toList() );
     }
 
     /**
@@ -114,7 +114,7 @@ public final class CCommon
      * @param p_term term
      * @return replaces variable object
      */
-    public static ITerm replaceVariableFromContext( final IContext<?> p_context, final ITerm p_term )
+    public static ITerm replaceFromContext( final IContext<?> p_context, final ITerm p_term )
     {
         if ( !( p_term instanceof IVariable<?> ) )
             return p_term;

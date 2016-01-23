@@ -72,7 +72,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
         if ( ( !l_rightreturn.getValue() ) || ( l_return.isEmpty() ) )
             return CBoolean.from( false );
 
-        ( (IVariable<?>) CCommon.replaceVariableFromContext( p_context, m_value ) ).set( CCommon.getRawValue( l_return.get( 0 ) ) );
+        ( (IVariable<?>) CCommon.replaceFromContext( p_context, m_value ) ).set( CCommon.getRawValue( l_return.get( 0 ) ) );
         return CBoolean.from( true );
     }
 

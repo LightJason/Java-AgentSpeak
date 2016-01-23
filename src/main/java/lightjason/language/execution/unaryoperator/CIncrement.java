@@ -70,7 +70,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
                                                final List<ITerm> p_annotation
     )
     {
-        final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable ) ).throwNotAllocated();
+        final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceFromContext( p_context, m_variable ) ).throwNotAllocated();
 
         if ( l_variable.isValueAssignableTo( Double.class ) )
             l_variable.set( (T) new Double( l_variable.get().doubleValue() + 1 ) );

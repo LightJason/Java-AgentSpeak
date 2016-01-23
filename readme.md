@@ -62,6 +62,7 @@ with a fuzzy-based logical calculus. Agent execution based on a mathematical str
     * _Failrun_ stores the number of fail runs
     * _Successrun_ stores the number of successful runs
     * _Runs_ number of runs of the plan (fail + successful runs)
+    * _Cycle_ agent-cycle number
     
 #### <a name="fuzzy">Fuzziness</a>
 
@@ -235,7 +236,6 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ### <a name="buildinbelief">Build-in Beliefs</a>
 
-* ```my/cycle``` current agent cylce, generates no event
 * ```my/awake``` exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
 * ```my/size/beliefbase``` number of beliefs within the current beliefbase, generates no event
 * ```my/size/planbase``` number of plans, generates no event

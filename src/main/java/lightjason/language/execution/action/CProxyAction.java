@@ -337,7 +337,7 @@ public final class CProxyAction implements IExecution
          */
         private List<ITerm> subexecute( final IContext<?> p_context, final Map<Integer, IExecution> p_execution )
         {
-            return Collections.unmodifiableList( lightjason.language.CCommon.replaceVariableFromContext(
+            return Collections.unmodifiableList( lightjason.language.CCommon.replaceFromContext(
                     p_context,
                     ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
                             .flatMap( i -> {

@@ -65,6 +65,7 @@ public final class CLogicalUnary extends IBaseUnary
              ( l_argument.size() != 1 ) )
             return CBoolean.from( false );
 
+
         switch ( m_operator )
         {
             case NEGATION:
