@@ -43,6 +43,7 @@ import lightjason.language.execution.action.CAchievementGoal;
 import lightjason.language.execution.action.CBarrier;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
+import lightjason.language.execution.action.CLambdaExpression;
 import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
@@ -591,13 +592,23 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitLambda( final AgentParser.LambdaContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CLambdaExpression(
+                p_context.AT() != null,
+                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
+                (IVariable<?>) this.visitVariable( p_context.variable() ),
+                (IExecution) this.visitBlock_formula( p_context.block_formula() )
+        );
     }
 
     @Override
     public Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
-        return this.visitChildren( p_context );
+        return new CLambdaExpression(
+                p_context.AT() != null,
+                (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
+                (IVariable<?>) this.visitVariable( p_context.variable() ),
+                (IExecution) this.visitBlock_formula( p_context.block_formula() )
+        );
     }
 
 
@@ -605,13 +616,25 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitLambda_initialization( final AgentParser.Lambda_initializationContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.variable() != null )
+            return this.createExecution( this.visitVariable( p_context.variable() ) );
+
+        if ( p_context.term() != null )
+            return this.createExecution( this.visitTerm( p_context.term() ) );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "lambdainitialization", p_context.getText() ) );
     }
 
     @Override
     public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.variable() != null )
+            return this.createExecution( this.visitVariable( p_context.variable() ) );
+
+        if ( p_context.term() != null )
+            return this.createExecution( this.visitTerm( p_context.term() ) );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "lambdainitialization", p_context.getText() ) );
     }
 
 
