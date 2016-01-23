@@ -26,6 +26,7 @@ package lightjason.beliefbase;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
@@ -140,9 +141,9 @@ public class CMask implements IMask
     }
 
     @Override
-    public void update()
+    public void update( final IAgent p_agent )
     {
-        m_beliefbase.update();
+        m_beliefbase.update( p_agent );
     }
 
     @Override

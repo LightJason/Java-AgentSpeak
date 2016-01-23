@@ -171,7 +171,7 @@ public class CAgent implements IAgent
     public IAgent call() throws Exception
     {
         // run beliefbase update, because environment can be changed
-        m_beliefbase.update();
+        m_beliefbase.update( this );
         if ( m_hibernate )
             // check wakup-event otherwise suspend
             return this;

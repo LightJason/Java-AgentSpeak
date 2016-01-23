@@ -25,6 +25,7 @@ package lightjason.beliefbase;
 
 
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.IAgent;
 
 import java.util.Map;
 
@@ -75,8 +76,10 @@ public interface IStorage<N, M>
 
     /**
      * updates all items
+     *
+     * @param p_agent agent which calls the update
      */
-    void update();
+    void update( final IAgent p_agent );
 
     /**
      * number of all elements

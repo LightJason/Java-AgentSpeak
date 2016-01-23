@@ -21,53 +21,62 @@
  * @endcond
  */
 
-package lightjason.language.execution;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import lightjason.agent.IAgent;
+import cern.colt.matrix.DoubleMatrix2D;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
- * internal execution interface
+ * assigns a value or matrix to all elements
  */
-public interface IExecution
+public final class CAssign extends IBuildinAction
 {
 
     /**
-     * defines a plan-body operation
-     *
-     * @param p_context current execution context
-     * @param p_parallel parallel execution
-     * @param p_argument parameter of the action
-     * @param p_return return values
-     * @param p_annotation annotation    @return fuzzy boolean
+     * ctor
      */
-    IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                  final List<ITerm> p_annotation
-    );
+    public CAssign()
+    {
+        super( 4 );
+    }
 
-    /**
-     * returns the scoring value of the execution structure
-     *
-     * @param p_aggregate aggregation function
-     * @param p_agent agent for which calculates the score value
-     * @return score value
-     */
-    double score( final IAggregation p_aggregate, final IAgent p_agent );
+    @Override
+    public final int getMinimalArgumentNumber()
+    {
+        return 2;
+    }
 
-    /**
-     * returns a map with all used variables
-     *
-     * @return variable map
-     *
-     * @warning must create an individual / local set, because
-     * variables will be instantiate locally, so variables must be cloned
-     */
-    Set<IVariable<?>> getVariables();
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        // first argument must be a term with a matrix object, second assign value
+        final DoubleMatrix2D l_matrix = CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) );
+        final Object l_value = CCommon.getRawValue( p_argument.get( 1 ) );
+
+        if ( l_value instanceof Double )
+        {
+            p_return.add( CRawTerm.from( l_matrix.assign( (Double) l_value ) ) );
+            return CBoolean.from( true );
+        }
+
+        if ( l_value instanceof DoubleMatrix2D )
+        {
+            p_return.add( CRawTerm.from( l_matrix.assign( (DoubleMatrix2D) l_value ) ) );
+            return CBoolean.from( true );
+        }
+
+        return CBoolean.from( false );
+    }
 }

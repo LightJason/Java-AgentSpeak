@@ -21,53 +21,57 @@
  * @endcond
  */
 
-package lightjason.language.execution;
+package lightjason.agent.action.buildin.collection.list;
 
-import lightjason.agent.IAgent;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 
 /**
- * internal execution interface
+ * returns an unique list of the list
  */
-public interface IExecution
+public final class CUnique extends IBuildinAction
 {
-
     /**
-     * defines a plan-body operation
-     *
-     * @param p_context current execution context
-     * @param p_parallel parallel execution
-     * @param p_argument parameter of the action
-     * @param p_return return values
-     * @param p_annotation annotation    @return fuzzy boolean
+     * ctor
      */
-    IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                  final List<ITerm> p_annotation
-    );
+    public CUnique()
+    {
+        super( 3 );
+    }
 
-    /**
-     * returns the scoring value of the execution structure
-     *
-     * @param p_aggregate aggregation function
-     * @param p_agent agent for which calculates the score value
-     * @return score value
-     */
-    double score( final IAggregation p_aggregate, final IAgent p_agent );
+    @Override
+    public final int getMinimalArgumentNumber()
+    {
+        return 1;
+    }
 
-    /**
-     * returns a map with all used variables
-     *
-     * @return variable map
-     *
-     * @warning must create an individual / local set, because
-     * variables will be instantiate locally, so variables must be cloned
-     */
-    Set<IVariable<?>> getVariables();
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        // first argument list reference
+        p_return.add(
+                CRawTerm.from(
+                        p_parallel
+                        ? Collections.synchronizedList( new LinkedList<>( new HashSet<>( CCommon.<Collection<?>, ITerm>getRawValue( p_argument.get( 0 ) ) ) ) )
+                        : new LinkedList<>( new HashSet<>( CCommon.<Collection<?>, ITerm>getRawValue( p_argument.get( 0 ) ) ) )
+                )
+        );
+
+        return CBoolean.from( true );
+    }
+
 }

@@ -24,6 +24,7 @@
 package lightjason.beliefbase;
 
 
+import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
@@ -121,10 +122,10 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final void update()
+    public final void update( final IAgent p_agent )
     {
-        m_storage.update();
-        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update() );
+        m_storage.update( p_agent );
+        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
     }
 
     @Override

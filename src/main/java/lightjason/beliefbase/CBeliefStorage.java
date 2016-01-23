@@ -27,6 +27,7 @@ package lightjason.beliefbase;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+import lightjason.agent.IAgent;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public void update()
+    public void update( final IAgent p_agent )
     {
     }
 
