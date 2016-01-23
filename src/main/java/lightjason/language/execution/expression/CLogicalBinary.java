@@ -57,13 +57,13 @@ public final class CLogicalBinary extends IBaseBinary
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
         // get left-hand-side argument and run fastcheck
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_lefthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() ) ||
+        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
              ( l_argument.isEmpty() ) )
             return CBoolean.from( false );
 
@@ -72,7 +72,7 @@ public final class CLogicalBinary extends IBaseBinary
 
 
         // get right-hand-side argument
-        if ( !m_righthandside.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() )
+        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
             return CBoolean.from( false );
         if ( l_argument.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );

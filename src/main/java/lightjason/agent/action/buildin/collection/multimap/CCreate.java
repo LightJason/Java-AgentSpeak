@@ -55,11 +55,11 @@ public final class CCreate extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( Multimaps.synchronizedSetMultimap( HashMultimap.create() ) ) );
+        p_return.add( CRawTerm.from( p_parallel ? Multimaps.synchronizedSetMultimap( HashMultimap.create() ) : HashMultimap.create() ) );
         return CBoolean.from( true );
     }
 

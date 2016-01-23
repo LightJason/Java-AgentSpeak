@@ -133,8 +133,8 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
@@ -143,7 +143,7 @@ public class CPlan implements IPlan
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
                   : m_action.stream()
-                ).map( i -> i.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), new LinkedList<>() ) )
+                ).map( i -> i.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
                  .allMatch( CBoolean.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );

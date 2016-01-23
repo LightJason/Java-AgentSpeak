@@ -56,12 +56,12 @@ public final class CLogicalUnary extends IBaseUnary
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_expression.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_argument ).getValue() ) ||
+        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
              ( l_argument.size() != 1 ) )
             return CBoolean.from( false );
 

@@ -66,8 +66,8 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context,
-                                               final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+                                               final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
         final IVariable<T> l_variable = ( (IVariable<T>) lightjason.language.CCommon.replaceVariableFromContext( p_context, m_variable ) ).throwNotAllocated();

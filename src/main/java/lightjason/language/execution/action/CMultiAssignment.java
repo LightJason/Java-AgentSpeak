@@ -65,12 +65,12 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
         final List<ITerm> l_result = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), l_result ).getValue() ) ||
+        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result, Collections.<ITerm>emptyList() ).getValue() ) ||
              ( l_result.isEmpty() ) )
             return CBoolean.from( false );
 

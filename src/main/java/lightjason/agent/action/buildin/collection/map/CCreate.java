@@ -30,6 +30,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,11 +55,11 @@ public final class CCreate extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final List<ITerm> p_annotation, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( new ConcurrentHashMap<>() ) );
+        p_return.add( CRawTerm.from( p_parallel ? new ConcurrentHashMap<>() : new HashMap<>() ) );
         return CBoolean.from( true );
     }
 
