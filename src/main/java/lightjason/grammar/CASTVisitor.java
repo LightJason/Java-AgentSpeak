@@ -54,6 +54,7 @@ import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.CAtom;
+import lightjason.language.execution.expression.CComparableBinary;
 import lightjason.language.execution.expression.CLogicalBinary;
 import lightjason.language.execution.expression.CLogicalUnary;
 import lightjason.language.execution.expression.EOperator;
@@ -1189,7 +1190,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_logical_negation() != null )
             return this.visitExpression_logical_negation( p_context.expression_logical_negation() );
 
-        //p_context.expression_numeric()
+        if ( p_context.expression_numeric() != null )
+            return this.visitExpression_numeric( p_context.expression_numeric() );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicallefthandside", p_context.getText() ) );
     }
@@ -1210,7 +1212,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_logical_negation() != null )
             return this.visitExpression_logical_negation( p_context.expression_logical_negation() );
 
-        //p_context.expression_numeric()
+        if ( p_context.expression_numeric() != null )
+            return this.visitExpression_numeric( p_context.expression_numeric() );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicallefthandside", p_context.getText() ) );
     }
@@ -1266,13 +1269,27 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_numeric( final AgentParser.Expression_numericContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
+
+        return new CComparableBinary(
+                p_context.EQUAL() != null ? EOperator.EQUAL : EOperator.NOTEQUAL,
+                (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
+                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+        );
     }
 
     @Override
     public Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
+
+        return new CComparableBinary(
+                p_context.EQUAL() != null ? EOperator.EQUAL : EOperator.NOTEQUAL,
+                (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
+                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+        );
     }
 
 
@@ -1338,13 +1355,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     {
 
         if ( p_context.number() != null )
-            return this.visitNumber( p_context.number() );
+            return new CAtom( this.visitNumber( p_context.number() ) );
 
         if ( p_context.variable() != null )
-            return this.visitVariable( p_context.variable() );
+            return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
-            return this.createExecution( p_context.literal() );
+        //if ( p_context.literal() != null )
+        //    return this.createExecution( p_context.literal() );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notnumericelement", p_context.getText() ) );
     }
@@ -1353,13 +1370,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
     {
         if ( p_context.number() != null )
-            return this.visitNumber( p_context.number() );
+            return new CAtom( this.visitNumber( p_context.number() ) );
 
         if ( p_context.variable() != null )
-            return this.visitVariable( p_context.variable() );
+            return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
-            return this.createExecution( p_context.literal() );
+        //if ( p_context.literal() != null )
+        //    return this.createExecution( p_context.literal() );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notnumericelement", p_context.getText() ) );
     }

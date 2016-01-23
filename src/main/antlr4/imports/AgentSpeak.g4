@@ -326,35 +326,35 @@ expression_logical_negation :
  * numerical entry rule for equal expression
  **/
 expression_numeric :
-    expression_numeric_relation ( (EQUAL | NOTEQUAL) expression_numeric )*
+    expression_numeric_relation ( (EQUAL | NOTEQUAL) expression_numeric )?
     ;
 
 /**
  * relation expression
  **/
 expression_numeric_relation :
-    expression_numeric_additive ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL) expression_numeric )*
+    expression_numeric_additive ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL) expression_numeric )?
     ;
 
 /**
  * numeric addition-expression
  **/
 expression_numeric_additive :
-    expression_numeric_multiplicative ( (PLUS | MINUS) expression_numeric )*
+    expression_numeric_multiplicative ( (PLUS | MINUS) expression_numeric )?
     ;
 
 /**
  * numeric multiply-expression
  **/
 expression_numeric_multiplicative :
-    expression_numeric_pow ( (SLASH | MODULO | MULTIPLY ) expression_numeric )*
+    expression_numeric_pow ( (SLASH | MODULO | MULTIPLY ) expression_numeric )?
     ;
 
 /**
  * numeric pow-expression
  **/
 expression_numeric_pow :
-    expression_numeric_element ( POW expression_numeric )*
+    expression_numeric_element ( POW expression_numeric )?
     ;
 
 /**

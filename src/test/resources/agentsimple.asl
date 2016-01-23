@@ -3,21 +3,24 @@ second(true).
 
 +!drive
     <-
+    /*
         [A|B|C] = collection/list/range(1, 6);
 
         [O|P] =.. foo( blub(1), blah(3) );
         [H|I] = P;
         generic/print(A,B,C,  O,P,H,I);
+        */
 
-        X = true && false ^ true ;
+        X = true;
+        //X = !X;
         generic/print(X);
 
-        X = !true;
-        generic/print(X);
+        Z = 3 == 3;
+        generic/print(Z);
 
         // sequencial lambda expression
-        // (O) -> Y | generic/print(Y);
+        // (O) -> Y | generic/print(Y)
         // parallel lambda expression
-        // @(O) -> Y | { generic/print(Y); generic/print(O); };
+        // @(O) -> Y | { generic/print(Y); generic/print(O); }
 
-        !!drive.
+        .
