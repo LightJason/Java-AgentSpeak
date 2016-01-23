@@ -15,7 +15,7 @@ second(true).
         //X = !X;
         generic/print(X);
 
-        Z = 3 == 3;
+        Z = 3 < 4;
         generic/print(Z);
 
         // sequencial lambda expression

@@ -57,6 +57,7 @@ import lightjason.language.execution.expression.CAtom;
 import lightjason.language.execution.expression.CComparableBinary;
 import lightjason.language.execution.expression.CLogicalBinary;
 import lightjason.language.execution.expression.CLogicalUnary;
+import lightjason.language.execution.expression.CRelationalBinary;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.unaryoperator.CDecrement;
@@ -1297,13 +1298,75 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_numeric_relation( final AgentParser.Expression_numeric_relationContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
+
+        if ( p_context.GREATER() != null )
+            return new CRelationalBinary(
+                    EOperator.GREATER,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.GREATEREQUAL() != null )
+            return new CRelationalBinary(
+                    EOperator.GREATEREQUAL,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.LESS() != null )
+            return new CRelationalBinary(
+                    EOperator.LESS,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.LESSEQUAL() != null )
+            return new CRelationalBinary(
+                    EOperator.LESSEQUAL,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "relationaloperator", p_context.getText() ) );
     }
 
     @Override
     public Object visitExpression_numeric_relation( final PlanBundleParser.Expression_numeric_relationContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
+
+        if ( p_context.GREATER() != null )
+            return new CRelationalBinary(
+                    EOperator.GREATER,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.GREATEREQUAL() != null )
+            return new CRelationalBinary(
+                    EOperator.GREATEREQUAL,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.LESS() != null )
+            return new CRelationalBinary(
+                    EOperator.LESS,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.LESSEQUAL() != null )
+            return new CRelationalBinary(
+                    EOperator.LESSEQUAL,
+                    (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "relationaloperator", p_context.getText() ) );
     }
 
 
