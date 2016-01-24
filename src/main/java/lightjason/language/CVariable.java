@@ -92,16 +92,13 @@ public class CVariable<T> implements IVariable<T>
     {
         m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );
         m_functor = p_functor;
-        this.set( p_value );
+        this.internalset( p_value );
     }
 
     @Override
     public IVariable<T> set( final T p_value )
     {
-        if ( !m_any )
-            // value can be a raw-term (depend on AST access), so unpack a raw-term to the native value
-            m_value = CCommon.getRawValue( p_value );
-        return this;
+        return this.internalset( p_value );
     }
 
     @Override
@@ -188,5 +185,19 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> clone()
     {
         return new CVariable<T>( m_functor.toString(), m_value );
+    }
+
+    /**
+     * internel set for avoid any exception throwing
+     *
+     * @param p_value value
+     * @return self reference
+     */
+    protected final IVariable<T> internalset( final T p_value )
+    {
+        // value must be set manually to avoid exception throwing (see CVariable.set)
+        if ( !m_any )
+            m_value = lightjason.language.CCommon.getRawValue( p_value );
+        return this;
     }
 }

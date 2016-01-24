@@ -3,6 +3,8 @@ second(true).
 
 +!drive
     <-
+        generic/print(Score, Cycle);
+
         [A|B|C] = collection/list/range(1, 6);
 
         [O|P] =.. foo( blub(1), blah(3) );

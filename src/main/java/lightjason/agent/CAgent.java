@@ -30,7 +30,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IMask;
+import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -40,6 +42,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -186,11 +189,25 @@ public class CAgent implements IAgent
         m_plans.values().stream().forEach( i -> {
 
             System.out.println( "=====>> " + i + " ===\n" );
-            System.out.println( "Score " + i.score( m_aggregation, this ) + "\n" );
             System.out.println(
                     "\n--> "
                     + i.execute(
-                            new CContext<>( this, i, i.getVariables(),
+                            new CContext<>( this, i,
+                                            Collections.unmodifiableSet(
+                                                    new HashSet<IVariable<?>>()
+                                                    {{
+                                                        addAll( i.getVariables() );
+
+                                                        // remove all internal values if exist and add a new reference
+                                                        Arrays.stream( new IVariable<?>[]{
+                                                                new CConstant<>( "Score", i.score( m_aggregation, CAgent.this ) ),
+                                                                new CConstant<>( "Cycle", CAgent.this.m_cycle )
+                                                        } ).forEach( i -> {
+                                                            remove( i );
+                                                            add( i );
+                                                        } );
+                                                    }}
+                                            ),
                                             Collections.unmodifiableMap( new HashMap<>() )
                             ), null, null, null, null
                     )
