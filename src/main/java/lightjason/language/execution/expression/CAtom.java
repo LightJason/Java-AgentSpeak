@@ -52,22 +52,14 @@ public class CAtom implements IExpression
     /**
      * ctor
      *
-     * @param p_value variable
-     */
-    public CAtom( final IVariable<?> p_value )
-    {
-        m_value = p_value;
-    }
-
-    /**
-     * ctor
-     *
      * @param p_value any atomic value
      */
+    @SuppressWarnings( "unchecked" )
     public <T> CAtom( final T p_value )
     {
-        m_value = CRawTerm.from( p_value );
+        m_value = ( p_value instanceof IVariable<?> ) ? (IVariable<?>) p_value : CRawTerm.from( p_value );
     }
+
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,

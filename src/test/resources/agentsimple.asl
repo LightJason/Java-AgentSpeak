@@ -12,10 +12,11 @@ second(true).
         */
 
         X = true;
-        //X = !X;
+        X = !X;
         generic/print(X);
 
         Z = 4 ** 0.5;
+        Z = 100 * Z;
         generic/print(Z);
 
         // sequencial lambda expression
