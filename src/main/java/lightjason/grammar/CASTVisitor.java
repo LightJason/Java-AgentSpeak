@@ -501,7 +501,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).collect(
+        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).filter(
+                i -> i != null ).collect(
                 Collectors.toList() );
     }
 
@@ -509,7 +510,8 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).collect(
+        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).filter(
+                i -> i != null ).collect(
                 Collectors.toList() );
     }
 
@@ -1642,7 +1644,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         }
 
         // otherwise only simple types encapsulate
-        return new CRawAction<>( p_item );
+        return p_item == null ? null : new CRawAction<>( p_item );
     }
 
     /**
