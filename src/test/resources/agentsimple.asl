@@ -3,13 +3,11 @@ second(true).
 
 +!drive
     <-
-    /*
         [A|B|C] = collection/list/range(1, 6);
 
         [O|P] =.. foo( blub(1), blah(3) );
         [H|I] = P;
         generic/print(A,B,C,  O,P,H,I);
-        */
 
         X = true;
         X = !X;
