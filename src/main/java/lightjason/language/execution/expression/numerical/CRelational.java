@@ -130,7 +130,7 @@ public final class CRelational extends IBaseBinary
      *
      * @tparam T number type
      */
-    private <T extends Number & Comparable> int compare( final T p_left, final T p_right )
+    private <T extends Number & Comparable<T>> int compare( final T p_left, final T p_right )
     {
         return p_left.compareTo( p_right );
     }
