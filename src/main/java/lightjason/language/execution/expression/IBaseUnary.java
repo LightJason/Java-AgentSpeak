@@ -34,7 +34,7 @@ public abstract class IBaseUnary implements IUnaryExpression
     protected IBaseUnary( final EOperator p_operator, final IExpression p_expression )
     {
         if ( !p_operator.isUnary() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( IBaseUnary.class, "notunary", p_operator ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( IBaseUnary.class, "operator", p_operator ) );
 
         m_operator = p_operator;
         m_expression = p_expression;

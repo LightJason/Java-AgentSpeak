@@ -21,13 +21,16 @@
  * @endcond
  */
 
-package lightjason.language.execution.expression;
+package lightjason.language.execution.expression.numerical;
 
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.expression.EOperator;
+import lightjason.language.execution.expression.IBaseBinary;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
@@ -37,11 +40,10 @@ import java.util.List;
 
 
 /**
- * comparable binary expression
+ * numerical relation expression
  */
-public final class CComparableBinary extends IBaseBinary
+public final class CRelational extends IBaseBinary
 {
-
     /**
      * ctor
      *
@@ -49,13 +51,14 @@ public final class CComparableBinary extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CComparableBinary( final EOperator p_operator, final IExpression p_lefthandside,
-                              final IExpression p_righthandside
+    public CRelational( final EOperator p_operator, final IExpression p_lefthandside,
+                        final IExpression p_righthandside
     )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-        if ( !m_operator.isComparable() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notcomparable", m_operator ) );
+
+        if ( !m_operator.isRelational() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "operator", m_operator ) );
     }
 
     @Override
@@ -77,16 +80,59 @@ public final class CComparableBinary extends IBaseBinary
 
         switch ( m_operator )
         {
-            case EQUAL:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).equals( l_argument.get( 1 ) ) ) );
+            case GREATER:
+                p_return.add( CRawTerm.from(
+                        this.compare(
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        ) > 0 )
+                );
                 return CBoolean.from( true );
 
-            case NOTEQUAL:
-                p_return.add( CRawTerm.from( !l_argument.get( 0 ).equals( l_argument.get( 1 ) ) ) );
+            case GREATEREQUAL:
+                p_return.add( CRawTerm.from(
+                        this.compare(
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        ) >= 0 )
+                );
+                return CBoolean.from( true );
+
+            case LESS:
+                p_return.add( CRawTerm.from(
+                        this.compare(
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        ) < 0 )
+                );
+                return CBoolean.from( true );
+
+            case LESSEQUAL:
+                p_return.add( CRawTerm.from(
+                        this.compare(
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        ) <= 0 )
+                );
                 return CBoolean.from( true );
 
             default:
                 return CBoolean.from( false );
         }
     }
+
+    /**
+     * compare method for any number type
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     *
+     * @tparam T number type
+     */
+    private <T extends Number & Comparable> int compare( final T p_left, final T p_right )
+    {
+        return p_left.compareTo( p_right );
+    }
+
 }

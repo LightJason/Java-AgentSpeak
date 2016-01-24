@@ -21,13 +21,16 @@
  * @endcond
  */
 
-package lightjason.language.execution.expression;
+package lightjason.language.execution.expression.numerical;
 
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.expression.EOperator;
+import lightjason.language.execution.expression.IBaseBinary;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
@@ -37,10 +40,11 @@ import java.util.List;
 
 
 /**
- * numerical relation expression
+ * multiplicative binary expression
  */
-public final class CRelationalBinary extends IBaseBinary
+public final class CMultiplicative extends IBaseBinary
 {
+
     /**
      * ctor
      *
@@ -48,14 +52,13 @@ public final class CRelationalBinary extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CRelationalBinary( final EOperator p_operator, final IExpression p_lefthandside,
-                              final IExpression p_righthandside
+    public CMultiplicative( final EOperator p_operator, final IExpression p_lefthandside,
+                            final IExpression p_righthandside
     )
     {
         super( p_operator, p_lefthandside, p_righthandside );
-
-        if ( !m_operator.isRelational() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notrelational", m_operator ) );
+        if ( !m_operator.isMultiplicative() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "operator", m_operator ) );
     }
 
     @Override
@@ -77,59 +80,80 @@ public final class CRelationalBinary extends IBaseBinary
 
         switch ( m_operator )
         {
-            case GREATER:
-                p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) > 0 )
-                );
+            case MULTIPLY:
+                p_return.add( CRawTerm.from( this.multiply(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                ) ) );
                 return CBoolean.from( true );
 
-            case GREATEREQUAL:
-                p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) >= 0 )
-                );
+            case DIVIDE:
+                p_return.add( CRawTerm.from( this.divide(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                ) ) );
                 return CBoolean.from( true );
 
-            case LESS:
-                p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) < 0 )
-                );
-                return CBoolean.from( true );
-
-            case LESSEQUAL:
-                p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) <= 0 )
-                );
+            case MODULO:
+                p_return.add( CRawTerm.from( this.modulo(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                ) ) );
                 return CBoolean.from( true );
 
             default:
                 return CBoolean.from( false );
         }
+
     }
 
     /**
-     * compare method for any number type
+     * runs the multiply of number types
      *
-     * @param p_left left argument
-     * @param p_right right argument
-     * @return default compare values [-1,1]
+     * @param p_left left number argument
+     * @param p_right right number argument
+     * @return multiply value
      *
-     * @tparam T number type
+     * @tparam N any number type
+     * @tparam M any number type
      */
-    private <T extends Number & Comparable> int compare( final T p_left, final T p_right )
+    private <N extends Number, M extends Number> Number multiply( final N p_left, final M p_right )
     {
-        return p_left.compareTo( p_right );
+        return ( p_left instanceof Double ) || ( p_right instanceof Double )
+               ? new Double( p_left.doubleValue() * p_right.doubleValue() )
+               : new Long( p_left.longValue() * p_right.longValue() );
+    }
+
+    /**
+     * runs the divide of number types
+     *
+     * @param p_left left number argument
+     * @param p_right right number argument
+     * @return divide value
+     *
+     * @tparam N any number type
+     * @tparam M any number type
+     */
+    private <N extends Number, M extends Number> Number divide( final N p_left, final M p_right )
+    {
+        return ( p_left instanceof Double ) || ( p_right instanceof Double )
+               ? new Double( p_left.doubleValue() / p_right.doubleValue() )
+               : new Long( p_left.longValue() / p_right.longValue() );
+    }
+
+    /**
+     * runs the modulo of number types
+     *
+     * @param p_left left number argument
+     * @param p_right right number argument
+     * @return modulo value
+     *
+     * @tparam N any number type
+     * @tparam M any number type
+     */
+    private <N extends Number, M extends Number> Number modulo( final N p_left, final M p_right )
+    {
+        return new Long( p_left.longValue() % p_right.longValue() );
     }
 
 }

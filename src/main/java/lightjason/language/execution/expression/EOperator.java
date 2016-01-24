@@ -114,6 +114,26 @@ public enum EOperator
     }
 
     /**
+     * check of a additive operator
+     *
+     * @return boolean for additive operator
+     */
+    public final boolean isAdditive()
+    {
+        return ( this == PLUS ) || ( this == MINUS );
+    }
+
+    /**
+     * check of a multiplicative operator
+     *
+     * @return boolean for multiplicative operator
+     */
+    public final boolean isMultiplicative()
+    {
+        return ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO );
+    }
+
+    /**
      * check of a binary operator
      *
      * @return boolean of binary flag

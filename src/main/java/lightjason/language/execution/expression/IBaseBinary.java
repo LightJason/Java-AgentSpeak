@@ -63,7 +63,7 @@ public abstract class IBaseBinary implements IBinaryExpression
     protected IBaseBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
     {
         if ( !p_operator.isBinary() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( IBaseBinary.class, "notbinary", p_operator ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( IBaseBinary.class, "operator", p_operator ) );
 
         m_operator = p_operator;
         m_lefthandside = p_lefthandside;

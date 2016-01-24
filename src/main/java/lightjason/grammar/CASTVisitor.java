@@ -54,12 +54,14 @@ import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.CAtom;
-import lightjason.language.execution.expression.CComparableBinary;
-import lightjason.language.execution.expression.CLogicalBinary;
-import lightjason.language.execution.expression.CLogicalUnary;
-import lightjason.language.execution.expression.CRelationalBinary;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.expression.logical.CBinary;
+import lightjason.language.execution.expression.logical.CUnary;
+import lightjason.language.execution.expression.numerical.CAdditive;
+import lightjason.language.execution.expression.numerical.CComparable;
+import lightjason.language.execution.expression.numerical.CMultiplicative;
+import lightjason.language.execution.expression.numerical.CRelational;
 import lightjason.language.execution.unaryoperator.CDecrement;
 import lightjason.language.execution.unaryoperator.CIncrement;
 import lightjason.language.plan.CPlan;
@@ -1194,7 +1196,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_numeric() != null )
             return this.visitExpression_numeric( p_context.expression_numeric() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicallefthandside", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicallefthandside", p_context.getText() ) );
     }
 
     @Override
@@ -1216,7 +1218,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_numeric() != null )
             return this.visitExpression_numeric( p_context.expression_numeric() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicallefthandside", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicallefthandside", p_context.getText() ) );
     }
 
 
@@ -1224,13 +1226,13 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_logical_negation( final AgentParser.Expression_logical_negationContext p_context )
     {
-        return new CLogicalUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
+        return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
 
     @Override
     public Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
     {
-        return new CLogicalUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
+        return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
 
 
@@ -1247,7 +1249,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         //if ( p_context.literal() != null )
         //    return this.createExecution( p_context.literal() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicalelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
 
     @Override
@@ -1262,7 +1264,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         //if ( p_context.literal() != null )
         //    return this.createExecution( p_context.literal() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notlogicalelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
 
 
@@ -1273,11 +1275,21 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
 
-        return new CComparableBinary(
-                p_context.EQUAL() != null ? EOperator.EQUAL : EOperator.NOTEQUAL,
-                (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
-                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
-        );
+        if ( p_context.EQUAL() != null )
+            return new CComparable(
+                    EOperator.EQUAL,
+                    (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.NOTEQUAL() != null )
+            return new CComparable(
+                    EOperator.NOTEQUAL,
+                    (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "compareoperator", p_context.getText() ) );
     }
 
     @Override
@@ -1286,11 +1298,21 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
 
-        return new CComparableBinary(
-                p_context.EQUAL() != null ? EOperator.EQUAL : EOperator.NOTEQUAL,
-                (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
-                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
-        );
+        if ( p_context.EQUAL() != null )
+            return new CComparable(
+                    EOperator.EQUAL,
+                    (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.NOTEQUAL() != null )
+            return new CComparable(
+                    EOperator.NOTEQUAL,
+                    (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "compareoperator", p_context.getText() ) );
     }
 
 
@@ -1302,28 +1324,28 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
 
         if ( p_context.GREATER() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.GREATER,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.GREATEREQUAL() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.GREATEREQUAL,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.LESS() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.LESS,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.LESSEQUAL() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.LESSEQUAL,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
@@ -1339,28 +1361,28 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
             return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
 
         if ( p_context.GREATER() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.GREATER,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.GREATEREQUAL() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.GREATEREQUAL,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.LESS() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.LESS,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.LESSEQUAL() != null )
-            return new CRelationalBinary(
+            return new CRelational(
                     EOperator.LESSEQUAL,
                     (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
@@ -1374,13 +1396,47 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_numeric_additive( final AgentParser.Expression_numeric_additiveContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );
+
+        if ( p_context.PLUS() != null )
+            return new CAdditive(
+                    EOperator.PLUS,
+                    (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.MINUS() != null )
+            return new CAdditive(
+                    EOperator.MINUS,
+                    (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "additiveoperator", p_context.getText() ) );
     }
 
     @Override
     public Object visitExpression_numeric_additive( final PlanBundleParser.Expression_numeric_additiveContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );
+
+        if ( p_context.PLUS() != null )
+            return new CAdditive(
+                    EOperator.PLUS,
+                    (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.MINUS() != null )
+            return new CAdditive(
+                    EOperator.MINUS,
+                    (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "additiveoperator", p_context.getText() ) );
     }
 
 
@@ -1388,13 +1444,61 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     @Override
     public Object visitExpression_numeric_multiplicative( final AgentParser.Expression_numeric_multiplicativeContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_pow( p_context.expression_numeric_pow() );
+
+        if ( p_context.MULTIPLY() != null )
+            return new CMultiplicative(
+                    EOperator.MULTIPLY,
+                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.SLASH() != null )
+            return new CMultiplicative(
+                    EOperator.DIVIDE,
+                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.MODULO() != null )
+            return new CMultiplicative(
+                    EOperator.MODULO,
+                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "multiplicativeoperator", p_context.getText() ) );
     }
 
     @Override
     public Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_pow( p_context.expression_numeric_pow() );
+
+        if ( p_context.MULTIPLY() != null )
+            return new CMultiplicative(
+                    EOperator.MULTIPLY,
+                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.SLASH() != null )
+            return new CMultiplicative(
+                    EOperator.DIVIDE,
+                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        if ( p_context.MODULO() != null )
+            return new CMultiplicative(
+                    EOperator.MODULO,
+                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "multiplicativeoperator", p_context.getText() ) );
     }
 
 
@@ -1426,7 +1530,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         //if ( p_context.literal() != null )
         //    return this.createExecution( p_context.literal() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notnumericelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
 
     @Override
@@ -1441,7 +1545,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
         //if ( p_context.literal() != null )
         //    return this.createExecution( p_context.literal() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notnumericelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
 
 
@@ -1551,7 +1655,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
         // otherwise creare concat expression
         while ( l_expression.size() > 1 )
-            l_expression.add( 0, new CLogicalBinary( p_operator, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
+            l_expression.add( 0, new CBinary( p_operator, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
 
         return l_expression.get( 0 );
     }
