@@ -30,9 +30,9 @@ import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
-import lightjason.grammar.CASTErrorListener;
-import lightjason.grammar.CASTVisitor;
-import lightjason.grammar.IAgentVisitor;
+import lightjason.grammar.CErrorListener;
+import lightjason.grammar.CParser;
+import lightjason.grammar.IParseAgent;
 import lightjason.language.score.IAggregation;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -67,7 +67,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IAgentVisitor l_visitor = this.parse( p_stream, new CASTVisitor( p_actions ) );
+        final IParseAgent l_visitor = this.parse( p_stream, new CParser( p_actions ) );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
@@ -105,9 +105,9 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @throws IOException thrown on IO errors
      */
-    protected IAgentVisitor parse( final InputStream p_stream, final IAgentVisitor p_astvisitor ) throws Exception
+    protected IParseAgent parse( final InputStream p_stream, final IParseAgent p_astvisitor ) throws Exception
     {
-        final ANTLRErrorListener l_errorlistener = new CASTErrorListener();
+        final ANTLRErrorListener l_errorlistener = new CErrorListener();
 
         final AgentLexer l_lexer = new AgentLexer( new ANTLRInputStream( p_stream ) );
         l_lexer.removeErrorListeners();

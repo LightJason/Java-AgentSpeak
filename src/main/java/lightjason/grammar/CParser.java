@@ -91,7 +91,7 @@ import java.util.stream.Collectors;
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAgentVisitor, IPlanBundleVisitor
+public class CParser extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
 {
     /**
      * numeric constant values - infinity is defined manually
@@ -132,7 +132,7 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
      *
      * @param p_actions set with actions
      */
-    public CASTVisitor( final Set<IAction> p_actions )
+    public CParser( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }

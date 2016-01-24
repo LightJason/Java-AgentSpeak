@@ -25,9 +25,9 @@ package lightjason.agent.generator;
 
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
-import lightjason.grammar.CASTErrorListener;
-import lightjason.grammar.CASTVisitor;
-import lightjason.grammar.IPlanBundleVisitor;
+import lightjason.grammar.CErrorListener;
+import lightjason.grammar.CParser;
+import lightjason.grammar.IParsePlanBundle;
 import lightjason.grammar.PlanBundleLexer;
 import lightjason.grammar.PlanBundleParser;
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -55,7 +55,7 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IPlanBundleVisitor l_visitor = this.parse( p_stream, new CASTVisitor( p_actions ) );
+        final IParsePlanBundle l_visitor = this.parse( p_stream, new CParser( p_actions ) );
     }
 
 
@@ -74,9 +74,9 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
      *
      * @throws IOException thrown on IO errors
      */
-    protected IPlanBundleVisitor parse( final InputStream p_stream, final IPlanBundleVisitor p_astvisitor ) throws Exception
+    protected IParsePlanBundle parse( final InputStream p_stream, final IParsePlanBundle p_astvisitor ) throws Exception
     {
-        final ANTLRErrorListener l_errorlistener = new CASTErrorListener();
+        final ANTLRErrorListener l_errorlistener = new CErrorListener();
 
         final PlanBundleLexer l_lexer = new PlanBundleLexer( new ANTLRInputStream( p_stream ) );
         l_lexer.removeErrorListeners();

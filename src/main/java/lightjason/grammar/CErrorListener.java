@@ -39,7 +39,7 @@ import java.util.BitSet;
  * AntLR error lister to catch parser and lexer errors
  * with individual error handling and language translating
  */
-public final class CASTErrorListener implements ANTLRErrorListener
+public final class CErrorListener implements ANTLRErrorListener
 {
     @Override
     public void syntaxError( final Recognizer<?, ?> p_recognizer, final Object p_symbol, final int p_line, final int p_charposition,
