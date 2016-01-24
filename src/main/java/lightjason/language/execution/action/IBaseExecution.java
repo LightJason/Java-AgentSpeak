@@ -95,4 +95,11 @@ public abstract class IBaseExecution<T> implements IExecution
     {
         return Collections.<IVariable<?>>emptySet();
     }
+
+    @Override
+    public String toString()
+    {
+        return m_value == null ? "" : m_value.toString();
+    }
+
 }
