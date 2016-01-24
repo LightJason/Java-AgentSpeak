@@ -15,7 +15,7 @@ second(true).
         //X = !X;
         generic/print(X);
 
-        Z = 5 % 2;
+        Z = 4 ** 0.5;
         generic/print(Z);
 
         // sequencial lambda expression

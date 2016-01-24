@@ -347,13 +347,13 @@ expression_numeric_additive :
  * numeric multiply-expression
  **/
 expression_numeric_multiplicative :
-    expression_numeric_pow ( (SLASH | MODULO | MULTIPLY ) expression_numeric )?
+    expression_numeric_power ( (SLASH | MODULO | MULTIPLY ) expression_numeric )?
     ;
 
 /**
  * numeric pow-expression
  **/
-expression_numeric_pow :
+expression_numeric_power :
     expression_numeric_element ( POW expression_numeric )?
     ;
 

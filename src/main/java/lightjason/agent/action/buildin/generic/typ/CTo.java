@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.generic.typ;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
@@ -35,15 +35,25 @@ import java.util.List;
 
 
 /**
- * action to cast a vale to an floating-point value
+ * action to cast any java object type
+ *
+ * @todo add logger on exception
  */
-public final class CToFloat extends IBuildinAction
+public final class CTo extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CTo()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -51,10 +61,21 @@ public final class CToFloat extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-                CRawTerm.from( CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).doubleValue() )
-        );
-        return CBoolean.from( true );
+
+
+        // first reference of Java object, second string with Java class name
+        try
+        {
+            p_return.add( CRawTerm.from( CCommon.getRawValue(
+                    Class.forName( CCommon.getRawValue( p_argument.get( 1 ) ) ).cast( CCommon.getRawValue( p_argument.get( 0 ) ) ) )
+            ) );
+
+            return CBoolean.from( true );
+        }
+        catch ( final ClassNotFoundException p_exception )
+        {
+            return CBoolean.from( false );
+        }
     }
 
 }

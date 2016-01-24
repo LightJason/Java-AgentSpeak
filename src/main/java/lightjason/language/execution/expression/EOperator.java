@@ -34,7 +34,7 @@ public enum EOperator
     MULTIPLY( "*" ),
     DIVIDE( "/" ),
     MODULO( "%" ),
-    POW( "**" ),
+    POWER( "**" ),
 
 
     OR( "||" ),
@@ -90,7 +90,7 @@ public enum EOperator
      */
     public final boolean isNumerical()
     {
-        return ( this == PLUS ) || ( this == MINUS ) || ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO ) || ( this == POW );
+        return ( this == PLUS ) || ( this == MINUS ) || ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO ) || ( this == POWER );
     }
 
     /**
@@ -131,6 +131,16 @@ public enum EOperator
     public final boolean isMultiplicative()
     {
         return ( this == MULTIPLY ) || ( this == DIVIDE ) || ( this == MODULO );
+    }
+
+    /**
+     * check of a power operator
+     *
+     * @return boolean for power operator
+     */
+    public final boolean isPower()
+    {
+        return ( this == POWER );
     }
 
     /**

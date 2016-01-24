@@ -21,29 +21,44 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.language.execution.expression.numerical;
 
-import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.expression.EOperator;
+import lightjason.language.execution.expression.IBaseBinary;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 
 /**
- * action to cast a vale to an integral value
+ * power binary expression
  */
-public final class CToInt extends IBuildinAction
+public final class CPower extends IBaseBinary
 {
 
-    @Override
-    public final int getMinimalArgumentNumber()
+    /**
+     * ctor
+     *
+     * @param p_operator operator
+     * @param p_lefthandside left-hand-side argument
+     * @param p_righthandside right-hand-side
+     */
+    public CPower( final EOperator p_operator, final IExpression p_lefthandside,
+                   final IExpression p_righthandside
+    )
     {
-        return 1;
+        super( p_operator, p_lefthandside, p_righthandside );
+        if ( !m_operator.isPower() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "operator", m_operator ) );
     }
 
     @Override
@@ -51,10 +66,34 @@ public final class CToInt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-                CRawTerm.from( CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).longValue() )
-        );
-        return CBoolean.from( true );
+        // run left-hand- and right-hand-side argument
+        final List<ITerm> l_argument = new LinkedList<>();
+        if ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+            return CBoolean.from( false );
+
+        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+            return CBoolean.from( false );
+
+        if ( l_argument.size() != 2 )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
+
+
+        switch ( m_operator )
+        {
+            case POWER:
+                p_return.add( CRawTerm.from(
+                        Math.pow(
+                                lightjason.language.CCommon.<Number, ITerm>getRawValue( l_argument.get( 0 ) ).doubleValue(),
+                                lightjason.language.CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).doubleValue()
+                        )
+                ) );
+                return CBoolean.from( true );
+
+
+            default:
+                return CBoolean.from( false );
+        }
+
     }
 
 }

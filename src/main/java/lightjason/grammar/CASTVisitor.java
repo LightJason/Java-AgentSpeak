@@ -61,6 +61,7 @@ import lightjason.language.execution.expression.logical.CUnary;
 import lightjason.language.execution.expression.numerical.CAdditive;
 import lightjason.language.execution.expression.numerical.CComparable;
 import lightjason.language.execution.expression.numerical.CMultiplicative;
+import lightjason.language.execution.expression.numerical.CPower;
 import lightjason.language.execution.expression.numerical.CRelational;
 import lightjason.language.execution.unaryoperator.CDecrement;
 import lightjason.language.execution.unaryoperator.CIncrement;
@@ -1445,26 +1446,26 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitExpression_numeric_multiplicative( final AgentParser.Expression_numeric_multiplicativeContext p_context )
     {
         if ( p_context.expression_numeric() == null )
-            return this.visitExpression_numeric_pow( p_context.expression_numeric_pow() );
+            return this.visitExpression_numeric_power( p_context.expression_numeric_power() );
 
         if ( p_context.MULTIPLY() != null )
             return new CMultiplicative(
                     EOperator.MULTIPLY,
-                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.SLASH() != null )
             return new CMultiplicative(
                     EOperator.DIVIDE,
-                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.MODULO() != null )
             return new CMultiplicative(
                     EOperator.MODULO,
-                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
@@ -1475,26 +1476,26 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
     public Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
     {
         if ( p_context.expression_numeric() == null )
-            return this.visitExpression_numeric_pow( p_context.expression_numeric_pow() );
+            return this.visitExpression_numeric_power( p_context.expression_numeric_power() );
 
         if ( p_context.MULTIPLY() != null )
             return new CMultiplicative(
                     EOperator.MULTIPLY,
-                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.SLASH() != null )
             return new CMultiplicative(
                     EOperator.DIVIDE,
-                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
         if ( p_context.MODULO() != null )
             return new CMultiplicative(
                     EOperator.MODULO,
-                    (IExpression) this.visitExpression_numeric_pow( p_context.expression_numeric_pow() ),
+                    (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                     (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
@@ -1504,15 +1505,29 @@ public class CASTVisitor extends AbstractParseTreeVisitor<Object> implements IAg
 
 
     @Override
-    public Object visitExpression_numeric_pow( final AgentParser.Expression_numeric_powContext p_context )
+    public Object visitExpression_numeric_power( final AgentParser.Expression_numeric_powerContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_element( p_context.expression_numeric_element() );
+
+        return new CPower(
+                EOperator.POWER,
+                (IExpression) this.visitExpression_numeric_element( p_context.expression_numeric_element() ),
+                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+        );
     }
 
     @Override
-    public Object visitExpression_numeric_pow( final PlanBundleParser.Expression_numeric_powContext p_context )
+    public Object visitExpression_numeric_power( final PlanBundleParser.Expression_numeric_powerContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.expression_numeric() == null )
+            return this.visitExpression_numeric_element( p_context.expression_numeric_element() );
+
+        return new CPower(
+                EOperator.POWER,
+                (IExpression) this.visitExpression_numeric_element( p_context.expression_numeric_element() ),
+                (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
+        );
     }
 
 
