@@ -155,7 +155,7 @@ public class CAgent implements IAgent
     public final boolean hibernate( final boolean p_value )
     {
         m_hibernate = p_value;
-        return p_value;
+        return m_hibernate;
     }
 
     @Override
