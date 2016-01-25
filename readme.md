@@ -305,7 +305,7 @@ of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an 
     * list (all messages)
     * pull message
     
-* Grid World
+* Grid World ([RPG](http://rpgjs.com/))
     * agents can be moved on the current grid to each position (except generators, postboxes and other agents)
     * if an agent is moved to the border of a local grid, only the number of agents and current food elements is transfered from the neighbour
     * on each grid the coherency is calculated
