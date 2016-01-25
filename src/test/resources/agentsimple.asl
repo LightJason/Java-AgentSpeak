@@ -5,11 +5,13 @@ second(true).
     <-
         generic/print(Score, Cycle);
 
-        [A|B|C] = collection/list/range(1, 6);
+        [A|B|C|_|D|E|F|G] = collection/list/range(1, 20);
+        generic/print(A,B,C,D,E,F,G);
+
 
         [O|P] =.. foo( blub(1), blah(3) );
         [H|I] = P;
-        generic/print(A,B,C,  O,P,H,I);
+        generic/print(O,P,H,I);
 
         X = true;
         X = !X;
@@ -20,13 +22,13 @@ second(true).
         generic/print(Z);
 
         // sequencial lambda expression
-        // (O) -> Y | generic/print(Y)
+        (O) -> Y | generic/print(Y);
         // parallel lambda expression
-        // @(O) -> Y | { generic/print(Y); generic/print(O); }
+        @(O) -> Y | { generic/print(Y); generic/print(O); };
 
         // sequential unification
         >>foo(U);
         // parallel unification
-        >>@foo(I)
+        >>@foo(U)
 
         .

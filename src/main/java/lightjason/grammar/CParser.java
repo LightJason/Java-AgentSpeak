@@ -499,7 +499,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
 
     @Override
-    public Object visitBody( final AgentParser.BodyContext p_context )
+    public final Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
         return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).filter(
@@ -508,7 +508,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     }
 
     @Override
-    public Object visitBody( final PlanBundleParser.BodyContext p_context )
+    public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines add a null value
         return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).filter(
@@ -585,13 +585,27 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.body_formula() != null )
+        {
+            final LinkedList<IExecution> l_statement = new LinkedList<>();
+            l_statement.add( this.createExecution( this.visitBody_formula( p_context.body_formula() ) ) );
+            return l_statement;
+        }
+
+        return this.visitBody( p_context.body() );
     }
 
     @Override
     public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
     {
-        return this.visitChildren( p_context );
+        if ( p_context.body_formula() != null )
+        {
+            final LinkedList<IExecution> l_statement = new LinkedList<>();
+            l_statement.add( this.createExecution( this.visitBody_formula( p_context.body_formula() ) ) );
+            return l_statement;
+        }
+
+        return this.visitBody( p_context.body() );
     }
 
 
@@ -617,7 +631,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
                 p_context.AT() != null,
                 (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
                 (IVariable<?>) this.visitVariable( p_context.variable() ),
-                (IExecution) this.visitBlock_formula( p_context.block_formula() )
+                (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
         );
     }
 
@@ -628,7 +642,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
                 p_context.AT() != null,
                 (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
                 (IVariable<?>) this.visitVariable( p_context.variable() ),
-                (IExecution) this.visitBlock_formula( p_context.block_formula() )
+                (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
         );
     }
 

@@ -33,6 +33,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     /**
      * execution body
      */
-    private final IExecution m_body;
+    private final List<IExecution> m_body;
     /**
      * flag of parallel execution
      */
@@ -66,12 +67,12 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_variable iteration variable
      * @param p_body execution body
      */
-    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_variable, final IExecution p_body )
+    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_variable, final List<IExecution> p_body )
     {
         super( p_variable );
         m_parallel = p_parallel;
         m_initialize = p_initialize;
-        m_body = p_body;
+        m_body = Collections.unmodifiableList( p_body );
     }
 
     @Override
