@@ -522,9 +522,9 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     public Object visitBarrier( final AgentParser.BarrierContext p_context )
     {
         return p_context.integernumber_positive() == null
-               ? new CBarrier( this.visitExpression( p_context.expression() ).toString() )
+               ? new CBarrier( (IExpression) this.visitExpression( p_context.expression() ) )
                : new CBarrier(
-                       this.visitExpression( p_context.expression() ).toString(),
+                       (IExpression) this.visitExpression( p_context.expression() ),
                        (Long) this.visitIntegernumber_positive( p_context.integernumber_positive() )
                );
     }
@@ -533,9 +533,9 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     public Object visitBarrier( final PlanBundleParser.BarrierContext p_context )
     {
         return p_context.integernumber_positive() == null
-               ? new CBarrier( this.visitExpression( p_context.expression() ).toString() )
+               ? new CBarrier( (IExpression) this.visitExpression( p_context.expression() ) )
                : new CBarrier(
-                       this.visitExpression( p_context.expression() ).toString(),
+                       (IExpression) this.visitExpression( p_context.expression() ),
                        (Long) this.visitIntegernumber_positive( p_context.integernumber_positive() )
                );
     }

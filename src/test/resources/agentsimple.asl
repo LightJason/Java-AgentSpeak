@@ -22,6 +22,8 @@ second(true).
         Z = 10 * Z;
         generic/print(Z);
 
+        < true, 5 >;
+
         // sequencial lambda expression
         (L) -> Y : generic/print(Y);
         // parallel lambda expression

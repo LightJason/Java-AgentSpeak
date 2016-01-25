@@ -23,19 +23,25 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 
 /**
  * barrier for synchronization
+ *
+ * @bug incomplete
  */
-public final class CBarrier extends IBaseExecution<String>
+public final class CBarrier extends IBaseExecution<IExpression>
 {
     /**
      * timeout
@@ -48,7 +54,7 @@ public final class CBarrier extends IBaseExecution<String>
      *
      * @param p_expression expression
      */
-    public CBarrier( final String p_expression )
+    public CBarrier( final IExpression p_expression )
     {
         this( p_expression, Long.MAX_VALUE );
     }
@@ -59,7 +65,7 @@ public final class CBarrier extends IBaseExecution<String>
      * @param p_expression expression
      * @param p_timeout timeout
      */
-    public CBarrier( final String p_expression, final long p_timeout )
+    public CBarrier( final IExpression p_expression, final long p_timeout )
     {
         super( p_expression );
         m_timeout = p_timeout;
@@ -70,7 +76,12 @@ public final class CBarrier extends IBaseExecution<String>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( true );
+        final List<ITerm> l_argument = new LinkedList<>();
+        if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
+             ( l_argument.size() != 1 ) )
+            return CBoolean.from( false );
+
+        return CBoolean.from( CCommon.getRawValue( l_argument.get( 0 ) ) );
     }
 
     @Override
