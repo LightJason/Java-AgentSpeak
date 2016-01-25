@@ -25,6 +25,7 @@ package lightjason.language.execution.action;
 
 import lightjason.agent.IAgent;
 import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
@@ -86,11 +87,11 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      *
      * @param p_parallel parallel execution flag
      * @param p_initialize expression
-     * @param p_return return variable
      * @param p_iterator iteration variable
+     * @param p_return return variable
      * @param p_body execution body
      */
-    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_return, final IVariable<?> p_iterator,
+    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_iterator, final IVariable<?> p_return,
                               final List<IExecution> p_body
     )
     {
@@ -113,16 +114,20 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
         // run lambda expression
         if ( m_parallel )
-        {
-            CCommon.flatList( l_return ).parallelStream().forEach( i -> {
-                final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
+            p_return.addAll(
+                    CCommon.flatList( l_return ).parallelStream().map( i -> {
 
+                        final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
                 l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
                 m_body.stream().forEach(
                         j -> j.execute(
-                                l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
-            } );
-        }
+                                l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() )
+                );
+                        return l_localcontext.getRight() != null ? CRawTerm.from( CCommon.getRawValue( l_localcontext.getRight() ) ) : null;
+
+                    } ).filter( i -> i instanceof ITerm ).collect( Collectors.toList() )
+            );
+
         else
         {
             final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
@@ -157,9 +162,14 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return m_initialize.getVariables();
+        return m_return == null ? m_initialize.getVariables() : new HashSet<IVariable<?>>()
+        {{
+            add( m_return );
+            addAll( m_initialize.getVariables() );
+        }};
     }
 
     @Override

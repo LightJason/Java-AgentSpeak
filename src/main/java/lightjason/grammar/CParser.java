@@ -627,6 +627,15 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitLambda( final AgentParser.LambdaContext p_context )
     {
+        if ( p_context.lambda_return() != null )
+            return new CLambdaExpression(
+                    p_context.AT() != null,
+                    (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
+                    (IVariable<?>) this.visitVariable( p_context.variable() ),
+                    (IVariable<?>) this.visitLambda_return( p_context.lambda_return() ),
+                    (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
+            );
+
         return new CLambdaExpression(
                 p_context.AT() != null,
                 (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
@@ -638,6 +647,15 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
+        if ( p_context.lambda_return() != null )
+            return new CLambdaExpression(
+                    p_context.AT() != null,
+                    (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
+                    (IVariable<?>) this.visitVariable( p_context.variable() ),
+                    (IVariable<?>) this.visitLambda_return( p_context.lambda_return() ),
+                    (List<IExecution>) this.visitBlock_formula( p_context.block_formula() )
+            );
+
         return new CLambdaExpression(
                 p_context.AT() != null,
                 (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),

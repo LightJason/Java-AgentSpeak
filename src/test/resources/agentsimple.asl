@@ -23,10 +23,11 @@ second(true).
         generic/print(Z);
 
         // sequencial lambda expression
-        (L) -> Y : generic/print(Y);
-        generic/print("-------------");
+        (L) -> Y | R : R = Y+1;
+        generic/print(R);
+        //generic/print("-------------");
         // parallel lambda expression
-        @(L) -> Y : { generic/print(Y); };
+        //@(L) -> Y : { generic/print(Y); };
 
         // sequential unification
         >>foo(U);
