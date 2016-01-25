@@ -33,6 +33,8 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -83,26 +85,34 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
                                                final List<ITerm> p_annotation
     )
     {
-        // rebuild instance variable map with overlapping variables
-        final IVariable<?> l_iterator = m_value.clone();
-        final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
-
-        l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
-        l_variables.remove( l_iterator );
-        l_variables.add( l_iterator );
-
-        // create new execution context and run initialization
-        final IContext<?> l_context = new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables );
-
+        // run initialization
         final List<ITerm> l_return = new LinkedList<>();
         m_initialize.execute( p_context, p_parallel, p_argument, l_return, p_annotation );
 
+
         // run lambda expression
-        CCommon.flatList( l_return ).stream().forEach( i -> {
-            l_iterator.set( CCommon.getRawValue( i ) );
-            m_body.stream().forEach(
-                    j -> j.execute( l_context, m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
-        } );
+        if ( m_parallel )
+        {
+            CCommon.flatList( l_return ).parallelStream().forEach( i -> {
+                final Pair<IVariable<?>, IContext<?>> l_localcontext = this.getLocalContext( p_context, m_value );
+
+                l_localcontext.getLeft().set( CCommon.getRawValue( i ) );
+                m_body.stream().forEach(
+                        j -> j.execute(
+                                l_localcontext.getRight(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
+            } );
+        }
+        else
+        {
+            final Pair<IVariable<?>, IContext<?>> l_localcontext = this.getLocalContext( p_context, m_value );
+
+            CCommon.flatList( l_return ).stream().forEach( i -> {
+                l_localcontext.getLeft().set( CCommon.getRawValue( i ) );
+                m_body.stream().forEach(
+                        j -> j.execute(
+                                l_localcontext.getRight(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
+            } );
+        }
 
         return CBoolean.from( true );
     }
@@ -118,7 +128,6 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     {
         return this.hashCode() == p_object.hashCode();
     }
-
 
     @Override
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
@@ -136,5 +145,17 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     public final String toString()
     {
         return MessageFormat.format( "{0}({1}) -> {2} | {3}", m_parallel ? "@" : "", m_initialize, m_value, m_body );
+    }
+
+    private Pair<IVariable<?>, IContext<?>> getLocalContext( final IContext<?> p_context, final IVariable<?> p_iterator )
+    {
+        final IVariable<?> l_iterator = p_iterator.clone();
+        final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
+
+        l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
+        l_variables.remove( l_iterator );
+        l_variables.add( l_iterator );
+
+        return new ImmutablePair<>( l_iterator, new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables ) );
     }
 }
