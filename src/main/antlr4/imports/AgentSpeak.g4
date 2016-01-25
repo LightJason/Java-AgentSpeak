@@ -416,7 +416,15 @@ lambda_return :
 if_else :
     IF LROUNDBRACKET expression RROUNDBRACKET
     block_formula
-    ( ELSE block_formula )?
+    ( else_block )?
+    ;
+
+/**
+ * else block structure
+ **/
+else_block :
+    ELSE
+    block_formula
     ;
 
 // ---------------------------------------------------------------------------------------

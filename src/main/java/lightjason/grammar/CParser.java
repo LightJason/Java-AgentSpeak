@@ -43,6 +43,7 @@ import lightjason.language.execution.action.CAchievementGoal;
 import lightjason.language.execution.action.CBarrier;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
+import lightjason.language.execution.action.CIfElse;
 import lightjason.language.execution.action.CLambdaExpression;
 import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
@@ -613,13 +614,39 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitIf_else( final AgentParser.If_elseContext p_context )
     {
-        return this.visitChildren( p_context );
+        return p_context.else_block() == null
+               ? new CIfElse(
+                (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ) )
+               : new CIfElse(
+                       (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ),
+                       (List<IExecution>) this.visitElse_block( p_context.else_block() )
+               );
     }
 
     @Override
     public Object visitIf_else( final PlanBundleParser.If_elseContext p_context )
     {
-        return this.visitChildren( p_context );
+        return p_context.else_block() == null
+               ? new CIfElse(
+                (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ) )
+               : new CIfElse(
+                       (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ),
+                       (List<IExecution>) this.visitElse_block( p_context.else_block() )
+               );
+    }
+
+
+
+    @Override
+    public Object visitElse_block( final AgentParser.Else_blockContext p_context )
+    {
+        return this.visitBlock_formula( p_context.block_formula() );
+    }
+
+    @Override
+    public Object visitElse_block( final PlanBundleParser.Else_blockContext p_context )
+    {
+        return this.visitBlock_formula( p_context.block_formula() );
     }
 
 

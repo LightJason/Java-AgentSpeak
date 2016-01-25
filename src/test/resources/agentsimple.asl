@@ -19,7 +19,7 @@ second(true).
         generic/print(X);
 
         Z = 4 ** 0.5;
-        Z = 100 * Z;
+        Z = 10 * Z;
         generic/print(Z);
 
         // sequencial lambda expression
@@ -33,6 +33,10 @@ second(true).
         // sequential unification
         >>foo(U);
         // parallel unification
-        >>@foo(U)
+        >>@foo(U);
 
+        if ( Z > 100.0 )
+            generic/print("if true")
+        else
+            generic/print("if false")
         .

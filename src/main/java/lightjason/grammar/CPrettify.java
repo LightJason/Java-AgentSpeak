@@ -325,6 +325,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
+    public Object visitElse_block( final AgentParser.Else_blockContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
         return null;
@@ -692,6 +698,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitIf_else( final PlanBundleParser.If_elseContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitElse_block( final PlanBundleParser.Else_blockContext p_context )
     {
         return null;
     }
