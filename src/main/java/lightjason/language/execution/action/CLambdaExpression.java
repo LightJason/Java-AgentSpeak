@@ -25,7 +25,6 @@ package lightjason.language.execution.action;
 
 import lightjason.agent.IAgent;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
@@ -79,7 +78,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      */
     public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_iterator, final List<IExecution> p_body )
     {
-        this( p_parallel, p_initialize, null, p_iterator, p_body );
+        this( p_parallel, p_initialize, p_iterator, null, p_body );
     }
 
     /**
@@ -103,42 +102,20 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
         // run initialization
-        final List<ITerm> l_return = new LinkedList<>();
-        m_initialize.execute( p_context, p_parallel, p_argument, l_return, p_annotation );
-
+        final List<ITerm> l_initialization = new LinkedList<>();
+        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).getValue() )
+            return CBoolean.from( false );
 
         // run lambda expression
-        if ( m_parallel )
-            p_return.addAll(
-                    CCommon.flatList( l_return ).parallelStream().map( i -> {
-
-                        final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
-                l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
-                m_body.stream().forEach(
-                        j -> j.execute(
-                                l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() )
-                );
-                        return l_localcontext.getRight() != null ? CRawTerm.from( CCommon.getRawValue( l_localcontext.getRight() ) ) : null;
-
-                    } ).filter( i -> i instanceof ITerm ).collect( Collectors.toList() )
-            );
-
-        else
-        {
-            final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
-
-            CCommon.flatList( l_return ).stream().forEach( i -> {
-                l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
-                m_body.stream().forEach(
-                        j -> j.execute(
-                                l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
-            } );
-        }
+        final List<?> l_return = m_parallel ? this.executeParallel( p_context, l_initialization ) : this.executeSequential( p_context, l_initialization );
+        if ( m_return != null )
+            ( (IVariable<List<?>>) CCommon.replaceFromContext( p_context, m_return ) ).set( l_return );
 
         return CBoolean.from( true );
     }
@@ -178,27 +155,74 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return MessageFormat.format( "{0}({1}) -> {2} | {3}", m_parallel ? "@" : "", m_initialize, m_value, m_body );
     }
 
+    /**
+     * run sequential execution
+     *
+     * @param p_context execution context
+     * @param p_input input list
+     * @return return list
+     */
+    private List<?> executeSequential( final IContext<?> p_context, final List<ITerm> p_input )
+    {
+        final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
+
+        return CCommon.flatList( p_input ).stream().map( i -> {
+
+            l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
+            m_body.stream().forEach(
+                    j -> j.execute(
+                            l_localcontext.getLeft(),
+                            m_parallel,
+                            Collections.<ITerm>emptyList(),
+                            new LinkedList<>(),
+                            Collections.<ITerm>emptyList()
+                    ) );
+            return l_localcontext.getRight() != null ? CCommon.getRawValue( l_localcontext.getRight() ) : null;
+
+        } ).filter( i -> i != null ).collect( Collectors.toList() );
+    }
+
+    /**
+     * run parallel execution
+     *
+     * @param p_context execution context
+     * @param p_input input list
+     * @return return list
+     */
+    private List<?> executeParallel( final IContext<?> p_context, final List<ITerm> p_input )
+    {
+        return CCommon.flatList( p_input ).parallelStream().map( i -> {
+
+            final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
+            l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
+            m_body.stream().forEach(
+                    j -> j.execute(
+                            l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
+                            Collections.<ITerm>emptyList()
+                    )
+            );
+            return l_localcontext.getRight() != null ? CCommon.getRawValue( l_localcontext.getRight() ) : null;
+
+        } ).filter( i -> i != null ).collect( Collectors.toList() );
+    }
+
 
     /**
      * create the local context structure of the expression
      *
      * @param p_context local context
-     * @param p_iterator iterator variable
-     * @param p_return return variable or null
      * @return tripel with context, iterator variable and return variable
      */
-    private Triple<IContext<?>, IVariable<?>, IVariable<?>> getLocalContext( final IContext<?> p_context, final IVariable<?> p_iterator,
-                                                                             final IVariable<?> p_return
-    )
+    private Triple<IContext<?>, IVariable<?>, IVariable<?>> getLocalContext( final IContext<?> p_context )
     {
-        final IVariable<?> l_iterator = p_iterator.clone();
-        final IVariable<?> l_return = p_return != null ? p_return.clone() : null;
+        final IVariable<?> l_iterator = m_value.clone();
+        final IVariable<?> l_return = m_return != null ? m_return.clone() : null;
+
         final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
 
         l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
         l_variables.remove( l_iterator );
         l_variables.add( l_iterator );
-
 
         if ( l_return != null )
         {
