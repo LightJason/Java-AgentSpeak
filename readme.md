@@ -248,6 +248,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     * ```@``` (parallel)
     * ...
     * If more than one prefix-tag is needed we order them by the rule: _First WHAT, then HOW_, e.g. ```>>@``` (unifiy in parallel)
+    
 
 ## <a name="todo">Todos</a>
 
@@ -255,7 +256,6 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
-* Examples in separate Git project, simple Web-UI with [Jetty](http://www.eclipse.org/jetty/)
 * Prettyfier component for source code layout
 * Meta-language for data/plan exchange with [Jaxb](https://jaxb.java.net) or [Jaxb JSON](https://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html#gmfnu). 
   Structural problem incompatibilites between Jason, Light-Jas, GOAL, ... -> generic exchange format
@@ -264,3 +264,4 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     * Introduce barrier in plans as a synchronisation point, where an agent waits until a certain condition matches, e.g. ```< term1, term2, ... | timeout >```
     * Distribution of joint plans, i.e. sub-plans/-actions/-beliefs via [MPI](https://de.wikipedia.org/wiki/Message_Passing_Interface) concepts like [gather](https://de.wikipedia.org/wiki/Message_Passing_Interface#Gather_.28sammeln.29)/[scatter](https://de.wikipedia.org/wiki/Message_Passing_Interface#Scatter_.28streuen.29)
 * add optional [FIPA communication interface](http://www.fipa.org/specs/fipa00061/index.html) (encapsulate message parsing) and [FIPA ontology](http://www.fipa.org/specs/fipa00086/index.html) definition
+* build distribution grid-world game with [Jetty](http://www.eclipse.org/jetty/) and use HTML5 game engines like [MelonJS](http://melonjs.org/)
