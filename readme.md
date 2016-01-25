@@ -241,7 +241,13 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
+## <a name="notes">Notes</a>
 
+* We support multiple ```prefix-tag```, e.g.
+    * ```>>``` (unification)
+    * ```@``` (parallel)
+    * ...
+    * If more than one prefix-tag is needed we order them by the rule: _First WHAT, then HOW_, e.g. ```>>@``` (unifiy in parallel)
 
 ## <a name="todo">Todos</a>
 
