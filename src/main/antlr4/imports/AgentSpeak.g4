@@ -390,7 +390,8 @@ block_formula :
 lambda :
     AT? lambda_initialization
     RIGHTARROW variable
-    VLINE block_formula
+    lambda_return?
+    COLON block_formula
     ;
 
 /**
@@ -400,6 +401,13 @@ lambda_initialization :
     LROUNDBRACKET
     ( variable | term )
     RROUNDBRACKET
+    ;
+
+/**
+ * return argument lambda expression
+ **/
+lambda_return :
+    VLINE variable
     ;
 
 /**

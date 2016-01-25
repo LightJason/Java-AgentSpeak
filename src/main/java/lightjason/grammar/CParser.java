@@ -673,6 +673,17 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     }
 
 
+    @Override
+    public Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
+    {
+        return this.visitVariable( p_context.variable() );
+    }
+
+    @Override
+    public Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
+    {
+        return this.visitVariable( p_context.variable() );
+    }
 
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )

@@ -33,8 +33,8 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -62,6 +62,10 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * flag of parallel execution
      */
     private boolean m_parallel;
+    /**
+     * return variable
+     */
+    private final IVariable<?> m_return;
 
 
     /**
@@ -69,14 +73,31 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      *
      * @param p_parallel parallel execution flag
      * @param p_initialize expression
-     * @param p_variable iteration variable
+     * @param p_iterator iteration variable
      * @param p_body execution body
      */
-    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_variable, final List<IExecution> p_body )
+    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_iterator, final List<IExecution> p_body )
     {
-        super( p_variable );
+        this( p_parallel, p_initialize, null, p_iterator, p_body );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_parallel parallel execution flag
+     * @param p_initialize expression
+     * @param p_return return variable
+     * @param p_iterator iteration variable
+     * @param p_body execution body
+     */
+    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_return, final IVariable<?> p_iterator,
+                              final List<IExecution> p_body
+    )
+    {
+        super( p_iterator );
         m_parallel = p_parallel;
         m_initialize = p_initialize;
+        m_return = p_return;
         m_body = Collections.unmodifiableList( p_body );
     }
 
@@ -94,23 +115,23 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         if ( m_parallel )
         {
             CCommon.flatList( l_return ).parallelStream().forEach( i -> {
-                final Pair<IVariable<?>, IContext<?>> l_localcontext = this.getLocalContext( p_context, m_value );
+                final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
 
-                l_localcontext.getLeft().set( CCommon.getRawValue( i ) );
+                l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
                 m_body.stream().forEach(
                         j -> j.execute(
-                                l_localcontext.getRight(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
+                                l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
             } );
         }
         else
         {
-            final Pair<IVariable<?>, IContext<?>> l_localcontext = this.getLocalContext( p_context, m_value );
+            final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context, m_value, m_return );
 
             CCommon.flatList( l_return ).stream().forEach( i -> {
-                l_localcontext.getLeft().set( CCommon.getRawValue( i ) );
+                l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
                 m_body.stream().forEach(
                         j -> j.execute(
-                                l_localcontext.getRight(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
+                                l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
             } );
         }
 
@@ -147,15 +168,34 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return MessageFormat.format( "{0}({1}) -> {2} | {3}", m_parallel ? "@" : "", m_initialize, m_value, m_body );
     }
 
-    private Pair<IVariable<?>, IContext<?>> getLocalContext( final IContext<?> p_context, final IVariable<?> p_iterator )
+
+    /**
+     * create the local context structure of the expression
+     *
+     * @param p_context local context
+     * @param p_iterator iterator variable
+     * @param p_return return variable or null
+     * @return tripel with context, iterator variable and return variable
+     */
+    private Triple<IContext<?>, IVariable<?>, IVariable<?>> getLocalContext( final IContext<?> p_context, final IVariable<?> p_iterator,
+                                                                             final IVariable<?> p_return
+    )
     {
         final IVariable<?> l_iterator = p_iterator.clone();
+        final IVariable<?> l_return = p_return != null ? p_return.clone() : null;
         final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
 
         l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
         l_variables.remove( l_iterator );
         l_variables.add( l_iterator );
 
-        return new ImmutablePair<>( l_iterator, new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables ) );
+
+        if ( l_return != null )
+        {
+            l_variables.remove( l_return );
+            l_variables.add( l_return );
+        }
+
+        return new ImmutableTriple<>( new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables ), l_iterator, l_return );
     }
 }

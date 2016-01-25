@@ -313,6 +313,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
+    public Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitIf_else( final AgentParser.If_elseContext p_context )
     {
         return null;
@@ -674,6 +680,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
     {
         return null;
     }
