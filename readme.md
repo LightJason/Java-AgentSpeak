@@ -241,6 +241,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
+
 ## <a name="notes">Notes</a>
 
 * We support multiple ```prefix-tag```, e.g.
@@ -264,4 +265,51 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     * Introduce barrier in plans as a synchronisation point, where an agent waits until a certain condition matches, e.g. ```< term1, term2, ... | timeout >```
     * Distribution of joint plans, i.e. sub-plans/-actions/-beliefs via [MPI](https://de.wikipedia.org/wiki/Message_Passing_Interface) concepts like [gather](https://de.wikipedia.org/wiki/Message_Passing_Interface#Gather_.28sammeln.29)/[scatter](https://de.wikipedia.org/wiki/Message_Passing_Interface#Scatter_.28streuen.29)
 * add optional [FIPA communication interface](http://www.fipa.org/specs/fipa00061/index.html) (encapsulate message parsing) and [FIPA ontology](http://www.fipa.org/specs/fipa00086/index.html) definition
-* build distribution grid-world game with [Jetty](http://www.eclipse.org/jetty/) and use [HTML5 game engines](http://www.designyourway.net/blog/resources/javascript-html5-game-engines-libraries-51-examples/)
+
+
+## <a name="example">Example</a>
+
+Build distribution grid-world game with [Jetty](http://www.eclipse.org/jetty/) and use [HTML5 game engines](http://www.designyourway.net/blog/resources/javascript-html5-game-engines-libraries-51-examples/).
+Each agent must search food and must eat to grow up, can bite other agents to get power. The bited agent lost power.
+The weight of the agent defines the biting power, also an agent can be growl other agent to warn. The user can be add postboxes, agent generates (of it own agents) and define food generators (but the own
+user agents don't eat own food). Each agent can be seperate itself to smaller agents. Each agent can be push / pull / list a postbox on the grid world to left messages (a postbox is limited to a fixed number
+of items). The user can send a signal to all own agents to come home (the distance from the home grid to the agent current position defines the costs of the call). Each action decreases the current power
+of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an agent lose its power, it dies. 
+
+* Agent actions
+    * eat (small agents are picky to eat own food)
+    * bite (only an agent is near - one cell, bite power is based on the weight)
+    * growl (only an agent is near - distance based on the weight)
+    * talk (only an agent is near - one cell and one agent)
+    * shout (distanced based a parameter value and current power)
+    * move
+    * split (based on the current weight - weight is divide to the number of agents)
+    * cure (another agent - if another team agent, the cure information is cached so a bit / growl is reduced)
+    * home (returns the current direction to the home grid)
+    * member (returns the position - if exists - of the nearest agent of my team)
+    * invite (agent can invite another agent to be a member of the team - defined only to one agent)
+    * abandon (an invited agent can removed from the team membership)
+    
+* Generators
+    * generates agents based on a script
+    * script can be changes all the time
+    * generator number is limited
+    * the agent generating process depends on a probability which is defined on the number of generators
+    
+* Food sources
+    * food sources are limited but can set on any grid cell
+    * the source generates around itself some food elements 
+    
+* Postbox (agent is near to postbox - one cell)
+    * push message
+    * list (all messages)
+    * pull message
+    
+* Grid World
+    * agents can be moved on the current grid to each position (except generators, postboxes and other agents)
+    * if an agent is moved to the border of a local grid, only the number of agents and current food elements is transfered from the neighbour
+    * on each grid the coherency is calculated
+
+* User challenge
+    * maximize the power over all own agents, but the power is definied by the weight and the rate of movements of all agents. 
+    * define a good home grid world (each user can define the number of cells individually)
