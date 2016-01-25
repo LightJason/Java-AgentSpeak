@@ -37,6 +37,7 @@ import java.util.Set;
 /**
  * binary expression
  */
+@SuppressWarnings( "serial" )
 public abstract class IBaseBinary implements IBinaryExpression
 {
     /**

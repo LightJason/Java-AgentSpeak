@@ -302,6 +302,12 @@ public final class CReflection
         }
 
         @Override
+        public final int hashCode()
+        {
+            return m_field.hashCode() + ( m_getter != null ? m_getter.hashCode() : 0 ) + ( m_setter != null ? m_setter.hashCode() : 0 );
+        }
+
+        @Override
         public final boolean equals( final Object p_object )
         {
             return ( this.hashCode() == p_object.hashCode() )
@@ -398,6 +404,12 @@ public final class CReflection
         public final int getMinimalArgumentNumber()
         {
             return m_minimalarguments;
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return m_handle.hashCode() + m_method.hashCode() + m_minimalarguments;
         }
 
         @Override

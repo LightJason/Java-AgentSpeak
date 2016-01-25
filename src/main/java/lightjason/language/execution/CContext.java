@@ -89,9 +89,10 @@ public final class CContext<T> implements IContext<T>
     }
 
     @Override
-    public T getInstance()
+    @SuppressWarnings( "unchecked" )
+    public <N> N getInstance()
     {
-        return m_instance;
+        return (N) m_instance;
     }
 
     @Override
@@ -117,4 +118,5 @@ public final class CContext<T> implements IContext<T>
     {
         return MessageFormat.format( "{0} [{1} | {2} | {3} | {4}]", super.toString(), m_agent, m_instance, m_variables, m_runningplans.values() );
     }
+
 }

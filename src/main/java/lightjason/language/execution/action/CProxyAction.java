@@ -184,6 +184,7 @@ public final class CProxyAction implements IExecution
          * @param p_value variable type
          * @return variable set (empty)
          */
+        @SuppressWarnings( "serial" )
         private Set<IVariable<?>> getVariableSet( final IVariable<?> p_value )
         {
             return new HashSet<IVariable<?>>()

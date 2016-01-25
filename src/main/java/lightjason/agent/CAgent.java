@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
  * @bug remove test plan execution
  * @bug inspector call incomplete
  */
+@SuppressWarnings( "serial" )
 public class CAgent implements IAgent
 {
     /**

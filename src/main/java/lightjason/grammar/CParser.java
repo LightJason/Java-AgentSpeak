@@ -96,6 +96,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     /**
      * numeric constant values - infinity is defined manually
      */
+    @SuppressWarnings( "serial" )
     protected static final Map<String, Double> NUMERICCONSTANT = new HashMap<String, Double>()
     {{
 

@@ -32,6 +32,8 @@ import java.util.Map;
 
 /**
  * execution context with local data
+ *
+ * @todo add inheritance of plan/rule interface
  */
 public interface IContext<T>
 {
@@ -47,8 +49,11 @@ public interface IContext<T>
      * returns the instance object
      *
      * @return instance object plan or rule
+     *
+     * @tparam N type
+     * @todo add inheritance of plan/rule interface
      */
-    T getInstance();
+    <N> N getInstance();
 
     /**
      * returns the variables names and their current value

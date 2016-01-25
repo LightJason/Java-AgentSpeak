@@ -42,6 +42,7 @@ import java.util.Set;
 /**
  * atom expression
  */
+@SuppressWarnings( "serial" )
 public class CAtom implements IExpression
 {
     /**
