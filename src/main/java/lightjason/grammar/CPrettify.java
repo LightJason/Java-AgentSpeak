@@ -193,6 +193,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
+    public Object visitUnification( final AgentParser.UnificationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
         return null;
@@ -548,6 +554,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitBarrier( final PlanBundleParser.BarrierContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
         return null;
     }

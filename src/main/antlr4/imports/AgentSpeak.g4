@@ -174,6 +174,7 @@ body :
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
     | term
+    | unification
 
     | barrier
 
@@ -242,6 +243,14 @@ deconstruct_expression :
 barrier :
     LESS expression ( COMMA integernumber_positive )? GREATER
     ;
+
+/**
+ * unification expression
+ **/
+unification :
+ GREATER GREATER AT?
+ STRONGNEGATION? literal
+ ;
 
 /**
  * assignment expression (for assignin a variable)

@@ -24,4 +24,9 @@ second(true).
         // parallel lambda expression
         // @(O) -> Y | { generic/print(Y); generic/print(O); }
 
+        // sequential unification
+        >>foo(U);
+        // parallel unification
+        >>@foo(I)
+
         .

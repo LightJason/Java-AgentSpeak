@@ -540,6 +540,19 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     }
 
 
+    @Override
+    public Object visitUnification( final AgentParser.UnificationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
+    {
+        return null;
+    }
+
+
 
     @Override
     public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
