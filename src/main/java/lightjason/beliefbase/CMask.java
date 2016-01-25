@@ -141,12 +141,6 @@ public class CMask implements IMask
     }
 
     @Override
-    public void update( final IAgent p_agent )
-    {
-        m_beliefbase.update( p_agent );
-    }
-
-    @Override
     public final int size()
     {
         return m_beliefbase.size();
@@ -287,6 +281,12 @@ public class CMask implements IMask
         }
 
         return walk( p_literal.getFunctorPath(), this, null ).remove( p_literal );
+    }
+
+    @Override
+    public <T extends IAgent> void update( final T p_agent )
+    {
+        m_beliefbase.update( p_agent );
     }
 
     @Override

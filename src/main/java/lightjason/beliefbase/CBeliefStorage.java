@@ -84,7 +84,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public void update( final IAgent p_agent )
+    public <T extends IAgent> void update( final T p_agent )
     {
     }
 
