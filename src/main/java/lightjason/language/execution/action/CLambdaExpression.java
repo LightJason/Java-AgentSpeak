@@ -24,8 +24,10 @@
 package lightjason.language.execution.action;
 
 import lightjason.agent.IAgent;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
+import lightjason.language.execution.CContext;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -34,14 +36,15 @@ import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
  * lambda expression definition
- *
- * @bug incomplete
  */
 public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 {
@@ -80,11 +83,26 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
                                                final List<ITerm> p_annotation
     )
     {
-        // execute initialization
-        // stream over the resulting list
-        // reallocate variables
-        // create new context
-        // run inner execution
+        // rebuild instance variable map with overlapping variables
+        final IVariable<?> l_iterator = m_value.clone();
+        final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
+
+        l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
+        l_variables.remove( l_iterator );
+        l_variables.add( l_iterator );
+
+        // create new execution context and run initialization
+        final IContext<?> l_context = new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables );
+
+        final List<ITerm> l_return = new LinkedList<>();
+        m_initialize.execute( p_context, p_parallel, p_argument, l_return, p_annotation );
+
+        // run lambda expression
+        CCommon.flatList( l_return ).stream().forEach( i -> {
+            l_iterator.set( CCommon.getRawValue( i ) );
+            m_body.stream().forEach(
+                    j -> j.execute( l_context, m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) );
+        } );
 
         return CBoolean.from( true );
     }

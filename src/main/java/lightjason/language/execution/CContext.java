@@ -27,9 +27,7 @@ import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -57,10 +55,7 @@ public final class CContext<T> implements IContext<T>
      * plan variables with their data
      */
     private final Map<CPath, IVariable<?>> m_variables;
-    /**
-     * current running plans
-     */
-    private final Map<ILiteral, IPlan> m_runningplans;
+
 
     /**
      * ctor
@@ -68,17 +63,15 @@ public final class CContext<T> implements IContext<T>
      * @param p_agent agent
      * @param p_instance instance object
      * @param p_variables instance variables
-     * @param p_runningplans current running plans
      */
-    public CContext( final IAgent p_agent, final T p_instance, final Set<IVariable<?>> p_variables, final Map<ILiteral, IPlan> p_runningplans )
+    public CContext( final IAgent p_agent, final T p_instance, final Set<IVariable<?>> p_variables )
     {
-        if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) || ( p_runningplans == null ) )
+        if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
 
         m_agent = p_agent;
         m_instance = p_instance;
         m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::getFQNFunctor, i -> i ) ) );
-        m_runningplans = p_runningplans;
     }
 
 
@@ -104,7 +97,7 @@ public final class CContext<T> implements IContext<T>
     @Override
     public final int hashCode()
     {
-        return m_agent.hashCode() + m_instance.hashCode() + m_variables.keySet().hashCode() + m_runningplans.values().hashCode();
+        return m_agent.hashCode() + m_instance.hashCode() + m_variables.keySet().hashCode();
     }
 
     @Override
@@ -116,7 +109,7 @@ public final class CContext<T> implements IContext<T>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [{1} | {2} | {3} | {4}]", super.toString(), m_agent, m_instance, m_variables, m_runningplans.values() );
+        return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_agent, m_instance, m_variables );
     }
 
 }
