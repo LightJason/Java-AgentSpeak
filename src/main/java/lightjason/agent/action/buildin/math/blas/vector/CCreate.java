@@ -26,6 +26,7 @@ package lightjason.agent.action.buildin.math.blas.vector;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.agent.action.buildin.math.blas.EType;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
@@ -81,13 +82,4 @@ public final class CCreate extends IBuildinAction
         return CBoolean.from( true );
     }
 
-
-    /**
-     * matrix type
-     */
-    private enum EType
-    {
-        SPARSE,
-        DENSE;
-    }
 }

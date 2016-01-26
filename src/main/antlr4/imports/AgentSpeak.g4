@@ -248,7 +248,7 @@ barrier :
  * unification expression
  **/
 unification :
- GREATER GREATER AT?
+ AT? GREATER GREATER
  STRONGNEGATION? literal
  ;
 

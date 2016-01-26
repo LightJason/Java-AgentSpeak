@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.matrix;
+package lightjason.agent.action.buildin.math.blas.vector;
 
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.agent.action.buildin.math.blas.EType;
 import lightjason.language.CCommon;
@@ -35,17 +35,18 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
- * creates a dense- or sparse-matrix
+ * creates a dense- or sparse-vector from a list
  */
-public final class CCreate extends IBuildinAction
+public final class CFromList extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCreate()
+    public CFromList()
     {
         super( 4 );
     }
@@ -53,7 +54,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -61,20 +62,21 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument is row-size, second colum-size
-        // optional third argument is matrix type (default dense-matrix)
-        switch ( p_argument.size() > 2 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 3 ) ) ) : EType.DENSE )
+        // first argument is the list type
+        // optional second argument is matrix type (default dense-matrix)
+        final List<Double> l_data = CCommon.getRawValue( p_argument.get( 0 ) );
+        switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
-                p_return.add(
-                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
-                );
+                final DenseDoubleMatrix1D l_densevector = new DenseDoubleMatrix1D( l_data.size() );
+                IntStream.range( 0, l_data.size() ).boxed().forEach( i -> l_densevector.setQuick( i, l_data.get( i ) ) );
+                p_return.add( new CRawTerm<>( l_densevector ) );
                 break;
 
             case SPARSE:
-                p_return.add(
-                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
-                );
+                final SparseDoubleMatrix1D l_sparsevector = new SparseDoubleMatrix1D( l_data.size() );
+                IntStream.range( 0, l_data.size() ).boxed().forEach( i -> l_sparsevector.setQuick( i, l_data.get( i ) ) );
+                p_return.add( new CRawTerm<>( l_sparsevector ) );
                 break;
 
             default:

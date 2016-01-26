@@ -24,7 +24,6 @@
 package lightjason.agent.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -72,7 +71,7 @@ public final class CAssign extends IBuildinAction
             return CBoolean.from( true );
         }
 
-        if ( l_value instanceof DoubleMatrix2D )
+        if ( l_value instanceof DoubleMatrix1D )
         {
             p_return.add( CRawTerm.from( l_matrix.assign( (DoubleMatrix1D) l_value ) ) );
             return CBoolean.from( true );

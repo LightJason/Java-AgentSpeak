@@ -35,7 +35,7 @@ second(true).
         // sequential unification
         >>foo(U);
         // parallel unification
-        >>@foo(U);
+        @>>foo(U);
 
         if ( Z > 100.0 )
             generic/print("if true")
