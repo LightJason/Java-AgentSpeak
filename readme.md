@@ -290,6 +290,11 @@ of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an 
     * invite (agent can invite another agent to be a member of the team - defined only to one agent)
     * abandon (an invited agent can removed from the team membership)
     
+* Perceive
+    * an agent percive its environment based on the power and weight
+    * weight defines the distance
+    * power the probability of the visibility
+    
 * Team member
     * an agent can be invited to another team, so the power is increased because the team size is increased
     * if a team member bits or growl to another team member the power is decreased
