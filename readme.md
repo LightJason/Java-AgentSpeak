@@ -278,7 +278,7 @@ of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an 
 
 * Agent actions
     * eat (small agents are picky to eat own food)
-    * bite (only an agent is near - one cell, bite power is based on the weight)
+    * bite/shoot (see _Weapons_)
     * growl (only an agent is near - distance based on the weight)
     * talk (only an agent is near - one cell and one agent)
     * shout (distanced based a parameter value and current power)
@@ -322,9 +322,26 @@ of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an 
     * if an agent is moved to the border of a local grid, only the number of agents and current food elements is transfered from the neighbour
     * on each grid the coherency is calculated
     * a tilemap is defined for the moving costs of the agent
+    
 
 * User challenge
     * maximize the power over all own agents, but the power is definied by the weight, the rate of movements of all agents and distance from home
     * define a good home grid world (each user can define the number of cells individually)
     * position of agent and food generators can be individual designed and modified
     * the tilemap can be also modified by the user with a [Map Generator](https://github.com/elias-schuett/Online-Tile-Map-Editor)
+    
+* Wormholes
+    * connect two cells on a grid (also possible to connect cells located on different grids)
+    * allow instant travel between connected 
+    * static: connection endures over game time
+    * dynamic: connection changes either cyclic, e.g. A<=>B -> A<=>C -> B<=>C -> A<=>B -> ... or randomly with fixed endpoints or also random endpoints
+    
+* Walls
+    * impenetrable
+    * movable
+    * destructible
+  
+* Weapons
+    * bite (only an agent is near - one cell, bite power is based on the weight)
+    * arrow shot (at another agent's direction, effects and hit probability decreases over distance)
+    * scatter shot (similar to _arrow shot_ but also effects neighboring cells)
