@@ -23,6 +23,7 @@
 
 package lightjason.agent.action.buildin.math.blas.vector;
 
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
@@ -68,20 +69,29 @@ public final class CFromList extends IBuildinAction
         switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
-                final DenseDoubleMatrix1D l_densevector = new DenseDoubleMatrix1D( l_data.size() );
-                IntStream.range( 0, l_data.size() ).boxed().forEach( i -> l_densevector.setQuick( i, l_data.get( i ) ) );
-                p_return.add( new CRawTerm<>( l_densevector ) );
+                p_return.add( this.assign( l_data, new DenseDoubleMatrix1D( l_data.size() ) ) );
                 break;
 
             case SPARSE:
-                final SparseDoubleMatrix1D l_sparsevector = new SparseDoubleMatrix1D( l_data.size() );
-                IntStream.range( 0, l_data.size() ).boxed().forEach( i -> l_sparsevector.setQuick( i, l_data.get( i ) ) );
-                p_return.add( new CRawTerm<>( l_sparsevector ) );
+                p_return.add( this.assign( l_data, new SparseDoubleMatrix1D( l_data.size() ) ) );
                 break;
 
             default:
         }
         return CBoolean.from( true );
+    }
+
+    /**
+     * assigns the list values to the vector
+     *
+     * @param p_data list
+     * @param p_vector vector
+     * @return term
+     */
+    private ITerm assign( final List<Double> p_data, final DoubleMatrix1D p_vector )
+    {
+        IntStream.range( 0, p_data.size() ).boxed().forEach( i -> p_vector.setQuick( i, p_data.get( i ) ) );
+        return new CRawTerm<>( p_vector );
     }
 
 }

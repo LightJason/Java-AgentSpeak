@@ -25,7 +25,7 @@ package lightjason.agent.action.buildin.math.blas;
 
 
 /**
- * blase types
+ * blas types
  */
 public enum EType
 {

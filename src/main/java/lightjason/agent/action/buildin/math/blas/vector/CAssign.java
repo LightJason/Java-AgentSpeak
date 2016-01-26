@@ -33,6 +33,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
@@ -62,18 +63,25 @@ public final class CAssign extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second assign value
-        final DoubleMatrix1D l_matrix = CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) );
+        final DoubleMatrix1D l_vector = CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) );
         final Object l_value = CCommon.getRawValue( p_argument.get( 1 ) );
 
         if ( l_value instanceof Double )
         {
-            p_return.add( CRawTerm.from( l_matrix.assign( (Double) l_value ) ) );
+            p_return.add( CRawTerm.from( l_vector.assign( (Double) l_value ) ) );
             return CBoolean.from( true );
         }
 
         if ( l_value instanceof DoubleMatrix1D )
         {
-            p_return.add( CRawTerm.from( l_matrix.assign( (DoubleMatrix1D) l_value ) ) );
+            p_return.add( CRawTerm.from( l_vector.assign( (DoubleMatrix1D) l_value ) ) );
+            return CBoolean.from( true );
+        }
+
+        if ( l_value instanceof List<?> )
+        {
+            final List<Double> l_data = (List<Double>) l_value;
+            IntStream.range( 0, Math.min( l_vector.size(), l_data.size() ) ).boxed().forEach( i -> l_vector.setQuick( i, l_data.get( i ) ) );
             return CBoolean.from( true );
         }
 
