@@ -248,7 +248,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     * ```>>``` (unification)
     * ```@``` (parallel)
     * ...
-    * If more than one prefix-tag is needed we order them by the rule: _First WHAT, then HOW_, e.g. ```>>@``` (unifiy in parallel)
+    * If more than one prefix-tag is needed we order them by the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
     
 
 ## <a name="todo">Todos</a>
