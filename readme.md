@@ -271,8 +271,8 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 Build distribution grid-world game with [Jetty](http://www.eclipse.org/jetty/) and use [HTML5 game engines](http://www.designyourway.net/blog/resources/javascript-html5-game-engines-libraries-51-examples/).
 Each agent must search food and must eat to grow up, can bite other agents to get power. The bited agent lost power.
-The weight of the agent defines the biting power, also an agent can be growl other agent to warn. The user can be add postboxes, agent generates (of it own agents) and define food generators (but the own
-user agents don't eat own food). Each agent can be seperate itself to smaller agents. Each agent can be push / pull / list a postbox on the grid world to left messages (a postbox is limited to a fixed number
+The weight of the agent defines the biting power, also an agent can be growl other agent to warn. The user can be add pinboard, agent generates (of it own agents) and define food generators (but the own
+user agents don't eat own food). Each agent can be seperate itself to smaller agents. Each agent can be push / pull / list a pinboard on the grid world to left messages (a pinboard is limited to a fixed number
 of items). The user can send a signal to all own agents to come home (the distance from the home grid to the agent current position defines the costs of the call). Each action decreases the current power
 of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an agent lose its power, it dies. 
 
@@ -282,7 +282,7 @@ of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an 
     * growl (only an agent is near - distance based on the weight)
     * talk (only an agent is near - one cell and one agent)
     * shout (distanced based a parameter value and current power)
-    * move
+    * move (moving power is defined by the underling tilemap)
     * split (based on the current weight - weight is divide to the number of agents)
     * cure (another agent - if another team agent, the cure information is cached so a bit / growl is reduced)
     * home (returns the current direction to the home grid)
@@ -290,26 +290,36 @@ of the agent, e.g. for large agents a bit is cheap, but moving expensive. If an 
     * invite (agent can invite another agent to be a member of the team - defined only to one agent)
     * abandon (an invited agent can removed from the team membership)
     
+* Team member
+    * an agent can be invited to another team, so the power is increased because the team size is increased
+    * if a team member bits or growl to another team member the power is decreased
+    * if eat is failed, because a team member has picked up earlier the power is decreased
+    
 * Generators
     * generates agents based on a script
     * script can be changes all the time
     * generator number is limited
     * the agent generating process depends on a probability which is defined on the number of generators
+    * sources reduce the global power (costs)
     
 * Food sources
     * food sources are limited but can set on any grid cell
     * the source generates around itself some food elements 
+    * sources reduce the global power (costs)
     
-* Postbox (agent is near to postbox - one cell)
+* Pinboard (agent is near to pinboard - one cell)
     * push message
     * list (all messages)
     * pull message
     
 * Grid World ([RPG](http://rpgjs.com/))
-    * agents can be moved on the current grid to each position (except generators, postboxes and other agents)
+    * agents can be moved on the current grid to each position (except generators, pinboard and other agents)
     * if an agent is moved to the border of a local grid, only the number of agents and current food elements is transfered from the neighbour
     * on each grid the coherency is calculated
+    * a tilemap is defined for the moving costs of the agent
 
 * User challenge
-    * maximize the power over all own agents, but the power is definied by the weight and the rate of movements of all agents. 
+    * maximize the power over all own agents, but the power is definied by the weight, the rate of movements of all agents and distance from home
     * define a good home grid world (each user can define the number of cells individually)
+    * position of agent and food generators can be individual designed and modified
+    * the tilemap can be also modified by the user with a [Map Generator](https://github.com/elias-schuett/Online-Tile-Map-Editor)
