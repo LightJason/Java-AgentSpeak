@@ -25,6 +25,8 @@ package lightjason.language.execution.action;
 
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
+import lightjason.language.execution.CContext;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.expression.IExpression;
@@ -33,8 +35,11 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -61,7 +66,7 @@ public final class CIfElse extends IBaseExecution<IExpression>
      */
     public CIfElse( final IExpression p_expression, final List<IExecution> p_true )
     {
-        this( p_expression, p_true, Collections.<IExecution>emptyList() );
+        this( p_expression, p_true, null );
     }
 
     /**
@@ -75,7 +80,7 @@ public final class CIfElse extends IBaseExecution<IExpression>
     {
         super( p_expression );
         m_true = Collections.unmodifiableList( p_true );
-        m_false = Collections.unmodifiableList( p_false );
+        m_false = p_false;
     }
 
 
@@ -89,11 +94,28 @@ public final class CIfElse extends IBaseExecution<IExpression>
              ( l_argument.size() != 1 ) )
             return CBoolean.from( false );
 
-        return CBoolean.from(
-                CCommon.getRawValue( l_argument.get( 0 ) )
-                ? m_true.stream().map( i -> i.execute( p_context, p_parallel, p_argument, p_return, p_annotation ) ).allMatch( CBoolean.isTrue() )
-                : m_false.stream().map( i -> i.execute( p_context, p_parallel, p_argument, p_return, p_annotation ) ).allMatch( CBoolean.isTrue() )
-        );
+        // create local execution context depend on the expression result and run the
+        final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
+
+        // true-execution
+        if ( CCommon.getRawValue( l_argument.get( 0 ) ) )
+        {
+            l_variables.addAll( m_true.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
+            final IContext<?> l_context = new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables );
+            return CBoolean.from(
+                    m_true.stream().map( i -> i.execute( l_context, p_parallel, p_argument, p_return, p_annotation ) ).allMatch( CBoolean.isTrue() ) );
+        }
+
+        // false-execution if exists
+        if ( m_false != null )
+        {
+            l_variables.addAll( m_false.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
+            final IContext<?> l_context = new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables );
+            return CBoolean.from(
+                    m_false.stream().map( i -> i.execute( l_context, p_parallel, p_argument, p_return, p_annotation ) ).allMatch( CBoolean.isTrue() ) );
+        }
+
+        return CBoolean.from( true );
     }
 
     @Override
