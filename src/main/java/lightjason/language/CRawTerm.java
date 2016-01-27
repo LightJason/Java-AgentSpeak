@@ -32,6 +32,8 @@ import java.util.Arrays;
 
 /**
  * term structure for simple datatypes
+ *
+ * @warning hash code is defined on the input data type
  */
 public final class CRawTerm<T> implements ITerm
 {
@@ -43,6 +45,10 @@ public final class CRawTerm<T> implements ITerm
      * functor
      */
     private final CPath m_functor;
+    /**
+     * hash code cache
+     */
+    private final int m_hashcode;
 
     /**
      * ctor
@@ -70,6 +76,8 @@ public final class CRawTerm<T> implements ITerm
             m_value = (T) p_value;
             m_functor = p_value == null ? CPath.EMPTY : CPath.from( p_value.toString() );
         }
+
+        m_hashcode = m_value == null ? super.hashCode() : m_value.hashCode();
     }
 
 
@@ -91,13 +99,13 @@ public final class CRawTerm<T> implements ITerm
     @Override
     public final int hashCode()
     {
-        return m_value == null ? super.hashCode() : m_value.hashCode();
+        return m_hashcode;
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return m_value == null ? super.equals( p_object ) : m_value.equals( p_object );
+        return m_hashcode == p_object.hashCode();
     }
 
     @Override

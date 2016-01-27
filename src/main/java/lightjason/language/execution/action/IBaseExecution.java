@@ -25,6 +25,7 @@ package lightjason.language.execution.action;
 
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.score.IAggregation;
@@ -47,19 +48,13 @@ public abstract class IBaseExecution<T> implements IExecution
 
     /**
      * ctor
-     */
-    protected IBaseExecution()
-    {
-        m_value = null;
-    }
-
-    /**
-     * ctor
      *
      * @param p_value data
      */
     protected IBaseExecution( final T p_value )
     {
+        if ( p_value == null )
+            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( IBaseExecution.class, "notnull" ) );
         m_value = p_value;
     }
 

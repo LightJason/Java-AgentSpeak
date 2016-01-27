@@ -52,13 +52,13 @@ public final class CRawAction<T> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value != null ? m_value.hashCode() : super.hashCode();
+        return m_value.hashCode();
     }
 
     @Override
     public final String toString()
     {
-        return m_value != null ? m_value.toString() : super.toString();
+        return m_value.toString();
     }
 
     @Override
