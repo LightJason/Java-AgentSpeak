@@ -57,22 +57,29 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * instance of the aggregate function
      */
     private final IAggregation m_aggregation;
+    /**
+     * instance of variable builder
+     */
+    private final IVariableBuilder m_variablebuilder;
 
 
     /**
      * ctor
      *
      * @param p_aggregation aggregation function
+     * @param p_variablebuilder variable builder
      * @param p_plans plans
      * @param p_initalbeliefs set with initial beliefs
      * @param p_initialgoal initial goal
      */
-    public CDefaultAgentConfiguration( final IAggregation p_aggregation, final SetMultimap<ITrigger<?>, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
+                                       final SetMultimap<ITrigger<?>, IPlan> p_plans,
                                        final Collection<ILiteral> p_initalbeliefs, final ILiteral p_initialgoal
     )
     {
         m_plans = p_plans;
         m_aggregation = p_aggregation;
+        m_variablebuilder = p_variablebuilder;
         m_initialgoal = p_initialgoal;
         m_initialbeliefs = p_initalbeliefs;
     }
@@ -95,6 +102,12 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public IAggregation getAggregate()
     {
         return m_aggregation;
+    }
+
+    @Override
+    public IVariableBuilder getVariableBuilder()
+    {
+        return m_variablebuilder;
     }
 
     @Override

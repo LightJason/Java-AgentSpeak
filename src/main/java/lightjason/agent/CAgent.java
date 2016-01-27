@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IAgentConfiguration;
+import lightjason.agent.configuration.IVariableBuilder;
 import lightjason.beliefbase.IMask;
 import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
@@ -90,6 +91,10 @@ public class CAgent implements IAgent
      */
     protected final IAggregation m_aggregation;
     /**
+     * variable builder
+     */
+    protected final IVariableBuilder m_variablebuilder;
+    /**
      * hibernate state
      */
     private volatile boolean m_hibernate;
@@ -106,6 +111,7 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_plans = p_configuration.getPlans();
         m_aggregation = p_configuration.getAggregate();
+        m_variablebuilder = p_configuration.getVariableBuilder();
 
         if ( p_configuration.getInitialGoal() != null )
             m_goals.add( p_configuration.getInitialGoal() );
@@ -183,7 +189,6 @@ public class CAgent implements IAgent
         // collect plan/goal events
         // create execution list
 
-
         System.out.println( "=====>> " + this );
 
         m_plans.values().stream().forEach( i -> {
@@ -196,7 +201,15 @@ public class CAgent implements IAgent
                                             Collections.unmodifiableSet(
                                                     new HashSet<IVariable<?>>()
                                                     {{
+                                                        // get plan variables
                                                         addAll( i.getVariables() );
+
+                                                        // add customized variables and replace existing
+                                                        if ( m_variablebuilder != null )
+                                                            m_variablebuilder.generate( CAgent.this, i ).stream().forEach( i -> {
+                                                                remove( i );
+                                                                add( i );
+                                                            } );
 
                                                         // remove all internal values if exist and add a new reference
                                                         Arrays.stream( new IVariable<?>[]{

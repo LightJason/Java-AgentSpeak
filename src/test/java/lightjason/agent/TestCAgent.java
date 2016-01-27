@@ -27,8 +27,12 @@ import com.google.common.collect.Multiset;
 import lightjason.agent.action.IAction;
 import lightjason.agent.action.buildin.bind.CBind;
 import lightjason.agent.action.buildin.bind.IActionBind;
+import lightjason.agent.configuration.IVariableBuilder;
 import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.language.CCommon;
+import lightjason.language.CConstant;
+import lightjason.language.IVariable;
+import lightjason.language.plan.IPlan;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,8 +45,10 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
@@ -126,7 +132,7 @@ public final class TestCAgent
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ) ).generate().call();
+            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ), new CVariableBuilder() ).generate().call();
         }
         catch ( final Exception p_exception )
         {
@@ -157,15 +163,35 @@ public final class TestCAgent
         }
 
         @Override
-        public double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+        public final double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
         {
             return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( i -> m_actions.get( i ) ).sum();
         }
 
         @Override
-        public double evaluate( final Collection<Double> p_values )
+        public final double evaluate( final Collection<Double> p_values )
         {
             return p_values.parallelStream().mapToDouble( i -> i ).sum();
+        }
+    }
+
+
+    /**
+     * variable builder
+     */
+    private static final class CVariableBuilder implements IVariableBuilder
+    {
+
+        @Override
+        @SuppressWarnings( "serial" )
+        public final <T extends IAgent, N extends IPlan> Set<IVariable<?>> generate( final T p_agent, final N p_runningcontext
+        )
+        {
+            return new HashSet<IVariable<?>>()
+            {{
+                add( new CConstant<>( "MyConstInt", 123 ) );
+                add( new CConstant<>( "MyConstString", "here is a test string" ) );
+            }};
         }
     }
 

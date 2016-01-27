@@ -3,7 +3,7 @@ second(true).
 
 +!drive
     <-
-        generic/print(Score, Cycle);
+        generic/print(Score, Cycle, MyConstInt, MyConstString);
 
         L = collection/list/range(1, 40);
         [A|B|C|_|D|E|F|G] = L;

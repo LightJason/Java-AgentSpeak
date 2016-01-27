@@ -28,6 +28,7 @@ import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
+import lightjason.agent.configuration.IVariableBuilder;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CErrorListener;
@@ -63,7 +64,9 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * @param p_aggregation aggregation function
      * @throws IOException thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
+                                   final IVariableBuilder p_variablebuilder
+    )
     throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
@@ -71,7 +74,9 @@ public class CDefaultAgentGenerator implements IAgentGenerator
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
-                p_aggregation, l_visitor.getPlans(), l_visitor.getInitialBeliefs(), l_visitor.getInitialGoal() );
+                p_aggregation, p_variablebuilder,
+                l_visitor.getPlans(), l_visitor.getInitialBeliefs(), l_visitor.getInitialGoal()
+        );
     }
 
     @Override
