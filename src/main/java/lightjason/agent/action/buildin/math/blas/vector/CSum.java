@@ -59,7 +59,7 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a vector object, second index of the element
+        // first argument must be a term with a vector object
         p_return.add( CRawTerm.from( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).zSum() ) );
         return CBoolean.from( true );
     }

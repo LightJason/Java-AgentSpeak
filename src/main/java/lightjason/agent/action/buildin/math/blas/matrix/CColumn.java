@@ -33,6 +33,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,12 +64,21 @@ public final class CColumn extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second column index
-        p_return.addAll(
+        p_return.add( CRawTerm.from(
+                p_parallel
+                ? Collections.synchronizedList(
                 Arrays.stream(
                         CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
                                 .viewColumn( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
-                ).mapToObj( i -> CRawTerm.<Double>from( i ) ).collect( Collectors.toList() )
-        );
+                )
+                      .boxed().collect( Collectors.toList() )
+                )
+                : Arrays.stream(
+                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
+                                .viewColumn( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
+                )
+                        .boxed().collect( Collectors.toList() )
+        ) );
 
         return CBoolean.from( true );
     }
