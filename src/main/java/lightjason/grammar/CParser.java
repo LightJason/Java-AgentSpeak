@@ -698,10 +698,10 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     public Object visitLambda_initialization( final AgentParser.Lambda_initializationContext p_context )
     {
         if ( p_context.variable() != null )
-            return this.createExecution( this.visitVariable( p_context.variable() ) );
+            return new CRawAction<>( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.term() != null )
-            return this.createExecution( this.visitTerm( p_context.term() ) );
+        if ( p_context.literal() != null )
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "lambdainitialization", p_context.getText() ) );
     }
@@ -710,10 +710,10 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
     {
         if ( p_context.variable() != null )
-            return this.createExecution( this.visitVariable( p_context.variable() ) );
+            return new CRawAction<>( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.term() != null )
-            return this.createExecution( this.visitTerm( p_context.term() ) );
+        if ( p_context.literal() != null )
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "lambdainitialization", p_context.getText() ) );
     }

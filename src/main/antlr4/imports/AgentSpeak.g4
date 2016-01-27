@@ -399,7 +399,7 @@ lambda :
  **/
 lambda_initialization :
     LROUNDBRACKET
-    ( variable | term )
+    ( variable | literal )
     RROUNDBRACKET
     ;
 
