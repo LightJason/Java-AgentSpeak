@@ -68,22 +68,11 @@ public final class CLiteral implements ILiteral
     /**
      * ctor
      *
-     * @param p_literal literal
-     * @param p_negated strong negation
-     */
-    public CLiteral( final CLiteral p_literal, final boolean p_negated )
-    {
-        this( p_literal.hasAt(), p_literal.getFQNFunctor(), p_negated, p_literal.getValues().values(), p_literal.getAnnotation().values() );
-    }
-
-    /**
-     * ctor
-     *
      * @param p_functor functor
      */
     public CLiteral( final String p_functor )
     {
-        this( false, p_functor, false, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() );
+        this( false, false, p_functor, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() );
     }
 
     /**
@@ -96,23 +85,23 @@ public final class CLiteral implements ILiteral
      */
     public CLiteral( final boolean p_at, final String p_functor, final Collection<ITerm> p_values, final Collection<ILiteral> p_annotations )
     {
-        this( p_at, CPath.from( p_functor ), false, p_values, p_annotations );
+        this( p_at, false, CPath.from( p_functor ), p_values, p_annotations );
     }
 
     /**
      * ctor
      *
      * @param p_at @ prefix is set
-     * @param p_functor functor of the literal
      * @param p_negated negated flag
+     * @param p_functor functor of the literal
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CLiteral( final boolean p_at, final String p_functor, final boolean p_negated, final Collection<ITerm> p_values,
+    public CLiteral( final boolean p_at, final boolean p_negated, final String p_functor, final Collection<ITerm> p_values,
                      final Collection<ILiteral> p_annotations
     )
     {
-        this( p_at, CPath.from( p_functor ), p_negated, p_values, p_annotations );
+        this( p_at, p_negated, CPath.from( p_functor ), p_values, p_annotations );
     }
 
 
@@ -120,12 +109,12 @@ public final class CLiteral implements ILiteral
      * ctor
      *
      * @param p_at @ prefix is set
-     * @param p_functor functor of the literal
      * @param p_negated negated flag
+     * @param p_functor functor of the literal
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CLiteral( final boolean p_at, final CPath p_functor, final boolean p_negated, final Collection<ITerm> p_values,
+    public CLiteral( final boolean p_at, final boolean p_negated, final CPath p_functor, final Collection<ITerm> p_values,
                      final Collection<ILiteral> p_annotations
     )
     {
@@ -147,7 +136,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final ILiteral clone( final CPath p_prefix )
     {
-        return new CLiteral( m_at, p_prefix.append( m_functor ).toString(), m_negated, m_values.values(), m_annotations.values() );
+        return new CLiteral( m_at, m_negated, p_prefix.append( m_functor ).toString(), m_values.values(), m_annotations.values() );
     }
 
     @Override
@@ -211,7 +200,7 @@ public final class CLiteral implements ILiteral
     @Override
     public ILiteral clone()
     {
-        return new CLiteral( m_at, m_functor, m_negated, m_values.values(), m_annotations.values() );
+        return new CLiteral( m_at, m_negated, m_functor, m_values.values(), m_annotations.values() );
     }
 
     @Override

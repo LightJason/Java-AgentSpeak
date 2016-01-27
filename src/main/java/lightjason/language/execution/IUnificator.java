@@ -34,15 +34,27 @@ public interface IUnificator
 {
 
     /**
-     * unifies a literal
+     * unifies a literal in parallel
      *
      * @param p_agent agent
      * @param p_literal literal
-     * @return any object type
+     * @return any object type or null if unification not possible
      *
      * @tparam R any return type
      * @tparam T agent type
      */
-    <R, T extends IAgent> R unify( final T p_agent, final ILiteral p_literal );
+    <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal );
+
+    /**
+     * unifies a literal in parallel
+     *
+     * @param p_agent agent
+     * @param p_literal literal
+     * @return any object type or null if unification not possible
+     *
+     * @tparam R any return type
+     * @tparam T agent type
+     */
+    <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal );
 
 }

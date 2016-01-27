@@ -50,6 +50,7 @@ import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTestGoal;
+import lightjason.language.execution.action.CUnification;
 import lightjason.language.execution.annotation.CAtomAnnotation;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
@@ -163,7 +164,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
     {
-        m_InitialGoal = new CLiteral( p_context.atom().getText() );
+        m_InitialGoal = new CLiteral( (String) this.visitAtom( p_context.atom() ) );
         return null;
     }
 
@@ -184,13 +185,13 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitBelief( final AgentParser.BeliefContext p_context )
     {
-        return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
+        return this.visitLiteral( p_context.literal() );
     }
 
     @Override
     public Object visitBelief( final PlanBundleParser.BeliefContext p_context )
     {
-        return new CLiteral( (CLiteral) this.visitLiteral( p_context.literal() ), p_context.STRONGNEGATION() != null );
+        return this.visitLiteral( p_context.literal() );
     }
 
 
@@ -544,13 +545,13 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
-        return null;
+        return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
     @Override
     public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
-        return null;
+        return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
 
@@ -900,7 +901,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     {
         return new CLiteral(
                 p_context.AT() != null,
-                this.visitAtom( p_context.atom() ).toString(),
+                p_context.STRONGNEGATION() != null, this.visitAtom( p_context.atom() ).toString(),
                 (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
@@ -911,7 +912,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     {
         return new CLiteral(
                 p_context.AT() != null,
-                this.visitAtom( p_context.atom() ).toString(),
+                p_context.STRONGNEGATION() != null, this.visitAtom( p_context.atom() ).toString(),
                 (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
@@ -1333,6 +1334,9 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
+        if ( p_context.unification() != null )
+            return this.visitUnification( p_context.unification() );
+
         //if ( p_context.literal() != null )
         //    return this.createExecution( p_context.literal() );
 
@@ -1347,6 +1351,9 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
+
+        if ( p_context.unification() != null )
+            return this.visitUnification( p_context.unification() );
 
         //if ( p_context.literal() != null )
         //    return this.createExecution( p_context.literal() );

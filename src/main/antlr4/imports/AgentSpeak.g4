@@ -35,7 +35,7 @@ import Terminal;
  * belief rule
  **/
 belief :
-    STRONGNEGATION? literal DOT
+    literal DOT
     ;
 
 /**
@@ -174,7 +174,6 @@ body :
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
     | term
-    | unification
 
     | barrier
 
@@ -249,7 +248,7 @@ barrier :
  **/
 unification :
  AT? GREATER GREATER
- STRONGNEGATION? literal
+ literal
  ;
 
 /**
@@ -322,6 +321,7 @@ expression_logical_element :
     logicalvalue
     | variable
     | literal
+    | unification
     ;
 
 /**
@@ -438,7 +438,7 @@ else_block :
  * atom, optional argument, optional annotations
  **/
 literal :
-    AT?
+    ( AT | STRONGNEGATION )?
     atom
     ( LROUNDBRACKET termlist? RROUNDBRACKET )?
     ( LANGULARBRACKET literalset? RANGULARBRACKET )?
