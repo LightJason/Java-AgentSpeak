@@ -29,12 +29,13 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IAgentConfiguration;
-import lightjason.agent.configuration.IVariableBuilder;
 import lightjason.beliefbase.IMask;
 import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
+import lightjason.language.execution.IUnificator;
+import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
@@ -92,6 +93,8 @@ public class CAgent implements IAgent
     protected final IAggregation m_aggregation;
     /**
      * variable builder
+     *
+     * @warning can be set to null
      */
     protected final IVariableBuilder m_variablebuilder;
     /**
@@ -168,6 +171,18 @@ public class CAgent implements IAgent
     public final Map<String, ?> getStorage()
     {
         return m_storage;
+    }
+
+    @Override
+    public final IUnificator getParallelUnificatior()
+    {
+        return null;
+    }
+
+    @Override
+    public final IUnificator getSequentialUnificator()
+    {
+        return null;
     }
 
     @Override

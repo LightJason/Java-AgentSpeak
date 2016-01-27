@@ -21,35 +21,28 @@
  * @endcond
  */
 
-
-package lightjason.agent.configuration;
+package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
-import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
-
-import java.util.Set;
+import lightjason.language.ILiteral;
 
 
 /**
- * interface for a variable builder which is
- * called on each plan / rule execution
+ * interface of an unification algorithm
  */
-public interface IVariableBuilder
+public interface IUnificator
 {
 
     /**
-     * returns a set of variables / constants
-     * which are pushed to the plan / rule
-     * execution
+     * unifies a literal
      *
-     * @param p_agent agent which is run
-     * @param p_runningcontext plan or rule
-     * @return set with variables
+     * @param p_agent agent
+     * @param p_literal literal
+     * @return any object type
      *
-     * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
-     * @bug IPlan must be modified to general interface of rule & plan
+     * @tparam R any return type
+     * @tparam T agent type
      */
-    <T extends IAgent, N extends IPlan> Set<IVariable<?>> generate( final T p_agent, final N p_runningcontext );
+    <R, T extends IAgent> R unify( final T p_agent, final ILiteral p_literal );
 
 }

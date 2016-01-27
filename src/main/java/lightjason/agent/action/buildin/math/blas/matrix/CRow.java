@@ -67,8 +67,8 @@ public final class CRow extends IBuildinAction
                 p_parallel
                 ? Collections.synchronizedList(
                         Arrays.stream(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
-                                .viewRow( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
+                                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
+                                        .viewRow( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
                         )
                               .boxed().collect( Collectors.toList() )
                 )

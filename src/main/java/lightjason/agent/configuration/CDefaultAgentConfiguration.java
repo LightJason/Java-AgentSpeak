@@ -28,6 +28,7 @@ import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CBeliefStorage;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
@@ -59,6 +60,8 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     private final IAggregation m_aggregation;
     /**
      * instance of variable builder
+     *
+     * @warning can be set to null
      */
     private final IVariableBuilder m_variablebuilder;
 
@@ -66,15 +69,29 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * ctor
      *
+     * @param p_initalbeliefs set with initial beliefs
+     * @param p_plans plans
+     * @param p_initialgoal initial goal
+     * @param p_aggregation aggregation function
+     */
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final SetMultimap<ITrigger<?>, IPlan> p_plans,
+                                       final ILiteral p_initialgoal, final IAggregation p_aggregation
+    )
+    {
+        this( p_initalbeliefs, p_plans, p_initialgoal, p_aggregation, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_initalbeliefs set with initial beliefs
+     * @param p_plans plans
+     * @param p_initialgoal initial goal
      * @param p_aggregation aggregation function
      * @param p_variablebuilder variable builder
-     * @param p_plans plans
-     * @param p_initalbeliefs set with initial beliefs
-     * @param p_initialgoal initial goal
      */
-    public CDefaultAgentConfiguration( final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                                       final SetMultimap<ITrigger<?>, IPlan> p_plans,
-                                       final Collection<ILiteral> p_initalbeliefs, final ILiteral p_initialgoal
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final SetMultimap<ITrigger<?>, IPlan> p_plans,
+                                       final ILiteral p_initialgoal, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder
     )
     {
         m_plans = p_plans;

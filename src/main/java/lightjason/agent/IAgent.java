@@ -26,6 +26,7 @@ package lightjason.agent;
 import com.google.common.collect.SetMultimap;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IUnificator;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
 
@@ -88,5 +89,20 @@ public interface IAgent extends Callable<IAgent>
      * @return storage map
      */
     Map<String, ?> getStorage();
+
+
+    /**
+     * returns a parallel unification
+     *
+     * @return parallel unification
+     */
+    IUnificator getParallelUnificatior();
+
+    /**
+     * returns a sequential unificator
+     *
+     * @return sequential unification
+     */
+    IUnificator getSequentialUnificator();
 
 }

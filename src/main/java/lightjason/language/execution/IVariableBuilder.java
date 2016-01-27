@@ -21,47 +21,35 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
 
-import lightjason.beliefbase.IMask;
-import lightjason.language.ILiteral;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.score.IAggregation;
+package lightjason.language.execution;
+
+import lightjason.agent.IAgent;
+import lightjason.language.IVariable;
+import lightjason.language.plan.IPlan;
+
+import java.util.Set;
 
 
 /**
- * interface to define the agent configuration
+ * interface for a variable builder which is
+ * called on each plan / rule execution
  */
-public interface IAgentConfiguration extends IConfiguration
+public interface IVariableBuilder
 {
 
     /**
-     * returns a beliefbase of the agent
+     * returns a set of variables / constants
+     * which are pushed to the plan / rule
+     * execution
      *
-     * @return root mask
-     */
-    IMask getBeliefbase();
-
-    /**
-     * returns the initial goal
+     * @param p_agent agent which is run
+     * @param p_runningcontext plan or rule
+     * @return set with variables
      *
-     * @return initial goal literal
+     * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
+     * @bug IPlan must be modified to general interface of rule & plan
      */
-    ILiteral getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
+    <T extends IAgent, N extends IPlan> Set<IVariable<?>> generate( final T p_agent, final N p_runningcontext );
 
 }
