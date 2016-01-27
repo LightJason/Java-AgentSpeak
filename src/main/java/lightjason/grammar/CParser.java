@@ -731,6 +731,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         return this.visitVariable( p_context.variable() );
     }
 
+
+
     @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
@@ -1064,13 +1066,15 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     }
 
     @Override
-    public Object visitIntegernumber_negative( final AgentParser.Integernumber_negativeContext p_context )
+    public Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
 
+
+
     @Override
-    public Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
+    public Object visitIntegernumber_negative( final AgentParser.Integernumber_negativeContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -1337,8 +1341,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.unification() != null )
             return this.visitUnification( p_context.unification() );
 
-        //if ( p_context.literal() != null )
-        //    return this.createExecution( p_context.literal() );
+        if ( p_context.literal() != null )
+            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1355,8 +1359,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.unification() != null )
             return this.visitUnification( p_context.unification() );
 
-        //if ( p_context.literal() != null )
-        //    return this.createExecution( p_context.literal() );
+        if ( p_context.literal() != null )
+            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1635,8 +1639,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        //if ( p_context.literal() != null )
-        //    return this.createExecution( p_context.literal() );
+        if ( p_context.literal() != null )
+            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
@@ -1650,8 +1654,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        //if ( p_context.literal() != null )
-        //    return this.createExecution( p_context.literal() );
+        if ( p_context.literal() != null )
+            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
