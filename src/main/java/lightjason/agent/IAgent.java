@@ -90,19 +90,11 @@ public interface IAgent extends Callable<IAgent>
      */
     Map<String, ?> getStorage();
 
-
     /**
-     * returns a parallel unification
+     * returns an unification
      *
-     * @return parallel unification
+     * @return unification algorithm
      */
-    IUnificator getParallelUnificatior();
-
-    /**
-     * returns a sequential unificator
-     *
-     * @return sequential unification
-     */
-    IUnificator getSequentialUnificator();
+    IUnificator getUnificatior();
 
 }

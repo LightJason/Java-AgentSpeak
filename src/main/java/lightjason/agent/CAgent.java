@@ -174,13 +174,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IUnificator getParallelUnificatior()
-    {
-        return null;
-    }
-
-    @Override
-    public final IUnificator getSequentialUnificator()
+    public final IUnificator getUnificatior()
     {
         return null;
     }
