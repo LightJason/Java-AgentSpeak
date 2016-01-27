@@ -32,18 +32,22 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns sum of a vector
+ * converts a vector to a list
  */
-public final class CSum extends IBuildinAction
+public final class CToList extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CSum()
+    public CToList()
     {
         super( 4 );
     }
@@ -59,8 +63,12 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a vector object, second index of the element
-        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).zSum() ) );
+        // first argument must be a term with a vector object
+        p_return.add( CRawTerm.from(
+                p_parallel == true
+                ? Collections.synchronizedList( Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray() ).boxed().collect( Collectors.toList() ) )
+                : Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray() ).boxed().collect( Collectors.toList() )
+        ) );
         return CBoolean.from( true );
     }
 }
