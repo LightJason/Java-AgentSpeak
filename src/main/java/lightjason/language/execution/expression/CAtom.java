@@ -78,6 +78,7 @@ public class CAtom implements IExpression
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final Set<IVariable<?>> getVariables()
     {
         return m_value instanceof IVariable<?> ? new HashSet<IVariable<?>>()

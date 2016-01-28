@@ -32,8 +32,10 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -50,6 +52,22 @@ public final class CRawAction<T> extends IBaseExecution<T>
     public CRawAction( final T p_data )
     {
         super( p_data );
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final Set<IVariable<?>> getVariables()
+    {
+        if ( m_value instanceof IVariable<?> )
+            return new HashSet<IVariable<?>>()
+            {{
+                add( ( (IVariable<?>) m_value ).clone() );
+            }};
+
+        if ( m_value instanceof IExpression )
+            return ( (IExpression) m_value ).getVariables();
+
+        return super.getVariables();
     }
 
     @Override
@@ -105,7 +123,10 @@ public final class CRawAction<T> extends IBaseExecution<T>
                                                  final List<ITerm> p_return
     )
     {
+        System.out.println( "----> foo" );
+
         final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_execution );
+        System.out.println( "----> foo2" );
 
         if ( !l_value.isAllocated() )
             return CBoolean.from( false );

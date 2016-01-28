@@ -120,12 +120,12 @@ public final class CCommon
             return p_term;
 
         final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.getFQNFunctor() );
-        if ( l_variable == null )
-            throw new CIllegalArgumentException( lightjason.common.CCommon
-                                                         .getLanguageString(
-                                                                 lightjason.common.CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() ) );
+        if ( l_variable != null )
+            return l_variable;
 
-        return l_variable;
+        throw new CIllegalArgumentException(
+                lightjason.common.CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() )
+        );
     }
 
 
