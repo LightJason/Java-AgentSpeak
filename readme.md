@@ -96,7 +96,6 @@ to describe an optimizing process.
     * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the [actions](#action) can fail)
     * ```@Exclusive``` no other [plan](#plan) / [rule](#rule) will run simulaneously
     * ```@Parallel``` all items will be run in parallel
-
  
 ### <a name="goal">Goals</a>
 
@@ -136,6 +135,19 @@ to describe an optimizing process.
 
 * Variables are written with an upper-case letter at begin
 * Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
+
+### <a name="at-annotation">Action / Term Annotation</a>
+
+* In LightJason one can specify HOW actions and terms will be executed/unified.
+* Concept of ```action-term-annotation```s allows to annotate ```actions```, and ```terms``` to perform
+    * unification (```>>```)
+    * parallel execution (```@```), see [Variables](#variable) and _lambda expressions_.
+    * ...
+* If more than one ```action-term-annotation``` is needs to be added, they have to be ordered according to the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
+* To annotate multiple actions/terms brackets ```(```,```)``` can be used. See the following examples
+* Examples
+    * ```@>>( foo(X), X > 1 ) && Score > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Score > 0.5```)
+    * ```>>foo(X) && X > 1 && Score > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
 
 
 ### <a name="buldinaction">Build-in Actions</a>
@@ -198,7 +210,15 @@ to describe an optimizing process.
 * Agents must be run (triggered) by an external runtime e.g. from an outside system component
 * [Plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
+### Coding Constructs Different from Jason
 
+* Head-Tail-Recursion supports arbitrary amount of heads, e.g. 
+    * ```[A|B|C|_|D|T] = [1,2,3,4,5,6,7];``` results in ```A=1, B=2, C=3, D=5, T=[6,7]```
+* Loops are denoted by _lambda expressions_, ```(L) -> Y | R : Statements;```, with ```R``` being an optional return parameter
+    * Examples:
+        * sequential lambda expression: ```(L) -> Y : generic/print(Y);```
+        * parallel lambda expression: ```@(L) -> Y | R : R = Y+1;```
+        
 
 ## Running Semantics
 
@@ -243,15 +263,6 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/size/planbase``` number of plans, generates no event
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
-
-## <a name="notes">Notes</a>
-
-* We support multiple ```prefix-tag```, e.g.
-    * ```>>``` (unification)
-    * ```@``` (parallel)
-    * ...
-    * If more than one prefix-tag is needed we order them by the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
-    
 
 ## <a name="todo">Todos</a>
 
