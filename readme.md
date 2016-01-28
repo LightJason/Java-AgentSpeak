@@ -243,14 +243,17 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * ```my/current/plans/``` planname with state [pause|running] as string value
 
 
-## <a name="notes">Notes</a>
+## <a name="notes">Prefix-Tags</a>
 
-* We support multiple ```prefix-tag```, e.g.
-    * ```>>``` (unification)
-    * ```@``` (parallel)
+* In LightJason one can specify HOW and WHAT will be executed in a defined way.
+* Concept of ```prefix-tag``` allows to annotate ```actions```, ```plans``` and ```terms``` to perform
+    * unification (```>>```)
+    * parallel execution (```@```)
     * ...
-    * If more than one prefix-tag is needed we order them by the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
-    
+* If more than one prefix-tag is needed they have to be ordered according to the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
+* Examples
+    * ```@>>( foo(X), X > 1 ) && Score > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Score > 0.5```)
+    * ```>>foo(X) && X > 1 && Score > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
 
 ## <a name="todo">Todos</a>
 
