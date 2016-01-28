@@ -1356,7 +1356,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return this.visitUnification( p_context.unification() );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1374,7 +1374,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return this.visitUnification( p_context.unification() );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1654,7 +1654,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
@@ -1669,7 +1669,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.createExecution( p_context.literal() ) );
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
