@@ -26,6 +26,7 @@ package lightjason.language.execution.action;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
@@ -42,6 +43,10 @@ public final class CUnification extends IBaseExecution<ILiteral>
      * parallel unification
      */
     private final boolean m_parallel;
+    /**
+     * unification expression
+     */
+    private final IExpression m_expression;
 
     /**
      * ctor
@@ -51,8 +56,21 @@ public final class CUnification extends IBaseExecution<ILiteral>
      */
     public CUnification( final boolean p_parallel, final ILiteral p_literal )
     {
+        this( p_parallel, p_literal, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_parallel parallel execution
+     * @param p_literal literal
+     * @param p_expression expression based on the unification result
+     */
+    public CUnification( final boolean p_parallel, final ILiteral p_literal, final IExpression p_expression )
+    {
         super( p_literal );
         m_parallel = p_parallel;
+        m_expression = p_expression;
     }
 
     @Override

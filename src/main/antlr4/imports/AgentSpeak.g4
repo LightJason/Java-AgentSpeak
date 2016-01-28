@@ -248,7 +248,7 @@ barrier :
  **/
 unification :
  AT? GREATER GREATER
- literal
+ ( literal | LROUNDBRACKET literal COMMA expression RROUNDBRACKET )
  ;
 
 /**

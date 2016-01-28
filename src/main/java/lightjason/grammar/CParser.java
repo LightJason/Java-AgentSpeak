@@ -545,13 +545,27 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
-        return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+        if ( p_context.expression() != null )
+            return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+
+        return new CUnification(
+                p_context.AT() != null,
+                (ILiteral) this.visitLiteral( p_context.literal() ),
+                (IExpression) this.visitExpression( p_context.expression() )
+        );
     }
 
     @Override
     public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
-        return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+        if ( p_context.expression() != null )
+            return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+
+        return new CUnification(
+                p_context.AT() != null,
+                (ILiteral) this.visitLiteral( p_context.literal() ),
+                (IExpression) this.visitExpression( p_context.expression() )
+        );
     }
 
 
