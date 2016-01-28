@@ -123,10 +123,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
                                                  final List<ITerm> p_return
     )
     {
-        System.out.println( "----> foo" );
-
         final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_execution );
-        System.out.println( "----> foo2" );
 
         if ( !l_value.isAllocated() )
             return CBoolean.from( false );
