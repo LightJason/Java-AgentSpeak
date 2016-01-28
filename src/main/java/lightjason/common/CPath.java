@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -126,11 +125,11 @@ public final class CPath implements Iterable<CPath>
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( CPath.class, "createpath" ) );
 
-        final List<String> l_pathlist = new LinkedList<>();
-        for ( int i = 1; i < p_varargs.length; ++i )
-            l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
-
-        return new CPath( l_pathlist );
+        return new CPath(
+                Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
+                      .flatMap( i -> Arrays.stream( StringUtils.split( i, p_varargs[0] ) ) )
+                      .collect( Collectors.toList() )
+        );
     }
 
     /**
@@ -505,10 +504,7 @@ public final class CPath implements Iterable<CPath>
      */
     private void initialize( final String p_fqn )
     {
-        for ( final String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() )
-                m_path.add( l_item );
-
+        m_path = Arrays.stream( p_fqn.split( m_separator ) ).filter( i -> !i.isEmpty() ).collect( Collectors.toList() );
         if ( m_path.size() == 0 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "pathempty" ) );
     }
