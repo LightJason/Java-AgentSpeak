@@ -503,20 +503,39 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
     {
-        // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).filter(
-                i -> i instanceof IExecution ).collect(
-                Collectors.toList() );
+        // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
+        return p_context.body_formula().stream()
+                        .filter( i -> i != null )
+                        .map( i -> this.visitBody_formula( i ) )
+                        .filter( i -> i instanceof IExecution )
+                        .collect( Collectors.toList() );
     }
 
     @Override
     public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
-        // filter null values of the body formular, because blank lines add a null value
-        return p_context.body_formula().stream().filter( i -> i != null ).map( i -> this.createExecution( this.visitBody_formula( i ) ) ).filter(
-                i -> i instanceof IExecution ).collect(
-                Collectors.toList() );
+        // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
+        return p_context.body_formula().stream()
+                        .filter( i -> i != null )
+                        .map( i -> this.visitBody_formula( i ) )
+                        .filter( i -> i instanceof IExecution )
+                        .collect( Collectors.toList() );
     }
+
+
+
+    @Override
+    public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
+    {
+        return this.getTermExecution( this.visitChildren( p_context ) );
+    }
+
+    @Override
+    public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
+    {
+        return this.getTermExecution( this.visitChildren( p_context ) );
+    }
+
 
 
     @Override
@@ -571,20 +590,6 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
 
     @Override
-    public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-
-
-    @Override
     public Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
         return this.visitChildren( p_context );
@@ -604,7 +609,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.body_formula() != null )
         {
             final LinkedList<IExecution> l_statement = new LinkedList<>();
-            l_statement.add( this.createExecution( this.visitBody_formula( p_context.body_formula() ) ) );
+            l_statement.add( (IExecution) this.visitBody_formula( p_context.body_formula() ) );
             return l_statement;
         }
 
@@ -617,7 +622,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
         if ( p_context.body_formula() != null )
         {
             final LinkedList<IExecution> l_statement = new LinkedList<>();
-            l_statement.add( this.createExecution( this.visitBody_formula( p_context.body_formula() ) ) );
+            l_statement.add( (IExecution) this.visitBody_formula( p_context.body_formula() ) );
             return l_statement;
         }
 
@@ -764,13 +769,15 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
-        return new CSingleAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+        return new CSingleAssignment<>(
+                (IVariable<?>) this.visitVariable( p_context.variable() ), this.getTermExecution( this.visitTerm( p_context.term() ) ) );
     }
 
     @Override
     public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
     {
-        return new CSingleAssignment<>( (IVariable<?>) this.visitVariable( p_context.variable() ), this.createExecution( this.visitTerm( p_context.term() ) ) );
+        return new CSingleAssignment<>(
+                (IVariable<?>) this.visitVariable( p_context.variable() ), this.getTermExecution( this.visitTerm( p_context.term() ) ) );
     }
 
 
@@ -780,7 +787,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                this.createExecution( this.visitTerm( p_context.term() ) )
+                this.getTermExecution( this.visitTerm( p_context.term() ) )
         );
     }
 
@@ -789,7 +796,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                this.createExecution( this.visitTerm( p_context.term() ) )
+                this.getTermExecution( this.visitTerm( p_context.term() ) )
         );
     }
 
@@ -1732,28 +1739,27 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     }
 
     /**
-     * creates an executable structure of a parsed item
+     * creates an executable structure of a parsed term item
      *
-     * @param p_item any parsed item
-     * @return execution structure
-     *
-     * @bug literal call must be changes, literals which does not match an action must be an unifying call
+     * @param p_item any parsed item (term rule)
+     * @return execution structure or null
      */
-    protected IExecution createExecution( final Object p_item )
+    protected IExecution getTermExecution( final Object p_item )
     {
-        // body actions directly return
+        // null value will be passed
+        if ( p_item == null )
+            return null;
+
+        // executable structures will be passed
         if ( p_item instanceof IExecution )
             return (IExecution) p_item;
 
         // literals are actions
         if ( p_item instanceof ILiteral )
-        {
-            final ILiteral l_literal = (ILiteral) p_item;
-            return new CProxyAction( m_actions, l_literal );
-        }
+            return new CProxyAction( m_actions, (ILiteral) p_item );
 
         // otherwise only simple types encapsulate
-        return p_item == null ? null : new CRawAction<>( p_item );
+        return new CRawAction<>( p_item );
     }
 
     /**
