@@ -67,13 +67,19 @@ public final class CCreate extends IBuildinAction
         {
             case DENSE:
                 p_return.add(
-                        new CRawTerm<>( new DenseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
+                        new CRawTerm<>( new DenseDoubleMatrix2D(
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue(),
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue()
+                        ) )
                 );
                 break;
 
             case SPARSE:
                 p_return.add(
-                        new CRawTerm<>( new SparseDoubleMatrix2D( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getRawValue( p_argument.get( 1 ) ) ) )
+                        new CRawTerm<>( new SparseDoubleMatrix2D(
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue(),
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue()
+                        ) )
                 );
                 break;
 

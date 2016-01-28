@@ -24,9 +24,11 @@
 package lightjason.language;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.common.CPath;
 
 import java.text.MessageFormat;
@@ -40,18 +42,17 @@ import java.util.Collections;
  * an optional set of annotations, e.g. velocity(50)[source(self)]
  *
  * @todo add getter with recursive walk for inner elements
- * @bug value set does not support duplicates
  */
 public final class CLiteral implements ILiteral
 {
     /**
      * literal annotations
      */
-    protected final ImmutableSetMultimap<CPath, ILiteral> m_annotations;
+    protected final ImmutableMultimap<CPath, ILiteral> m_annotations;
     /**
      * literal values
      */
-    protected final ImmutableSetMultimap<CPath, ITerm> m_values;
+    protected final ImmutableMultimap<CPath, ITerm> m_values;
     /**
      * literals functor
      */
@@ -123,14 +124,15 @@ public final class CLiteral implements ILiteral
         m_negated = p_negated;
         m_functor = p_functor;
 
+
         // create immutable structures
-        final SetMultimap<CPath, ILiteral> l_annotations = HashMultimap.create();
+        final Multimap<CPath, ILiteral> l_annotations = HashMultimap.create();
         p_annotations.stream().forEach( i -> l_annotations.put( i.getFQNFunctor(), i ) );
         m_annotations = ImmutableSetMultimap.copyOf( l_annotations );
 
-        final SetMultimap<CPath, ITerm> l_values = LinkedHashMultimap.create();
+        final Multimap<CPath, ITerm> l_values = LinkedListMultimap.create();
         p_values.stream().forEachOrdered( i -> l_values.put( i.getFQNFunctor(), i ) );
-        m_values = ImmutableSetMultimap.copyOf( l_values );
+        m_values = ImmutableListMultimap.copyOf( l_values );
     }
 
 
@@ -141,13 +143,13 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final SetMultimap<CPath, ILiteral> getAnnotation()
+    public final Multimap<CPath, ILiteral> getAnnotation()
     {
         return m_annotations;
     }
 
     @Override
-    public final SetMultimap<CPath, ITerm> getValues()
+    public final Multimap<CPath, ITerm> getValues()
     {
         return m_values;
     }

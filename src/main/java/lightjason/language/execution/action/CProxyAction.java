@@ -25,8 +25,8 @@ package lightjason.language.execution.action;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableMultiset;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.SetMultimap;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
@@ -314,7 +314,7 @@ public final class CProxyAction implements IExecution
          * @return ordered execution structure
          */
         @SuppressWarnings( "unchecked" )
-        private Map<Integer, IExecution> createSubExecutions( final SetMultimap<CPath, ? extends ITerm> p_elements, final Map<CPath, IAction> p_actions,
+        private Map<Integer, IExecution> createSubExecutions( final Multimap<CPath, ? extends ITerm> p_elements, final Map<CPath, IAction> p_actions,
                                                               final Multiset<IAction> p_scorecache
         )
         {

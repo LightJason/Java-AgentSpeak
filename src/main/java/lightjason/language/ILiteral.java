@@ -24,7 +24,7 @@
 package lightjason.language;
 
 
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.common.CPath;
 
 
@@ -56,14 +56,14 @@ public interface ILiteral extends ITerm
      *
      * @return annotation terms
      */
-    SetMultimap<CPath, ILiteral> getAnnotation();
+    Multimap<CPath, ILiteral> getAnnotation();
 
     /**
      * returns the optional value term
      *
      * @return value terms
      */
-    SetMultimap<CPath, ITerm> getValues();
+    Multimap<CPath, ITerm> getValues();
 
     /**
      * getter of the literal for the negation

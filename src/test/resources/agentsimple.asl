@@ -26,14 +26,15 @@ second(true).
 
 
         // check blas arithmetic
-        /*
         M = math/blas/matrix/create(2,2);
         math/blas/matrix/set(M, 0,0, 1);
         math/blas/matrix/set(M, 0,1, 2);
         math/blas/matrix/set(M, 1,0, 3);
         math/blas/matrix/set(M, 1,1, 4);
-        generic/print(M);
-        */
+        Det = math/blas/matrix/determinant(M);
+        EV  = math/blas/matrix/eigenvalue(M);
+        generic/print(Det, EV);
+
 
         // check sequencial & parallel lambda expression
         (L) -> Y : generic/print(Y);
