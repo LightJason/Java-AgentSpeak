@@ -1,5 +1,6 @@
 hallo(123).
 second(true).
+~lub("hallo").
 
 +!drive
     <-
@@ -40,5 +41,9 @@ second(true).
         if ( Z > 100.0 )
             generic/print("if true")
         else
-            generic/print("if false")
+            generic/print("if false");
+
+        Z < 100.0;
+        generic/print("plan passed")
+
         .

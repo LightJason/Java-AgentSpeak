@@ -28,14 +28,17 @@ import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
 /**
  * encapsulate class for any non-executable data type e.g. boolean
+ * and caching of execution results
  */
 public final class CRawAction<T> extends IBaseExecution<T>
 {
@@ -70,7 +73,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
         if ( m_value instanceof Boolean )
             return this.getTypedResult( (Boolean) m_value, p_return );
         if ( m_value instanceof IVariable<?> )
-            return this.getTypedResult( (IVariable<?>) m_value, p_return, p_context );
+            return this.getTypedResult( (IVariable<?>) m_value, p_context, p_return );
+        if ( m_value instanceof IExpression )
+            return this.getTypedResult( (IExpression) m_value, p_context, p_parallel, p_argument, p_return, p_annotation );
 
         return this.getTypedResult( m_value, p_return );
     }
@@ -78,27 +83,29 @@ public final class CRawAction<T> extends IBaseExecution<T>
     /**
      * fixed type result
      *
-     * @param p_value boolean value
+     * @param p_execution boolean value
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final Boolean p_value, final List<ITerm> p_return )
+    private IFuzzyValue<Boolean> getTypedResult( final Boolean p_execution, final List<ITerm> p_return )
     {
         p_return.add( new CRawTerm<>( m_value ) );
-        return CBoolean.from( p_value );
+        return CBoolean.from( p_execution );
     }
 
     /**
      * fixed type result
      *
-     * @param p_value variable value
-     * @param p_return native return
+     * @param p_execution variable value
      * @param p_context context
+     * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final IVariable<?> p_value, final List<ITerm> p_return, final IContext<?> p_context )
+    private IFuzzyValue<Boolean> getTypedResult( final IVariable<?> p_execution, final IContext<?> p_context,
+                                                 final List<ITerm> p_return
+    )
     {
-        final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_value );
+        final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_execution );
 
         if ( !l_value.isAllocated() )
             return CBoolean.from( false );
@@ -110,14 +117,39 @@ public final class CRawAction<T> extends IBaseExecution<T>
         return CBoolean.from( true );
     }
 
+
     /**
      * fixed type result
      *
-     * @param p_value any other value
+     * @param p_execution execution element
+     * @param p_context context
+     * @param p_argument expression
+     * @param p_return native return
+     * @param p_annotation annotations
+     * @return fuzzy-boolean
+     */
+    private IFuzzyValue<Boolean> getTypedResult( final IExpression p_execution, final IContext<?> p_context, final Boolean p_parallel,
+                                                 final List<ITerm> p_argument, final List<ITerm> p_return,
+                                                 final List<ITerm> p_annotation
+    )
+    {
+        final List<ITerm> l_return = new LinkedList<>();
+        if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return, p_annotation ).getValue() ) || ( l_return.isEmpty() ) )
+            return CBoolean.from( false );
+
+        return CBoolean.from( CCommon.getRawValue( l_return.get( 0 ) ) );
+    }
+
+
+
+    /**
+     * fixed type result
+     *
+     * @param p_execution any other value
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private CBoolean getTypedResult( final T p_value, final List<ITerm> p_return )
+    private IFuzzyValue<Boolean> getTypedResult( final T p_execution, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( m_value ) );
         return CBoolean.from( true );
