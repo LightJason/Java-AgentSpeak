@@ -33,7 +33,7 @@ second(true).
         math/blas/matrix/set(M, 1,1, 4);
         Det = math/blas/matrix/determinant(M);
         EV  = math/blas/matrix/eigenvalue(M);
-        generic/print(Det, EV);
+        generic/print(M, Det, EV);
 
 
         // check sequencial & parallel lambda expression

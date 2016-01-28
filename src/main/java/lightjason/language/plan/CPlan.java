@@ -41,7 +41,6 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -138,12 +137,12 @@ public class CPlan implements IPlan
     )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
-        // each item gets its own parameters, annotation and returns stack, so it will be created locally
+        // each item gets its own parameters, annotation and return stack, so it will be created locally
         return CBoolean.from(
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
                   : m_action.stream()
-                ).map( i -> i.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
+                ).map( i -> i.execute( p_context, null, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) )
                  .allMatch( CBoolean.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );

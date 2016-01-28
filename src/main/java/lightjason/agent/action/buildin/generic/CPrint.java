@@ -24,6 +24,9 @@
 package lightjason.agent.action.buildin.generic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.agent.action.buildin.math.blas.CFormat1D;
+import lightjason.agent.action.buildin.math.blas.CFormat2D;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -32,7 +35,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -50,6 +57,10 @@ public final class CPrint extends IBuildinAction
      * argument seperator
      */
     private final String m_seperator;
+    /**
+     * list mit individual format calls
+     */
+    private final Set<IFormatter<?>> m_formatter;
 
     /**
      * ctor
@@ -58,7 +69,7 @@ public final class CPrint extends IBuildinAction
      */
     public CPrint()
     {
-        this( "   ", System.out );
+        this( "   ", System.out, new CFormat2D(), new CFormat1D() );
     }
 
     /**
@@ -66,12 +77,24 @@ public final class CPrint extends IBuildinAction
      *
      * @param p_seperator argument seperator
      * @param p_stream any byte output stream
+     * @param p_formatter formatter elements
      */
-    public CPrint( final String p_seperator, final PrintStream p_stream )
+    public CPrint( final String p_seperator, final PrintStream p_stream, final IFormatter<?>... p_formatter )
     {
         super( 2 );
         m_stream = p_stream;
         m_seperator = p_seperator;
+        m_formatter = new HashSet<>( Arrays.asList( p_formatter ) );
+    }
+
+    /**
+     * returns the formatter list
+     *
+     * @return formatter set
+     */
+    public final Set<IFormatter<?>> getFormatter()
+    {
+        return m_formatter;
     }
 
 
@@ -88,19 +111,75 @@ public final class CPrint extends IBuildinAction
     {
         m_stream.println(
                 MessageFormat.format(
-                        "{0}{1}",
-                        StringUtils.join( p_argument.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator ),
+                        "{0}{1}", this.getString( p_argument ),
                         ( p_annotation.isEmpty()
                           ? ""
-                          : MessageFormat.format(
-                                  "{0}{1}",
-                                  m_seperator,
-                                  StringUtils.join( p_annotation.stream().map( i -> i.toString() ).collect( Collectors.toList() ), m_seperator )
-                          )
+                          : MessageFormat.format( "{0}{1}", m_seperator, this.getString( p_annotation ) )
                         )
                 )
         );
         return CBoolean.from( true );
+    }
+
+    /**
+     * string format definition
+     *
+     * @param p_argument arguments list
+     * @return string
+     */
+    private String getString( final Collection<ITerm> p_argument )
+    {
+        return StringUtils.join( p_argument.stream().map( i -> CCommon.getRawValue( i ) ).map( i -> {
+            final IFormatter<?> l_formatter = m_formatter.parallelStream().filter( j -> j.isAssignableTo( i.getClass() ) ).limit( 1 ).findFirst().orElse(
+                    null );
+            return l_formatter == null ? i.toString() : l_formatter.toString( i );
+        } ).collect( Collectors.toList() ), m_seperator );
+    }
+
+
+    /**
+     * formating class
+     *
+     * @tparam any type
+     */
+    public static abstract class IFormatter<T>
+    {
+        /**
+         * checks if a type is assigneable
+         *
+         * @return assignable flag
+         */
+        public final boolean isAssignableTo( final Class<?> p_class )
+        {
+            return this.getType().isAssignableFrom( p_class );
+        }
+
+        /**
+         * to string
+         *
+         * @param p_data object type
+         * @return output string
+         */
+        @SuppressWarnings( "unchecked" )
+        public final String toString( final Object p_data )
+        {
+            return this.format( (T) p_data );
+        }
+
+        /**
+         * returns type to match the formatter
+         *
+         * @return class type
+         */
+        protected abstract Class<?> getType();
+
+        /**
+         * formatter call
+         *
+         * @param p_data object type
+         * @return formatted string
+         */
+        protected abstract String format( final T p_data );
     }
 
 }
