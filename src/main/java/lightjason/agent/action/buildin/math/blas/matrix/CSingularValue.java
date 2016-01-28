@@ -23,7 +23,7 @@
 
 package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import cern.colt.matrix.linalg.SingularValueDecomposition;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -39,14 +39,14 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * creates the singular value decomposition of a matrix
  */
-public final class CEigenValue extends IBuildinAction
+public final class CSingularValue extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CEigenValue()
+    public CSingularValue()
     {
         super( 4 );
     }
@@ -67,11 +67,11 @@ public final class CEigenValue extends IBuildinAction
                 p_parallel
                 ? Collections.synchronizedList(
                         Arrays.stream(
-                                new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+                                new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
                         ).boxed().sorted().collect( Collectors.toList() )
                 )
                 : Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+                        new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
                 ).boxed().sorted().collect( Collectors.toList() )
         ) );
 

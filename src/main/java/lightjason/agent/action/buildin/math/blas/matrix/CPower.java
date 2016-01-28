@@ -23,8 +23,8 @@
 
 package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
-import lightjason.agent.action.buildin.IBuildinAction;
+import cern.colt.matrix.DoubleMatrix2D;
+import lightjason.agent.action.buildin.math.blas.IAlgebra;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
@@ -32,21 +32,19 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * returns the matrix power
  */
-public final class CEigenValue extends IBuildinAction
+public final class CPower extends IAlgebra
 {
+
     /**
      * ctor
      */
-    public CEigenValue()
+    public CPower()
     {
         super( 4 );
     }
@@ -54,7 +52,7 @@ public final class CEigenValue extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -62,18 +60,15 @@ public final class CEigenValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // argument must be a term with a matrix object
-        p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList(
-                        Arrays.stream(
-                                new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                        ).boxed().sorted().collect( Collectors.toList() )
+        // first argument must be a term with a matrix object, second argument must be the exponent
+        p_return.add(
+                CRawTerm.from(
+                        m_algebra.pow(
+                                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ),
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue()
+                        )
                 )
-                : Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                ).boxed().sorted().collect( Collectors.toList() )
-        ) );
+        );
 
         return CBoolean.from( true );
     }

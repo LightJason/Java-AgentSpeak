@@ -21,60 +21,39 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.matrix;
+package lightjason.agent.action.buildin.math.blas;
 
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import cern.colt.matrix.linalg.Algebra;
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * blas algebra operations e.g. inverse, determinate
  */
-public final class CEigenValue extends IBuildinAction
+public abstract class IAlgebra extends IBuildinAction
 {
+
+    /**
+     * algebra reference
+     */
+    protected static final Algebra m_algebra = new Algebra();
+
     /**
      * ctor
      */
-    public CEigenValue()
+    protected IAlgebra()
     {
-        super( 4 );
+        super();
     }
 
-    @Override
-    public final int getMinimalArgumentNumber()
+    /**
+     * ctor
+     *
+     * @param p_length length of package parts
+     */
+    protected IAlgebra( final int p_length )
     {
-        return 1;
+        super( p_length );
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        // argument must be a term with a matrix object
-        p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList(
-                        Arrays.stream(
-                                new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                        ).boxed().sorted().collect( Collectors.toList() )
-                )
-                : Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                ).boxed().sorted().collect( Collectors.toList() )
-        ) );
-
-        return CBoolean.from( true );
-    }
 }

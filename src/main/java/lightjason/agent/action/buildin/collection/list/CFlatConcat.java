@@ -21,34 +21,29 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.matrix;
+package lightjason.agent.action.buildin.collection.list;
 
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * returns a flat concated list of any term data
  */
-public final class CEigenValue extends IBuildinAction
+public final class CFlatConcat extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CEigenValue()
+    public CFlatConcat()
     {
-        super( 4 );
+        super( 3 );
     }
 
     @Override
@@ -62,19 +57,9 @@ public final class CEigenValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // argument must be a term with a matrix object
-        p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList(
-                        Arrays.stream(
-                                new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                        ).boxed().sorted().collect( Collectors.toList() )
-                )
-                : Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                ).boxed().sorted().collect( Collectors.toList() )
-        ) );
-
+        // first argument list reference
+        p_return.addAll( CCommon.flatList( p_argument ) );
         return CBoolean.from( true );
     }
+
 }

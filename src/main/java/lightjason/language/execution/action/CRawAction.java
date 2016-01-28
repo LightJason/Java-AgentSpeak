@@ -55,7 +55,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings( {"unchecked", "serial"} )
     public final Set<IVariable<?>> getVariables()
     {
         if ( m_value instanceof IVariable<?> )
