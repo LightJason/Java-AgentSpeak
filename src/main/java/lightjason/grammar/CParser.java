@@ -509,7 +509,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
                         .map( i -> this.visitBody_formula( i ) )
                         .filter( i -> i instanceof IExecution )
                         // expression are encapsulate to get result
-                        .map( i -> i instanceof IExpression ? new CRawAction( i ) : i )
+                        .map( i -> i instanceof IExpression ? new CRawAction<>( i ) : i )
                         .collect( Collectors.toList() );
     }
 
@@ -522,7 +522,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
                         .map( i -> this.visitBody_formula( i ) )
                         .filter( i -> i instanceof IExecution )
                         // expression are encapsulate to get result
-                        .map( i -> i instanceof IExpression ? new CRawAction( i ) : i )
+                        .map( i -> i instanceof IExpression ? new CRawAction<>( i ) : i )
                         .collect( Collectors.toList() );
     }
 

@@ -44,6 +44,9 @@ second(true).
             generic/print("if false");
 
         Z < 100.0;
-        generic/print("plan passed")
+        generic/print("plan passed");
+
+        V = true;
+        V;
 
         .

@@ -21,87 +21,45 @@
  * @endcond
  */
 
-package lightjason.language.execution.expression;
+package lightjason.agent.action.buildin.collection.list;
 
-import lightjason.agent.IAgent;
+import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
- * atom expression
+ * returns a flat concated list of any term data
  */
-@SuppressWarnings( "serial" )
-public class CAtom implements IExpression
+public final class CFlatConcat extends IBuildinAction
 {
     /**
-     * value
-     */
-    private final ITerm m_value;
-
-    /**
      * ctor
-     *
-     * @param p_value any atomic value
      */
-    @SuppressWarnings( "unchecked" )
-    public <T> CAtom( final T p_value )
+    public CFlatConcat()
     {
-        m_value = ( p_value instanceof IVariable<?> ) ? (IVariable<?>) p_value : CRawTerm.from( p_value );
+        super( 3 );
     }
 
+    @Override
+    public final int getMinimalArgumentNumber()
+    {
+        return 1;
+    }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.getRawValue( CCommon.replaceFromContext( p_context, m_value ) ) ) );
+        // first argument list reference
+        p_return.addAll( CCommon.flatList( p_argument ) );
         return CBoolean.from( true );
     }
 
-    @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
-    {
-        return 0;
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final Set<IVariable<?>> getVariables()
-    {
-        return m_value instanceof IVariable<?> ? new HashSet<IVariable<?>>()
-        {{
-            add( ( (IVariable<?>) m_value ).clone() );
-        }} : Collections.<IVariable<?>>emptySet();
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_value.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return m_value.equals( p_object );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_value.toString();
-    }
 }

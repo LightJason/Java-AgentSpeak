@@ -21,10 +21,12 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.collection.list;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import lightjason.agent.action.buildin.IBuildinAction;
+import cern.colt.matrix.DoubleMatrix2D;
+import lightjason.agent.action.buildin.math.blas.IAlgebra;
 import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -34,16 +36,17 @@ import java.util.List;
 
 
 /**
- * returns a flat list of any term data
+ * transpose the matrix
  */
-public final class CFlat extends IBuildinAction
+public final class CTranspose extends IAlgebra
 {
+
     /**
      * ctor
      */
-    public CFlat()
+    public CTranspose()
     {
-        super( 3 );
+        super( 4 );
     }
 
     @Override
@@ -57,9 +60,13 @@ public final class CFlat extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument list reference
-        p_return.addAll( CCommon.flatList( p_argument ) );
+        // first argument must be a term with a matrix object
+        p_return.add(
+                CRawTerm.from(
+                        m_algebra.transpose( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
+                )
+        );
+
         return CBoolean.from( true );
     }
-
 }
