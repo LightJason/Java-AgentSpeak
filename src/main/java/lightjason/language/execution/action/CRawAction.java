@@ -141,7 +141,8 @@ public final class CRawAction<T> extends IBaseExecution<T>
      *
      * @param p_execution execution element
      * @param p_context context
-     * @param p_argument expression
+     * @param p_parallel paralle execution
+     * @param p_argument arguments
      * @param p_return native return
      * @param p_annotation annotations
      * @return fuzzy-boolean
