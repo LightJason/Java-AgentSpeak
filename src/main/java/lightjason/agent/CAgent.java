@@ -34,7 +34,7 @@ import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
-import lightjason.language.execution.IUnificator;
+import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -174,7 +174,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IUnificator getUnificatior()
+    public final IUnifier getUnifier()
     {
         return null;
     }

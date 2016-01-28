@@ -50,7 +50,7 @@ import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTestGoal;
-import lightjason.language.execution.action.CUnification;
+import lightjason.language.execution.action.CUnify;
 import lightjason.language.execution.annotation.CAtomAnnotation;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
@@ -569,9 +569,9 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
         if ( p_context.expression() != null )
-            return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+            return new CUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
-        return new CUnification(
+        return new CUnify(
                 p_context.AT() != null,
                 (ILiteral) this.visitLiteral( p_context.literal() ),
                 (IExpression) this.visitExpression( p_context.expression() )
@@ -582,9 +582,9 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
         if ( p_context.expression() != null )
-            return new CUnification( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+            return new CUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
-        return new CUnification(
+        return new CUnify(
                 p_context.AT() != null,
                 (ILiteral) this.visitLiteral( p_context.literal() ),
                 (IExpression) this.visitExpression( p_context.expression() )

@@ -25,12 +25,13 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.expression.IExpression;
 
 
 /**
  * interface of an unification algorithm
  */
-public interface IUnificator
+public interface IUnifier
 {
 
     /**
@@ -38,23 +39,25 @@ public interface IUnificator
      *
      * @param p_agent agent
      * @param p_literal literal
+     * @param p_expression expression
      * @return any object type or null if unification not possible
      *
      * @tparam R any return type
      * @tparam T agent type
      */
-    <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal );
+    <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression );
 
     /**
      * unifies a literal in parallel
      *
      * @param p_agent agent
      * @param p_literal literal
+     * @param p_expression expression
      * @return any object type or null if unification not possible
      *
      * @tparam R any return type
      * @tparam T agent type
      */
-    <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal );
+    <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression );
 
 }

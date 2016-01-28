@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CRawTerm;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
@@ -37,7 +38,7 @@ import java.util.List;
 /**
  * test goal action
  */
-public final class CUnification extends IBaseExecution<ILiteral>
+public final class CUnify extends IBaseExecution<ILiteral>
 {
     /**
      * parallel unification
@@ -54,7 +55,7 @@ public final class CUnification extends IBaseExecution<ILiteral>
      * @param p_parallel parallel execution
      * @param p_literal literal
      */
-    public CUnification( final boolean p_parallel, final ILiteral p_literal )
+    public CUnify( final boolean p_parallel, final ILiteral p_literal )
     {
         this( p_parallel, p_literal, null );
     }
@@ -66,7 +67,7 @@ public final class CUnification extends IBaseExecution<ILiteral>
      * @param p_literal literal
      * @param p_expression expression based on the unification result
      */
-    public CUnification( final boolean p_parallel, final ILiteral p_literal, final IExpression p_expression )
+    public CUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_expression )
     {
         super( p_literal );
         m_parallel = p_parallel;
@@ -84,6 +85,14 @@ public final class CUnification extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
+        final Object l_result = m_parallel
+                                ? p_context.getAgent().getUnifier().parallelunify( p_context.getAgent(), m_value, m_expression )
+                                : p_context.getAgent().getUnifier().sequentialunify( p_context.getAgent(), m_value, m_expression );
+
+        if ( l_result == null )
+            return CBoolean.from( false );
+
+        p_return.add( CRawTerm.from( l_result ) );
         return CBoolean.from( true );
     }
 

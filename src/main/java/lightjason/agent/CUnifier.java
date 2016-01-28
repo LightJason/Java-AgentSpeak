@@ -23,78 +23,25 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.SetMultimap;
-import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
-
-import java.util.Map;
-import java.util.concurrent.Callable;
+import lightjason.language.execution.expression.IExpression;
 
 
 /**
- * agent interface
+ * unification algorithm
  */
-public interface IAgent extends Callable<IAgent>
+public final class CUnifier implements IUnifier
 {
+    @Override
+    public final <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression )
+    {
+        return null;
+    }
 
-    /**
-     * inspector method
-     *
-     * @param p_inspector inspector object
-     */
-    void inspect( final IInspector... p_inspector );
-
-    /**
-     * trigger an event
-     *
-     * @param p_event event
-     */
-    void trigger( final ITrigger<?> p_event );
-
-    /**
-     * returns the beliefbase
-     *
-     * @return beliefbase
-     */
-    IMask getBeliefBase();
-
-    /**
-     * returns a map of the current running plans
-     *
-     * @return map with running plans
-     */
-    SetMultimap<ILiteral, IPlan> getRunningPlans();
-
-    /**
-     * returns the hibernate state
-     *
-     * @return boolean state value
-     */
-    boolean hibernate();
-
-    /**
-     * returns and sets the hibernate state
-     *
-     * @param p_value new hibernate state
-     * @return boolean new state value
-     */
-    boolean hibernate( final boolean p_value );
-
-    /**
-     * storage access
-     *
-     * @return storage map
-     */
-    Map<String, ?> getStorage();
-
-    /**
-     * returns an unifier
-     *
-     * @return unification algorithm
-     */
-    IUnifier getUnifier();
-
+    @Override
+    public final <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression )
+    {
+        return null;
+    }
 }
