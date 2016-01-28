@@ -26,7 +26,6 @@ package lightjason.agent.action.buildin.math.blas.vector;
 import cern.colt.matrix.DoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -36,14 +35,14 @@ import java.util.List;
 
 
 /**
- * returns a single element of a vector
+ * set a single element of a matrix
  */
-public final class CGet extends IBuildinAction
+public final class CSet extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CGet()
+    public CSet()
     {
         super( 4 );
     }
@@ -51,7 +50,7 @@ public final class CGet extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -59,9 +58,14 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second index of the element
-        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) )
-                                             .getQuick( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ) ) );
+        // first argument must be a term with a vector object, second index, third the value
+        CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) )
+                .setQuick(
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                );
+
+
         return CBoolean.from( true );
     }
 }

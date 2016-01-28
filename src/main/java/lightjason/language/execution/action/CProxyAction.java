@@ -251,7 +251,7 @@ public final class CProxyAction implements IExecution
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 
             // check number of arguments and add action to the score cache
-            if ( m_action.getMinimalArgumentNumber() > p_literal.getValues().size() )
+            if ( p_literal.getValues().size() < m_action.getMinimalArgumentNumber() )
                 throw new CIllegalArgumentException(
                         CCommon.getLanguageString( this, "argumentnumber", p_literal, m_action.getMinimalArgumentNumber() ) );
 

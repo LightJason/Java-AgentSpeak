@@ -40,6 +40,7 @@ import java.util.Collections;
  * an optional set of annotations, e.g. velocity(50)[source(self)]
  *
  * @todo add getter with recursive walk for inner elements
+ * @bug value set does not support duplicates
  */
 public final class CLiteral implements ILiteral
 {
