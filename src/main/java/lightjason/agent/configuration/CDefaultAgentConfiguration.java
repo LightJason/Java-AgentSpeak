@@ -23,7 +23,7 @@
 
 package lightjason.agent.configuration;
 
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CBeliefStorage;
 import lightjason.beliefbase.IMask;
@@ -49,7 +49,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * instance of agent plans
      */
-    private final SetMultimap<ITrigger<?>, IPlan> m_plans;
+    private final Multimap<ITrigger<?>, IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
@@ -74,7 +74,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_initialgoal initial goal
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final SetMultimap<ITrigger<?>, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger<?>, IPlan> p_plans,
                                        final ILiteral p_initialgoal, final IAggregation p_aggregation
     )
     {
@@ -90,7 +90,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_aggregation aggregation function
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final SetMultimap<ITrigger<?>, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger<?>, IPlan> p_plans,
                                        final ILiteral p_initialgoal, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder
     )
     {
@@ -128,7 +128,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public SetMultimap<ITrigger<?>, IPlan> getPlans()
+    public Multimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }

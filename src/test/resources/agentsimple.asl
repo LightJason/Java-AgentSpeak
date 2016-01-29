@@ -3,6 +3,7 @@ second(true).
 ~lub("hallo").
 
 +!drive
+    <- generic/print("hallo")
     <-
         // test manual individual & internal variables
         generic/print(Score, Cycle, MyConstInt, MyConstString);

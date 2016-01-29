@@ -23,7 +23,7 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -50,7 +50,7 @@ public interface IPlanBundle
      *
      * @return multimap
      */
-    SetMultimap<ITrigger<?>, IPlan> getPlans();
+    Multimap<ITrigger<?>, IPlan> getPlans();
 
     /**
      * returns the rules / principles

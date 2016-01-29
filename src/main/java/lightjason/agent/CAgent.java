@@ -27,7 +27,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.SetMultimap;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IMask;
 import lightjason.language.CConstant;
@@ -62,11 +61,11 @@ public class CAgent implements IAgent
     /**
      * map with all existing plans
      */
-    protected final SetMultimap<ITrigger<?>, IPlan> m_plans;
+    protected final Multimap<ITrigger<?>, IPlan> m_plans;
     /**
      * running plans (thread-safe)
      */
-    protected final SetMultimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
+    protected final Multimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
     /**
      * storage map
      *
@@ -149,7 +148,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final SetMultimap<ILiteral, IPlan> getRunningPlans()
+    public final Multimap<ILiteral, IPlan> getRunningPlans()
     {
         return m_runningplans;
     }

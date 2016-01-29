@@ -23,7 +23,7 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
@@ -66,7 +66,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return map with running plans
      */
-    SetMultimap<ILiteral, IPlan> getRunningPlans();
+    Multimap<ILiteral, IPlan> getRunningPlans();
 
     /**
      * returns the hibernate state

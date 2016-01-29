@@ -107,7 +107,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
      */
     private IFuzzyValue<Boolean> getTypedResult( final Boolean p_execution, final List<ITerm> p_return )
     {
-        p_return.add( new CRawTerm<>( m_value ) );
+        p_return.add( CRawTerm.from( p_execution ) );
         return CBoolean.from( p_execution );
     }
 

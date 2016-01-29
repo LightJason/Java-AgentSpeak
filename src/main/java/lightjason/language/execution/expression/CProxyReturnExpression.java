@@ -41,9 +41,9 @@ import java.util.Set;
 /**
  * encpasulating any execution context
  *
- * @bug actions will not work
+ * @warning the class returns the result of the execution call only
  */
-public final class CProxyExpression<T extends IExecution> implements IExpression
+public final class CProxyReturnExpression<T extends IExecution> implements IExpression
 {
     /**
      * execution
@@ -55,7 +55,7 @@ public final class CProxyExpression<T extends IExecution> implements IExpression
      *
      * @param p_execution execution
      */
-    public CProxyExpression( final T p_execution )
+    public CProxyReturnExpression( final T p_execution )
     {
         m_execution = p_execution;
     }
