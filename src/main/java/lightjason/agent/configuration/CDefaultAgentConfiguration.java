@@ -28,6 +28,7 @@ import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CBeliefStorage;
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
@@ -64,6 +65,10 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @warning can be set to null
      */
     private final IVariableBuilder m_variablebuilder;
+    /**
+     * unifier instance
+     */
+    private final IUnifier m_unifier;
 
 
     /**
@@ -72,13 +77,14 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_initalbeliefs set with initial beliefs
      * @param p_plans plans
      * @param p_initialgoal initial goal
+     * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
     public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger<?>, IPlan> p_plans,
-                                       final ILiteral p_initialgoal, final IAggregation p_aggregation
+                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
-        this( p_initalbeliefs, p_plans, p_initialgoal, p_aggregation, null );
+        this( p_initalbeliefs, p_plans, p_initialgoal, p_unifier, p_aggregation, null );
     }
 
     /**
@@ -88,10 +94,12 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_plans plans
      * @param p_initialgoal initial goal
      * @param p_aggregation aggregation function
+     * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
     public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger<?>, IPlan> p_plans,
-                                       final ILiteral p_initialgoal, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder
+                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
+                                       final IVariableBuilder p_variablebuilder
     )
     {
         m_plans = p_plans;
@@ -99,10 +107,11 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         m_variablebuilder = p_variablebuilder;
         m_initialgoal = p_initialgoal;
         m_initialbeliefs = p_initalbeliefs;
+        m_unifier = p_unifier;
     }
 
     @Override
-    public IMask getBeliefbase()
+    public final IMask getBeliefbase()
     {
         final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
@@ -110,31 +119,37 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public ILiteral getInitialGoal()
+    public final ILiteral getInitialGoal()
     {
         return m_initialgoal;
     }
 
     @Override
-    public IAggregation getAggregate()
+    public final IAggregation getAggregate()
     {
         return m_aggregation;
     }
 
     @Override
-    public IVariableBuilder getVariableBuilder()
+    public final IUnifier getUnifier()
+    {
+        return m_unifier;
+    }
+
+    @Override
+    public final IVariableBuilder getVariableBuilder()
     {
         return m_variablebuilder;
     }
 
     @Override
-    public Multimap<ITrigger<?>, IPlan> getPlans()
+    public final Multimap<ITrigger<?>, IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public Map<String, Object> getRules()
+    public final Map<String, Object> getRules()
     {
         return null;
     }

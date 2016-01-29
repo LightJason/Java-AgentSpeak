@@ -69,11 +69,13 @@ public class CAgent implements IAgent
     /**
      * storage map
      *
-     * @note must be thread-safe
+     * @note must be thread-safe and need not to be null
      */
     protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
     /**
      * beliefbase
+     *
+     * @warning need not to be null
      */
     protected final IMask m_beliefbase;
     /**
@@ -83,11 +85,15 @@ public class CAgent implements IAgent
      */
     protected final Set<ILiteral> m_goals = Collections.newSetFromMap( new ConcurrentHashMap<>() );
     /**
-     * curent agent cycle
+     * unifier
+     *
+     * @warning need not to be null
      */
-    protected long m_cycle;
+    protected final IUnifier m_unifier;
     /**
      * aggregation function
+     *
+     * @warning need not to be null
      */
     protected final IAggregation m_aggregation;
     /**
@@ -96,6 +102,10 @@ public class CAgent implements IAgent
      * @warning can be set to null
      */
     protected final IVariableBuilder m_variablebuilder;
+    /**
+     * curent agent cycle
+     */
+    protected long m_cycle;
     /**
      * hibernate state
      */
@@ -112,6 +122,7 @@ public class CAgent implements IAgent
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();
         m_plans = p_configuration.getPlans();
+        m_unifier = p_configuration.getUnifier();
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
 
@@ -175,7 +186,7 @@ public class CAgent implements IAgent
     @Override
     public final IUnifier getUnifier()
     {
-        return null;
+        return m_unifier;
     }
 
     @Override

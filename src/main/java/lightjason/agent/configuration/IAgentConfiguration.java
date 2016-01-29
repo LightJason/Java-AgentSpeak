@@ -25,6 +25,7 @@ package lightjason.agent.configuration;
 
 import lightjason.beliefbase.IMask;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.score.IAggregation;
 
@@ -56,6 +57,13 @@ public interface IAgentConfiguration extends IConfiguration
      * @return aggregate function
      */
     IAggregation getAggregate();
+
+    /**
+     * returns the unifier function
+     *
+     * @return unifier
+     */
+    IUnifier getUnifier();
 
     /**
      * returns the variable builder

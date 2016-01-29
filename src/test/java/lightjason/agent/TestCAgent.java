@@ -131,7 +131,8 @@ public final class TestCAgent
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ), new CVariableBuilder() ).generate().call();
+            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CVariableBuilder() ).generate()
+                                                                                                                                                   .call();
         }
         catch ( final Exception p_exception )
         {

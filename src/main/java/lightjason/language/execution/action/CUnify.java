@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CRawTerm;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
@@ -86,7 +87,6 @@ public final class CUnify extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        /*
         final Object l_result = m_parallel
                                 ? p_context.getAgent().getUnifier().parallelunify( p_context.getAgent(), m_value, m_expression )
                                 : p_context.getAgent().getUnifier().sequentialunify( p_context.getAgent(), m_value, m_expression );
@@ -95,7 +95,6 @@ public final class CUnify extends IBaseExecution<ILiteral>
             return CBoolean.from( false );
 
         p_return.add( CRawTerm.from( l_result ) );
-        */
         return CBoolean.from( true );
     }
 

@@ -33,6 +33,7 @@ import lightjason.grammar.AgentParser;
 import lightjason.grammar.CErrorListener;
 import lightjason.grammar.CParser;
 import lightjason.grammar.IParseAgent;
+import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.score.IAggregation;
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -62,12 +63,14 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with action
+     * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      * @throws IOException thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation ) throws Exception
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier, final IAggregation p_aggregation )
+    throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, null );
+        this( p_stream, p_actions, p_unifier, p_aggregation, null );
     }
 
     /**
@@ -75,11 +78,12 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with action
+     * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws IOException thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier, final IAggregation p_aggregation,
                                    final IVariableBuilder p_variablebuilder
     )
     throws Exception
@@ -89,7 +93,12 @@ public class CDefaultAgentGenerator implements IAgentGenerator
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
-                l_visitor.getInitialBeliefs(), l_visitor.getPlans(), l_visitor.getInitialGoal(), p_aggregation, p_variablebuilder
+                l_visitor.getInitialBeliefs(),
+                l_visitor.getPlans(),
+                l_visitor.getInitialGoal(),
+                p_unifier,
+                p_aggregation,
+                p_variablebuilder
         );
     }
 
