@@ -31,6 +31,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.plan.trigger.ITrigger;
@@ -76,6 +77,10 @@ public class CPlan implements IPlan
      */
     protected long m_failruns;
     /**
+     * execution condition / expression
+     */
+    protected final IExpression m_condition;
+    /**
      * action list
      */
     protected final List<IExecution> m_action;
@@ -83,6 +88,7 @@ public class CPlan implements IPlan
      * map with annotation (enum value for getting annotation object)
      */
     protected final Map<IAnnotation.EType, IAnnotation<?>> m_annotation;
+
 
     /**
      * ctor
@@ -94,10 +100,27 @@ public class CPlan implements IPlan
      */
     public CPlan( final ITrigger<?> p_event, final ILiteral p_literal, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
     {
+        this( p_event, p_literal, null, p_body, p_annotation );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_event trigger event
+     * @param p_literal head literal
+     * @param p_condition execution condition
+     * @param p_body plan body
+     * @param p_annotation annotations
+     */
+    public CPlan( final ITrigger<?> p_event, final ILiteral p_literal, final IExpression p_condition, final List<IExecution> p_body,
+                  final Set<IAnnotation<?>> p_annotation
+    )
+    {
         m_literal = p_literal;
         m_triggerevent = p_event;
         m_action = Collections.unmodifiableList( p_body );
         m_annotation = this.addDefault( p_annotation );
+        m_condition = p_condition;
     }
 
     @Override
