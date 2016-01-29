@@ -154,6 +154,24 @@ public final class CPrint extends IBuildinAction
             return this.getType().isAssignableFrom( p_class );
         }
 
+        @Override
+        public final int hashCode()
+        {
+            return this.getType().hashCode();
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return this.hashCode() == p_object.hashCode();
+        }
+
+        @Override
+        public final String toString()
+        {
+            return "";
+        }
+
         /**
          * to string
          *
