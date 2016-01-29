@@ -36,7 +36,6 @@ import lightjason.language.plan.IPlan;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -87,7 +86,7 @@ public final class TestCAgent
     /**
      * asl parsing test
      */
-    @Test
+    //@Test
     public void testASL()
     {
         final Map<String, String> l_testing = new HashMap<String, String>()
@@ -101,7 +100,6 @@ public final class TestCAgent
 
         l_testing.entrySet().stream().forEach( i -> {
             final Pair<Boolean, String> l_result = this.testAgent( i.getKey(), i.getValue() );
-
             assertTrue( l_result.getRight(), l_result.getLeft() );
             System.out.println( l_result.getValue() );
         } );

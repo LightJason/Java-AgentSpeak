@@ -139,12 +139,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
-    public Object visitPlan_context( final AgentParser.Plan_contextContext p_context )
-    {
-        return null;
-    }
-
-    @Override
     public Object visitBody( final AgentParser.BodyContext p_context )
     {
         return null;
@@ -512,12 +506,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitPlan_belief_trigger( final PlanBundleParser.Plan_belief_triggerContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitPlan_context( final PlanBundleParser.Plan_contextContext p_context )
     {
         return null;
     }

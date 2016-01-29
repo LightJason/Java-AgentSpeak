@@ -72,7 +72,7 @@ plan :
  * The definition is [ : condition ] [ <- body ]
  **/
 plandefinition :
-    ( COLON plan_context )?
+    ( COLON expression )?
     LEFTARROW body
     ;
 
@@ -151,13 +151,6 @@ plan_goal_trigger :
  **/
 plan_belief_trigger :
     PLUS | MINUS
-    ;
-
-/**
- * logical context for plan matching
- **/
-plan_context :
-    expression
     ;
 
 /**

@@ -21,82 +21,83 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.language.execution.expression;
 
-import lightjason.language.ILiteral;
+import lightjason.agent.IAgent;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.score.IAggregation;
 
-import java.text.MessageFormat;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
- * unify action
+ * encpasulating any execution context
  *
- * @bug incomplete
+ * @bug actions will not work
  */
-public final class CUnify extends IBaseExecution<ILiteral>
+public final class CProxyExpression<T extends IExecution> implements IExpression
 {
     /**
-     * parallel unification
+     * execution
      */
-    private final boolean m_parallel;
-    /**
-     * unification expression
-     */
-    private final IExpression m_expression;
+    private final T m_execution;
 
     /**
      * ctor
      *
-     * @param p_parallel parallel execution
-     * @param p_literal literal
+     * @param p_execution execution
      */
-    public CUnify( final boolean p_parallel, final ILiteral p_literal )
+    public CProxyExpression( final T p_execution )
     {
-        this( p_parallel, p_literal, null );
+        m_execution = p_execution;
     }
 
-    /**
-     * ctor
-     *
-     * @param p_parallel parallel execution
-     * @param p_literal literal
-     * @param p_expression expression based on the unification result
-     */
-    public CUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_expression )
-    {
-        super( p_literal );
-        m_parallel = p_parallel;
-        m_expression = p_expression;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value );
-    }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        /*
-        final Object l_result = m_parallel
-                                ? p_context.getAgent().getUnifier().parallelunify( p_context.getAgent(), m_value, m_expression )
-                                : p_context.getAgent().getUnifier().sequentialunify( p_context.getAgent(), m_value, m_expression );
-
-        if ( l_result == null )
-            return CBoolean.from( false );
-
-        p_return.add( CRawTerm.from( l_result ) );
-        */
+        p_return.add( CRawTerm.from( m_execution.execute( p_context, p_parallel, p_argument, new LinkedList<>(), p_annotation ).getValue() ) );
         return CBoolean.from( true );
+    }
+
+    @Override
+    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    {
+        return m_execution.score( p_aggregate, p_agent );
+    }
+
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return m_execution.getVariables();
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_execution.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return m_execution.equals( p_object );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_execution.toString();
     }
 
 }

@@ -24,7 +24,6 @@
 package lightjason.language.plan;
 
 import lightjason.agent.IAgent;
-import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -56,10 +55,6 @@ import java.util.stream.Collectors;
  */
 public class CPlan implements IPlan
 {
-    /**
-     * plan literal
-     **/
-    protected final ILiteral m_literal;
     /**
      * trigger event
      */
@@ -94,29 +89,25 @@ public class CPlan implements IPlan
      * ctor
      *
      * @param p_event trigger event
-     * @param p_literal head literal
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger<?> p_event, final ILiteral p_literal, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( final ITrigger<?> p_event, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
     {
-        this( p_event, p_literal, null, p_body, p_annotation );
+        this( p_event, null, p_body, p_annotation );
     }
 
     /**
      * ctor
      *
      * @param p_event trigger event
-     * @param p_literal head literal
      * @param p_condition execution condition
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger<?> p_event, final ILiteral p_literal, final IExpression p_condition, final List<IExecution> p_body,
-                  final Set<IAnnotation<?>> p_annotation
+    public CPlan( final ITrigger<?> p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
     )
     {
-        m_literal = p_literal;
         m_triggerevent = p_event;
         m_action = Collections.unmodifiableList( p_body );
         m_annotation = this.addDefault( p_annotation );
@@ -151,7 +142,13 @@ public class CPlan implements IPlan
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ({1} | {2} |- {3} ==>> {4})", super.toString(), m_annotation.values(), m_triggerevent, m_literal, StringUtils.join( m_action, "; " ) );
+                "{0} ({1} | {2}{3} ==>> {4})",
+                super.toString(),
+                m_annotation.values(),
+                m_triggerevent,
+                m_condition == null ? "" : MessageFormat.format( " |- {0}", m_condition ),
+                StringUtils.join( m_action, "; " )
+        );
     }
 
     @Override

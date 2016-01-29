@@ -43,10 +43,9 @@ second(true).
         generic/print(L);
         generic/print(R);
 
-
         // sequential & parallel unification
-        //>>foo(U);
-        //@>>foo(U);
+        >>foo(U);
+        @>>foo(U);
 
 
         // check condition and plan passing

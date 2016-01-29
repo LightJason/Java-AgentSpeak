@@ -56,6 +56,7 @@ import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.CAtom;
+import lightjason.language.execution.expression.CProxyExpression;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.expression.logical.CBinary;
@@ -227,15 +228,17 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitPlan( final AgentParser.PlanContext p_context )
     {
-        final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
-        final ITrigger.EType l_trigger = (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() );
         final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
+        final CTrigger l_trigger = new CTrigger(
+                (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),
+                ( (ILiteral) this.visitLiteral( p_context.literal() ) ).getFQNFunctor()
+        );
 
         // parallel stream does not work with multi hashmap
         p_context.plandefinition().stream().forEach( i -> {
 
-            final Pair<Object, List<IExecution>> l_content = (Pair<Object, List<IExecution>>) this.visitPlandefinition( i );
-            final IPlan l_plan = new CPlan( new CTrigger( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
+            final Pair<IExpression, List<IExecution>> l_content = (Pair<IExpression, List<IExecution>>) this.visitPlandefinition( i );
+            final IPlan l_plan = new CPlan( l_trigger, l_content.getLeft(), l_content.getRight(), l_annotation );
             m_plans.put( l_plan.getTrigger(), l_plan );
 
         } );
@@ -246,19 +249,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitPlan( final PlanBundleParser.PlanContext p_context )
     {
-        final ILiteral l_head = (ILiteral) this.visitLiteral( p_context.literal() );
-        final ITrigger.EType l_trigger = (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() );
-        final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
-
-        // parallel stream does not work with multi hashmap
-        p_context.plandefinition().stream().forEach( i -> {
-
-            final Pair<Object, List<IExecution>> l_content = (Pair<Object, List<IExecution>>) this.visitPlandefinition( i );
-            final IPlan l_plan = new CPlan( new CTrigger( l_trigger, l_head.getFQNFunctor() ), l_head, l_content.getRight(), l_annotation );
-            m_plans.put( l_plan.getTrigger(), l_plan );
-
-        } );
-
+        // @bug
         return null;
     }
 
@@ -267,15 +258,19 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitPlandefinition( final AgentParser.PlandefinitionContext p_context )
     {
-        return new ImmutablePair<Object, List<IExecution>>(
-                this.visitPlan_context( p_context.plan_context() ), (List<IExecution>) this.visitBody( p_context.body() ) );
+        return new ImmutablePair<IExpression, List<IExecution>>(
+                p_context.expression() == null ? null : (IExpression) this.visitExpression( p_context.expression() ),
+                (List<IExecution>) this.visitBody( p_context.body() )
+        );
     }
 
     @Override
     public Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
     {
-        return new ImmutablePair<Object, List<IExecution>>(
-                this.visitPlan_context( p_context.plan_context() ), (List<IExecution>) this.visitBody( p_context.body() ) );
+        return new ImmutablePair<IExpression, List<IExecution>>(
+                p_context.expression() == null ? null : (IExpression) this.visitExpression( p_context.expression() ),
+                (List<IExecution>) this.visitBody( p_context.body() )
+        );
     }
 
 
@@ -487,20 +482,6 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
 
     @Override
-    public Object visitPlan_context( final AgentParser.Plan_contextContext p_context )
-    {
-        return p_context == null ? "" : p_context.getText();
-    }
-
-    @Override
-    public Object visitPlan_context( final PlanBundleParser.Plan_contextContext p_context )
-    {
-        return p_context == null ? "" : p_context.getText();
-    }
-
-
-
-    @Override
     public final Object visitBody( final AgentParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
@@ -568,26 +549,24 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
-        if ( p_context.expression() != null )
-            return new CUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
-
         return new CUnify(
                 p_context.AT() != null,
                 (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IExpression) this.visitExpression( p_context.expression() )
+                p_context.expression() == null
+                ? null
+                : (IExpression) this.visitExpression( p_context.expression() )
         );
     }
 
     @Override
     public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
-        if ( p_context.expression() != null )
-            return new CUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
-
         return new CUnify(
                 p_context.AT() != null,
                 (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IExpression) this.visitExpression( p_context.expression() )
+                p_context.expression() == null
+                ? null
+                : (IExpression) this.visitExpression( p_context.expression() )
         );
     }
 
@@ -1364,10 +1343,10 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
         if ( p_context.unification() != null )
-            return this.visitUnification( p_context.unification() );
+            return new CProxyExpression<>( (IExecution) this.visitUnification( p_context.unification() ) );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
+            return new CProxyExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1382,10 +1361,10 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
         if ( p_context.unification() != null )
-            return this.visitUnification( p_context.unification() );
+            return new CProxyExpression<>( (IExecution) this.visitUnification( p_context.unification() ) );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
+            return new CProxyExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1665,7 +1644,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
         if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
+            return new CProxyExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
