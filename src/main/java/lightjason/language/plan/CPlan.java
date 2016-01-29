@@ -41,6 +41,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -162,7 +163,7 @@ public class CPlan implements IPlan
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
                   : m_action.stream()
-                ).map( i -> i.execute( p_context, null, Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList(), Collections.<ITerm>emptyList() ) )
+                ).map( i -> i.execute( p_context, null, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
                  .allMatch( CBoolean.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );
