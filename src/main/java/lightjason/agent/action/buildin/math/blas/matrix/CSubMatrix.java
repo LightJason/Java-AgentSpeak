@@ -21,41 +21,36 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.statistic;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.agent.action.buildin.math.blas.IAlgebra;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * create a (set) of random values
+ * returns a submatrix
  */
-public final class CRandom extends IBuildinAction
+public final class CSubMatrix extends IAlgebra
 {
-
     /**
      * ctor
      */
-    public CRandom()
+    public CSubMatrix()
     {
-        super( 3 );
+        super( 4 );
     }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 5;
     }
 
     @Override
@@ -63,23 +58,19 @@ public final class CRandom extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument distribution reference, second optional value number of random values
-        if ( p_argument.size() > 1 )
-            p_return.add( CRawTerm.from(
-                    p_parallel
-                    ? Collections.synchronizedList( Arrays.stream(
-                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
-                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                    ).boxed().collect( Collectors.toList() ) )
-                    : Arrays.stream(
-                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
-                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                    ).boxed().collect( Collectors.toList() )
-            ) );
-        else
-            p_return.add( CRawTerm.from( CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) ).sample() ) );
+        // first argument must be a term with a matrix object,
+        // second begin row index, third end row index
+        // forth begin column index, fifth end column index
+        p_return.add( CRawTerm.from(
+                m_algebra.subMatrix(
+                        CCommon.getRawValue( p_argument.get( 0 ) ),
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue(),
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 3 ) ).intValue(),
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 4 ) ).intValue()
+                )
+        ) );
 
         return CBoolean.from( true );
     }
-
 }

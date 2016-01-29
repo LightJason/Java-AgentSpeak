@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import lightjason.common.CCommon;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -115,7 +114,7 @@ public final class TestCLanguageLabels
      *
      * @bug disable unused label checking
      */
-    @Test
+    //@Test
     public void testResourceString()
     {
         // --- check source -> label definition
