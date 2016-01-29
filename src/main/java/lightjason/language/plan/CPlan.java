@@ -158,7 +158,8 @@ public class CPlan implements IPlan
     )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
-        // each item gets its own parameters, annotation and return stack, so it will be created locally
+        // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
+        // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
         return CBoolean.from(
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
