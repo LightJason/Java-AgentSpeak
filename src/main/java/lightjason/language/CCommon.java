@@ -140,6 +140,18 @@ public final class CCommon
         return flattenToStream( p_terms ).collect( Collectors.toList() );
     }
 
+    /**
+     * flats and concat the term list
+     *
+     * @param p_input input term list
+     * @return byte sequence
+     */
+    public static byte[] getBytes( final List<ITerm> p_input )
+    {
+        final StringBuilder l_result = new StringBuilder();
+        ( flatList( p_input ) ).stream().forEach( i -> l_result.append( getRawValue( i ).toString() ) );
+        return l_result.toString().getBytes();
+    }
 
     /*
      * recursive flattering of a list structure

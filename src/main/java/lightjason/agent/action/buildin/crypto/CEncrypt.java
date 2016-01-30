@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic;
+package lightjason.agent.action.buildin.crypto;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
@@ -31,22 +31,30 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
 /**
- * hash algorithm
+ * encrypting algorithm
+ *
+ * @bug not working see http://stackoverflow.com/questions/992019/java-256-bit-aes-password-based-encryption/992413#992413 /
+ * http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java
  */
-public final class CHash extends IBuildinAction
+public final class CEncrypt extends IBuildinAction
 {
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -56,32 +64,18 @@ public final class CHash extends IBuildinAction
     {
         try
         {
-            p_return.add( CRawTerm.from(
-                    String.format( "%032x", new BigInteger(
-                            1,
-                            MessageDigest.getInstance( CCommon.getRawValue( p_argument.get( 0 ) ) )
-                                         .digest( this.concat( p_argument.subList( 1, p_argument.size() ) ) )
-                    ) )
-            ) );
+            final String l_type = CCommon.getRawValue( p_argument.get( 0 ) );
+            final Cipher l_cipher = Cipher.getInstance( l_type );
+            l_cipher.init( Cipher.ENCRYPT_MODE, new SecretKeySpec( CCommon.<String, ITerm>getRawValue( p_argument.get( 1 ) ).getBytes(), l_type ) );
+            p_return.add(
+                    CRawTerm.from( DatatypeConverter.printHexBinary( l_cipher.doFinal( CCommon.getBytes( p_argument.subList( 3, p_argument.size() ) ) ) ) ) );
 
             return CBoolean.from( true );
         }
-        catch ( final NoSuchAlgorithmException p_exception )
+        catch ( final InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException p_exception )
         {
             return CBoolean.from( false );
         }
     }
 
-    /**
-     * flats and concat the argument data
-     *
-     * @param p_input input arguments
-     * @return byte sequence
-     */
-    private byte[] concat( final List<ITerm> p_input )
-    {
-        final StringBuilder l_result = new StringBuilder();
-        ( CCommon.flatList( p_input ) ).stream().forEach( i -> l_result.append( CCommon.getRawValue( i ).toString() ) );
-        return l_result.toString().getBytes();
-    }
 }

@@ -64,9 +64,14 @@ second(true).
 
 
         // check hash
-        HashMD5 = generic/hash( "md5", "hallo" );
-        HashSHA = generic/hash( "sha-256", "string test1", "second data", 4, 5, 6);
+        HashMD5 = crypto/hash( "md5", "hallo" );
+        HashSHA = crypto/hash( "sha-256", "string test1", "second data", 4, 5, 6);
         generic/print("MD5 & SHA-256 hash", HashMD5, HashSHA);
+
+
+        // check crypto
+        //Encrypt = crypto/encrypt( "AES", "my secret password", "my message test 1", 1, 5, 9, "another message part");
+        //generic/print("Crypt", Encrypt);
 
 
         // check sequencial & parallel lambda expression
