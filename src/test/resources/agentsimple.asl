@@ -63,6 +63,12 @@ second(true).
         generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
 
 
+        // check hash
+        HashMD5 = generic/hash( "md5", "hallo" );
+        HashSHA = generic/hash( "sha-256", "string test1", "second data", 4, 5, 6);
+        generic/print("md5 hash", HashMD5, HashSHA);
+
+
         // check sequencial & parallel lambda expression
         (L) -> Y : generic/print(Y);
         @(L) -> Y | R : R = Y+1;
