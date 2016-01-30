@@ -24,26 +24,32 @@
 package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalStateException;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatistics;
 
 import java.util.List;
 
 
 /**
- * action to push a value to the statistic object
+ * action to create a summary statistic
  */
-public final class CAddSummaryStatisticValue extends IBuildinAction
+public final class CCreateStatistic extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CAddSummaryStatisticValue()
+    public CCreateStatistic()
     {
         super( 3 );
     }
@@ -51,7 +57,7 @@ public final class CAddSummaryStatisticValue extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 0;
     }
 
     @Override
@@ -59,10 +65,48 @@ public final class CAddSummaryStatisticValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final SummaryStatistics l_statistic = CCommon.<SummaryStatistics, ITerm>getRawValue( p_argument.get( 0 ) );
-        CCommon.flatList( p_argument.subList( 1, p_argument.size() ) ).stream().forEach(
-                i -> l_statistic.addValue( CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ) );
+        p_return.add( CRawTerm.from(
+                ( p_argument.size() == 0
+                  ? EType.SUMMARY
+                  : EType.valueOf( lightjason.language.CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() )
+                ).generate( p_parallel )
+        ) );
+
         return CBoolean.from( true );
     }
 
+
+    /**
+     * enume statistic type
+     */
+    private enum EType
+    {
+        SUMMARY,
+        DESCRIPTIVE;
+
+        /**
+         * returns the statistic object
+         *
+         * @param p_parallel parallel-safe
+         * @return statistic object
+         */
+        public final StatisticalSummary generate( final Boolean p_parallel )
+        {
+            switch ( this )
+            {
+                case SUMMARY:
+                    return p_parallel
+                           ? new SynchronizedSummaryStatistics()
+                           : new SummaryStatistics();
+
+                case DESCRIPTIVE:
+                    return p_parallel
+                           ? new SynchronizedDescriptiveStatistics()
+                           : new DescriptiveStatistics();
+
+                default:
+                    throw new CIllegalStateException( CCommon.getLanguageString( this, "unknown" ) );
+            }
+        }
+    }
 }

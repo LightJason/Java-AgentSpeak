@@ -45,20 +45,20 @@ second(true).
 
 
         // check statistics
-        Statistic = math/statistic/createsummarystatistic();
-        math/statistic/addsummarystatisticvalue(Statistic, RV, L);
+        Statistic = math/statistic/createstatistic();
+        math/statistic/addstatisticvalue(Statistic, RV, L);
 
-        SMax = math/statistic/getsummarystatisticvalue(Statistic, "max");
-        SMin = math/statistic/getsummarystatisticvalue(Statistic, "min");
-        SCount = math/statistic/getsummarystatisticvalue(Statistic, "count");
-        SPopVariance = math/statistic/getsummarystatisticvalue(Statistic, "populationvariance");
-        SQuadraticMean = math/statistic/getsummarystatisticvalue(Statistic, "quadraticmean");
-        SSecondMom = math/statistic/getsummarystatisticvalue(Statistic, "secondmoment");
-        SStd = math/statistic/getsummarystatisticvalue(Statistic, "standarddeviation");
-        SSum = math/statistic/getsummarystatisticvalue(Statistic, "sum");
-        SSumSq = math/statistic/getsummarystatisticvalue(Statistic, "sumsquare");
-        SVar = math/statistic/getsummarystatisticvalue(Statistic, "variance");
-        SMean = math/statistic/getsummarystatisticvalue(Statistic, "mean");
+        SMax = math/statistic/getstatisticvalue(Statistic, "max");
+        SMin = math/statistic/getstatisticvalue(Statistic, "min");
+        SCount = math/statistic/getstatisticvalue(Statistic, "count");
+        SPopVariance = math/statistic/getstatisticvalue(Statistic, "populationvariance");
+        SQuadraticMean = math/statistic/getstatisticvalue(Statistic, "quadraticmean");
+        SSecondMom = math/statistic/getstatisticvalue(Statistic, "secondmoment");
+        SStd = math/statistic/getstatisticvalue(Statistic, "standarddeviation");
+        SSum = math/statistic/getstatisticvalue(Statistic, "sum");
+        SSumSq = math/statistic/getstatisticvalue(Statistic, "sumsquare");
+        SVar = math/statistic/getstatisticvalue(Statistic, "variance");
+        SMean = math/statistic/getstatisticvalue(Statistic, "mean");
 
         generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
 
