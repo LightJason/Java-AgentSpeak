@@ -66,7 +66,7 @@ second(true).
         // check hash
         HashMD5 = generic/hash( "md5", "hallo" );
         HashSHA = generic/hash( "sha-256", "string test1", "second data", 4, 5, 6);
-        generic/print("md5 hash", HashMD5, HashSHA);
+        generic/print("MD5 & SHA-256 hash", HashMD5, HashSHA);
 
 
         // check sequencial & parallel lambda expression
