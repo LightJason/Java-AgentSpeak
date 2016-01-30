@@ -24,30 +24,28 @@
 package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.error.CIllegalStateException;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * create a (set) of random values
+ * action to return a statistic value
  */
-public final class CRandom extends IBuildinAction
+public final class CGetSummaryStatisticValue extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CRandom()
+    public CGetSummaryStatisticValue()
     {
         super( 3 );
     }
@@ -55,31 +53,96 @@ public final class CRandom extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument distribution reference, second optional value number of random values
-        if ( p_argument.size() > 1 )
-            p_return.add( CRawTerm.from(
-                    p_parallel
-                    ? Collections.synchronizedList( Arrays.stream(
-                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
-                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                    ).boxed().collect( Collectors.toList() ) )
-                    : Arrays.stream(
-                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
-                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                    ).boxed().collect( Collectors.toList() )
-            ) );
-        else
-            p_return.add( CRawTerm.from( CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) ).sample() ) );
-
+        p_return.add( CRawTerm.from(
+                EValueType.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 1 ) ).trim().toUpperCase() )
+                          .get( CCommon.<SummaryStatistics, ITerm>getRawValue( p_argument.get( 0 ) ) )
+        ) );
         return CBoolean.from( true );
+    }
+
+
+
+    /**
+     * enum of statistic value types
+     */
+    private enum EValueType
+    {
+        GEOMETRICMEAN,
+        MAX,
+        MIN,
+        COUNT,
+        POPULATIONVARIANCE,
+        QUADRATICMEAN,
+        SECONDMOMENT,
+        STANDARDDEVIATION,
+        SUM,
+        SUMLOG,
+        SUMSQUARE,
+        VARIANCE,
+        MEAN;
+
+        /**
+         * returns a statistic value
+         *
+         * @param p_statistic statistic object
+         * @return value
+         */
+        public final Number get( final SummaryStatistics p_statistic )
+        {
+            switch ( this )
+            {
+                case GEOMETRICMEAN:
+                    return p_statistic.getGeometricMean();
+
+                case MAX:
+                    return p_statistic.getMax();
+
+                case MIN:
+                    return p_statistic.getMin();
+
+                case COUNT:
+                    return p_statistic.getN();
+
+                case POPULATIONVARIANCE:
+                    return p_statistic.getPopulationVariance();
+
+                case QUADRATICMEAN:
+                    return p_statistic.getQuadraticMean();
+
+                case SECONDMOMENT:
+                    return p_statistic.getSecondMoment();
+
+                case STANDARDDEVIATION:
+                    return p_statistic.getStandardDeviation();
+
+                case SUM:
+                    return p_statistic.getSum();
+
+                case SUMLOG:
+                    return p_statistic.getSumOfLogs();
+
+                case SUMSQUARE:
+                    return p_statistic.getSumsq();
+
+                case VARIANCE:
+                    return p_statistic.getVariance();
+
+                case MEAN:
+                    return p_statistic.getMean();
+
+                default:
+                    throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unknown" ) );
+            }
+        }
     }
 
 }

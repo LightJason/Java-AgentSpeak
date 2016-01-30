@@ -30,21 +30,24 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action for geometric mean
+ * create a (set) of random values
  */
-public final class CGeometricMean extends IBuildinAction
+public final class CRandomSample extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CGeometricMean()
+    public CRandomSample()
     {
         super( 3 );
     }
@@ -56,14 +59,26 @@ public final class CGeometricMean extends IBuildinAction
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        final SummaryStatistics l_statistics = new SummaryStatistics();
-        p_argument.stream().mapToDouble( i -> CCommon.getRawValue( i ) ).forEach( i -> l_statistics.addValue( i ) );
-        p_argument.add( CRawTerm.from( l_statistics.getGeometricMean() ) );
+        // first argument distribution reference, second optional value number of random values
+        if ( p_argument.size() > 1 )
+            p_return.add( CRawTerm.from(
+                    p_parallel
+                    ? Collections.synchronizedList( Arrays.stream(
+                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
+                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
+                    ).boxed().collect( Collectors.toList() ) )
+                    : Arrays.stream(
+                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
+                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
+                    ).boxed().collect( Collectors.toList() )
+            ) );
+        else
+            p_return.add( CRawTerm.from( CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) ).sample() ) );
+
         return CBoolean.from( true );
     }
 

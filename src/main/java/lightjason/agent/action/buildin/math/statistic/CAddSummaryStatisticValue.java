@@ -25,7 +25,6 @@ package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -36,15 +35,15 @@ import java.util.List;
 
 
 /**
- * action for sum-of-squared-errors
+ * action to push a value to the statistic object
  */
-public final class CSumOfSqueares extends IBuildinAction
+public final class CAddSummaryStatisticValue extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CSumOfSqueares()
+    public CAddSummaryStatisticValue()
     {
         super( 3 );
     }
@@ -52,18 +51,17 @@ public final class CSumOfSqueares extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        final SummaryStatistics l_statistics = new SummaryStatistics();
-        p_argument.stream().mapToDouble( i -> CCommon.getRawValue( i ) ).forEach( i -> l_statistics.addValue( i ) );
-        p_argument.add( CRawTerm.from( l_statistics.getSumsq() ) );
+        final SummaryStatistics l_statistic = CCommon.<SummaryStatistics, ITerm>getRawValue( p_argument.get( 0 ) );
+        CCommon.flatList( p_argument.subList( 1, p_argument.size() ) ).stream().forEach(
+                i -> l_statistic.addValue( CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ) );
         return CBoolean.from( true );
     }
 

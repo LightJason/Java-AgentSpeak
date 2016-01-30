@@ -24,27 +24,27 @@
 package lightjason.agent.action.buildin.math.statistic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatistics;
 
 import java.util.List;
 
 
 /**
- * action for standard deviation
+ * action to create a summarize statistic
  */
-public final class CStandardDeviation extends IBuildinAction
+public final class CCreateSummaryStatistic extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CStandardDeviation()
+    public CCreateSummaryStatistic()
     {
         super( 3 );
     }
@@ -52,18 +52,20 @@ public final class CStandardDeviation extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        final SummaryStatistics l_statistics = new SummaryStatistics();
-        p_argument.stream().mapToDouble( i -> CCommon.getRawValue( i ) ).forEach( i -> l_statistics.addValue( i ) );
-        p_argument.add( CRawTerm.from( l_statistics.getStandardDeviation() ) );
+        p_return.add( CRawTerm.from(
+                p_parallel
+                ? new SynchronizedSummaryStatistics()
+                : new SummaryStatistics()
+        ) );
+
         return CBoolean.from( true );
     }
 

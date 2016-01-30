@@ -40,8 +40,27 @@ second(true).
 
         // check random
         Distribution = math/statistic/createdistribution( "normal", -100, 100 );
-        RV = math/statistic/random( Distribution, 8 );
+        RV = math/statistic/randomsample( Distribution, 8 );
         generic/print("random", RV);
+
+
+        // check statistics
+        Statistic = math/statistic/createsummarystatistic();
+        math/statistic/addsummarystatisticvalue(Statistic, RV, L);
+
+        SMax = math/statistic/getsummarystatisticvalue(Statistic, "max");
+        SMin = math/statistic/getsummarystatisticvalue(Statistic, "min");
+        SCount = math/statistic/getsummarystatisticvalue(Statistic, "count");
+        SPopVariance = math/statistic/getsummarystatisticvalue(Statistic, "populationvariance");
+        SQuadraticMean = math/statistic/getsummarystatisticvalue(Statistic, "quadraticmean");
+        SSecondMom = math/statistic/getsummarystatisticvalue(Statistic, "secondmoment");
+        SStd = math/statistic/getsummarystatisticvalue(Statistic, "standarddeviation");
+        SSum = math/statistic/getsummarystatisticvalue(Statistic, "sum");
+        SSumSq = math/statistic/getsummarystatisticvalue(Statistic, "sumsquare");
+        SVar = math/statistic/getsummarystatisticvalue(Statistic, "variance");
+        SMean = math/statistic/getsummarystatisticvalue(Statistic, "mean");
+
+        generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
 
 
         // check sequencial & parallel lambda expression
@@ -51,17 +70,20 @@ second(true).
         generic/print("list", L);
         generic/print("lambda return", R);
 
-        // sequential & parallel unification
+
+        // check sequential & parallel unification
         >>foo(U);
         @>>foo(U);
 
 
-        // check condition and plan passing
+        // check condition
         if ( Z > 100.0 )
             generic/print("if true")
         else
             generic/print("if false");
 
+
+        // check plan passing
         Z < 100.0;
         generic/print("plan passed")
 
