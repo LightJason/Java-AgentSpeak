@@ -31,6 +31,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -66,7 +67,7 @@ public final class CHash extends IBuildinAction
 
             return CBoolean.from( true );
         }
-        catch ( final NoSuchAlgorithmException p_exception )
+        catch ( final UnsupportedEncodingException | NoSuchAlgorithmException p_exception )
         {
             return CBoolean.from( false );
         }

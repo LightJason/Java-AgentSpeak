@@ -29,6 +29,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.IContext;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
@@ -144,13 +145,14 @@ public final class CCommon
      * flats and concat the term list
      *
      * @param p_input input term list
-     * @return byte sequence
+     * @return byte sequence with UTF-8 encoding
+     * @throws UnsupportedEncodingException is thrown on wrong encoding type
      */
-    public static byte[] getBytes( final List<ITerm> p_input )
+    public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException
     {
         final StringBuilder l_result = new StringBuilder();
         ( flatList( p_input ) ).stream().forEach( i -> l_result.append( getRawValue( i ).toString() ) );
-        return l_result.toString().getBytes();
+        return l_result.toString().getBytes( "UTF-8" );
     }
 
     /*
