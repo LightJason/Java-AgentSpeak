@@ -25,19 +25,17 @@ package lightjason.agent.action.buildin.crypto;
 
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -46,7 +44,7 @@ import java.util.List;
  * encrypting algorithm
  *
  * @bug not working see http://stackoverflow.com/questions/992019/java-256-bit-aes-password-based-encryption/992413#992413 /
- * http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java
+ * http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java / http://stackoverflow.com/questions/3451670/java-aes-and-using-my-own-key
  */
 public final class CEncrypt extends IBuildinAction
 {
@@ -64,18 +62,69 @@ public final class CEncrypt extends IBuildinAction
     {
         try
         {
-            final String l_type = CCommon.getRawValue( p_argument.get( 0 ) );
-            final Cipher l_cipher = Cipher.getInstance( l_type );
-            l_cipher.init( Cipher.ENCRYPT_MODE, new SecretKeySpec( CCommon.<String, ITerm>getRawValue( p_argument.get( 1 ) ).getBytes(), l_type ) );
-            p_return.add(
-                    CRawTerm.from( DatatypeConverter.printHexBinary( l_cipher.doFinal( CCommon.getBytes( p_argument.subList( 3, p_argument.size() ) ) ) ) ) );
+            final EType l_encrypt = EType.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() );
+            l_encrypt.getEncryptCipher( l_encrypt.generateKey( CCommon.getRawValue( p_argument.get( 1 ) ) ) );
 
             return CBoolean.from( true );
         }
-        catch ( final InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException p_exception )
+        catch ( final NoSuchAlgorithmException | UnsupportedEncodingException | NoSuchPaddingException | InvalidKeyException p_exception )
         {
             return CBoolean.from( false );
         }
     }
 
+
+    /**
+     * enum with encrypting types
+     */
+    private enum EType
+    {
+        AES( "AES/ECB/PKCS5Padding" ),
+        DES( "DESede/ECB/PKCS5Padding" ),
+        RSA( "RSA/ECB/OAEPWithSHA-256AndMGF1Padding" );
+
+        /**
+         * chipher name
+         */
+        private final String m_id;
+
+        /**
+         * ctor
+         *
+         * @param p_id chipher name
+         */
+        EType( final String p_id )
+        {
+            m_id = p_id;
+        }
+
+        /**
+         * generates a key
+         *
+         * @param p_key string key
+         * @return key object
+         *
+         * @throws UnsupportedEncodingException on encoding error
+         */
+        public final Key generateKey( final String p_key ) throws UnsupportedEncodingException
+        {
+            return new SecretKeySpec( p_key.getBytes( "UTF-8" ), m_id );
+        }
+
+        /**
+         * @param p_key key object
+         * @return cipher
+         *
+         * @throws NoSuchPaddingException on padding error
+         * @throws NoSuchAlgorithmException on algorithm error
+         * @throws InvalidKeyException on key invalid
+         */
+        public final Cipher getEncryptCipher( final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+        {
+            final Cipher l_cipher = Cipher.getInstance( m_id );
+            l_cipher.init( Cipher.ENCRYPT_MODE, p_key );
+            return l_cipher;
+        }
+
+    }
 }
