@@ -38,6 +38,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 
 
@@ -62,7 +63,8 @@ public final class CDecrypt extends IBuildinAction
         {
             final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getDecryptCipher(
                     CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
-            p_argument.subList( 2, p_argument.size() ).stream().forEach( i -> l_cipher.update( CCommon.getRawValue( i ).toString().getBytes() ) );
+            p_argument.subList( 2, p_argument.size() ).stream().forEach(
+                    i -> l_cipher.update( Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) ) ) );
             p_return.add( CRawTerm.from( new String( l_cipher.doFinal() ) ) );
 
             return CBoolean.from( true );

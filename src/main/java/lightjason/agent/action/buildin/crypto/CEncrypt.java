@@ -38,6 +38,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 
 
@@ -63,7 +64,7 @@ public final class CEncrypt extends IBuildinAction
             final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getEncryptCipher(
                     CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
             p_argument.subList( 2, p_argument.size() ).stream().forEach( i -> l_cipher.update( CCommon.getRawValue( i ).toString().getBytes() ) );
-            p_return.add( CRawTerm.from( new String( l_cipher.doFinal() ) ) );
+            p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( l_cipher.doFinal() ) ) );
 
             return CBoolean.from( true );
         }

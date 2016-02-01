@@ -38,8 +38,11 @@ import java.util.List;
 /**
  * creates an encrypting / decrypting key
  *
- * @bug not working see http://stackoverflow.com/questions/992019/java-256-bit-aes-password-based-encryption/992413#992413 /
- * http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java / http://stackoverflow.com/questions/3451670/java-aes-and-using-my-own-key
+ * @see http://stackoverflow.com/questions/992019/java-256-bit-aes-password-based-encryption/992413#992413
+ * @see https://javadigest.wordpress.com/
+ * @see http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java
+ * @see http://stackoverflow.com/questions/3451670/java-aes-and-using-my-own-key
+ *
  */
 public final class CCreateKey extends IBuildinAction
 {
