@@ -146,6 +146,7 @@ public final class CCommon
      *
      * @param p_input input term list
      * @return byte sequence with UTF-8 encoding
+     *
      * @throws UnsupportedEncodingException is thrown on wrong encoding type
      */
     public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException

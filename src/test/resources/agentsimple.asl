@@ -70,8 +70,13 @@ second(true).
 
 
         // check crypto
-        //Encrypt = crypto/encrypt( "AES", "my secret password", "my message test 1", 1, 5, 9, "another message part");
-        //generic/print("Crypt", Encrypt);
+        Key = crypto/createkey( "DES" );
+
+        Encrypt = crypto/encrypt( "DES", Key, "my message test 1", 1, 5, 9, "another message part");
+        generic/print("Encrypt", Encrypt );
+
+        //Decrypt = crypto/decrypt( "DES", Key, Encrypt);
+        //generic/print("Decrypt", Decrypt );
 
 
         // check sequencial & parallel lambda expression

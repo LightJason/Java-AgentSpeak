@@ -23,54 +23,84 @@
 
 package lightjason.agent.action.buildin.crypto;
 
-import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
-
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 
 /**
- * encrypting algorithm
+ * enum with encrypting types
  */
-public final class CEncrypt extends IBuildinAction
+public enum EAlgorithm
 {
+    AES( "AES/ECB/PKCS5Padding", "AES" ),
+    DES( "DES/ECB/PKCS5Padding", "DES" ),
+    RSA( "RSA/ECB/OAEPWithSHA-256AndMGF1Padding", "RSA" );
 
-    @Override
-    public final int getMinimalArgumentNumber()
+    /**
+     * chipher name
+     */
+    private final String m_cipher;
+    /**
+     * key name
+     */
+    private final String m_key;
+
+    /**
+     * ctor
+     *
+     * @param p_cipher chipher name
+     * @param p_key name of the key
+     */
+    EAlgorithm( final String p_cipher, final String p_key )
     {
-        return 3;
+        m_cipher = p_cipher;
+        m_key = p_key;
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    /**
+     * generates a key
+     *
+     * @return key object
+     *
+     * @throws NoSuchAlgorithmException on algorithm error
+     */
+    public final Key generateKey() throws NoSuchAlgorithmException
     {
-        try
-        {
-            final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getEncryptCipher(
-                    CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
-            p_argument.subList( 2, p_argument.size() ).stream().forEach( i -> l_cipher.update( CCommon.getRawValue( i ).toString().getBytes() ) );
-            p_return.add( CRawTerm.from( new String( l_cipher.doFinal() ) ) );
+        return KeyGenerator.getInstance( m_key ).generateKey();
+    }
 
-            return CBoolean.from( true );
-        }
-        catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
-        {
-            return CBoolean.from( false );
-        }
+    /**
+     * @param p_key key object
+     * @return cipher
+     *
+     * @throws NoSuchPaddingException on padding error
+     * @throws NoSuchAlgorithmException on algorithm error
+     * @throws InvalidKeyException on key invalid
+     */
+    public final Cipher getEncryptCipher( final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+    {
+        final Cipher l_cipher = Cipher.getInstance( m_cipher );
+        l_cipher.init( Cipher.ENCRYPT_MODE, p_key );
+        return l_cipher;
+    }
+
+    /**
+     * @param p_key key object
+     * @return cipher
+     *
+     * @throws NoSuchPaddingException on padding error
+     * @throws NoSuchAlgorithmException on algorithm error
+     * @throws InvalidKeyException on key invalid
+     */
+    public final Cipher getDecryptCipher( final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+    {
+        final Cipher l_cipher = Cipher.getInstance( m_cipher );
+        l_cipher.init( Cipher.DECRYPT_MODE, p_key );
+        return l_cipher;
     }
 
 }

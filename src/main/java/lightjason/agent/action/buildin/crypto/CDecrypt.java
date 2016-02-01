@@ -42,9 +42,9 @@ import java.util.List;
 
 
 /**
- * encrypting algorithm
+ * dencrypting algorithm
  */
-public final class CEncrypt extends IBuildinAction
+public final class CDecrypt extends IBuildinAction
 {
 
     @Override
@@ -60,7 +60,7 @@ public final class CEncrypt extends IBuildinAction
     {
         try
         {
-            final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getEncryptCipher(
+            final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getDecryptCipher(
                     CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
             p_argument.subList( 2, p_argument.size() ).stream().forEach( i -> l_cipher.update( CCommon.getRawValue( i ).toString().getBytes() ) );
             p_return.add( CRawTerm.from( new String( l_cipher.doFinal() ) ) );
