@@ -21,6 +21,9 @@ dependencies:
       - sudo apt-get install doxygen
 
 test:
+    override:
+        - mvn
+
     post:
       - mv target/documentation/html /tmp
       - git checkout gh-pages

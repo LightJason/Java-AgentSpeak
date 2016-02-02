@@ -61,6 +61,8 @@ public final class CEncrypt extends IBuildinAction
     {
         try
         {
+            // http://stackoverflow.com/questions/2836646/java-serializable-object-to-byte-array
+
             final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getEncryptCipher(
                     CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
             p_argument.subList( 2, p_argument.size() ).stream().forEach( i -> l_cipher.update( CCommon.getRawValue( i ).toString().getBytes() ) );
