@@ -12,7 +12,7 @@ second(true).
 
         // check collections
         L = collection/list/range(1, 20);
-        [A|B|C|_|D|E|F|G] = L;
+        [ A|B|C| _ |D|E|F|G ] = L;
         generic/print("list elements", A,B,C,D,E,F,G);
 
 
@@ -39,7 +39,7 @@ second(true).
 
 
         // check random
-        Distribution = math/statistic/createdistribution( "normal", -100, 100 );
+        Distribution = math/statistic/createdistribution( "normal", 20, 100 );
         RV = math/statistic/randomsample( Distribution, 8 );
         generic/print("random", RV);
 
@@ -70,14 +70,17 @@ second(true).
 
 
         // check crypto
-        Key = crypto/createkey( "DES" );
+        [ PublicKey | PrivateKey ] = crypto/createkey( "DES" );
+        //generic/print("Crypto AES (public / private key)", PublicKey, PrivateKey);
 
-        Encrypt = crypto/encrypt( "DES", Key, "my message test 1");
+
+/*
+        Encrypt = crypto/encrypt( "AES", Key, "my message test 1");
         generic/print("Encrypt", Encrypt );
 
-        Decrypt = crypto/decrypt( "DES", Key, Encrypt );
+        Decrypt = crypto/decrypt( "AES", Key, Encrypt );
         generic/print("Decrypt", Decrypt );
-
+*/
 
         // check sequencial & parallel lambda expression
         (L) -> Y : generic/print(Y);

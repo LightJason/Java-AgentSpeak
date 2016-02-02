@@ -230,7 +230,7 @@ public final class CCreateDistribution extends IBuildinAction
                     return new WeibullDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
 
                 default:
-                    throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unknown" ) );
+                    throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unknown", this ) );
             }
         }
     }
@@ -323,7 +323,7 @@ public final class CCreateDistribution extends IBuildinAction
                     return new SynchronizedRandomGenerator( new Well44497b() );
 
                 default:
-                    throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unknown" ) );
+                    throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unknown", this ) );
             }
         }
     }

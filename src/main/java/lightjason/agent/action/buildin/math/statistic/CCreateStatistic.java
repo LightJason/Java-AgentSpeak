@@ -105,7 +105,7 @@ public final class CCreateStatistic extends IBuildinAction
                            : new DescriptiveStatistics();
 
                 default:
-                    throw new CIllegalStateException( CCommon.getLanguageString( this, "unknown" ) );
+                    throw new CIllegalStateException( CCommon.getLanguageString( this, "unknown", this ) );
             }
         }
     }

@@ -23,11 +23,18 @@
 
 package lightjason.agent.action.buildin.crypto;
 
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalStateException;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -64,13 +71,25 @@ public enum EAlgorithm
     /**
      * generates a key
      *
-     * @return key object
+     * @return key pair object (public key / private key or null)
      *
      * @throws NoSuchAlgorithmException on algorithm error
      */
-    public final Key generateKey() throws NoSuchAlgorithmException
+    public final Pair<Key, Key> generateKey() throws NoSuchAlgorithmException
     {
-        return KeyGenerator.getInstance( m_key ).generateKey();
+        switch ( this )
+        {
+            case AES:
+            case DES:
+                return new ImmutablePair<>( KeyGenerator.getInstance( m_key ).generateKey(), null );
+
+            case RSA:
+                final KeyPair l_key = KeyPairGenerator.getInstance( m_key ).generateKeyPair();
+                return new ImmutablePair<>( l_key.getPublic(), l_key.getPublic() );
+
+            default:
+                throw new CIllegalStateException( CCommon.getLanguageString( this, "unknown", this ) );
+        }
     }
 
     /**

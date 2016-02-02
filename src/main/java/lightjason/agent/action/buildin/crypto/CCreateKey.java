@@ -30,18 +30,15 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
 /**
- * creates an encrypting / decrypting key
- *
- * @see http://stackoverflow.com/questions/992019/java-256-bit-aes-password-based-encryption/992413#992413
- * @see https://javadigest.wordpress.com/
- * @see http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java
- * @see http://stackoverflow.com/questions/3451670/java-aes-and-using-my-own-key
+ * creates an encrypting / decrypting key pair
  */
 public final class CCreateKey extends IBuildinAction
 {
@@ -59,9 +56,11 @@ public final class CCreateKey extends IBuildinAction
     {
         try
         {
-            p_return.add( CRawTerm.from(
-                    EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).generateKey()
-            ) );
+            final Pair<Key, Key> l_key = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).generateKey();
+
+            p_return.add( CRawTerm.from( l_key.getLeft() ) );
+            if ( l_key.getRight() != null )
+                p_return.add( CRawTerm.from( l_key.getRight() ) );
 
             return CBoolean.from( true );
         }
