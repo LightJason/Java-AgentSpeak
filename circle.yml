@@ -25,6 +25,7 @@ test:
         - mvn
 
     post:
+      - git checkout master
       - mv target/documentation/html /tmp
       - git checkout gh-pages
       - mv circle.yml /tmp
