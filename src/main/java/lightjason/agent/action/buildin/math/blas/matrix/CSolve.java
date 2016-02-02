@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * solver of matrix-equation A*X=B
+ * solver of matrix-equation \f$A \cdot X = B\f$
  */
 public final class CSolve extends IAlgebra
 {
