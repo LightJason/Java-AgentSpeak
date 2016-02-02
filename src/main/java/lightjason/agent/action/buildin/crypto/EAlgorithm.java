@@ -45,7 +45,7 @@ public enum EAlgorithm
 {
     AES( "AES/ECB/PKCS5Padding", "AES" ),
     DES( "DES/ECB/PKCS5Padding", "DES" ),
-    RSA( "RSA/ECB/OAEPWithSHA-256AndMGF1Padding", "RSA" );
+    RSA( "RSA/ECB/PKCS1Padding", "RSA" );
 
     /**
      * chipher name
