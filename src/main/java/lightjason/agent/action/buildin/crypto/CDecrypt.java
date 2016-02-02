@@ -30,9 +30,9 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
@@ -40,6 +40,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -59,20 +60,30 @@ public final class CDecrypt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        try
-        {
-            final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getDecryptCipher(
-                    CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
-            p_argument.subList( 2, p_argument.size() ).stream().forEach(
-                    i -> l_cipher.update( Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) ) ) );
-            p_return.add( CRawTerm.from( new String( l_cipher.doFinal() ) ) );
+        final EAlgorithm l_algorithm = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() );
+        final Key l_key = CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) );
 
-            return CBoolean.from( true );
-        }
-        catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
-        {
-            return CBoolean.from( false );
-        }
+
+        p_return.addAll(
+                p_argument.subList( 2, p_argument.size() ).stream()
+                          .map( i -> {
+                                    try
+                                    {
+                                        return SerializationUtils.deserialize(
+                                                l_algorithm.getDecryptCipher( l_key ).doFinal(
+                                                        Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) )
+                                                )
+                                        );
+                                    }
+                                    catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
+                                    {
+                                        return null;
+                                    }
+                                }
+                          ).filter( i -> i != null ).map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+        );
+
+        return CBoolean.from( true );
     }
 
 }

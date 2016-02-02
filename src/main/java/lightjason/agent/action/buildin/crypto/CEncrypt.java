@@ -30,9 +30,9 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
@@ -40,6 +40,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -59,21 +60,29 @@ public final class CEncrypt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        try
-        {
-            // http://stackoverflow.com/questions/2836646/java-serializable-object-to-byte-array
+        final EAlgorithm l_algorithm = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() );
+        final Key l_key = CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) );
 
-            final Cipher l_cipher = EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).getEncryptCipher(
-                    CCommon.<Key, ITerm>getRawValue( p_argument.get( 1 ) ) );
-            p_argument.subList( 2, p_argument.size() ).stream().forEach( i -> l_cipher.update( CCommon.getRawValue( i ).toString().getBytes() ) );
-            p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( l_cipher.doFinal() ) ) );
+        p_return.addAll(
+                p_argument.subList( 2, p_argument.size() ).stream()
+                          .map( i -> {
+                                    try
+                                    {
+                                        return CRawTerm.from( Base64.getEncoder().encodeToString(
+                                                l_algorithm
+                                                        .getEncryptCipher( l_key )
+                                                        .doFinal( SerializationUtils.serialize( CCommon.getRawValue( i ) ) )
+                                        ) );
+                                    }
+                                    catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
+                                    {
+                                        return null;
+                                    }
+                                }
+                          ).filter( i -> i != null ).collect( Collectors.toList() )
+        );
 
-            return CBoolean.from( true );
-        }
-        catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
-        {
-            return CBoolean.from( false );
-        }
+        return CBoolean.from( true );
     }
 
 }

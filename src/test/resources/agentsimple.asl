@@ -72,7 +72,7 @@ second(true).
         // check crypto
         Key = crypto/createkey( "DES" );
 
-        Encrypt = crypto/encrypt( "DES", Key, "my message test 1", 1, 5, 9, "another message part");
+        Encrypt = crypto/encrypt( "DES", Key, "my message test 1");
         generic/print("Encrypt", Encrypt );
 
         Decrypt = crypto/decrypt( "DES", Key, Encrypt );
