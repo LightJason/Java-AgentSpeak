@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.crypto;
+package lightjason.agent.action.buildin.collection.multimap;
 
+import com.google.common.collect.HashMultimap;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -31,20 +32,21 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
 /**
- * creates an encrypting / decrypting key
- *
- * @see http://stackoverflow.com/questions/992019/java-256-bit-aes-password-based-encryption/992413#992413
- * @see https://javadigest.wordpress.com/
- * @see http://stackoverflow.com/questions/1205135/how-to-encrypt-string-in-java
- * @see http://stackoverflow.com/questions/3451670/java-aes-and-using-my-own-key
+ * returns the multimap as map
  */
-public final class CCreateKey extends IBuildinAction
+public final class CAsMap extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CAsMap()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int getMinimalArgumentNumber()
@@ -57,18 +59,11 @@ public final class CCreateKey extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        try
-        {
-            p_return.add( CRawTerm.from(
-                    EAlgorithm.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).generateKey()
-            ) );
-
-            return CBoolean.from( true );
-        }
-        catch ( final NoSuchAlgorithmException p_exception )
-        {
-            return CBoolean.from( false );
-        }
+        // first argument map reference
+        p_return.add( CRawTerm.from(
+                CCommon.<HashMultimap<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) ).asMap()
+        ) );
+        return CBoolean.from( true );
     }
 
 }
