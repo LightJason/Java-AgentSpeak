@@ -271,6 +271,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 * visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
 * Prettyfier component for source code layout
+* add [LP Solver](http://scpsolver.org/)
 * Meta-language for data/plan exchange with [Jaxb](https://jaxb.java.net) or [Jaxb JSON](https://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html#gmfnu). 
   Structural problem incompatibilites between Jason, Light-Jas, GOAL, ... -> generic exchange format
 * Communication (Contract Net Protocol) -> Threadpool/Semaphore/Cycle synchronisation and execution ordering problem
