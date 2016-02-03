@@ -57,6 +57,17 @@ public final class CCoherency implements Callable<CCoherency>
      */
     private static final Algebra ALGEBRA = new Algebra();
     /**
+     * function for inverting probability
+     */
+    private static final DoubleFunction PROBABILITYINVERT = new DoubleFunction()
+    {
+        @Override
+        public double apply( final double p_value )
+        {
+            return 1 - p_value;
+        }
+    };
+    /**
      * algorithm to calculate stationary probability
      **/
     private final EAlgorithm m_algorithm;
@@ -164,14 +175,7 @@ public final class CCoherency implements Callable<CCoherency>
             l_eigenvector = this.getStationaryDistribution( l_matrix );
 
         // calculate the inverted probability and normalize with 1-norm
-        l_eigenvector.assign( new DoubleFunction()
-        {
-            @Override
-            public double apply( final double p_value )
-            {
-                return 1 - p_value;
-            }
-        } );
+        l_eigenvector.assign( PROBABILITYINVERT );
         l_eigenvector.assign( Functions.div( ALGEBRA.norm1( l_eigenvector ) ) );
 
         // set coherency value for each entry
@@ -298,16 +302,7 @@ public final class CCoherency implements Callable<CCoherency>
 
         // normalize eigenvector and create positiv oriantation
         l_eigenvector.assign( Mult.div( ALGEBRA.norm1( l_eigenvector ) ) );
-        l_eigenvector.assign(
-                new DoubleFunction()
-                {
-                    @Override
-                    public double apply( final double p_value )
-                    {
-                        return Math.abs( p_value );
-                    }
-                }
-        );
+        l_eigenvector.assign( Functions.abs );
 
         return l_eigenvector;
     }

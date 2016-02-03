@@ -23,10 +23,10 @@
 
 package lightjason.agent.action.buildin.math.blas;
 
-import cern.colt.function.DoubleFunction;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.AbstractMatrix;
+import cern.jet.math.Functions;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
@@ -101,24 +101,9 @@ public class CElementWise extends IBuildinAction
     private void plus( final AbstractMatrix p_matrix, final double p_value )
     {
         if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element + p_element;
-                }
-            } );
-
+            ( (DoubleMatrix1D) p_matrix ).assign( Functions.plus( p_value ) );
         else
-            ( (DoubleMatrix2D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element + p_element;
-                }
-            } );
+            ( (DoubleMatrix2D) p_matrix ).assign( Functions.plus( p_value ) );
     }
 
 
@@ -131,24 +116,9 @@ public class CElementWise extends IBuildinAction
     private void minus( final AbstractMatrix p_matrix, final double p_value )
     {
         if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element - p_element;
-                }
-            } );
-
+            ( (DoubleMatrix1D) p_matrix ).assign( Functions.minus( p_value ) );
         else
-            ( (DoubleMatrix2D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element - p_element;
-                }
-            } );
+            ( (DoubleMatrix2D) p_matrix ).assign( Functions.minus( p_value ) );
     }
 
 
@@ -161,24 +131,9 @@ public class CElementWise extends IBuildinAction
     private void multiply( final AbstractMatrix p_matrix, final double p_value )
     {
         if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element * p_element;
-                }
-            } );
-
+            ( (DoubleMatrix1D) p_matrix ).assign( Functions.mult( p_value ) );
         else
-            ( (DoubleMatrix2D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element * p_element;
-                }
-            } );
+            ( (DoubleMatrix2D) p_matrix ).assign( Functions.mult( p_value ) );
     }
 
 
@@ -191,24 +146,9 @@ public class CElementWise extends IBuildinAction
     private void divide( final AbstractMatrix p_matrix, final double p_value )
     {
         if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element / p_element;
-                }
-            } );
-
+            ( (DoubleMatrix1D) p_matrix ).assign( Functions.div( p_value ) );
         else
-            ( (DoubleMatrix2D) p_matrix ).assign( new DoubleFunction()
-            {
-                @Override
-                public double apply( final double p_element )
-                {
-                    return p_element / p_element;
-                }
-            } );
+            ( (DoubleMatrix2D) p_matrix ).assign( Functions.div( p_value ) );
     }
 
 }
