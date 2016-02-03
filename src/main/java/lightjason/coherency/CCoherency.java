@@ -31,6 +31,7 @@ import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import cern.jet.math.Functions;
 import cern.jet.math.Mult;
 import lightjason.agent.IAgent;
 import lightjason.coherency.metric.IMetric;
@@ -162,8 +163,19 @@ public final class CCoherency implements Callable<CCoherency>
         else
             l_eigenvector = this.getStationaryDistribution( l_matrix );
 
-        // set coherency value for each entry (it is the inverted probability)
-        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), 1 - l_eigenvector.get( i ) ) );
+        // calculate the inverted probability and normalize with 1-norm
+        l_eigenvector.assign( new DoubleFunction()
+        {
+            @Override
+            public double apply( final double p_value )
+            {
+                return 1 - p_value;
+            }
+        } );
+        l_eigenvector.assign( Functions.div( ALGEBRA.norm1( l_eigenvector ) ) );
+
+        // set coherency value for each entry
+        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), l_eigenvector.get( i ) ) );
 
         return this;
     }
