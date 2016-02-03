@@ -70,6 +70,9 @@ RCURVEDBRACKET             : '}';
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
 
+LSHIFT                     : '<<';
+RSHIFT                     : '>>';
+
 /**
  * plan annotation
  **/

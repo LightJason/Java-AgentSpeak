@@ -240,7 +240,7 @@ barrier :
  * unification expression
  **/
 unification :
- AT? GREATER GREATER
+ AT? RSHIFT
  ( literal | LROUNDBRACKET literal COMMA expression RROUNDBRACKET )
  ;
 
@@ -569,4 +569,5 @@ string :
     SINGLEQUOTESTRING
     | DOUBLEQUOTESTRING
     ;
+
 // ---------------------------------------------------------------------------------------
