@@ -20,6 +20,7 @@ second(true).
         [ A|B|C| _ |D|E|F|G ] = L;
         generic/print("list elements", A,B,C,D,E,F,G);
         generic/print("full list", L);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ second(true).
         [O|P] =.. foo( blub(1), blah(3) );
         [H|I] = P;
         generic/print("deconstruct", O,P,H,I);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -39,6 +41,7 @@ second(true).
 
         Z = 10 * 4 ** 0.5;
         generic/print("simple expression", Z);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -54,6 +57,7 @@ second(true).
         Det = math/blas/matrix/determinant(M);
         EV  = math/blas/matrix/eigenvalue(M);
         generic/print("matrix", M,Det,EV);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -64,6 +68,7 @@ second(true).
         Distribution = math/statistic/createdistribution( "normal", 20, 100 );
         RV = math/statistic/randomsample( Distribution, 8 );
         generic/print("random", RV);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -87,6 +92,7 @@ second(true).
         SMean = math/statistic/getstatisticvalue(Statistic, "mean");
 
         generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -97,6 +103,7 @@ second(true).
         HashMD5 = crypto/hash( "md5", "hallo" );
         HashSHA = crypto/hash( "sha-256", "string test1", "second data", 4, 5, 6);
         generic/print("MD5 & SHA-256 hash", HashMD5, HashSHA);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -113,6 +120,7 @@ second(true).
         AESEncrypt = crypto/encrypt( "AES", AESKey, "AES uncrypted message");
         AESDecrypt = crypto/decrypt( "AES", AESKey, AESEncrypt);
         generic/print( "crypto aes", AESEncrypt, AESDecrypt );
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -126,10 +134,12 @@ second(true).
         Encrypt1to2 = crypto/encrypt( "RSA", PublicKey2, "RSA message from 1 to 2" );
         Encrypt2to1 = crypto/encrypt( "RSA", PublicKey1, "RSA message from 2 to 1" );
 
-        //Decrypt1to2 = crypto/decrypt( "RSA", PrivateKey2, Encrypt1to2 );
-        //Decrypt2to1 = crypto/decrypt( "RSA", PrivateKey1, Encrypt2to1 );
+        Decrypt1to2 = crypto/decrypt( "RSA", PrivateKey2, Encrypt1to2 );
+        Decrypt2to1 = crypto/decrypt( "RSA", PrivateKey1, Encrypt2to1 );
 
-        generic/print("crypto rsa", Encrypt1to2, Encrypt2to1 );
+        generic/print("crypto rsa 1 to 2", Encrypt1to2, Decrypt1to2 );
+        generic/print("crypto rsa 2 to 1", Encrypt2to1, Decrypt2to1 );
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -141,6 +151,7 @@ second(true).
         @(L) -> Y | R : R = Y+1;
 
         generic/print("lambda return", R);
+        generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

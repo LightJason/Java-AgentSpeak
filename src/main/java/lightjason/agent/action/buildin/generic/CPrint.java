@@ -101,7 +101,7 @@ public final class CPrint extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override

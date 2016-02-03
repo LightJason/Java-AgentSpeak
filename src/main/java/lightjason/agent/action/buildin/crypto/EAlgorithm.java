@@ -85,7 +85,7 @@ public enum EAlgorithm
 
             case RSA:
                 final KeyPair l_key = KeyPairGenerator.getInstance( m_key ).generateKeyPair();
-                return new ImmutablePair<>( l_key.getPublic(), l_key.getPublic() );
+                return new ImmutablePair<>( l_key.getPublic(), l_key.getPrivate() );
 
             default:
                 throw new CIllegalStateException( CCommon.getLanguageString( this, "unknown", this ) );
