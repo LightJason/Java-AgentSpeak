@@ -65,21 +65,18 @@ public final class CEncrypt extends IBuildinAction
 
         p_return.addAll(
                 p_argument.subList( 2, p_argument.size() ).stream()
+                          .map( i -> SerializationUtils.serialize( CCommon.getRawValue( i ) ) )
                           .map( i -> {
                                     try
                                     {
-                                        return CRawTerm.from( Base64.getEncoder().encodeToString(
-                                                l_algorithm
-                                                        .getEncryptCipher( l_key )
-                                                        .doFinal( SerializationUtils.serialize( CCommon.getRawValue( i ) ) )
-                                        ) );
+                                        return l_algorithm.getEncryptCipher( l_key ).doFinal( i );
                                     }
                                     catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
                                     {
                                         return null;
                                     }
                                 }
-                          ).filter( i -> i != null ).collect( Collectors.toList() )
+                          ).filter( i -> i != null ).map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) ).collect( Collectors.toList() )
         );
 
         return CBoolean.from( true );

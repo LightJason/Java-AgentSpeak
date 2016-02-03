@@ -66,21 +66,18 @@ public final class CDecrypt extends IBuildinAction
 
         p_return.addAll(
                 p_argument.subList( 2, p_argument.size() ).stream()
+                          .map( i -> Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) ) )
                           .map( i -> {
                                     try
                                     {
-                                        return SerializationUtils.deserialize(
-                                                l_algorithm.getDecryptCipher( l_key ).doFinal(
-                                                        Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) )
-                                                )
-                                        );
+                                        return l_algorithm.getDecryptCipher( l_key ).doFinal( i );
                                     }
                                     catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
                                     {
                                         return null;
                                     }
                                 }
-                          ).filter( i -> i != null ).map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+                          ).filter( i -> i != null ).map( i -> CRawTerm.from( SerializationUtils.deserialize( i ) ) ).collect( Collectors.toList() )
         );
 
         return CBoolean.from( true );
