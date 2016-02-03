@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.inconsistency.metric;
+package lightjason.coherency.metric;
 
 
 import lightjason.agent.IAgent;
@@ -31,37 +31,28 @@ import java.util.Collection;
 
 
 /**
- * generic discrete metric
+ * metric interface of the coherency structure
  *
- * @see http://mathworld.wolfram.com/DiscreteMetric.html
+ * @see http://en.wikipedia.org/wiki/Metric_space
  */
-public final class CDiscrete<T> extends IBaseMetric
+public interface IMetric
 {
 
     /**
-     * ctor
+     * calculates the metric value between two objects
      *
-     * @param p_paths for reading agent value
+     * @param p_first first object
+     * @param p_second second object
+     * @return double metric
      */
-    public CDiscrete( final CPath... p_paths )
-    {
-        super( p_paths );
-    }
+    double calculate( final IAgent p_first, final IAgent p_second );
+
 
     /**
-     * ctor
+     * returns the selectors
      *
-     * @param p_paths collection of path
+     * @return selector
      */
-    public CDiscrete( final Collection<CPath> p_paths )
-    {
-        super( p_paths );
-    }
-
-    @Override
-    public final double calculate( final IAgent p_first, final IAgent p_second )
-    {
-        return p_first.equals( p_second ) ? 0 : 1;
-    }
+    Collection<CPath> getSelector();
 
 }

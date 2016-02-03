@@ -21,38 +21,51 @@
  * @endcond
  */
 
-package lightjason.inconsistency.metric;
+package lightjason.coherency.metric;
 
-
-import lightjason.agent.IAgent;
 import lightjason.common.CPath;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * metric interface of the inconsistency structure
- *
- * @see http://en.wikipedia.org/wiki/Metric_space
+ * default metric with an optional set of path values
  */
-public interface IMetric
+public abstract class IBaseMetric implements IMetric
 {
+    /**
+     * set with paths
+     */
+    protected final Set<CPath> m_paths = new HashSet<>();
 
     /**
-     * calculates the metric value between two objects
+     * ctor
      *
-     * @param p_first first object
-     * @param p_second second object
-     * @return double metric
+     * @param p_paths for reading agent value
      */
-    double calculate( final IAgent p_first, final IAgent p_second );
-
+    protected IBaseMetric( final CPath... p_paths )
+    {
+        if ( p_paths != null )
+            m_paths.addAll( Arrays.asList( p_paths ) );
+    }
 
     /**
-     * returns the selectors
+     * ctor
      *
-     * @return selector
+     * @param p_paths collection of path
      */
-    Collection<CPath> getSelector();
+    protected IBaseMetric( final Collection<CPath> p_paths )
+    {
+        if ( p_paths != null )
+            m_paths.addAll( p_paths );
+    }
 
+    @Override
+    public final Collection<CPath> getSelector()
+    {
+        return m_paths;
+    }
 }

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.inconsistency;
+package lightjason.coherency;
 
 import cern.colt.function.DoubleFunction;
 import cern.colt.matrix.DoubleFactory1D;
@@ -33,9 +33,9 @@ import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import lightjason.agent.IAgent;
+import lightjason.coherency.metric.IMetric;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalStateException;
-import lightjason.inconsistency.metric.IMetric;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -45,11 +45,11 @@ import java.util.stream.IntStream;
 
 
 /**
- * layer with inconsistence data
+ * layer with coherency data
  *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
-public final class CInconsistency implements Callable<CInconsistency>
+public final class CCoherency implements Callable<CCoherency>
 {
     /**
      * algebra object
@@ -60,7 +60,7 @@ public final class CInconsistency implements Callable<CInconsistency>
      **/
     private final EAlgorithm m_algorithm;
     /**
-     * map with object and inconsistency value
+     * map with object and coherency value
      **/
     private final Map<IAgent, Double> m_data = new ConcurrentHashMap<>();
     /**
@@ -81,7 +81,7 @@ public final class CInconsistency implements Callable<CInconsistency>
      *
      * @param p_metric object metric
      */
-    public CInconsistency( final IMetric p_metric )
+    public CCoherency( final IMetric p_metric )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Numeric;
@@ -96,7 +96,7 @@ public final class CInconsistency implements Callable<CInconsistency>
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistency( final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    public CCoherency( final IMetric p_metric, final int p_iteration, final double p_epsilon )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Iteration;
@@ -105,19 +105,18 @@ public final class CInconsistency implements Callable<CInconsistency>
     }
 
     /**
-     * returns the inconsistency value of an object
+     * returns the coherency value of an object
      *
      * @param p_object object
      * @return value
      */
-    public final Double getInconsistencyValue( final IAgent p_object )
+    public final Double getValue( final IAgent p_object )
     {
         return m_data.get( p_object );
     }
 
     /**
-     * adds a new object to the
-     * inconsistency structure
+     * adds a new object
      *
      * @param p_object new object
      */
@@ -127,7 +126,7 @@ public final class CInconsistency implements Callable<CInconsistency>
     }
 
     @Override
-    public final CInconsistency call() throws Exception
+    public final CCoherency call() throws Exception
     {
         if ( m_data.size() < 2 )
             return this;
@@ -163,8 +162,8 @@ public final class CInconsistency implements Callable<CInconsistency>
         else
             l_eigenvector = this.getStationaryDistribution( l_matrix );
 
-        // set inconsistency value for each entry
-        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), l_eigenvector.get( i ) ) );
+        // set coherency value for each entry (it is the inverted probability)
+        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), 1 - l_eigenvector.get( i ) ) );
 
         return this;
     }
@@ -190,8 +189,7 @@ public final class CInconsistency implements Callable<CInconsistency>
     }
 
     /**
-     * removes an object from the
-     * inconsistency structure
+     * removes an object
      *
      * @param p_object removing object
      */
