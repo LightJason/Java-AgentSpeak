@@ -280,10 +280,8 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ## <a name="devaction">Developing Buildin Actions & Components</a>
 
-* Exponential functions
-* [Combinatorial](http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/util/CombinatoricsUtils.html)
-* [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html)
 * [LP Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/linear/package-summary.html) / [extern LP Solver](http://scpsolver.org/)
+* [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html)
 * [Curve Fitting](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/package-summary.html)
 * [Genetic Algorithm](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/genetics/package-summary.html)
 * [Base Clustering](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ml/clustering/package-summary.html)
