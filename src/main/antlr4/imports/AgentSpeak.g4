@@ -179,7 +179,6 @@ body_formula :
     | unary_expression
 
     | lambda
-    | if_else
     ;
 
 /**
@@ -197,6 +196,7 @@ term :
     | LANGULARBRACKET termlist RANGULARBRACKET
 
     | expression
+    | ternary_operation
     ;
 
 /**
@@ -219,6 +219,33 @@ test_goal_action :
 achievement_goal_action :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) literal
     ;
+
+/**
+ * ternary operation
+ **/
+ternary_operation :
+    expression
+    ternary_operation_true
+    ternary_operation_false
+    ;
+
+/**
+ * ternary operation true-rule
+ **/
+ternary_operation_true :
+    QUESTIONMARK
+    term
+    ;
+
+/**
+ * ternary operation false-rule
+ **/
+ternary_operation_false :
+    COLON
+    term
+    ;
+
+
 
 /**
  * deconstruct expression (splitting clauses)
@@ -401,23 +428,6 @@ lambda_initialization :
  **/
 lambda_return :
     VLINE variable
-    ;
-
-/**
- * if-else structure
- **/
-if_else :
-    IF LROUNDBRACKET expression RROUNDBRACKET
-    block_formula
-    ( else_block )?
-    ;
-
-/**
- * else block structure
- **/
-else_block :
-    ELSE
-    block_formula
     ;
 
 // ---------------------------------------------------------------------------------------

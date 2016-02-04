@@ -175,6 +175,24 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
+    public Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
     {
         return null;
@@ -308,18 +326,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitIf_else( final AgentParser.If_elseContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitElse_block( final AgentParser.Else_blockContext p_context )
     {
         return null;
     }
@@ -547,6 +553,24 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
+    public Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
     {
         return null;
@@ -680,18 +704,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitIf_else( final PlanBundleParser.If_elseContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitElse_block( final PlanBundleParser.Else_blockContext p_context )
     {
         return null;
     }

@@ -43,12 +43,12 @@ import lightjason.language.execution.action.CAchievementGoal;
 import lightjason.language.execution.action.CBarrier;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
-import lightjason.language.execution.action.CIfElse;
 import lightjason.language.execution.action.CLambdaExpression;
 import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CSingleAssignment;
+import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.CTestGoal;
 import lightjason.language.execution.action.CUnify;
 import lightjason.language.execution.annotation.CAtomAnnotation;
@@ -629,46 +629,6 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
 
     @Override
-    public Object visitIf_else( final AgentParser.If_elseContext p_context )
-    {
-        return p_context.else_block() == null
-               ? new CIfElse(
-                (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ) )
-               : new CIfElse(
-                       (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ),
-                       (List<IExecution>) this.visitElse_block( p_context.else_block() )
-               );
-    }
-
-    @Override
-    public Object visitIf_else( final PlanBundleParser.If_elseContext p_context )
-    {
-        return p_context.else_block() == null
-               ? new CIfElse(
-                (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ) )
-               : new CIfElse(
-                       (IExpression) this.visitExpression( p_context.expression() ), (List<IExecution>) this.visitBlock_formula( p_context.block_formula() ),
-                       (List<IExecution>) this.visitElse_block( p_context.else_block() )
-               );
-    }
-
-
-
-    @Override
-    public Object visitElse_block( final AgentParser.Else_blockContext p_context )
-    {
-        return this.visitBlock_formula( p_context.block_formula() );
-    }
-
-    @Override
-    public Object visitElse_block( final PlanBundleParser.Else_blockContext p_context )
-    {
-        return this.visitBlock_formula( p_context.block_formula() );
-    }
-
-
-
-    @Override
     public Object visitLambda( final AgentParser.LambdaContext p_context )
     {
         if ( p_context.lambda_return() != null )
@@ -848,6 +808,56 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
 
     @Override
+    public Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
+    {
+        return new CTernaryOperation(
+                (IExpression) this.visitExpression( p_context.expression() ),
+                (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),
+                (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )
+        );
+    }
+
+    @Override
+    public Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
+    {
+        return new CTernaryOperation(
+                (IExpression) this.visitExpression( p_context.expression() ),
+                (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),
+                (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )
+        );
+    }
+
+
+
+    @Override
+    public final Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
+    {
+        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+    }
+
+    @Override
+    public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
+    {
+        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+    }
+
+
+
+    @Override
+    public final Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
+    {
+        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+    }
+
+    @Override
+    public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
+    {
+        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+    }
+
+
+
+    @Override
     public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
     {
         return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
@@ -979,6 +989,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return this.visitTermlist( p_context.termlist() );
         if ( p_context.expression() != null )
             return this.visitExpression( p_context.expression() );
+        if ( p_context.ternary_operation() != null )
+            return this.visitTernary_operation( p_context.ternary_operation() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
@@ -1002,6 +1014,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
             return this.visitTermlist( p_context.termlist() );
         if ( p_context.expression() != null )
             return this.visitExpression( p_context.expression() );
+        if ( p_context.ternary_operation() != null )
+            return this.visitTernary_operation( p_context.ternary_operation() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
