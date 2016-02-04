@@ -47,6 +47,7 @@ import lightjason.language.execution.action.CLambdaExpression;
 import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
+import lightjason.language.execution.action.CRepair;
 import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.CTestGoal;
@@ -540,13 +541,63 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
     {
-        return this.visitChildren( p_context );
+        // a non-existing repair formula can return any object-item, so convert it
+        // to executable structure, because the grammar rule must return an executable item
+        if ( p_context.repair_formula() == null )
+            return this.getTermExecution( this.visitChildren( p_context ) );
+
+
+        // if there exists any repair element, build a sequential hierarchie of repair calls
+        if ( p_context.term() != null )
+            return new CRepair(
+                    (IExecution) this.getTermExecution( this.visitTerm( p_context.term() ) ),
+                    (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+            );
+
+        if ( p_context.test_goal_action() != null )
+            return new CRepair(
+                    (IExecution) this.visitTest_goal_action( p_context.test_goal_action() ),
+                    (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+            );
+
+        if ( p_context.achievement_goal_action() != null )
+            return new CRepair(
+                    (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
+                    (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "repairelement", p_context.getText() ) );
     }
 
     @Override
     public Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
-        return this.visitChildren( p_context );
+        // a non-existing repair formula can return any object-item, so convert it
+        // to executable structure, because the grammar rule must return an executable item
+        if ( p_context.repair_formula() == null )
+            return this.getTermExecution( this.visitChildren( p_context ) );
+
+
+        // if there exists any repair element, build a sequential hierarchie of repair calls
+        if ( p_context.term() != null )
+            return new CRepair(
+                    (IExecution) this.getTermExecution( this.visitTerm( p_context.term() ) ),
+                    (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+            );
+
+        if ( p_context.test_goal_action() != null )
+            return new CRepair(
+                    (IExecution) this.visitTest_goal_action( p_context.test_goal_action() ),
+                    (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+            );
+
+        if ( p_context.achievement_goal_action() != null )
+            return new CRepair(
+                    (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
+                    (IExecution) this.visitRepair_formula( p_context.repair_formula() )
+            );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "repairelement", p_context.getText() ) );
     }
 
 

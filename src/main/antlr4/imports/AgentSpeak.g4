@@ -186,7 +186,7 @@ body_formula :
  **/
 repair_formula :
     ( term | test_goal_action | achievement_goal_action )
-    ( LSHIFT repair_formula )*
+    ( LSHIFT repair_formula )?
     ;
 
 /**

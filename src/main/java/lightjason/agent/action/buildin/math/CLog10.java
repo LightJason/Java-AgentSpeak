@@ -21,48 +21,30 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.agent.action.buildin.math;
 
-import com.google.common.collect.ImmutableMultiset;
-import lightjason.agent.IAgent;
-import lightjason.language.ILiteral;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
-import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * achievement goal action
- * @bug not implemented
+ * action for logarithm (base 10) value
  */
-public final class CAchievementGoal extends IBaseExecution<ILiteral>
+public final class CLog10 extends IBuildinAction
 {
-    /**
-     * flag to run immediately
-     */
-    private final boolean m_immediately;
-
-    /**
-     * ctor
-     *
-     * @param p_literal literal
-     * @param p_immediately immediately execution
-     */
-    public CAchievementGoal( final ILiteral p_literal, final boolean p_immediately )
-    {
-        super( p_literal );
-        m_immediately = p_immediately;
-    }
 
     @Override
-    public final String toString()
+    public final int getMinimalArgumentNumber()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+        return 1;
     }
 
     @Override
@@ -70,13 +52,15 @@ public final class CAchievementGoal extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( false );
-    }
-
-    @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
-    {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+        p_return.addAll(
+                CCommon.flatList( p_argument ).stream()
+                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                       .boxed()
+                       .map( i -> Math.log10( i ) )
+                       .map( i -> CRawTerm.from( i ) )
+                       .collect( Collectors.toList() )
+        );
+        return CBoolean.from( true );
     }
 
 }

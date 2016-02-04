@@ -23,60 +23,62 @@
 
 package lightjason.language.execution.action;
 
-import com.google.common.collect.ImmutableMultiset;
-import lightjason.agent.IAgent;
-import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
- * achievement goal action
- * @bug not implemented
+ * defines an execution element with a repair call
  */
-public final class CAchievementGoal extends IBaseExecution<ILiteral>
+public class CRepair extends IBaseExecution<IExecution>
 {
     /**
-     * flag to run immediately
+     * fallback execution
      */
-    private final boolean m_immediately;
+    private final IExecution m_fallback;
 
     /**
      * ctor
      *
-     * @param p_literal literal
-     * @param p_immediately immediately execution
+     * @param p_value execution element
+     * @param p_fallback fallback execution
      */
-    public CAchievementGoal( final ILiteral p_literal, final boolean p_immediately )
+    public CRepair( final IExecution p_value, final IExecution p_fallback )
     {
-        super( p_literal );
-        m_immediately = p_immediately;
+        super( p_value );
+        m_fallback = p_fallback;
+    }
+
+    @Override
+    public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
+    )
+    {
+        final IFuzzyValue<Boolean> l_return = m_value.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+        return l_return.getValue() ? l_return : m_fallback.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+    }
+
+    @Override
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet<IVariable<?>>()
+        {{
+            addAll( m_value.getVariables() );
+            addAll( m_fallback.getVariables() );
+        }};
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+        return MessageFormat.format( "{0} << {1}", m_value, m_fallback );
     }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        return CBoolean.from( false );
-    }
-
-    @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
-    {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
-    }
-
 }
