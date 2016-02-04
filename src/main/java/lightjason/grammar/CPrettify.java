@@ -151,6 +151,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
     }
 
     @Override
+    public Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitTerm( final AgentParser.TermContext p_context )
     {
         return null;
@@ -524,6 +530,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPret
 
     @Override
     public Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
         return null;
     }

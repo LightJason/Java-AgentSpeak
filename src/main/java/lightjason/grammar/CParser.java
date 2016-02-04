@@ -538,6 +538,20 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
 
 
     @Override
+    public Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
     public Object visitBarrier( final AgentParser.BarrierContext p_context )
     {
         return p_context.integernumber_positive() == null

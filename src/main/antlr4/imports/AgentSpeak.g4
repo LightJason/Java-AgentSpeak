@@ -165,14 +165,14 @@ body :
 
 
 // --- agent-expression-context ----------------------------------------------------------
+
+/**
+ * basic executable formula
+ **/
 body_formula :
-    term
-
+    repair_formula
     | barrier
-
     | belief_action
-    | test_goal_action
-    | achievement_goal_action
 
     | deconstruct_expression
     | assignment_expression
@@ -181,6 +181,13 @@ body_formula :
     | lambda
     ;
 
+/**
+ * repairable formula
+ **/
+repair_formula :
+    ( term | test_goal_action | achievement_goal_action )
+    ( LSHIFT repair_formula )*
+    ;
 
 /**
  * terms are predictable structures
