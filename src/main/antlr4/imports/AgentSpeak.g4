@@ -166,7 +166,7 @@ body :
 
 // --- agent-expression-context ----------------------------------------------------------
 body_formula :
-    | term
+    term
 
     | barrier
 
@@ -180,6 +180,7 @@ body_formula :
 
     | lambda
     ;
+
 
 /**
  * terms are predictable structures
