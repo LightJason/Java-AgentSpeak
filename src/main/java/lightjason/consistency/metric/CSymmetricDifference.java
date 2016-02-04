@@ -21,8 +21,7 @@
  * @endcond
  */
 
-package lightjason.coherency.metric;
-
+package lightjason.consistency.metric;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
@@ -34,11 +33,10 @@ import java.util.Set;
 
 
 /**
- * calculates the distance with respect
- * to size of union and intersection of beliefbases.
+ * metric on collections returns the size of symmetric difference
  */
 @SuppressWarnings( "serial" )
-public final class CWeightedDifference extends IBaseMetric
+public final class CSymmetricDifference extends IBaseMetric
 {
 
     /**
@@ -46,7 +44,7 @@ public final class CWeightedDifference extends IBaseMetric
      *
      * @param p_paths for reading agent value
      */
-    public CWeightedDifference( final CPath... p_paths )
+    public CSymmetricDifference( final CPath... p_paths )
     {
         super( p_paths );
     }
@@ -56,7 +54,7 @@ public final class CWeightedDifference extends IBaseMetric
      *
      * @param p_paths collection of path
      */
-    public CWeightedDifference( final Collection<CPath> p_paths )
+    public CSymmetricDifference( final Collection<CPath> p_paths )
     {
         super( p_paths );
     }
@@ -64,10 +62,8 @@ public final class CWeightedDifference extends IBaseMetric
     @Override
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        // collect all literals within specified paths
         final Set<ILiteral> l_firstLiterals = new HashSet<>();
         final Set<ILiteral> l_secondLiterals = new HashSet<>();
-
 
         // if no path elements are set, we use all
         if ( m_paths.isEmpty() )
@@ -82,24 +78,16 @@ public final class CWeightedDifference extends IBaseMetric
                 l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
             }
 
-        // get size of union
-        final Set<ILiteral> l_set = new HashSet<ILiteral>()
+
+        // get union
+        final Set<ILiteral> l_aggregate = new HashSet<ILiteral>()
         {{
             addAll( l_firstLiterals );
             addAll( l_secondLiterals );
         }};
-        final int l_unionSize = l_set.size();
 
-        // get size of intersection
-        l_set.retainAll( l_firstLiterals );
-        l_set.retainAll( l_secondLiterals );
-        final int l_intersectionSize = l_set.size();
-
-        // return distance
-        return new Double(
-                ( ( l_unionSize - l_firstLiterals.size() )
-                  + ( l_unionSize - l_secondLiterals.size() )
-                ) * l_unionSize / l_intersectionSize
-        );
+        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
+        return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
     }
+
 }

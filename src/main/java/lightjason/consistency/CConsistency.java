@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.coherency;
+package lightjason.consistency;
 
 import cern.colt.function.DoubleFunction;
 import cern.colt.matrix.DoubleFactory1D;
@@ -34,8 +34,8 @@ import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Functions;
 import cern.jet.math.Mult;
 import lightjason.agent.IAgent;
-import lightjason.coherency.metric.IMetric;
 import lightjason.common.CCommon;
+import lightjason.consistency.metric.IMetric;
 import lightjason.error.CIllegalStateException;
 
 import java.util.ArrayList;
@@ -46,11 +46,11 @@ import java.util.stream.IntStream;
 
 
 /**
- * layer with coherency data
+ * layer with consistency data based a markov-chain
  *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
-public final class CCoherency implements Callable<CCoherency>
+public final class CConsistency implements Callable<CConsistency>
 {
     /**
      * algebra object
@@ -72,7 +72,7 @@ public final class CCoherency implements Callable<CCoherency>
      **/
     private final EAlgorithm m_algorithm;
     /**
-     * map with object and coherency value
+     * map with object and consistency value
      **/
     private final Map<IAgent, Double> m_data = new ConcurrentHashMap<>();
     /**
@@ -93,7 +93,7 @@ public final class CCoherency implements Callable<CCoherency>
      *
      * @param p_metric object metric
      */
-    public CCoherency( final IMetric p_metric )
+    public CConsistency( final IMetric p_metric )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Numeric;
@@ -108,7 +108,7 @@ public final class CCoherency implements Callable<CCoherency>
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CCoherency( final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    public CConsistency( final IMetric p_metric, final int p_iteration, final double p_epsilon )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Iteration;
@@ -117,7 +117,7 @@ public final class CCoherency implements Callable<CCoherency>
     }
 
     /**
-     * returns the coherency value of an object
+     * returns the consistency value of an object
      *
      * @param p_object object
      * @return value
@@ -138,7 +138,7 @@ public final class CCoherency implements Callable<CCoherency>
     }
 
     @Override
-    public final CCoherency call() throws Exception
+    public final CConsistency call() throws Exception
     {
         if ( m_data.size() < 2 )
             return this;
@@ -148,7 +148,7 @@ public final class CCoherency implements Callable<CCoherency>
 
         // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
-        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> {
+        IntStream.range( 0, l_keys.size() ).parallel().boxed().forEach( i -> {
 
             final IAgent l_item = l_keys.get( i );
             IntStream.range( i + 1, l_keys.size() ).boxed().forEach( j -> {
@@ -178,7 +178,7 @@ public final class CCoherency implements Callable<CCoherency>
         l_eigenvector.assign( PROBABILITYINVERT );
         l_eigenvector.assign( Functions.div( ALGEBRA.norm1( l_eigenvector ) ) );
 
-        // set coherency value for each entry
+        // set consistency value for each entry
         IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), l_eigenvector.get( i ) ) );
 
         return this;
@@ -224,16 +224,12 @@ public final class CCoherency implements Callable<CCoherency>
     {
         final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
 
-        // gets the position of the largest eigenvalue
-        final DoubleMatrix1D l_eigenvalues = l_eigen.getRealEigenvalues();
-
-        int l_position = 0;
-        for ( int i = 0; i < l_eigenvalues.size(); ++i )
-            if ( l_eigenvalues.get( i ) > l_eigenvalues.get( l_position ) )
-                l_position = i;
-
-        // gets the largest eigenvector
-        return l_eigen.getV().viewColumn( l_position );
+        // gets the position of the largest eigenvalue in parallel and returns the eigenvector
+        final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();
+        return l_eigen.getV().viewColumn(
+                IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()
+                         .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).getAsInt()
+        );
     }
 
     /**

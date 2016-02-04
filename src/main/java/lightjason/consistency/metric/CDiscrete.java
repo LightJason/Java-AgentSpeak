@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.coherency.metric;
+package lightjason.consistency.metric;
 
 
 import lightjason.agent.IAgent;

@@ -21,32 +21,35 @@
  * @endcond
  */
 
-package lightjason.coherency.metric;
+package lightjason.consistency.metric;
 
-import lightjason.agent.IAgent;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 
 /**
- * metric on collections returns the size of symmetric difference
+ * default metric with an optional set of path values
  */
-@SuppressWarnings( "serial" )
-public final class CSymmetricDifference extends IBaseMetric
+public abstract class IBaseMetric implements IMetric
 {
+    /**
+     * set with paths
+     */
+    protected final Set<CPath> m_paths = new HashSet<>();
 
     /**
      * ctor
      *
      * @param p_paths for reading agent value
      */
-    public CSymmetricDifference( final CPath... p_paths )
+    protected IBaseMetric( final CPath... p_paths )
     {
-        super( p_paths );
+        if ( p_paths != null )
+            m_paths.addAll( Arrays.asList( p_paths ) );
     }
 
     /**
@@ -54,40 +57,15 @@ public final class CSymmetricDifference extends IBaseMetric
      *
      * @param p_paths collection of path
      */
-    public CSymmetricDifference( final Collection<CPath> p_paths )
+    protected IBaseMetric( final Collection<CPath> p_paths )
     {
-        super( p_paths );
+        if ( p_paths != null )
+            m_paths.addAll( p_paths );
     }
 
     @Override
-    public final double calculate( final IAgent p_first, final IAgent p_second )
+    public final Collection<CPath> getSelector()
     {
-        final Set<ILiteral> l_firstLiterals = new HashSet<>();
-        final Set<ILiteral> l_secondLiterals = new HashSet<>();
-
-        // if no path elements are set, we use all
-        if ( m_paths.isEmpty() )
-        {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals().values() );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals().values() );
-        }
-        else
-            for ( final CPath l_path : m_paths )
-            {
-                l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals( l_path ).values() );
-                l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
-            }
-
-
-        // get union
-        final Set<ILiteral> l_aggregate = new HashSet<ILiteral>()
-        {{
-            addAll( l_firstLiterals );
-            addAll( l_secondLiterals );
-        }};
-
-        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
-        return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
+        return m_paths;
     }
-
 }
