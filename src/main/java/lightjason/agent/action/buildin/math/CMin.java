@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * action for minimum
+ * action for minimum \f$ min( x_0, x_1, \ldots, x_i ) \f$
  */
 public final class CMin extends IBuildinAction
 {

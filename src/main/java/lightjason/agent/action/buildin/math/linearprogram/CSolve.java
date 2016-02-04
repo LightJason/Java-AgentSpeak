@@ -21,49 +21,47 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.agent.action.buildin.math.linearprogram;
 
-import com.google.common.collect.ImmutableMultiset;
-import lightjason.agent.IAgent;
-import lightjason.language.ILiteral;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.math3.optim.linear.LinearConstraint;
+import org.apache.commons.math3.optim.linear.LinearConstraintSet;
+import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
+import org.apache.commons.math3.optim.linear.SimplexSolver;
 
-import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * achievement goal action
+ * solves the linear program
  *
- * @bug not implemented
+ * @bug incomplete
  */
-public final class CAchievementGoal extends IBaseExecution<ILiteral>
+public final class CSolve extends IBuildinAction
 {
-    /**
-     * flag to run immediately
-     */
-    private final boolean m_immediately;
 
     /**
      * ctor
-     *
-     * @param p_literal literal
-     * @param p_immediately immediately execution
      */
-    public CAchievementGoal( final ILiteral p_literal, final boolean p_immediately )
+    public CSolve()
     {
-        super( p_literal );
-        m_immediately = p_immediately;
+        super( 3 );
     }
 
     @Override
-    public final String toString()
+    public final int getMinimalArgumentNumber()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+        return 1;
     }
 
     @Override
@@ -71,13 +69,17 @@ public final class CAchievementGoal extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( false );
-    }
+        final Pair<LinearObjectiveFunction, HashSet<LinearConstraint>> l_items = CCommon.<Pair<LinearObjectiveFunction, HashSet<LinearConstraint>>, ITerm>getRawValue(
+                p_argument.get( 0 ) );
 
-    @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
-    {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+        final SimplexSolver l_lp = new SimplexSolver();
+        p_return.addAll(
+                Arrays.stream(
+                        l_lp.optimize( l_items.getLeft(), new LinearConstraintSet( l_items.getRight() ) ).getPoint()
+                ).boxed().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+        );
+
+        return CBoolean.from( true );
     }
 
 }

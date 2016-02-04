@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * action for sum of elements
+ * action for sum of elements \f$ \sum_{i} x_i \f$
  */
 public final class CSum extends IBuildinAction
 {

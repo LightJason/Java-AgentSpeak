@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * action for maximum
+ * action for maximum \f$ max( x_0, x_1, \ldots, x_i ) \f$
  */
 public final class CMax extends IBuildinAction
 {

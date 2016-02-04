@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for floor value
+ * action for floor value \f$ \lfloor x_i \rfloor \f$
  */
 public final class CFloor extends IBuildinAction
 {

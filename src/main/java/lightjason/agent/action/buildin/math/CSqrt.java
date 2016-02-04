@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for sqrt value
+ * action for sqrt value \f$ \sqrt{ x_i } \f$
  */
 public final class CSqrt extends IBuildinAction
 {

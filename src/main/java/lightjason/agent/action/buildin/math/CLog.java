@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for logarithm value
+ * action for logarithm value \f$ log( x_i ) \f$
  */
 public final class CLog extends IBuildinAction
 {

@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for exponential value
+ * action for exponential value \f$ e^{x_i} \f$
  */
 public final class CExp extends IBuildinAction
 {

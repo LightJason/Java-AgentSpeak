@@ -24,18 +24,23 @@
 package lightjason.agent.action.buildin.math.linearprogram;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.math3.optim.linear.SimplexSolver;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.math3.optim.linear.LinearConstraint;
+import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 
+import java.util.HashSet;
 import java.util.List;
 
 
 /**
- * action to create a linear program
+ * action to create a linear program with an
+ * objective functions \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + d \f$
  */
 public final class CCreate extends IBuildinAction
 {
@@ -51,7 +56,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 0;
+        return 2;
     }
 
     @Override
@@ -60,7 +65,14 @@ public final class CCreate extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-                new SimplexSolver()
+                new ImmutablePair<>(
+                        new LinearObjectiveFunction(
+                                p_argument.subList( 0, p_argument.size() - 1 ).stream()
+                                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray(),
+                                CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+                        ),
+                        new HashSet<LinearConstraint>()
+                )
         ) );
 
         return CBoolean.from( true );

@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for cosinus value
+ * action for cosinus value \f$ cos( x_i ) \f$
  */
 public final class CCos extends IBuildinAction
 {

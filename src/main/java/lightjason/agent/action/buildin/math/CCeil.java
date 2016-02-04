@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for ceil value
+ * action for ceil value \f$ \lceil x_i \rceil \f$
  */
 public final class CCeil extends IBuildinAction
 {

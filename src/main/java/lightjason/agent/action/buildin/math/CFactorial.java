@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for calculating factorial
+ * action for calculating factorial \f$ ! x_i \f$
  */
 public final class CFactorial extends IBuildinAction
 {

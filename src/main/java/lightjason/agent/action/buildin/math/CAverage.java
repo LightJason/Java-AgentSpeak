@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * action for average
+ * action for average \f$ \frac{1}{i} \sum_{i} x_i \f$
  */
 public final class CAverage extends IBuildinAction
 {

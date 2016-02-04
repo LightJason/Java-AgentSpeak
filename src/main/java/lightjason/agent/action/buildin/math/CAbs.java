@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for absolute value
+ * action for absolute value \f$ \lvert x_i \rvert \f$
  */
 public final class CAbs extends IBuildinAction
 {

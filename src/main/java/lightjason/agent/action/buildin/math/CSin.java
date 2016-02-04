@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for sinus value
+ * action for sinus value \f$ sin( x_i ) \f$
  */
 public final class CSin extends IBuildinAction
 {
