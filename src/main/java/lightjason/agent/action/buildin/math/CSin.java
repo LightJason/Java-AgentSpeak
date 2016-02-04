@@ -32,12 +32,13 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action for minimum
+ * action for sinus value
  */
-public final class CMin extends IBuildinAction
+public final class CSin extends IBuildinAction
 {
 
     @Override
@@ -51,8 +52,15 @@ public final class CMin extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).min()
-                                            .getAsDouble() ) );
+        p_return.addAll(
+                CCommon.flatList( p_argument ).stream()
+                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                       .boxed()
+                       .map( i -> Math.sin( i ) )
+                       .map( i -> CRawTerm.from( i ) )
+                       .collect( Collectors.toList() )
+        );
         return CBoolean.from( true );
     }
+
 }

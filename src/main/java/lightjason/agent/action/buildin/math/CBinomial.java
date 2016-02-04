@@ -30,20 +30,21 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 
 import java.util.List;
 
 
 /**
- * action for minimum
+ * action for calculating binomial coefficient \f$ \binom{n}{k} \f$
  */
-public final class CMin extends IBuildinAction
+public final class CBinomial extends IBuildinAction
 {
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -51,8 +52,13 @@ public final class CMin extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).min()
-                                            .getAsDouble() ) );
+        p_return.add( CRawTerm.from(
+                CombinatoricsUtils.binomialCoefficient(
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue(),
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue()
+                )
+        ) );
         return CBoolean.from( true );
     }
+
 }

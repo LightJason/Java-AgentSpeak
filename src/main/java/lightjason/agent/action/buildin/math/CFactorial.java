@@ -30,14 +30,16 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action for minimum
+ * action for calculating factorial
  */
-public final class CMin extends IBuildinAction
+public final class CFactorial extends IBuildinAction
 {
 
     @Override
@@ -51,8 +53,11 @@ public final class CMin extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).min()
-                                            .getAsDouble() ) );
+        p_return.add( CRawTerm.from(
+                CCommon.flatList( p_argument ).stream().map( i -> CombinatoricsUtils.factorial( CCommon.<Number, ITerm>getRawValue( i ).intValue() ) )
+                       .collect( Collectors.toList() )
+        ) );
         return CBoolean.from( true );
     }
+
 }

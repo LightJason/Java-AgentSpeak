@@ -54,7 +54,8 @@ public final class CIsPrime extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-                p_argument.stream().map( i -> Primes.isPrime( CCommon.<Number, ITerm>getRawValue( i ).intValue() ) ).collect( Collectors.toList() )
+                CCommon.flatList( p_argument ).stream().map( i -> Primes.isPrime( CCommon.<Number, ITerm>getRawValue( i ).intValue() ) )
+                       .collect( Collectors.toList() )
         ) );
         return CBoolean.from( true );
     }

@@ -51,7 +51,8 @@ public final class CMax extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( p_argument.stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).max().getAsDouble() ) );
+        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).max()
+                                            .getAsDouble() ) );
         return CBoolean.from( true );
     }
 }
