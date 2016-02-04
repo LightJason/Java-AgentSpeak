@@ -123,13 +123,13 @@ second(true).
         // ---- crypto (AES & DES) -----------------------------------------------------------------------------------------------------------------------------
 
         DESKey = crypto/createkey( "DES" );
-        DESEncrypt = crypto/encrypt( "DES", DESKey, "DES uncrypted message");
-        DESDecrypt = crypto/decrypt( "DES", DESKey, DESEncrypt);
+        DESEncrypt = crypto/encrypt( DESKey, "DES uncrypted message");
+        DESDecrypt = crypto/decrypt( DESKey, DESEncrypt);
         generic/print( "crypto des", DESEncrypt, DESDecrypt );
 
         AESKey = crypto/createkey( "AES" );
-        AESEncrypt = crypto/encrypt( "AES", AESKey, "AES uncrypted message");
-        AESDecrypt = crypto/decrypt( "AES", AESKey, AESEncrypt);
+        AESEncrypt = crypto/encrypt( AESKey, "AES uncrypted message");
+        AESDecrypt = crypto/decrypt( AESKey, AESEncrypt);
         generic/print( "crypto aes", AESEncrypt, AESDecrypt );
         generic/print();
 
@@ -142,11 +142,11 @@ second(true).
         [ PublicKey1 | PrivateKey1 ] = crypto/createkey( "RSA" );
         [ PublicKey2 | PrivateKey2 ] = crypto/createkey( "RSA" );
 
-        Encrypt1to2 = crypto/encrypt( "RSA", PublicKey2, "RSA message from 1 to 2" );
-        Encrypt2to1 = crypto/encrypt( "RSA", PublicKey1, "RSA message from 2 to 1" );
+        Encrypt1to2 = crypto/encrypt( PublicKey2, "RSA message from 1 to 2" );
+        Encrypt2to1 = crypto/encrypt( PublicKey1, "RSA message from 2 to 1" );
 
-        Decrypt1to2 = crypto/decrypt( "RSA", PrivateKey2, Encrypt1to2 );
-        Decrypt2to1 = crypto/decrypt( "RSA", PrivateKey1, Encrypt2to1 );
+        Decrypt1to2 = crypto/decrypt( PrivateKey2, Encrypt1to2 );
+        Decrypt2to1 = crypto/decrypt( PrivateKey1, Encrypt2to1 );
 
         generic/print("crypto rsa 1 to 2", Encrypt1to2, Decrypt1to2 );
         generic/print("crypto rsa 2 to 1", Encrypt2to1, Decrypt2to1 );
