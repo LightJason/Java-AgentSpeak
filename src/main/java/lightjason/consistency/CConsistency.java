@@ -243,17 +243,11 @@ public final class CConsistency implements Callable<CConsistency>
      */
     private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix, final int p_iteration )
     {
-        DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
-        for ( int i = 0; i < p_iteration; ++i )
-        {
-            l_probability = ALGEBRA.mult( p_matrix, l_probability );
-            l_probability.assign(
-                    Mult.div(
-                            ALGEBRA.norm2( l_probability )
-                    )
-            );
-        }
-
+        final DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
+        IntStream.range( 0, p_iteration ).forEach( i -> {
+            l_probability.assign( ALGEBRA.mult( p_matrix, l_probability ) );
+            l_probability.assign( Mult.div( ALGEBRA.norm2( l_probability ) ) );
+        } );
         return l_probability;
     }
 
