@@ -35,7 +35,7 @@ import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.apache.commons.math3.optim.linear.Relationship;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -94,9 +94,9 @@ public final class CValueConstraint extends IBuildinAction
         }
 
 
-        CCommon.<Pair<LinearObjectiveFunction, HashSet<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
+        CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
                 new LinearConstraint(
-                        p_argument.subList( 2, p_argument.size() - 2 ).stream()
+                        p_argument.subList( 1, p_argument.size() - 2 ).stream()
                                   .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
                                   .toArray(),
                         l_relationship,

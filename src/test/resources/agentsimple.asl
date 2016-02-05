@@ -111,13 +111,22 @@ second(true).
 
         // --- LP solver ---------------------------------------------------------------------------------------------------------------------------------------
 
-        LP = math/linearprogram/create( 2, 2, 1, 0 );
-        math/linearprogram/valueconstraint( LP, 1, 1, 0, ">=", 1 );
-        math/linearprogram/valueconstraint( LP, 1, 0, 1, ">=", 1 );
-        math/linearprogram/valueconstraint( LP, 0, 1, 0, ">=", 1 );
-        [LP1 | LP2 | LP3] = math/linearprogram/solve( LP );
+        LP1 = math/linearprogram/create( 2, 2, 1, 0 );
+        math/linearprogram/valueconstraint( LP1, 1, 1, 0, ">=", 1 );
+        math/linearprogram/valueconstraint( LP1, 1, 0, 1, ">=", 1 );
+        math/linearprogram/valueconstraint( LP1, 0, 1, 0, ">=", 1 );
+        [LP1Value | LP1PointCount | LP1Points] = math/linearprogram/solve( LP1, "minimize", "non-negative" );
 
-        generic/print("LP solve", LP1, LP2, LP3);
+        LP2 = math/linearprogram/create( 0.8, 0.2, 0.7, 0.3, 0.6, 0.4, 0 );
+        math/linearprogram/valueconstraint( LP2, 1, 0, 1, 0, 1, 0,  "=", 23 );
+        math/linearprogram/valueconstraint( LP2, 0, 1, 0, 1, 0, 1,  "=", 23 );
+        math/linearprogram/valueconstraint( LP2, 1, 0, 0, 0, 0, 0, ">=", 10 );
+        math/linearprogram/valueconstraint( LP2, 0, 0, 1, 0, 0, 0, ">=", 8 );
+        math/linearprogram/valueconstraint( LP2, 0, 0, 0, 0, 1, 0, ">=", 5 );
+        [LP2Value | LP2PointCount | LP2Points] = math/linearprogram/solve( LP2, "maximize", "non-negative" );
+
+        generic/print("LP solve minimize", LP1Value, LP1PointCount, LP1Points);
+        generic/print("LP solve maximize", LP2Value, LP2PointCount, LP2Points);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
