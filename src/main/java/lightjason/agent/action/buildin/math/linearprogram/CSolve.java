@@ -50,8 +50,6 @@ import java.util.stream.Collectors;
 
 /**
  * solves the linear program
- *
- * @bug incomplete
  */
 public final class CSolve extends IBuildinAction
 {
