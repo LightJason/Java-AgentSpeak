@@ -31,6 +31,7 @@ import lightjason.language.execution.IContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -94,6 +95,25 @@ public final class CCommon
 
         return (T) p_value;
     }
+
+    /**
+     * checks a term value for assignable class
+     *
+     * @param p_value any value type
+     * @param p_class assignable class
+     * @return term value or raw value
+     */
+    @SuppressWarnings( "unchecked" )
+    public static <T> boolean isRawValueAssignableTo( final T p_value, final Class<?>... p_class )
+    {
+        if ( p_value instanceof IVariable<?> )
+            return ( (IVariable<?>) p_value ).isValueAssignableTo( p_class );
+        if ( p_value instanceof CRawTerm<?> )
+            return ( (CRawTerm<?>) p_value ).isValueAssignableTo( p_class );
+
+        return Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( p_value.getClass() ) ).anyMatch( i -> i );
+    }
+
 
     /**
      * replace variables with context variables

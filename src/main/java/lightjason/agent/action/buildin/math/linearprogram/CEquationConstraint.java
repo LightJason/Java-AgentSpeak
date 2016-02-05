@@ -24,38 +24,28 @@
 package lightjason.agent.action.buildin.math.linearprogram;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.language.CCommon;
-import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.math3.optim.linear.LinearConstraint;
-import org.apache.commons.math3.optim.linear.LinearConstraintSet;
-import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
-import org.apache.commons.math3.optim.linear.NonNegativeConstraint;
-import org.apache.commons.math3.optim.linear.SimplexSolver;
-import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * solves the linear program
- *
- * @bug incomplete
+ * adds an linear value constraint to
+ * the LP with the definition
+ * \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + c_{const}    =      \left( \sum_{i=1} r_i \cdot x_i \right) + r_{const} \f$,
+ * \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + c_{const}    \geq   \left( \sum_{i=1} r_i \cdot x_i \right) + r_{const} \f$
+ * \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + c_{const}    \leq   \left( \sum_{i=1} r_i \cdot x_i \right) + r_{const} \f$
  */
-public final class CSolve extends IBuildinAction
+public final class CEquationConstraint extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CSolve()
+    public CEquationConstraint()
     {
         super( 3 );
     }
@@ -63,7 +53,7 @@ public final class CSolve extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 6;
     }
 
     @Override
@@ -71,21 +61,43 @@ public final class CSolve extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Pair<LinearObjectiveFunction, HashSet<LinearConstraint>> l_items = CCommon.<Pair<LinearObjectiveFunction, HashSet<LinearConstraint>>, ITerm>getRawValue(
-                p_argument.get( 0 ) );
+        // first search the relation symbol
+/*
+        p_argument.subList( 1, p_argument.size() ).stream().filter( i -> CCommon.isRawValueAssignableTo( i, String.class ) ).findFirst().orElseThrow( () -> new CIllegalArgumentException() );
 
-        final SimplexSolver l_lp = new SimplexSolver();
-        p_return.addAll(
-                Arrays.stream(
-                        l_lp.optimize(
-                                l_items.getLeft(),
-                                new LinearConstraintSet( l_items.getRight() ),
-                                GoalType.MINIMIZE,
-                                new NonNegativeConstraint( true )
-                        ).getPoint()
-                ).boxed().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+        final Relationship l_relationship;
+        final String l_symbol = CCommon.<String, ITerm>getRawValue( p_argument.get( p_argument.size() - 2 ) ).trim();
+        switch ( l_symbol )
+        {
+            case "<":
+            case "<=":
+                l_relationship = Relationship.LEQ;
+                break;
+
+            case ">":
+            case ">=":
+                l_relationship = Relationship.GEQ;
+                break;
+
+            case "=":
+            case "==":
+                l_relationship = Relationship.EQ;
+                break;
+
+            default:
+                throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "relation", l_symbol ) );
+        }
+
+
+        CCommon.<Pair<LinearObjectiveFunction, HashSet<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
+                new LinearConstraint(
+                        p_argument.subList( 2, p_argument.size() - 2 ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                                  .toArray(),
+                        l_relationship,
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+                )
         );
-
+*/
         return CBoolean.from( true );
     }
 

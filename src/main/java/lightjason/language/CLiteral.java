@@ -34,6 +34,8 @@ import lightjason.common.CPath;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -53,6 +55,10 @@ public final class CLiteral implements ILiteral
      * literal values
      */
     protected final ImmutableMultimap<CPath, ITerm> m_values;
+    /**
+     * literal values as list
+     */
+    protected final List<ITerm> m_orderedvalues;
     /**
      * literals functor
      */
@@ -133,6 +139,8 @@ public final class CLiteral implements ILiteral
         final Multimap<CPath, ITerm> l_values = LinkedListMultimap.create();
         p_values.stream().forEachOrdered( i -> l_values.put( i.getFQNFunctor(), i ) );
         m_values = ImmutableListMultimap.copyOf( l_values );
+
+        m_orderedvalues = Collections.unmodifiableList( new LinkedList<>( p_values ) );
     }
 
 
@@ -152,6 +160,12 @@ public final class CLiteral implements ILiteral
     public final Multimap<CPath, ITerm> getValues()
     {
         return m_values;
+    }
+
+    @Override
+    public final List<ITerm> getOrderedValues()
+    {
+        return m_orderedvalues;
     }
 
     @Override
@@ -188,7 +202,7 @@ public final class CLiteral implements ILiteral
     public final int hashCode()
     {
         return m_functor.hashCode()
-               + m_values.values().stream().mapToInt( i -> i.hashCode() ).sum()
+               + m_orderedvalues.stream().mapToInt( i -> i.hashCode() ).sum()
                + m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
                + ( m_negated ? 17737 : 55529 )
                + ( m_at ? 2741 : 8081 );
@@ -209,7 +223,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? "~" : "", m_at ? "@" : "", m_functor, m_values.values(), m_annotations.values() );
+        return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? "~" : "", m_at ? "@" : "", m_functor, m_orderedvalues, m_annotations.values() );
     }
 
 }

@@ -25,7 +25,6 @@ package lightjason.language.execution.action;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
@@ -43,6 +42,7 @@ import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -259,8 +259,8 @@ public final class CProxyAction implements IExecution
 
 
             // resolve action arguments and annotation
-            m_arguments = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getValues(), p_actions, p_scorecache ) );
-            m_annotation = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getAnnotation(), p_actions, p_scorecache ) );
+            m_arguments = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getOrderedValues(), p_actions, p_scorecache ) );
+            m_annotation = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getAnnotation().values(), p_actions, p_scorecache ) );
         }
 
         @Override
@@ -308,24 +308,21 @@ public final class CProxyAction implements IExecution
         /**
          * builds the map of execution arguments
          *
-         * @param p_elements set with literal elements (term- / literal list of attributes & annotations)
+         * @param p_elements collection with literal elements (term- / literal list of attributes & annotations)
          * @param p_actions map with actions
          * @param p_scorecache store cache
          * @return ordered execution structure
          */
         @SuppressWarnings( "unchecked" )
-        private Map<Integer, IExecution> createSubExecutions( final Multimap<CPath, ? extends ITerm> p_elements, final Map<CPath, IAction> p_actions,
+        private Map<Integer, IExecution> createSubExecutions( final Collection<? extends ITerm> p_elements, final Map<CPath, IAction> p_actions,
                                                               final Multiset<IAction> p_scorecache
         )
         {
-            final List<Map.Entry<CPath, ? extends ITerm>> l_arguments = new LinkedList<>( p_elements.entries() );
-
-            return IntStream.range( 0, l_arguments.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
-                final ITerm l_term = l_arguments.get( i ).getValue();
-                if ( l_term instanceof ILiteral )
-                    return new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache );
-
-                return new CTermWrapper<>( l_term );
+            // convert collection to list and build map with indices
+            final List<? extends ITerm> l_elements = new LinkedList<>( p_elements );
+            return IntStream.range( 0, l_elements.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
+                final ITerm l_term = l_elements.get( i );
+                return l_term instanceof ILiteral ? new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache ) : new CTermWrapper<>( l_term );
             } ) );
         }
 
@@ -336,11 +333,12 @@ public final class CProxyAction implements IExecution
          * @param p_execution map with execution elements
          * @return return arguments of execution (flat list)
          */
+        @SuppressWarnings( "unchecked" )
         private List<ITerm> subexecute( final IContext<?> p_context, final Map<Integer, IExecution> p_execution )
         {
             return Collections.unmodifiableList( lightjason.language.CCommon.replaceFromContext(
                     p_context,
-                    ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
+                    (Collection<? extends ITerm>) ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
                             .flatMap( i -> {
 
                                 final List<ITerm> l_return = new LinkedList<ITerm>();

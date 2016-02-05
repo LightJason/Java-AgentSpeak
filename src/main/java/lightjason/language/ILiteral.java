@@ -27,6 +27,8 @@ package lightjason.language;
 import com.google.common.collect.Multimap;
 import lightjason.common.CPath;
 
+import java.util.List;
+
 
 /**
  * literal interface
@@ -64,6 +66,13 @@ public interface ILiteral extends ITerm
      * @return value terms
      */
     Multimap<CPath, ITerm> getValues();
+
+    /**
+     * returns the values as ordered list
+     *
+     * @return value list
+     */
+    List<ITerm> getOrderedValues();
 
     /**
      * getter of the literal for the negation

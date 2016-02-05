@@ -42,9 +42,9 @@ import java.util.List;
 /**
  * adds an linear value constraint to
  * the LP with the definition
- * \f$ \sum_{i=1} c_i \cdot x_i = v \f$,
- * \f$ \sum_{i=1} c_i \cdot x_i \geq v \f$
- * \f$ \sum_{i=1} c_i \cdot x_i \leq v \f$
+ * \f$ \sum_{i=1} c_i \cdot x_i   =      v \f$,
+ * \f$ \sum_{i=1} c_i \cdot x_i   \geq   v \f$
+ * \f$ \sum_{i=1} c_i \cdot x_i   \leq   v \f$
  *
  * @todo add equation constraints https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/linear/LinearConstraint.html
  */
@@ -96,7 +96,8 @@ public final class CValueConstraint extends IBuildinAction
 
         CCommon.<Pair<LinearObjectiveFunction, HashSet<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
                 new LinearConstraint(
-                        p_argument.subList( 2, p_argument.size() - 2 ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                        p_argument.subList( 2, p_argument.size() - 2 ).stream()
+                                  .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
                                   .toArray(),
                         l_relationship,
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()

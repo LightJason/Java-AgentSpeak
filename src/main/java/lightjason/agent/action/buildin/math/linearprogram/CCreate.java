@@ -56,7 +56,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 2;
+        return 3;
     }
 
     @Override
