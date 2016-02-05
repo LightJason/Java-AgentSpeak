@@ -23,13 +23,19 @@
 
 package lightjason.agent.action.buildin.math.linearprogram;
 
-import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.error.CIllegalArgumentException;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.math3.optim.linear.LinearConstraint;
+import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
@@ -39,7 +45,7 @@ import java.util.List;
  * \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + c_{const}    \geq   \left( \sum_{i=1} r_i \cdot x_i \right) + r_{const} \f$
  * \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + c_{const}    \leq   \left( \sum_{i=1} r_i \cdot x_i \right) + r_{const} \f$
  */
-public final class CEquationConstraint extends IBuildinAction
+public final class CEquationConstraint extends IConstraint
 {
 
     /**
@@ -61,43 +67,32 @@ public final class CEquationConstraint extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first search the relation symbol
-/*
-        p_argument.subList( 1, p_argument.size() ).stream().filter( i -> CCommon.isRawValueAssignableTo( i, String.class ) ).findFirst().orElseThrow( () -> new CIllegalArgumentException() );
-
-        final Relationship l_relationship;
-        final String l_symbol = CCommon.<String, ITerm>getRawValue( p_argument.get( p_argument.size() - 2 ) ).trim();
-        switch ( l_symbol )
-        {
-            case "<":
-            case "<=":
-                l_relationship = Relationship.LEQ;
-                break;
-
-            case ">":
-            case ">=":
-                l_relationship = Relationship.GEQ;
-                break;
-
-            case "=":
-            case "==":
-                l_relationship = Relationship.EQ;
-                break;
-
-            default:
-                throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "relation", l_symbol ) );
-        }
+        // first search the relation symbol and create spliting lists
+        final int l_index = IntStream.range( 1, p_argument.size() )
+                                     .boxed()
+                                     .mapToInt( i -> CCommon.isRawValueAssignableTo( p_argument.get( i ), String.class ) ? i : -1 )
+                                     .filter( i -> i > -1 )
+                                     .findFirst()
+                                     .orElseThrow( () -> new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "relation" ) ) );
 
 
-        CCommon.<Pair<LinearObjectiveFunction, HashSet<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
+        // create linear constraint based on an equation
+        CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
                 new LinearConstraint(
-                        p_argument.subList( 2, p_argument.size() - 2 ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                        p_argument.subList( 1, l_index - 2 ).stream()
+                                  .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
                                   .toArray(),
-                        l_relationship,
+                        CCommon.<Number, ITerm>getRawValue( p_argument.get( l_index - 1 ) ).doubleValue(),
+
+                        this.getRelation( CCommon.getRawValue( p_argument.get( l_index ) ) ),
+
+                        p_argument.subList( l_index + 1, p_argument.size() ).stream()
+                                  .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                                  .toArray(),
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
                 )
         );
-*/
+
         return CBoolean.from( true );
     }
 

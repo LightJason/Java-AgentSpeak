@@ -23,8 +23,6 @@
 
 package lightjason.agent.action.buildin.math.linearprogram;
 
-import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
@@ -33,7 +31,6 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
-import org.apache.commons.math3.optim.linear.Relationship;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,10 +42,8 @@ import java.util.List;
  * \f$ \sum_{i=1} c_i \cdot x_i   =      v \f$,
  * \f$ \sum_{i=1} c_i \cdot x_i   \geq   v \f$
  * \f$ \sum_{i=1} c_i \cdot x_i   \leq   v \f$
- *
- * @todo add equation constraints https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/linear/LinearConstraint.html
  */
-public final class CValueConstraint extends IBuildinAction
+public final class CValueConstraint extends IConstraint
 {
 
     /**
@@ -70,36 +65,13 @@ public final class CValueConstraint extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Relationship l_relationship;
-        final String l_symbol = CCommon.<String, ITerm>getRawValue( p_argument.get( p_argument.size() - 2 ) ).trim();
-        switch ( l_symbol )
-        {
-            case "<":
-            case "<=":
-                l_relationship = Relationship.LEQ;
-                break;
-
-            case ">":
-            case ">=":
-                l_relationship = Relationship.GEQ;
-                break;
-
-            case "=":
-            case "==":
-                l_relationship = Relationship.EQ;
-                break;
-
-            default:
-                throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "relation", l_symbol ) );
-        }
-
-
+        // create linear constraint based on a value
         CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
                 new LinearConstraint(
                         p_argument.subList( 1, p_argument.size() - 2 ).stream()
                                   .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
                                   .toArray(),
-                        l_relationship,
+                        this.getRelation( CCommon.getRawValue( p_argument.get( p_argument.size() - 2 ) ) ),
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
                 )
         );
