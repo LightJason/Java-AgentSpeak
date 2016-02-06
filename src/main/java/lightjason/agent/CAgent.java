@@ -107,6 +107,10 @@ public class CAgent implements IAgent
      */
     protected long m_cycle;
     /**
+     * nano seconds at the last cycle
+     */
+    protected long m_cycletime;
+    /**
      * hibernate state
      */
     private volatile boolean m_hibernate;
@@ -190,6 +194,12 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public final long getLastCycleTime()
+    {
+        return m_cycletime;
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format( "{0} ( Cycle: {1} / Beliefbase: {2} )", super.toString(), m_cycle, m_beliefbase );
@@ -249,8 +259,9 @@ public class CAgent implements IAgent
 
         System.out.println( "=====>> " + this );
 
-        // increment cycle
+        // increment cycle and set the cycle time
         m_cycle++;
+        m_cycletime = System.nanoTime();
 
         return this;
     }

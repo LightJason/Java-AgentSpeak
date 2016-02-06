@@ -53,7 +53,7 @@ public final class CEquationConstraint extends IConstraint
      */
     public CEquationConstraint()
     {
-        super( 3 );
+        super();
     }
 
     @Override

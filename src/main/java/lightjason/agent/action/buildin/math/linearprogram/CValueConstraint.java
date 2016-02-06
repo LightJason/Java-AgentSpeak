@@ -51,7 +51,7 @@ public final class CValueConstraint extends IConstraint
      */
     public CValueConstraint()
     {
-        super( 3 );
+        super();
     }
 
     @Override

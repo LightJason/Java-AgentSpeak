@@ -40,13 +40,6 @@ import java.util.List;
  */
 public final class CSize extends IBuildinAction
 {
-    /**
-     * ctor
-     */
-    public CSize()
-    {
-        super( 2 );
-    }
 
     @Override
     public final int getMinimalArgumentNumber()

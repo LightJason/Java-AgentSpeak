@@ -97,4 +97,12 @@ public interface IAgent extends Callable<IAgent>
      */
     IUnifier getUnifier();
 
+    /**
+     * returns the time in nano seconds
+     * since the last cycle
+     *
+     * @return nano seconds
+     */
+    long getLastCycleTime();
+
 }

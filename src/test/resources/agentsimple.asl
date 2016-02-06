@@ -74,6 +74,17 @@ second(true).
 
 
 
+        // --- date / time -------------------------------------------------------------------------------------------------------------------------------------
+
+        [Hour | Minute | Second | Nano] = generic/datetime/time();
+        [Day | Month | Year | DayOfWeek | DayOfYear] = generic/datetime/date();
+        generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear);
+        generic/print();
+
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
         // --- math functions ----------------------------------------------------------------------------------------------------------------------------------
 
         MinIdx = math/minindex(RV);

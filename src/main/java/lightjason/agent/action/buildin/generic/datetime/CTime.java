@@ -21,60 +21,53 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.linearprogram;
+package lightjason.agent.action.buildin.generic.datetime;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.error.CIllegalArgumentException;
-import org.apache.commons.math3.optim.linear.Relationship;
+import lightjason.language.CCommon;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+
+import java.time.LocalTime;
+import java.util.List;
 
 
 /**
- * abstract class for constraint actions
+ * action for getting the current time
  */
-public abstract class IConstraint extends IBuildinAction
+public final class CTime extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    protected IConstraint()
+    public CTime()
     {
         super( 3 );
     }
 
-    /**
-     * returns the enum of a relationship by a string value
-     *
-     * @param p_symbol string symbol
-     * @return
-     */
-    protected final Relationship getRelation( final String p_symbol )
+    @Override
+    public final int getMinimalArgumentNumber()
     {
-        switch ( p_symbol.trim().toLowerCase() )
-        {
-            case "less":
-            case "less-equal":
-            case "leq":
-            case "<":
-            case "<=":
-                return Relationship.LEQ;
+        return 0;
+    }
 
-            case "greater":
-            case "greater-equal":
-            case "geq":
-            case ">":
-            case ">=":
-                return Relationship.GEQ;
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        final LocalTime l_time = p_argument.size() == 1 ? LocalTime.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) : LocalTime.now();
 
-            case "equal":
-            case "eq":
-            case "=":
-            case "==":
-                return Relationship.EQ;
+        p_return.add( CCommon.getRawValue( l_time.getHour() ) );
+        p_return.add( CCommon.getRawValue( l_time.getMinute() ) );
+        p_return.add( CCommon.getRawValue( l_time.getSecond() ) );
+        p_return.add( CCommon.getRawValue( l_time.getNano() ) );
 
-            default:
-                throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( IConstraint.class, "relation", p_symbol ) );
-        }
+
+        return CBoolean.from( true );
     }
 
 }

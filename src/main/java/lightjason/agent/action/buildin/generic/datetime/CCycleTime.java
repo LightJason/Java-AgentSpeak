@@ -21,60 +21,45 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.linearprogram;
+package lightjason.agent.action.buildin.generic.datetime;
 
 import lightjason.agent.action.buildin.IBuildinAction;
-import lightjason.error.CIllegalArgumentException;
-import org.apache.commons.math3.optim.linear.Relationship;
+import lightjason.language.CRawTerm;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 
 
 /**
- * abstract class for constraint actions
+ * action to get time in nanoseconds to the last cycle call
  */
-public abstract class IConstraint extends IBuildinAction
+public class CCycleTime extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    protected IConstraint()
+    public CCycleTime()
     {
         super( 3 );
     }
 
-    /**
-     * returns the enum of a relationship by a string value
-     *
-     * @param p_symbol string symbol
-     * @return
-     */
-    protected final Relationship getRelation( final String p_symbol )
+    @Override
+    public final int getMinimalArgumentNumber()
     {
-        switch ( p_symbol.trim().toLowerCase() )
-        {
-            case "less":
-            case "less-equal":
-            case "leq":
-            case "<":
-            case "<=":
-                return Relationship.LEQ;
+        return 0;
+    }
 
-            case "greater":
-            case "greater-equal":
-            case "geq":
-            case ">":
-            case ">=":
-                return Relationship.GEQ;
-
-            case "equal":
-            case "eq":
-            case "=":
-            case "==":
-                return Relationship.EQ;
-
-            default:
-                throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( IConstraint.class, "relation", p_symbol ) );
-        }
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        p_return.add( CRawTerm.from( System.nanoTime() - p_context.getAgent().getLastCycleTime() ) );
+        return CBoolean.from( true );
     }
 
 }
