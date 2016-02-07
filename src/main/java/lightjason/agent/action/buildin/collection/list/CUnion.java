@@ -31,20 +31,19 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * creates the intersection between lists
+ * creates the union between lists (not unique)
  */
-public final class CIntersect extends IBuildinAction
+public final class CUnion extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CIntersect()
+    public CUnion()
     {
         super( 3 );
     }
@@ -60,21 +59,9 @@ public final class CIntersect extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
+        // all arguments must be lists
         p_return.add( CRawTerm.from(
-
-                CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toSet() ).parallelStream()
-                       .filter(
-                        i -> p_argument.stream()
-                                       .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j )
-                                               .parallelStream()
-                                               .map( l -> CCommon.getRawValue( l ) )
-                                               .collect( Collectors.toList() )
-                                               .contains( i )
-                                       )
-                                       .allMatch( j -> j )
-                       ).collect( Collectors.toList() )
-
+                CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toList() )
         ) );
 
         return CBoolean.from( true );
