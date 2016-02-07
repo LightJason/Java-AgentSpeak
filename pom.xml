@@ -62,6 +62,10 @@
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- will be set outside (build parameter) -->
+        <build.number></build.number>
+        <build.commit></build.commit>
     </properties>
 
     <dependencies>
