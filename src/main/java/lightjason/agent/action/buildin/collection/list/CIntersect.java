@@ -38,8 +38,6 @@ import java.util.stream.Collectors;
 
 /**
  * creates the intersection between lists
- *
- * @bug not working
  */
 public final class CIntersect extends IBuildinAction
 {
