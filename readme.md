@@ -152,41 +152,17 @@ to describe an optimizing process.
 
 ### <a name="buldinaction">Build-in Actions</a>
 
-#### Math
-
-* min / max
-* sin / cos / tan / exp
-* frac / round / ceil / abs / sgn
-* BLAS structure & algorithms
-* random generators (uniform, normal, pareto, beta, bernoulli, ...)
-* statistical analysing (mean, average, median, quantile, expection value, standard deviation, ...)
-
-#### String
-
-* concat / substring / reverse / contains
-* upper / lower
-* beginswith / endswith
-* count / length
-
 #### List
 
-* get / add
-* concat
-* replace / sublist / reverse / delete
-* empty / count
-* has
-* difference / union / sort / range
+* difference / union
 
 #### Date / Time
 
-* date / time / datetime / datetimeutc
 * datedifference / timedifference
 
 #### Cryptographic
 
-* hash algorithms (md-?, sha-?, ...)
 * signature algorithm
-* encryption algorithms
 
 #### External-Access
 
