@@ -18,8 +18,11 @@ second(true).
 
         L = collection/list/range(1, 20);
         [ A|B|C| _ |D|E|F|G ] = L;
+        Intersect = collection/list/intersect( [1,2,3,4,5], [3,4,5,6,7], [3,8,9,5] );
+
         generic/print("list elements", A,B,C,D,E,F,G);
         generic/print("full list", L);
+        generic/print("intersection", Intersect);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
