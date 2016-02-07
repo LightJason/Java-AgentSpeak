@@ -62,15 +62,21 @@ public final class CIntersect extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // all arguments must be lists
-        final List<?> l_elements = CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toList() );
-
+        // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
         p_return.add( CRawTerm.from(
-                l_elements.parallelStream().filter(
+
+                CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toSet() ).parallelStream()
+                       .filter(
                         i -> p_argument.stream()
-                                       .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j ).contains( i ) )
+                                       .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j )
+                                               .parallelStream()
+                                               .map( l -> CCommon.getRawValue( l ) )
+                                               .collect( Collectors.toList() )
+                                               .contains( i )
+                                       )
                                        .allMatch( j -> j )
                 ).collect( Collectors.<Object>toList() )
+
         ) );
 
         return CBoolean.from( true );
