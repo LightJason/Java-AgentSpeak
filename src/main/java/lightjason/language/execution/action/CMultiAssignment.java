@@ -33,6 +33,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -113,12 +114,12 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     }
 
     @Override
-    @SuppressWarnings( "serial" )
+    @SuppressWarnings( {"serial", "unchecked"} )
     public final Set<IVariable<?>> getVariables()
     {
         return new HashSet<IVariable<?>>()
         {{
-            addAll( m_value.stream().map( i -> i.clone() ).collect( Collectors.toSet() ) );
+            addAll( (Collection<? extends IVariable<?>>) m_value.stream().map( i -> i.clone() ).collect( Collectors.toSet() ) );
             addAll( m_righthand.getVariables() );
         }};
     }
