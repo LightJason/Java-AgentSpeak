@@ -152,10 +152,6 @@ to describe an optimizing process.
 
 ### <a name="buldinaction">Build-in Actions</a>
 
-#### List
-
-* difference / union
-
 #### Date / Time
 
 * datedifference / timedifference
