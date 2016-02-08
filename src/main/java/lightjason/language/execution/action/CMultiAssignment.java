@@ -118,7 +118,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     {
         return new HashSet<IVariable<?>>()
         {{
-            addAll( m_value.stream().map( i -> i.clone() ).collect( Collectors.toList() ) );
+            addAll( m_value.stream().map( i -> i.clone() ).collect( Collectors.toSet() ) );
             addAll( m_righthand.getVariables() );
         }};
     }
