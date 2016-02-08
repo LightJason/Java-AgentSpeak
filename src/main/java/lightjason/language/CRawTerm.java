@@ -171,14 +171,15 @@ public final class CRawTerm<T> implements ITerm
      * throws an illegal state exception
      * iif the raw term is not allocated
      *
+     * @param p_name optional name text for the error message
      * @return object itself
      *
      * @throws IllegalStateException on non-allocated
      */
-    public final CRawTerm<T> throwNotAllocated() throws IllegalStateException
+    public final CRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException
     {
         if ( !this.isAllocated() )
-            throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "notallocated", this ) );
+            throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "notallocated", p_name != null ? p_name[0] : this ) );
 
         return this;
     }
