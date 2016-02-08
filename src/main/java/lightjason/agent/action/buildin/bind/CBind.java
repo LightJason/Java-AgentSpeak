@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
  * to other Java objects
  *
  * @see http://wiki.eclipse.org/GEF/GEF4/Common#Adapt
+ * @bug incompelete
  */
 public final class CBind<T>
 {
