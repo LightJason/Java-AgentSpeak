@@ -29,8 +29,6 @@ import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 
-import java.util.Iterator;
-
 
 /**
  * default beliefbase
@@ -132,18 +130,6 @@ public class CBeliefBase implements IBeliefBase
     public int size()
     {
         return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
-    }
-
-    @Override
-    public Iterator<ILiteral> iteratorLiteral()
-    {
-        return m_storage.getMultiElements().values().iterator();
-    }
-
-    @Override
-    public Iterator<IMask> iteratorBeliefBaseMask()
-    {
-        return m_storage.getSingleElements().values().iterator();
     }
 
     @Override

@@ -27,8 +27,6 @@ package lightjason.beliefbase;
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 
-import java.util.Iterator;
-
 
 /**
  * interface for equal method names on masks and beliefbases
@@ -114,18 +112,5 @@ public interface IStructure
      */
     int size();
 
-    /**
-     * iterator over all multielements
-     *
-     * @return iterator
-     */
-    Iterator<ILiteral> iteratorLiteral();
-
-    /**
-     * iterator over all singlelements
-     *
-     * @return iterator
-     */
-    Iterator<IMask> iteratorBeliefBaseMask();
 
 }

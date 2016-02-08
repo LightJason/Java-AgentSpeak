@@ -33,10 +33,8 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 
 import java.text.MessageFormat;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 
@@ -144,78 +142,6 @@ public class CMask implements IMask
     public final int size()
     {
         return m_beliefbase.size();
-    }
-
-    @Override
-    public Iterator<ILiteral> iteratorLiteral()
-    {
-        // the fqn path is build through the tree traversing, so only the current path is build
-        final CPath l_path = CPath.from( m_name );
-        return new Iterator<ILiteral>()
-        {
-            /**
-             * stack with iterators
-             **/
-            final Stack<Iterator<ILiteral>> m_stack = new Stack<Iterator<ILiteral>>()
-            {{
-                add( CMask.this.iteratorLiteral() );
-                CMask.this.getStorage().getSingleElements().values().stream().forEach( i -> add( i.iteratorLiteral() ) );
-            }};
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public ILiteral next()
-            {
-                return m_stack.peek().next().clone( l_path );
-            }
-
-        };
-    }
-
-    @Override
-    public Iterator<IMask> iteratorBeliefBaseMask()
-    {
-        return new Iterator<IMask>()
-        {
-            /**
-             * stack with iterator
-             **/
-            final Stack<Iterator<IMask>> m_stack = new Stack<Iterator<IMask>>()
-            {{
-                add( CMask.this.getStorage().getSingleElements().values().iterator() );
-                CMask.this.getStorage().getSingleElements().values().stream().forEach( i -> add( i.iteratorBeliefBaseMask() ) );
-            }};
-
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public IMask next()
-            {
-                return m_stack.peek().next();
-            }
-        };
     }
 
     @Override
