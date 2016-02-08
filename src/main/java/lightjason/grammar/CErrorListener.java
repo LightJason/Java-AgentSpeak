@@ -38,6 +38,8 @@ import java.util.BitSet;
 /**
  * AntLR error lister to catch parser and lexer errors
  * with individual error handling and language translating
+ *
+ * @todo check null check on exception, because forgotten semicolon are not recognized
  */
 public final class CErrorListener implements ANTLRErrorListener
 {

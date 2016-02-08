@@ -21,7 +21,7 @@ second(true).
         Intersect = collection/list/intersect( [1,2,3,4,5], [3,4,5,6,7], [3,8,9,5] );
         Union = collection/list/union( [1,2,3], [2,3,4], [3,4,5] );
         SD = collection/list/symmetricdifference( [1,2,3], [3,4] );
-        CP = collection/list/complement( [1,2,3,4,5], [1,2] )
+        CP = collection/list/complement( [1,2,3,4,5], [1,2] );
 
         generic/print("list elements", A,B,C,D,E,F,G, L);
         generic/print("intersection & union & symmetric difference & complement", Intersect, "--", Union, "--", SD, "--", CP);
