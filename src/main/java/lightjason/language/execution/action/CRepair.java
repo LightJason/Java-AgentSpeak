@@ -67,6 +67,7 @@ public class CRepair extends IBaseExecution<IExecution>
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
         return new HashSet<IVariable<?>>()

@@ -105,6 +105,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
         return new HashSet<IVariable<?>>()
