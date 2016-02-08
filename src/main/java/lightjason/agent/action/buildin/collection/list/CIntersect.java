@@ -32,6 +32,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,7 @@ public final class CIntersect extends IBuildinAction
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -61,20 +62,21 @@ public final class CIntersect extends IBuildinAction
     )
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
+        final List<?> l_result = CCommon.flatList( p_argument ).parallelStream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toSet() )
+                                        .parallelStream()
+                                        .filter(
+                                                i -> p_argument.stream()
+                                                               .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j )
+                                                                       .stream()
+                                                                       .map( l -> CCommon.getRawValue( l ) )
+                                                                       .collect( Collectors.toList() )
+                                                                       .contains( i )
+                                                               )
+                                                               .allMatch( j -> j )
+                                        ).collect( Collectors.toList() );
+
         p_return.add( CRawTerm.from(
-
-                CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toSet() ).parallelStream()
-                       .filter(
-                        i -> p_argument.stream()
-                                       .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j )
-                                               .parallelStream()
-                                               .map( l -> CCommon.getRawValue( l ) )
-                                               .collect( Collectors.toList() )
-                                               .contains( i )
-                                       )
-                                       .allMatch( j -> j )
-                       ).collect( Collectors.toList() )
-
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
         return CBoolean.from( true );

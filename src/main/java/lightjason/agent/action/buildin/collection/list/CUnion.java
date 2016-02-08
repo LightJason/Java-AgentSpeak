@@ -31,6 +31,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,8 +61,10 @@ public final class CUnion extends IBuildinAction
     )
     {
         // all arguments must be lists
+        final List<?> l_result = CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toList() );
+
         p_return.add( CRawTerm.from(
-                CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toList() )
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
         return CBoolean.from( true );

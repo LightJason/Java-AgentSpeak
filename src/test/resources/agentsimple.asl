@@ -20,9 +20,10 @@ second(true).
         [ A|B|C| _ |D|E|F|G ] = L;
         Intersect = collection/list/intersect( [1,2,3,4,5], [3,4,5,6,7], [3,8,9,5] );
         Union = collection/list/union( [1,2,3], [2,3,4], [3,4,5] );
+        SD = collection/list/symmetricdifference( [1,2,3], [3,4] );
 
         generic/print("list elements", A,B,C,D,E,F,G, L);
-        generic/print("intersection & union ", Intersect, Union);
+        generic/print("intersection & union & symmetric difference ", Intersect, Union, SD);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

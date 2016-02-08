@@ -23,6 +23,8 @@
 
 package lightjason.agent.action.buildin.collection.list;
 
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multiset;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
@@ -34,18 +36,17 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 /**
- * creates a list with a integer ranged list
+ * creates the symmetric difference between lists (difference of union and intersection)
  */
-public final class CRange extends IBuildinAction
+public final class CSymmetricDifference extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CRange()
+    public CSymmetricDifference()
     {
         super( 3 );
     }
@@ -61,16 +62,17 @@ public final class CRange extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_result = IntStream.range(
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue(),
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue()
-        ).boxed().collect( Collectors.toList() );
+        // create a multiset and counts the occurence of element -> on an odd number the element will be returned
+        final Multiset<?> l_count = ConcurrentHashMultiset.create();
+        CCommon.flatList( p_argument ).parallelStream().forEach( i -> l_count.add( CCommon.getRawValue( i ) ) );
+        final List<?> l_result = l_count.entrySet().parallelStream().filter( i -> i.getCount() % 2 == 1 ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
                 p_parallel
                 ? Collections.synchronizedList( l_result )
                 : l_result
         ) );
+
         return CBoolean.from( true );
     }
 
