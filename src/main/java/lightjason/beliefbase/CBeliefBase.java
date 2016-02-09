@@ -34,7 +34,11 @@ import lightjason.language.ILiteral;
  * default beliefbase
  *
  * @tparam T literal type
- * @todo event storing must be implement
+ * @todo event storing must be implement, use weak-reference or reference-counting to store mask relation with event replication
+ * (event methods: clear, add, remove(Literal | String), modify -> event is generated on successfully operation)
+ * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
+ * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
+ * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
  */
 public class CBeliefBase implements IBeliefBase
 {
