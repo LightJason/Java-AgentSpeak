@@ -153,20 +153,20 @@ public class CMask implements IMask
     @Override
     public final IMask add( final CPath p_path, final IMask p_mask )
     {
-        return this.add( p_path, p_mask, null );
+        return this.add( p_path.normalize(), p_mask, null );
     }
 
     @Override
     public final IMask add( final CPath p_path, final IGenerator<Object> p_generator )
     {
-        return walk( p_path, this, p_generator );
+        return walk( p_path.normalize(), this, p_generator );
     }
 
     @Override
     public final IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator
     )
     {
-        return walk( p_path, this, p_generator ).add( p_mask );
+        return walk( p_path.normalize(), this, p_generator ).add( p_mask );
     }
 
     @Override
@@ -179,6 +179,7 @@ public class CMask implements IMask
     @Override
     public final boolean containsMask( final CPath p_path )
     {
+        p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return true;
 
@@ -191,6 +192,7 @@ public class CMask implements IMask
     @Override
     public final boolean containsLiteral( final CPath p_path )
     {
+        p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return true;
 
@@ -215,6 +217,7 @@ public class CMask implements IMask
     @Override
     public final boolean remove( final CPath p_path )
     {
+        p_path.normalize();
         if ( p_path.size() == 1 )
         {
             m_beliefbase.remove( p_path.getSuffix() );
