@@ -41,9 +41,9 @@ import java.util.stream.Collectors;
 /**
  * mask of a beliefbase
  *
- * @todo reference counting with http://docs.oracle.com/javase/6/docs/api/java/lang/ref/PhantomReference.html /
+ * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
+ * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
- * http://docs.oracle.com/javase/6/docs/api/java/lang/ref/WeakReference.html
  *
  */
 @SuppressWarnings( "serial" )
@@ -105,7 +105,7 @@ public class CMask implements IMask
         for ( IMask l_mask = this; l_mask != null; )
         {
             if ( this.getStorage().equals( p_mask.getStorage() ) )
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_mask.getName(), l_mask.getFQNPath() ) );
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_mask.getName(), l_mask.getPath() ) );
 
             l_mask = l_mask.getParent();
         }
@@ -255,7 +255,7 @@ public class CMask implements IMask
     @Override
     public SetMultimap<CPath, ILiteral> getLiterals()
     {
-        final CPath l_path = this.getFQNPath();
+        final CPath l_path = this.getPath();
         final SetMultimap<CPath, ILiteral> l_map = HashMultimap.create();
 
         m_beliefbase.getStorage().getMultiElements().values().stream().forEach( i -> {
@@ -291,13 +291,13 @@ public class CMask implements IMask
     @Override
     public Map<CPath, IMask> getMasks()
     {
-        return m_beliefbase.getStorage().getSingleElements().values().stream().collect( Collectors.toMap( i -> i.getFQNPath(), i -> i ) );
+        return m_beliefbase.getStorage().getSingleElements().values().stream().collect( Collectors.toMap( i -> i.getPath(), i -> i ) );
     }
 
     @Override
-    public CPath getFQNPath()
+    public CPath getPath()
     {
-        return getFQNPath( this, new CPath() );
+        return getPath( this, new CPath() );
     }
 
     @Override
@@ -327,7 +327,7 @@ public class CMask implements IMask
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "[name : {0}, fqn : {1}, storage : {2}]", m_name, this.getFQNPath(), m_beliefbase.getStorage() );
+        return MessageFormat.format( "[name : {0}, fqn : {1}, storage : {2}]", m_name, this.getPath(), m_beliefbase.getStorage() );
     }
 
     /**
@@ -339,10 +339,10 @@ public class CMask implements IMask
      *
      * @tparam Q type of the beliefbase elements
      */
-    private static <Q> CPath getFQNPath( final IMask p_mask, final CPath p_path )
+    private static <Q> CPath getPath( final IMask p_mask, final CPath p_path )
     {
         p_path.pushfront( p_mask.getName() );
-        return !p_mask.hasParent() ? p_path : getFQNPath( p_mask.getParent(), p_path );
+        return !p_mask.hasParent() ? p_path : getPath( p_mask.getParent(), p_path );
     }
 
     /**

@@ -44,6 +44,7 @@ public interface IMask extends IStructure
      * @param p_path path
      * @param p_mask mask
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
+     * @todo check if it is really nessesary
      */
     IMask add( final CPath p_path, final IMask p_mask );
 
@@ -65,6 +66,7 @@ public interface IMask extends IStructure
      * @param p_generator beliefbase generator if beliefbase not exists
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
+     * @todo check if it is really nessesary
      */
     IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator );
 
@@ -76,6 +78,8 @@ public interface IMask extends IStructure
      * @param p_generator beliefbase generator if beliefbase not exists
      */
     void add( final ILiteral p_literal, final IGenerator<Object> p_generator );
+
+
 
 
     /**
@@ -94,22 +98,7 @@ public interface IMask extends IStructure
      */
     boolean containsLiteral( final CPath p_path );
 
-    /**
-     * removes a literal
-     *
-     * @param p_literal literal
-     * @return is found and removed
-     */
-    boolean remove( final ILiteral p_literal );
 
-    /**
-     * removes a mask
-     *
-     * @param p_path path
-     * @param p_mask mask
-     * @return is found and removed
-     */
-    boolean remove( final CPath p_path, final IMask p_mask );
 
     /**
      * removes literal and mask
@@ -118,6 +107,8 @@ public interface IMask extends IStructure
      * @return is found and removed
      */
     boolean remove( final CPath p_path );
+
+
 
     /**
      * clones the current mask
@@ -128,42 +119,33 @@ public interface IMask extends IStructure
     IMask clone( final IMask p_parent );
 
 
-    /**
-     * returns set of literal
-     *
-     * @return set of literals
-     */
-    Set<ILiteral> getLiteral();
 
     /**
      * returns set of literal
      *
-     * @param p_path path of the literal
+     * @param p_path paths of the literals
      * @return set of literals
      */
-    Set<ILiteral> getLiteral( final CPath p_path );
+    Set<ILiteral> getLiteral( final CPath... p_path );
 
-    /**
-     * returns masks
-     *
-     * @return mask
-     */
-    Set<IMask> getMask();
+
 
     /**
      * returns mask
      *
-     * @param p_path path of the mask
+     * @param p_path paths of the masks
      * @return mask
      */
-    Set<IMask> getMask( final CPath p_path );
+    Set<IMask> getMask( final CPath... p_path );
+
+
 
     /**
      * returns the full path
      *
      * @return path
      */
-    CPath getFQNPath();
+    CPath getPath();
 
     /**
      * returns only the element name
@@ -185,6 +167,8 @@ public interface IMask extends IStructure
      * @return boolean flag of the parent
      */
     boolean hasParent();
+
+
 
     /**
      * interface for generating non-existing beliefbases
