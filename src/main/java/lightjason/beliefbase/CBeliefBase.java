@@ -42,7 +42,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
  */
-public class CBeliefBase implements IBeliefBase
+public final class CBeliefBase implements IBeliefBase
 {
     /**
      * storage with data
