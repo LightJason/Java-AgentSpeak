@@ -47,9 +47,6 @@ DOT                        : '.';
 UNDERSCORE                 : '_';
 SLASH                      : '/';
 
-IF                         : 'if';
-ELSE                       : 'else';
-
 PI                         : 'pi';
 EULER                      : 'euler';
 GRAVITY                    : 'gravity';
@@ -59,19 +56,20 @@ ELECTRON                   : 'electron';
 PROTON                     : 'proton';
 NEUTRON                    : 'neutron';
 LIGHTSPEED                 : 'lightspeed';
+INFINITY                   : 'infinity';
 
-LROUNDBRACKET              : '(';
-RROUNDBRACKET              : ')';
-LANGULARBRACKET            : '[';
-RANGULARBRACKET            : ']';
-LCURVEDBRACKET             : '{';
-RCURVEDBRACKET             : '}';
+LEFTROUNDBRACKET           : '(';
+RIGHTROUNDBRACKET          : ')';
+LEFTANGULARBRACKET         : '[';
+RIGHTANGULARBRACKET        : ']';
+LEFTCURVEDBRACKET          : '{';
+RIGHTCURVEDBRACKET         : '}';
 
 TRUE                       : 'true' | 'success';
 FALSE                      : 'false' | 'fail';
 
-LSHIFT                     : '<<';
-RSHIFT                     : '>>';
+LEFTSHIFT                  : '<<';
+RIGHTSHIFT                 : '>>';
 
 /**
  * plan annotation
@@ -82,7 +80,6 @@ EXCLUSIVE                  : 'exclusive';
 FUZZY                      : 'fuzzy';
 SCORE                      : 'score';
 EXPIRES                    : 'expires';
-INFINITY                   : 'infinity';
 
 
 /**

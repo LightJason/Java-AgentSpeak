@@ -38,8 +38,6 @@ import java.util.BitSet;
 /**
  * AntLR error lister to catch parser and lexer errors
  * with individual error handling and language translating
- *
- * @todo check null check on exception, because forgotten semicolon are not recognized
  */
 public final class CErrorListener implements ANTLRErrorListener
 {
@@ -49,10 +47,6 @@ public final class CErrorListener implements ANTLRErrorListener
                              final RecognitionException p_exception
     )
     {
-        // only on existing exception a syntax error is reported
-        if ( p_exception == null )
-            return;
-
         final String l_message = CCommon.getLanguageString(
                 this, p_exception == null ? "generic" : p_exception.getClass().getSimpleName(), p_line, p_charposition );
         throw new CSyntaxErrorException( l_message.isEmpty() ? p_message : l_message, p_exception );
