@@ -24,11 +24,9 @@
 package lightjason.beliefbase;
 
 
-import com.google.common.collect.SetMultimap;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 
-import java.util.Map;
 import java.util.Set;
 
 
@@ -76,8 +74,9 @@ public interface IMask extends IStructure
      *
      * @param p_literal literal
      * @param p_generator beliefbase generator if beliefbase not exists
+     * @return existance boolean
      */
-    void add( final ILiteral p_literal, final IGenerator<Object> p_generator );
+    boolean add( final ILiteral p_literal, final IGenerator<Object> p_generator );
 
 
 

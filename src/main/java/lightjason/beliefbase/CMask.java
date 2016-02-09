@@ -24,8 +24,6 @@
 package lightjason.beliefbase;
 
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -33,9 +31,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 
 import java.text.MessageFormat;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -89,13 +85,13 @@ public class CMask implements IMask
     }
 
     @Override
-    public void add( final ILiteral p_literal )
+    public final boolean add( final ILiteral p_literal )
     {
-        this.add( p_literal, null );
+        return this.add( p_literal, null );
     }
 
     @Override
-    public IMask add( final IMask p_mask )
+    public final IMask add( final IMask p_mask )
     {
         // check first, if a mask with an equal storage exists  on the path
         for ( IMask l_mask = this; l_mask != null; )
@@ -110,19 +106,25 @@ public class CMask implements IMask
     }
 
     @Override
+    public final boolean modify( final ILiteral p_before, final ILiteral p_after )
+    {
+        return false;
+    }
+
+    @Override
     public final void clear()
     {
         m_beliefbase.clear();
     }
 
     @Override
-    public <E extends IMask> E create( final String p_name )
+    public final <E extends IMask> E create( final String p_name )
     {
         return m_beliefbase.create( p_name );
     }
 
     @Override
-    public <L extends IStorage<ILiteral, IMask>> L getStorage()
+    public final <L extends IStorage<ILiteral, IMask>> L getStorage()
     {
         return m_beliefbase.getStorage();
     }
@@ -134,7 +136,7 @@ public class CMask implements IMask
     }
 
     @Override
-    public boolean remove( final IMask p_mask )
+    public final boolean remove( final IMask p_mask )
     {
         return m_beliefbase.remove( p_mask );
     }
@@ -146,36 +148,33 @@ public class CMask implements IMask
     }
 
     @Override
-    public IMask add( final CPath p_path, final IMask p_mask )
+    public final IMask add( final CPath p_path, final IMask p_mask )
     {
         return this.add( p_path, p_mask, null );
     }
 
     @Override
-    public IMask add( final CPath p_path, final IGenerator<Object> p_generator )
+    public final IMask add( final CPath p_path, final IGenerator<Object> p_generator )
     {
         return walk( p_path, this, p_generator );
     }
 
     @Override
-    public IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator
+    public final IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator
     )
     {
         return walk( p_path, this, p_generator ).add( p_mask );
     }
 
     @Override
-    public void add( final ILiteral p_literal, final IGenerator<Object> p_generator
+    public final boolean add( final ILiteral p_literal, final IGenerator<Object> p_generator
     )
     {
-        if ( p_literal.getFunctorPath().isEmpty() )
-            m_beliefbase.add( p_literal );
-        else
-            walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal );
+        return p_literal.getFunctorPath().isEmpty() ? m_beliefbase.add( p_literal ) : walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal );
     }
 
     @Override
-    public boolean containsMask( final CPath p_path )
+    public final boolean containsMask( final CPath p_path )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return true;
@@ -187,7 +186,7 @@ public class CMask implements IMask
     }
 
     @Override
-    public boolean containsLiteral( final CPath p_path )
+    public final boolean containsLiteral( final CPath p_path )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return true;
@@ -199,15 +198,9 @@ public class CMask implements IMask
     }
 
     @Override
-    public boolean remove( final ILiteral p_literal )
+    public final boolean remove( final ILiteral p_literal )
     {
-        if ( p_literal.getFunctorPath().isEmpty() )
-        {
-            m_beliefbase.add( p_literal );
-            return true;
-        }
-
-        return walk( p_literal.getFunctorPath(), this, null ).remove( p_literal );
+        return p_literal.getFunctorPath().isEmpty() ? m_beliefbase.add( p_literal ) : walk( p_literal.getFunctorPath(), this, null ).remove( p_literal );
     }
 
     @Override
@@ -217,13 +210,7 @@ public class CMask implements IMask
     }
 
     @Override
-    public boolean remove( final CPath p_path, final IMask p_mask )
-    {
-        return walk( p_path, this, null ).remove( p_mask );
-    }
-
-    @Override
-    public boolean remove( final CPath p_path )
+    public final boolean remove( final CPath p_path )
     {
         if ( p_path.size() == 1 )
         {
@@ -240,8 +227,20 @@ public class CMask implements IMask
         return new CMask( m_name, m_beliefbase, p_parent );
     }
 
+    @Override
+    public final Set<ILiteral> getLiteral( final CPath... p_path )
+    {
+        return null;
+    }
+
+    @Override
+    public final Set<IMask> getMask( final CPath... p_path )
+    {
+        return null;
+    }
 
 
+/*
     @Override
     public SetMultimap<CPath, ILiteral> getLiterals( final CPath p_path )
     {
@@ -278,6 +277,7 @@ public class CMask implements IMask
         return walk( p_path.getSubPath( 0, -1 ), this, null ).getStorage().getSingleElements().get( p_path.getSuffix() );
     }
 
+
     @Override
     public Map<CPath, IMask> getMasks( final CPath p_path )
     {
@@ -289,9 +289,10 @@ public class CMask implements IMask
     {
         return m_beliefbase.getStorage().getSingleElements().values().stream().collect( Collectors.toMap( i -> i.getPath(), i -> i ) );
     }
+    */
 
     @Override
-    public CPath getPath()
+    public final CPath getPath()
     {
         return getPath( this, new CPath() );
     }
