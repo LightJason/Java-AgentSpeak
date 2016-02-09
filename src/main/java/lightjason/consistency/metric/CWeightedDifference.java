@@ -72,15 +72,14 @@ public final class CWeightedDifference extends IBaseMetric
         // if no path elements are set, we use all
         if ( m_paths.isEmpty() )
         {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals().values() );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals().values() );
+            l_firstLiterals.addAll( p_first.getBeliefBase().getLiteral() );
+            l_secondLiterals.addAll( p_second.getBeliefBase().getLiteral() );
         }
         else
-            for ( final CPath l_path : m_paths )
-            {
-                l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals( l_path ).values() );
-                l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
-            }
+        {
+            l_firstLiterals.addAll( p_first.getBeliefBase().getLiteral( m_paths.toArray( new CPath[m_paths.size()] ) ) );
+            l_secondLiterals.addAll( p_second.getBeliefBase().getLiteral( m_paths.toArray( new CPath[m_paths.size()] ) ) );
+        }
 
         // get size of union
         final Set<ILiteral> l_set = new HashSet<ILiteral>()
