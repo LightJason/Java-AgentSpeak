@@ -28,6 +28,8 @@ import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
@@ -45,14 +47,14 @@ public class CBeliefBase implements IBeliefBase
     /**
      * storage with data
      */
-    protected final IStorage<ILiteral, IMask> m_storage;
+    protected final IStorage<Pair<Boolean, ILiteral>, IMask> m_storage;
 
     /**
      * ctor
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<ILiteral, IMask> p_storage )
+    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IMask> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -74,7 +76,7 @@ public class CBeliefBase implements IBeliefBase
     @Override
     public final boolean add( final ILiteral p_literal )
     {
-        return m_storage.getMultiElements().put( p_literal.getFunctor(), p_literal );
+        return m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
     @Override
@@ -106,7 +108,7 @@ public class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<ILiteral, IMask>> L getStorage()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage()
     {
         return (L) m_storage;
     }
@@ -126,7 +128,7 @@ public class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final ILiteral p_literal )
     {
-        return m_storage.getMultiElements().remove( p_literal.getFunctor(), p_literal );
+        return m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
     @Override

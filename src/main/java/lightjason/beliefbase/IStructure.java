@@ -26,6 +26,7 @@ package lightjason.beliefbase;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
@@ -131,6 +132,6 @@ public interface IStructure
      *
      * @tparam L typecast
      */
-    <L extends IStorage<ILiteral, IMask>> L getStorage();
+    <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage();
 
 }
