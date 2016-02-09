@@ -127,53 +127,36 @@ public interface IMask extends IStructure
      */
     IMask clone( final IMask p_parent );
 
-    /**
-     * gets a list of all literals
-     * of the path
-     *
-     * @param p_path path
-     * @return map with literal
-     */
-    SetMultimap<CPath, ILiteral> getLiterals( final CPath p_path );
 
     /**
-     * gets a list of all literals
+     * returns set of literal
      *
-     * @return set with literals
+     * @return set of literals
      */
-    SetMultimap<CPath, ILiteral> getLiterals();
+    Set<ILiteral> getLiteral();
 
     /**
-     * returns a literal
+     * returns set of literal
      *
      * @param p_path path of the literal
-     * @return set of literals or null
+     * @return set of literals
      */
     Set<ILiteral> getLiteral( final CPath p_path );
 
     /**
-     * returns a mask
+     * returns masks
+     *
+     * @return mask
+     */
+    Set<IMask> getMask();
+
+    /**
+     * returns mask
      *
      * @param p_path path of the mask
-     * @return mask or null
+     * @return mask
      */
-    IMask getMask( final CPath p_path );
-
-    /**
-     * gets a list of all literals
-     * of the path
-     *
-     * @param p_path path
-     * @return map with literal
-     */
-    Map<CPath, IMask> getMasks( final CPath p_path );
-
-    /**
-     * gets a list of all literals
-     *
-     * @return map with literals
-     */
-    Map<CPath, IMask> getMasks();
+    Set<IMask> getMask( final CPath p_path );
 
     /**
      * returns the full path

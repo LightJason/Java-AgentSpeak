@@ -239,6 +239,8 @@ public class CMask implements IMask
         return new CMask( m_name, m_beliefbase, p_parent );
     }
 
+
+
     @Override
     public SetMultimap<CPath, ILiteral> getLiterals( final CPath p_path )
     {
