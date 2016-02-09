@@ -333,7 +333,7 @@ public class CMask implements IMask
     /**
      * static method to generate FQN path
      *
-     * @param p_mask curretn path
+     * @param p_mask current path
      * @param p_path current path
      * @return path
      *

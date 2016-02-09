@@ -89,7 +89,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public final int sizeSingleElements()
+    public final int size()
     {
         return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum() + m_singleelements.size();
     }
