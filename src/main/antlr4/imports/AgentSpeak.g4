@@ -116,9 +116,9 @@ annotation_literal :
  **/
 annotation_numeric_literal :
     ( FUZZY | SCORE )
-    LROUNDBRACKET
+    LEFTROUNDBRACKET
     number
-    RROUNDBRACKET
+    RIGHTROUNDBRACKET
     ;
 
 /**
@@ -126,9 +126,9 @@ annotation_numeric_literal :
  **/
 annotation_symbolic_literal :
     EXPIRES
-    LROUNDBRACKET
+    LEFTROUNDBRACKET
     atom
-    RROUNDBRACKET
+    RIGHTROUNDBRACKET
     ;
 
 /**
@@ -186,7 +186,7 @@ body_formula :
  **/
 repair_formula :
     ( term | test_goal_action | achievement_goal_action )
-    ( LSHIFT repair_formula )?
+    ( LEFTSHIFT repair_formula )?
     ;
 
 /**
@@ -201,7 +201,7 @@ term :
     | variable
 
     | variablelist
-    | LANGULARBRACKET termlist RANGULARBRACKET
+    | LEFTANGULARBRACKET termlist RIGHTANGULARBRACKET
 
     | expression
     | ternary_operation
@@ -275,8 +275,8 @@ barrier :
  * unification expression
  **/
 unification :
- AT? RSHIFT
- ( literal | LROUNDBRACKET literal COMMA expression RROUNDBRACKET )
+ AT? RIGHTSHIFT
+ ( literal | LEFTROUNDBRACKET literal COMMA expression RIGHTROUNDBRACKET )
  ;
 
 /**
@@ -325,7 +325,7 @@ expression :
  * bracket expression
  **/
 expression_bracket :
-    LROUNDBRACKET expression RROUNDBRACKET
+    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
     ;
 
 /**
@@ -401,14 +401,14 @@ expression_numeric_element :
     number
     | variable
     | literal
-    | LROUNDBRACKET expression_numeric RROUNDBRACKET
+    | LEFTROUNDBRACKET expression_numeric RIGHTROUNDBRACKET
     ;
 
 /**
  * block-formula of subsection
  **/
 block_formula :
-    LCURVEDBRACKET body RCURVEDBRACKET
+    LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
     | body_formula
     ;
 
@@ -426,9 +426,9 @@ lambda :
  * initialization of lambda expression
  **/
 lambda_initialization :
-    LROUNDBRACKET
+    LEFTROUNDBRACKET
     ( variable | literal )
-    RROUNDBRACKET
+    RIGHTROUNDBRACKET
     ;
 
 /**
@@ -451,8 +451,8 @@ lambda_return :
 literal :
     ( AT | STRONGNEGATION )?
     atom
-    ( LROUNDBRACKET termlist? RROUNDBRACKET )?
-    ( LANGULARBRACKET literalset? RANGULARBRACKET )?
+    ( LEFTROUNDBRACKET termlist? RIGHTROUNDBRACKET )?
+    ( LEFTANGULARBRACKET literalset? RIGHTANGULARBRACKET )?
     ;
 
 /**
@@ -473,9 +473,9 @@ literalset :
  * list with head-tail-annotation definition
  **/
 variablelist :
-    LANGULARBRACKET
+    LEFTANGULARBRACKET
     variable ( VLINE variable )*
-    RANGULARBRACKET
+    RIGHTANGULARBRACKET
     ;
 
 /**
