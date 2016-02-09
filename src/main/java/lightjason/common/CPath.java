@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -496,6 +497,29 @@ public final class CPath implements Iterable<CPath>
     {
         return this.startsWith( new CPath( p_path ) );
     }
+
+
+    /**
+     * normalizes the path (remove dot and dot-dot elements)
+     *
+     * @return self reference
+     */
+    public final CPath normalize()
+    {
+        if ( m_path.isEmpty() )
+            return this;
+
+        m_path = m_path.stream().filter( i -> !i.equals( "." ) ).collect( Collectors.toList() );
+
+        final String l_last = m_path.get( m_path.size() - 1 );
+        m_path = IntStream.range( 0, m_path.size() - 1 ).boxed().filter( i -> !m_path.get( i + 1 ).equals( ".." ) ).map( i -> m_path.get( i ) ).collect(
+                Collectors.toList() );
+        if ( !l_last.equals( ".." ) )
+            m_path.add( l_last );
+
+        return this;
+    }
+
 
     /**
      * splits the string data

@@ -107,13 +107,6 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage()
-    {
-        return (L) m_storage;
-    }
-
-    @Override
     public final boolean isEmpty()
     {
         return m_storage.isEmpty();
@@ -150,6 +143,13 @@ public class CBeliefBase implements IBeliefBase
         final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
         final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
         return l_single || l_multi;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage()
+    {
+        return (L) m_storage;
     }
 
 }

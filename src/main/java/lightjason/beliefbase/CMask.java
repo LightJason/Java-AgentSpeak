@@ -29,6 +29,7 @@ import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Set;
@@ -94,6 +95,7 @@ public class CMask implements IMask
     public final IMask add( final IMask p_mask )
     {
         // check first, if a mask with an equal storage exists  on the path
+        /*
         for ( IMask l_mask = this; l_mask != null; )
         {
             if ( this.getStorage().equals( p_mask.getStorage() ) )
@@ -101,6 +103,7 @@ public class CMask implements IMask
 
             l_mask = l_mask.getParent();
         }
+        */
 
         return m_beliefbase.add( p_mask.clone( this ) );
     }
@@ -124,7 +127,7 @@ public class CMask implements IMask
     }
 
     @Override
-    public final <L extends IStorage<ILiteral, IMask>> L getStorage()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage()
     {
         return m_beliefbase.getStorage();
     }
