@@ -40,6 +40,11 @@ import java.util.stream.Collectors;
 
 /**
  * mask of a beliefbase
+ *
+ * @todo reference counting with http://docs.oracle.com/javase/6/docs/api/java/lang/ref/PhantomReference.html /
+ * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
+ * http://docs.oracle.com/javase/6/docs/api/java/lang/ref/WeakReference.html
+ *
  */
 @SuppressWarnings( "serial" )
 public class CMask implements IMask
