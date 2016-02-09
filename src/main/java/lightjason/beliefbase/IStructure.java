@@ -95,6 +95,13 @@ public interface IStructure
      */
     boolean isEmpty();
 
+    /**
+     * returns the size of literals
+     *
+     * @return size
+     */
+    int size();
+
 
 
     /**

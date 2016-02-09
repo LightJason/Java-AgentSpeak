@@ -68,9 +68,9 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final void add( final ILiteral p_literal )
+    public final boolean add( final ILiteral p_literal )
     {
-        m_storage.getMultiElements().put( p_literal.getFunctor(), p_literal );
+        return m_storage.getMultiElements().put( p_literal.getFunctor(), p_literal );
     }
 
     @Override
@@ -78,6 +78,12 @@ public class CBeliefBase implements IBeliefBase
     {
         m_storage.getSingleElements().put( p_mask.getName(), p_mask );
         return p_mask;
+    }
+
+    @Override
+    public final boolean modify( final ILiteral p_before, final ILiteral p_after )
+    {
+        return this.remove( p_before ) && this.add( p_after );
     }
 
     @Override
@@ -127,13 +133,13 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
     }
 
     @Override
-    public boolean remove( final String p_name )
+    public final boolean remove( final String p_name )
     {
         final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
         final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
