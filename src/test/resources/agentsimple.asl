@@ -52,6 +52,21 @@ second(true).
 
 
 
+        // --- string ------------------------------------------------------------------------------------------------------------------------------------------
+
+        SBase64 = generic/string/base64encode( "Base64 encoded string" );
+        SReverse = generic/string/reverse( "abcdefg" );
+        SUpper = generic/string/upper("AbCdefg");
+        SLower = generic/string/lower("AbCdefg");
+        SReplace = generic/string/replace( "a1b1defg1xyz1ui", "1", "-" );
+        SRand = generic/string/random( 20, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" );
+        generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SRand, "--", SReplace);
+        generic/print();
+
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
         // --- blas arithmetic ---------------------------------------------------------------------------------------------------------------------------------
 
         M = math/blas/matrix/create(2,2);
