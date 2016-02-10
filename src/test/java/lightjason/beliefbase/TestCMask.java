@@ -21,56 +21,36 @@
  * @endcond
  */
 
-package lightjason.language.execution.expression.arithmetic;
+package lightjason.beliefbase;
+
+import lightjason.language.CLiteral;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Test;
+
+import java.util.stream.IntStream;
+
+import static org.junit.Assert.assertEquals;
+
 
 /**
- * test arithmetic expression
+ *
  */
-@SuppressWarnings( "serial" )
-public final class TestCExpression
+public final class TestCMask
 {
 
     /**
-     * test simple expression with random values
+     * test tree structure
      */
-    /*@Test
-    public void testSimpleExpressionWithVariable()
+    @Test
+    public void testTree()
     {
-        final Random l_random = new Random();
-        final CExpression l_expression = new CExpression();
+        final int l_max = 10;
+        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
 
-        // (1+X) * 4 + 8
-        l_expression.push( "+" ).push( 1 ).push( new CVariable<Number>( "X" ) );
-        l_expression.push( "*" ).push( 4 ).push( "+" ).push( 8 );
+        IntStream.range( 0, l_max ).boxed().forEach(
+                i -> l_beliefbase.add( new CLiteral( RandomStringUtils.random( 10, "abcdefghijklmnopqrstuvwxyz".toCharArray() ) ) ) );
 
-        for ( int i = 0; i < 500; i++ )
-        {
-            final int l_inputvalue = l_random.nextInt( 100000 );
-            final int l_successoutput = ( l_inputvalue + 1 ) * 4 + 8;
-
-            l_expression.getVariables().get( CPath.from( "X" ) ).set( new Integer( l_inputvalue ) );
-            final int l_output = l_expression.evaluate().intValue();
-
-            assertTrue( MessageFormat.format( "value in run [{0}] should be [{1}] but is [{2}]", i, l_successoutput, l_output ), l_successoutput == l_output );
-        }
-
+        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
     }
-    */
-
-
-    /**
-     * test complex expression with fixed value
-     */
-    /*@Test
-    public void testComplexExpression()
-    {
-        // 2 * (3 ** 4) and ( 2 ** 3 ) * 4
-        final CExpression l_expression1 = new CExpression();
-        l_expression1.push( "*", "**" ).push( 3, 4, 2 );
-
-        final int l_value1 = l_expression1.evaluate().intValue();
-        assertTrue( MessageFormat.format( "value should be [{0}] but is [{1}]", 162, l_value1 ), l_value1 == 162 );
-    }
-    */
 
 }

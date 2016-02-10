@@ -42,19 +42,8 @@ public interface IMask extends IStructure
      * @param p_path path
      * @param p_mask mask
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
-     * @todo check if it is really nessesary
      */
     IMask add( final CPath p_path, final IMask p_mask );
-
-    /**
-     * adds a mask in the current structure
-     *
-     * @param p_path path
-     * @param p_generator beliefbase generator if beliefbase not exists
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
-     * @returns returns the added mask
-     */
-    IMask add( final CPath p_path, final IGenerator<Object> p_generator );
 
     /**
      * adds a mask in the current structure
@@ -64,7 +53,6 @@ public interface IMask extends IStructure
      * @param p_generator beliefbase generator if beliefbase not exists
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
-     * @todo check if it is really nessesary
      */
     IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator );
 

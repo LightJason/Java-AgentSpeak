@@ -157,12 +157,6 @@ public class CMask implements IMask
     }
 
     @Override
-    public final IMask add( final CPath p_path, final IGenerator<Object> p_generator )
-    {
-        return walk( p_path.normalize(), this, p_generator );
-    }
-
-    @Override
     public final IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator
     )
     {
