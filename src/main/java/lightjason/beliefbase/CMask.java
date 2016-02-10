@@ -32,8 +32,11 @@ import lightjason.language.ILiteral;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -229,16 +232,23 @@ public class CMask implements IMask
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final Set<ILiteral> getLiteral( final CPath... p_path )
     {
+        final CPath l_path = this.getPath();
         if ( ( p_path == null ) || ( p_path.length == 0 ) )
             return new HashSet<ILiteral>()
             {{
-
+                addAll( (Collection<? extends ILiteral>) m_beliefbase.getStorage().getMultiElements().values().parallelStream()
+                                                                     .map( i -> i.getRight().clone( l_path ) ).collect( Collectors.toSet() ) );
             }};
 
-
-        return null;
+        return Arrays.stream( p_path )
+                     .parallel()
+                     .map( i -> i.normalize() )
+                     .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
+                                                                             .map( j -> j.getRight() ) )
+                     .collect( Collectors.toSet() );
     }
 
     @Override
