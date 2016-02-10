@@ -109,7 +109,12 @@ second(true).
 
         MinIdx = math/minindex(RV);
         MaxIdx = math/maxindex(RV);
+        InRect = math/shape/inrectangle( 2,1,  0,0, 4,5);
+        InCircle = math/shape/incircle( 2,1,  2,2, 1);
+        InTriangle = math/shape/intriangle( 160,270,  350,320,  25,375,  40,55 );
+
         generic/print("min & max index", MinIdx, MaxIdx);
+        generic/print("shapes (in)", "", "rectangle", InRect, "circle", InCircle, "triangle", InTriangle);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
