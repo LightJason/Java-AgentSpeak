@@ -32,6 +32,7 @@ import lightjason.language.ILiteral;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -230,6 +231,13 @@ public class CMask implements IMask
     @Override
     public final Set<ILiteral> getLiteral( final CPath... p_path )
     {
+        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+            return new HashSet<ILiteral>()
+            {{
+
+            }};
+
+
         return null;
     }
 
@@ -240,56 +248,7 @@ public class CMask implements IMask
     }
 
 
-/*
-    @Override
-    public SetMultimap<CPath, ILiteral> getLiterals( final CPath p_path )
-    {
-        return walk( p_path, this, null ).getLiterals();
-    }
 
-    @Override
-    public SetMultimap<CPath, ILiteral> getLiterals()
-    {
-        final CPath l_path = this.getPath();
-        final SetMultimap<CPath, ILiteral> l_map = HashMultimap.create();
-
-        m_beliefbase.getStorage().getMultiElements().values().stream().forEach( i -> {
-
-            final ILiteral l_literal = i.clone( l_path.append( i.getFunctorPath() ) );
-            l_map.put( l_literal.getFQNFunctor(), l_literal );
-
-        } );
-
-        m_beliefbase.getStorage().getSingleElements().values().forEach( i -> l_map.putAll( i.getLiterals() ) );
-
-        return l_map;
-    }
-
-    @Override
-    public Set<ILiteral> getLiteral( final CPath p_path )
-    {
-        return walk( p_path.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( p_path.getSuffix() );
-    }
-
-    @Override
-    public IMask getMask( final CPath p_path )
-    {
-        return walk( p_path.getSubPath( 0, -1 ), this, null ).getStorage().getSingleElements().get( p_path.getSuffix() );
-    }
-
-
-    @Override
-    public Map<CPath, IMask> getMasks( final CPath p_path )
-    {
-        return walk( p_path, this, null ).getMasks();
-    }
-
-    @Override
-    public Map<CPath, IMask> getMasks()
-    {
-        return m_beliefbase.getStorage().getSingleElements().values().stream().collect( Collectors.toMap( i -> i.getPath(), i -> i ) );
-    }
-    */
 
     @Override
     public final CPath getPath()
@@ -345,24 +304,22 @@ public class CMask implements IMask
     /**
      * returns a mask on the recursive descend
      *
-     * @param p_path path
+     * @param p_path path (must be normalized)
      * @param p_root start / root node
      * @param p_generator generator object for new masks
      * @return mask
      *
      * @tparam Q literal type
-     * @note a path can contains ".." to use the parent object
+     * @note path must be normalized
      */
     private static <Q> IMask walk( final CPath p_path, final IMask p_root, final IGenerator<Q> p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
 
-        // get the next mask (on ".." the parent is returned otherwise the child is used)
-        IMask l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
-
-        // if a generator is exists and the mask is null, a new mask is created and added to the current
-        if ( ( l_mask == null ) && ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
+        // get the next mask and if a generator is exists and the mask is null, a new mask is created and added to the current
+        IMask l_mask = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
+        if ( ( l_mask == null ) && ( p_generator != null ) )
             l_mask = p_root.add( p_generator.createBeliefbase( p_path.get( 0 ) ) );
 
         // if mask null an exception is thrown
