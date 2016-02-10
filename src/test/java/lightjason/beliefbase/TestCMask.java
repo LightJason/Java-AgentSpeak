@@ -48,7 +48,8 @@ public final class TestCMask
         final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
 
         IntStream.range( 0, l_max ).boxed().forEach(
-                i -> l_beliefbase.add( new CLiteral( RandomStringUtils.random( 10, "abcdefghijklmnopqrstuvwxyz".toCharArray() ) ) ) );
+                i -> l_beliefbase.add( new CLiteral( RandomStringUtils.random( 10, "abcdefghijklmnopqrstuvwxyz".toCharArray() ) ) )
+        );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
     }
