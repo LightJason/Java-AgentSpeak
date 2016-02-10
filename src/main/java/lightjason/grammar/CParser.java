@@ -93,6 +93,7 @@ import java.util.stream.Collectors;
  *
  * @note methods are implemented twice agent and plan-bundle, because both use equal
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
+ * @todo add barrier check to plan generating
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
 public class CParser extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
