@@ -310,6 +310,8 @@ public class CView implements IView
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
 
+        System.out.println( "-----> " + p_path );
+
         // get the next view and if a generator exists and the view is null, generate a new view
         IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
         if ( ( l_view == null ) && ( p_generator != null ) )

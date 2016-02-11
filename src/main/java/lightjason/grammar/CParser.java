@@ -167,7 +167,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     @Override
     public Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
     {
-        m_InitialGoal = new CLiteral( (String) this.visitAtom( p_context.atom() ) );
+        m_InitialGoal = CLiteral.from( (String) this.visitAtom( p_context.atom() ) );
         return null;
     }
 
@@ -997,7 +997,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     {
         return new CLiteral(
                 p_context.AT() != null,
-                p_context.STRONGNEGATION() != null, this.visitAtom( p_context.atom() ).toString(),
+                p_context.STRONGNEGATION() != null,
+                CPath.from( this.visitAtom( p_context.atom() ).toString() ),
                 (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
@@ -1008,7 +1009,8 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
     {
         return new CLiteral(
                 p_context.AT() != null,
-                p_context.STRONGNEGATION() != null, this.visitAtom( p_context.atom() ).toString(),
+                p_context.STRONGNEGATION() != null,
+                CPath.from( this.visitAtom( p_context.atom() ).toString() ),
                 (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );

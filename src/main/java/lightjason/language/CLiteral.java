@@ -48,6 +48,14 @@ import java.util.List;
 public final class CLiteral implements ILiteral
 {
     /**
+     * negation symbol
+     */
+    protected static final String NEGATION = "~";
+    /**
+     * at symbol
+     */
+    protected static final String AT = "@";
+    /**
      * literal annotations
      */
     protected final ImmutableMultimap<CPath, ILiteral> m_annotations;
@@ -71,46 +79,6 @@ public final class CLiteral implements ILiteral
      * @ prefix is set
      */
     protected final boolean m_at;
-
-
-    /**
-     * ctor
-     *
-     * @param p_functor functor
-     */
-    public CLiteral( final String p_functor )
-    {
-        this( false, false, p_functor, Collections.<ITerm>emptyList(), Collections.<ILiteral>emptyList() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_at @ prefix is set
-     * @param p_functor functor of the literal
-     * @param p_values negated flag
-     * @param p_annotations initial set of annotations
-     */
-    public CLiteral( final boolean p_at, final String p_functor, final Collection<ITerm> p_values, final Collection<ILiteral> p_annotations )
-    {
-        this( p_at, false, CPath.from( p_functor ), p_values, p_annotations );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_at @ prefix is set
-     * @param p_negated negated flag
-     * @param p_functor functor of the literal
-     * @param p_values initial list of values
-     * @param p_annotations initial set of annotations
-     */
-    public CLiteral( final boolean p_at, final boolean p_negated, final String p_functor, final Collection<ITerm> p_values,
-                     final Collection<ILiteral> p_annotations
-    )
-    {
-        this( p_at, p_negated, CPath.from( p_functor ), p_values, p_annotations );
-    }
 
 
     /**
@@ -143,11 +111,49 @@ public final class CLiteral implements ILiteral
         m_orderedvalues = Collections.unmodifiableList( new LinkedList<>( p_values ) );
     }
 
+    /**
+     * factory
+     *
+     * @param p_functor functor string
+     * @return literal
+     */
+    public static ILiteral from( final String p_functor )
+    {
+        return from( p_functor, Collections.emptySet(), Collections.emptySet() );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor string
+     * @param p_values value literals
+     * @return literal
+     */
+    public static ILiteral from( final String p_functor, final Collection<ITerm> p_values )
+    {
+        return from( p_functor, p_values, Collections.emptySet() );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor string
+     * @param p_values value literals
+     * @param p_annotations annotation literals
+     * @return literal
+     */
+    public static ILiteral from( final String p_functor, final Collection<ITerm> p_values, final Collection<ILiteral> p_annotations )
+    {
+        return new CLiteral(
+                p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ), p_values,
+                p_annotations
+        );
+    }
 
     @Override
     public final ILiteral clone( final CPath p_prefix )
     {
-        return new CLiteral( m_at, m_negated, p_prefix.append( m_functor ).toString(), m_values.values(), m_annotations.values() );
+        return new CLiteral( m_at, m_negated, p_prefix.append( m_functor ), m_values.values(), m_annotations.values() );
     }
 
     @Override
@@ -223,7 +229,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? "~" : "", m_at ? "@" : "", m_functor, m_orderedvalues, m_annotations.values() );
+        return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues, m_annotations.values() );
     }
 
 }
