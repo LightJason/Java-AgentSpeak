@@ -26,7 +26,7 @@ package lightjason.agent.configuration;
 import com.google.common.collect.Multimap;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CBeliefStorage;
-import lightjason.beliefbase.IMask;
+import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
@@ -111,9 +111,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IMask getBeliefbase()
+    public final IView getBeliefbase()
     {
-        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
         return l_beliefbase;
     }

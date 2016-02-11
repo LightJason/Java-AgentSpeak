@@ -28,7 +28,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.configuration.IAgentConfiguration;
-import lightjason.beliefbase.IMask;
+import lightjason.beliefbase.IView;
 import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
@@ -77,7 +77,7 @@ public class CAgent implements IAgent
      *
      * @warning need not to be null
      */
-    protected final IMask m_beliefbase;
+    protected final IView m_beliefbase;
     /**
      * execution goal list
      *
@@ -135,7 +135,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IMask getBeliefBase()
+    public final IView getBeliefBase()
     {
         return m_beliefbase;
     }

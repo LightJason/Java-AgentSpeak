@@ -40,14 +40,13 @@ import java.util.stream.Collectors;
 
 
 /**
- * mask of a beliefbase
- *
+ * view of a beliefbase
  */
 @SuppressWarnings( "serial" )
-public class CMask implements IMask
+public class CView implements IView
 {
     /**
-     * mask name
+     * view name
      */
     protected final String m_name;
     /**
@@ -57,15 +56,15 @@ public class CMask implements IMask
     /**
      * parent name
      */
-    private final IMask m_parent;
+    private final IView m_parent;
 
     /**
      * ctor
      *
-     * @param p_name name of the mask
+     * @param p_name view name
      * @param p_beliefbase reference to the beliefbase context
      */
-    public CMask( final String p_name, final IBeliefBase p_beliefbase )
+    public CView( final String p_name, final IBeliefBase p_beliefbase )
     {
         this( p_name, p_beliefbase, null );
     }
@@ -73,11 +72,11 @@ public class CMask implements IMask
     /**
      * ctor
      *
-     * @param p_name name of the mask
+     * @param p_name view name
      * @param p_beliefbase reference to the beliefbase context
-     * @param p_parent reference to the parent mask
+     * @param p_parent reference to the parent view
      */
-    public CMask( final String p_name, final IBeliefBase p_beliefbase, final IMask p_parent )
+    public CView( final String p_name, final IBeliefBase p_beliefbase, final IView p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -96,20 +95,19 @@ public class CMask implements IMask
     }
 
     @Override
-    public final IMask add( final IMask p_mask )
+    public final IView add( final IView p_view )
     {
-        // check first, if a mask with an equal storage exists  on the path
         /*
-        for ( IMask l_mask = this; l_mask != null; )
+        // check first, if a view with an equal storage exists  on the path
+        for ( IView l_view = this; l_view != null; )
         {
-            if ( this.getStorage().equals( p_mask.getStorage() ) )
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_mask.getName(), l_mask.getPath() ) );
+            if ( this.getStorage().equals( p_view.getStorage() ) )
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getName(), l_view.getPath() ) );
 
-            l_mask = l_mask.getParent();
+            l_view = l_view.getParent();
         }
         */
-
-        return m_beliefbase.add( p_mask.clone( this ) );
+        return m_beliefbase.add( p_view.clone( this ) );
     }
 
     @Override
@@ -125,13 +123,13 @@ public class CMask implements IMask
     }
 
     @Override
-    public final <E extends IMask> E create( final String p_name )
+    public final <E extends IView> E create( final String p_name )
     {
         return m_beliefbase.create( p_name );
     }
 
     @Override
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage()
     {
         return m_beliefbase.getStorage();
     }
@@ -143,9 +141,9 @@ public class CMask implements IMask
     }
 
     @Override
-    public final boolean remove( final IMask p_mask )
+    public final boolean remove( final IView p_view )
     {
-        return m_beliefbase.remove( p_mask );
+        return m_beliefbase.remove( p_view );
     }
 
     @Override
@@ -155,16 +153,16 @@ public class CMask implements IMask
     }
 
     @Override
-    public final IMask add( final CPath p_path, final IMask p_mask )
+    public final IView add( final CPath p_path, final IView p_view )
     {
-        return this.add( p_path.normalize(), p_mask, null );
+        return this.add( p_path.normalize(), p_view, null );
     }
 
     @Override
-    public final IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator
+    public final IView add( final CPath p_path, final IView p_view, final IGenerator<Object> p_generator
     )
     {
-        return walk( p_path.normalize(), this, p_generator ).add( p_mask );
+        return walk( p_path.normalize(), this, p_generator ).add( p_view );
     }
 
     @Override
@@ -175,7 +173,7 @@ public class CMask implements IMask
     }
 
     @Override
-    public final boolean containsMask( final CPath p_path )
+    public final boolean containsView( final CPath p_path )
     {
         p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
@@ -184,7 +182,7 @@ public class CMask implements IMask
         if ( p_path.size() == 1 )
             return m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) );
 
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsMask( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -213,22 +211,21 @@ public class CMask implements IMask
     }
 
     @Override
-    public final boolean remove( final CPath p_path )
+    public final boolean remove( final CPath... p_path )
     {
-        p_path.normalize();
-        if ( p_path.size() == 1 )
-        {
-            m_beliefbase.remove( p_path.getSuffix() );
-            return true;
-        }
+        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+            return false;
 
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path );
+        return Arrays.stream( p_path ).parallel().map( i -> {
+            i.normalize();
+            return i.size() == 1 ? m_beliefbase.remove( i.getSuffix() ) : walk( i.getSubPath( 0, -1 ), this, null ).remove( i );
+        } ).allMatch( i -> i );
     }
 
     @Override
-    public IMask clone( final IMask p_parent )
+    public IView clone( final IView p_parent )
     {
-        return new CMask( m_name, m_beliefbase, p_parent );
+        return new CView( m_name, m_beliefbase, p_parent );
     }
 
     @Override
@@ -252,15 +249,6 @@ public class CMask implements IMask
     }
 
     @Override
-    public final Set<IMask> getMask( final CPath... p_path )
-    {
-        return null;
-    }
-
-
-
-
-    @Override
     public final CPath getPath()
     {
         return getPath( this, new CPath() );
@@ -273,7 +261,7 @@ public class CMask implements IMask
     }
 
     @Override
-    public final IMask getParent()
+    public final IView getParent()
     {
         return m_parent;
     }
@@ -299,44 +287,42 @@ public class CMask implements IMask
     /**
      * static method to generate FQN path
      *
-     * @param p_mask current path
+     * @param p_view current path
      * @param p_path current path
-     * @return path
-     *
-     * @tparam Q type of the beliefbase elements
+     * @return path modified path
      */
-    private static <Q> CPath getPath( final IMask p_mask, final CPath p_path )
+    private static CPath getPath( final IView p_view, final CPath p_path )
     {
-        p_path.pushfront( p_mask.getName() );
-        return !p_mask.hasParent() ? p_path : getPath( p_mask.getParent(), p_path );
+        p_path.pushfront( p_view.getName() );
+        return !p_view.hasParent() ? p_path : getPath( p_view.getParent(), p_path );
     }
 
     /**
-     * returns a mask on the recursive descend
+     * returns a view on the recursive descend
      *
      * @param p_path path (must be normalized)
      * @param p_root start / root node
-     * @param p_generator generator object for new masks
-     * @return mask
+     * @param p_generator generator object for new views
+     * @return view
      *
      * @tparam Q literal type
      * @note path must be normalized
      */
-    private static <Q> IMask walk( final CPath p_path, final IMask p_root, final IGenerator<Q> p_generator )
+    private static <Q> IView walk( final CPath p_path, final IView p_root, final IGenerator<Q> p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
 
-        // get the next mask and if a generator is exists and the mask is null, a new mask is created and added to the current
-        IMask l_mask = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
-        if ( ( l_mask == null ) && ( p_generator != null ) )
-            l_mask = p_root.add( p_generator.createBeliefbase( p_path.get( 0 ) ) );
+        // get the next view and if a generator exists and the view is null, generate a new view
+        IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
+        if ( ( l_view == null ) && ( p_generator != null ) )
+            l_view = p_root.add( p_generator.createBeliefbase( p_path.get( 0 ) ) );
 
-        // if mask null an exception is thrown
-        if ( l_mask == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CMask.class, "notfound", p_path.get( 0 ), p_path ) );
+        // if view is null an exception is thrown
+        if ( l_view == null )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_path ) );
 
         // recursive descend
-        return walk( p_path.getSubPath( 1 ), l_mask, p_generator );
+        return walk( p_path.getSubPath( 1 ), l_view, p_generator );
     }
 }

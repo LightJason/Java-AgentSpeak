@@ -31,30 +31,31 @@ import java.util.Set;
 
 
 /**
- * mask of the path
+ * view for a beliefbase
  */
-public interface IMask extends IStructure
+public interface IView extends IStructure
 {
 
     /**
-     * adds a mask in the current structure
+     * adds view in the current structure
      *
      * @param p_path path
-     * @param p_mask mask
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
+     * @param p_view existing view
+     * @return returns cloned view
+     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IMask add( final CPath p_path, final IMask p_mask );
+    IView add( final CPath p_path, final IView p_view );
 
     /**
-     * adds a mask in the current structure
+     * adds a view in the current structure
      *
      * @param p_path path
-     * @param p_mask mask
+     * @param p_view existing view
      * @param p_generator beliefbase generator if beliefbase not exists
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
-     * @returns returns the added mask
+     * @return returns cloned view
+     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IMask add( final CPath p_path, final IMask p_mask, final IGenerator<Object> p_generator );
+    IView add( final CPath p_path, final IView p_view, final IGenerator<Object> p_generator );
 
 
     /**
@@ -70,12 +71,12 @@ public interface IMask extends IStructure
 
 
     /**
-     * checks if a mask exists
+     * view existing check
      *
-     * @param p_path path to a mask (suffix is mask name)
+     * @param p_path path to a view
      * @return existance boolean
      */
-    boolean containsMask( final CPath p_path );
+    boolean containsView( final CPath p_path );
 
     /**
      * checks if a literal exists
@@ -88,22 +89,22 @@ public interface IMask extends IStructure
 
 
     /**
-     * removes literal and mask
+     * removes literal and view
      *
-     * @param p_path path
+     * @param p_path paths
      * @return is found and removed
      */
-    boolean remove( final CPath p_path );
+    boolean remove( final CPath... p_path );
 
 
 
     /**
-     * clones the current mask
+     * clones the current view
      *
      * @param p_parent new parent
-     * @return new mask object
+     * @return new view object
      */
-    IMask clone( final IMask p_parent );
+    IView clone( final IView p_parent );
 
 
 
@@ -114,16 +115,6 @@ public interface IMask extends IStructure
      * @return set of literals
      */
     Set<ILiteral> getLiteral( final CPath... p_path );
-
-
-
-    /**
-     * returns mask
-     *
-     * @param p_path paths of the masks
-     * @return mask
-     */
-    Set<IMask> getMask( final CPath... p_path );
 
 
 
@@ -142,14 +133,14 @@ public interface IMask extends IStructure
     String getName();
 
     /**
-     * returns the parent of the mask
+     * returns the parent of the view
      *
      * @return parent object or null
      */
-    IMask getParent();
+    IView getParent();
 
     /**
-     * returns if the mask has a parent
+     * check if the view has got a parent
      *
      * @return boolean flag of the parent
      */
@@ -162,6 +153,6 @@ public interface IMask extends IStructure
      */
     interface IGenerator<Q>
     {
-        IMask createBeliefbase( final String p_name );
+        IView createBeliefbase( final String p_name );
     }
 }

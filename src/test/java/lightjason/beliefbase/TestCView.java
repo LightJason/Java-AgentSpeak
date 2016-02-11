@@ -33,9 +33,9 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- *
+ * test of beliefbase view
  */
-public final class TestCMask
+public final class TestCView
 {
 
     /**
@@ -45,7 +45,7 @@ public final class TestCMask
     public void testTree()
     {
         final int l_max = 10;
-        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
 
         IntStream.range( 0, l_max ).boxed().forEach(
                 i -> l_beliefbase.add( new CLiteral( RandomStringUtils.random( 10, "abcdefghijklmnopqrstuvwxyz".toCharArray() ) ) )

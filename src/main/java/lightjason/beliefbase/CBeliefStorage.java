@@ -37,8 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * thread-safe storage of the data
  *
- * @tparam N element type
- * @tparam M mask type
+ * @tparam N multi-element type
+ * @tparam M single-element type
  */
 @SuppressWarnings( "serial" )
 public class CBeliefStorage<N, M> implements IStorage<N, M>
@@ -48,7 +48,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
      **/
     protected final SetMultimap<String, N> m_multielements = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
     /**
-     * map with masks
+     * map with single elements
      **/
     protected final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
 

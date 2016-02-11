@@ -23,7 +23,7 @@
 
 package lightjason.agent.configuration;
 
-import lightjason.beliefbase.IMask;
+import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
@@ -39,9 +39,9 @@ public interface IAgentConfiguration extends IConfiguration
     /**
      * returns a beliefbase of the agent
      *
-     * @return root mask
+     * @return root view
      */
-    IMask getBeliefbase();
+    IView getBeliefbase();
 
     /**
      * returns the initial goal

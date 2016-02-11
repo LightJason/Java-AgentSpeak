@@ -36,7 +36,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * default beliefbase
  *
  * @tparam T literal type
- * @todo event storing must be implement, use weak-reference or reference-counting to store mask relation with event replication
+ * @todo event storing must be implement, use weak-reference or reference-counting to store view relation with event replication
  * (event methods: clear, add, remove(Literal | String), modify -> event is generated on successfully operation)
  * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
  * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
@@ -47,14 +47,14 @@ public final class CBeliefBase implements IBeliefBase
     /**
      * storage with data
      */
-    protected final IStorage<Pair<Boolean, ILiteral>, IMask> m_storage;
+    protected final IStorage<Pair<Boolean, ILiteral>, IView> m_storage;
 
     /**
      * ctor
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IMask> p_storage )
+    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IView> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -80,10 +80,10 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final IMask add( final IMask p_mask )
+    public final IView add( final IView p_view )
     {
-        m_storage.getSingleElements().put( p_mask.getName(), p_mask );
-        return p_mask;
+        m_storage.getSingleElements().put( p_view.getName(), p_view );
+        return p_view;
     }
 
     @Override
@@ -101,9 +101,9 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <E extends IMask> E create( final String p_name )
+    public <E extends IView> E create( final String p_name )
     {
-        return (E) new CMask( p_name, this );
+        return (E) new CView( p_name, this );
     }
 
     @Override
@@ -113,9 +113,9 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final boolean remove( final IMask p_mask )
+    public final boolean remove( final IView p_view )
     {
-        return m_storage.getSingleElements().remove( p_mask.getName() ) != null;
+        return m_storage.getSingleElements().remove( p_view.getName() ) != null;
     }
 
     @Override
@@ -147,7 +147,7 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IMask>> L getStorage()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage()
     {
         return (L) m_storage;
     }
