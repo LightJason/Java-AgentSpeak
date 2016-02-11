@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 /**
  * view of a beliefbase
  */
-@SuppressWarnings( "serial" )
 public class CView implements IView
 {
     /**
@@ -229,7 +228,7 @@ public class CView implements IView
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings( {"serial", "unchecked"} )
     public final Set<ILiteral> getLiteral( final CPath... p_path )
     {
         final CPath l_path = this.getPath();

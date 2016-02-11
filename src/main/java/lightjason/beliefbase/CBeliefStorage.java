@@ -40,7 +40,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @tparam N multi-element type
  * @tparam M single-element type
  */
-@SuppressWarnings( "serial" )
 public class CBeliefStorage<N, M> implements IStorage<N, M>
 {
     /**

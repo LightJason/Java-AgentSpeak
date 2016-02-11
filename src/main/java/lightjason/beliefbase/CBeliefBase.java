@@ -35,7 +35,6 @@ import org.apache.commons.lang3.tuple.Pair;
 /**
  * default beliefbase
  *
- * @tparam T literal type
  * @todo event storing must be implement, use weak-reference or reference-counting to store view relation with event replication
  * (event methods: clear, add, remove(Literal | String), modify -> event is generated on successfully operation)
  * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
@@ -125,7 +124,7 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public <T extends IAgent> void update( final T p_agent )
+    public final <T extends IAgent> void update( final T p_agent )
     {
         m_storage.update( p_agent );
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
