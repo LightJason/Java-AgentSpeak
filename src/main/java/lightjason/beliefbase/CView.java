@@ -112,7 +112,7 @@ public class CView implements IView
     @Override
     public final boolean modify( final ILiteral p_before, final ILiteral p_after )
     {
-        return false;
+        return this.remove( p_before ) && this.add( p_after );
     }
 
     @Override
@@ -168,7 +168,9 @@ public class CView implements IView
     public final boolean add( final ILiteral p_literal, final IGenerator<Object> p_generator
     )
     {
-        return p_literal.getFunctorPath().isEmpty() ? m_beliefbase.add( p_literal ) : walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal );
+        return p_literal.getFunctorPath().isEmpty()
+               ? m_beliefbase.add( p_literal )
+               : walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal );
     }
 
     @Override
@@ -178,10 +180,9 @@ public class CView implements IView
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return true;
 
-        if ( p_path.size() == 1 )
-            return m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) );
-
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+        return p_path.size() == 1
+               ? m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) )
+               : walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -191,16 +192,17 @@ public class CView implements IView
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return true;
 
-        if ( p_path.size() == 1 )
-            return m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) );
-
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+        return p_path.size() == 1
+               ? m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) )
+               : walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
     public final boolean remove( final ILiteral p_literal )
     {
-        return p_literal.getFunctorPath().isEmpty() ? m_beliefbase.add( p_literal ) : walk( p_literal.getFunctorPath(), this, null ).remove( p_literal );
+        return p_literal.getFunctorPath().isEmpty()
+               ? m_beliefbase.add( p_literal )
+               : walk( p_literal.getFunctorPath(), this, null ).remove( p_literal );
     }
 
     @Override
