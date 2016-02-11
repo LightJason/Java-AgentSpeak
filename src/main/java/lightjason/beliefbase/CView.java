@@ -98,7 +98,7 @@ public class CView implements IView
     public final IView add( final IView p_view )
     {
         this.root()
-            .filter( i -> this.getStorage().equals( i.getStorage() ) )
+            .filter( i -> p_view.getStorage().equals( i.getStorage() ) )
             .findAny()
             .ifPresent( i -> {
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getPath(), i.getPath() ) );
@@ -313,8 +313,6 @@ public class CView implements IView
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
-
-        System.out.println( "-----> " + p_path );
 
         // get the next view and if a generator exists and the view is null, generate a new view
         IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );

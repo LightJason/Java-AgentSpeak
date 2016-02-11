@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -496,6 +497,27 @@ public final class CPath implements Iterable<CPath>
     public final boolean startsWith( final String p_path )
     {
         return this.startsWith( new CPath( p_path ) );
+    }
+
+
+    /**
+     * stream over elements
+     *
+     * @return sequential stream
+     */
+    public final Stream<String> stream()
+    {
+        return m_path.stream();
+    }
+
+    /**
+     * parallel stream over elements
+     *
+     * @return parallel stream
+     */
+    public final Stream<String> parallelStream()
+    {
+        return m_path.parallelStream();
     }
 
 
