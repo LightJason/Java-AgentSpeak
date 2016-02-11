@@ -28,6 +28,7 @@ import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -42,6 +43,7 @@ public interface IView extends IStructure
      * @param p_path path
      * @param p_view existing view
      * @return returns cloned view
+     *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
     IView add( final CPath p_path, final IView p_view );
@@ -53,9 +55,10 @@ public interface IView extends IStructure
      * @param p_view existing view
      * @param p_generator beliefbase generator if beliefbase not exists
      * @return returns cloned view
+     *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final CPath p_path, final IView p_view, final IGenerator<Object> p_generator );
+    IView add( final CPath p_path, final IView p_view, final IGenerator p_generator );
 
 
     /**
@@ -65,8 +68,7 @@ public interface IView extends IStructure
      * @param p_generator beliefbase generator if beliefbase not exists
      * @return existance boolean
      */
-    boolean add( final ILiteral p_literal, final IGenerator<Object> p_generator );
-
+    boolean add( final ILiteral p_literal, final IGenerator p_generator );
 
 
 
@@ -97,6 +99,12 @@ public interface IView extends IStructure
     boolean remove( final CPath... p_path );
 
 
+    /**
+     * returns a stream to the root node
+     *
+     * @return stream of views
+     */
+    Stream<IView> root();
 
     /**
      * clones the current view
@@ -151,7 +159,7 @@ public interface IView extends IStructure
     /**
      * interface for generating non-existing beliefbases
      */
-    interface IGenerator<Q>
+    interface IGenerator
     {
         IView createBeliefbase( final String p_name );
     }

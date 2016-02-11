@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -96,16 +97,9 @@ public class CView implements IView
     @Override
     public final IView add( final IView p_view )
     {
-        /*
-        // check first, if a view with an equal storage exists  on the path
-        for ( IView l_view = this; l_view != null; )
-        {
-            if ( this.getStorage().equals( p_view.getStorage() ) )
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getName(), l_view.getPath() ) );
+        if ( this.root().map( i -> this.getStorage().equals( i.getStorage() ) ).anyMatch( i -> i ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getName() ) );
 
-            l_view = l_view.getParent();
-        }
-        */
         return m_beliefbase.add( p_view.clone( this ) );
     }
 
@@ -158,14 +152,14 @@ public class CView implements IView
     }
 
     @Override
-    public final IView add( final CPath p_path, final IView p_view, final IGenerator<Object> p_generator
+    public final IView add( final CPath p_path, final IView p_view, final IGenerator p_generator
     )
     {
         return walk( p_path.normalize(), this, p_generator ).add( p_view );
     }
 
     @Override
-    public final boolean add( final ILiteral p_literal, final IGenerator<Object> p_generator
+    public final boolean add( final ILiteral p_literal, final IGenerator p_generator
     )
     {
         return p_literal.getFunctorPath().isEmpty()
@@ -238,21 +232,25 @@ public class CView implements IView
             return new HashSet<ILiteral>()
             {{
                 addAll( (Collection<? extends ILiteral>) m_beliefbase.getStorage().getMultiElements().values().parallelStream()
-                                                                     .map( i -> i.getRight().clone( l_path ) ).collect( Collectors.toSet() ) );
+                                                                     .map( i -> i.getRight().clone( l_path ) )
+                                                                     .collect( Collectors.toSet() ) );
             }};
 
         return Arrays.stream( p_path )
                      .parallel()
                      .map( i -> i.normalize() )
                      .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
-                                                                             .map( j -> j.getRight() ) )
+                                                                             .map( j -> j.getRight() )
+                     )
                      .collect( Collectors.toSet() );
     }
 
     @Override
     public final CPath getPath()
     {
-        return getPath( this, new CPath() );
+        final CPath l_path = new CPath();
+        this.root().forEach( i -> l_path.pushfront( i.getName() ) );
+        return l_path;
     }
 
     @Override
@@ -286,16 +284,16 @@ public class CView implements IView
     }
 
     /**
-     * static method to generate FQN path
+     * stream to root
      *
-     * @param p_view current path
-     * @param p_path current path
-     * @return path modified path
+     * @return stream to root
      */
-    private static CPath getPath( final IView p_view, final CPath p_path )
+    public final Stream<IView> root()
     {
-        p_path.pushfront( p_view.getName() );
-        return !p_view.hasParent() ? p_path : getPath( p_view.getParent(), p_path );
+        return Stream.concat(
+                Stream.of( this ),
+                Stream.of( this.getParent() ).filter( i -> i != null )
+        );
     }
 
     /**
@@ -305,11 +303,9 @@ public class CView implements IView
      * @param p_root start / root node
      * @param p_generator generator object for new views
      * @return view
-     *
-     * @tparam Q literal type
      * @note path must be normalized
      */
-    private static <Q> IView walk( final CPath p_path, final IView p_root, final IGenerator<Q> p_generator )
+    private static IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;

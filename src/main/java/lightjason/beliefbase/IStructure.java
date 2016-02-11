@@ -48,6 +48,7 @@ public interface IStructure
      *
      * @param p_view existing view
      * @return returns cloned view
+     *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
     IView add( final IView p_view );
@@ -60,6 +61,7 @@ public interface IStructure
      * @param p_before literal before modification
      * @param p_after literal after modification
      * @return boolean for correct modification
+     *
      * @note it is an atomic optation of remove and add
      */
     boolean modify( final ILiteral p_before, final ILiteral p_after );

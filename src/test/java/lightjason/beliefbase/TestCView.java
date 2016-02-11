@@ -46,12 +46,29 @@ public final class TestCView
     {
         final int l_max = 10;
         final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView.IGenerator l_gen = new CGenerator();
 
         IntStream.range( 0, l_max ).boxed().forEach(
-                i -> l_beliefbase.add( new CLiteral( RandomStringUtils.random( 10, "abcdefghijklmnopqrstuvwxyz".toCharArray() ) ) )
+                i -> l_beliefbase.add( new CLiteral( RandomStringUtils.random( 10, "abcdefghijklmnopqrstuvwxyz".toCharArray() ) ), l_gen )
         );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
+        System.out.println( l_beliefbase );
     }
+
+
+    /**
+     * test generator
+     */
+    private static final class CGenerator implements IView.IGenerator
+    {
+
+        @Override
+        public final IView createBeliefbase( final String p_name )
+        {
+            return new CBeliefBase( new CBeliefStorage<>() ).create( p_name );
+        }
+    }
+
 
 }
