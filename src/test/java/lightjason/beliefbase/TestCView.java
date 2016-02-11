@@ -49,7 +49,7 @@ public final class TestCView
         final IView.IGenerator l_gen = new CGenerator();
 
         IntStream.range( 0, l_max ).boxed().forEach(
-                i -> l_beliefbase.add( CLiteral.from( RandomStringUtils.random( 10, "~abcdefghijklmnopqrstuvwxyz".toCharArray() ) ), l_gen )
+                i -> l_beliefbase.add( CLiteral.from( RandomStringUtils.random( 10, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ), l_gen )
         );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );

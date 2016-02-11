@@ -97,8 +97,12 @@ public class CView implements IView
     @Override
     public final IView add( final IView p_view )
     {
-        if ( this.root().map( i -> this.getStorage().equals( i.getStorage() ) ).anyMatch( i -> i ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getName() ) );
+        this.root()
+            .filter( i -> this.getStorage().equals( i.getStorage() ) )
+            .findAny()
+            .ifPresent( i -> {
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getPath(), i.getPath() ) );
+            } );
 
         return m_beliefbase.add( p_view.clone( this ) );
     }
