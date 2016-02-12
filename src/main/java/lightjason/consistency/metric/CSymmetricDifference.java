@@ -25,11 +25,8 @@ package lightjason.consistency.metric;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -62,6 +59,7 @@ public final class CSymmetricDifference extends IBaseMetric
     @Override
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
+        /*
         final Set<ILiteral> l_firstLiterals = new HashSet<>();
         final Set<ILiteral> l_secondLiterals = new HashSet<>();
 
@@ -87,6 +85,8 @@ public final class CSymmetricDifference extends IBaseMetric
 
         // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
         return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
+        */
+        return 0;
     }
 
 }

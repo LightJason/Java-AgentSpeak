@@ -33,10 +33,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -229,11 +225,20 @@ public class CView implements IView
 
     @Override
     @SuppressWarnings( {"serial", "unchecked"} )
-    public final Set<ILiteral> getLiteral( final CPath... p_path )
+    public final Stream<ILiteral> stream( final CPath... p_path )
     {
         // build path relative to this view
         final CPath l_path = this.getPath().getSubPath( 1 );
 
+        return Stream.concat(
+                m_beliefbase.getStorage().getMultiElements().values().stream().map( j -> j.getRight() ),
+                Arrays.stream( p_path )
+                      .map( i -> i.normalize() )
+                      .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
+                                                                              .map( l -> l.getRight() ) )
+        );
+
+        /*
         if ( ( p_path == null ) || ( p_path.length == 0 ) )
             return new HashSet<ILiteral>()
             {{
@@ -255,6 +260,7 @@ public class CView implements IView
                                                                              .map( j -> j.getRight() )
                      )
                      .collect( Collectors.toSet() );
+       */
     }
 
     @Override

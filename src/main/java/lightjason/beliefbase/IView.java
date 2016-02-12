@@ -27,7 +27,6 @@ package lightjason.beliefbase;
 import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -117,12 +116,12 @@ public interface IView extends IStructure
 
 
     /**
-     * returns set of literal
+     * returns stream of literal
      *
      * @param p_path paths of the literals
      * @return set of literals
      */
-    Set<ILiteral> getLiteral( final CPath... p_path );
+    Stream<ILiteral> stream( final CPath... p_path );
 
 
 

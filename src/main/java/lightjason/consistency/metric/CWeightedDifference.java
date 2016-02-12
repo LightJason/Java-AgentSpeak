@@ -26,11 +26,8 @@ package lightjason.consistency.metric;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -64,6 +61,7 @@ public final class CWeightedDifference extends IBaseMetric
     @Override
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
+        /*
         // collect all literals within specified paths
         final Set<ILiteral> l_firstLiterals = new HashSet<>();
         final Set<ILiteral> l_secondLiterals = new HashSet<>();
@@ -100,5 +98,7 @@ public final class CWeightedDifference extends IBaseMetric
                   + ( l_unionSize - l_secondLiterals.size() )
                 ) * l_unionSize / l_intersectionSize
         );
+        */
+        return 0;
     }
 }
