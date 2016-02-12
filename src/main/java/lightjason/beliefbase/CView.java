@@ -231,13 +231,21 @@ public class CView implements IView
     @SuppressWarnings( {"serial", "unchecked"} )
     public final Set<ILiteral> getLiteral( final CPath... p_path )
     {
-        final CPath l_path = this.getPath();
+        // build path relative to this view
+        final CPath l_path = this.getPath().getSubPath( 1 );
+
         if ( ( p_path == null ) || ( p_path.length == 0 ) )
             return new HashSet<ILiteral>()
             {{
                 addAll( (Collection<? extends ILiteral>) m_beliefbase.getStorage().getMultiElements().values().parallelStream()
                                                                      .map( i -> i.getRight().clone( l_path ) )
-                                                                     .collect( Collectors.toSet() ) );
+                                                                     .collect( Collectors.toSet() )
+                );
+
+                addAll( (Collection<? extends ILiteral>) m_beliefbase.getStorage().getSingleElements().values().parallelStream()
+                                                                     .flatMap( i -> i.getLiteral().stream() )
+                                                                     .collect( Collectors.toSet() )
+                );
             }};
 
         return Arrays.stream( p_path )

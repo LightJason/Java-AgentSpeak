@@ -54,7 +54,8 @@ public interface ILiteral extends ITerm
     ILiteral clone();
 
     /**
-     * clones the literal without full path
+     * clones the literal without full-qualified
+     * path, only suffix is used
      *
      * @return new instance of the literal
      */

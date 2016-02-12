@@ -39,22 +39,46 @@ public final class TestCView
 {
 
     /**
-     * test tree structure
+     * random test tree structure
      */
     @Test
     public void testTree()
     {
-        final int l_max = 50;
+        final int l_max = 10;
         final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
         final IView.IGenerator l_gen = new CGenerator();
 
         IntStream.range( 0, l_max ).boxed().forEach(
-                i -> l_beliefbase.add( CLiteral.from( RandomStringUtils.random( 10, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ), l_gen )
+                i -> l_beliefbase.add( CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ), l_gen )
         );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
         System.out.println( l_beliefbase );
     }
+
+
+    /**
+     * manual test of tree structure
+     */
+    @Test
+    public void testManual()
+    {
+        final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView.IGenerator l_gen = new CGenerator();
+
+        l_beliefbase.add( CLiteral.from( "toplevel" ) );
+
+        l_beliefbase.add( CLiteral.from( "first/sub1" ), l_gen );
+        l_beliefbase.add( CLiteral.from( "first/sub2" ) );
+
+        l_beliefbase.add( CLiteral.from( "second/sub1" ), l_gen );
+        l_beliefbase.add( CLiteral.from( "second/sub2" ) );
+
+
+        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 5 );
+        System.out.println( l_beliefbase );
+    }
+
 
     /**
      * test generator
@@ -68,6 +92,5 @@ public final class TestCView
             return new CBeliefBase( new CBeliefStorage<>() ).create( p_name );
         }
     }
-
 
 }
