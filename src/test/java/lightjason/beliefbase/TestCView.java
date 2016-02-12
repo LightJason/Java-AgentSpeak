@@ -77,8 +77,6 @@ public final class TestCView
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 5 );
         System.out.println( l_beliefbase );
-
-        l_beliefbase.stream().forEach( i -> System.out.println( "---> " + i ) );
     }
 
 

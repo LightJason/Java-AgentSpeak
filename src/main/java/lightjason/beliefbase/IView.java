@@ -121,7 +121,7 @@ public interface IView extends IStructure
      * @param p_path paths of the literals
      * @return set of literals
      */
-    Stream<ILiteral> stream( final CPath... p_path );
+    Stream<ILiteral> parallelStream( final CPath... p_path );
 
 
 

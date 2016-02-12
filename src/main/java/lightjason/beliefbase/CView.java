@@ -224,43 +224,20 @@ public class CView implements IView
     }
 
     @Override
-    @SuppressWarnings( {"serial", "unchecked"} )
-    public final Stream<ILiteral> stream( final CPath... p_path )
+    public final Stream<ILiteral> parallelStream( final CPath... p_path )
     {
         // build path relative to this view
         final CPath l_path = this.getPath().getSubPath( 1 );
-
         return Stream.concat(
-                m_beliefbase.getStorage().getMultiElements().values().stream().map( j -> j.getRight() ),
-                Arrays.stream( p_path )
-                      .map( i -> i.normalize() )
-                      .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
-                                                                              .map( l -> l.getRight() ) )
+                m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().clone( l_path ) ),
+                ( p_path == null ) || ( p_path.length == 0 )
+                ? m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream() )
+                : Arrays.stream( p_path )
+                        .parallel()
+                        .map( i -> i.normalize() )
+                        .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).parallelStream()
+                                                                                .map( l -> l.getRight().clone( l_path ) ) )
         );
-
-        /*
-        if ( ( p_path == null ) || ( p_path.length == 0 ) )
-            return new HashSet<ILiteral>()
-            {{
-                addAll( (Collection<? extends ILiteral>) m_beliefbase.getStorage().getMultiElements().values().parallelStream()
-                                                                     .map( i -> i.getRight().clone( l_path ) )
-                                                                     .collect( Collectors.toSet() )
-                );
-
-                addAll( (Collection<? extends ILiteral>) m_beliefbase.getStorage().getSingleElements().values().parallelStream()
-                                                                     .flatMap( i -> i.getLiteral().stream() )
-                                                                     .collect( Collectors.toSet() )
-                );
-            }};
-
-        return Arrays.stream( p_path )
-                     .parallel()
-                     .map( i -> i.normalize() )
-                     .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
-                                                                             .map( j -> j.getRight() )
-                     )
-                     .collect( Collectors.toSet() );
-       */
     }
 
     @Override
