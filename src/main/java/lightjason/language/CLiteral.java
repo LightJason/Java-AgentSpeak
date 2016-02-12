@@ -96,7 +96,7 @@ public final class CLiteral implements ILiteral
     {
         m_at = p_at;
         m_negated = p_negated;
-        m_functor = p_functor;
+        m_functor = p_functor.normalize();
 
 
         // create immutable structures
@@ -224,6 +224,12 @@ public final class CLiteral implements ILiteral
     public ILiteral clone()
     {
         return new CLiteral( m_at, m_negated, m_functor, m_values.values(), m_annotations.values() );
+    }
+
+    @Override
+    public ILiteral cloneWithoutPath()
+    {
+        return new CLiteral( m_at, m_negated, CPath.from( m_functor.getSuffix() ), m_values.values(), m_annotations.values() );
     }
 
     @Override

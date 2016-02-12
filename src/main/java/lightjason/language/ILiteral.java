@@ -54,6 +54,13 @@ public interface ILiteral extends ITerm
     ILiteral clone();
 
     /**
+     * clones the literal without full path
+     *
+     * @return new instance of the literal
+     */
+    ILiteral cloneWithoutPath();
+
+    /**
      * returns the optional annotations
      *
      * @return annotation terms

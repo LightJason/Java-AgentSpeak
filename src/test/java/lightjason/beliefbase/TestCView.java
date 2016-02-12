@@ -44,7 +44,7 @@ public final class TestCView
     @Test
     public void testTree()
     {
-        final int l_max = 10;
+        final int l_max = 50;
         final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
         final IView.IGenerator l_gen = new CGenerator();
 
@@ -55,7 +55,6 @@ public final class TestCView
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
         System.out.println( l_beliefbase );
     }
-
 
     /**
      * test generator
