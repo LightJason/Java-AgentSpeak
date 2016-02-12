@@ -42,7 +42,7 @@ public final class TestCView
      * random test tree structure
      */
     @Test
-    public void testTree()
+    public final void testTree()
     {
         final int l_max = 10;
         final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
@@ -61,7 +61,7 @@ public final class TestCView
      * manual test of tree structure
      */
     @Test
-    public void testManual()
+    public final void testManual()
     {
         final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
         final IView.IGenerator l_gen = new CGenerator();
@@ -79,6 +79,20 @@ public final class TestCView
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
         System.out.println( l_beliefbase );
+    }
+
+
+    /**
+     * manuell running test
+     *
+     * @param p_args arguments
+     */
+    public static void main( final String[] p_args )
+    {
+        final TestCView l_test = new TestCView();
+
+        l_test.testTree();
+        l_test.testManual();
     }
 
 

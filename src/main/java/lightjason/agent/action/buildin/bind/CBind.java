@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
  * action for binding action (via reflection)
  * to other Java objects
  *
- * @see http://wiki.eclipse.org/GEF/GEF4/Common#Adapt
  * @bug incompelete
+ * @see http://wiki.eclipse.org/GEF/GEF4/Common#Adapt
  */
 public final class CBind<T>
 {

@@ -317,6 +317,7 @@ public class CView implements IView
      * @param p_root start / root node
      * @param p_generator generator object for new views
      * @return view
+     *
      * @note path must be normalized
      */
     private static IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )

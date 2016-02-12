@@ -88,7 +88,7 @@ public final class TestCAgent
      * asl parsing test
      */
     @Test
-    public void testASL()
+    public final void testASL()
     {
         final Map<String, String> l_testing = new HashMap<String, String>()
         {{
@@ -196,7 +196,6 @@ public final class TestCAgent
     }
 
 
-
     /**
      * super-class for testing binding action
      */
@@ -208,6 +207,7 @@ public final class TestCAgent
 
         }
     }
+
 
     /**
      * class for testing binding actions
