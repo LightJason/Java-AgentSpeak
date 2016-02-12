@@ -74,8 +74,10 @@ public final class TestCView
         l_beliefbase.add( CLiteral.from( "second/sub1" ), l_gen );
         l_beliefbase.add( CLiteral.from( "second/sub2" ) );
 
+        l_beliefbase.add( CLiteral.from( "second/sub/sub1" ), l_gen );
 
-        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 5 );
+
+        assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
         System.out.println( l_beliefbase );
     }
 

@@ -27,6 +27,7 @@ import lightjason.agent.IAgent;
 import lightjason.common.CPath;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 
 /**
@@ -59,34 +60,17 @@ public final class CSymmetricDifference extends IBaseMetric
     @Override
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        /*
-        final Set<ILiteral> l_firstLiterals = new HashSet<>();
-        final Set<ILiteral> l_secondLiterals = new HashSet<>();
+        // build filter
+        final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
-        // if no path elements are set, we use all
-        if ( m_paths.isEmpty() )
-        {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiteral() );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiteral() );
-        }
-        else
-        {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiteral( m_paths.toArray( new CPath[m_paths.size()] ) ) );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiteral( m_paths.toArray( new CPath[m_paths.size()] ) ) );
-        }
+        // count elements
+        final double l_unionsize = Stream.concat( p_first.getBeliefBase().parallelStream( l_filter ), p_second.getBeliefBase().parallelStream( l_filter ) )
+                                         .distinct().count();
 
+        final double l_set1 = p_first.getBeliefBase().parallelStream( l_filter ).count();
+        final double l_set2 = p_second.getBeliefBase().parallelStream( l_filter ).count();
 
-        // get union
-        final Set<ILiteral> l_aggregate = new HashSet<ILiteral>()
-        {{
-            addAll( l_firstLiterals );
-            addAll( l_secondLiterals );
-        }};
-
-        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
-        return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
-        */
-        return 0;
+        return new Double( l_unionsize - l_set1 + l_unionsize - l_set2 );
     }
 
 }

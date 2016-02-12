@@ -230,12 +230,31 @@ public class CView implements IView
         final CPath l_path = this.getPath().getSubPath( 1 );
         return Stream.concat(
                 m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().clone( l_path ) ),
+
                 ( p_path == null ) || ( p_path.length == 0 )
-                ? m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream() )
+                ? m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream().map( j -> j.clone( l_path ) ) )
                 : Arrays.stream( p_path )
                         .parallel()
                         .map( i -> i.normalize() )
                         .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).parallelStream()
+                                                                                .map( l -> l.getRight().clone( l_path ) ) )
+        ).parallel();
+    }
+
+    @Override
+    public final Stream<ILiteral> stream( final CPath... p_path )
+    {
+        // build path relative to this view
+        final CPath l_path = this.getPath().getSubPath( 1 );
+        return Stream.concat(
+                m_beliefbase.getStorage().getMultiElements().values().stream().map( i -> i.getRight().clone( l_path ) ),
+
+                ( p_path == null ) || ( p_path.length == 0 )
+                ? m_beliefbase.getStorage().getSingleElements().values().stream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
+                : Arrays.stream( p_path )
+                        .parallel()
+                        .map( i -> i.normalize() )
+                        .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
                                                                                 .map( l -> l.getRight().clone( l_path ) ) )
         );
     }
