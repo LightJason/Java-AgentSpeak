@@ -29,8 +29,6 @@ import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -69,14 +67,15 @@ public final class CWeightedDifference extends IBaseMetric
         final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
         // count elements
-        final double l_unionsize = Stream.concat( p_first.getBeliefBase().parallelStream( l_filter ), p_second.getBeliefBase().parallelStream( l_filter ) )
-                                         .distinct().count();
+        final Stream<ILiteral> l_union = Stream.concat(
+                p_first.getBeliefBase().parallelStream( l_filter ), p_second.getBeliefBase().parallelStream( l_filter ) );
 
         final double l_set1 = p_first.getBeliefBase().parallelStream( l_filter ).count();
         final double l_set2 = p_second.getBeliefBase().parallelStream( l_filter ).count();
 
-        final Set<ILiteral> l_set = p_second.getBeliefBase().parallelStream( l_filter ).collect( Collectors.toSet() );
-        final double l_intersectionsize = p_first.getBeliefBase().parallelStream( l_filter ).filter( i -> l_set.contains( i ) ).count();
+        // @bug seems to be incorrect with distinct
+        final double l_intersectionsize = l_union.distinct().count();
+        final double l_unionsize = l_union.count();
 
         // return distance
         return new Double( ( l_unionsize - l_set1 + l_unionsize - l_set2 ) * l_unionsize / l_intersectionsize );
