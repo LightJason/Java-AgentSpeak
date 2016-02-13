@@ -31,29 +31,32 @@ import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CBeliefStorage;
 import lightjason.beliefbase.IView;
 import lightjason.consistency.metric.CSymmetricDifference;
+import lightjason.consistency.metric.IMetric;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
 import lightjason.language.plan.IPlan;
 import lightjason.language.plan.trigger.ITrigger;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
  * metric tests
  */
+@SuppressWarnings( "serial" )
 public final class TestIMetric
 {
     /**
      * literal view generator
      */
-    private final IView.IGenerator l_gen = new CGenerator();
+    private final IView.IGenerator m_generator = new CGenerator();
     ;
 
 
@@ -63,21 +66,19 @@ public final class TestIMetric
     @Test
     public final void testSymmetricWeight()
     {
-        final IAgent l_agent1 = this.getAgent(
-                IntStream.range( 0, 15 )
-                         .boxed()
-                         .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
-                         .collect( Collectors.toSet() )
-        );
+        final IMetric l_metric = new CSymmetricDifference();
 
-        final IAgent l_agent2 = this.getAgent(
-                IntStream.range( 0, 15 )
-                         .boxed()
-                         .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
-                         .collect( Collectors.toSet() )
-        );
+        final Set<ILiteral> l_beliefs = new HashSet<>();
+        l_beliefs.add( CLiteral.from( "toplevel" ) );
+        l_beliefs.add( CLiteral.from( "first/sub1" ) );
+        l_beliefs.add( CLiteral.from( "first/sub2" ) );
+        l_beliefs.add( CLiteral.from( "second/sub1" ) );
+        l_beliefs.add( CLiteral.from( "second/sub2" ) );
+        l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
 
-        System.out.println( MessageFormat.format( "symmetric difference: {0}", new CSymmetricDifference().calculate( l_agent1, l_agent2 ) ) );
+
+        //this.check( "symmetric difference equality", l_metric, l_beliefs, l_beliefs, 0, 0 );
+        //this.check( "symmetric difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs ){{ add( CLiteral.from( "diff" ) ); }}, 1, 0 );
     }
 
 
@@ -104,6 +105,26 @@ public final class TestIMetric
     }
 
     /**
+     * runs the check
+     *
+     * @param p_message error / successful message
+     * @param p_metric metric value
+     * @param p_belief1 belief set 1
+     * @param p_belief2 belief set 2
+     * @param p_excepted expected value
+     * @param p_delta delta
+     */
+    private void check( final String p_message, final IMetric p_metric, final Collection<ILiteral> p_belief1, final Collection<ILiteral> p_belief2,
+                        final double p_excepted, final double p_delta
+    )
+    {
+        final double l_value = p_metric.calculate( this.getAgent( p_belief1 ), this.getAgent( p_belief2 ) );
+        assertEquals( p_message, l_value, p_excepted, p_delta );
+        System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
+    }
+
+
+    /**
      * generates an agent
      *
      * @param p_literals literal collection
@@ -116,7 +137,7 @@ public final class TestIMetric
                 ImmutableSetMultimap.<ITrigger<?>, IPlan>of(),
                 null, null, null
         ) );
-        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, l_gen ) );
+        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
         return l_agent;
     }
 
