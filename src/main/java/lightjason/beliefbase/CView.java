@@ -332,7 +332,7 @@ public class CView implements IView
 
         // if view is null an exception is thrown
         if ( l_view == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_path ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 
         // recursive descend
         return walk( p_path.getSubPath( 1 ), l_view, p_generator );

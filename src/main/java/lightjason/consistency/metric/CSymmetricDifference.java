@@ -70,6 +70,8 @@ public final class CSymmetricDifference extends IBaseMetric
         final double l_set1 = p_first.getBeliefBase().parallelStream( l_filter ).count();
         final double l_set2 = p_second.getBeliefBase().parallelStream( l_filter ).count();
 
+        System.out.println( "---> " + l_set1 + "  " + l_set2 + "   " + l_unionsize );
+
         return new Double( l_unionsize - l_set1 + l_unionsize - l_set2 );
     }
 
