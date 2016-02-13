@@ -64,7 +64,10 @@ public final class CSymmetricDifference extends IBaseMetric
         final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
         // count elements
-        final double l_unionsize = Stream.concat( p_first.getBeliefBase().parallelStream( l_filter ), p_second.getBeliefBase().parallelStream( l_filter ) )
+        final double l_unionsize = Stream.concat(
+                p_first.getBeliefBase().parallelStream( l_filter ),
+                p_second.getBeliefBase().parallelStream( l_filter )
+        )
                                          .distinct()
                                          .count();
 

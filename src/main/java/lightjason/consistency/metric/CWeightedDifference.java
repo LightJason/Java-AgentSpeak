@@ -68,7 +68,9 @@ public final class CWeightedDifference extends IBaseMetric
 
         // count elements
         final Stream<ILiteral> l_union = Stream.concat(
-                p_first.getBeliefBase().parallelStream( l_filter ), p_second.getBeliefBase().parallelStream( l_filter ) );
+                p_first.getBeliefBase().parallelStream( l_filter ),
+                p_second.getBeliefBase().parallelStream( l_filter )
+        );
 
         final double l_set1 = p_first.getBeliefBase().parallelStream( l_filter ).count();
         final double l_set2 = p_second.getBeliefBase().parallelStream( l_filter ).count();
