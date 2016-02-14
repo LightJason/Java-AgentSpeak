@@ -77,7 +77,7 @@ public final class TestIMetric
         l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
 
 
-        //this.check( "symmetric difference equality", l_metric, l_beliefs, l_beliefs, 0, 0 );
+        this.check( "symmetric difference equality", l_metric, l_beliefs, l_beliefs, 0, 0 );
         //this.check( "symmetric difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs ){{ add( CLiteral.from( "diff" ) ); }}, 1, 0 );
     }
 
