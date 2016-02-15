@@ -31,6 +31,7 @@ import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CBeliefStorage;
 import lightjason.beliefbase.IView;
 import lightjason.consistency.metric.CSymmetricDifference;
+import lightjason.consistency.metric.CWeightedDifference;
 import lightjason.consistency.metric.IMetric;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
@@ -76,9 +77,11 @@ public final class TestIMetric
         l_beliefs.add( CLiteral.from( "second/sub2" ) );
         l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
 
-
         this.check( "symmetric difference equality", l_metric, l_beliefs, l_beliefs, 0, 0 );
-        //this.check( "symmetric difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs ){{ add( CLiteral.from( "diff" ) ); }}, 1, 0 );
+        this.check( "symmetric difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
+        {{
+            add( CLiteral.from( "diff" ) );
+        }}, 1, 0 );
     }
 
 
@@ -88,7 +91,21 @@ public final class TestIMetric
     @Test
     public final void testWeight()
     {
+        final IMetric l_metric = new CWeightedDifference();
 
+        final Set<ILiteral> l_beliefs = new HashSet<>();
+        l_beliefs.add( CLiteral.from( "toplevel" ) );
+        l_beliefs.add( CLiteral.from( "first/sub1" ) );
+        l_beliefs.add( CLiteral.from( "first/sub2" ) );
+        l_beliefs.add( CLiteral.from( "second/sub1" ) );
+        l_beliefs.add( CLiteral.from( "second/sub2" ) );
+        l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
+
+        this.check( "weight difference equality", l_metric, l_beliefs, l_beliefs, 24.2, 0 );
+        this.check( "weight difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
+        {{
+            add( CLiteral.from( "diff" ) );
+        }}, 1, 0 );
     }
 
     /**

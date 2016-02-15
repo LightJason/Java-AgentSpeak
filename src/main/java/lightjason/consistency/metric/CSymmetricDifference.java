@@ -63,30 +63,10 @@ public final class CSymmetricDifference extends IBaseMetric
         // build filter
         final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
-        // count elements
-        final double l_unionsize = Stream.concat(
-                p_first.getBeliefBase().stream( l_filter ),
-                p_second.getBeliefBase().stream( l_filter )
-        )
-                                         .distinct()
-                                         .map( i -> {
-                                             System.out.println( "-> " + i );
-                                             return i;
-                                         } )
-                                         .count();
-
-        final double l_set1 = p_first.getBeliefBase().stream( l_filter ).map( i -> {
-            System.out.println( "--> " + i );
-            return i;
-        } ).count();
-        final double l_set2 = p_second.getBeliefBase().stream( l_filter ).map( i -> {
-            System.out.println( "---> " + i );
-            return i;
-        } ).count();
-
-        System.out.println( "----> " + l_set1 + "   " + l_set2 + "    " + l_unionsize );
-
-        return new Double( l_unionsize - l_set1 + l_unionsize - l_set2 );
+        // element aggregation and return distance
+        return 2.0 * Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).parallel().distinct().count()
+               - p_first.getBeliefBase().parallelStream( l_filter ).count()
+               - p_second.getBeliefBase().parallelStream( l_filter ).count();
     }
 
 }

@@ -232,7 +232,7 @@ public class CView implements IView
     @Override
     public final Stream<ILiteral> stream( final CPath... p_path )
     {
-        // build path relative to this view
+        // build path relative to this view and add sequential to the stream-return to avoid inference problems
         final CPath l_path = this.getPath().getSubPath( 1 );
         return Stream.concat(
                 m_beliefbase.getStorage().getMultiElements().values().stream().map( i -> i.getRight().clone( l_path ) ),
@@ -241,10 +241,10 @@ public class CView implements IView
                 ? m_beliefbase.getStorage().getSingleElements().values().stream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
                 : Arrays.stream( p_path )
                         .map( i -> i.normalize() )
-                        .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() ).stream()
+                        .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
+                                                                                .stream()
                                                                                 .map( l -> l.getRight().clone( l_path ) ) )
-
-        );
+        ).sequential();
     }
 
     @Override
