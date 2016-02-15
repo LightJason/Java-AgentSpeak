@@ -155,7 +155,7 @@ public class CView implements IView
     public final IView add( final CPath p_path, final IView p_view, final IGenerator p_generator
     )
     {
-        return walk( p_path.normalize(), this, p_generator ).add( p_view );
+        return this.walk( p_path.normalize(), this, p_generator ).add( p_view );
     }
 
     @Override
@@ -164,7 +164,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.add( p_literal )
-               : walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.cloneWithoutPath() );
+               : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.cloneWithoutPath() );
     }
 
     @Override
@@ -176,7 +176,7 @@ public class CView implements IView
 
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) )
-               : walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -188,7 +188,7 @@ public class CView implements IView
 
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) )
-               : walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -196,7 +196,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.remove( p_literal )
-               : walk( p_literal.getFunctorPath(), this, null ).remove( p_literal.cloneWithoutPath() );
+               : this.walk( p_literal.getFunctorPath(), this, null ).remove( p_literal.cloneWithoutPath() );
     }
 
     @Override
@@ -213,7 +213,7 @@ public class CView implements IView
 
         return Arrays.stream( p_path ).parallel().map( i -> {
             i.normalize();
-            return i.size() == 1 ? m_beliefbase.remove( i.getSuffix() ) : walk( i.getSubPath( 0, -1 ), this, null ).remove( i );
+            return i.size() == 1 ? m_beliefbase.remove( i.getSuffix() ) : this.walk( i.getSubPath( 0, -1 ), this, null ).remove( i );
         } ).allMatch( i -> i );
     }
 
@@ -235,15 +235,16 @@ public class CView implements IView
         // build path relative to this view
         final CPath l_path = this.getPath().getSubPath( 1 );
         return Stream.concat(
-                m_beliefbase.getStorage().getMultiElements().values().stream().map( i -> i.getRight().clone( l_path ) ),
+                m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().clone( l_path ) ),
 
                 ( p_path == null ) || ( p_path.length == 0 )
-                ? m_beliefbase.getStorage().getSingleElements().values().stream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
+                ? m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
                 : Arrays.stream( p_path )
+                        .parallel()
                         .map( i -> i.normalize() )
-                        .flatMap( i -> walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
-                                                                                .stream()
-                                                                                .map( l -> l.getRight().clone( l_path ) ) )
+                        .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
+                                           .parallelStream()
+                                           .map( l -> l.getRight().clone( l_path ) ) )
         );
     }
 
@@ -308,7 +309,7 @@ public class CView implements IView
      *
      * @note path must be normalized
      */
-    private static IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )
+    private synchronized IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
@@ -323,6 +324,6 @@ public class CView implements IView
             throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 
         // recursive descend
-        return walk( p_path.getSubPath( 1 ), l_view, p_generator );
+        return this.walk( p_path.getSubPath( 1 ), l_view, p_generator );
     }
 }

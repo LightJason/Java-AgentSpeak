@@ -155,7 +155,7 @@ public final class TestIMetric
                 ImmutableSetMultimap.<ITrigger<?>, IPlan>of(),
                 null, null, null
         ) );
-        p_literals.stream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
+        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
         return l_agent;
     }
 
