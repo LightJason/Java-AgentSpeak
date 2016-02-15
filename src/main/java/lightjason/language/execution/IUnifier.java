@@ -39,7 +39,7 @@ public interface IUnifier
      *
      * @param p_agent agent
      * @param p_literal literal
-     * @param p_expression expression
+     * @param p_expression expression can be null iif expression is not set
      * @return any object type or null if unification not possible
      *
      * @tparam R any return type
@@ -52,7 +52,7 @@ public interface IUnifier
      *
      * @param p_agent agent
      * @param p_literal literal
-     * @param p_expression expression
+     * @param p_expression expression can be null iif expression is not set
      * @return any object type or null if unification not possible
      *
      * @tparam R any return type
