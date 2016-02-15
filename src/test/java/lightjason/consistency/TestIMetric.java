@@ -146,7 +146,6 @@ public final class TestIMetric
      *
      * @param p_literals literal collection
      * @return agent
-     * @note run non-parallel stream with add, because concurrency will be indeterministic
      */
     private IAgent getAgent( final Collection<ILiteral> p_literals )
     {
