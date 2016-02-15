@@ -79,6 +79,10 @@ public final class CLiteral implements ILiteral
      * @ prefix is set
      */
     protected final boolean m_at;
+    /**
+     * hash code
+     */
+    private final int m_hash;
 
 
     /**
@@ -109,6 +113,13 @@ public final class CLiteral implements ILiteral
         m_values = ImmutableListMultimap.copyOf( l_values );
 
         m_orderedvalues = Collections.unmodifiableList( new LinkedList<>( p_values ) );
+
+        // calculates hash value
+        m_hash = m_functor.hashCode()
+                 + m_orderedvalues.stream().mapToInt( i -> i.hashCode() ).sum()
+                 + m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
+                 + ( m_negated ? 17737 : 55529 )
+                 + ( m_at ? 2741 : 8081 );
     }
 
     /**
@@ -207,11 +218,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final int hashCode()
     {
-        return m_functor.hashCode()
-               //+ m_orderedvalues.stream().mapToInt( i -> i.hashCode() ).sum()
-               //+ m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
-               + ( m_negated ? 17737 : 55529 )
-               + ( m_at ? 2741 : 8081 );
+        return m_hash;
     }
 
     @Override
@@ -238,4 +245,9 @@ public final class CLiteral implements ILiteral
         return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues, m_annotations.values() );
     }
 
+    @Override
+    public final int compareTo( final ILiteral p_literal )
+    {
+        return Integer.compare( this.hashCode(), p_literal.hashCode() );
+    }
 }

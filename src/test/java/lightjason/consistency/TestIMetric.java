@@ -88,7 +88,7 @@ public final class TestIMetric
     /**
      * test symmetric metric
      */
-    //@Test
+    @Test
     public final void testWeight()
     {
         final IMetric l_metric = new CWeightedDifference();
@@ -105,7 +105,7 @@ public final class TestIMetric
         this.check( "weight difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
         {{
             add( CLiteral.from( "diff" ) );
-        }}, 28.8, 0 );
+        }}, 28 + 1.0 / 6, 0 );
     }
 
     /**
@@ -146,6 +146,7 @@ public final class TestIMetric
      *
      * @param p_literals literal collection
      * @return agent
+     * @note run non-parallel stream with add, because concurrency will be indeterministic
      */
     private IAgent getAgent( final Collection<ILiteral> p_literals )
     {
@@ -154,7 +155,7 @@ public final class TestIMetric
                 ImmutableSetMultimap.<ITrigger<?>, IPlan>of(),
                 null, null, null
         ) );
-        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
+        p_literals.stream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
         return l_agent;
     }
 

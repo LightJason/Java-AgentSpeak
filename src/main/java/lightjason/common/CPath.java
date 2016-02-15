@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * class to create a path structure
  */
-public final class CPath implements Iterable<CPath>
+public final class CPath implements Iterable<CPath>, Comparable<CPath>
 {
     public static final String DEFAULTSEPERATOR = "/";
     /**
@@ -540,6 +540,12 @@ public final class CPath implements Iterable<CPath>
             m_path.add( l_last );
 
         return this;
+    }
+
+    @Override
+    public final int compareTo( final CPath p_path )
+    {
+        return Integer.compare( this.hashCode(), p_path.hashCode() );
     }
 
 

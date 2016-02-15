@@ -64,14 +64,9 @@ public final class CSymmetricDifference extends IBaseMetric
         final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
         // element aggregation and return distance
-        final double a = Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).distinct().count();
-        final double b = p_first.getBeliefBase().stream( l_filter ).count();
-        final double c = p_second.getBeliefBase().stream( l_filter ).count();
-
-        System.out.println( "----> " + a + "     " + b + "      " + c );
-        return 2.0 * a
-               - b
-               - c;
+        return 2.0 * Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).sorted().distinct().count()
+               - p_first.getBeliefBase().stream( l_filter ).count()
+               - p_second.getBeliefBase().stream( l_filter ).sorted().count();
     }
 
 }

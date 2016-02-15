@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral extends ITerm
+public interface ILiteral extends ITerm, Comparable<ILiteral>
 {
 
     /**
