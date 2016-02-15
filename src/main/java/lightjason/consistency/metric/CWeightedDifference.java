@@ -69,14 +69,14 @@ public final class CWeightedDifference extends IBaseMetric
         final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
         // element aggregation
-        final double l_union = Stream.concat( p_first.getBeliefBase().parallelStream( l_filter ), p_second.getBeliefBase().parallelStream( l_filter ) ).count();
-        final Set<ILiteral> l_intersection = p_first.getBeliefBase().parallelStream( l_filter ).collect( Collectors.toSet() );
-        l_intersection.retainAll( p_second.getBeliefBase().parallelStream( l_filter ).collect( Collectors.toSet() ) );
+        final double l_union = Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).count();
+        final Set<ILiteral> l_intersection = p_first.getBeliefBase().stream( l_filter ).collect( Collectors.toSet() );
+        l_intersection.retainAll( p_second.getBeliefBase().stream( l_filter ).collect( Collectors.toSet() ) );
 
         // return distance
         return ( 2.0 * l_union
-                 - p_first.getBeliefBase().parallelStream( l_filter ).count()
-                 - p_second.getBeliefBase().parallelStream( l_filter ).count()
+                 - p_first.getBeliefBase().stream( l_filter ).count()
+                 - p_second.getBeliefBase().stream( l_filter ).count()
                )
                * l_union
                / l_intersection.size();
