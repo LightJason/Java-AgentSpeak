@@ -309,7 +309,7 @@ public class CView implements IView
      *
      * @note path must be normalized
      */
-    private synchronized IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )
+    protected final synchronized IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
