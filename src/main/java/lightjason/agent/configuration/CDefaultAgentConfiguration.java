@@ -44,31 +44,35 @@ import java.util.Map;
 public class CDefaultAgentConfiguration implements IAgentConfiguration
 {
     /**
+     * name of the root beliefbase
+     */
+    protected static final String BELIEFBASEROTTNAME = "beliefbase";
+    /**
      * initial goal
      */
-    final ILiteral m_initialgoal;
+    protected final ILiteral m_initialgoal;
     /**
      * instance of agent plans
      */
-    private final Multimap<ITrigger<?>, IPlan> m_plans;
+    protected final Multimap<ITrigger<?>, IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
-    private final Collection<ILiteral> m_initialbeliefs;
+    protected final Collection<ILiteral> m_initialbeliefs;
     /**
      * instance of the aggregate function
      */
-    private final IAggregation m_aggregation;
+    protected final IAggregation m_aggregation;
     /**
      * instance of variable builder
      *
      * @warning can be set to null
      */
-    private final IVariableBuilder m_variablebuilder;
+    protected final IVariableBuilder m_variablebuilder;
     /**
      * unifier instance
      */
-    private final IUnifier m_unifier;
+    protected final IUnifier m_unifier;
 
 
     /**
@@ -113,7 +117,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     @Override
     public final IView getBeliefbase()
     {
-        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( BELIEFBASEROTTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
         return l_beliefbase;
     }
