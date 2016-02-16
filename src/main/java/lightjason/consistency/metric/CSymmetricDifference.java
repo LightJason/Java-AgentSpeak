@@ -25,11 +25,9 @@ package lightjason.consistency.metric;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CPath;
-import lightjason.language.ILiteral;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -62,32 +60,13 @@ public final class CSymmetricDifference extends IBaseMetric
     @Override
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        final Set<ILiteral> l_firstLiterals = new HashSet<>();
-        final Set<ILiteral> l_secondLiterals = new HashSet<>();
+        // build filter
+        final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
-        // if no path elements are set, we use all
-        if ( m_paths.isEmpty() )
-        {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals().values() );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals().values() );
-        }
-        else
-            for ( final CPath l_path : m_paths )
-            {
-                l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals( l_path ).values() );
-                l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
-            }
-
-
-        // get union
-        final Set<ILiteral> l_aggregate = new HashSet<ILiteral>()
-        {{
-            addAll( l_firstLiterals );
-            addAll( l_secondLiterals );
-        }};
-
-        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
-        return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
+        // element aggregation and return distance
+        return 2.0 * Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).sorted().distinct().count()
+               - p_first.getBeliefBase().stream( l_filter ).count()
+               - p_second.getBeliefBase().stream( l_filter ).sorted().count();
     }
 
 }

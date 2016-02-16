@@ -25,8 +25,8 @@ package lightjason.agent.configuration;
 
 import com.google.common.collect.Multimap;
 import lightjason.beliefbase.CBeliefBase;
-import lightjason.beliefbase.CBeliefStorage;
-import lightjason.beliefbase.IMask;
+import lightjason.beliefbase.CStorage;
+import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
@@ -44,31 +44,35 @@ import java.util.Map;
 public class CDefaultAgentConfiguration implements IAgentConfiguration
 {
     /**
+     * name of the root beliefbase
+     */
+    protected static final String BELIEFBASEROTTNAME = "beliefbase";
+    /**
      * initial goal
      */
-    final ILiteral m_initialgoal;
+    protected final ILiteral m_initialgoal;
     /**
      * instance of agent plans
      */
-    private final Multimap<ITrigger<?>, IPlan> m_plans;
+    protected final Multimap<ITrigger<?>, IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
-    private final Collection<ILiteral> m_initialbeliefs;
+    protected final Collection<ILiteral> m_initialbeliefs;
     /**
      * instance of the aggregate function
      */
-    private final IAggregation m_aggregation;
+    protected final IAggregation m_aggregation;
     /**
      * instance of variable builder
      *
      * @warning can be set to null
      */
-    private final IVariableBuilder m_variablebuilder;
+    protected final IVariableBuilder m_variablebuilder;
     /**
      * unifier instance
      */
-    private final IUnifier m_unifier;
+    protected final IUnifier m_unifier;
 
 
     /**
@@ -111,9 +115,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IMask getBeliefbase()
+    public final IView getBeliefbase()
     {
-        final IMask l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( BELIEFBASEROTTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.clone() ) );
         return l_beliefbase;
     }

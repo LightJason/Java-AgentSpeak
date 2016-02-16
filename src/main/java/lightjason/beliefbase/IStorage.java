@@ -82,7 +82,7 @@ public interface IStorage<N, M>
     <T extends IAgent> void update( final T p_agent );
 
     /**
-     * number of all elements
+     * number of multi elements
      */
     int size();
 

@@ -29,8 +29,9 @@ import lightjason.common.CPath;
 import lightjason.language.ILiteral;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -64,42 +65,20 @@ public final class CWeightedDifference extends IBaseMetric
     @Override
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
-        // collect all literals within specified paths
-        final Set<ILiteral> l_firstLiterals = new HashSet<>();
-        final Set<ILiteral> l_secondLiterals = new HashSet<>();
+        // build filter
+        final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
 
-
-        // if no path elements are set, we use all
-        if ( m_paths.isEmpty() )
-        {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals().values() );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals().values() );
-        }
-        else
-            for ( final CPath l_path : m_paths )
-            {
-                l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals( l_path ).values() );
-                l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
-            }
-
-        // get size of union
-        final Set<ILiteral> l_set = new HashSet<ILiteral>()
-        {{
-            addAll( l_firstLiterals );
-            addAll( l_secondLiterals );
-        }};
-        final int l_unionSize = l_set.size();
-
-        // get size of intersection
-        l_set.retainAll( l_firstLiterals );
-        l_set.retainAll( l_secondLiterals );
-        final int l_intersectionSize = l_set.size();
+        // element aggregation
+        final double l_union = Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).count();
+        final Set<ILiteral> l_intersection = p_first.getBeliefBase().stream( l_filter ).collect( Collectors.toSet() );
+        l_intersection.retainAll( p_second.getBeliefBase().stream( l_filter ).collect( Collectors.toSet() ) );
 
         // return distance
-        return new Double(
-                ( ( l_unionSize - l_firstLiterals.size() )
-                  + ( l_unionSize - l_secondLiterals.size() )
-                ) * l_unionSize / l_intersectionSize
-        );
+        return ( 2.0 * l_union
+                 - p_first.getBeliefBase().stream( l_filter ).count()
+                 - p_second.getBeliefBase().stream( l_filter ).count()
+               )
+               * l_union
+               / l_intersection.size();
     }
 }

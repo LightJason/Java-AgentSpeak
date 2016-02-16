@@ -34,12 +34,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
  * class to create a path structure
  */
-public final class CPath implements Iterable<CPath>
+public final class CPath implements Iterable<CPath>, Comparable<CPath>
 {
     public static final String DEFAULTSEPERATOR = "/";
     /**
@@ -496,6 +498,56 @@ public final class CPath implements Iterable<CPath>
     {
         return this.startsWith( new CPath( p_path ) );
     }
+
+
+    /**
+     * stream over elements
+     *
+     * @return sequential stream
+     */
+    public final Stream<String> stream()
+    {
+        return m_path.stream();
+    }
+
+    /**
+     * parallel stream over elements
+     *
+     * @return parallel stream
+     */
+    public final Stream<String> parallelStream()
+    {
+        return m_path.parallelStream();
+    }
+
+
+    /**
+     * normalizes the path (remove dot and dot-dot elements)
+     *
+     * @return self reference
+     */
+    public final CPath normalize()
+    {
+        if ( m_path.isEmpty() )
+            return this;
+
+        m_path = m_path.stream().filter( i -> !i.equals( "." ) ).collect( Collectors.toList() );
+
+        final String l_last = m_path.get( m_path.size() - 1 );
+        m_path = IntStream.range( 0, m_path.size() - 1 ).boxed().filter( i -> !m_path.get( i + 1 ).equals( ".." ) ).map( i -> m_path.get( i ) ).collect(
+                Collectors.toList() );
+        if ( !l_last.equals( ".." ) )
+            m_path.add( l_last );
+
+        return this;
+    }
+
+    @Override
+    public final int compareTo( final CPath p_path )
+    {
+        return Integer.compare( this.hashCode(), p_path.hashCode() );
+    }
+
 
     /**
      * splits the string data

@@ -26,10 +26,11 @@ package lightjason.beliefbase;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
- * interface for equal method names on masks and beliefbases
+ * interface for equal method on views and beliefbases
  */
 public interface IStructure
 {
@@ -38,41 +39,57 @@ public interface IStructure
      * adds a literal in the current structure
      *
      * @param p_literal literal
+     * @return boolean flag for correct adding
      */
-    void add( final ILiteral p_literal );
+    boolean add( final ILiteral p_literal );
 
     /**
-     * adds a mask into the current structure
+     * adds view in the current structure
      *
-     * @param p_mask mask
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
-     * @returns returns the added mask
+     * @param p_view existing view
+     * @return returns cloned view
+     *
+     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IMask add( final IMask p_mask );
+    IView add( final IView p_view );
+
+
+
+    /**
+     * modify an literal
+     *
+     * @param p_before literal before modification
+     * @param p_after literal after modification
+     * @return boolean for correct modification
+     *
+     * @note it is an atomic optation of remove and add
+     */
+    boolean modify( final ILiteral p_before, final ILiteral p_after );
+
+
+
+    /**
+     * removes a view in the current structure
+     *
+     * @param p_view view
+     * @return boolean flag for correct removing
+     */
+    boolean remove( final IView p_view );
+
+    /**
+     * removes a literal in the current structure
+     *
+     * @param p_literal literal
+     * @return boolean flag for correct removing
+     */
+    boolean remove( final ILiteral p_literal );
+
+
 
     /**
      * clears all elements
      */
     void clear();
-
-    /**
-     * returns a new mask of the belief base
-     *
-     * @param p_name name of the mask
-     * @return mask
-     *
-     * @tparam E typecast
-     */
-    <E extends IMask> E create( final String p_name );
-
-    /**
-     * returns the storage of the beliefbase
-     *
-     * @return storage
-     *
-     * @tparam L typecast
-     */
-    <L extends IStorage<ILiteral, IMask>> L getStorage();
 
     /**
      * checks if the structure empty
@@ -82,35 +99,41 @@ public interface IStructure
     boolean isEmpty();
 
     /**
-     * removes a mask in the current structure
+     * returns the size of literals
      *
-     * @param p_mask mask
+     * @return size
      */
-    boolean remove( final IMask p_mask );
+    int size();
 
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    boolean remove( final ILiteral p_literal );
+
 
     /**
      * updates all items
      *
      * @param p_agent agent which runs the update call
-     * @warning call update on a storage and on all storage-masks, if exists different masks
+     * @warning call update on a storage and on all storage-view, if exists different views
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
     <T extends IAgent> void update( final T p_agent );
 
     /**
-     * number of literal elements
+     * returns a new view of the belief base
      *
-     * @return size
+     * @param p_name name of the view
+     * @return view
+     *
+     * @tparam E typecast
      */
-    int size();
+    <E extends IView> E create( final String p_name );
 
+    /**
+     * returns the storage of the beliefbase
+     *
+     * @return storage
+     *
+     * @tparam L typecast
+     */
+    <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage();
 
 }

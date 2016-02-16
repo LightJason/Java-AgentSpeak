@@ -24,55 +24,78 @@
 package lightjason.beliefbase;
 
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.SetMultimap;
+import lightjason.agent.IAgent;
+
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * storage of beliefbases to address different beliefbases with a name
+ * thread-safe storage of the data
+ *
+ * @tparam N multi-element type
+ * @tparam M single-element type
  */
-public final class CBeliefBaseStorage<T>
+public class CStorage<N, M> implements IStorage<N, M>
 {
     /**
-     * map with case-insensitive name and a beliefbase
+     * map with elements
      **/
-    private final Map<String, IBeliefBase> m_beliefbases = new ConcurrentHashMap<>();
-
-
+    protected final SetMultimap<String, N> m_multielements = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
     /**
-     * adds a new beliefbase
-     *
-     * @param p_name key name
-     * @param p_base beliefbase
-     */
-    public final void add( final String p_name, final IBeliefBase p_base )
-    {
-        if ( m_beliefbases.containsKey( p_name.toLowerCase() ) )
-            throw new IllegalArgumentException( MessageFormat.format( "beliefbase with the name {0} exists", p_name ) );
+     * map with single elements
+     **/
+    protected final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
 
-        m_beliefbases.put( p_name.toLowerCase(), p_base );
+    @Override
+    public final SetMultimap<String, N> getMultiElements()
+    {
+        return m_multielements;
     }
 
-    /**
-     * returns a beliefbase
-     *
-     * @param p_name key name
-     * @return null or beliefbase
-     */
-    public final IBeliefBase get( final String p_name )
+    @Override
+    public final Map<String, M> getSingleElements()
     {
-        return m_beliefbases.get( p_name.toLowerCase() );
+        return m_singleelements;
     }
 
-    /**
-     * removes a beliefbase
-     *
-     * @param p_name key name
-     */
-    public final void remove( final String p_name )
+    @Override
+    public void clear()
     {
-        m_beliefbases.remove( p_name.toLowerCase() );
+        m_multielements.clear();
+        m_singleelements.clear();
     }
 
+    @Override
+    public final boolean contains( final String p_key )
+    {
+        return m_multielements.containsKey( p_key ) || m_singleelements.containsKey( p_key );
+    }
+
+    @Override
+    public final boolean isEmpty()
+    {
+        return m_multielements.isEmpty() && m_singleelements.isEmpty();
+    }
+
+    @Override
+    public <T extends IAgent> void update( final T p_agent )
+    {
+    }
+
+    @Override
+    public final int size()
+    {
+        return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum() + m_singleelements.size();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "[multi elements: {0}, single elements: {1}]", m_multielements, m_singleelements );
+    }
 }

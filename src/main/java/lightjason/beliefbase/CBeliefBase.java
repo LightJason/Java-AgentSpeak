@@ -28,27 +28,32 @@ import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
  * default beliefbase
  *
- * @tparam T literal type
- * @todo event storing must be implement
+ * @todo event storing must be implement, use weak-reference or reference-counting to store view relation with event replication
+ * (event methods: clear, add, remove(Literal | String), modify -> event is generated on successfully operation)
+ * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
+ * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
+ * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
  */
-public class CBeliefBase implements IBeliefBase
+public final class CBeliefBase implements IBeliefBase
 {
     /**
      * storage with data
      */
-    protected final IStorage<ILiteral, IMask> m_storage;
+    protected final IStorage<Pair<Boolean, ILiteral>, IView> m_storage;
 
     /**
      * ctor
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<ILiteral, IMask> p_storage )
+    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IView> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -68,16 +73,22 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final void add( final ILiteral p_literal )
+    public final boolean add( final ILiteral p_literal )
     {
-        m_storage.getMultiElements().put( p_literal.getFunctor(), p_literal );
+        return m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
     @Override
-    public final IMask add( final IMask p_mask )
+    public final IView add( final IView p_view )
     {
-        m_storage.getSingleElements().put( p_mask.getName(), p_mask );
-        return p_mask;
+        m_storage.getSingleElements().put( p_view.getName(), p_view );
+        return p_view;
+    }
+
+    @Override
+    public final boolean modify( final ILiteral p_before, final ILiteral p_after )
+    {
+        return this.remove( p_before ) && this.add( p_after );
     }
 
     @Override
@@ -89,16 +100,9 @@ public class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <E extends IMask> E create( final String p_name )
+    public <E extends IView> E create( final String p_name )
     {
-        return (E) new CMask( p_name, this );
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<ILiteral, IMask>> L getStorage()
-    {
-        return (L) m_storage;
+        return (E) new CView( p_name, this );
     }
 
     @Override
@@ -108,36 +112,43 @@ public class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final boolean remove( final IMask p_mask )
+    public final boolean remove( final IView p_view )
     {
-        return m_storage.getSingleElements().remove( p_mask.getName() ) != null;
+        return m_storage.getSingleElements().remove( p_view.getName() ) != null;
     }
 
     @Override
     public final boolean remove( final ILiteral p_literal )
     {
-        return m_storage.getMultiElements().remove( p_literal.getFunctor(), p_literal );
+        return m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
     @Override
-    public <T extends IAgent> void update( final T p_agent )
+    public final <T extends IAgent> void update( final T p_agent )
     {
         m_storage.update( p_agent );
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
     }
 
     @Override
-    public boolean remove( final String p_name )
+    public final boolean remove( final String p_name )
     {
         final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
         final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
         return l_single || l_multi;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage()
+    {
+        return (L) m_storage;
     }
 
 }

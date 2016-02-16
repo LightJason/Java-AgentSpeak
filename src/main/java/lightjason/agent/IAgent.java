@@ -24,7 +24,7 @@
 package lightjason.agent;
 
 import com.google.common.collect.Multimap;
-import lightjason.beliefbase.IMask;
+import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.plan.IPlan;
@@ -59,7 +59,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return beliefbase
      */
-    IMask getBeliefBase();
+    IView getBeliefBase();
 
     /**
      * returns a map of the current running plans
