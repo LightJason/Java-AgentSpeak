@@ -196,7 +196,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.remove( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this, null ).remove( p_literal.cloneWithoutPath() );
+               : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.cloneWithoutPath() );
     }
 
     @Override
@@ -213,7 +213,7 @@ public class CView implements IView
 
         return Arrays.stream( p_path ).parallel().map( i -> {
             i.normalize();
-            return i.size() == 1 ? m_beliefbase.remove( i.getSuffix() ) : this.walk( i.getSubPath( 0, -1 ), this, null ).remove( i );
+            return i.size() == 1 ? m_beliefbase.remove( i.getSuffix() ) : this.walk( i.getSubPath( 0, -1 ), this ).remove( i );
         } ).allMatch( i -> i );
     }
 
@@ -314,16 +314,37 @@ public class CView implements IView
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
 
-        // get the next view and if a generator exists and the view is null, generate a new view
+        // get the next view and if the view is null, generate a new view
         IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
-        if ( ( l_view == null ) && ( p_generator != null ) )
+        if ( l_view == null )
             l_view = p_root.add( p_generator.createBeliefbase( p_path.get( 0 ) ) );
 
         // if view is null an exception is thrown
         if ( l_view == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 
-        // recursive descend
         return this.walk( p_path.getSubPath( 1 ), l_view, p_generator );
+    }
+
+    /**
+     * returns a view on the recursive descend
+     *
+     * @param p_path path (must be normalized)
+     * @param p_root start / root node
+     * @return view
+     *
+     * @note path must be normalized
+     */
+    protected final IView walk( final CPath p_path, final IView p_root )
+    {
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+            return p_root;
+
+        // if view is null an exception is thrown
+        final IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
+        if ( l_view == null )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
+
+        return this.walk( p_path.getSubPath( 1 ), l_view );
     }
 }
