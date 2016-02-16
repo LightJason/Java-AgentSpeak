@@ -24,8 +24,8 @@
 package lightjason.grammar;
 
 /**
- * interface of a literal parser
+ * interface of a type parser
  */
-public interface IParseLiteral extends LiteralVisitor<Object>
+public interface IParseType extends TypeVisitor<Object>
 {
 }

@@ -22,20 +22,33 @@
  */
 
 /**
- * high-level grammar rules of AgentSpeak(L)
- * which defines the agent
+ * high-level grammar rules of data typing
  **/
-grammar Literal;
+grammar Type;
 import ComplexType;
 
 
 // --- agent structure -------------------------------------------------------------------
 
 /**
- * initial grammar rule
+ * rule for a literal
  **/
-stringliteral :
+literal_type :
     literal
+    ;
+
+/**
+ * rule for an expression
+ **/
+expression_type :
+    expression
+    ;
+
+/**
+ * rule for a term
+ **/
+expression_term :
+    term
     ;
 
 // ---------------------------------------------------------------------------------------

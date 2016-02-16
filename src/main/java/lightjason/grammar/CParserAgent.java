@@ -96,7 +96,7 @@ import java.util.stream.Collectors;
  * @todo add barrier check to plan generating
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CParser extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
+public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
 {
     /**
      * numeric constant values - infinity is defined manually
@@ -138,7 +138,7 @@ public class CParser extends AbstractParseTreeVisitor<Object> implements IParseA
      *
      * @param p_actions set with actions
      */
-    public CParser( final Set<IAction> p_actions )
+    public CParserAgent( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }

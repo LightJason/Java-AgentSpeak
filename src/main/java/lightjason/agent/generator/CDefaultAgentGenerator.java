@@ -31,7 +31,7 @@ import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
 import lightjason.grammar.CErrorListener;
-import lightjason.grammar.CParser;
+import lightjason.grammar.CParserAgent;
 import lightjason.grammar.IParseAgent;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
@@ -89,7 +89,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IParseAgent l_visitor = this.parse( p_stream, new CParser( p_actions ) );
+        final IParseAgent l_visitor = this.parse( p_stream, new CParserAgent( p_actions ) );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
