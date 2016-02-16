@@ -21,22 +21,56 @@
  * @endcond
  */
 
-package lightjason.grammar;
+package lightjason.agent;
 
+import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+
+import java.text.MessageFormat;
+import java.util.HashSet;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * test for unification
  */
-public interface IParseAgent extends IParseAgentSpeak, AgentVisitor<Object>
+@SuppressWarnings( "serial" )
+public final class TestCUnifier
 {
 
     /**
-     * returns the initial goal
-     *
-     * @returns literal or null
+     * traversion of literal content
      */
-    ILiteral getInitialGoal();
+    //@Test
+    public void testLiteralTraversing()
+    {
+        final ILiteral l_deep = CLiteral.from( "second/sub/sub1" );
+        final ILiteral l_literal = CLiteral.from( "toplevel", new HashSet<ITerm>()
+        {{
+
+            add( CLiteral.from( "first/sub1" ) );
+            add( CLiteral.from( "first/sub2" ) );
+            add( CLiteral.from( "second/sub1" ) );
+            add( CLiteral.from( "second/sub2" ) );
+            add( l_deep );
+
+        }} );
+
+        assertEquals( MessageFormat.format( "literal traversing in {0} is {1} not found", l_literal, l_deep ), l_literal.values(), l_deep );
+    }
+
+    /**
+     * manuell running test
+     *
+     * @param p_args arguments
+     */
+    public static void main( final String[] p_args )
+    {
+        final TestCUnifier l_test = new TestCUnifier();
+
+        l_test.testLiteralTraversing();
+    }
 
 }

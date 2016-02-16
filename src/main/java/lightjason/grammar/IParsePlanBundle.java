@@ -26,6 +26,6 @@ package lightjason.grammar;
 /**
  * visitor interface of the abstract-syntax-tree (AST) for a plan bundle
  */
-public interface IParsePlanBundle extends IParser, PlanBundleVisitor<Object>
+public interface IParsePlanBundle extends IParseAgentSpeak, PlanBundleVisitor<Object>
 {
 }

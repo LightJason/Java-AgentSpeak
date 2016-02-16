@@ -21,42 +21,21 @@
  * @endcond
  */
 
-package lightjason.grammar;
+/**
+ * high-level grammar rules of AgentSpeak(L)
+ * which defines the agent
+ **/
+grammar Literal;
+import ComplexType;
 
-import com.google.common.collect.Multimap;
-import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
 
-import java.util.Map;
-import java.util.Set;
-
+// --- agent structure -------------------------------------------------------------------
 
 /**
- * interface of visitor structure
- */
-public interface IParser
-{
+ * initial grammar rule
+ **/
+stringliteral :
+    literal
+    ;
 
-    /**
-     * returns initial beliefs
-     *
-     * @return set with initial beliefs
-     */
-    Set<ILiteral> getInitialBeliefs();
-
-    /**
-     * get a multimap with event-plan matching
-     *
-     * @return multimap
-     */
-    Multimap<ITrigger<?>, IPlan> getPlans();
-
-    /**
-     * returns the rules / principles
-     *
-     * @return map with rules
-     */
-    Map<String, Object> getRules();
-
-}
+// ---------------------------------------------------------------------------------------

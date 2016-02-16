@@ -27,6 +27,7 @@ package lightjason.language;
 import com.google.common.collect.Multimap;
 import lightjason.common.CPath;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -69,11 +70,13 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
     Multimap<CPath, ILiteral> getAnnotation();
 
     /**
-     * returns the optional value term
+     * returns the optional value terms
      *
      * @return value terms
      */
     Multimap<CPath, ITerm> getValues();
+
+    Collection<ITerm> values( final CPath... p_path );
 
     /**
      * returns the values as ordered list

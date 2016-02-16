@@ -28,6 +28,7 @@ lexer grammar Terminal;
 
 
 // --- character structures --------------------------------------------------------------
+
 EXCLAMATIONMARK            : '!';
 STRONGNEGATION             : '~';
 COMMA                      : ',';
@@ -139,10 +140,12 @@ DOUBLEQUOTESTRING          : '"' ~('"')* '"';
 LOWERCASELETTER            : [a-z];
 UPPERCASELETTER            : [A-Z];
 DIGIT                      : [0-9];
+
 // ---------------------------------------------------------------------------------------
 
 
 // --- skip items ------------------------------------------------------------------------
+
 /**
  * any whitespace
  **/
@@ -156,4 +159,5 @@ LINECOMMENT                : ('//' | '#') .*? '\r'? '\n' -> skip;
  * default behaviour does not allow block comments
  **/
 BLOCKCOMMENT                    :   '/*' .*? '*/' -> skip;
+
 // ---------------------------------------------------------------------------------------

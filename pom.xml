@@ -127,6 +127,7 @@
 
     </dependencies>
 
+
     <!-- reporting plugins -->
     <reporting>
 
@@ -148,6 +149,8 @@
 
     </reporting>
 
+
+    <!-- main build -->
     <build>
         <!-- default goal is set to package and checking dependency updates -->
         <defaultGoal>package versions:display-dependency-updates</defaultGoal>

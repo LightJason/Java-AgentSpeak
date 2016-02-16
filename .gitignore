@@ -1,6 +1,7 @@
 *.*
 
 !.gitignore
+!.travis.yml
 !circle.yml
 !pom.xml
 !*.java
@@ -20,4 +21,5 @@
 
 src/main/antlr4/lightjason/grammar/AgentSpeak.g4
 src/main/antlr4/lightjason/grammar/Terminal.g4
+src/main/antlr4/lightjason/grammar/ComplexType.g4
 target/**

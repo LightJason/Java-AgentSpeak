@@ -23,20 +23,9 @@
 
 package lightjason.grammar;
 
-import lightjason.language.ILiteral;
-
-
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * interface of a literal parser
  */
-public interface IParseAgent extends IParseAgentSpeak, AgentVisitor<Object>
+public interface IParseLiteral extends LiteralVisitor<Object>
 {
-
-    /**
-     * returns the initial goal
-     *
-     * @returns literal or null
-     */
-    ILiteral getInitialGoal();
-
 }
