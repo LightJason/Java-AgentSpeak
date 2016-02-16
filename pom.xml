@@ -68,6 +68,7 @@
         <build.commit></build.commit>
     </properties>
 
+
     <dependencies>
 
         <!-- base structures -->
@@ -126,6 +127,27 @@
 
     </dependencies>
 
+    <!-- reporting plugins -->
+    <reporting>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.3</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+
+        </plugins>
+
+    </reporting>
+
     <build>
         <!-- default goal is set to package and checking dependency updates -->
         <defaultGoal>package versions:display-dependency-updates</defaultGoal>
@@ -138,9 +160,11 @@
             </resource>
         </resources>
 
-        <!-- using newer build plugins -->
+        <!-- using build plugins -->
         <pluginManagement>
+
             <plugins>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
@@ -153,7 +177,9 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+
             </plugins>
+
         </pluginManagement>
 
         <plugins>
