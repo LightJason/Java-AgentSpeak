@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @tparam N multi-element type
  * @tparam M single-element type
  */
-public class CBeliefStorage<N, M> implements IStorage<N, M>
+public class CStorage<N, M> implements IStorage<N, M>
 {
     /**
      * map with elements

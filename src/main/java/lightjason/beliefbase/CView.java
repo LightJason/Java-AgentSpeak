@@ -317,7 +317,7 @@ public class CView implements IView
         // get the next view and if the view is null, generate a new view
         IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
         if ( l_view == null )
-            l_view = p_root.add( p_generator.createBeliefbase( p_path.get( 0 ) ) );
+            l_view = p_root.add( p_generator.generate( p_path.get( 0 ) ) );
 
         // if view is null an exception is thrown
         if ( l_view == null )

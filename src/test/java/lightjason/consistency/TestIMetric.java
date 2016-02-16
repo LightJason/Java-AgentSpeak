@@ -28,7 +28,7 @@ import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.beliefbase.CBeliefBase;
-import lightjason.beliefbase.CBeliefStorage;
+import lightjason.beliefbase.CStorage;
 import lightjason.beliefbase.IView;
 import lightjason.consistency.metric.CSymmetricDifference;
 import lightjason.consistency.metric.CWeightedDifference;
@@ -164,9 +164,9 @@ public final class TestIMetric
     private static final class CGenerator implements IView.IGenerator
     {
         @Override
-        public final IView createBeliefbase( final String p_name )
+        public final IView generate( final String p_name )
         {
-            return new CBeliefBase( new CBeliefStorage<>() ).create( p_name );
+            return new CBeliefBase( new CStorage<>() ).create( p_name );
         }
     }
 

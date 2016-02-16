@@ -45,7 +45,7 @@ public final class TestCView
     public final void testTree()
     {
         final int l_max = 10;
-        final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( "root" );
         final IView.IGenerator l_gen = new CGenerator();
 
         IntStream.range( 0, l_max )
@@ -63,7 +63,7 @@ public final class TestCView
     @Test
     public final void testManual()
     {
-        final IView l_beliefbase = new CBeliefBase( new CBeliefStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( "root" );
         final IView.IGenerator l_gen = new CGenerator();
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) );
@@ -102,9 +102,9 @@ public final class TestCView
     private static final class CGenerator implements IView.IGenerator
     {
         @Override
-        public final IView createBeliefbase( final String p_name )
+        public final IView generate( final String p_name )
         {
-            return new CBeliefBase( new CBeliefStorage<>() ).create( p_name );
+            return new CBeliefBase( new CStorage<>() ).create( p_name );
         }
     }
 

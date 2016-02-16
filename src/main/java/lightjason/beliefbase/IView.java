@@ -164,10 +164,17 @@ public interface IView extends IStructure
 
 
     /**
-     * interface for generating non-existing beliefbases
+     * interface for generating non-existing beliefbases views
      */
     interface IGenerator
     {
-        IView createBeliefbase( final String p_name );
+
+        /**
+         * generates a  new view
+         *
+         * @param p_name name of the view
+         * @return view object
+         */
+        IView generate( final String p_name );
     }
 }
