@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
@@ -116,7 +117,7 @@ public final class CLiteral implements ILiteral
 
         // calculates hash value
         m_hash = m_functor.hashCode()
-                 + m_orderedvalues.stream().mapToInt( i -> i.hashCode() ).sum()
+                 + IntStream.range( 0, m_orderedvalues.size() ).boxed().mapToInt( i -> ( i + 1 ) * m_orderedvalues.get( i ).hashCode() ).sum()
                  + m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
                  + ( m_negated ? 17737 : 55529 )
                  + ( m_at ? 2741 : 8081 );
