@@ -26,7 +26,7 @@ package lightjason.agent.generator;
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
 import lightjason.grammar.CErrorListener;
-import lightjason.grammar.CParserAgent;
+import lightjason.grammar.CParseAgent;
 import lightjason.grammar.IParsePlanBundle;
 import lightjason.grammar.PlanBundleLexer;
 import lightjason.grammar.PlanBundleParser;
@@ -55,7 +55,7 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IParsePlanBundle l_visitor = this.parse( p_stream, new CParserAgent( p_actions ) );
+        final IParsePlanBundle l_visitor = this.parse( p_stream, new CParseAgent( p_actions ) );
     }
 
 

@@ -96,26 +96,9 @@ import java.util.stream.Collectors;
  * @todo add barrier check to plan generating
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
+public class CParseAgent extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
 {
-    /**
-     * numeric constant values - infinity is defined manually
-     */
-    @SuppressWarnings( "serial" )
-    protected static final Map<String, Double> NUMERICCONSTANT = new HashMap<String, Double>()
-    {{
 
-        put( "pi", Math.PI );
-        put( "euler", Math.E );
-        put( "lightspeed", 299792458.0 );
-        put( "avogadro", 6.0221412927e23 );
-        put( "boltzmann", 8.617330350e-15 );
-        put( "gravity", 6.67408e-11 );
-        put( "electron", 9.10938356e-31 );
-        put( "neutron", 1674927471214e-27 );
-        put( "proton", 1.6726219e-27 );
-
-    }};
     /**
      * initial goal
      */
@@ -138,7 +121,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
      *
      * @param p_actions set with actions
      */
-    public CParserAgent( final Set<IAction> p_actions )
+    public CParseAgent( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }
@@ -528,13 +511,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     @Override
     public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
     {
-        return this.getTermExecution( this.visitChildren( p_context ) );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
     }
 
     @Override
     public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
     {
-        return this.getTermExecution( this.visitChildren( p_context ) );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
     }
 
 
@@ -545,13 +528,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
         if ( p_context.repair_formula() == null )
-            return this.getTermExecution( this.visitChildren( p_context ) );
+            return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
 
 
         // if there exists any repair element, build a sequential hierarchie of repair calls
         if ( p_context.term() != null )
             return new CRepair(
-                    (IExecution) this.getTermExecution( this.visitTerm( p_context.term() ) ),
+                    (IExecution) lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
@@ -576,13 +559,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
         if ( p_context.repair_formula() == null )
-            return this.getTermExecution( this.visitChildren( p_context ) );
+            return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
 
 
         // if there exists any repair element, build a sequential hierarchie of repair calls
         if ( p_context.term() != null )
             return new CRepair(
-                    (IExecution) this.getTermExecution( this.visitTerm( p_context.term() ) ),
+                    (IExecution) lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
@@ -776,13 +759,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
 
 
     @Override
-    public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
+    public final Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
+    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -793,14 +776,14 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     public Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
     {
         return new CSingleAssignment<>(
-                (IVariable<?>) this.visitVariable( p_context.variable() ), this.getTermExecution( this.visitTerm( p_context.term() ) ) );
+                (IVariable<?>) this.visitVariable( p_context.variable() ), lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions ) );
     }
 
     @Override
     public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
     {
         return new CSingleAssignment<>(
-                (IVariable<?>) this.visitVariable( p_context.variable() ), this.getTermExecution( this.visitTerm( p_context.term() ) ) );
+                (IVariable<?>) this.visitVariable( p_context.variable() ), lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions ) );
     }
 
 
@@ -810,7 +793,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                this.getTermExecution( this.visitTerm( p_context.term() ) )
+                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions )
         );
     }
 
@@ -819,7 +802,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                this.getTermExecution( this.visitTerm( p_context.term() ) )
+                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions )
         );
     }
 
@@ -898,13 +881,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     @Override
     public final Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
     {
-        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
     }
 
     @Override
     public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
     {
-        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
     }
 
 
@@ -912,13 +895,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     @Override
     public final Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
     {
-        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
     }
 
     @Override
     public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
     {
-        return this.getTermExecution( this.visitTerm( p_context.term() ) );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
     }
 
 
@@ -1115,13 +1098,13 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
 
 
     @Override
-    public Object visitVariablelist( final AgentParser.VariablelistContext p_context )
+    public final Object visitVariablelist( final AgentParser.VariablelistContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
     @Override
-    public Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
+    public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1138,7 +1121,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     }
 
     @Override
-    public Object visitNumber( final PlanBundleParser.NumberContext p_context )
+    public final Object visitNumber( final PlanBundleParser.NumberContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1153,7 +1136,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     }
 
     @Override
-    public Object visitIntegernumber( final PlanBundleParser.IntegernumberContext p_context )
+    public final Object visitIntegernumber( final PlanBundleParser.IntegernumberContext p_context )
     {
         return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
                                                           : this.visitIntegernumber_positive( p_context.integernumber_positive() );
@@ -1193,7 +1176,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
         if ( p_context.getText().equals( "infinity" ) )
             return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
-        final Double l_constant = NUMERICCONSTANT.get( p_context.getText() );
+        final Double l_constant = lightjason.grammar.CCommon.NUMERICCONSTANT.get( p_context.getText() );
         if ( l_constant != null )
             return l_constant;
 
@@ -1206,7 +1189,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
         if ( p_context.getText().equals( "infinity" ) )
             return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
 
-        final Double l_constant = NUMERICCONSTANT.get( p_context.getText() );
+        final Double l_constant = lightjason.grammar.CCommon.NUMERICCONSTANT.get( p_context.getText() );
         if ( l_constant != null )
             return l_constant;
 
@@ -1216,7 +1199,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
 
 
     @Override
-    public final Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
+    public Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null;
     }
@@ -1236,7 +1219,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     }
 
     @Override
-    public Object visitConstant( final PlanBundleParser.ConstantContext p_context )
+    public final Object visitConstant( final PlanBundleParser.ConstantContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1244,7 +1227,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
 
 
     @Override
-    public final Object visitString( final AgentParser.StringContext p_context )
+    public Object visitString( final AgentParser.StringContext p_context )
     {
         // remove quotes
         final String l_text = p_context.getText();
@@ -1297,7 +1280,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
             return this.visitExpression_bracket( p_context.expression_bracket() );
 
         // or-expression
-        return this.createLogicalBinaryExpression(
+        return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.OR,
                 (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
                 p_context.expression() != null
@@ -1315,7 +1298,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
             return this.visitExpression_bracket( p_context.expression_bracket() );
 
         // or-expression
-        return this.createLogicalBinaryExpression(
+        return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.OR,
                 (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
                 p_context.expression() != null
@@ -1344,7 +1327,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     @Override
     public Object visitExpression_logical_and( final AgentParser.Expression_logical_andContext p_context )
     {
-        return this.createLogicalBinaryExpression(
+        return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.AND,
                 (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),
                 p_context.expression() != null
@@ -1357,7 +1340,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     @Override
     public Object visitExpression_logical_and( final PlanBundleParser.Expression_logical_andContext p_context )
     {
-        return this.createLogicalBinaryExpression(
+        return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.AND,
                 (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),
                 p_context.expression() != null
@@ -1373,7 +1356,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     public Object visitExpression_logical_xor( final AgentParser.Expression_logical_xorContext p_context )
     {
         if ( p_context.expression_logical_element() != null )
-            return this.createLogicalBinaryExpression(
+            return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                     EOperator.XOR,
                     (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),
                     p_context.expression() != null
@@ -1395,7 +1378,7 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     public Object visitExpression_logical_xor( final PlanBundleParser.Expression_logical_xorContext p_context )
     {
         if ( p_context.expression_logical_element() != null )
-            return this.createLogicalBinaryExpression(
+            return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                     EOperator.XOR,
                     (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),
                     p_context.expression() != null
@@ -1815,60 +1798,6 @@ public class CParserAgent extends AbstractParseTreeVisitor<Object> implements IP
     public final ILiteral getInitialGoal()
     {
         return m_InitialGoal;
-    }
-
-    /**
-     * creates an executable structure of a parsed term item
-     *
-     * @param p_item any parsed item (term rule)
-     * @return execution structure or null
-     */
-    protected IExecution getTermExecution( final Object p_item )
-    {
-        // null value will be passed
-        if ( p_item == null )
-            return null;
-
-        // executable structures will be passed
-        if ( p_item instanceof IExecution )
-            return (IExecution) p_item;
-
-        // literals are actions
-        if ( p_item instanceof ILiteral )
-            return new CProxyAction( m_actions, (ILiteral) p_item );
-
-        // otherwise only simple types encapsulate
-        return new CRawAction<>( p_item );
-    }
-
-    /**
-     * creates a logical expression concationation with single operator
-     *
-     * @param p_operator operator
-     * @param p_lefthandside left-hand-side expression
-     * @param p_righthandside right-hand-side expressions
-     * @return concat expression
-     */
-    protected IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
-                                                         final Collection<IExpression> p_righthandside
-    )
-    {
-        if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )
-            throw new CSyntaxErrorException( CCommon.getLanguageString( this, "notbinarylogicoperator", p_operator ) );
-
-        final List<IExpression> l_expression = new LinkedList<>();
-        l_expression.add( p_lefthandside );
-        l_expression.addAll( p_righthandside );
-
-        // only left-hand-side is existing
-        if ( l_expression.size() == 1 )
-            return l_expression.get( 0 );
-
-        // otherwise creare concat expression
-        while ( l_expression.size() > 1 )
-            l_expression.add( 0, new CBinary( p_operator, l_expression.remove( 0 ), l_expression.remove( 0 ) ) );
-
-        return l_expression.get( 0 );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
