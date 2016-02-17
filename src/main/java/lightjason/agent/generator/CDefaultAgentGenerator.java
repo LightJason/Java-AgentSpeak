@@ -28,17 +28,10 @@ import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
-import lightjason.grammar.AgentLexer;
-import lightjason.grammar.AgentParser;
-import lightjason.grammar.CASTVisitorAgent;
-import lightjason.grammar.CErrorListener;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.score.IAggregation;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,7 +82,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IASTVisitorAgent l_visitor = this.parse( p_stream, new CASTVisitorAgent( p_actions ) );
+        final IASTVisitorAgent l_visitor = new CDefaultParser( p_actions ).parse( p_stream );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
@@ -121,32 +114,6 @@ public class CDefaultAgentGenerator implements IAgentGenerator
                 return null;
             }
         } ).filter( i -> i != null ).collect( Collectors.toSet() );
-    }
-
-
-    /**
-     * parsing ASL code
-     *
-     * @param p_stream input stream
-     * @param p_astvisitor AST visitor object
-     * @return visitor instance
-     *
-     * @throws IOException thrown on IO errors
-     */
-    protected IASTVisitorAgent parse( final InputStream p_stream, final IASTVisitorAgent p_astvisitor ) throws Exception
-    {
-        final ANTLRErrorListener l_errorlistener = new CErrorListener();
-
-        final AgentLexer l_lexer = new AgentLexer( new ANTLRInputStream( p_stream ) );
-        l_lexer.removeErrorListeners();
-        l_lexer.addErrorListener( l_errorlistener );
-
-        final AgentParser l_parser = new AgentParser( new CommonTokenStream( l_lexer ) );
-        l_parser.removeErrorListeners();
-        l_parser.addErrorListener( l_errorlistener );
-
-        p_astvisitor.visit( l_parser.agent() );
-        return p_astvisitor;
     }
 
 }

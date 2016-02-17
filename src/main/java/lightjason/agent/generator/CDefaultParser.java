@@ -21,22 +21,64 @@
  * @endcond
  */
 
-package lightjason.grammar;
+package lightjason.agent.generator;
 
-import lightjason.language.ILiteral;
+import lightjason.agent.action.IAction;
+import lightjason.grammar.AgentLexer;
+import lightjason.grammar.AgentParser;
+import lightjason.grammar.CASTVisitorAgent;
+import lightjason.grammar.CErrorListener;
+import lightjason.grammar.IGenericParser;
+import org.antlr.v4.runtime.ANTLRErrorListener;
+
+import java.io.InputStream;
+import java.util.Set;
 
 
 /**
- * visitor interface of the abstract-syntax-tree (AST) for an agent
+ * default agent and planbundle parser
  */
-public interface IParseAgent extends IParseAgentSpeak, AgentVisitor<Object>
+public final class CDefaultParser extends IGenericParser<CASTVisitorAgent, AgentLexer, AgentParser>
 {
 
     /**
-     * returns the initial goal
+     * ctor
      *
-     * @returns literal or null
+     * @param p_actions agent actions
      */
-    ILiteral getInitialGoal();
+    public CDefaultParser( final Set<IAction> p_actions )
+    {
+        this( new CASTVisitorAgent( p_actions ), new CErrorListener() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_visitor visitor instance
+     * @param p_errorlistener listener instance
+     */
+    protected CDefaultParser( final CASTVisitorAgent p_visitor, final ANTLRErrorListener p_errorlistener )
+    {
+        super( p_visitor, p_errorlistener );
+    }
+
+    @Override
+    public final CASTVisitorAgent parse( final InputStream p_stream ) throws Exception
+    {
+        m_visitor.visit( this.getParser( p_stream ).agent() );
+        return m_visitor;
+    }
+
+    @Override
+    protected final Class<AgentLexer> getLexerClass()
+    {
+        return AgentLexer.class;
+    }
+
+    @Override
+    protected final Class<AgentParser> getParserClass()
+    {
+        return AgentParser.class;
+    }
 
 }
