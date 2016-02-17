@@ -80,9 +80,19 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
      * returns a stream over value items
      *
      * @param p_path optional filtering value names
+     * (filtering values within values)
      * @return stream
      */
     Stream<ITerm> values( final CPath... p_path );
+
+    /**
+     * returns a stream over annotation items
+     *
+     * @param p_path optional filtering annotation names (filtering all
+     * annotations on the same level not within)
+     * @return stream
+     */
+    Stream<ILiteral> annotations( final CPath... p_path );
 
     /**
      * returns the values as ordered list

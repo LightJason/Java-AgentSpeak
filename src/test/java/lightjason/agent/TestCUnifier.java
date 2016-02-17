@@ -46,7 +46,7 @@ public final class TestCUnifier
 {
 
     /**
-     * traversion of literal content
+     * traversion of literal value content
      */
     @Test
     public void testLiteralValueTraversing() throws Exception
@@ -72,6 +72,21 @@ public final class TestCUnifier
         final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
         System.out.println( MessageFormat.format( "literal [{0}] value traversing: {1}", l_literal, l_result ) );
+    }
+
+
+    /**
+     * traversion of literal annotation content
+     */
+    @Test
+    public void testLiteralAnnotationTraversing() throws Exception
+    {
+
+        final ILiteral l_literal = CLiteral.parse( "foo()[ first(1), first(2), first(foo('hallo')), second('test') ]" );
+
+        final List<ITerm> l_result = l_literal.annotations( CPath.from( "first" ) ).collect( Collectors.toList() );
+        assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), 3 );
+        System.out.println( MessageFormat.format( "literal [{0}] annotation traversing: {1}", l_literal, l_result ) );
     }
 
     /**

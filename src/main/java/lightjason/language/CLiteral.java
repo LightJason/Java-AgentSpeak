@@ -53,8 +53,6 @@ import java.util.stream.Stream;
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. velocity(50)[source(self)]
- *
- * @todo add getter with recursive walk for inner elements
  */
 public final class CLiteral implements ILiteral
 {
@@ -214,6 +212,16 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final Stream<ILiteral> annotations( final CPath... p_path )
+    {
+        return ( p_path == null ) || ( p_path.length < 1 )
+               ? m_annotations.values().stream()
+               : Arrays.stream( p_path )
+                       .parallel()
+                       .flatMap( i -> m_annotations.asMap().get( i ).stream() );
+    }
+
+    @Override
     public final List<ITerm> getOrderedValues()
     {
         return m_orderedvalues;
@@ -276,7 +284,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}{1}{2}{3}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues, m_annotations.values() );
+        return MessageFormat.format( "{0}{1}{2}{3}{4}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues, m_annotations.values() );
     }
 
     @Override
