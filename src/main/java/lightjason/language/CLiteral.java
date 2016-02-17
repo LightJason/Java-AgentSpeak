@@ -37,7 +37,6 @@ import lightjason.grammar.IASTVisitorType;
 import lightjason.grammar.IGenericParser;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
-import org.antlr.v4.runtime.ANTLRErrorListener;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -289,25 +288,15 @@ public final class CLiteral implements ILiteral
          */
         public CParser()
         {
-            this( new CASTVisitorType( Collections.<IAction>emptySet() ), new CErrorListener() );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_visitor visitor instance
-         * @param p_errorlistener listener instance
-         */
-        protected CParser( final IASTVisitorType p_visitor, final ANTLRErrorListener p_errorlistener )
-        {
-            super( p_visitor, p_errorlistener );
+            super( new CErrorListener() );
         }
 
         @Override
         public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
         {
-            m_visitor.visit( this.getParser( p_stream ).literal_type() );
-            return m_visitor;
+            final IASTVisitorType l_visitor = new CASTVisitorType( Collections.<IAction>emptySet() );
+            l_visitor.visit( this.getParser( p_stream ).literal_type() );
+            return l_visitor;
         }
 
         @Override

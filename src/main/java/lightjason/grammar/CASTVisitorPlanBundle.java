@@ -23,7 +23,6 @@
 
 package lightjason.grammar;
 
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
@@ -87,20 +86,15 @@ import java.util.stream.Collectors;
 
 
 /**
- * default abstract-syntax-tree (AST) visitor for agent scripts
+ * default abstract-syntax-tree (AST) visitor for plan-bundles scripts
  *
  * @note methods are implemented twice agent and plan-bundle, because both use equal
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
  * @todo add barrier check to plan generating
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implements IASTVisitorAgent
+public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle
 {
-
-    /**
-     * initial goal
-     */
-    protected ILiteral m_InitialGoal;
     /**
      * set with initial beliefs
      */
@@ -119,47 +113,26 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
      *
      * @param p_actions set with actions
      */
-    public CASTVisitorAgent( final Set<IAction> p_actions )
+    public CASTVisitorPlanBundle( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-    // --- agent rules -----------------------------------------------------------------------------------------------------------------------------------------
+    // --- plan bundle rules -----------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Object visitAgent( final AgentParser.AgentContext p_context )
+    public Object visitPlanbundle( final PlanBundleParser.PlanbundleContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
-
-
-    @Override
-    public Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
-    {
-        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
-        return null;
-    }
-
-
-
-    @Override
-    public Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
-    {
-        m_InitialGoal = CLiteral.from( (String) this.visitAtom( p_context.atom() ) );
-        return null;
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
     // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitBelief( final AgentParser.BeliefContext p_context )
+    public Object visitBelief( final PlanBundleParser.BeliefContext p_context )
     {
         return this.visitLiteral( p_context.literal() );
     }
@@ -167,7 +140,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitPlans( final AgentParser.PlansContext p_context )
+    public Object visitPlans( final PlanBundleParser.PlansContext p_context )
     {
         if ( p_context.plan() == null )
             return null;
@@ -176,10 +149,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         return null;
     }
 
-
-
     @Override
-    public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
+    public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -187,7 +158,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitPlan( final AgentParser.PlanContext p_context )
+    public Object visitPlan( final PlanBundleParser.PlanContext p_context )
     {
         final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
         final CTrigger l_trigger = new CTrigger(
@@ -206,7 +177,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitPlandefinition( final AgentParser.PlandefinitionContext p_context )
+    public Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
     {
         return new ImmutablePair<IExpression, List<IExecution>>(
                 p_context.expression() == null ? null : (IExpression) this.visitExpression( p_context.expression() ),
@@ -217,7 +188,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAnnotations( final AgentParser.AnnotationsContext p_context )
+    public Object visitAnnotations( final PlanBundleParser.AnnotationsContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;
@@ -234,7 +205,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAnnotation_atom( final AgentParser.Annotation_atomContext p_context )
+    public Object visitAnnotation_atom( final PlanBundleParser.Annotation_atomContext p_context )
     {
         if ( p_context.ATOMIC() != null )
             return new CAtomAnnotation( IAnnotation.EType.ATOMIC );
@@ -245,13 +216,13 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         if ( p_context.PARALLEL() != null )
             return new CAtomAnnotation( IAnnotation.EType.PARALLEL );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "atomannotation", p_context.getText() ) );
+        throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "atomannotation", p_context.getText() ) );
     }
 
 
 
     @Override
-    public final Object visitAnnotation_literal( final AgentParser.Annotation_literalContext p_context )
+    public final Object visitAnnotation_literal( final PlanBundleParser.Annotation_literalContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -259,13 +230,13 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAnnotation_numeric_literal( final AgentParser.Annotation_numeric_literalContext p_context )
+    public Object visitAnnotation_numeric_literal( final PlanBundleParser.Annotation_numeric_literalContext p_context )
     {
         if ( p_context.FUZZY() != null )
             return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
 
         if ( p_context.SCORE() != null )
-            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).doubleValue() );
+            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).longValue() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
     }
@@ -273,7 +244,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAnnotation_symbolic_literal( final AgentParser.Annotation_symbolic_literalContext p_context )
+    public Object visitAnnotation_symbolic_literal( final PlanBundleParser.Annotation_symbolic_literalContext p_context )
     {
         if ( p_context.EXPIRES() != null )
             return new CSymbolicAnnotation( IAnnotation.EType.EXPIRES, (ILiteral) this.visitAtom( p_context.atom() ) );
@@ -284,7 +255,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitPlan_trigger( final AgentParser.Plan_triggerContext p_context )
+    public final Object visitPlan_trigger( final PlanBundleParser.Plan_triggerContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -292,7 +263,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitPlan_goal_trigger( final AgentParser.Plan_goal_triggerContext p_context )
+    public Object visitPlan_goal_trigger( final PlanBundleParser.Plan_goal_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -309,7 +280,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitPlan_belief_trigger( final AgentParser.Plan_belief_triggerContext p_context )
+    public Object visitPlan_belief_trigger( final PlanBundleParser.Plan_belief_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -328,7 +299,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitBody( final AgentParser.BodyContext p_context )
+    public final Object visitBody( final PlanBundleParser.BodyContext p_context )
     {
         // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
         return p_context.body_formula().stream()
@@ -343,7 +314,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
+    public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
     {
         return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
     }
@@ -351,7 +322,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitRepair_formula( final AgentParser.Repair_formulaContext p_context )
+    public Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
@@ -382,9 +353,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
     @Override
-    public Object visitBarrier( final AgentParser.BarrierContext p_context )
+    public Object visitBarrier( final PlanBundleParser.BarrierContext p_context )
     {
         return p_context.integernumber_positive() == null
                ? new CBarrier( (IExpression) this.visitExpression( p_context.expression() ) )
@@ -397,7 +367,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitUnification( final AgentParser.UnificationContext p_context )
+    public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
         return new CUnify(
                 p_context.AT() != null,
@@ -411,7 +381,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitLogicrule( final AgentParser.LogicruleContext p_context )
+    public Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -419,7 +389,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
+    public final Object visitBlock_formula( final PlanBundleParser.Block_formulaContext p_context )
     {
         if ( p_context.body_formula() != null )
         {
@@ -434,7 +404,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitLambda( final AgentParser.LambdaContext p_context )
+    public Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
         if ( p_context.lambda_return() != null )
             return new CLambdaExpression(
@@ -456,7 +426,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitLambda_initialization( final AgentParser.Lambda_initializationContext p_context )
+    public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
     {
         if ( p_context.variable() != null )
             return new CRawAction<>( this.visitVariable( p_context.variable() ) );
@@ -470,7 +440,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitLambda_return( final AgentParser.Lambda_returnContext p_context )
+    public Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
     {
         return this.visitVariable( p_context.variable() );
     }
@@ -478,7 +448,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
+    public final Object visitAssignment_expression( final PlanBundleParser.Assignment_expressionContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -486,7 +456,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAssignment_expression_singlevariable( final AgentParser.Assignment_expression_singlevariableContext p_context )
+    public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
     {
         return new CSingleAssignment<>(
                 (IVariable<?>) this.visitVariable( p_context.variable() ),
@@ -497,7 +467,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAssignment_expression_multivariable( final AgentParser.Assignment_expression_multivariableContext p_context )
+    public Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
@@ -508,7 +478,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
+    public Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
     {
         switch ( p_context.unaryoperator().getText() )
         {
@@ -526,7 +496,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
+    public Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
     {
         return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
     }
@@ -534,7 +504,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
+    public Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
     {
         return new CTernaryOperation(
                 (IExpression) this.visitExpression( p_context.expression() ),
@@ -544,33 +514,29 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
     @Override
-    public final Object visitTernary_operation_true( final AgentParser.Ternary_operation_trueContext p_context )
+    public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
     {
         return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
     }
 
 
-
     @Override
-    public final Object visitTernary_operation_false( final AgentParser.Ternary_operation_falseContext p_context )
+    public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
     {
         return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
     }
 
 
-
     @Override
-    public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
+    public Object visitTest_goal_action( final PlanBundleParser.Test_goal_actionContext p_context )
     {
         return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
 
-
     @Override
-    public Object visitBelief_action( final AgentParser.Belief_actionContext p_context )
+    public Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
     {
         if ( p_context.PLUS() != null )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Add );
@@ -585,9 +551,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
     @Override
-    public Object visitDeconstruct_expression( final AgentParser.Deconstruct_expressionContext p_context )
+    public Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
     {
         return new CDeconstruct<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
@@ -601,7 +566,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitLiteral( final AgentParser.LiteralContext p_context )
+    public Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
     {
         return new CLiteral(
                 p_context.AT() != null,
@@ -615,7 +580,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitLiteralset( final AgentParser.LiteralsetContext p_context )
+    public Object visitLiteralset( final PlanBundleParser.LiteralsetContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -626,7 +591,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitTerm( final AgentParser.TermContext p_context )
+    public Object visitTerm( final PlanBundleParser.TermContext p_context )
     {
         if ( p_context.string() != null )
             return this.visitString( p_context.string() );
@@ -653,7 +618,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitTermlist( final AgentParser.TermlistContext p_context )
+    public Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -664,9 +629,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
     @Override
-    public final Object visitVariablelist( final AgentParser.VariablelistContext p_context )
+    public final Object visitVariablelist( final PlanBundleParser.VariablelistContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -677,7 +641,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Object visitNumber( final AgentParser.NumberContext p_context )
+    public final Object visitNumber( final PlanBundleParser.NumberContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -685,7 +649,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
+    public final Object visitIntegernumber( final PlanBundleParser.IntegernumberContext p_context )
     {
         return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
                                                           : this.visitIntegernumber_positive( p_context.integernumber_positive() );
@@ -694,7 +658,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitIntegernumber_positive( final AgentParser.Integernumber_positiveContext p_context )
+    public Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -702,7 +666,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitIntegernumber_negative( final AgentParser.Integernumber_negativeContext p_context )
+    public Object visitIntegernumber_negative( final PlanBundleParser.Integernumber_negativeContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -710,7 +674,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitFloatnumber( final AgentParser.FloatnumberContext p_context )
+    public Object visitFloatnumber( final PlanBundleParser.FloatnumberContext p_context )
     {
         if ( p_context.getText().equals( "infinity" ) )
             return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
@@ -723,17 +687,15 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
     @Override
-    public Object visitLogicalvalue( final AgentParser.LogicalvalueContext p_context )
+    public Object visitLogicalvalue( final PlanBundleParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null;
     }
 
 
-
     @Override
-    public final Object visitConstant( final AgentParser.ConstantContext p_context )
+    public final Object visitConstant( final PlanBundleParser.ConstantContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -741,7 +703,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitString( final AgentParser.StringContext p_context )
+    public Object visitString( final PlanBundleParser.StringContext p_context )
     {
         // remove quotes
         final String l_text = p_context.getText();
@@ -749,9 +711,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
     @Override
-    public Object visitAtom( final AgentParser.AtomContext p_context )
+    public Object visitAtom( final PlanBundleParser.AtomContext p_context )
     {
         return p_context.getText();
     }
@@ -759,7 +720,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitVariable( final AgentParser.VariableContext p_context )
+    public Object visitVariable( final PlanBundleParser.VariableContext p_context )
     {
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
@@ -767,7 +728,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression( final AgentParser.ExpressionContext p_context )
+    public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
         // bracket expression
         if ( p_context.expression_bracket() != null )
@@ -787,7 +748,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitExpression_bracket( final AgentParser.Expression_bracketContext p_context )
+    public final Object visitExpression_bracket( final PlanBundleParser.Expression_bracketContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -795,7 +756,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_logical_and( final AgentParser.Expression_logical_andContext p_context )
+    public Object visitExpression_logical_and( final PlanBundleParser.Expression_logical_andContext p_context )
     {
         return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.AND,
@@ -810,7 +771,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_logical_xor( final AgentParser.Expression_logical_xorContext p_context )
+    public Object visitExpression_logical_xor( final PlanBundleParser.Expression_logical_xorContext p_context )
     {
         if ( p_context.expression_logical_element() != null )
             return lightjason.grammar.CCommon.createLogicalBinaryExpression(
@@ -834,7 +795,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_logical_negation( final AgentParser.Expression_logical_negationContext p_context )
+    public Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
     {
         return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
@@ -842,7 +803,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
+    public Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
     {
         if ( p_context.logicalvalue() != null )
             return new CAtom( this.visitLogicalvalue( p_context.logicalvalue() ) );
@@ -862,7 +823,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_numeric( final AgentParser.Expression_numericContext p_context )
+    public Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
@@ -887,7 +848,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_numeric_relation( final AgentParser.Expression_numeric_relationContext p_context )
+    public Object visitExpression_numeric_relation( final PlanBundleParser.Expression_numeric_relationContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
@@ -926,7 +887,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_numeric_additive( final AgentParser.Expression_numeric_additiveContext p_context )
+    public Object visitExpression_numeric_additive( final PlanBundleParser.Expression_numeric_additiveContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );
@@ -951,7 +912,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_numeric_multiplicative( final AgentParser.Expression_numeric_multiplicativeContext p_context )
+    public Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_power( p_context.expression_numeric_power() );
@@ -983,7 +944,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_numeric_power( final AgentParser.Expression_numeric_powerContext p_context )
+    public Object visitExpression_numeric_power( final PlanBundleParser.Expression_numeric_powerContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_element( p_context.expression_numeric_element() );
@@ -998,9 +959,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public Object visitExpression_numeric_element( final AgentParser.Expression_numeric_elementContext p_context )
+    public Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
     {
-
         if ( p_context.number() != null )
             return new CAtom( this.visitNumber( p_context.number() ) );
 
@@ -1008,15 +968,14 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
         if ( p_context.literal() != null )
-            return new CProxyReturnExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
+            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
 
 
-
     @Override
-    public final Object visitUnaryoperator( final AgentParser.UnaryoperatorContext p_context )
+    public final Object visitUnaryoperator( final PlanBundleParser.UnaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1024,7 +983,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
 
     @Override
-    public final Object visitBinaryoperator( final AgentParser.BinaryoperatorContext p_context )
+    public final Object visitBinaryoperator( final PlanBundleParser.BinaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -1052,12 +1011,5 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         return null;
     }
 
-    @Override
-    public final ILiteral getInitialGoal()
-    {
-        return m_InitialGoal;
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 }

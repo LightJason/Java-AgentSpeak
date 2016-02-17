@@ -42,10 +42,6 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class IGenericParser<T extends IASTVisitor, L extends Lexer, P extends Parser> implements IParser<T>
 {
     /**
-     * visitor
-     */
-    protected final T m_visitor;
-    /**
      * error listener
      */
     protected final ANTLRErrorListener m_errorlistener;
@@ -54,12 +50,10 @@ public abstract class IGenericParser<T extends IASTVisitor, L extends Lexer, P e
     /**
      * ctor
      *
-     * @param p_visitor visitor instance
      * @param p_errorlistener listener instance
      */
-    protected IGenericParser( final T p_visitor, final ANTLRErrorListener p_errorlistener )
+    protected IGenericParser( final ANTLRErrorListener p_errorlistener )
     {
-        m_visitor = p_visitor;
         m_errorlistener = p_errorlistener;
     }
 

@@ -23,38 +23,57 @@
 
 package lightjason.agent.generator;
 
-import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
-import lightjason.grammar.IASTVisitorPlanBundle;
+import lightjason.grammar.AgentLexer;
+import lightjason.grammar.AgentParser;
+import lightjason.grammar.CASTVisitorAgent;
+import lightjason.grammar.CErrorListener;
+import lightjason.grammar.IASTVisitorAgent;
+import lightjason.grammar.IGenericParser;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 
 
 /**
- * plan bundle generator
+ * default agent parser
  */
-public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
+public final class CDefaultAgentParser extends IGenericParser<IASTVisitorAgent, AgentLexer, AgentParser>
 {
+    /**
+     * set with actions
+     */
+    final Set<IAction> m_actions;
 
     /**
      * ctor
      *
-     * @param p_stream input stream
-     * @param p_actions set with actions
-     * @throws IOException thrown on error
+     * @param p_actions agent actions
      */
-    public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public CDefaultAgentParser( final Set<IAction> p_actions )
     {
-        final IASTVisitorPlanBundle l_visitor = new CDefaultPlanBundleParser( p_actions ).parse( p_stream );
+        super( new CErrorListener() );
+        m_actions = p_actions;
     }
 
+    @Override
+    public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
+    {
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions );
+        l_visitor.visit( this.getParser( p_stream ).agent() );
+        return l_visitor;
+    }
 
     @Override
-    public <T> IPlanBundle generate( final T... p_data ) throws Exception
+    protected final Class<AgentLexer> getLexerClass()
     {
-        return null;
+        return AgentLexer.class;
+    }
+
+    @Override
+    protected final Class<AgentParser> getParserClass()
+    {
+        return AgentParser.class;
     }
 
 }

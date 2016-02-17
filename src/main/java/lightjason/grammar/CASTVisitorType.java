@@ -385,12 +385,12 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     public Object visitLiteral( final TypeParser.LiteralContext p_context )
     {
         return new CLiteral(
-            p_context.AT() != null,
-            p_context.STRONGNEGATION() != null,
-            CPath.from( this.visitAtom( p_context.atom() ).toString() ),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
-            (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
-    );
+                p_context.AT() != null,
+                p_context.STRONGNEGATION() != null,
+                CPath.from( this.visitAtom( p_context.atom() ).toString() ),
+                (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
+                (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
+        );
     }
 
     @Override

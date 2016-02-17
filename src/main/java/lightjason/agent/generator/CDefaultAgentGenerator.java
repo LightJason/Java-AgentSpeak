@@ -81,8 +81,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     )
     throws Exception
     {
-        // run parsing with default AgentSpeak(L) visitor
-        final IASTVisitorAgent l_visitor = new CDefaultParser( p_actions ).parse( p_stream );
+        final IASTVisitorAgent l_visitor = new CDefaultAgentParser( p_actions ).parse( p_stream );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(

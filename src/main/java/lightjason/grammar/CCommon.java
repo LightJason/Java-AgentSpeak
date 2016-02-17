@@ -108,7 +108,7 @@ public final class CCommon
      * @return concat expression
      */
     public static IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
-                                                         final Collection<IExpression> p_righthandside
+                                                             final Collection<IExpression> p_righthandside
     )
     {
         if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )

@@ -24,61 +24,55 @@
 package lightjason.agent.generator;
 
 import lightjason.agent.action.IAction;
-import lightjason.grammar.AgentLexer;
-import lightjason.grammar.AgentParser;
-import lightjason.grammar.CASTVisitorAgent;
+import lightjason.grammar.CASTVisitorPlanBundle;
 import lightjason.grammar.CErrorListener;
+import lightjason.grammar.IASTVisitorPlanBundle;
 import lightjason.grammar.IGenericParser;
-import org.antlr.v4.runtime.ANTLRErrorListener;
+import lightjason.grammar.PlanBundleLexer;
+import lightjason.grammar.PlanBundleParser;
 
 import java.io.InputStream;
 import java.util.Set;
 
 
 /**
- * default agent and planbundle parser
+ * default planbundle parser
  */
-public final class CDefaultParser extends IGenericParser<CASTVisitorAgent, AgentLexer, AgentParser>
+public final class CDefaultPlanBundleParser extends IGenericParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
 {
+    /**
+     * set with actions
+     */
+    final Set<IAction> m_actions;
 
     /**
      * ctor
      *
      * @param p_actions agent actions
      */
-    public CDefaultParser( final Set<IAction> p_actions )
+    public CDefaultPlanBundleParser( final Set<IAction> p_actions )
     {
-        this( new CASTVisitorAgent( p_actions ), new CErrorListener() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_visitor visitor instance
-     * @param p_errorlistener listener instance
-     */
-    protected CDefaultParser( final CASTVisitorAgent p_visitor, final ANTLRErrorListener p_errorlistener )
-    {
-        super( p_visitor, p_errorlistener );
+        super( new CErrorListener() );
+        m_actions = p_actions;
     }
 
     @Override
-    public final CASTVisitorAgent parse( final InputStream p_stream ) throws Exception
+    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
-        m_visitor.visit( this.getParser( p_stream ).agent() );
-        return m_visitor;
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions );
+        l_visitor.visit( this.getParser( p_stream ).planbundle() );
+        return l_visitor;
     }
 
     @Override
-    protected final Class<AgentLexer> getLexerClass()
+    protected final Class<PlanBundleLexer> getLexerClass()
     {
-        return AgentLexer.class;
+        return PlanBundleLexer.class;
     }
 
     @Override
-    protected final Class<AgentParser> getParserClass()
+    protected final Class<PlanBundleParser> getParserClass()
     {
-        return AgentParser.class;
+        return PlanBundleParser.class;
     }
-
 }
