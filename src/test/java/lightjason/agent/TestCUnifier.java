@@ -23,12 +23,17 @@
 
 package lightjason.agent;
 
+import lightjason.common.CPath;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -43,22 +48,30 @@ public final class TestCUnifier
     /**
      * traversion of literal content
      */
-    //@Test
-    public void testLiteralTraversing() throws Exception
+    @Test
+    public void testLiteralValueTraversing() throws Exception
     {
-        final ILiteral l_deep = CLiteral.parse( "second/sub/sub1(hallo(1))" );
+        final Set<ILiteral> l_test = new HashSet<ILiteral>()
+        {{
+
+            add( CLiteral.parse( "first('Hello')" ) );
+            add( CLiteral.parse( "first('Foo')" ) );
+
+        }};
+
         final ILiteral l_literal = CLiteral.from( "toplevel", new HashSet<ITerm>()
         {{
 
-            add( CLiteral.from( "first/sub1" ) );
-            add( CLiteral.from( "first/sub2" ) );
-            add( CLiteral.from( "second/sub1" ) );
-            add( CLiteral.from( "second/sub2" ) );
-            add( l_deep );
+            addAll( l_test );
+            add( CLiteral.parse( "second/sub(1)" ) );
+            add( CLiteral.parse( "second/sub(2)" ) );
+            add( CLiteral.parse( "second/sub(3)" ) );
 
         }} );
 
-        assertEquals( MessageFormat.format( "literal traversing in {0} is {1} not found", l_literal, l_deep ), l_literal.values(), l_deep );
+        final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
+        assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
+        System.out.println( MessageFormat.format( "literal [{0}] value traversing: {1}", l_literal, l_result ) );
     }
 
     /**
@@ -70,7 +83,7 @@ public final class TestCUnifier
     {
         final TestCUnifier l_test = new TestCUnifier();
 
-        l_test.testLiteralTraversing();
+        l_test.testLiteralValueTraversing();
     }
 
 }

@@ -45,8 +45,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -202,17 +202,15 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final Collection<ITerm> values( final CPath... p_path )
+    public final Stream<ITerm> values( final CPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
-               ? m_values.values()
-               : Collections.unmodifiableSet(
-                       m_values.asMap().get( p_path[0] )
-                               .parallelStream()
-                               .filter( i -> i instanceof ILiteral )
-                               .flatMap( i -> ( (ILiteral) i ).values( Arrays.copyOfRange( p_path, 1, p_path.length ) ).stream() )
-                               .collect( Collectors.toSet() )
-               );
+               ? m_values.values().stream()
+               : p_path.length == 1
+                 ? m_values.asMap().get( p_path[0] ).stream()
+                 : m_values.asMap().get( p_path[0] ).stream()
+                           .filter( i -> i instanceof ILiteral )
+                           .flatMap( i -> ( (ILiteral) i ).values( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
     @Override

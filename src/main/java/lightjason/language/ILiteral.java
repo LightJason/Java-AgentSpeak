@@ -27,8 +27,8 @@ package lightjason.language;
 import com.google.common.collect.Multimap;
 import lightjason.common.CPath;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -76,7 +76,13 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
      */
     Multimap<CPath, ITerm> getValues();
 
-    Collection<ITerm> values( final CPath... p_path );
+    /**
+     * returns a stream over value items
+     *
+     * @param p_path optional filtering value names
+     * @return stream
+     */
+    Stream<ITerm> values( final CPath... p_path );
 
     /**
      * returns the values as ordered list
