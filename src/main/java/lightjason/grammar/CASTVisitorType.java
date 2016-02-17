@@ -80,6 +80,13 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     protected ITerm m_term;
 
 
+    /**
+     * ctor
+     */
+    public CASTVisitorType()
+    {
+        this( Collections.<IAction>emptySet() );
+    }
 
     /**
      * ctor

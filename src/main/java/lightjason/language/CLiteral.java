@@ -29,7 +29,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import lightjason.agent.action.IAction;
 import lightjason.common.CPath;
 import lightjason.grammar.CASTVisitorType;
 import lightjason.grammar.CErrorListener;
@@ -306,7 +305,7 @@ public final class CLiteral implements ILiteral
         @Override
         public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
         {
-            final IASTVisitorType l_visitor = new CASTVisitorType( Collections.<IAction>emptySet() );
+            final IASTVisitorType l_visitor = new CASTVisitorType();
             l_visitor.visit( this.getParser( p_stream ).literal_type() );
             return l_visitor;
         }
