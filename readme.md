@@ -241,12 +241,11 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 ## <a name="todo">Todos</a>
 
 * parallel / SIMD unification with [type inhertitance](http://stackoverflow.com/questions/1396558/how-can-i-implement-the-unification-algorithm-in-a-language-like-java-or-c) or [Java Unification](https://code.google.com/p/kawala/source/browse/trunk/src/com/kaching/platform/common/types/Unification.java?r=265)
-* [ISO Prolog Specification](http://stackoverflow.com/questions/20119749/is-there-an-iso-prolog-reference-implementation)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
-* visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
 
 ## <a name="workingpackages">Working Packages</a>
 
+* visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
 * Meta-language for data/plan exchange with [Jaxb](https://jaxb.java.net) or [Jaxb JSON](https://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html#gmfnu). 
   Structural problem incompatibilites between Jason, Light-Jas, GOAL, ... -> generic exchange format
 * Communication (e.g. Contract Net Protocol) -> Threadpool/Semaphore/Cycle synchronisation and execution ordering problem
@@ -256,9 +255,9 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ### <a name="devaction">Developing Buildin Actions & Components</a>
 
+* Prettyfier component for source code layout
 * [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html) see [example](http://commons.apache.org/proper/commons-math/userguide/ode.html)
 * [Curve Fitting](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/package-summary.html)
 * [Genetic Algorithm](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/genetics/package-summary.html)
 * [Base Clustering](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ml/clustering/package-summary.html)
-* Prettyfier component for source code layout
 * [FIPA communication interface](http://www.fipa.org/specs/fipa00061/index.html) (encapsulate message parsing) and [FIPA ontology](http://www.fipa.org/specs/fipa00086/index.html) definition
