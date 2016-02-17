@@ -23,9 +23,37 @@
 
 package lightjason.grammar;
 
+import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
+import lightjason.language.execution.expression.IExpression;
+
+
 /**
  * interface of a type parser
  */
 public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
 {
+
+    /**
+     * get the parsed literal
+     *
+     * @return literal
+     */
+    ILiteral getLiteral();
+
+    /**
+     * get the parsed expression
+     *
+     * @return expression
+     */
+    IExpression getExpression();
+
+    /**
+     * get the parsed term
+     *
+     * @return any term
+     */
+    ITerm getTerm();
+
+
 }

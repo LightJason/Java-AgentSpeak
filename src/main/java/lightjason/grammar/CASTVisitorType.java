@@ -66,6 +66,20 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
      * map with action definition
      */
     protected final Map<CPath, IAction> m_actions;
+    /**
+     * parsed literal
+     */
+    protected ILiteral m_literal;
+    /**
+     * parsed expression
+     */
+    protected IExpression m_expression;
+    /**
+     * parsed term
+     */
+    protected ITerm m_term;
+
+
 
     /**
      * ctor
@@ -77,26 +91,104 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+    // --- start rules -----------------------------------------------------------------------------------------------------------------------------------------
 
 
     @Override
     public final Object visitLiteral_type( final TypeParser.Literal_typeContext p_context )
     {
-        return this.visitChildren( p_context );
+        m_literal = (ILiteral) this.visitChildren( p_context );
+        return null;
     }
 
     @Override
     public final Object visitExpression_type( final TypeParser.Expression_typeContext p_context )
     {
-        return this.visitChildren( p_context );
+        m_expression = (IExpression) this.visitChildren( p_context );
+        return null;
     }
 
     @Override
     public final Object visitExpression_term( final TypeParser.Expression_termContext p_context )
     {
-        return this.visitChildren( p_context );
+        m_term = (ITerm) this.visitChildren( p_context );
+        return null;
     }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- term element rules ----------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Object visitUnification( final TypeParser.UnificationContext p_context )
+    {
+        return new CUnify(
+                p_context.AT() != null,
+                (ILiteral) this.visitLiteral( p_context.literal() ),
+                p_context.expression() == null
+                ? null
+                : (IExpression) this.visitExpression( p_context.expression() )
+        );
+    }
+
+
+
+    @Override
+    public Object visitTernary_operation( final TypeParser.Ternary_operationContext p_context )
+    {
+        return new CTernaryOperation(
+                (IExpression) this.visitExpression( p_context.expression() ),
+                (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),
+                (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )
+        );
+    }
+
+
+
+    @Override
+    public final Object visitTernary_operation_true( final TypeParser.Ternary_operation_trueContext p_context )
+    {
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+    }
+
+
+
+    @Override
+    public final Object visitTernary_operation_false( final TypeParser.Ternary_operation_falseContext p_context )
+    {
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Object visitLiteral( final TypeParser.LiteralContext p_context )
+    {
+        return new CLiteral(
+                p_context.AT() != null,
+                p_context.STRONGNEGATION() != null,
+                CPath.from( this.visitAtom( p_context.atom() ).toString() ),
+                (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
+                (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
+        );
+    }
+
+
+
+    @Override
+    public Object visitLiteralset( final TypeParser.LiteralsetContext p_context )
+    {
+        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+            return Collections.EMPTY_LIST;
+
+        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
+    }
+
+
 
     @Override
     public Object visitTerm( final TypeParser.TermContext p_context )
@@ -123,39 +215,121 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
 
-    @Override
-    public Object visitUnification( final TypeParser.UnificationContext p_context )
-    {
-        return new CUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                p_context.expression() == null
-                ? null
-                : (IExpression) this.visitExpression( p_context.expression() )
-        );
-    }
+
 
     @Override
-    public Object visitTernary_operation( final TypeParser.Ternary_operationContext p_context )
+    public Object visitTermlist( final TypeParser.TermlistContext p_context )
     {
-        return new CTernaryOperation(
-                (IExpression) this.visitExpression( p_context.expression() ),
-                (IExecution) this.visitTernary_operation_true( p_context.ternary_operation_true() ),
-                (IExecution) this.visitTernary_operation_false( p_context.ternary_operation_false() )
-        );
+        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+            return Collections.EMPTY_LIST;
+
+        return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
+                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
+        ).collect( Collectors.toList() );
     }
 
-    @Override
-    public final Object visitTernary_operation_true( final TypeParser.Ternary_operation_trueContext p_context )
-    {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
-    }
+
 
     @Override
-    public final Object visitTernary_operation_false( final TypeParser.Ternary_operation_falseContext p_context )
+    public final Object visitVariablelist( final TypeParser.VariablelistContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+        return this.visitChildren( p_context );
     }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final Object visitNumber( final TypeParser.NumberContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public final Object visitIntegernumber( final TypeParser.IntegernumberContext p_context )
+    {
+        return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
+                                                          : this.visitIntegernumber_positive( p_context.integernumber_positive() );
+    }
+
+
+
+    @Override
+    public Object visitIntegernumber_positive( final TypeParser.Integernumber_positiveContext p_context )
+    {
+        return Long.valueOf( p_context.getText() );
+    }
+
+
+
+    @Override
+    public Object visitIntegernumber_negative( final TypeParser.Integernumber_negativeContext p_context )
+    {
+        return Long.valueOf( p_context.getText() );
+    }
+
+
+
+    @Override
+    public Object visitFloatnumber( final TypeParser.FloatnumberContext p_context )
+    {
+        if ( p_context.getText().equals( "infinity" ) )
+            return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
+
+        final Double l_constant = lightjason.grammar.CCommon.NUMERICCONSTANT.get( p_context.getText() );
+        if ( l_constant != null )
+            return l_constant;
+
+        return Double.valueOf( p_context.getText() );
+    }
+
+
+
+    @Override
+    public Object visitLogicalvalue( final TypeParser.LogicalvalueContext p_context )
+    {
+        return p_context.TRUE() != null;
+    }
+
+
+
+    @Override
+    public final Object visitConstant( final TypeParser.ConstantContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+
+
+    @Override
+    public Object visitString( final TypeParser.StringContext p_context )
+    {
+        // remove quotes
+        final String l_text = p_context.getText();
+        return l_text.length() < 3 ? "" : l_text.substring( 1, l_text.length() - 1 );
+    }
+
+
+
+    @Override
+    public Object visitAtom( final TypeParser.AtomContext p_context )
+    {
+        return p_context.getText();
+    }
+
+
+
+    @Override
+    public Object visitVariable( final TypeParser.VariableContext p_context )
+    {
+        return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
+    }
+
+
 
     @Override
     public Object visitExpression( final TypeParser.ExpressionContext p_context )
@@ -175,11 +349,15 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         );
     }
 
+
+
     @Override
     public final Object visitExpression_bracket( final TypeParser.Expression_bracketContext p_context )
     {
         return this.visitChildren( p_context );
     }
+
+
 
     @Override
     public Object visitExpression_logical_and( final TypeParser.Expression_logical_andContext p_context )
@@ -193,6 +371,8 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
                 : Collections.<IExpression>emptyList()
         );
     }
+
+
 
     @Override
     public Object visitExpression_logical_xor( final TypeParser.Expression_logical_xorContext p_context )
@@ -216,6 +396,16 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "logicallefthandside", p_context.getText() ) );
     }
 
+
+
+    @Override
+    public Object visitExpression_logical_negation( final TypeParser.Expression_logical_negationContext p_context )
+    {
+        return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
+    }
+
+
+
     @Override
     public Object visitExpression_logical_element( final TypeParser.Expression_logical_elementContext p_context )
     {
@@ -234,11 +424,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
 
-    @Override
-    public Object visitExpression_logical_negation( final TypeParser.Expression_logical_negationContext p_context )
-    {
-        return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
-    }
+
 
     @Override
     public Object visitExpression_numeric( final TypeParser.Expression_numericContext p_context )
@@ -262,6 +448,8 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "compareoperator", p_context.getText() ) );
     }
+
+
 
     @Override
     public Object visitExpression_numeric_relation( final TypeParser.Expression_numeric_relationContext p_context )
@@ -300,6 +488,8 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "relationaloperator", p_context.getText() ) );
     }
 
+
+
     @Override
     public Object visitExpression_numeric_additive( final TypeParser.Expression_numeric_additiveContext p_context )
     {
@@ -322,6 +512,8 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "additiveoperator", p_context.getText() ) );
     }
+
+
 
     @Override
     public Object visitExpression_numeric_multiplicative( final TypeParser.Expression_numeric_multiplicativeContext p_context )
@@ -353,6 +545,8 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "multiplicativeoperator", p_context.getText() ) );
     }
 
+
+
     @Override
     public Object visitExpression_numeric_power( final TypeParser.Expression_numeric_powerContext p_context )
     {
@@ -365,6 +559,8 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
         );
     }
+
+
 
     @Override
     public Object visitExpression_numeric_element( final TypeParser.Expression_numeric_elementContext p_context )
@@ -381,123 +577,45 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
     }
 
-    @Override
-    public Object visitLiteral( final TypeParser.LiteralContext p_context )
-    {
-        return new CLiteral(
-                p_context.AT() != null,
-                p_context.STRONGNEGATION() != null,
-                CPath.from( this.visitAtom( p_context.atom() ).toString() ),
-                (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
-                (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
-        );
-    }
+
 
     @Override
-    public Object visitTermlist( final TypeParser.TermlistContext p_context )
-    {
-        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
-
-        return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
-        ).collect( Collectors.toList() );
-    }
-
-    @Override
-    public Object visitLiteralset( final TypeParser.LiteralsetContext p_context )
-    {
-        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
-
-        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
-    }
-
-    @Override
-    public final Object visitVariablelist( final TypeParser.VariablelistContext p_context )
+    public final Object visitUnaryoperator( final TypeParser.UnaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
-    @Override
-    public Object visitAtom( final TypeParser.AtomContext p_context )
-    {
-        return p_context.getText();
-    }
+
 
     @Override
-    public Object visitVariable( final TypeParser.VariableContext p_context )
-    {
-        return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
-    }
-
-    @Override
-    public Object visitUnaryoperator( final TypeParser.UnaryoperatorContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitBinaryoperator( final TypeParser.BinaryoperatorContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public final Object visitNumber( final TypeParser.NumberContext p_context )
+    public final Object visitBinaryoperator( final TypeParser.BinaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public Object visitFloatnumber( final TypeParser.FloatnumberContext p_context )
+    public final ILiteral getLiteral()
     {
-        if ( p_context.getText().equals( "infinity" ) )
-            return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
-
-        final Double l_constant = lightjason.grammar.CCommon.NUMERICCONSTANT.get( p_context.getText() );
-        if ( l_constant != null )
-            return l_constant;
-
-        return Double.valueOf( p_context.getText() );
+        return m_literal;
     }
 
     @Override
-    public final Object visitIntegernumber( final TypeParser.IntegernumberContext p_context )
+    public final IExpression getExpression()
     {
-        return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
-                                                          : this.visitIntegernumber_positive( p_context.integernumber_positive() );
+        return m_expression;
     }
 
     @Override
-    public Object visitIntegernumber_positive( final TypeParser.Integernumber_positiveContext p_context )
+    public final ITerm getTerm()
     {
-        return Long.valueOf( p_context.getText() );
+        return m_term;
     }
 
-    @Override
-    public Object visitIntegernumber_negative( final TypeParser.Integernumber_negativeContext p_context )
-    {
-        return Long.valueOf( p_context.getText() );
-    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public Object visitLogicalvalue( final TypeParser.LogicalvalueContext p_context )
-    {
-        return p_context.TRUE() != null;
-    }
-
-    @Override
-    public final Object visitConstant( final TypeParser.ConstantContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
-    public Object visitString( final TypeParser.StringContext p_context )
-    {
-        // remove quotes
-        final String l_text = p_context.getText();
-        return l_text.length() < 3 ? "" : l_text.substring( 1, l_text.length() - 1 );
-    }
 }
