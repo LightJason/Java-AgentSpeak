@@ -33,7 +33,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CPrettify extends AbstractParseTreeVisitor<Object> implements IPrettifyAgent, IPrettifyPlanBundle
+public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTPrettifyAgent, IASTPrettifyPlanBundle
 {
 
     @Override

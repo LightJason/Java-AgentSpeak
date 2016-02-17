@@ -23,9 +23,24 @@
 
 package lightjason.grammar;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+
 /**
- * visitor interface of the abstract-syntax-tree (AST) of a prettify agent
+ * parser interface
  */
-public interface IPrettifyAgent extends IPrettify, AgentVisitor<Object>
+public interface IParser<T extends IASTVisitor>
 {
+
+    /**
+     * parsing code
+     *
+     * @param p_stream input stream
+     * @return visitor instance
+     *
+     * @throws IOException thrown on IO errors
+     */
+    T parse( final InputStream p_stream ) throws Exception;
+
 }

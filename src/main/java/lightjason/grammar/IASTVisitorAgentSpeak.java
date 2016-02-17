@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * interface of visitor structure
  */
-public interface IParseAgentSpeak
+public interface IASTVisitorAgentSpeak extends IASTVisitor
 {
 
     /**

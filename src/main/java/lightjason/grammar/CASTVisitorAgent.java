@@ -60,7 +60,6 @@ import lightjason.language.execution.expression.CAtom;
 import lightjason.language.execution.expression.CProxyReturnExpression;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.expression.logical.CBinary;
 import lightjason.language.execution.expression.logical.CUnary;
 import lightjason.language.execution.expression.numerical.CAdditive;
 import lightjason.language.execution.expression.numerical.CComparable;
@@ -79,7 +78,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,7 +94,7 @@ import java.util.stream.Collectors;
  * @todo add barrier check to plan generating
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CParseAgent extends AbstractParseTreeVisitor<Object> implements IParseAgent, IParsePlanBundle
+public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implements IASTVisitorAgent, IASTVisitorPlanBundle
 {
 
     /**
@@ -121,7 +119,7 @@ public class CParseAgent extends AbstractParseTreeVisitor<Object> implements IPa
      *
      * @param p_actions set with actions
      */
-    public CParseAgent( final Set<IAction> p_actions )
+    public CASTVisitorAgent( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }

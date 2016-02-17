@@ -59,7 +59,8 @@ import java.util.stream.Collectors;
 /**
  * parser for complex-datatypes
  */
-public class CParseType extends AbstractParseTreeVisitor<Object> implements IParseType
+@SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
+public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements IASTVisitorType
 {
     /**
      * map with action definition
@@ -71,7 +72,7 @@ public class CParseType extends AbstractParseTreeVisitor<Object> implements IPar
      *
      * @param p_actions set with actions
      */
-    public CParseType( final Set<IAction> p_actions )
+    public CASTVisitorType( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
     }

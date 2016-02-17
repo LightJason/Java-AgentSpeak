@@ -23,11 +23,9 @@
 
 package lightjason.grammar;
 
-
 /**
- * interface of prettifier
+ * visitor interface of the abstract-syntax-tree (AST) of a prettify plan bundle
  */
-public interface IPrettify
+public interface IASTPrettifyPlanBundle extends IASTPrettify, PlanBundleVisitor<Object>
 {
-
 }

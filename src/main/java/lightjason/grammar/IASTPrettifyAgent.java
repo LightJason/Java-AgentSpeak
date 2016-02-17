@@ -24,8 +24,8 @@
 package lightjason.grammar;
 
 /**
- * interface of a type parser
+ * visitor interface of the abstract-syntax-tree (AST) of a prettify agent
  */
-public interface IParseType extends TypeVisitor<Object>
+public interface IASTPrettifyAgent extends IASTPrettify, AgentVisitor<Object>
 {
 }

@@ -30,9 +30,9 @@ import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.grammar.AgentLexer;
 import lightjason.grammar.AgentParser;
+import lightjason.grammar.CASTVisitorAgent;
 import lightjason.grammar.CErrorListener;
-import lightjason.grammar.CParseAgent;
-import lightjason.grammar.IParseAgent;
+import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.score.IAggregation;
@@ -89,7 +89,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     throws Exception
     {
         // run parsing with default AgentSpeak(L) visitor
-        final IParseAgent l_visitor = this.parse( p_stream, new CParseAgent( p_actions ) );
+        final IASTVisitorAgent l_visitor = this.parse( p_stream, new CASTVisitorAgent( p_actions ) );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
@@ -133,7 +133,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @throws IOException thrown on IO errors
      */
-    protected IParseAgent parse( final InputStream p_stream, final IParseAgent p_astvisitor ) throws Exception
+    protected IASTVisitorAgent parse( final InputStream p_stream, final IASTVisitorAgent p_astvisitor ) throws Exception
     {
         final ANTLRErrorListener l_errorlistener = new CErrorListener();
 
