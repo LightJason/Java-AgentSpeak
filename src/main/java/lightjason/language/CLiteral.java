@@ -38,6 +38,7 @@ import lightjason.grammar.IGenericParser;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -170,6 +171,17 @@ public final class CLiteral implements ILiteral
                 p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ), p_values,
                 p_annotations
         );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_literal literal string
+     * @return literal
+     */
+    public static ILiteral parse( final String p_literal ) throws Exception
+    {
+        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes() ) ).getLiteral();
     }
 
     @Override

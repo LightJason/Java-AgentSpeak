@@ -44,9 +44,9 @@ public final class TestCUnifier
      * traversion of literal content
      */
     //@Test
-    public void testLiteralTraversing()
+    public void testLiteralTraversing() throws Exception
     {
-        final ILiteral l_deep = CLiteral.from( "second/sub/sub1" );
+        final ILiteral l_deep = CLiteral.parse( "second/sub/sub1(hallo(1))" );
         final ILiteral l_literal = CLiteral.from( "toplevel", new HashSet<ITerm>()
         {{
 
@@ -66,7 +66,7 @@ public final class TestCUnifier
      *
      * @param p_args arguments
      */
-    public static void main( final String[] p_args )
+    public static void main( final String[] p_args ) throws Exception
     {
         final TestCUnifier l_test = new TestCUnifier();
 
