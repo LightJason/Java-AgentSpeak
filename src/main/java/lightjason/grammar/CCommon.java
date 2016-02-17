@@ -78,6 +78,7 @@ public final class CCommon
      * creates an executable structure of a parsed term item
      *
      * @param p_item any parsed item (term rule)
+     * @param p_actions map with agent actions
      * @return execution structure or null
      */
     public static IExecution getTermExecution( final Object p_item, final Map<CPath, IAction> p_actions )

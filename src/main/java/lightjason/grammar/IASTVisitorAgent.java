@@ -29,7 +29,7 @@ import lightjason.language.ILiteral;
 /**
  * visitor interface of the abstract-syntax-tree (AST) for an agent
  */
-public interface IASTVisitorAgent extends IASTVisitor, IASTVisitorAgentSpeak, AgentVisitor<Object>
+public interface IASTVisitorAgent extends IASTVisitorAgentSpeak, AgentVisitor<Object>
 {
 
     /**
