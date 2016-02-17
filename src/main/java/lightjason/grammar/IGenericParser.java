@@ -69,11 +69,11 @@ public abstract class IGenericParser<T extends IASTVisitor, L extends Lexer, P e
      * @param p_stream input stream
      * @return parser (for using in visitor interface)
      *
-     * @throws IOException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
+     * @throws IOException on io-stream errors
+     * @throws NoSuchMethodException on ctor-method call
+     * @throws IllegalAccessException on lexer / parser method access error
+     * @throws InvocationTargetException on lexer / parser invocation error
+     * @throws InstantiationException on lexer / parser instantiation error
      */
     protected final P getParser( final InputStream p_stream )
     throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
