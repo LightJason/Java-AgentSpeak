@@ -29,8 +29,17 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import lightjason.agent.action.IAction;
 import lightjason.common.CPath;
+import lightjason.grammar.CASTVisitorType;
+import lightjason.grammar.CErrorListener;
+import lightjason.grammar.IASTVisitorType;
+import lightjason.grammar.IGenericParser;
+import lightjason.grammar.TypeLexer;
+import lightjason.grammar.TypeParser;
+import org.antlr.v4.runtime.ANTLRErrorListener;
 
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -245,13 +254,13 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public ILiteral clone()
+    public final ILiteral clone()
     {
         return new CLiteral( m_at, m_negated, m_functor, m_values.values(), m_annotations.values() );
     }
 
     @Override
-    public ILiteral cloneWithoutPath()
+    public final ILiteral cloneWithoutPath()
     {
         return new CLiteral( m_at, m_negated, CPath.from( m_functor.getSuffix() ), m_values.values(), m_annotations.values() );
     }
@@ -266,5 +275,51 @@ public final class CLiteral implements ILiteral
     public final int compareTo( final ILiteral p_literal )
     {
         return Integer.compare( this.hashCode(), p_literal.hashCode() );
+    }
+
+
+    /**
+     * literal parser
+     */
+    protected static final class CParser extends IGenericParser<IASTVisitorType, TypeLexer, TypeParser>
+    {
+
+        /**
+         * ctor
+         */
+        public CParser()
+        {
+            this( new CASTVisitorType( Collections.<IAction>emptySet() ), new CErrorListener() );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_visitor visitor instance
+         * @param p_errorlistener listener instance
+         */
+        protected CParser( final IASTVisitorType p_visitor, final ANTLRErrorListener p_errorlistener )
+        {
+            super( p_visitor, p_errorlistener );
+        }
+
+        @Override
+        public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
+        {
+            m_visitor.visit( this.getParser( p_stream ).literal_type() );
+            return m_visitor;
+        }
+
+        @Override
+        protected final Class<TypeLexer> getLexerClass()
+        {
+            return TypeLexer.class;
+        }
+
+        @Override
+        protected final Class<TypeParser> getParserClass()
+        {
+            return TypeParser.class;
+        }
     }
 }
