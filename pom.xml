@@ -216,7 +216,7 @@
                 <executions>
                     <execution>
                         <id>doxygen</id>
-                        <phase>generate-resources</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
