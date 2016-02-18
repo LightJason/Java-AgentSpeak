@@ -212,6 +212,20 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final Stream<ITerm> orderedvalues( final CPath... p_path )
+    {
+        return ( p_path == null ) || ( p_path.length < 1 )
+               ? m_orderedvalues.stream().sequential()
+               : p_path.length == 1
+                 ? m_orderedvalues.stream()
+                                  .filter( i -> i.getFQNFunctor().equals( p_path[0] ) ).sequential()
+                 : m_orderedvalues.stream()
+                                  .filter( i -> i.getFQNFunctor().equals( p_path[0] ) )
+                                  .filter( i -> i instanceof ILiteral )
+                                  .flatMap( i -> ( (ILiteral) i ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
+    }
+
+    @Override
     public final Stream<ILiteral> annotations( final CPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )

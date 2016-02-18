@@ -86,6 +86,12 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
     Stream<ITerm> values( final CPath... p_path );
 
     /**
+     * returns a stream over the ordered values
+     * in sequential ordering
+     */
+    Stream<ITerm> orderedvalues( final CPath... p_path );
+
+    /**
      * returns a stream over annotation items
      *
      * @param p_path optional filtering annotation names (filtering all

@@ -33,9 +33,11 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -76,6 +78,38 @@ public final class TestCUnifier
 
 
     /**
+     * traversion of literal value content
+     */
+    @Test
+    public void testLiteralValueSequentialTraversing() throws Exception
+    {
+        final Stack<ILiteral> l_test = new Stack<ILiteral>()
+        {{
+
+            add( CLiteral.parse( "first('Hello')" ) );
+            add( CLiteral.parse( "first('Foo')" ) );
+
+        }};
+
+        final ILiteral l_literal = CLiteral.from( "toplevel", new HashSet<ITerm>()
+        {{
+
+            add( CLiteral.parse( "second/sub(1)" ) );
+            add( CLiteral.parse( "second/sub(2)" ) );
+            add( CLiteral.parse( "second/sub(3)" ) );
+            addAll( l_test );
+
+        }} );
+
+        assertTrue(
+                MessageFormat.format( "literal sequential traversing in {0} is wrong for {1}", l_literal, l_test ),
+                l_literal.orderedvalues( CPath.from( "first" ) ).map( i -> i.equals( l_test.pop() ) ).allMatch( i -> i )
+                && l_test.isEmpty()
+        );
+        System.out.println( MessageFormat.format( "literal [{0}] value sequential traversing: {1}", l_literal, l_test ) );
+    }
+
+    /**
      * traversion of literal annotation content
      */
     @Test
@@ -99,6 +133,8 @@ public final class TestCUnifier
         final TestCUnifier l_test = new TestCUnifier();
 
         l_test.testLiteralValueTraversing();
+        l_test.testLiteralValueSequentialTraversing();
+        l_test.testLiteralAnnotationTraversing();
     }
 
 }
