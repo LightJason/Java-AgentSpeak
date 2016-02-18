@@ -208,7 +208,7 @@
                 </executions>
             </plugin>
 
-            <!-- Doxygen and modified clean call -->
+            <!-- Doxygen -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
