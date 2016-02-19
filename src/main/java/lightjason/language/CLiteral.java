@@ -188,18 +188,6 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final Multimap<CPath, ILiteral> getAnnotation()
-    {
-        return m_annotations;
-    }
-
-    @Override
-    public final Multimap<CPath, ITerm> getValues()
-    {
-        return m_values;
-    }
-
-    @Override
     public final Stream<ITerm> values( final CPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
@@ -233,12 +221,6 @@ public final class CLiteral implements ILiteral
                : Arrays.stream( p_path )
                        .parallel()
                        .flatMap( i -> m_annotations.asMap().get( i ).stream() );
-    }
-
-    @Override
-    public final List<ITerm> getOrderedValues()
-    {
-        return m_orderedvalues;
     }
 
     @Override

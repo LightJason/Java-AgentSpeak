@@ -107,8 +107,9 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
         if ( p_assignment.size() >= 1 )
             ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.getFQNFunctor().toString() );
         if ( p_assignment.size() >= 2 )
-            ( (IVariable<Object>) p_assignment.get( 1 ) ).set( Collections.synchronizedList( new LinkedList<>( p_term.getValues().values() ) ) );
+            ( (IVariable<Object>) p_assignment.get( 1 ) ).set( Collections.synchronizedList( p_term.values().collect( Collectors.toList() ) ) );
         if ( p_assignment.size() >= 3 )
-            ( (IVariable<Object>) p_assignment.get( 2 ) ).set( Collections.synchronizedList( new LinkedList<>( p_term.getAnnotation().values() ) ) );
+            ( (IVariable<Object>) p_assignment.get( 2 ) ).set(
+                    Collections.synchronizedList( new LinkedList<>( p_term.annotations().collect( Collectors.toList() ) ) ) );
     }
 }

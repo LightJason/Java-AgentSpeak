@@ -24,10 +24,8 @@
 package lightjason.language;
 
 
-import com.google.common.collect.Multimap;
 import lightjason.common.CPath;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 
@@ -63,20 +61,6 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
     ILiteral cloneWithoutPath();
 
     /**
-     * returns the optional annotations
-     *
-     * @return annotation terms
-     */
-    Multimap<CPath, ILiteral> getAnnotation();
-
-    /**
-     * returns the optional value terms
-     *
-     * @return value terms
-     */
-    Multimap<CPath, ITerm> getValues();
-
-    /**
      * returns a stream over value items
      *
      * @param p_path optional filtering value names
@@ -99,13 +83,6 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
      * @return stream
      */
     Stream<ILiteral> annotations( final CPath... p_path );
-
-    /**
-     * returns the values as ordered list
-     *
-     * @return value list
-     */
-    List<ITerm> getOrderedValues();
 
     /**
      * getter of the literal for the negation

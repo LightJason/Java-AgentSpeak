@@ -251,7 +251,7 @@ public final class CProxyAction implements IExecution
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 
             // check number of arguments and add action to the score cache
-            if ( p_literal.getValues().size() < m_action.getMinimalArgumentNumber() )
+            if ( p_literal.orderedvalues().count() < m_action.getMinimalArgumentNumber() )
                 throw new CIllegalArgumentException(
                         CCommon.getLanguageString( this, "argumentnumber", p_literal, m_action.getMinimalArgumentNumber() ) );
 
@@ -259,8 +259,10 @@ public final class CProxyAction implements IExecution
 
 
             // resolve action arguments and annotation
-            m_arguments = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getOrderedValues(), p_actions, p_scorecache ) );
-            m_annotation = Collections.unmodifiableMap( this.createSubExecutions( p_literal.getAnnotation().values(), p_actions, p_scorecache ) );
+            m_arguments = Collections.unmodifiableMap(
+                    this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions, p_scorecache ) );
+            m_annotation = Collections.unmodifiableMap(
+                    this.createSubExecutions( p_literal.annotations().collect( Collectors.toSet() ), p_actions, p_scorecache ) );
         }
 
         @Override
