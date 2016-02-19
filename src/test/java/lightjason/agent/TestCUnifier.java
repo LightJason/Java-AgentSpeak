@@ -37,6 +37,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -124,6 +125,32 @@ public final class TestCUnifier
     }
 
     /**
+     * structure hashing
+     */
+    @Test
+    public void testStructureHash() throws Exception
+    {
+        final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(123),data(value('data string')))[ann(1),value('test')]" );
+        final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string')))[ann(1),value('test')]" );
+
+        assertEquals(
+                MessageFormat.format( "structure hash of [{0}] and [{1}] is [{2}] inequal", l_first, l_second ), l_first.structurehash(),
+                l_second.structurehash()
+        );
+        System.out.println( MessageFormat.format( "structure hash of [{0}] is equal [{1}]", l_first, l_first.structurehash() ) );
+
+
+        final ILiteral l_third = CLiteral.parse( "foo()" );
+        final ILiteral l_fourth = CLiteral.parse( "hallo()" );
+        assertNotEquals(
+                MessageFormat.format( "structure hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth ), l_third.structurehash(),
+                l_fourth.structurehash()
+        );
+        System.out.println( MessageFormat.format( "structure hash of [{0}] is inequal [{1}|", l_third, l_fourth ) );
+    }
+
+
+    /**
      * manuell running test
      *
      * @param p_args arguments
@@ -135,6 +162,7 @@ public final class TestCUnifier
         l_test.testLiteralValueTraversing();
         l_test.testLiteralValueSequentialTraversing();
         l_test.testLiteralAnnotationTraversing();
+        l_test.testStructureHash();
     }
 
 }

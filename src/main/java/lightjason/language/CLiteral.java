@@ -23,12 +23,15 @@
 
 package lightjason.language;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
 import lightjason.common.CPath;
 import lightjason.grammar.CASTVisitorType;
 import lightjason.grammar.CErrorListener;
@@ -92,6 +95,10 @@ public final class CLiteral implements ILiteral
      * hash code
      */
     private final int m_hash;
+    /**
+     * hash of the value and annotation structure
+     */
+    private final int m_structurehash;
 
 
     /**
@@ -129,6 +136,18 @@ public final class CLiteral implements ILiteral
                  + m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
                  + ( m_negated ? 17737 : 55529 )
                  + ( m_at ? 2741 : 8081 );
+
+        // calculates the structure hash value (Murmur3) of the value and annotation definition
+        // functor will be added iif no literal values exists
+        final Hasher l_hasher = Hashing.murmur3_32().newHasher();
+        m_annotations.values().forEach( i -> l_hasher.putInt( i.structurehash() ) );
+        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_hasher.putInt( ( (ILiteral) i ).structurehash() ) ).count() == 0 )
+        {
+            final String l_functor = p_functor.getPath();
+            l_hasher.putString( l_functor, Charsets.UTF_8 );
+        }
+
+        m_structurehash = l_hasher.hash().asInt();
     }
 
     /**
@@ -221,6 +240,12 @@ public final class CLiteral implements ILiteral
                : Arrays.stream( p_path )
                        .parallel()
                        .flatMap( i -> m_annotations.asMap().get( i ).stream() );
+    }
+
+    @Override
+    public final int structurehash()
+    {
+        return m_structurehash;
     }
 
     @Override
