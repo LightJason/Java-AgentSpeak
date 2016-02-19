@@ -184,8 +184,11 @@ second(true).
         // --- hash --------------------------------------------------------------------------------------------------------------------------------------------
 
         HashMD5 = crypto/hash( "md5", "hallo" );
+        HashMurmur = crypto/hash( "murmur3-32", "hallo" );
+        HashAdler = crypto/hash( "adler-32", "hallo" );
+        HashCrc = crypto/hash( "crc-32", "hallo" );
         HashSHA = crypto/hash( "sha-256", "string test1", "second data", 4, 5, 6);
-        generic/print("MD5 & SHA-256 hash", HashMD5, HashSHA);
+        generic/print("MD5 & SHA-256 & Murmur & Adler & CRC hash", HashMD5, HashSHA, HashMurmur, HashAdler, HashCrc);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
