@@ -52,7 +52,7 @@ public final class TestCUnifier
      * traversion of literal value content
      */
     @Test
-    public void testLiteralValueTraversing() throws Exception
+    public final void testLiteralValueTraversing() throws Exception
     {
         final Set<ILiteral> l_test = new HashSet<ILiteral>()
         {{
@@ -82,7 +82,7 @@ public final class TestCUnifier
      * traversion of literal value content
      */
     @Test
-    public void testLiteralValueSequentialTraversing() throws Exception
+    public final void testLiteralValueSequentialTraversing() throws Exception
     {
         final Stack<ILiteral> l_test = new Stack<ILiteral>()
         {{
@@ -114,7 +114,7 @@ public final class TestCUnifier
      * traversion of literal annotation content
      */
     @Test
-    public void testLiteralAnnotationTraversing() throws Exception
+    public final void testLiteralAnnotationTraversing() throws Exception
     {
 
         final ILiteral l_literal = CLiteral.parse( "foo()[ first(1), first(2), first(foo('hallo')), second('test') ]" );
@@ -128,7 +128,7 @@ public final class TestCUnifier
      * structure hashing
      */
     @Test
-    public void testStructureHash() throws Exception
+    public final void testStructureHash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
@@ -155,6 +155,24 @@ public final class TestCUnifier
 
 
     /**
+     * structure value hash (without annotations)
+     */
+    @Test
+    public final void testStructureValueHash() throws Exception
+    {
+        final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[anno(1),xvalue('test')]" );
+        final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
+
+
+        assertTrue(
+                MessageFormat.format( "value structure hash of [{0}] and [{1}] are not equal [{2}]", l_first, l_second ),
+                ( l_first.valuestructurehash() == l_second.valuestructurehash() ) && ( l_first.structurehash() != l_second.structurehash() )
+        );
+        System.out.println( MessageFormat.format( "value structure hash of [{0}] is equal [{1}|", l_first, l_second.valuestructurehash() ) );
+    }
+
+
+    /**
      * manuell running test
      *
      * @param p_args arguments
@@ -167,6 +185,7 @@ public final class TestCUnifier
         l_test.testLiteralValueSequentialTraversing();
         l_test.testLiteralAnnotationTraversing();
         l_test.testStructureHash();
+        l_test.testStructureValueHash();
     }
 
 }

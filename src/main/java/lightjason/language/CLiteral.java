@@ -99,6 +99,10 @@ public final class CLiteral implements ILiteral
      * hash of the value and annotation structure
      */
     private final int m_structurehash;
+    /**
+     * hash of the value structure
+     */
+    private final int m_valuestructurehash;
 
 
     /**
@@ -138,16 +142,23 @@ public final class CLiteral implements ILiteral
                  + ( m_at ? 2741 : 8081 );
 
         // calculates the structure hash value (Murmur3) of the value and annotation definition
-        // functor will be added iif no literal values exists
-        final Hasher l_hasher = Hashing.murmur3_32().newHasher();
-        m_annotations.values().forEach( i -> l_hasher.putInt( i.structurehash() ) );
-        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_hasher.putInt( ( (ILiteral) i ).structurehash() ) ).count() == 0 )
+        // functor will be added iif no literal values exists ( hasher must be existing twice )
+        final Hasher l_structurehasher = Hashing.murmur3_32().newHasher();
+        final Hasher l_valuehasher = Hashing.murmur3_32().newHasher();
+        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> {
+            l_structurehasher.putInt( ( (ILiteral) i ).structurehash() );
+            l_valuehasher.putInt( ( (ILiteral) i ).structurehash() );
+            return i;
+        } ).count() == 0 )
         {
             final String l_functor = p_functor.getPath();
-            l_hasher.putString( l_functor, Charsets.UTF_8 );
+            l_structurehasher.putString( l_functor, Charsets.UTF_8 );
+            l_valuehasher.putString( l_functor, Charsets.UTF_8 );
         }
 
-        m_structurehash = l_hasher.hash().asInt();
+        m_annotations.values().forEach( i -> l_structurehasher.putInt( i.structurehash() ) );
+        m_structurehash = l_structurehasher.hash().asInt();
+        m_valuestructurehash = l_valuehasher.hash().asInt();
     }
 
     /**
@@ -246,6 +257,12 @@ public final class CLiteral implements ILiteral
     public final int structurehash()
     {
         return m_structurehash;
+    }
+
+    @Override
+    public final int valuestructurehash()
+    {
+        return m_valuestructurehash;
     }
 
     @Override

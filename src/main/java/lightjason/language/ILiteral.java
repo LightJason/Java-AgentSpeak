@@ -92,6 +92,11 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
     int structurehash();
 
     /**
+     * returns the hash value of the value structure
+     */
+    int valuestructurehash();
+
+    /**
      * getter of the literal for the negation
      */
     boolean isNegated();
