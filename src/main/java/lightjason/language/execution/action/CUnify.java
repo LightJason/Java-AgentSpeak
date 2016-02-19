@@ -23,16 +23,17 @@
 
 package lightjason.language.execution.action;
 
-import lightjason.language.CRawTerm;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -87,15 +88,21 @@ public final class CUnify extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        final Object l_result = m_parallel
-                                ? p_context.getAgent().getUnifier().parallelunify( p_context.getAgent(), m_value, m_expression )
-                                : p_context.getAgent().getUnifier().sequentialunify( p_context.getAgent(), m_value, m_expression );
-
-        if ( l_result == null )
-            return CBoolean.from( false );
-
-        p_return.add( CRawTerm.from( l_result ) );
-        return CBoolean.from( true );
+        return m_parallel
+               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_expression )
+               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_expression );
     }
 
+    @Override
+    @SuppressWarnings( "serial" )
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet<IVariable<?>>()
+        {{
+
+            if ( m_expression != null )
+                addAll( m_expression.getVariables() );
+
+        }};
+    }
 }

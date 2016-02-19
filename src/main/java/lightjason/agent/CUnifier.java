@@ -24,8 +24,11 @@
 package lightjason.agent;
 
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -37,19 +40,21 @@ import java.util.stream.Collectors;
 public final class CUnifier implements IUnifier
 {
     @Override
-    public final <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression )
+    public final <T extends IAgent> IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression )
     {
-        final Collection<ILiteral> l_result = this.search( p_agent, p_literal );
+        final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
         //System.out.println("----> " + l_result);
-        return null;
+        return CBoolean.from( !l_result.isEmpty() );
     }
 
     @Override
-    public final <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression )
+    public final <T extends IAgent> IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal,
+                                                                          final IExpression p_expression
+    )
     {
-        final Collection<ILiteral> l_result = this.search( p_agent, p_literal );
+        final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
         //System.out.println("----> " + l_result);
-        return null;
+        return CBoolean.from( !l_result.isEmpty() );
     }
 
     /**
@@ -63,9 +68,8 @@ public final class CUnifier implements IUnifier
      * (values and annotations) the literal structure if no
      * literal is found, search runs again without annotation
      * definition
-     * @tparam T agent type
      */
-    private <T extends IAgent> Collection<ILiteral> search( final T p_agent, final ILiteral p_literal )
+    private Collection<ILiteral> search( final IAgent p_agent, final ILiteral p_literal )
     {
         // try to get a full match
         final Collection<ILiteral> l_fullmatch = p_agent.getBeliefBase()
@@ -83,10 +87,6 @@ public final class CUnifier implements IUnifier
                                                         .filter( i -> i.isNegated() == p_literal.isNegated() )
                                                         .filter( i -> i.valuestructurehash() == p_literal.valuestructurehash() )
                                                         .collect( Collectors.toList() );
-
-        if ( !l_partmatch.isEmpty() )
-            return l_partmatch;
-
-        return null;
+        return l_partmatch;
     }
 }

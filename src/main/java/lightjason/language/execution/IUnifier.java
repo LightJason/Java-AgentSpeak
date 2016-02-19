@@ -26,6 +26,7 @@ package lightjason.language.execution;
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 
 /**
@@ -37,27 +38,28 @@ public interface IUnifier
     /**
      * unifies a literal in parallel
      *
-     * @param p_agent agent
+     *
+     * @param p_context running context
      * @param p_literal literal
      * @param p_expression expression can be null iif expression is not set
-     * @return any object type or null if unification not possible
+     * @return boolean if a unify can be done
      *
-     * @tparam R any return type
      * @tparam T agent type
      */
-    <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression );
+    <T extends IAgent> IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression );
 
     /**
      * unifies a literal in parallel
      *
-     * @param p_agent agent
+     *
+     * @param p_context running context
      * @param p_literal literal
      * @param p_expression expression can be null iif expression is not set
-     * @return any object type or null if unification not possible
+     * @return boolean if a unify can be done
      *
      * @tparam R any return type
      * @tparam T agent type
      */
-    <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression );
+    <T extends IAgent> IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression );
 
 }
