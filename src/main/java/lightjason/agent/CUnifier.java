@@ -27,6 +27,9 @@ import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.expression.IExpression;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 
 /**
  * unification algorithm
@@ -36,12 +39,54 @@ public final class CUnifier implements IUnifier
     @Override
     public final <R, T extends IAgent> R parallelunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression )
     {
+        final Collection<ILiteral> l_result = this.search( p_agent, p_literal );
+        //System.out.println("----> " + l_result);
         return null;
     }
 
     @Override
     public final <R, T extends IAgent> R sequentialunify( final T p_agent, final ILiteral p_literal, final IExpression p_expression )
     {
+        final Collection<ILiteral> l_result = this.search( p_agent, p_literal );
+        //System.out.println("----> " + l_result);
+        return null;
+    }
+
+    /**
+     * search all relevant literals within the agent beliefbase
+     *
+     * @param p_agent agent
+     * @param p_literal literal search
+     * @return collection of found literals or null if no literal is found
+     *
+     * @note try to search all literals which are exactly match
+     * (values and annotations) the literal structure if no
+     * literal is found, search runs again without annotation
+     * definition
+     * @tparam T agent type
+     */
+    private <T extends IAgent> Collection<ILiteral> search( final T p_agent, final ILiteral p_literal )
+    {
+        // try to get a full match
+        final Collection<ILiteral> l_fullmatch = p_agent.getBeliefBase()
+                                                        .parallelStream( p_literal.getFQNFunctor() )
+                                                        .filter( i -> i.isNegated() == p_literal.isNegated() )
+                                                        .filter( i -> i.structurehash() == p_literal.structurehash() )
+                                                        .collect( Collectors.toList() );
+
+        if ( !l_fullmatch.isEmpty() )
+            return l_fullmatch;
+
+        // try to get a part match (without annotation)
+        final Collection<ILiteral> l_partmatch = p_agent.getBeliefBase()
+                                                        .parallelStream( p_literal.getFQNFunctor() )
+                                                        .filter( i -> i.isNegated() == p_literal.isNegated() )
+                                                        .filter( i -> i.valuestructurehash() == p_literal.valuestructurehash() )
+                                                        .collect( Collectors.toList() );
+
+        if ( !l_partmatch.isEmpty() )
+            return l_partmatch;
+
         return null;
     }
 }

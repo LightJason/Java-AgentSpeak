@@ -234,18 +234,17 @@ public class CView implements IView
     {
         // build path relative to this view
         final CPath l_path = this.getPath().getSubPath( 1 );
-        return Stream.concat(
+        return ( p_path == null ) || ( p_path.length == 0 )
+               ? Stream.concat(
                 m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().clone( l_path ) ),
-
-                ( p_path == null ) || ( p_path.length == 0 )
-                ? m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
+                m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
+        )
                 : Arrays.stream( p_path )
                         .parallel()
                         .map( i -> i.normalize() )
                         .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
                                            .parallelStream()
-                                           .map( l -> l.getRight().clone( l_path ) ) )
-        );
+                                           .map( l -> l.getRight().clone( l_path ) ) );
     }
 
     @Override
