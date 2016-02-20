@@ -153,7 +153,7 @@ public class CPlan implements IPlan
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final Boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
@@ -164,7 +164,7 @@ public class CPlan implements IPlan
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
                   : m_action.stream()
-                ).map( i -> i.execute( p_context, null, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
+                ).map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
                  .allMatch( CBoolean.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );

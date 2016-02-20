@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public final class CUnifier implements IUnifier
 {
     @Override
-    public final <T extends IAgent> IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression )
+    public final IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression )
     {
         final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
         //System.out.println("----> " + l_result);
@@ -48,8 +48,7 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public final <T extends IAgent> IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal,
-                                                                          final IExpression p_expression
+    public final IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression
     )
     {
         final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
@@ -85,6 +84,15 @@ public final class CUnifier implements IUnifier
                                                         .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                                                         .filter( i -> i.valuestructurehash() == p_literal.valuestructurehash() )
                                                         .collect( Collectors.toList() );
-        return l_partmatch;
+
+        if ( !l_partmatch.isEmpty() )
+            return l_partmatch;
+
+        // try to match any possible literal by its functor
+        final Collection<ILiteral> l_any = p_agent.getBeliefBase()
+                                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                                  .collect( Collectors.toList() );
+
+        return l_any;
     }
 }

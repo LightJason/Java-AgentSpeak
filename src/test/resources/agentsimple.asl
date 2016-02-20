@@ -1,5 +1,5 @@
-hallo(123)[abc(8),value('xxxx')].
 ~hallo("text").
+hallo(123)[abc(8),value('xxxx')].
 hallo(666)[abc(8)].
 hallo(123).
 hallo(1111).
