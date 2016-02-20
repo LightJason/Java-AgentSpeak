@@ -235,16 +235,55 @@ public class CView implements IView
         // build path relative to this view
         final CPath l_path = this.getPath().getSubPath( 1 );
         return ( p_path == null ) || ( p_path.length == 0 )
-               ? Stream.concat(
-                m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().clone( l_path ) ),
-                m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.stream().map( j -> j.clone( l_path ) ) )
-        )
-                : Arrays.stream( p_path )
-                        .parallel()
-                        .map( i -> i.normalize() )
-                        .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
-                                           .parallelStream()
-                                           .map( l -> l.getRight().clone( l_path ) ) );
+
+               ?
+               Stream.concat(
+                       m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().clone( l_path ) ),
+                       m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream()
+                                                                                                              .map( j -> j.clone( l_path ) )
+                       )
+               )
+
+               :
+               Arrays.stream( p_path )
+                     .parallel()
+                     .map( i -> i.normalize() )
+                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
+                                        .parallelStream()
+                                        .map( j -> j.getRight().clone( l_path ) ) );
+    }
+
+    @Override
+    public final Stream<ILiteral> parallelStream( final boolean p_negated, final CPath... p_path )
+    {
+        return this.stream( p_negated, p_path ).parallel();
+    }
+
+    @Override
+    public final Stream<ILiteral> stream( final boolean p_negated, final CPath... p_path )
+    {
+        // build path relative to this view
+        final CPath l_path = this.getPath().getSubPath( 1 );
+        return ( p_path == null ) || ( p_path.length == 0 )
+
+               ?
+               Stream.concat(
+                       m_beliefbase.getStorage().getMultiElements().values().parallelStream()
+                                   .filter( i -> i.getLeft() == p_negated )
+                                   .map( i -> i.getRight().clone( l_path ) ),
+                       m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream( p_negated )
+                                                                                                              .map( j -> j.clone( l_path ) )
+                       )
+               )
+
+               :
+               Arrays.stream( p_path )
+                     .parallel()
+                     .map( i -> i.normalize() )
+                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
+                                        .parallelStream()
+                                        .filter( j -> j.getLeft() == p_negated )
+                                        .map( j -> j.getRight().clone( l_path ) ) );
     }
 
     @Override

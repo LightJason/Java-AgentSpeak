@@ -131,6 +131,24 @@ public interface IView extends IStructure
      */
     Stream<ILiteral> stream( final CPath... p_path );
 
+    /**
+     * returns parallel stream of literal
+     *
+     * @param p_negated negated flag
+     * @param p_path paths of the literals
+     * @return literal stream
+     */
+    Stream<ILiteral> parallelStream( final boolean p_negated, final CPath... p_path );
+
+    /**
+     * returns stream of literal
+     *
+     * @param p_negated negated flag
+     * @param p_path paths of the literals
+     * @return literal stream
+     */
+    Stream<ILiteral> stream( final boolean p_negated, final CPath... p_path );
+
 
 
     /**

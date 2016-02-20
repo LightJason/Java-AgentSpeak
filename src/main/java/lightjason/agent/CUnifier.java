@@ -73,8 +73,7 @@ public final class CUnifier implements IUnifier
     {
         // try to get a full match
         final Collection<ILiteral> l_fullmatch = p_agent.getBeliefBase()
-                                                        .parallelStream( p_literal.getFQNFunctor() )
-                                                        .filter( i -> i.isNegated() == p_literal.isNegated() )
+                                                        .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                                                         .filter( i -> i.structurehash() == p_literal.structurehash() )
                                                         .collect( Collectors.toList() );
 
@@ -83,8 +82,7 @@ public final class CUnifier implements IUnifier
 
         // try to get a part match (without annotation)
         final Collection<ILiteral> l_partmatch = p_agent.getBeliefBase()
-                                                        .parallelStream( p_literal.getFQNFunctor() )
-                                                        .filter( i -> i.isNegated() == p_literal.isNegated() )
+                                                        .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                                                         .filter( i -> i.valuestructurehash() == p_literal.valuestructurehash() )
                                                         .collect( Collectors.toList() );
         return l_partmatch;

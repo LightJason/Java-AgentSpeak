@@ -1,6 +1,8 @@
 hallo(123)[abc(8),value('xxxx')].
 ~hallo("text").
 hallo(666)[abc(8)].
+hallo(123).
+hallo(1111).
 hallo(foo(3)).
 second(true).
 
@@ -247,6 +249,7 @@ second(true).
 
         // --- sequential & parallel unification ---------------------------------------------------------------------------------------------------------------
 
+        //>>hallo(U, xxx(5), sub(sub('Test'))) << true;
         >>hallo(U) << true;
         //@>>foo(U);
 
