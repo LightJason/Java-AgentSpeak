@@ -52,7 +52,7 @@ public final class CUnifier implements IUnifier
     )
     {
         final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        System.out.println( "----> " + l_result );
+        //System.out.println( "----> " + l_result );
         return CBoolean.from( !l_result.isEmpty() );
     }
 

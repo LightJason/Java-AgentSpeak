@@ -85,14 +85,14 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
     Stream<ILiteral> annotations( final CPath... p_path );
 
     /**
-     * returns the hash value of the annotation structure
+     * returns the hash of the annotations
      *
      * @return hash
      */
     int annotationhash();
 
     /**
-     * returns the hash value of the value structure
+     * returns the hash of the values
      *
      * @return hash
      */
