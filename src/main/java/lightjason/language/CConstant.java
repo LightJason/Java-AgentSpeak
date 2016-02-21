@@ -85,7 +85,7 @@ public final class CConstant<T> extends CVariable<T>
     }
 
     @Override
-    public final IVariable<T> clone()
+    public final IVariable<T> shallowclone()
     {
         return new CConstant<T>( m_functor.toString(), m_value );
     }

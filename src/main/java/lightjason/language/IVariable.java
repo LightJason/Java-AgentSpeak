@@ -93,10 +93,11 @@ public interface IVariable<T> extends ITerm
     IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
 
     /**
-     * override clonable interface definition
+     * clones the variable (shallow-copy)
+     * and not the value
      *
-     * @return clones variables
+     * @return cloned variable
      */
-    IVariable<T> clone();
+    IVariable<T> shallowclone();
 
 }

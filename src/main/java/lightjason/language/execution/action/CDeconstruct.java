@@ -92,7 +92,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     @Override
     public final Set<IVariable<?>> getVariables()
     {
-        return m_value.stream().map( i -> i.clone() ).collect( Collectors.toSet() );
+        return m_value.stream().map( i -> i.shallowclone() ).collect( Collectors.toSet() );
     }
 
     /**

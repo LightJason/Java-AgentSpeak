@@ -96,7 +96,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     {
         return new HashSet<IVariable<?>>()
         {{
-            add( m_variable.clone() );
+            add( m_variable.shallowclone() );
         }};
     }
 }

@@ -137,7 +137,7 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized IVariable<T> clone()
+    public final synchronized IVariable<T> shallowclone()
     {
         return new CMutexVariable<T>( m_functor.toString(), m_value );
     }

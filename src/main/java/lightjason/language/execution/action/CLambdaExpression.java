@@ -215,8 +215,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      */
     private Triple<IContext<?>, IVariable<?>, IVariable<?>> getLocalContext( final IContext<?> p_context )
     {
-        final IVariable<?> l_iterator = m_value.clone();
-        final IVariable<?> l_return = m_return != null ? m_return.clone() : null;
+        final IVariable<?> l_iterator = m_value.shallowclone();
+        final IVariable<?> l_return = m_return != null ? m_return.shallowclone() : null;
 
         final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
 

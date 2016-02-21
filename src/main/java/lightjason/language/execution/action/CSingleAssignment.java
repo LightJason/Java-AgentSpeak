@@ -100,7 +100,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
     {
         return new HashSet<IVariable<?>>()
         {{
-            add( m_value.clone() );
+            add( m_value.shallowclone() );
             addAll( m_righthand.getVariables() );
         }};
     }

@@ -38,27 +38,28 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
 {
 
     /**
-     * clones the literal
+     * clones the literal (shallow-copy)
      *
      * @param p_prefix add a path to the functor
      * @return new instance of the literal
      */
-    ILiteral clone( final CPath p_prefix );
+    ILiteral shallowclone( final CPath p_prefix );
 
     /**
-     * clones the literal
+     * clones the literal (shallow-copy)
      *
      * @return new instance of the literal
      */
-    ILiteral clone();
+    ILiteral shallowclone();
 
     /**
-     * clones the literal without full-qualified
-     * path, only suffix is used
+     * clones the literal (shallow-copy)
+     * without full-qualified path, only
+     * suffix is used
      *
      * @return new instance of the literal
      */
-    ILiteral cloneSuffixOnly();
+    ILiteral shallowcloneSuffixOnly();
 
     /**
      * returns a stream over value items

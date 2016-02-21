@@ -61,7 +61,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
         if ( m_value instanceof IVariable<?> )
             return new HashSet<IVariable<?>>()
             {{
-                add( ( (IVariable<?>) m_value ).clone() );
+                add( ( (IVariable<?>) m_value ).shallowclone() );
             }};
 
         if ( m_value instanceof IExpression )

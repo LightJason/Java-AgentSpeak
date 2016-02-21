@@ -182,7 +182,7 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public IVariable<T> clone()
+    public IVariable<T> shallowclone()
     {
         return new CVariable<T>( m_functor.toString(), m_value );
     }
