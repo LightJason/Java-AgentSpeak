@@ -141,23 +141,20 @@ public final class CLiteral implements ILiteral
                  + ( m_negated ? 17737 : 55529 )
                  + ( m_at ? 2741 : 8081 );
 
-        // calculates the structure hash value (Murmur3) of the value and annotation definition
-        // functor will be added iif no literal values exists ( hasher must be existing twice )
-        final Hasher l_structurehasher = Hashing.murmur3_32().newHasher();
-        final Hasher l_valuehasher = Hashing.murmur3_32().newHasher();
-        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> {
-            l_structurehasher.putInt( ( (ILiteral) i ).structurehash() );
-            l_valuehasher.putInt( ( (ILiteral) i ).structurehash() );
-            return i;
-        } ).count() == 0 )
-        {
-            final String l_functor = p_functor.getPath();
-            l_structurehasher.putString( l_functor, Charsets.UTF_8 );
-            l_valuehasher.putString( l_functor, Charsets.UTF_8 );
-        }
 
-        m_annotations.values().forEach( i -> l_structurehasher.putInt( i.structurehash() ) );
-        m_structurehash = l_structurehasher.hash().asInt();
+        // calculates the structure hash value (Murmur3) of the value and annotation definition
+        // functor will be added iif no literal data exists ( hasher must be existing twice )
+        final String l_functor = p_functor.getPath();
+
+        final Hasher l_valuehasher = Hashing.murmur3_32().newHasher();
+        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_valuehasher.putInt( ( (ILiteral) i ).valuehash() ) ).count() == 0 )
+            l_valuehasher.putString( l_functor, Charsets.UTF_8 );
+
+        final Hasher l_annotationhasher = Hashing.murmur3_32().newHasher();
+        if ( m_annotations.values().stream().map( i -> l_annotationhasher.putInt( i.valuehash() ) ).count() == 0 )
+            l_annotationhasher.putString( l_functor, Charsets.UTF_8 );
+
+        m_structurehash = l_annotationhasher.hash().asInt();
         m_valuestructurehash = l_valuehasher.hash().asInt();
     }
 
@@ -254,13 +251,13 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final int structurehash()
+    public final int annotationhash()
     {
         return m_structurehash;
     }
 
     @Override
-    public final int valuestructurehash()
+    public final int valuehash()
     {
         return m_valuestructurehash;
     }

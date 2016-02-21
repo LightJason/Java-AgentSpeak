@@ -52,7 +52,7 @@ public final class CUnifier implements IUnifier
     )
     {
         final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        //System.out.println("----> " + l_result);
+        System.out.println( "----> " + l_result );
         return CBoolean.from( !l_result.isEmpty() );
     }
 
@@ -73,7 +73,8 @@ public final class CUnifier implements IUnifier
         // try to get a full match
         final Collection<ILiteral> l_fullmatch = p_agent.getBeliefBase()
                                                         .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                        .filter( i -> i.structurehash() == p_literal.structurehash() )
+                                                        .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
+                                                                      ( i.annotationhash() == p_literal.annotationhash() ) )
                                                         .collect( Collectors.toList() );
 
         if ( !l_fullmatch.isEmpty() )
@@ -82,7 +83,7 @@ public final class CUnifier implements IUnifier
         // try to get a part match (without annotation)
         final Collection<ILiteral> l_partmatch = p_agent.getBeliefBase()
                                                         .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                        .filter( i -> i.valuestructurehash() == p_literal.valuestructurehash() )
+                                                        .filter( i -> i.valuehash() == p_literal.valuehash() )
                                                         .collect( Collectors.toList() );
 
         if ( !l_partmatch.isEmpty() )

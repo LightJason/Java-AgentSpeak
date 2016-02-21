@@ -125,50 +125,50 @@ public final class TestCUnifier
     }
 
     /**
-     * structure hashing
+     * literal value hashing
      */
     @Test
-    public final void testStructureHash() throws Exception
+    public final void testValueHash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
 
         assertEquals(
-                MessageFormat.format( "structure hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.structurehash(),
-                                      l_second.structurehash()
+                MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.valuehash(),
+                                      l_second.valuehash()
                 ),
-                l_first.structurehash(),
-                l_second.structurehash()
+                l_first.valuehash(),
+                l_second.valuehash()
         );
-        System.out.println( MessageFormat.format( "structure hash of [{0}] is equal [{1}]", l_first, l_first.structurehash() ) );
+        System.out.println( MessageFormat.format( "literal value hash of [{0}] is equal [{1}]", l_first, l_first.valuehash() ) );
 
 
         final ILiteral l_third = CLiteral.parse( "foo()" );
         final ILiteral l_fourth = CLiteral.parse( "hallo()" );
         assertNotEquals(
-                MessageFormat.format( "structure hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth ),
-                l_third.structurehash(),
-                l_fourth.structurehash()
+                MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth ),
+                l_third.valuehash(),
+                l_fourth.valuehash()
         );
-        System.out.println( MessageFormat.format( "structure hash of [{0}] is inequal [{1}|", l_third, l_fourth ) );
+        System.out.println( MessageFormat.format( "literal value hash of [{0}] is inequal [{1}]", l_third, l_fourth ) );
     }
 
 
     /**
-     * structure value hash (without annotations)
+     * literal annotation
      */
     @Test
-    public final void testStructureValueHash() throws Exception
+    public final void testAnnotationHash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[anno(1),xvalue('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
 
 
-        assertTrue(
-                MessageFormat.format( "value structure hash of [{0}] and [{1}] are not equal [{2}]", l_first, l_second ),
-                ( l_first.valuestructurehash() == l_second.valuestructurehash() ) && ( l_first.structurehash() != l_second.structurehash() )
+        assertNotEquals(
+                MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second ),
+                l_first.annotationhash(), l_second.annotationhash()
         );
-        System.out.println( MessageFormat.format( "value structure hash of [{0}] is equal [{1}|", l_first, l_second.valuestructurehash() ) );
+        System.out.println( MessageFormat.format( "literal annotation hash of [{0}] is inequal [{1}|", l_first, l_second.annotationhash() ) );
     }
 
 
@@ -184,8 +184,8 @@ public final class TestCUnifier
         l_test.testLiteralValueTraversing();
         l_test.testLiteralValueSequentialTraversing();
         l_test.testLiteralAnnotationTraversing();
-        l_test.testStructureHash();
-        l_test.testStructureValueHash();
+        l_test.testValueHash();
+        l_test.testAnnotationHash();
     }
 
 }
