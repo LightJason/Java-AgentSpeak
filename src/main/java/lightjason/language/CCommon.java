@@ -23,12 +23,18 @@
 
 package lightjason.language;
 
+import com.google.common.hash.Funnel;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
+import com.google.common.hash.PrimitiveSink;
 import com.google.common.reflect.ClassPath;
 import lightjason.agent.action.IAction;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.IContext;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -174,6 +180,31 @@ public final class CCommon
         final StringBuilder l_result = new StringBuilder();
         ( flatList( p_input ) ).stream().forEach( i -> l_result.append( getRawValue( i ).toString() ) );
         return l_result.toString().getBytes( "UTF-8" );
+    }
+
+    /**
+     * returns the hasing function for term data
+     *
+     * @return hasher
+     */
+    public static Hasher getTermHashing()
+    {
+        return Hashing.murmur3_32().newHasher();
+    }
+
+    /**
+     *
+     */
+    public static <T extends Serializable> Funnel<T> getTermFunnel()
+    {
+        return new Funnel<T>()
+        {
+            @Override
+            public final void funnel( final T p_object, final PrimitiveSink p_sink )
+            {
+                p_sink.putBytes( SerializationUtils.serialize( p_object ) );
+            }
+        };
     }
 
     /*

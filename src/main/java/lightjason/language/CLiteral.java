@@ -31,7 +31,6 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.hash.Hasher;
-import com.google.common.hash.Hashing;
 import lightjason.common.CPath;
 import lightjason.grammar.CASTVisitorType;
 import lightjason.grammar.CErrorListener;
@@ -96,13 +95,13 @@ public final class CLiteral implements ILiteral
      */
     private final int m_hash;
     /**
-     * hash of the value and annotation structure
+     * hash of the annotations
      */
-    private final int m_structurehash;
+    private final int m_annotationhash;
     /**
-     * hash of the value structure
+     * hash of the values
      */
-    private final int m_valuestructurehash;
+    private final int m_valuehash;
 
 
     /**
@@ -146,22 +145,22 @@ public final class CLiteral implements ILiteral
         // functor will be added iif no literal data exists ( hasher must be existing twice )
         final String l_functor = p_functor.getPath();
 
-        final Hasher l_valuehasher = Hashing.murmur3_32().newHasher();
+        final Hasher l_valuehasher = CCommon.getTermHashing();
         if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_valuehasher.putInt( ( (ILiteral) i ).valuehash() ) ).count() == 0 )
         {
             l_valuehasher.putBoolean( m_negated );
             l_valuehasher.putString( l_functor, Charsets.UTF_8 );
         }
 
-        final Hasher l_annotationhasher = Hashing.murmur3_32().newHasher();
+        final Hasher l_annotationhasher = CCommon.getTermHashing();
         if ( m_annotations.values().stream().map( i -> l_annotationhasher.putInt( i.valuehash() ) ).count() == 0 )
         {
             l_annotationhasher.putBoolean( m_negated );
             l_annotationhasher.putString( l_functor, Charsets.UTF_8 );
         }
 
-        m_structurehash = l_annotationhasher.hash().asInt();
-        m_valuestructurehash = l_valuehasher.hash().asInt();
+        m_annotationhash = l_annotationhasher.hash().asInt();
+        m_valuehash = l_valuehasher.hash().asInt();
     }
 
     /**
@@ -259,13 +258,13 @@ public final class CLiteral implements ILiteral
     @Override
     public final int annotationhash()
     {
-        return m_structurehash;
+        return m_annotationhash;
     }
 
     @Override
     public final int valuehash()
     {
-        return m_valuestructurehash;
+        return m_valuehash;
     }
 
     @Override

@@ -23,6 +23,7 @@
 
 package lightjason.language;
 
+import com.google.common.base.Charsets;
 import lightjason.common.CPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
@@ -50,6 +51,10 @@ public class CVariable<T> implements IVariable<T>
      * value of the variable
      */
     protected T m_value;
+    /**
+     * hash of the variable
+     */
+    private final int m_valuehash;
 
     /**
      * ctor
@@ -93,6 +98,8 @@ public class CVariable<T> implements IVariable<T>
         m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );
         m_functor = p_functor;
         this.internalset( p_value );
+
+        m_valuehash = CCommon.getTermHashing().putString( m_functor.getPath(), Charsets.UTF_8 ).hash().asInt();
     }
 
     @Override
@@ -179,6 +186,12 @@ public class CVariable<T> implements IVariable<T>
     public final CPath getFQNFunctor()
     {
         return m_functor;
+    }
+
+    @Override
+    public final int valuehash()
+    {
+        return m_valuehash;
     }
 
     @Override
