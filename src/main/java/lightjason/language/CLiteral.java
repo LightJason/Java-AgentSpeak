@@ -47,7 +47,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -312,7 +311,7 @@ public final class CLiteral implements ILiteral
         return new CLiteral(
                 m_at, m_negated, p_prefix.append( m_functor ),
                 m_values.values(),
-                m_annotations.values().stream().map( i -> i.shallowclone() ).collect( Collectors.toList() )
+                m_annotations.values()
         );
     }
 
@@ -322,7 +321,7 @@ public final class CLiteral implements ILiteral
         return new CLiteral(
                 m_at, m_negated, m_functor,
                 m_values.values(),
-                m_annotations.values().stream().map( i -> i.shallowclone() ).collect( Collectors.toList() )
+                m_annotations.values()
         );
     }
 
@@ -332,7 +331,7 @@ public final class CLiteral implements ILiteral
         return new CLiteral(
                 m_at, m_negated, CPath.from( m_functor.getSuffix() ),
                 m_values.values(),
-                m_annotations.values().stream().map( i -> i.shallowclone() ).collect( Collectors.toList() )
+                m_annotations.values()
         );
     }
 
