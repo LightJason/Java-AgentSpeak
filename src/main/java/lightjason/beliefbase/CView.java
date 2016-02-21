@@ -164,7 +164,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.add( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.cloneWithoutPath() );
+               : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.cloneSuffixOnly() );
     }
 
     @Override
@@ -196,7 +196,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.remove( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.cloneWithoutPath() );
+               : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.cloneSuffixOnly() );
     }
 
     @Override

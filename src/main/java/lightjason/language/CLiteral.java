@@ -316,7 +316,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral cloneWithoutPath()
+    public final ILiteral cloneSuffixOnly()
     {
         return new CLiteral( m_at, m_negated, CPath.from( m_functor.getSuffix() ), m_values.values(), m_annotations.values() );
     }

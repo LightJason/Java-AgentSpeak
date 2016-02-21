@@ -58,7 +58,7 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
      *
      * @return new instance of the literal
      */
-    ILiteral cloneWithoutPath();
+    ILiteral cloneSuffixOnly();
 
     /**
      * returns a stream over value items
