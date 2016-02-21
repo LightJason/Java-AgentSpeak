@@ -34,6 +34,7 @@ import java.util.Arrays;
  * term structure for simple datatypes
  *
  * @warning hash code is defined on the input data type
+ * @todo check value hasing
  */
 public final class CRawTerm<T> implements ITerm
 {
@@ -49,10 +50,7 @@ public final class CRawTerm<T> implements ITerm
      * hash code cache
      */
     private final int m_hashcode;
-    /**
-     * value hash
-     */
-    private final int m_valuehash;
+
 
     /**
      * ctor
@@ -82,8 +80,6 @@ public final class CRawTerm<T> implements ITerm
         }
 
         m_hashcode = m_value == null ? super.hashCode() : m_value.hashCode();
-        m_valuehash = 0;
-        //CCommon.getTermHashing().putObject( m_value, CCommon.<>getTermFunnel() ).hash().asInt();
     }
 
 
@@ -136,12 +132,6 @@ public final class CRawTerm<T> implements ITerm
     public final CPath getFQNFunctor()
     {
         return m_functor;
-    }
-
-    @Override
-    public final int valuehash()
-    {
-        return m_valuehash;
     }
 
     /**

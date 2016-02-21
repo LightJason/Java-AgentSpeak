@@ -54,11 +54,4 @@ public interface ITerm
      */
     CPath getFQNFunctor();
 
-    /**
-     * returns the hash of the value
-     *
-     * @return hash
-     */
-    int valuehash();
-
 }

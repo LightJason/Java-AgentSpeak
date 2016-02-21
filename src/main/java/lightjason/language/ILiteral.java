@@ -92,6 +92,13 @@ public interface ILiteral extends ITerm, Comparable<ILiteral>
     int annotationhash();
 
     /**
+     * returns the hash of the value
+     *
+     * @return hash
+     */
+    int valuehash();
+
+    /**
      * getter of the literal for the negation
      */
     boolean isNegated();
