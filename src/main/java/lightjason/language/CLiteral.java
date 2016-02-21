@@ -47,6 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -55,6 +56,8 @@ import java.util.stream.Stream;
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. velocity(50)[source(self)]
+ *
+ * @todo incomplete deep-copy (clone) for values
  */
 public final class CLiteral implements ILiteral
 {
@@ -214,12 +217,6 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral clone( final CPath p_prefix )
-    {
-        return new CLiteral( m_at, m_negated, p_prefix.append( m_functor ), m_values.values(), m_annotations.values() );
-    }
-
-    @Override
     public final Stream<ITerm> values( final CPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
@@ -310,15 +307,33 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final ILiteral clone( final CPath p_prefix )
+    {
+        return new CLiteral(
+                m_at, m_negated, p_prefix.append( m_functor ),
+                m_values.values(),
+                m_annotations.values().stream().map( i -> i.clone() ).collect( Collectors.toList() )
+        );
+    }
+
+    @Override
     public final ILiteral clone()
     {
-        return new CLiteral( m_at, m_negated, m_functor, m_values.values(), m_annotations.values() );
+        return new CLiteral(
+                m_at, m_negated, m_functor,
+                m_values.values(),
+                m_annotations.values().stream().map( i -> i.clone() ).collect( Collectors.toList() )
+        );
     }
 
     @Override
     public final ILiteral cloneSuffixOnly()
     {
-        return new CLiteral( m_at, m_negated, CPath.from( m_functor.getSuffix() ), m_values.values(), m_annotations.values() );
+        return new CLiteral(
+                m_at, m_negated, CPath.from( m_functor.getSuffix() ),
+                m_values.values(),
+                m_annotations.values().stream().map( i -> i.clone() ).collect( Collectors.toList() )
+        );
     }
 
     @Override
