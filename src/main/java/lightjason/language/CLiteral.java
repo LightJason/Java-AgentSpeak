@@ -148,11 +148,17 @@ public final class CLiteral implements ILiteral
 
         final Hasher l_valuehasher = Hashing.murmur3_32().newHasher();
         if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_valuehasher.putInt( ( (ILiteral) i ).valuehash() ) ).count() == 0 )
+        {
+            l_valuehasher.putBoolean( m_negated );
             l_valuehasher.putString( l_functor, Charsets.UTF_8 );
+        }
 
         final Hasher l_annotationhasher = Hashing.murmur3_32().newHasher();
         if ( m_annotations.values().stream().map( i -> l_annotationhasher.putInt( i.valuehash() ) ).count() == 0 )
+        {
+            l_annotationhasher.putBoolean( m_negated );
             l_annotationhasher.putString( l_functor, Charsets.UTF_8 );
+        }
 
         m_structurehash = l_annotationhasher.hash().asInt();
         m_valuestructurehash = l_valuehasher.hash().asInt();
