@@ -23,7 +23,9 @@
 
 package lightjason.agent;
 
+import com.codepoetics.protonpack.StreamUtils;
 import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.expression.IExpression;
@@ -31,6 +33,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -52,9 +55,30 @@ public final class CUnifier implements IUnifier
     )
     {
         final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        //System.out.println( "----> " + l_result );
+        //System.out.print( "----> " );
+        //l_result.stream().forEach( i -> System.out.println(i + " --> " + this.unify( i, p_literal ) ) );
         return CBoolean.from( !l_result.isEmpty() );
     }
+
+    /**
+     * runs the unifiying process
+     *
+     * @param p_source source literal (literal which stores the data)
+     * @param p_target target literal (literal which stores the variables)
+     * @return list with unified variables
+     */
+    @SuppressWarnings( "unchecked" )
+    private List<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
+    {
+        final ILiteral l_target = (ILiteral) p_target.deepcopy();
+        return StreamUtils.zip(
+                p_source.values(),
+                l_target.values(),
+                ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
+        ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
+    }
+
+
 
     /**
      * search all relevant literals within the agent beliefbase
