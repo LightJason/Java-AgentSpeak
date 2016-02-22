@@ -2,6 +2,7 @@
 hallo(123)[abc(8),value('xxxx')].
 hallo(666)[abc(8)].
 hallo(123).
+hallo("foo").
 hallo(1111).
 hallo(foo(3)).
 second(true).

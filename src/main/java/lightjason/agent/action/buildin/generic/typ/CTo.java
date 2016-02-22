@@ -61,8 +61,6 @@ public final class CTo extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-
-
         // first reference of Java object, second string with Java class name
         try
         {

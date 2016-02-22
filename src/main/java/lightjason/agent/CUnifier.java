@@ -55,8 +55,8 @@ public final class CUnifier implements IUnifier
     )
     {
         final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        //System.out.print( "----> " );
-        //l_result.stream().forEach( i -> System.out.println(i + " --> " + this.unify( i, p_literal ) ) );
+        //System.out.println( "----> " + l_result );
+        //l_result.stream().forEach( i -> System.out.println("--> " + i + " --> " + this.unify( i, p_literal ) ) );
         return CBoolean.from( !l_result.isEmpty() );
     }
 

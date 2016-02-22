@@ -30,9 +30,9 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.IVariable;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -64,7 +64,7 @@ public final class CContext<T> implements IContext<T>
      * @param p_instance instance object
      * @param p_variables instance variables
      */
-    public CContext( final IAgent p_agent, final T p_instance, final Set<IVariable<?>> p_variables )
+    public CContext( final IAgent p_agent, final T p_instance, final Collection<IVariable<?>> p_variables )
     {
         if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
@@ -74,6 +74,11 @@ public final class CContext<T> implements IContext<T>
         m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::getFQNFunctor, i -> i ) ) );
     }
 
+    @Override
+    public IContext<T> duplicate()
+    {
+        return new CContext<T>( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
+    }
 
     @Override
     public final IAgent getAgent()

@@ -21,51 +21,48 @@
  * @endcond
  */
 
-package lightjason.language.execution;
+package lightjason.agent.action.buildin.generic.typ;
 
-import lightjason.agent.IAgent;
-import lightjason.common.CPath;
-import lightjason.language.IVariable;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Map;
+import java.util.List;
 
 
 /**
- * execution context with local data
- *
- * @todo add inheritance of plan/rule interface
+ * action to check if a type is a number
  */
-public interface IContext<T>
+public final class CIsNumeric extends IBuildinAction
 {
 
     /**
-     * returns the agent of the context
-     *
-     * @return agent
+     * ctor
      */
-    IAgent getAgent();
+    public CIsNumeric()
+    {
+        super( 3 );
+    }
 
-    /**
-     * returns the instance object
-     *
-     * @return instance object plan or rule
-     *
-     * @tparam N type
-     * @todo add inheritance of plan/rule interface
-     */
-    <N> N getInstance();
+    @Override
+    public final int getMinimalArgumentNumber()
+    {
+        return 1;
+    }
 
-    /**
-     * returns the variables names and their current value
-     *
-     * @return variable names and their current value
-     */
-    Map<CPath, IVariable<?>> getInstanceVariables();
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        p_return.add(
+                CRawTerm.from( CCommon.getRawValue( p_argument.get( 0 ) ) instanceof Number )
+        );
+        return CBoolean.from( true );
+    }
 
-    /**
-     * duplicates the context with a shallow-copy
-     *
-     * @return shallow-copy of the context
-     */
-    IContext<T> duplicate();
 }
