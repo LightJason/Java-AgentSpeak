@@ -90,10 +90,8 @@ public final class CUnifier implements IUnifier
             return l_partmatch;
 
         // try to match any possible literal by its functor
-        final Collection<ILiteral> l_any = p_agent.getBeliefBase()
-                                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                  .collect( Collectors.toList() );
-
-        return l_any;
+        return p_agent.getBeliefBase()
+                      .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                      .collect( Collectors.toList() );
     }
 }
