@@ -146,7 +146,7 @@ public final class TestCUnifier
         final ILiteral l_third = CLiteral.parse( "foo()" );
         final ILiteral l_fourth = CLiteral.parse( "hallo()" );
         assertNotEquals(
-                MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth ),
+                MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.valuehash() ),
                 l_third.valuehash(),
                 l_fourth.valuehash()
         );
@@ -163,12 +163,14 @@ public final class TestCUnifier
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[anno(1),xvalue('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
 
-
         assertNotEquals(
-                MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second ),
+                MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second, l_first.annotationhash() ),
                 l_first.annotationhash(), l_second.annotationhash()
         );
-        System.out.println( MessageFormat.format( "literal annotation hash of [{0}] is inequal [{1}|", l_first, l_second.annotationhash() ) );
+        System.out.println( MessageFormat
+                                    .format( "literal annotation hash of [{0}] and [{1}] are inequal [{2} / {3}]", l_first, l_second, l_first.annotationhash(),
+                                             l_second.annotationhash()
+                                    ) );
     }
 
 
@@ -182,8 +184,9 @@ public final class TestCUnifier
         final TestCUnifier l_test = new TestCUnifier();
 
         l_test.testLiteralValueTraversing();
-        l_test.testLiteralValueSequentialTraversing();
         l_test.testLiteralAnnotationTraversing();
+        l_test.testLiteralValueSequentialTraversing();
+
         l_test.testValueHash();
         l_test.testAnnotationHash();
     }
