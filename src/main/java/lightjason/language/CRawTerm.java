@@ -34,7 +34,7 @@ import java.util.Arrays;
  * term structure for simple datatypes
  *
  * @warning hash code is defined on the input data type
- * @todo check value hasing
+ * @todo deep-copy value copy incorrect
  */
 public final class CRawTerm<T> implements ITerm
 {
@@ -215,4 +215,15 @@ public final class CRawTerm<T> implements ITerm
         return this;
     }
 
+    @Override
+    public final ITerm deepcopy( final CPath... p_prefix )
+    {
+        return CRawTerm.from( m_value );
+    }
+
+    @Override
+    public final ITerm deepcopySuffix()
+    {
+        return CRawTerm.from( m_value );
+    }
 }

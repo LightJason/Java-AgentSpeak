@@ -29,7 +29,7 @@ import lightjason.common.CPath;
 /**
  * term interface
  */
-public interface ITerm
+public interface ITerm extends IDeepCopy<ITerm>
 {
 
     /**
@@ -53,12 +53,5 @@ public interface ITerm
      * @return fqn functor
      */
     CPath getFQNFunctor();
-
-    /**
-     * create deep-copy of the term data
-     *
-     * @return term
-     */
-    //ITerm deepcopy();
 
 }

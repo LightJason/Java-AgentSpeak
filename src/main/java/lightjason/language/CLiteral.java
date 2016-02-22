@@ -47,6 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -55,8 +56,6 @@ import java.util.stream.Stream;
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. velocity(50)[source(self)]
- *
- * @todo incomplete deep-copy (clone) for values
  */
 public final class CLiteral implements ILiteral
 {
@@ -345,6 +344,38 @@ public final class CLiteral implements ILiteral
     public final int compareTo( final ILiteral p_literal )
     {
         return Integer.compare( this.hashCode(), p_literal.hashCode() );
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final ITerm deepcopy( final CPath... p_prefix )
+    {
+        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+
+               ?
+               new CLiteral(
+                       m_at, m_negated, m_functor,
+                       m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
+                       m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+               )
+
+               :
+               new CLiteral(
+                       m_at, m_negated, p_prefix[0].append( m_functor ),
+                       m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
+                       m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+               );
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final ITerm deepcopySuffix()
+    {
+        return new CLiteral(
+                m_at, m_negated, CPath.from( m_functor.getSuffix() ),
+                m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
+                m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+        );
     }
 
 

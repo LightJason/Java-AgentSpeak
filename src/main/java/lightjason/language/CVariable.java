@@ -35,6 +35,7 @@ import java.util.Arrays;
  * default variable definition
  *
  * @note variable set is not thread-safe on default
+ * @todo deep-copy value copy incorrect
  */
 public class CVariable<T> implements IVariable<T>
 {
@@ -194,6 +195,18 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> shallowcopySuffix()
     {
         return new CVariable<T>( m_functor.getSuffix(), m_value );
+    }
+
+    @Override
+    public final ITerm deepcopy( final CPath... p_prefix )
+    {
+        return this.shallowcopy( p_prefix );
+    }
+
+    @Override
+    public final ITerm deepcopySuffix()
+    {
+        return this.shallowcopySuffix();
     }
 
     /**
