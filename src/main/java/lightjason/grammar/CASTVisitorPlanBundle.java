@@ -160,7 +160,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitPlan( final PlanBundleParser.PlanContext p_context )
     {
-        final Set<IAnnotation<?>> l_annotation = (Set) this.visitAnnotations( p_context.annotations() );
+        final Set<IAnnotation<?>> l_annotation = (Set<IAnnotation<?>>) this.visitAnnotations( p_context.annotations() );
         final CTrigger l_trigger = new CTrigger(
                 (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),
                 ( (ILiteral) this.visitLiteral( p_context.literal() ) ).getFQNFunctor()
