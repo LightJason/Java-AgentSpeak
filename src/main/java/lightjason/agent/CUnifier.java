@@ -24,7 +24,9 @@
 package lightjason.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
+import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IUnifier;
@@ -33,6 +35,8 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,11 +58,40 @@ public final class CUnifier implements IUnifier
     public final IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression
     )
     {
-        final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        //System.out.println( "----> " + l_result );
-        //l_result.stream().forEach( i -> System.out.println("--> " + i + " --> " + this.unify( i, p_literal ) ) );
+        // get possible literals
+        final List<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
+        if ( l_result.isEmpty() )
+            return CBoolean.from( false );
+
+
+        // on empty expression, first match will be used
+        if ( p_expression == null )
+        {
+            this.updateContext( p_context, this.unify( l_result.get( 0 ), p_literal ) );
+            return CBoolean.from( true );
+        }
+
+        // otherwise we try to evaluate the expression
+        // @todo not working
+        l_result.stream().map( i -> {
+            final List<ITerm> l_return = new LinkedList<>();
+            p_expression.execute(
+                    this.updateContext( p_context, this.unify( i, p_literal ) ), false, Collections.<ITerm>emptyList(), l_return,
+                    Collections.<ITerm>emptyList()
+            );
+            return ( l_return.size() == 1 ) && ( CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) ) );
+        } ).findFirst();
+
         return CBoolean.from( !l_result.isEmpty() );
     }
+
+
+    private IContext<?> updateContext( final IContext<?> p_context, final List<IVariable<?>> p_unifiedvariables )
+    {
+        p_unifiedvariables.parallelStream().forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
+        return p_context;
+    }
+
 
     /**
      * runs the unifiying process
@@ -70,10 +103,9 @@ public final class CUnifier implements IUnifier
     @SuppressWarnings( "unchecked" )
     private List<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
     {
-        final ILiteral l_target = (ILiteral) p_target.deepcopy();
         return StreamUtils.zip(
                 p_source.values(),
-                l_target.values(),
+                ( (ILiteral) p_target.deepcopy() ).values(),
                 ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
         ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
     }
@@ -92,23 +124,23 @@ public final class CUnifier implements IUnifier
      * literal is found, search runs again without annotation
      * definition
      */
-    private Collection<ILiteral> search( final IAgent p_agent, final ILiteral p_literal )
+    private List<ILiteral> search( final IAgent p_agent, final ILiteral p_literal )
     {
         // try to get a full match
-        final Collection<ILiteral> l_fullmatch = p_agent.getBeliefBase()
-                                                        .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                        .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
+        final List<ILiteral> l_fullmatch = p_agent.getBeliefBase()
+                                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                                  .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
                                                                       ( i.annotationhash() == p_literal.annotationhash() ) )
-                                                        .collect( Collectors.toList() );
+                                                  .collect( Collectors.toList() );
 
         if ( !l_fullmatch.isEmpty() )
             return l_fullmatch;
 
         // try to get a part match (without annotation)
-        final Collection<ILiteral> l_partmatch = p_agent.getBeliefBase()
-                                                        .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                        .filter( i -> i.valuehash() == p_literal.valuehash() )
-                                                        .collect( Collectors.toList() );
+        final List<ILiteral> l_partmatch = p_agent.getBeliefBase()
+                                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                                  .filter( i -> i.valuehash() == p_literal.valuehash() )
+                                                  .collect( Collectors.toList() );
 
         if ( !l_partmatch.isEmpty() )
             return l_partmatch;
