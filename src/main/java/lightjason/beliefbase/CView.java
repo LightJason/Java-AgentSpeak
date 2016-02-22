@@ -164,7 +164,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.add( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.shallowcloneSuffixOnly() );
+               : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.shallowcopySuffix() );
     }
 
     @Override
@@ -196,7 +196,7 @@ public class CView implements IView
     {
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.remove( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.shallowcloneSuffixOnly() );
+               : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.shallowcopySuffix() );
     }
 
     @Override
@@ -238,9 +238,9 @@ public class CView implements IView
 
                ?
                Stream.concat(
-                       m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().shallowclone( l_path ) ),
+                       m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().shallowcopy( l_path ) ),
                        m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream()
-                                                                                                              .map( j -> j.shallowclone( l_path ) )
+                                                                                                              .map( j -> j.shallowcopy( l_path ) )
                        )
                )
 
@@ -250,7 +250,7 @@ public class CView implements IView
                      .map( i -> i.normalize() )
                      .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
-                                        .map( j -> j.getRight().shallowclone( l_path ) ) );
+                                        .map( j -> j.getRight().shallowcopy( l_path ) ) );
     }
 
     @Override
@@ -270,9 +270,9 @@ public class CView implements IView
                Stream.concat(
                        m_beliefbase.getStorage().getMultiElements().values().parallelStream()
                                    .filter( i -> i.getLeft() == p_negated )
-                                   .map( i -> i.getRight().shallowclone( l_path ) ),
+                                   .map( i -> i.getRight().shallowcopy( l_path ) ),
                        m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream( p_negated )
-                                                                                                              .map( j -> j.shallowclone( l_path ) )
+                                                                                                              .map( j -> j.shallowcopy( l_path ) )
                        )
                )
 
@@ -283,7 +283,7 @@ public class CView implements IView
                      .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
                                         .filter( j -> j.getLeft() == p_negated )
-                                        .map( j -> j.getRight().shallowclone( l_path ) ) );
+                                        .map( j -> j.getRight().shallowcopy( l_path ) ) );
     }
 
     @Override

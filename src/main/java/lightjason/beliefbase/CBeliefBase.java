@@ -40,6 +40,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
  * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
+ * @todo check if a map with hash values optimize runtime access
  */
 public final class CBeliefBase implements IBeliefBase
 {

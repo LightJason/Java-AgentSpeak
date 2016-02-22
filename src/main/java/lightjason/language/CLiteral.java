@@ -306,27 +306,27 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral shallowclone( final CPath p_prefix )
+    public final ILiteral shallowcopy( final CPath... p_prefix )
     {
-        return new CLiteral(
-                m_at, m_negated, p_prefix.append( m_functor ),
-                m_values.values(),
-                m_annotations.values()
-        );
+        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+
+               ?
+               new CLiteral(
+                       m_at, m_negated, m_functor,
+                       m_values.values(),
+                       m_annotations.values()
+               )
+
+               :
+               new CLiteral(
+                       m_at, m_negated, p_prefix[0].append( m_functor ),
+                       m_values.values(),
+                       m_annotations.values()
+               );
     }
 
     @Override
-    public final ILiteral shallowclone()
-    {
-        return new CLiteral(
-                m_at, m_negated, m_functor,
-                m_values.values(),
-                m_annotations.values()
-        );
-    }
-
-    @Override
-    public final ILiteral shallowcloneSuffixOnly()
+    public final ILiteral shallowcopySuffix()
     {
         return new CLiteral(
                 m_at, m_negated, CPath.from( m_functor.getSuffix() ),
