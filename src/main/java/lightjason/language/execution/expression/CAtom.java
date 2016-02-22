@@ -84,7 +84,7 @@ public class CAtom implements IExpression
     {
         return m_value instanceof IVariable<?> ? new HashSet<IVariable<?>>()
         {{
-            add( ( (IVariable<?>) m_value ).shallowclone() );
+            add( ( (IVariable<?>) m_value ).shallowcopy() );
         }} : Collections.<IVariable<?>>emptySet();
     }
 

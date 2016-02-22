@@ -182,9 +182,18 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public IVariable<T> shallowclone()
+    public IVariable<T> shallowcopy( final CPath... p_prefix )
     {
-        return new CVariable<T>( m_functor.toString(), m_value );
+        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+               ? new CVariable<T>( m_functor, m_value )
+               : new CVariable<T>( p_prefix[0].append( m_functor ), m_value );
+    }
+
+
+    @Override
+    public IVariable<T> shallowcopySuffix()
+    {
+        return new CVariable<T>( m_functor.getSuffix(), m_value );
     }
 
     /**

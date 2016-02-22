@@ -23,80 +23,30 @@
 
 package lightjason.language;
 
-import lightjason.common.CCommon;
 import lightjason.common.CPath;
-import lightjason.error.CIllegalStateException;
 
 
 /**
- * constant definition
- *
- * @tparam T data type
+ * interface to create shallow-copy of objects
  */
-public final class CConstant<T> extends CVariable<T>
+public interface IShallowCopy<T> extends ICopy
 {
+    /**
+     * clones the object (shallow-copy)
+     *
+     * @param p_prefix add a path (only one path element is supported)
+     * to the functor or returns a shallow-copy
+     * @return new instance of the object
+     */
+    T shallowcopy( final CPath... p_prefix );
 
     /**
-     * ctor
+     * clones the object (shallow-copy)
+     * without full-qualified path, only
+     * suffix is used
      *
-     * @param p_functor name
+     * @return new instance of the object
      */
-    public CConstant( final String p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    public CConstant( final String p_functor, final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     */
-    public CConstant( final CPath p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    public CConstant( final CPath p_functor, final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    @Override
-    public final IVariable<T> set( final T p_value )
-    {
-        throw new CIllegalStateException( CCommon.getLanguageString( this, "set", m_functor ) );
-    }
-
-    @Override
-    public final IVariable<T> shallowcopy( final CPath... p_prefix )
-    {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CConstant<T>( m_functor, m_value )
-               : new CConstant<T>( p_prefix[0].append( m_functor ), m_value );
-    }
-
-
-    @Override
-    public final IVariable<T> shallowcopySuffix()
-    {
-        return new CConstant<T>( m_functor.getSuffix(), m_value );
-    }
+    T shallowcopySuffix();
 
 }

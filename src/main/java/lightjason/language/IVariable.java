@@ -28,7 +28,7 @@ package lightjason.language;
  *
  * @tparam T data type
  */
-public interface IVariable<T> extends ITerm
+public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
 {
 
     /**
@@ -91,13 +91,5 @@ public interface IVariable<T> extends ITerm
      * @throws IllegalArgumentException on assignable error
      */
     IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
-
-    /**
-     * clones the variable (shallow-copy)
-     * and not the value
-     *
-     * @return cloned variable
-     */
-    IVariable<T> shallowclone();
 
 }

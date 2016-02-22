@@ -189,7 +189,7 @@ public final class CProxyAction implements IExecution
         {
             return new HashSet<IVariable<?>>()
             {{
-                add( p_value.shallowclone() );
+                add( p_value.shallowcopy() );
             }};
         }
 

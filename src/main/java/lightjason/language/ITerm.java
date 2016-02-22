@@ -54,4 +54,11 @@ public interface ITerm
      */
     CPath getFQNFunctor();
 
+    /**
+     * create deep-copy of the term data
+     *
+     * @return term
+     */
+    //ITerm deepcopy();
+
 }

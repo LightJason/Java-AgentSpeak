@@ -96,7 +96,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     {
         return new HashSet<IVariable<?>>()
         {{
-            add( m_variable.shallowclone() );
+            add( m_variable.shallowcopy() );
         }};
     }
 

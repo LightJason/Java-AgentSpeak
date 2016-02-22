@@ -21,82 +21,12 @@
  * @endcond
  */
 
+
 package lightjason.language;
 
-import lightjason.common.CCommon;
-import lightjason.common.CPath;
-import lightjason.error.CIllegalStateException;
-
-
 /**
- * constant definition
- *
- * @tparam T data type
+ * interface to define copyable obejcts (shallow- and deep-copy)
  */
-public final class CConstant<T> extends CVariable<T>
+public interface ICopy
 {
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     */
-    public CConstant( final String p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    public CConstant( final String p_functor, final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     */
-    public CConstant( final CPath p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    public CConstant( final CPath p_functor, final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    @Override
-    public final IVariable<T> set( final T p_value )
-    {
-        throw new CIllegalStateException( CCommon.getLanguageString( this, "set", m_functor ) );
-    }
-
-    @Override
-    public final IVariable<T> shallowcopy( final CPath... p_prefix )
-    {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CConstant<T>( m_functor, m_value )
-               : new CConstant<T>( p_prefix[0].append( m_functor ), m_value );
-    }
-
-
-    @Override
-    public final IVariable<T> shallowcopySuffix()
-    {
-        return new CConstant<T>( m_functor.getSuffix(), m_value );
-    }
-
 }

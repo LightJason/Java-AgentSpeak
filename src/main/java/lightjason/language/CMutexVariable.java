@@ -137,9 +137,18 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized IVariable<T> shallowclone()
+    public final IVariable<T> shallowcopy( final CPath... p_prefix )
     {
-        return new CMutexVariable<T>( m_functor.toString(), m_value );
+        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+               ? new CMutexVariable<T>( m_functor, m_value )
+               : new CMutexVariable<T>( p_prefix[0].append( m_functor ), m_value );
+    }
+
+
+    @Override
+    public final IVariable<T> shallowcopySuffix()
+    {
+        return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
     }
 
 }

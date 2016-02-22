@@ -34,26 +34,8 @@ import java.util.stream.Stream;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral extends ITerm, Comparable<ILiteral>
+public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILiteral>
 {
-
-    /**
-     * clones the literal (shallow-copy)
-     *
-     * @param p_prefix add a path (only one path element is supported)
-     * to the functor or returns a shallow-copy
-     * @return new instance of the literal
-     */
-    ILiteral shallowcopy( final CPath... p_prefix );
-
-    /**
-     * clones the literal (shallow-copy)
-     * without full-qualified path, only
-     * suffix is used
-     *
-     * @return new instance of the literal
-     */
-    ILiteral shallowcopySuffix();
 
     /**
      * returns a stream over value items
