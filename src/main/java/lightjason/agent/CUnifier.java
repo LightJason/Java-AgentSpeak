@@ -24,6 +24,7 @@
 package lightjason.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
+import lightjason.error.CIllegalStateException;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -39,6 +40,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -85,7 +87,13 @@ public final class CUnifier implements IUnifier
         return CBoolean.from( !l_result.isEmpty() );
     }
 
-
+    /**
+     * updates within an instance context all variables with the unified values
+     *
+     * @param p_context context
+     * @param p_unifiedvariables unified variables
+     * @return context reference
+     */
     private IContext<?> updateContext( final IContext<?> p_context, final List<IVariable<?>> p_unifiedvariables )
     {
         p_unifiedvariables.parallelStream().forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
@@ -104,50 +112,56 @@ public final class CUnifier implements IUnifier
     private List<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
     {
         return StreamUtils.zip(
-                p_source.values(),
-                ( (ILiteral) p_target.deepcopy() ).values(),
+                p_source.orderedvalues(),
+                ( (ILiteral) p_target.deepcopy() ).orderedvalues(),
                 ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
         ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
     }
 
 
-
     /**
-     * search all relevant literals within the agent beliefbase
-     *
-     * @param p_agent agent
-     * @param p_literal literal search
-     * @return collection of found literals or null if no literal is found
-     *
-     * @note try to search all literals which are exactly match
-     * (values and annotations) the literal structure if no
-     * literal is found, search runs again without annotation
-     * definition
+     * enum for unifying
      */
-    private List<ILiteral> search( final IAgent p_agent, final ILiteral p_literal )
+    private enum EUnify
     {
-        // try to get a full match
-        final List<ILiteral> l_fullmatch = p_agent.getBeliefBase()
-                                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                  .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
-                                                                      ( i.annotationhash() == p_literal.annotationhash() ) )
-                                                  .collect( Collectors.toList() );
+        EXACT,
+        VALUES,
+        ANY;
 
-        if ( !l_fullmatch.isEmpty() )
-            return l_fullmatch;
 
-        // try to get a part match (without annotation)
-        final List<ILiteral> l_partmatch = p_agent.getBeliefBase()
-                                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                                  .filter( i -> i.valuehash() == p_literal.valuehash() )
-                                                  .collect( Collectors.toList() );
+        /**
+         * search all relevant literals within the agent beliefbase
+         *
+         * @param p_agent agent
+         * @param p_literal literal search
+         * @return stream of literals
+         **/
+        public Stream<ILiteral> getStream( final ILiteral p_literal, final IAgent p_agent )
+        {
+            switch ( this )
+            {
+                case EXACT:
+                    return p_agent.getBeliefBase()
+                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                  .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
+                                                ( i.annotationhash() == p_literal.annotationhash() ) );
 
-        if ( !l_partmatch.isEmpty() )
-            return l_partmatch;
+                case VALUES:
+                    return p_agent.getBeliefBase()
+                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                  .filter( i -> i.valuehash() == p_literal.valuehash() );
 
-        // try to match any possible literal by its functor
-        return p_agent.getBeliefBase()
-                      .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                      .collect( Collectors.toList() );
+                case ANY:
+                    return p_agent.getBeliefBase()
+                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() );
+
+                default:
+                    throw new CIllegalStateException();
+
+            }
+        }
+
+
     }
+
 }
