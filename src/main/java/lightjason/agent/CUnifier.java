@@ -120,6 +120,37 @@ public final class CUnifier implements IUnifier
 
 
     /**
+     * searches the literals within the agent beliefbase
+     *
+     * @param p_agent agent
+     * @param p_literal searched literal
+     * @return list with possible literals
+     */
+    @Deprecated
+    private List<ILiteral> search( final IAgent p_agent, final ILiteral p_literal )
+    {
+        final List<ILiteral> l_full = p_agent.getBeliefBase()
+                                             .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                             .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
+                                                           ( i.annotationhash() == p_literal.annotationhash() ) )
+                                             .collect( Collectors.toList() );
+        if ( !l_full.isEmpty() )
+            return l_full;
+
+        final List<ILiteral> l_part = p_agent.getBeliefBase()
+                                             .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                             .filter( i -> i.valuehash() == p_literal.valuehash() )
+                                             .collect( Collectors.toList() );
+        if ( !l_part.isEmpty() )
+            return l_part;
+
+        return p_agent.getBeliefBase()
+                      .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                      .collect( Collectors.toList() );
+    }
+
+
+    /**
      * enum for unifying
      */
     private enum EUnify
@@ -136,7 +167,7 @@ public final class CUnifier implements IUnifier
          * @param p_literal literal search
          * @return stream of literals
          **/
-        public Stream<ILiteral> getStream( final ILiteral p_literal, final IAgent p_agent )
+        public Stream<ILiteral> getStream( final IAgent p_agent, final ILiteral p_literal )
         {
             switch ( this )
             {
