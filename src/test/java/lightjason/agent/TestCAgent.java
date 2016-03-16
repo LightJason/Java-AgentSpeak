@@ -71,7 +71,7 @@ public final class TestCAgent
         Map<IAction, Double> l_map = new HashMap<>();
         try
         {
-            l_map = CCommon.getActionsFromPackage( "lightjason.agent.action.buildin" ).stream().collect(
+            l_map = CCommon.getActionsFromPackage().stream().collect(
                     Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
 
             l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );

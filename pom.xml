@@ -9,6 +9,9 @@
 
 
     <!-- project meta information -->
+    <name>Light-Jason</name>
+    <url>https://github.com/flashpixx/Light-Jason</url>
+
     <licenses>
         <license>
             <name>GNU Lesser General Public License 3</name>
@@ -62,6 +65,8 @@
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <gpg.skip>true</gpg.skip>
 
         <!-- will be set outside (build parameter) -->
         <build.number></build.number>
@@ -194,6 +199,21 @@
 
         <plugins>
 
+            <!-- GPG Sign plugin -->
+            <plugin>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- AntLR grammar build -->
             <plugin>
                 <groupId>org.antlr</groupId>
@@ -246,6 +266,25 @@
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
+            </plugin>
+
+            <!-- sources & jar build -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- checkstyle is performtemplate at compile / validation phase
