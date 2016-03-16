@@ -252,9 +252,11 @@ second(true).
 
         //>>hallo(U, xxx(5), sub(sub('Test'))) << true;
         >>( hallo( UN1 ), generic/typ/isstring(UN1) ) << true;
-        >>hallo( UN2 ) << true;
 
-        generic/print("unifcation", UN1, UN2 );
+        // relation create a null object -> NPE
+        //>>( hallo( UN2 ), generic/typ/isnumeric(UN2) && (UN2 > 200.0) ) << true;
+
+        generic/print("unifcation", UN1 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
