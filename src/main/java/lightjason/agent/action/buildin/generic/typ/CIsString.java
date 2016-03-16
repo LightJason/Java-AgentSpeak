@@ -60,12 +60,10 @@ public final class CIsString extends IBuildinAction
     )
     {
         final Object l_value = CCommon.getRawValue( p_argument.get( 0 ) );
-        p_return.add(
-                CRawTerm.from(
-                        ( l_value instanceof String ) || ( l_value instanceof Character )
-                )
-        );
-        return CBoolean.from( true );
+        final boolean l_return = ( l_value instanceof String ) || ( l_value instanceof Character );
+
+        p_return.add( CRawTerm.from( l_return ) );
+        return CBoolean.from( l_return );
     }
 
 }

@@ -35,10 +35,10 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,104 +51,68 @@ public final class CUnifier implements IUnifier
     @Override
     public final IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression )
     {
-        final Collection<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        //System.out.println("----> " + l_result);
-        return CBoolean.from( !l_result.isEmpty() );
+        return CBoolean.from( false );
     }
 
     @Override
     public final IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression
     )
     {
-        // get possible literals
-        final List<ILiteral> l_result = this.search( p_context.getAgent(), p_literal );
-        if ( l_result.isEmpty() )
+        // get all possible variables
+        final List<Set<IVariable<?>>> l_variables = EUnify.EXACT.unify( p_context.getAgent(), p_literal );
+        if ( l_variables.isEmpty() )
+            l_variables.addAll( EUnify.VALUEEXACT.unify( p_context.getAgent(), p_literal ) );
+        if ( l_variables.isEmpty() )
+            l_variables.addAll( EUnify.ANY.unify( p_context.getAgent(), p_literal ) );
+        if ( l_variables.isEmpty() )
             return CBoolean.from( false );
 
-
-        // on empty expression, first match will be used
+        // if no expression exists, returns the first unified structure
         if ( p_expression == null )
         {
-            this.updateContext( p_context, this.unify( l_result.get( 0 ), p_literal ) );
+            this.updateContext( p_context, l_variables.get( 0 ).parallelStream() );
             return CBoolean.from( true );
         }
 
-        // otherwise we try to evaluate the expression
-        // @todo not working
-        l_result.stream().map( i -> {
-            final List<ITerm> l_return = new LinkedList<>();
-            p_expression.execute(
-                    this.updateContext( p_context, this.unify( i, p_literal ) ), false, Collections.<ITerm>emptyList(), l_return,
-                    Collections.<ITerm>emptyList()
-            );
-            return ( l_return.size() == 1 ) && ( CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) ) );
-        } ).findFirst();
+        // otherwise the expression must be checked, first match will be used
+        final Set<IVariable<?>> l_result = l_variables.stream()
+                                                      .filter( i -> {
+                                                          final List<ITerm> l_return = new LinkedList<>();
+                                                          final IFuzzyValue<Boolean> x = p_expression.execute(
+                                                                  this.updateContext(
+                                                                          p_context.duplicate(),
+                                                                          i.parallelStream()
+                                                                  ),
+                                                                  false,
+                                                                  Collections.<ITerm>emptyList(),
+                                                                  l_return,
+                                                                  Collections.<ITerm>emptyList()
+                                                          );
+                                                          return ( l_return.size() == 1 ) && ( CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) ) );
+                                                      } )
+                                                      .findFirst()
+                                                      .orElse( Collections.<IVariable<?>>emptySet() );
 
-        return CBoolean.from( !l_result.isEmpty() );
+        // if no match
+        if ( l_result.isEmpty() )
+            return CBoolean.from( false );
+
+        this.updateContext( p_context, l_result.parallelStream() );
+        return CBoolean.from( true );
     }
 
     /**
      * updates within an instance context all variables with the unified values
      *
      * @param p_context context
-     * @param p_unifiedvariables unified variables
+     * @param p_unifiedvariables unified variables as stream
      * @return context reference
      */
-    private IContext<?> updateContext( final IContext<?> p_context, final List<IVariable<?>> p_unifiedvariables )
+    private IContext<?> updateContext( final IContext<?> p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.parallelStream().forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
+        p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
         return p_context;
     }
-
-
-    /**
-     * runs the unifiying process
-     *
-     * @param p_source source literal (literal which stores the data)
-     * @param p_target target literal (literal which stores the variables)
-     * @return list with unified variables
-     */
-    @SuppressWarnings( "unchecked" )
-    private List<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
-    {
-        return StreamUtils.zip(
-                p_source.orderedvalues(),
-                ( (ILiteral) p_target.deepcopy() ).orderedvalues(),
-                ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
-        ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
-    }
-
-
-    /**
-     * searches the literals within the agent beliefbase
-     *
-     * @param p_agent agent
-     * @param p_literal searched literal
-     * @return list with possible literals
-     */
-    @Deprecated
-    private List<ILiteral> search( final IAgent p_agent, final ILiteral p_literal )
-    {
-        final List<ILiteral> l_full = p_agent.getBeliefBase()
-                                             .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                             .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
-                                                           ( i.annotationhash() == p_literal.annotationhash() ) )
-                                             .collect( Collectors.toList() );
-        if ( !l_full.isEmpty() )
-            return l_full;
-
-        final List<ILiteral> l_part = p_agent.getBeliefBase()
-                                             .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                             .filter( i -> i.valuehash() == p_literal.valuehash() )
-                                             .collect( Collectors.toList() );
-        if ( !l_part.isEmpty() )
-            return l_part;
-
-        return p_agent.getBeliefBase()
-                      .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                      .collect( Collectors.toList() );
-    }
-
 
     /**
      * enum for unifying
@@ -156,18 +120,19 @@ public final class CUnifier implements IUnifier
     private enum EUnify
     {
         EXACT,
-        VALUES,
+        VALUEEXACT,
         ANY;
 
 
         /**
-         * search all relevant literals within the agent beliefbase
+         * search all relevant literals within the agent beliefbase and unifies the variables
          *
          * @param p_agent agent
          * @param p_literal literal search
-         * @return stream of literals
+         * @return list of literal sets
+         * @todo recursive descend of ordered / annotation values
          **/
-        public Stream<ILiteral> getStream( final IAgent p_agent, final ILiteral p_literal )
+        public List<Set<IVariable<?>>> unify( final IAgent p_agent, final ILiteral p_literal )
         {
             switch ( this )
             {
@@ -175,24 +140,87 @@ public final class CUnifier implements IUnifier
                     return p_agent.getBeliefBase()
                                   .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                                   .filter( i -> ( i.valuehash() == p_literal.valuehash() ) &&
-                                                ( i.annotationhash() == p_literal.annotationhash() ) );
+                                                ( i.annotationhash() == p_literal.annotationhash() )
+                                  )
+                                  .map( i -> {
+                                      final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
+                                      return Stream.concat(
+                                              this.unifyexact( l_literal.orderedvalues(), i.orderedvalues() ),
+                                              this.unifyexact( l_literal.annotations(), i.annotations() )
+                                      ).collect( Collectors.toSet() );
+                                  } )
+                                  .filter( i -> !i.isEmpty() )
+                                  .collect( Collectors.toList() );
 
-                case VALUES:
+                case VALUEEXACT:
                     return p_agent.getBeliefBase()
                                   .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                                  .filter( i -> i.valuehash() == p_literal.valuehash() );
+                                  .filter( i -> i.valuehash() == p_literal.valuehash() )
+                                  .map( i -> {
+                                      final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
+                                      return Stream.concat(
+                                              this.unifyexact( l_literal.orderedvalues(), i.orderedvalues() ),
+                                              this.unifyfuzzy( l_literal.annotations(), i.annotations() )
+                                      ).collect( Collectors.toSet() );
+                                  } )
+                                  .filter( i -> !i.isEmpty() )
+                                  .collect( Collectors.toList() );
+
 
                 case ANY:
                     return p_agent.getBeliefBase()
-                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() );
+                                  .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                                  .map( i -> {
+                                      final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
+                                      return Stream.concat(
+                                              this.unifyexact( l_literal.orderedvalues(), i.orderedvalues() ),
+                                              this.unifyfuzzy( l_literal.annotations(), i.annotations() )
+                                      ).collect( Collectors.toSet() );
+                                  } )
+                                  .filter( i -> !i.isEmpty() )
+                                  .collect( Collectors.toList() );
 
                 default:
-                    throw new CIllegalStateException();
+                    throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unificationnotexists" ) );
 
             }
         }
 
+        /**
+         * runs the exact (hash equal) unifiying process
+         *
+         * @param p_target term stream of targets (literal which stores the variables as instance)
+         * @param p_source term stream of sources
+         * @return list with unified variables
+         *
+         * @tparam T term type
+         */
+        @SuppressWarnings( "unchecked" )
+        private <T> Stream<IVariable<?>> unifyexact( final Stream<T> p_target, final Stream<T> p_source )
+        {
+            return StreamUtils.zip(
+                    p_source,
+                    p_target,
+                    ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
+            )
+                              .filter( i -> i instanceof IVariable<?> )
+                              .map( i -> (IVariable<?>) i );
+        }
 
+        /**
+         * runs the fuzzy (hash unequal) unifiying process
+         *
+         * @param p_target term stream of targets (literal which stores the variables as instance)
+         * @param p_source term stream of sources
+         * @return list with unified variables
+         *
+         * @tparam T term type
+         * @bug incomplete
+         */
+        private <T> Stream<IVariable<?>> unifyfuzzy( final Stream<T> p_target, final Stream<T> p_source )
+        {
+            return Stream.of();
+        }
     }
 
 }

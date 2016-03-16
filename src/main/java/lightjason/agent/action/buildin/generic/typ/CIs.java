@@ -62,13 +62,11 @@ public final class CIs extends IBuildinAction
         // first reference of Java object, second string with Java class name
         try
         {
-            p_return.add(
-                    CRawTerm.from(
-                            Class.forName( CCommon.getRawValue( p_argument.get( 1 ) ) )
-                                 .isAssignableFrom( CCommon.getRawValue( p_argument.get( 0 ) ).getClass() )
-                    )
-            );
-            return CBoolean.from( true );
+            final boolean l_return = Class.forName( CCommon.getRawValue( p_argument.get( 1 ) ) )
+                                          .isAssignableFrom( CCommon.getRawValue( p_argument.get( 0 ) ).getClass() );
+
+            p_return.add( CRawTerm.from( l_return ) );
+            return CBoolean.from( l_return );
         }
         catch ( final ClassNotFoundException p_exception )
         {

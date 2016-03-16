@@ -251,10 +251,10 @@ second(true).
         // --- sequential & parallel unification ---------------------------------------------------------------------------------------------------------------
 
         //>>hallo(U, xxx(5), sub(sub('Test'))) << true;
-        >>hallo( UN1, generic/type/isstring(UN1) ) << true;
-        //@>>foo(U);
+        >>( hallo( UN1 ), generic/typ/isstring(UN1) ) << true;
+        >>hallo( UN2 ) << true;
 
-        generic/print("unifcation", UN1);
+        generic/print("unifcation", UN1, UN2 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

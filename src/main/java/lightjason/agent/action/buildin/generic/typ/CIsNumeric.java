@@ -59,10 +59,10 @@ public final class CIsNumeric extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-                CRawTerm.from( CCommon.getRawValue( p_argument.get( 0 ) ) instanceof Number )
-        );
-        return CBoolean.from( true );
+        final boolean l_return = CCommon.getRawValue( p_argument.get( 0 ) ) instanceof Number;
+
+        p_return.add( CRawTerm.from( l_return ) );
+        return CBoolean.from( l_return );
     }
 
 }
