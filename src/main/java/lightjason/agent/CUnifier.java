@@ -70,7 +70,7 @@ public final class CUnifier implements IUnifier
         // if no expression exists, returns the first unified structure
         if ( p_expression == null )
         {
-            this.updateContext( p_context, l_variables.get( 0 ).parallelStream() );
+            updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
             return CBoolean.from( true );
         }
 
@@ -79,7 +79,7 @@ public final class CUnifier implements IUnifier
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
                                                           final IFuzzyValue<Boolean> x = p_expression.execute(
-                                                                  this.updateContext(
+                                                                  updatecontext(
                                                                           p_context.duplicate(),
                                                                           i.parallelStream()
                                                                   ),
@@ -97,7 +97,7 @@ public final class CUnifier implements IUnifier
         if ( l_result.isEmpty() )
             return CBoolean.from( false );
 
-        this.updateContext( p_context, l_result.parallelStream() );
+        updatecontext( p_context, l_result.parallelStream() );
         return CBoolean.from( true );
     }
 
@@ -108,7 +108,7 @@ public final class CUnifier implements IUnifier
      * @param p_unifiedvariables unified variables as stream
      * @return context reference
      */
-    private IContext<?> updateContext( final IContext<?> p_context, final Stream<IVariable<?>> p_unifiedvariables )
+    private static IContext<?> updatecontext( final IContext<?> p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
         p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
         return p_context;
@@ -145,8 +145,8 @@ public final class CUnifier implements IUnifier
                                   .map( i -> {
                                       final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                                       return Stream.concat(
-                                              this.unifyexact( l_literal.orderedvalues(), i.orderedvalues() ),
-                                              this.unifyexact( l_literal.annotations(), i.annotations() )
+                                              unifyexact( recursiveValues( l_literal.orderedvalues() ), recursiveValues( i.orderedvalues() ) ),
+                                              unifyexact( l_literal.annotations(), i.annotations() )
                                       ).collect( Collectors.toSet() );
                                   } )
                                   .filter( i -> !i.isEmpty() )
@@ -159,8 +159,8 @@ public final class CUnifier implements IUnifier
                                   .map( i -> {
                                       final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                                       return Stream.concat(
-                                              this.unifyexact( l_literal.orderedvalues(), i.orderedvalues() ),
-                                              this.unifyfuzzy( l_literal.annotations(), i.annotations() )
+                                              unifyexact( recursiveValues( l_literal.orderedvalues() ), recursiveValues( i.orderedvalues() ) ),
+                                              unifyfuzzy( l_literal.annotations(), i.annotations() )
                                       ).collect( Collectors.toSet() );
                                   } )
                                   .filter( i -> !i.isEmpty() )
@@ -173,8 +173,8 @@ public final class CUnifier implements IUnifier
                                   .map( i -> {
                                       final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                                       return Stream.concat(
-                                              this.unifyexact( l_literal.orderedvalues(), i.orderedvalues() ),
-                                              this.unifyfuzzy( l_literal.annotations(), i.annotations() )
+                                              unifyfuzzy( recursiveValues( l_literal.orderedvalues() ), recursiveValues( i.orderedvalues() ) ),
+                                              unifyfuzzy( l_literal.annotations(), i.annotations() )
                                       ).collect( Collectors.toSet() );
                                   } )
                                   .filter( i -> !i.isEmpty() )
@@ -196,7 +196,7 @@ public final class CUnifier implements IUnifier
          * @tparam T term type
          */
         @SuppressWarnings( "unchecked" )
-        private <T> Stream<IVariable<?>> unifyexact( final Stream<T> p_target, final Stream<T> p_source )
+        private static <T> Stream<IVariable<?>> unifyexact( final Stream<T> p_target, final Stream<T> p_source )
         {
             return StreamUtils.zip(
                     p_source,
@@ -205,6 +205,18 @@ public final class CUnifier implements IUnifier
             )
                               .filter( i -> i instanceof IVariable<?> )
                               .map( i -> (IVariable<?>) i );
+        }
+
+        /**
+         * recursive stream of literal values
+         *
+         * @param p_input term stream
+         * @return term stream
+         */
+        @SuppressWarnings( "unchecked" )
+        private static Stream<ITerm> recursiveValues( final Stream<ITerm> p_input )
+        {
+            return p_input.flatMap( i -> i instanceof ILiteral ? recursiveValues( ( (ILiteral) i ).orderedvalues() ) : Stream.of( i ) );
         }
 
         /**
@@ -217,7 +229,7 @@ public final class CUnifier implements IUnifier
          * @tparam T term type
          * @bug incomplete
          */
-        private <T> Stream<IVariable<?>> unifyfuzzy( final Stream<T> p_target, final Stream<T> p_source )
+        private static <T> Stream<IVariable<?>> unifyfuzzy( final Stream<T> p_target, final Stream<T> p_source )
         {
             return Stream.of();
         }
