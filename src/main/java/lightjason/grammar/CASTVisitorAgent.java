@@ -789,7 +789,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public final Object visitExpression_bracket( final AgentParser.Expression_bracketContext p_context )
     {
-        return this.visitChildren( p_context );
+        return this.visitExpression( p_context.expression() );
     }
 
 
