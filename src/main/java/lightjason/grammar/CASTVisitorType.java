@@ -361,7 +361,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public final Object visitExpression_bracket( final TypeParser.Expression_bracketContext p_context )
     {
-        return this.visitChildren( p_context );
+        return this.visitExpression( p_context.expression() );
     }
 
 

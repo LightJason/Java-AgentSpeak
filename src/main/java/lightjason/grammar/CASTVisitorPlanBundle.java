@@ -750,7 +750,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public final Object visitExpression_bracket( final PlanBundleParser.Expression_bracketContext p_context )
     {
-        return this.visitChildren( p_context );
+        return this.visitExpression( p_context.expression() );
     }
 
 
