@@ -44,13 +44,50 @@ import java.util.stream.Stream;
 
 /**
  * unification algorithm
+ * @todo incomplete
  */
 public final class CUnifier implements IUnifier
 {
     @Override
     public final IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final IExpression p_expression )
     {
-        return CBoolean.from( false );
+        // get all possible variables
+        final List<Set<IVariable<?>>> l_variables = unify( p_context.getAgent(), p_literal );
+        if ( l_variables.isEmpty() )
+            return CBoolean.from( false );
+
+        // if no expression exists, returns the first unified structure
+        if ( p_expression == null )
+        {
+            updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
+            return CBoolean.from( true );
+        }
+
+        // otherwise the expression must be checked, first match will be used
+        final Set<IVariable<?>> l_result = l_variables.parallelStream()
+                                                      .filter( i -> {
+                                                          final List<ITerm> l_return = new LinkedList<>();
+                                                          final IFuzzyValue<Boolean> x = p_expression.execute(
+                                                                  updatecontext(
+                                                                          p_context.duplicate(),
+                                                                          i.parallelStream()
+                                                                  ),
+                                                                  false,
+                                                                  Collections.<ITerm>emptyList(),
+                                                                  l_return,
+                                                                  Collections.<ITerm>emptyList()
+                                                          );
+                                                          return ( l_return.size() == 1 ) && ( CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) ) );
+                                                      } )
+                                                      .findFirst()
+                                                      .orElse( Collections.<IVariable<?>>emptySet() );
+
+        // if no match
+        if ( l_result.isEmpty() )
+            return CBoolean.from( false );
+
+        updatecontext( p_context, l_result.parallelStream() );
+        return CBoolean.from( true );
     }
 
     @Override

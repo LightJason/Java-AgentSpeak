@@ -4,6 +4,12 @@ hallo(666)[abc(8)].
 hallo(123).
 hallo("foo").
 hallo(1111).
+hallo(600).
+hallo(999).
+hallo(900).
+hallo(888).
+hallo(777).
+hallo(700).
 hallo(foo(3)).
 second(true).
 
@@ -253,7 +259,7 @@ second(true).
         //>>hallo(U, xxx(5), sub(sub('Test'))) << true;
         >>hallo( UN1 ) << true;
         >>( hallo( UN2 ), generic/typ/isstring(UN2) ) << true;
-        >>( hallo( UN3 ), generic/typ/isnumeric(UN3) && (UN3 > 200) ) << true;
+        @>>( hallo( UN3 ), generic/typ/isnumeric(UN3) && (UN3 > 200) ) << true;
 
         generic/print("unifcation", UN1, UN2, UN3 );
         generic/print();
