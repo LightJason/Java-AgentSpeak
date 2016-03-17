@@ -58,7 +58,7 @@ public final class CUnifier implements IUnifier
     )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = unifyvariables( p_context.getAgent(), p_literal );
+        final List<Set<IVariable<?>>> l_variables = unify( p_context.getAgent(), p_literal );
         if ( l_variables.isEmpty() )
             return CBoolean.from( false );
 
@@ -118,7 +118,7 @@ public final class CUnifier implements IUnifier
      *
      * @todo recursive descend of ordered / annotation values
      **/
-    private static List<Set<IVariable<?>>> unifyvariables( final IAgent p_agent, final ILiteral p_literal )
+    private static List<Set<IVariable<?>>> unify( final IAgent p_agent, final ILiteral p_literal )
     {
         final List<Set<IVariable<?>>> l_variables = unifyexact( p_agent, p_literal );
         if ( l_variables.isEmpty() )
@@ -148,8 +148,8 @@ public final class CUnifier implements IUnifier
                       .map( i -> {
                           final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                           return Stream.concat(
-                                  unifyexact( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
-                                  unifyexact( l_literal.annotations(), i.annotations() )
+                                  streamunifyexact( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
+                                  streamunifyexact( l_literal.annotations(), i.annotations() )
                           ).collect( Collectors.toSet() );
                       } )
                       .filter( i -> !i.isEmpty() )
@@ -173,8 +173,8 @@ public final class CUnifier implements IUnifier
                       .map( i -> {
                           final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                           return Stream.concat(
-                                  unifyexact( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
-                                  unifyfuzzy( l_literal.annotations(), i.annotations() )
+                                  streamunifyexact( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
+                                  streamunifyfuzzy( l_literal.annotations(), i.annotations() )
                           ).collect( Collectors.toSet() );
                       } )
                       .filter( i -> !i.isEmpty() )
@@ -197,8 +197,8 @@ public final class CUnifier implements IUnifier
                       .map( i -> {
                           final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                           return Stream.concat(
-                                  unifyfuzzy( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
-                                  unifyfuzzy( l_literal.annotations(), i.annotations() )
+                                  streamunifyfuzzy( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
+                                  streamunifyfuzzy( l_literal.annotations(), i.annotations() )
                           ).collect( Collectors.toSet() );
                       } )
                       .filter( i -> !i.isEmpty() )
@@ -229,7 +229,7 @@ public final class CUnifier implements IUnifier
      * @tparam T term type
      */
     @SuppressWarnings( "unchecked" )
-    private static <T> Stream<IVariable<?>> unifyexact( final Stream<T> p_target, final Stream<T> p_source )
+    private static <T> Stream<IVariable<?>> streamunifyexact( final Stream<T> p_target, final Stream<T> p_source )
     {
         return StreamUtils.zip(
                 p_source,
@@ -250,7 +250,7 @@ public final class CUnifier implements IUnifier
      * @tparam T term type
      * @bug incomplete
      */
-    private static <T> Stream<IVariable<?>> unifyfuzzy( final Stream<T> p_target, final Stream<T> p_source )
+    private static <T> Stream<IVariable<?>> streamunifyfuzzy( final Stream<T> p_target, final Stream<T> p_source )
     {
         return Stream.of();
     }
