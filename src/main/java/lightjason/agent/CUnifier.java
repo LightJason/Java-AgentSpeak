@@ -67,7 +67,7 @@ public final class CUnifier implements IUnifier
         final Set<IVariable<?>> l_result = l_variables.parallelStream()
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
-                                                          final IFuzzyValue<Boolean> x = p_expression.execute(
+                                                          p_expression.execute(
                                                                   updatecontext(
                                                                           p_context.duplicate(),
                                                                           i.parallelStream()
@@ -110,7 +110,7 @@ public final class CUnifier implements IUnifier
         final Set<IVariable<?>> l_result = l_variables.stream()
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
-                                                          final IFuzzyValue<Boolean> x = p_expression.execute(
+                                                          p_expression.execute(
                                                                   updatecontext(
                                                                           p_context.duplicate(),
                                                                           i.parallelStream()
