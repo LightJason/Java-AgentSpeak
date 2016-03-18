@@ -179,8 +179,8 @@ public final class CUnifier implements IUnifier
                       .map( i -> {
                           final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                           return Stream.concat(
-                                  streamunifyexact( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
-                                  streamunifyexact( recursivedescendannotation( l_literal.annotations() ), recursivedescendannotation( i.annotations() ) )
+                                  unifyexact( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
+                                  unifyexact( recursivedescendannotation( l_literal.annotations() ), recursivedescendannotation( i.annotations() ) )
                           ).collect( Collectors.toSet() );
                       } )
                       .filter( i -> !i.isEmpty() )
@@ -203,8 +203,8 @@ public final class CUnifier implements IUnifier
                       .map( i -> {
                           final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
                           return Stream.concat(
-                                  streamunifyfuzzy( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
-                                  streamunifyfuzzy( recursivedescendannotation( l_literal.annotations() ), recursivedescendannotation( i.annotations() ) )
+                                  unifyrecursive( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
+                                  unifyrecursive( recursivedescendannotation( l_literal.annotations() ), recursivedescendannotation( i.annotations() ) )
                           ).collect( Collectors.toSet() );
                       } )
                       .filter( i -> !i.isEmpty() )
@@ -248,11 +248,12 @@ public final class CUnifier implements IUnifier
      * @tparam T term type
      */
     @SuppressWarnings( "unchecked" )
-    private static Stream<IVariable<?>> streamunifyexact( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
+    private static Stream<IVariable<?>> unifyexact( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
     {
         return StreamUtils.zip(
                 p_source,
                 p_target,
+                // check first if it a variable, than set the value, otherwise both terms must be equal to procceed
                 ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
         )
                           .filter( i -> i instanceof IVariable<?> )
@@ -269,7 +270,7 @@ public final class CUnifier implements IUnifier
      * @tparam T term type
      * @bug incomplete
      */
-    private static Stream<IVariable<?>> streamunifyfuzzy( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
+    private static Stream<IVariable<?>> unifyrecursive( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
     {
         return Stream.of();
     }
