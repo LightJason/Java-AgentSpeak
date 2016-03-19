@@ -29,6 +29,9 @@
           <option name = "ANNOTATION_PARAMETER_WRAP" value = "1" />
           <option name = "ALIGN_MULTILINE_ANNOTATION_PARAMETERS" value = "true" />
         </JavaCodeStyleSettings>
+        <MultiMarkdownCodeStyleSettings>
+          <option name = "RIGHT_MARGIN" value = "72" />
+        </MultiMarkdownCodeStyleSettings>
         <XML>
           <option name = "XML_SPACE_AROUND_EQUALITY_IN_ATTRIBUTE" value = "true" />
           <option name = "XML_SPACE_INSIDE_EMPTY_TAG" value = "true" />
