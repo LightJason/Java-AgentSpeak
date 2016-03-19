@@ -169,6 +169,7 @@ public final class CUnifier implements IUnifier
      * @param p_literal literal search
      * @return list of literal sets
      **/
+    @SuppressWarnings( "unchecked" )
     private static List<Set<IVariable<?>>> unifyexact( final IAgent p_agent, final ILiteral p_literal )
     {
         return p_agent.getBeliefBase()
@@ -196,17 +197,12 @@ public final class CUnifier implements IUnifier
      * @todo search variables recursive and store path of the variable, get based on the path the values,
      * use also hash-codes to get value checks
      **/
+    @SuppressWarnings( "unchecked" )
     private static List<Set<IVariable<?>>> unifyrecursive( final IAgent p_agent, final ILiteral p_literal )
     {
         return p_agent.getBeliefBase()
                       .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                      .map( i -> {
-                          final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
-                          return Stream.concat(
-                                  unifyrecursive( recursivedescendvalues( l_literal.orderedvalues() ), recursivedescendvalues( i.orderedvalues() ) ),
-                                  unifyrecursive( recursivedescendannotation( l_literal.annotations() ), recursivedescendannotation( i.annotations() ) )
-                          ).collect( Collectors.toSet() );
-                      } )
+                      .map( i -> unifyrecursive( (ILiteral) p_literal.deepcopy(), p_literal ) )
                       .filter( i -> !i.isEmpty() )
                       .collect( Collectors.toList() );
     }
@@ -246,6 +242,7 @@ public final class CUnifier implements IUnifier
      * @return list with unified variables
      *
      * @tparam T term type
+     * @bug can not handle non-variable elements
      */
     @SuppressWarnings( "unchecked" )
     private static Stream<IVariable<?>> unifyexact( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
@@ -263,16 +260,20 @@ public final class CUnifier implements IUnifier
     /**
      * runs the fuzzy (hash unequal) unifiying process
      *
-     * @param p_target term stream of targets (literal which stores the variables as instance)
-     * @param p_source term stream of sources
-     * @return list with unified variables
+     * @param p_target literal of targets (literal which stores the variables as instance)
+     * @param p_source literal sources
+     * @return set with unified variables
      *
      * @tparam T term type
      * @bug incomplete
      */
-    private static Stream<IVariable<?>> unifyrecursive( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
+    private static Set<IVariable<?>> unifyrecursive( final ILiteral p_target, final ILiteral p_source )
     {
-        return Stream.of();
+        // target && source elements must be equal, if not equal ignore literal
+        // variables can be match with literals or values
+        // iterate over each literal, if element is a variable -> unify, otherwise literals must be equal or unifyable
+
+        return Collections.<IVariable<?>>emptySet();
     }
 
 }
