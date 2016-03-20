@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -35,6 +36,8 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -81,8 +84,19 @@ public final class CUnify extends IBaseExecution<ILiteral>
         m_parallel = p_parallel;
         m_expression = p_expression;
 
-        m_variablenumber = CCommon.recursiveterm( p_literal.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).count()
-                           + CCommon.recursiveliteral( p_literal.annotations() ).filter( i -> i instanceof IVariable<?> ).count();
+        // check unique variables
+        final List<ITerm> l_terms = Stream.concat(
+                CCommon.recursiveterm( p_literal.orderedvalues() ),
+                CCommon.recursiveliteral( p_literal.annotations() )
+        ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
+        if ( l_terms.size() != new HashSet<>( l_terms ).size() )
+            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "uniquevariable" ) );
+
+        // count variables
+        m_variablenumber = Stream.concat(
+                CCommon.recursiveterm( p_literal.orderedvalues() ),
+                CCommon.recursiveliteral( p_literal.annotations() )
+        ).filter( i -> i instanceof IVariable<?> ).count();
     }
 
     @Override
