@@ -198,6 +198,31 @@ public final class CCommon
     }
 
     /**
+     * recursive stream of term values
+     *
+     * @param p_input term stream
+     * @return term stream
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Stream<ITerm> recursiveterm( final Stream<ITerm> p_input )
+    {
+        return p_input.flatMap( i -> i instanceof ILiteral ? recursiveterm( ( (ILiteral) i ).orderedvalues() ) : Stream.of( i ) );
+    }
+
+    /**
+     * recursive stream of literal values
+     *
+     * @param p_input term stream
+     * @return term stream
+     *
+     * @note annotations cannot use annotation within
+     */
+    public static Stream<ITerm> recursiveliteral( final Stream<ILiteral> p_input )
+    {
+        return p_input.flatMap( i -> recursiveterm( i.orderedvalues() ) );
+    }
+
+    /**
      * returns the hasing function for term data
      *
      * @return hasher

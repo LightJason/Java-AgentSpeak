@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -51,6 +52,10 @@ public final class CUnify extends IBaseExecution<ILiteral>
      * unification expression
      */
     private final IExpression m_expression;
+    /**
+     * number of variables
+     */
+    private final long m_variablenumber;
 
     /**
      * ctor
@@ -75,6 +80,9 @@ public final class CUnify extends IBaseExecution<ILiteral>
         super( p_literal );
         m_parallel = p_parallel;
         m_expression = p_expression;
+
+        m_variablenumber = CCommon.recursiveterm( p_literal.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).count()
+                           + CCommon.recursiveliteral( p_literal.annotations() ).filter( i -> i instanceof IVariable<?> ).count();
     }
 
     @Override
@@ -89,8 +97,8 @@ public final class CUnify extends IBaseExecution<ILiteral>
     )
     {
         return m_parallel
-               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_expression )
-               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_expression );
+               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_variablenumber, m_expression )
+               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_variablenumber, m_expression );
     }
 
     @Override
