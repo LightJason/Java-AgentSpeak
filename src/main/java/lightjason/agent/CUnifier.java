@@ -35,6 +35,7 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,7 @@ import java.util.stream.Stream;
 
 /**
  * unification algorithm
+ *
  * @todo incomplete
  */
 public final class CUnifier implements IUnifier
@@ -168,6 +170,7 @@ public final class CUnifier implements IUnifier
      * @param p_agent agent
      * @param p_literal literal search
      * @return list of literal sets
+     * @todo check for returning empty streams
      **/
     @SuppressWarnings( "unchecked" )
     private static List<Set<IVariable<?>>> unifyexact( final IAgent p_agent, final ILiteral p_literal )
@@ -194,6 +197,7 @@ public final class CUnifier implements IUnifier
      * @param p_agent agent
      * @param p_literal literal search
      * @return list of literal sets
+     *
      * @todo search variables recursive and store path of the variable, get based on the path the values,
      * use also hash-codes to get value checks
      **/
@@ -236,25 +240,34 @@ public final class CUnifier implements IUnifier
 
     /**
      * runs the exact (hash equal) unifiying process
+     * @note stucture of input literals are equal, so only a element-wise check is
+     * needed. If an element in the target literal stream is a variable unification success
+     * and variable will be unified, otherwise elements in the source and target literal must
+     * be equal
      *
      * @param p_target term stream of targets (literal which stores the variables as instance)
      * @param p_source term stream of sources
      * @return list with unified variables
-     *
-     * @tparam T term type
-     * @bug can not handle non-variable elements
      */
     @SuppressWarnings( "unchecked" )
     private static Stream<IVariable<?>> unifyexact( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
     {
-        return StreamUtils.zip(
+        final Set<IVariable<?>> l_result = new HashSet<>();
+        if ( !StreamUtils.zip(
                 p_source,
                 p_target,
-                // check first if it a variable, than set the value, otherwise both terms must be equal to procceed
-                ( s, t ) -> t instanceof IVariable<?> ? ( (IVariable<Object>) t ).set( s ) : null
-        )
-                          .filter( i -> i instanceof IVariable<?> )
-                          .map( i -> (IVariable<?>) i );
+                ( s, t ) -> {
+                    if ( t instanceof IVariable<?> )
+                    {
+                        l_result.add( ( (IVariable<Object>) t ).set( s ) );
+                        return true;
+                    }
+                    return s.equals( t );
+                }
+        ).allMatch( i -> i ) )
+            return Collections.<IVariable<?>>emptySet().stream();
+
+        return l_result.stream();
     }
 
     /**
