@@ -183,7 +183,6 @@ public final class CUnifier implements IUnifier
      * @param p_literal literal search
      * @param p_variablenumber number of unified variables
      * @return list of literal sets
-     * @todo check for returning empty streams
      **/
     @SuppressWarnings( "unchecked" )
     private static List<Set<IVariable<?>>> unifyexact( final IAgent p_agent, final ILiteral p_literal, final long p_variablenumber )
@@ -235,7 +234,7 @@ public final class CUnifier implements IUnifier
      *
      * @param p_target term stream of targets (literal which stores the variables as instance)
      * @param p_source term stream of sources
-     * @return list with unified variables
+     * @return stream with unified variables
      */
     @SuppressWarnings( "unchecked" )
     private static Stream<IVariable<?>> unifyexact( final Stream<ITerm> p_target, final Stream<ITerm> p_source )
@@ -264,8 +263,6 @@ public final class CUnifier implements IUnifier
      * @param p_target literal of targets (literal which stores the variables as instance)
      * @param p_source literal sources
      * @return set with unified variables
-     *
-     * @tparam T term type
      * @bug incomplete
      */
     private static Set<IVariable<?>> unifyrecursive( final ILiteral p_target, final ILiteral p_source )
@@ -273,8 +270,9 @@ public final class CUnifier implements IUnifier
         // target && source elements must be equal, if not equal ignore literal
         // variables can be match with literals or values
         // iterate over each literal, if element is a variable -> unify, otherwise literals must be equal or unifyable
+        final Set<IVariable<?>> l_result = new HashSet<>();
 
-        return Collections.<IVariable<?>>emptySet();
+        return l_result;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
