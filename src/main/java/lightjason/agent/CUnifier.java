@@ -258,7 +258,7 @@ public final class CUnifier implements IUnifier
     }
 
     /**
-     * runs the fuzzy (hash unequal) unifiying process
+     * runs the recursive (hash unequal) unifiying process
      *
      * @param p_target literal of targets (literal which stores the variables as instance)
      * @param p_source literal sources
