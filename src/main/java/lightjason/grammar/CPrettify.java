@@ -91,6 +91,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
     }
 
     @Override
+    public Object visitLogicalruledefinition( final AgentParser.LogicalruledefinitionContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitAnnotations( final AgentParser.AnnotationsContext p_context )
     {
         return null;
@@ -470,6 +476,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
 
     @Override
     public Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitLogicalruledefinition( final PlanBundleParser.LogicalruledefinitionContext p_context )
     {
         return null;
     }

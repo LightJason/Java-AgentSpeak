@@ -184,6 +184,12 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         return this.visitChildren( p_context );
     }
 
+    @Override
+    public Object visitLogicalruledefinition( final AgentParser.LogicalruledefinitionContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
 
 
     @Override

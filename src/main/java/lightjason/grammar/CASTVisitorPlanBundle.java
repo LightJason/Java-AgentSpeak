@@ -149,8 +149,16 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         return null;
     }
 
+
+
     @Override
     public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
+    {
+        return this.visitChildren( p_context );
+    }
+
+    @Override
+    public Object visitLogicalruledefinition( final PlanBundleParser.LogicalruledefinitionContext p_context )
     {
         return this.visitChildren( p_context );
     }

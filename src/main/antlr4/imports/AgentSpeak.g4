@@ -83,9 +83,16 @@ plandefinition :
 logicrule :
     annotations?
     literal
+    logicalruledefinition+
+    DOT
+    ;
+
+/**
+ * rule definition similar to plan
+ **/
+logicalruledefinition :
     RULEOPERATOR
     body
-    DOT
     ;
 
 /**
