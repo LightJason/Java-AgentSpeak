@@ -28,6 +28,7 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.action.buildin.bind.CBind;
 import lightjason.agent.action.buildin.bind.IActionBind;
 import lightjason.agent.generator.CDefaultAgentGenerator;
+import lightjason.agent.unify.CUnifier;
 import lightjason.language.CCommon;
 import lightjason.language.CConstant;
 import lightjason.language.IVariable;

@@ -89,6 +89,8 @@ public final class CUnify extends IBaseExecution<ILiteral>
                 CCommon.recursiveterm( p_literal.orderedvalues() ),
                 CCommon.recursiveliteral( p_literal.annotations() )
         ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
+        if ( l_terms.size() == 0 )
+            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "novariable" ) );
         if ( l_terms.size() != new HashSet<>( l_terms ).size() )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "uniquevariable" ) );
 

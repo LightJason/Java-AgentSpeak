@@ -21,84 +21,36 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.agent.unify;
 
+import com.codepoetics.protonpack.StreamUtils;
+import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 
-import lightjason.common.CPath;
-
+import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
- * literal interface
- *
- * @note closed world assumption, no negation marker needed
+ * unify on at hash-based quality
  */
-public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILiteral>
+public final class CHash implements IAlgorithm
 {
 
-    /**
-     * returns a stream over value items
-     *
-     * @param p_path optional filtering value names
-     * (filtering values within values)
-     * @return stream
-     */
-    Stream<ITerm> values( final CPath... p_path );
-
-    /**
-     * returns a stream over the ordered values
-     * in sequential ordering
-     */
-    Stream<ITerm> orderedvalues( final CPath... p_path );
-
-    /**
-     * returns a stream over annotation items
-     *
-     * @param p_path optional filtering annotation names (filtering all
-     * annotations on the same level not within)
-     * @return stream
-     */
-    Stream<ILiteral> annotations( final CPath... p_path );
-
-    /**
-     * returns the hash of the annotations
-     *
-     * @return hash
-     */
-    int annotationhash();
-
-    /**
-     * returns the hash of the value
-     *
-     * @return hash
-     */
-    int valuehash();
-
-    /**
-     * number of value elements
-     *
-     * @return number
-     */
-    int valuesize();
-
-    /**
-     * number of annotation elements
-     *
-     * @return number
-     */
-    int annotationsize();
-
-
-    /**
-     * getter of the literal for the negation
-     */
-    boolean isNegated();
-
-    /**
-     * returns if the literal has an @ prefix
-     *
-     * @return prefix is set
-     */
-    boolean hasAt();
+    @Override
+    public final <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
+    {
+        return StreamUtils.zip(
+                p_source,
+                p_target,
+                ( s, t ) -> {
+                    if ( t instanceof IVariable<?> )
+                    {
+                        p_variables.add( ( (IVariable<Object>) t ).set( s ) );
+                        return true;
+                    }
+                    return s.equals( t );
+                }
+        ).allMatch( i -> i );
+    }
 }

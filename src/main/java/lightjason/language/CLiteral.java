@@ -263,6 +263,18 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final int valuesize()
+    {
+        return m_values.size();
+    }
+
+    @Override
+    public final int annotationsize()
+    {
+        return m_annotations.size();
+    }
+
+    @Override
     public final boolean isNegated()
     {
         return m_negated;
