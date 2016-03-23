@@ -47,7 +47,7 @@ public final class CPath implements IPath
     /**
      * empty path
      **/
-    public static final IPath EMPTY = new CPath();
+    public static final IPath EMPTY = new CPath( Collections.<String>emptyList() );
     /**
      * list with path parts *
      */
@@ -100,6 +100,16 @@ public final class CPath implements IPath
     {
         if ( ( p_collection != null ) && ( !p_collection.isEmpty() ) )
             m_path.addAll( p_collection );
+    }
+
+    /**
+     * private ctor for internal access
+     *
+     * @param p_path list path
+     */
+    private CPath( final List<String> p_path )
+    {
+        m_path = p_path;
     }
 
     /**

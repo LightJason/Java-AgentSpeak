@@ -67,7 +67,7 @@ public interface ITrigger<T>
          *
          * @param p_name text name
          */
-        private EType( final String p_name )
+        EType( final String p_name )
         {
             m_name = p_name;
         }
