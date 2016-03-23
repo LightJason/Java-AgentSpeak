@@ -36,7 +36,7 @@ import java.util.Arrays;
  * @warning hash code is defined on the input data type
  * @todo deep-copy value copy incorrect
  */
-public final class CRawTerm<T> implements ITerm
+public final class CRawTerm<T> implements IRawTerm<T>
 {
     /**
      * value data
@@ -61,9 +61,9 @@ public final class CRawTerm<T> implements ITerm
     @SuppressWarnings( "unchecked" )
     public <N> CRawTerm( final N p_value )
     {
-        if ( p_value instanceof CRawTerm<?> )
+        if ( p_value instanceof IRawTerm<?> )
         {
-            final CRawTerm<?> l_term = (CRawTerm<?>) p_value;
+            final IRawTerm<?> l_term = (IRawTerm<?>) p_value;
             m_value = l_term.getTyped();
             m_functor = l_term.getFQNFunctor();
         }
@@ -134,51 +134,27 @@ public final class CRawTerm<T> implements ITerm
         return m_functor;
     }
 
-    /**
-     * returns the raw valuw
-     *
-     * @return value
-     */
+    @Override
     public final T get()
     {
         return m_value;
     }
 
-    /**
-     * gets the value with cast
-     *
-     * @return casted value
-     *
-     * @tparam N casted type
-     */
+    @Override
     @SuppressWarnings( "unchecked" )
     public final <N> N getTyped()
     {
         return (N) m_value;
     }
 
-    ;
-
-    /**
-     * returns allocated state
-     *
-     * @return boolean flag
-     */
+    @Override
     public final boolean isAllocated()
     {
         return m_value != null;
     }
 
-    /**
-     * throws an illegal state exception
-     * iif the raw term is not allocated
-     *
-     * @param p_name optional name text for the error message
-     * @return object itself
-     *
-     * @throws IllegalStateException on non-allocated
-     */
-    public final CRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException
+    @Override
+    public final IRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException
     {
         if ( !this.isAllocated() )
             throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "notallocated", p_name != null ? p_name[0] : this ) );
@@ -186,28 +162,14 @@ public final class CRawTerm<T> implements ITerm
         return this;
     }
 
-    /**
-     * checkes assignable of the value
-     *
-     * @param p_class class
-     * @return assignable (on null always true)
-     */
+    @Override
     public final boolean isValueAssignableTo( final Class<?>... p_class )
     {
         return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
-    /**
-     * throws an illegal argument exception
-     * iif the value is not assignable to the
-     * class
-     *
-     * @param p_class assignable class
-     * @return object itself
-     *
-     * @throws IllegalArgumentException on assignable error
-     */
-    public final CRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
+    @Override
+    public final IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.isValueAssignableTo( p_class ) )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "notassignable", this, p_class ) );

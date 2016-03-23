@@ -111,8 +111,8 @@ public final class CCommon
     {
         if ( p_value instanceof IVariable<?> )
             return ( (IVariable<?>) p_value ).getTyped();
-        if ( p_value instanceof CRawTerm<?> )
-            return ( (CRawTerm<?>) p_value ).getTyped();
+        if ( p_value instanceof IRawTerm<?> )
+            return ( (IRawTerm<?>) p_value ).getTyped();
 
         return (T) p_value;
     }
@@ -129,8 +129,8 @@ public final class CCommon
     {
         if ( p_value instanceof IVariable<?> )
             return ( (IVariable<?>) p_value ).isValueAssignableTo( p_class );
-        if ( p_value instanceof CRawTerm<?> )
-            return ( (CRawTerm<?>) p_value ).isValueAssignableTo( p_class );
+        if ( p_value instanceof IRawTerm<?> )
+            return ( (IRawTerm<?>) p_value ).isValueAssignableTo( p_class );
 
         return Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( p_value.getClass() ) ).anyMatch( i -> i );
     }
