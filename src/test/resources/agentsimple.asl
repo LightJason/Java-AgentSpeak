@@ -11,6 +11,7 @@ hallo(888).
 hallo(777).
 hallo(700).
 hallo(foo(3)).
+foo(blub(1),hallo("test")).
 second(true).
 
 +!drive
@@ -256,12 +257,14 @@ second(true).
 
         // --- sequential & parallel unification ---------------------------------------------------------------------------------------------------------------
 
-        //>>hallo(U, xxx(5), sub(sub('Test'))) << true;
         >>hallo( UN1 ) << true;
         >>( hallo( UN2 ), generic/typ/isstring(UN2) ) << true;
         @>>( hallo( UN3 ), generic/typ/isnumeric(UN3) && (UN3 > 200) ) << true;
+        >>foo( UN4, UN5 ) << true;
+        // @bug NPE
+        //>>foo( blub( UN6 ), hallo( UN7 ) ) << true;
 
-        generic/print("unifcation", UN1, UN2, UN3 );
+        generic/print("unifcation", UN1, UN2, UN3, "   ", UN4, UN5 ); //, "   ", UN6, UN7 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

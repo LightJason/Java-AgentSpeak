@@ -24,10 +24,14 @@
 
 package lightjason.agent.unify;
 
+import com.codepoetics.protonpack.StreamUtils;
+import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -40,9 +44,43 @@ public final class CRecursive implements IAlgorithm
 {
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
-        return false;
+        final List<T> l_target = p_target.collect( Collectors.toList() );
+        final List<T> l_source = p_source.collect( Collectors.toList() );
+
+        if ( ( l_target.size() != l_source.size() ) || ( l_target.isEmpty() ) || ( l_source.isEmpty() ) )
+            return false;
+
+        return StreamUtils.zip(
+                l_source.stream(),
+                l_target.stream(),
+                ( s, t ) -> {
+
+                    // if a variable exists -> unify
+                    if ( t instanceof IVariable<?> )
+                    {
+                        p_variables.add( ( (IVariable<Object>) t ).set( s ) );
+                        return true;
+                    }
+
+                    // if a literal exists -> source and target literal must be equal with the functor -> recursive descent
+                    if ( ( s instanceof ILiteral ) && ( t instanceof ILiteral ) )
+                    {
+                        final ILiteral l_sourceliteral = (ILiteral) s;
+                        final ILiteral l_targetliteral = (ILiteral) t;
+
+                        if ( !l_sourceliteral.getFQNFunctor().equals( l_targetliteral.getFQNFunctor() ) )
+                            return false;
+
+                        return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
+                    }
+
+                    // otherwise false
+                    return false;
+                }
+        ).allMatch( i -> i );
     }
 
 }

@@ -76,21 +76,6 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     int valuehash();
 
     /**
-     * number of value elements
-     *
-     * @return number
-     */
-    int valuesize();
-
-    /**
-     * number of annotation elements
-     *
-     * @return number
-     */
-    int annotationsize();
-
-
-    /**
      * getter of the literal for the negation
      */
     boolean isNegated();
