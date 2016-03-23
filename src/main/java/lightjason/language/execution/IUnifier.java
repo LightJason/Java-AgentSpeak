@@ -37,7 +37,7 @@ public interface IUnifier
     /**
      * unifies a literal in parallel
      *
-     *  @param p_context running context
+     * @param p_context running context
      * @param p_literal literal
      * @param p_variablenumber number of unified variables
      * @param p_expression expression can be null iif expression is not set  @return boolean if a unify can be done
@@ -47,7 +47,7 @@ public interface IUnifier
     /**
      * unifies a literal in parallel
      *
-     *  @param p_context running context
+     * @param p_context running context
      * @param p_literal literal
      * @param p_variablenumber number of unified variables
      * @param p_expression expression can be null iif expression is not set  @return boolean if a unify can be done

@@ -105,8 +105,11 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final boolean equals( final Object p_object )
     {
+        if ( p_object instanceof IVariable<?> )
+            return m_hashcode == ( (IVariable<?>) p_object ).get().hashCode();
         return m_hashcode == p_object.hashCode();
     }
 

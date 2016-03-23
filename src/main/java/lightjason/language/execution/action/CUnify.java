@@ -42,8 +42,6 @@ import java.util.stream.Stream;
 
 /**
  * unify action
- *
- * @bug incomplete
  */
 public final class CUnify extends IBaseExecution<ILiteral>
 {
@@ -128,8 +126,9 @@ public final class CUnify extends IBaseExecution<ILiteral>
                 addAll( m_expression.getVariables() );
 
             // create a shallow-copy of all variables within the value- and annotation-definition
-            m_value.values().filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
-            m_value.annotations().flatMap( i -> i.values() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
+            CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
+            CCommon.recursiveliteral( m_value.annotations() ).filter( i -> i instanceof IVariable<?> ).forEach(
+                    i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
 
         }};
     }

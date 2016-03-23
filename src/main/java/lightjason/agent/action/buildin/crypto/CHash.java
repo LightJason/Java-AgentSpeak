@@ -41,6 +41,7 @@ import java.util.List;
 
 /**
  * hash algorithm
+ *
  * @see http://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
  * @see https://github.com/google/guava/wiki/HashingExplained
  */

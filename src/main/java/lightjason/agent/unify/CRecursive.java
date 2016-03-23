@@ -26,6 +26,7 @@ package lightjason.agent.unify;
 
 import com.codepoetics.protonpack.StreamUtils;
 import lightjason.language.ILiteral;
+import lightjason.language.IRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 
@@ -37,8 +38,6 @@ import java.util.stream.Stream;
 
 /**
  * recursive unify
- *
- * @bug incomplete
  */
 public final class CRecursive implements IAlgorithm
 {
@@ -50,7 +49,10 @@ public final class CRecursive implements IAlgorithm
         final List<T> l_target = p_target.collect( Collectors.toList() );
         final List<T> l_source = p_source.collect( Collectors.toList() );
 
-        if ( ( l_target.size() != l_source.size() ) || ( l_target.isEmpty() ) || ( l_source.isEmpty() ) )
+        if ( ( l_target.isEmpty() ) || ( l_source.isEmpty() ) )
+            return true;
+
+        if ( l_target.size() != l_source.size() )
             return false;
 
         return StreamUtils.zip(
@@ -64,6 +66,10 @@ public final class CRecursive implements IAlgorithm
                         p_variables.add( ( (IVariable<Object>) t ).set( s ) );
                         return true;
                     }
+
+                    // if both raw values -> equality
+                    if ( ( s instanceof IRawTerm<?> ) || ( t instanceof IRawTerm<?> ) )
+                        return s.equals( t );
 
                     // if a literal exists -> source and target literal must be equal with the functor -> recursive descent
                     if ( ( s instanceof ILiteral ) && ( t instanceof ILiteral ) )

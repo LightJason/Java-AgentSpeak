@@ -55,5 +55,4 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      */
     ITerm getTerm();
 
-
 }
