@@ -24,7 +24,7 @@
 package lightjason.beliefbase;
 
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 
 import java.util.stream.Stream;
@@ -45,7 +45,7 @@ public interface IView extends IStructure
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final CPath p_path, final IView p_view );
+    IView add( final IPath p_path, final IView p_view );
 
     /**
      * adds a view in the current structure
@@ -57,7 +57,7 @@ public interface IView extends IStructure
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final CPath p_path, final IView p_view, final IGenerator p_generator );
+    IView add( final IPath p_path, final IView p_view, final IGenerator p_generator );
 
 
     /**
@@ -77,7 +77,7 @@ public interface IView extends IStructure
      * @param p_path path to a view
      * @return existance boolean
      */
-    boolean containsView( final CPath p_path );
+    boolean containsView( final IPath p_path );
 
     /**
      * checks if a literal exists
@@ -85,7 +85,7 @@ public interface IView extends IStructure
      * @param p_path path to a literal (suffix is literal name)
      * @return existance boolean
      */
-    boolean containsLiteral( final CPath p_path );
+    boolean containsLiteral( final IPath p_path );
 
 
 
@@ -95,7 +95,7 @@ public interface IView extends IStructure
      * @param p_path paths
      * @return is found and removed
      */
-    boolean remove( final CPath... p_path );
+    boolean remove( final IPath... p_path );
 
 
     /**
@@ -121,7 +121,7 @@ public interface IView extends IStructure
      * @param p_path paths of the literals
      * @return literal stream
      */
-    Stream<ILiteral> parallelStream( final CPath... p_path );
+    Stream<ILiteral> parallelStream( final IPath... p_path );
 
     /**
      * returns stream of literal
@@ -129,7 +129,7 @@ public interface IView extends IStructure
      * @param p_path paths of the literals
      * @return literal stream
      */
-    Stream<ILiteral> stream( final CPath... p_path );
+    Stream<ILiteral> stream( final IPath... p_path );
 
     /**
      * returns parallel stream of literal
@@ -138,7 +138,7 @@ public interface IView extends IStructure
      * @param p_path paths of the literals
      * @return literal stream
      */
-    Stream<ILiteral> parallelStream( final boolean p_negated, final CPath... p_path );
+    Stream<ILiteral> parallelStream( final boolean p_negated, final IPath... p_path );
 
     /**
      * returns stream of literal
@@ -147,7 +147,7 @@ public interface IView extends IStructure
      * @param p_path paths of the literals
      * @return literal stream
      */
-    Stream<ILiteral> stream( final boolean p_negated, final CPath... p_path );
+    Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path );
 
 
 
@@ -156,7 +156,7 @@ public interface IView extends IStructure
      *
      * @return path
      */
-    CPath getPath();
+    IPath getPath();
 
     /**
      * returns only the element name

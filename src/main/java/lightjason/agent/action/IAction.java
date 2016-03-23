@@ -23,7 +23,7 @@
 
 package lightjason.agent.action;
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.language.execution.IExecution;
 
 
@@ -37,7 +37,7 @@ public interface IAction extends IExecution
      *
      * @return path (literal functor)
      */
-    CPath getName();
+    IPath getName();
 
     /**
      * minimum number of arguments

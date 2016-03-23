@@ -25,6 +25,7 @@ package lightjason.grammar;
 
 import lightjason.agent.action.IAction;
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.language.CLiteral;
@@ -65,7 +66,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     /**
      * map with action definition
      */
-    protected final Map<CPath, IAction> m_actions;
+    protected final Map<IPath, IAction> m_actions;
     /**
      * parsed literal
      */

@@ -25,7 +25,7 @@ package lightjason.consistency.metric;
 
 
 import lightjason.agent.IAgent;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 
 import java.util.Collection;
@@ -47,7 +47,7 @@ public final class CWeightedDifference extends IBaseMetric
      *
      * @param p_paths for reading agent value
      */
-    public CWeightedDifference( final CPath... p_paths )
+    public CWeightedDifference( final IPath... p_paths )
     {
         super( p_paths );
     }
@@ -57,7 +57,7 @@ public final class CWeightedDifference extends IBaseMetric
      *
      * @param p_paths collection of path
      */
-    public CWeightedDifference( final Collection<CPath> p_paths )
+    public CWeightedDifference( final Collection<IPath> p_paths )
     {
         super( p_paths );
     }
@@ -66,7 +66,7 @@ public final class CWeightedDifference extends IBaseMetric
     public final double calculate( final IAgent p_first, final IAgent p_second )
     {
         // build filter
-        final CPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new CPath[m_paths.size()] );
+        final IPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] );
 
         // element aggregation
         final double l_union = Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).count();

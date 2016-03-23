@@ -23,7 +23,7 @@
 
 package lightjason.language;
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 
 /**
@@ -44,7 +44,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return path
      */
-    CPath getFunctorPath();
+    IPath getFunctorPath();
 
     /**
      * returns the full-qualified functor
@@ -52,6 +52,6 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return fqn functor
      */
-    CPath getFQNFunctor();
+    IPath getFQNFunctor();
 
 }

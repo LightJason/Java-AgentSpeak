@@ -25,7 +25,7 @@ package lightjason.consistency.metric;
 
 
 import lightjason.agent.IAgent;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 import java.util.Collection;
 
@@ -43,7 +43,7 @@ public final class CDiscrete<T> extends IBaseMetric
      *
      * @param p_paths for reading agent value
      */
-    public CDiscrete( final CPath... p_paths )
+    public CDiscrete( final IPath... p_paths )
     {
         super( p_paths );
     }
@@ -53,7 +53,7 @@ public final class CDiscrete<T> extends IBaseMetric
      *
      * @param p_paths collection of path
      */
-    public CDiscrete( final Collection<CPath> p_paths )
+    public CDiscrete( final Collection<IPath> p_paths )
     {
         super( p_paths );
     }

@@ -24,7 +24,7 @@
 package lightjason.language;
 
 import lightjason.common.CCommon;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalStateException;
 
 
@@ -62,7 +62,7 @@ public final class CConstant<T> extends CVariable<T>
      *
      * @param p_functor name
      */
-    public CConstant( final CPath p_functor )
+    public CConstant( final IPath p_functor )
     {
         super( p_functor );
     }
@@ -73,7 +73,7 @@ public final class CConstant<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CConstant( final CPath p_functor, final T p_value )
+    public CConstant( final IPath p_functor, final T p_value )
     {
         super( p_functor, p_value );
     }
@@ -85,7 +85,7 @@ public final class CConstant<T> extends CVariable<T>
     }
 
     @Override
-    public final IVariable<T> shallowcopy( final CPath... p_prefix )
+    public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CConstant<T>( m_functor, m_value )

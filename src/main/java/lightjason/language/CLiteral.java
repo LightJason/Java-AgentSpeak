@@ -32,6 +32,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.hash.Hasher;
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.grammar.CASTVisitorType;
 import lightjason.grammar.CErrorListener;
 import lightjason.grammar.IASTVisitorType;
@@ -70,11 +71,11 @@ public final class CLiteral implements ILiteral
     /**
      * literal annotations
      */
-    protected final ImmutableMultimap<CPath, ILiteral> m_annotations;
+    protected final ImmutableMultimap<IPath, ILiteral> m_annotations;
     /**
      * literal values
      */
-    protected final ImmutableMultimap<CPath, ITerm> m_values;
+    protected final ImmutableMultimap<IPath, ITerm> m_values;
     /**
      * literal values as list
      */
@@ -82,7 +83,7 @@ public final class CLiteral implements ILiteral
     /**
      * literals functor
      */
-    protected final CPath m_functor;
+    protected final IPath m_functor;
     /**
      * negated option
      */
@@ -114,7 +115,7 @@ public final class CLiteral implements ILiteral
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CLiteral( final boolean p_at, final boolean p_negated, final CPath p_functor, final Collection<ITerm> p_values,
+    public CLiteral( final boolean p_at, final boolean p_negated, final IPath p_functor, final Collection<ITerm> p_values,
                      final Collection<ILiteral> p_annotations
     )
     {
@@ -124,11 +125,11 @@ public final class CLiteral implements ILiteral
 
 
         // create immutable structures
-        final Multimap<CPath, ILiteral> l_annotations = HashMultimap.create();
+        final Multimap<IPath, ILiteral> l_annotations = HashMultimap.create();
         p_annotations.stream().forEach( i -> l_annotations.put( i.getFQNFunctor(), i ) );
         m_annotations = ImmutableSetMultimap.copyOf( l_annotations );
 
-        final Multimap<CPath, ITerm> l_values = LinkedListMultimap.create();
+        final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
         p_values.stream().forEachOrdered( i -> l_values.put( i.getFQNFunctor(), i ) );
         m_values = ImmutableListMultimap.copyOf( l_values );
 
@@ -215,7 +216,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final Stream<ITerm> values( final CPath... p_path )
+    public final Stream<ITerm> values( final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_values.values().stream()
@@ -227,7 +228,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final Stream<ITerm> orderedvalues( final CPath... p_path )
+    public final Stream<ITerm> orderedvalues( final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_orderedvalues.stream().sequential()
@@ -241,7 +242,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final Stream<ILiteral> annotations( final CPath... p_path )
+    public final Stream<ILiteral> annotations( final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_annotations.values().stream()
@@ -281,13 +282,13 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final CPath getFunctorPath()
+    public final IPath getFunctorPath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public final CPath getFQNFunctor()
+    public final IPath getFQNFunctor()
     {
         return m_functor;
     }
@@ -305,7 +306,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral shallowcopy( final CPath... p_prefix )
+    public final ILiteral shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 
@@ -348,7 +349,7 @@ public final class CLiteral implements ILiteral
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final ITerm deepcopy( final CPath... p_prefix )
+    public final ITerm deepcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 

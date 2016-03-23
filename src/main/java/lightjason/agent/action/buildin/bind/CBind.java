@@ -27,6 +27,7 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.action.IBaseAction;
 import lightjason.common.CPath;
 import lightjason.common.CReflection;
+import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
@@ -228,7 +229,7 @@ public final class CBind<T>
         /**
          * action name
          */
-        private final CPath m_name;
+        private final IPath m_name;
         /**
          * number of arguments
          */
@@ -260,7 +261,7 @@ public final class CBind<T>
         }
 
         @Override
-        public final CPath getName()
+        public final IPath getName()
         {
             return m_name;
         }
@@ -312,7 +313,7 @@ public final class CBind<T>
         /**
          * action name
          */
-        private final CPath m_name;
+        private final IPath m_name;
         /**
          * number of arguments
          */
@@ -358,7 +359,7 @@ public final class CBind<T>
         }
 
         @Override
-        public final CPath getName()
+        public final IPath getName()
         {
             return m_name;
         }

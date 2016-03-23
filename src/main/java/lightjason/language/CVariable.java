@@ -24,6 +24,7 @@
 package lightjason.language;
 
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 
@@ -42,7 +43,7 @@ public class CVariable<T> implements IVariable<T>
     /**
      * variable / functor name
      */
-    protected final CPath m_functor;
+    protected final IPath m_functor;
     /**
      * boolean flag, that defines an variable which matchs always
      */
@@ -78,7 +79,7 @@ public class CVariable<T> implements IVariable<T>
      *
      * @param p_functor name
      */
-    public CVariable( final CPath p_functor )
+    public CVariable( final IPath p_functor )
     {
         this( p_functor, null );
     }
@@ -89,7 +90,7 @@ public class CVariable<T> implements IVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CVariable( final CPath p_functor, final T p_value )
+    public CVariable( final IPath p_functor, final T p_value )
     {
         m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );
         m_functor = p_functor;
@@ -171,19 +172,19 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public final CPath getFunctorPath()
+    public final IPath getFunctorPath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public final CPath getFQNFunctor()
+    public final IPath getFQNFunctor()
     {
         return m_functor;
     }
 
     @Override
-    public IVariable<T> shallowcopy( final CPath... p_prefix )
+    public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CVariable<T>( m_functor, m_value )
@@ -198,7 +199,7 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public final ITerm deepcopy( final CPath... p_prefix )
+    public final ITerm deepcopy( final IPath... p_prefix )
     {
         return this.shallowcopy( p_prefix );
     }

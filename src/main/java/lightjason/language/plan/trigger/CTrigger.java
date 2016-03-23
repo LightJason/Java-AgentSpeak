@@ -23,7 +23,7 @@
 
 package lightjason.language.plan.trigger;
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 import java.text.MessageFormat;
 
@@ -31,12 +31,12 @@ import java.text.MessageFormat;
 /**
  * event with literal data
  */
-public final class CTrigger implements ITrigger<CPath>
+public final class CTrigger implements ITrigger<IPath>
 {
     /**
      * literal path
      */
-    private final CPath m_data;
+    private final IPath m_data;
     /**
      * event type
      */
@@ -48,7 +48,7 @@ public final class CTrigger implements ITrigger<CPath>
      * @param p_event type
      * @param p_data data
      */
-    public CTrigger( final EType p_event, final CPath p_data )
+    public CTrigger( final EType p_event, final IPath p_data )
     {
         m_data = p_data;
         m_event = p_event;
@@ -79,7 +79,7 @@ public final class CTrigger implements ITrigger<CPath>
     }
 
     @Override
-    public final CPath getData()
+    public final IPath getData()
     {
         return m_data;
     }

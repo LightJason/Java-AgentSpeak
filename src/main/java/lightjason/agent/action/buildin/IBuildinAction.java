@@ -25,6 +25,7 @@ package lightjason.agent.action.buildin;
 
 import lightjason.agent.action.IBaseAction;
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ public abstract class IBuildinAction extends IBaseAction
     /**
      * action name
      */
-    private final CPath m_name;
+    private final IPath m_name;
 
     /**
      * ctor
@@ -64,7 +65,7 @@ public abstract class IBuildinAction extends IBaseAction
 
 
     @Override
-    public final CPath getName()
+    public final IPath getName()
     {
         return m_name;
     }

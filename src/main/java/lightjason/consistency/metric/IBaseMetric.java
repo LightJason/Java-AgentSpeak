@@ -23,7 +23,7 @@
 
 package lightjason.consistency.metric;
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,14 +39,14 @@ public abstract class IBaseMetric implements IMetric
     /**
      * set with paths
      */
-    protected final Set<CPath> m_paths = new HashSet<>();
+    protected final Set<IPath> m_paths = new HashSet<>();
 
     /**
      * ctor
      *
      * @param p_paths for reading agent value
      */
-    protected IBaseMetric( final CPath... p_paths )
+    protected IBaseMetric( final IPath... p_paths )
     {
         if ( p_paths != null )
             m_paths.addAll( Arrays.asList( p_paths ) );
@@ -57,14 +57,14 @@ public abstract class IBaseMetric implements IMetric
      *
      * @param p_paths collection of path
      */
-    protected IBaseMetric( final Collection<CPath> p_paths )
+    protected IBaseMetric( final Collection<IPath> p_paths )
     {
         if ( p_paths != null )
             m_paths.addAll( p_paths );
     }
 
     @Override
-    public final Collection<CPath> getSelector()
+    public final Collection<IPath> getSelector()
     {
         return m_paths;
     }

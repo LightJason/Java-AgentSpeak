@@ -27,6 +27,7 @@ package lightjason.beliefbase;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import org.apache.commons.lang3.tuple.Pair;
@@ -146,13 +147,13 @@ public class CView implements IView
     }
 
     @Override
-    public final IView add( final CPath p_path, final IView p_view )
+    public final IView add( final IPath p_path, final IView p_view )
     {
         return this.add( p_path.normalize(), p_view, null );
     }
 
     @Override
-    public final IView add( final CPath p_path, final IView p_view, final IGenerator p_generator
+    public final IView add( final IPath p_path, final IView p_view, final IGenerator p_generator
     )
     {
         return this.walk( p_path.normalize(), this, p_generator ).add( p_view );
@@ -168,7 +169,7 @@ public class CView implements IView
     }
 
     @Override
-    public final boolean containsView( final CPath p_path )
+    public final boolean containsView( final IPath p_path )
     {
         p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
@@ -180,7 +181,7 @@ public class CView implements IView
     }
 
     @Override
-    public final boolean containsLiteral( final CPath p_path )
+    public final boolean containsLiteral( final IPath p_path )
     {
         p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
@@ -206,7 +207,7 @@ public class CView implements IView
     }
 
     @Override
-    public final boolean remove( final CPath... p_path )
+    public final boolean remove( final IPath... p_path )
     {
         if ( ( p_path == null ) || ( p_path.length == 0 ) )
             return false;
@@ -224,16 +225,16 @@ public class CView implements IView
     }
 
     @Override
-    public final Stream<ILiteral> parallelStream( final CPath... p_path )
+    public final Stream<ILiteral> parallelStream( final IPath... p_path )
     {
         return this.stream( p_path ).parallel();
     }
 
     @Override
-    public final Stream<ILiteral> stream( final CPath... p_path )
+    public final Stream<ILiteral> stream( final IPath... p_path )
     {
         // build path relative to this view
-        final CPath l_path = this.getPath().getSubPath( 1 );
+        final IPath l_path = this.getPath().getSubPath( 1 );
         return ( p_path == null ) || ( p_path.length == 0 )
 
                ?
@@ -254,16 +255,16 @@ public class CView implements IView
     }
 
     @Override
-    public final Stream<ILiteral> parallelStream( final boolean p_negated, final CPath... p_path )
+    public final Stream<ILiteral> parallelStream( final boolean p_negated, final IPath... p_path )
     {
         return this.stream( p_negated, p_path ).parallel();
     }
 
     @Override
-    public final Stream<ILiteral> stream( final boolean p_negated, final CPath... p_path )
+    public final Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path )
     {
         // build path relative to this view
-        final CPath l_path = this.getPath().getSubPath( 1 );
+        final IPath l_path = this.getPath().getSubPath( 1 );
         return ( p_path == null ) || ( p_path.length == 0 )
 
                ?
@@ -287,9 +288,9 @@ public class CView implements IView
     }
 
     @Override
-    public final CPath getPath()
+    public final IPath getPath()
     {
-        final CPath l_path = new CPath();
+        final IPath l_path = new CPath();
         this.root().forEach( i -> l_path.pushfront( i.getName() ) );
         return l_path;
     }
@@ -347,7 +348,7 @@ public class CView implements IView
      *
      * @note path must be normalized
      */
-    protected final synchronized IView walk( final CPath p_path, final IView p_root, final IGenerator p_generator )
+    protected final synchronized IView walk( final IPath p_path, final IView p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
@@ -373,7 +374,7 @@ public class CView implements IView
      *
      * @note path must be normalized
      */
-    protected final IView walk( final CPath p_path, final IView p_root )
+    protected final IView walk( final IPath p_path, final IView p_root )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;

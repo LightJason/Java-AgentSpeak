@@ -25,7 +25,7 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.IVariable;
 
@@ -54,7 +54,7 @@ public final class CContext<T> implements IContext<T>
     /**
      * plan variables with their data
      */
-    private final Map<CPath, IVariable<?>> m_variables;
+    private final Map<IPath, IVariable<?>> m_variables;
 
 
     /**
@@ -94,7 +94,7 @@ public final class CContext<T> implements IContext<T>
     }
 
     @Override
-    public final Map<CPath, IVariable<?>> getInstanceVariables()
+    public final Map<IPath, IVariable<?>> getInstanceVariables()
     {
         return m_variables;
     }

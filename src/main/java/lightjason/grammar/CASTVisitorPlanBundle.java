@@ -28,6 +28,7 @@ import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.language.CLiteral;
@@ -106,7 +107,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with action definition
      */
-    protected final Map<CPath, IAction> m_actions;
+    protected final Map<IPath, IAction> m_actions;
 
     /**
      * ctor

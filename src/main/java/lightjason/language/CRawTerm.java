@@ -24,6 +24,7 @@
 package lightjason.language;
 
 import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 
@@ -45,7 +46,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     /**
      * functor
      */
-    private final CPath m_functor;
+    private final IPath m_functor;
     /**
      * hash code cache
      */
@@ -126,13 +127,13 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final CPath getFunctorPath()
+    public final IPath getFunctorPath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public final CPath getFQNFunctor()
+    public final IPath getFQNFunctor()
     {
         return m_functor;
     }
@@ -181,7 +182,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final ITerm deepcopy( final CPath... p_prefix )
+    public final ITerm deepcopy( final IPath... p_prefix )
     {
         return CRawTerm.from( m_value );
     }

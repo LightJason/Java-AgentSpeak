@@ -24,7 +24,7 @@
 package lightjason.language;
 
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 import java.util.stream.Stream;
 
@@ -44,13 +44,13 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * (filtering values within values)
      * @return stream
      */
-    Stream<ITerm> values( final CPath... p_path );
+    Stream<ITerm> values( final IPath... p_path );
 
     /**
      * returns a stream over the ordered values
      * in sequential ordering
      */
-    Stream<ITerm> orderedvalues( final CPath... p_path );
+    Stream<ITerm> orderedvalues( final IPath... p_path );
 
     /**
      * returns a stream over annotation items
@@ -59,7 +59,7 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * annotations on the same level not within)
      * @return stream
      */
-    Stream<ILiteral> annotations( final CPath... p_path );
+    Stream<ILiteral> annotations( final IPath... p_path );
 
     /**
      * returns the hash of the annotations

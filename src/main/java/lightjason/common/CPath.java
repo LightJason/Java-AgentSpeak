@@ -41,13 +41,13 @@ import java.util.stream.Stream;
 /**
  * class to create a path structure
  */
-public final class CPath implements Iterable<CPath>, Comparable<CPath>
+public final class CPath implements IPath
 {
     public static final String DEFAULTSEPERATOR = "/";
     /**
      * empty path
      **/
-    public static final CPath EMPTY = new CPath();
+    public static final IPath EMPTY = new CPath();
     /**
      * list with path parts *
      */
@@ -63,7 +63,7 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
      * @param p_path path object
      * @param p_varargs string arguments
      */
-    public CPath( final CPath p_path, final String... p_varargs )
+    public CPath( final IPath p_path, final String... p_varargs )
     {
         this( p_path );
         m_path.addAll( Arrays.asList( p_varargs ) );
@@ -74,10 +74,10 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
      *
      * @param p_path path object
      */
-    public CPath( final CPath p_path )
+    public CPath( final IPath p_path )
     {
-        m_separator = p_path.m_separator;
-        m_path.addAll( p_path.m_path );
+        m_separator = p_path.getSeparator();
+        m_path.addAll( p_path.stream().collect( Collectors.toList() ) );
     }
 
     /**
@@ -108,10 +108,10 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
      * @param p_varargs list of strings
      * @return path object
      */
-    public static CPath createPath( final String... p_varargs )
+    public static IPath createPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CPath.class, "createpath" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( IPath.class, "createpath" ) );
 
         return new CPath( p_varargs );
     }
@@ -122,10 +122,10 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
      * @param p_varargs list of string (first element is the seperator)
      * @return path object
      */
-    public static CPath createSplitPath( final String... p_varargs )
+    public static IPath createSplitPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CPath.class, "createpath" ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( IPath.class, "createpath" ) );
 
         return new CPath(
                 Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
@@ -135,74 +135,48 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
     }
 
     /**
-     * appends a path at the current and returns a new object
-     *
-     * @param p_path path
-     * @return new path
-     */
-    public final CPath append( final CPath p_path )
-    {
-        final CPath l_path = new CPath( this );
-        l_path.pushback( p_path );
-        return l_path;
-    }
-
-    /**
      * factor method to build path
      *
      * @param p_string input string
      * @return path
      */
-    public static CPath from( final String p_string )
+    public static IPath from( final String p_string )
     {
         return ( p_string == null ) || ( p_string.isEmpty() ) ? EMPTY : createSplitPath( DEFAULTSEPERATOR, p_string );
     }
 
-    /**
-     * appends a string at the current path and returns the new object
-     *
-     * @param p_path string with path
-     * @return new path
-     */
-    public final CPath append( final String p_path )
+    @Override
+    public final IPath append( final IPath p_path )
     {
-        final CPath l_path = new CPath( this );
+        final IPath l_path = new CPath( this );
         l_path.pushback( p_path );
         return l_path;
     }
 
-    /**
-     * removes an element
-     *
-     * @param p_index index position
-     * @return return the changed object
-     */
-    public final CPath remove( final int p_index )
+    @Override
+    public final IPath append( final String p_path )
+    {
+        final IPath l_path = new CPath( this );
+        l_path.pushback( p_path );
+        return l_path;
+    }
+
+    @Override
+    public final IPath remove( final int p_index )
     {
         m_path.remove( p_index );
         return this;
     }
 
-    /**
-     * removes all elements from start index until end index (exclusive)
-     *
-     * @param p_start start index
-     * @param p_end end index (exclusive)
-     * @return return the changed object
-     */
-    public final CPath remove( final int p_start, final int p_end )
+    @Override
+    public final IPath remove( final int p_start, final int p_end )
     {
         m_path.subList( p_start, p_end ).clear();
         return this;
     }
 
-    /**
-     * check of a path ends with another path
-     *
-     * @param p_path path
-     * @return boolean
-     */
-    public final boolean endsWith( final CPath p_path )
+    @Override
+    public final boolean endsWith( final IPath p_path )
     {
         if ( p_path.size() > this.size() )
             return false;
@@ -214,55 +188,32 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
         return true;
     }
 
-    /**
-     * returns an part of the path
-     *
-     * @param p_index index position (negativ index is element from the end)
-     * @return element
-     */
+    @Override
     public final String get( final int p_index )
     {
         return p_index < 0 ? m_path.get( m_path.size() + p_index ) : m_path.get( p_index );
     }
 
-    /**
-     * returns the full path as string with an individual separator
-     *
-     * @param p_separator separator
-     * @return string path
-     */
+    @Override
     public final String getPath( final String p_separator )
     {
         return StringUtils.join( m_path, p_separator );
     }
 
-    /**
-     * returns the full path as string
-     *
-     * @return string path
-     */
+    @Override
     public final String getPath()
     {
         return StringUtils.join( m_path, m_separator );
     }
 
-    /**
-     * returns the separator
-     *
-     * @return separator
-     */
+    @Override
     public final String getSeparator()
     {
         return m_separator;
     }
 
-    /**
-     * sets the separator
-     *
-     * @param p_separator separator
-     * @return path object
-     */
-    public final CPath setSeparator( final String p_separator )
+    @Override
+    public final IPath setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "separatornotempty" ) );
@@ -271,59 +222,33 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
         return this;
     }
 
-    /**
-     * changes all elements to lower-case
-     *
-     * @return object
-     */
-    public final CPath toLower()
+    @Override
+    public final IPath toLower()
     {
         m_path = m_path.stream().map( i -> i.toLowerCase() ).collect( Collectors.toList() );
         return this;
     }
 
-    /**
-     * changes all elements to uppercase
-     *
-     * @return object
-     */
-    public final CPath toUpper()
+    @Override
+    public final IPath toUpper()
     {
         m_path = m_path.stream().map( i -> i.toUpperCase() ).collect( Collectors.toList() );
         return this;
     }
 
-    /**
-     * creates a path of the start index until the end
-     *
-     * @param p_fromIndex start index
-     * @return path
-     */
-    public final CPath getSubPath( final int p_fromIndex )
+    @Override
+    public final IPath getSubPath( final int p_fromIndex )
     {
         return this.getSubPath( p_fromIndex, this.size() );
     }
 
-    /**
-     * creates a path of the indices
-     *
-     * @param p_fromIndex start index
-     * @param p_toIndex end index (exclusive) / negative values from the end
-     * @return path
-     */
-    public final CPath getSubPath( final int p_fromIndex, final int p_toIndex )
+    @Override
+    public final IPath getSubPath( final int p_fromIndex, final int p_toIndex )
     {
-        final CPath l_path = new CPath();
-        l_path.m_separator = m_separator;
-        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex >= 0 ? p_toIndex : this.size() + p_toIndex ) );
-        return l_path;
+        return new CPath( m_path.subList( p_fromIndex, p_toIndex >= 0 ? p_toIndex : this.size() + p_toIndex ) ).setSeparator( m_separator );
     }
 
-    /**
-     * returns the last part of the path
-     *
-     * @return string
-     */
+    @Override
     public final String getSuffix()
     {
         return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
@@ -338,7 +263,7 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof CPath )
+        if ( p_object instanceof IPath )
             return this.hashCode() == p_object.hashCode();
         if ( p_object instanceof String )
             return p_object.hashCode() == this.getPath().hashCode();
@@ -363,9 +288,9 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
     }
 
     @Override
-    public final Iterator<CPath> iterator()
+    public final Iterator<IPath> iterator()
     {
-        return new Iterator<CPath>()
+        return new Iterator<IPath>()
         {
             private int m_index;
 
@@ -376,68 +301,44 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
             }
 
             @Override
-            public CPath next()
+            public IPath next()
             {
                 return new CPath( CCommon.convertCollectionToArray( String[].class, m_path.subList( 0, ++m_index ) ) );
             }
         };
     }
 
-    /**
-     * adds a path at the end
-     *
-     * @param p_path path
-     * @return return the changed object
-     */
-    public final CPath pushback( final CPath p_path )
+    @Override
+    public final IPath pushback( final IPath p_path )
     {
-        m_path.addAll( p_path.m_path );
+        m_path.addAll( p_path.stream().collect( Collectors.toList() ) );
         return this;
     }
 
-    /**
-     * adds a path at the end
-     *
-     * @param p_path string path
-     * @return return the changed object
-     */
-    public final CPath pushback( final String p_path )
+    @Override
+    public final IPath pushback( final String p_path )
     {
         this.pushback( new CPath( p_path ) );
         return this;
     }
 
-    /**
-     * adds a path at the front
-     *
-     * @param p_path string path
-     * @return return the changed object
-     */
-    public final CPath pushfront( final String p_path )
+    @Override
+    public final IPath pushfront( final String p_path )
     {
         this.pushfront( new CPath( p_path ) );
         return this;
     }
 
-    /**
-     * adds a path to the front of the path
-     *
-     * @param p_path path
-     * @return return the changed object
-     */
-    public final CPath pushfront( final CPath p_path )
+    @Override
+    public final IPath pushfront( final IPath p_path )
     {
-        final ArrayList<String> l_path = new ArrayList<>( p_path.m_path );
+        final ArrayList<String> l_path = p_path.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
         l_path.addAll( m_path );
         m_path = l_path;
         return this;
     }
 
-    /**
-     * remove the suffix from the path
-     *
-     * @return last item of the path
-     */
+    @Override
     public final String removeSuffix()
     {
         if ( this.isEmpty() )
@@ -449,34 +350,21 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
         return l_suffix;
     }
 
-    /**
-     * reverse path
-     *
-     * @return return the changed object
-     */
-    public final CPath reverse()
+    @Override
+    public final IPath reverse()
     {
         Collections.reverse( m_path );
         return this;
     }
 
-    /**
-     * returns the number of path elements
-     *
-     * @return size
-     */
+    @Override
     public final int size()
     {
         return m_path.size();
     }
 
-    /**
-     * check of a path starts with another path
-     *
-     * @param p_path path
-     * @return boolean
-     */
-    public final boolean startsWith( final CPath p_path )
+    @Override
+    public final boolean startsWith( final IPath p_path )
     {
         if ( p_path.size() > this.size() )
             return false;
@@ -488,45 +376,26 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
         return true;
     }
 
-    /**
-     * check of a path starts with another path
-     *
-     * @param p_path path
-     * @return boolean
-     */
+    @Override
     public final boolean startsWith( final String p_path )
     {
         return this.startsWith( new CPath( p_path ) );
     }
 
-
-    /**
-     * stream over elements
-     *
-     * @return sequential stream
-     */
+    @Override
     public final Stream<String> stream()
     {
         return m_path.stream();
     }
 
-    /**
-     * parallel stream over elements
-     *
-     * @return parallel stream
-     */
+    @Override
     public final Stream<String> parallelStream()
     {
         return m_path.parallelStream();
     }
 
-
-    /**
-     * normalizes the path (remove dot and dot-dot elements)
-     *
-     * @return self reference
-     */
-    public final CPath normalize()
+    @Override
+    public final IPath normalize()
     {
         if ( m_path.isEmpty() )
             return this;
@@ -543,7 +412,7 @@ public final class CPath implements Iterable<CPath>, Comparable<CPath>
     }
 
     @Override
-    public final int compareTo( final CPath p_path )
+    public final int compareTo( final IPath p_path )
     {
         return Integer.compare( this.hashCode(), p_path.hashCode() );
     }

@@ -24,7 +24,7 @@
 package lightjason.grammar;
 
 import lightjason.agent.action.IAction;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IExecution;
@@ -81,7 +81,7 @@ public final class CCommon
      * @param p_actions map with agent actions
      * @return execution structure or null
      */
-    public static IExecution getTermExecution( final Object p_item, final Map<CPath, IAction> p_actions )
+    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions )
     {
         // null value will be passed
         if ( p_item == null )

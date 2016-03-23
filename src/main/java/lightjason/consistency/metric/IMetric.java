@@ -25,7 +25,7 @@ package lightjason.consistency.metric;
 
 
 import lightjason.agent.IAgent;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 import java.util.Collection;
 
@@ -53,6 +53,6 @@ public interface IMetric
      *
      * @return selector
      */
-    Collection<CPath> getSelector();
+    Collection<IPath> getSelector();
 
 }

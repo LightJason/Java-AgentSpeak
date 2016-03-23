@@ -29,7 +29,7 @@ import com.google.common.collect.Multiset;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -77,7 +77,7 @@ public final class CProxyAction implements IExecution
      * @param p_actions actions definition
      * @param p_literal literal
      */
-    public CProxyAction( final Map<CPath, IAction> p_actions, final ILiteral p_literal )
+    public CProxyAction( final Map<IPath, IAction> p_actions, final ILiteral p_literal )
     {
         // create cache for scoring action and define action
         final Multiset<IAction> l_scoringcache = HashMultiset.create();
@@ -239,7 +239,7 @@ public final class CProxyAction implements IExecution
          * @param p_actions actions
          * @param p_scorecache score cache
          */
-        public CActionWrapper( final ILiteral p_literal, final Map<CPath, IAction> p_actions, final Multiset<IAction> p_scorecache )
+        public CActionWrapper( final ILiteral p_literal, final Map<IPath, IAction> p_actions, final Multiset<IAction> p_scorecache )
         {
             // check parallel and inner execution
             m_parallel = p_literal.hasAt();
@@ -316,7 +316,7 @@ public final class CProxyAction implements IExecution
          * @return ordered execution structure
          */
         @SuppressWarnings( "unchecked" )
-        private Map<Integer, IExecution> createSubExecutions( final Collection<? extends ITerm> p_elements, final Map<CPath, IAction> p_actions,
+        private Map<Integer, IExecution> createSubExecutions( final Collection<? extends ITerm> p_elements, final Map<IPath, IAction> p_actions,
                                                               final Multiset<IAction> p_scorecache
         )
         {

@@ -23,7 +23,7 @@
 
 package lightjason.language;
 
-import lightjason.common.CPath;
+import lightjason.common.IPath;
 
 
 /**
@@ -38,7 +38,7 @@ public interface IShallowCopy<T> extends ICopy
      * to the functor or returns a shallow-copy
      * @return new instance of the object
      */
-    T shallowcopy( final CPath... p_prefix );
+    T shallowcopy( final IPath... p_prefix );
 
     /**
      * clones the object (shallow-copy)
