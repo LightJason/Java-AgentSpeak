@@ -24,7 +24,6 @@
 package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.configuration.IAgentConfiguration;
@@ -153,7 +152,7 @@ public class CAgent implements IAgent
                 .putAll( IInspector.EValue.RUNNINGPLAN, m_storage.entrySet().stream().collect( Collectors.toList() ).iterator() )
                 .build();
 
-        Arrays.stream( p_inspector ).forEach( i -> i.inspect( ImmutableMultimap.copyOf( l_map ) ) );
+        Arrays.stream( p_inspector ).parallel().forEach( i -> i.inspect( l_map ) );
     }
 
     @Override
