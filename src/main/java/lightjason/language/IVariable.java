@@ -63,6 +63,13 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
     boolean isAllocated();
 
     /**
+     * flag to define a "any variable"
+     *
+     * @return flag for any variable
+     */
+    boolean isAny();
+
+    /**
      * throws an illegal state exception
      * iif the variable is not allocated
      *

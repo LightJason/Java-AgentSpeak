@@ -123,6 +123,12 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    public final boolean isAny()
+    {
+        return m_any;
+    }
+
+    @Override
     public IVariable<T> throwNotAllocated() throws IllegalStateException
     {
         if ( !this.isAllocated() )

@@ -94,7 +94,7 @@ public final class CUnify extends IBaseExecution<ILiteral>
         if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "novariable" ) );
 
-        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().getFunctor().equals( "_" ) ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
+        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().isAny() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "uniquevariable" ) );
 
         // count variables
