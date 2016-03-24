@@ -35,6 +35,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,22 +83,25 @@ public final class CUnify extends IBaseExecution<ILiteral>
         m_parallel = p_parallel;
         m_expression = p_expression;
 
-        // check unique variables
-        final List<ITerm> l_terms = Stream.concat(
+        // check unique variables - get variable frequency especially any variable "_"
+        final Map<IVariable<?>, Integer> l_frequency = Stream.concat(
                 CCommon.recursiveterm( p_literal.orderedvalues() ),
                 CCommon.recursiveliteral( p_literal.annotations() )
-        ).filter( i -> i instanceof IVariable<?> ).collect( Collectors.toList() );
-        if ( l_terms.size() == 0 )
+        ).filter( i -> i instanceof IVariable<?> )
+                                                             .map( i -> (IVariable<?>) i )
+                                                             .collect( Collectors.toConcurrentMap( i -> i, i -> 1, Integer::sum ) );
+
+        if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "novariable" ) );
-        if ( l_terms.size() != new HashSet<>( l_terms ).size() )
+
+        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().getFunctor().equals( "_" ) ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "uniquevariable" ) );
 
         // count variables
-        m_variablenumber = Stream.concat(
-                CCommon.recursiveterm( p_literal.orderedvalues() ),
-                CCommon.recursiveliteral( p_literal.annotations() )
-        ).filter( i -> i instanceof IVariable<?> ).count();
+        m_variablenumber = l_frequency.size();
     }
+
+
 
     @Override
     public final String toString()
