@@ -439,7 +439,6 @@ public final class CPath implements IPath
 
         // clear internal path and add optimized path
         m_path.clear();
-        ;
         m_path.addAll( l_backremove );
 
         return this;
