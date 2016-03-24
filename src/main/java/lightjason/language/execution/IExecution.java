@@ -48,7 +48,7 @@ public interface IExecution
      * @param p_return return values
      * @param p_annotation annotation    @return fuzzy boolean
      */
-    IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                   final List<ITerm> p_annotation
     );
 

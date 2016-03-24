@@ -28,6 +28,7 @@ import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.IVariable;
+import lightjason.language.instantiable.IPlanRule;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
  *
  * @tparam T instance type (plan or rule)
  */
-public final class CContext<T> implements IContext<T>
+public final class CContext implements IContext
 {
     /**
      * agent of the running context
@@ -50,7 +51,7 @@ public final class CContext<T> implements IContext<T>
     /**
      * current instance object
      */
-    private final T m_instance;
+    private final IPlanRule m_instance;
     /**
      * plan variables with their data
      */
@@ -64,7 +65,7 @@ public final class CContext<T> implements IContext<T>
      * @param p_instance instance object
      * @param p_variables instance variables
      */
-    public CContext( final IAgent p_agent, final T p_instance, final Collection<IVariable<?>> p_variables )
+    public CContext( final IAgent p_agent, final IPlanRule p_instance, final Collection<IVariable<?>> p_variables )
     {
         if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
@@ -75,9 +76,9 @@ public final class CContext<T> implements IContext<T>
     }
 
     @Override
-    public IContext<T> duplicate()
+    public IContext duplicate()
     {
-        return new CContext<T>( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
+        return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
     }
 
     @Override
@@ -87,10 +88,9 @@ public final class CContext<T> implements IContext<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public <N> N getInstance()
+    public IPlanRule getInstance()
     {
-        return (N) m_instance;
+        return m_instance;
     }
 
     @Override

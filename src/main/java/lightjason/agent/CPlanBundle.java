@@ -26,8 +26,8 @@ package lightjason.agent;
 import com.google.common.collect.Multimap;
 import lightjason.agent.configuration.IPlanBundleConfiguration;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Map;
 import java.util.Set;

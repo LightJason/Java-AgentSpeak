@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package lightjason.language.rule;
+package lightjason.language.instantiable.rule;
 
 import lightjason.agent.IAgent;
-import lightjason.common.IPath;
+import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -34,8 +34,12 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,9 +50,9 @@ import java.util.Set;
 public final class CRule implements IRule
 {
     /**
-     * name of the rule
+     * identifier of the rule
      */
-    protected final IPath m_name;
+    protected final ILiteral m_id;
     /**
      * action list
      */
@@ -62,18 +66,18 @@ public final class CRule implements IRule
      */
     public CRule( final ILiteral p_id, final List<List<IExecution>> p_action )
     {
-        m_name = p_id.getFQNFunctor();
-        m_action = p_action;
+        m_id = p_id;
+        m_action = Collections.unmodifiableList( p_action.stream().map( i -> Collections.unmodifiableList( i ) ).collect( Collectors.toList() ) );
     }
 
     @Override
-    public final IPath getName()
+    public final ILiteral getIdentifier()
     {
-        return m_name;
+        return m_id;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
@@ -87,27 +91,41 @@ public final class CRule implements IRule
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return null;
+        return new HashSet<IVariable<?>>()
+        {{
+
+            CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
+            CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
+
+            m_action.parallelStream().flatMap( i -> i.stream().flatMap( j -> j.getVariables().stream() ) ).forEach( i -> add( i ) );
+
+        }};
     }
 
     @Override
     public final int hashCode()
     {
-        return m_name.hashCode();
+        return m_id.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return m_name.hashCode() == p_object.hashCode();
+        return m_id.hashCode() == p_object.hashCode();
     }
 
     @Override
     public final String toString()
     {
-        return super.toString();
+        return MessageFormat.format(
+                "{0} ({1} ==>> {2})",
+                super.toString(),
+                m_id,
+                m_action
+        );
     }
 
 }

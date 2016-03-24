@@ -84,7 +84,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
@@ -119,7 +119,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private IFuzzyValue<Boolean> getTypedResult( final IVariable<?> p_execution, final IContext<?> p_context,
+    private IFuzzyValue<Boolean> getTypedResult( final IVariable<?> p_execution, final IContext p_context,
                                                  final List<ITerm> p_return
     )
     {
@@ -147,7 +147,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_annotation annotations
      * @return fuzzy-boolean
      */
-    private IFuzzyValue<Boolean> getTypedResult( final IExpression p_execution, final IContext<?> p_context, final Boolean p_parallel,
+    private IFuzzyValue<Boolean> getTypedResult( final IExpression p_execution, final IContext p_context, final Boolean p_parallel,
                                                  final List<ITerm> p_argument, final List<ITerm> p_return,
                                                  final List<ITerm> p_annotation
     )

@@ -27,8 +27,8 @@ import com.google.common.collect.Multimap;
 import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Map;
 import java.util.concurrent.Callable;

@@ -21,66 +21,62 @@
  * @endcond
  */
 
-package lightjason.language.plan.trigger;
-
-import lightjason.common.IPath;
-
-import java.text.MessageFormat;
-
+package lightjason.language.instantiable.plan.trigger;
 
 /**
- * event with literal data
+ * event definition
+ *
+ * @param T data type
  */
-public final class CTrigger implements ITrigger<IPath>
+public interface ITrigger<T>
 {
-    /**
-     * literal path
-     */
-    private final IPath m_data;
-    /**
-     * event type
-     */
-    private final EType m_event;
 
     /**
-     * ctor
+     * returns the type of the event
      *
-     * @param p_event type
-     * @param p_data data
+     * @return type
      */
-    public CTrigger( final EType p_event, final IPath p_data )
+    EType getID();
+
+    /**
+     * returns the data or null
+     *
+     * @return data
+     */
+    T getData();
+
+
+    /**
+     * event types
+     */
+    enum EType
     {
-        m_data = p_data;
-        m_event = p_event;
+        ADDBELIEF( "+" ),
+        DELETEBELIEF( "-" ),
+        CHANGEBELIEF( "-+" ),
+        ADDGOAL( "+!" ),
+        DELETEGOAL( "-!" );
+
+        /**
+         * text name of the enum
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name text name
+         */
+        EType( final String p_name )
+        {
+            m_name = p_name;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_name;
+        }
     }
 
-    @Override
-    public final int hashCode()
-    {
-        return m_event.hashCode() + m_data.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.hashCode() == p_object.hashCode();
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}{1}", m_event, m_data );
-    }
-
-    @Override
-    public final EType getID()
-    {
-        return m_event;
-    }
-
-    @Override
-    public final IPath getData()
-    {
-        return m_data;
-    }
 }

@@ -34,8 +34,8 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
@@ -225,30 +225,30 @@ public class CAgent implements IAgent
             System.out.println(
                     "\n--> "
                     + i.execute(
-                            new CContext<>( this, i,
-                                            Collections.unmodifiableSet(
-                                                    new HashSet<IVariable<?>>()
-                                                    {{
-                                                        // get plan variables
-                                                        addAll( i.getVariables() );
+                            new CContext( this, i,
+                                          Collections.unmodifiableSet(
+                                                  new HashSet<IVariable<?>>()
+                                                  {{
+                                                      // get plan variables
+                                                      addAll( i.getVariables() );
 
-                                                        // add customized variables and replace existing
-                                                        if ( m_variablebuilder != null )
-                                                            m_variablebuilder.generate( CAgent.this, i ).stream().forEach( i -> {
-                                                                remove( i );
-                                                                add( i );
-                                                            } );
+                                                      // add customized variables and replace existing
+                                                      if ( m_variablebuilder != null )
+                                                          m_variablebuilder.generate( CAgent.this, i ).stream().forEach( i -> {
+                                                              remove( i );
+                                                              add( i );
+                                                          } );
 
-                                                        // remove all internal values if exist and add a new reference
-                                                        Arrays.stream( new IVariable<?>[]{
-                                                                new CConstant<>( "Score", i.score( m_aggregation, CAgent.this ) ),
-                                                                new CConstant<>( "Cycle", CAgent.this.m_cycle )
-                                                        } ).forEach( i -> {
-                                                            remove( i );
-                                                            add( i );
-                                                        } );
-                                                    }}
-                                            )
+                                                      // remove all internal values if exist and add a new reference
+                                                      Arrays.stream( new IVariable<?>[]{
+                                                              new CConstant<>( "Score", i.score( m_aggregation, CAgent.this ) ),
+                                                              new CConstant<>( "Cycle", CAgent.this.m_cycle )
+                                                      } ).forEach( i -> {
+                                                          remove( i );
+                                                          add( i );
+                                                      } );
+                                                  }}
+                                          )
                             ), false, null, null, null
                     )
                     + " <--\n" );

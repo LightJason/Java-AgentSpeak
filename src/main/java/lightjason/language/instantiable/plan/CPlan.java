@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.language.plan;
+package lightjason.language.instantiable.plan;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
@@ -33,7 +33,7 @@ import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
 
@@ -60,10 +60,6 @@ public final class CPlan implements IPlan
      * trigger event
      */
     protected final ITrigger<?> m_triggerevent;
-    /**
-     * current plan state
-     */
-    protected EState m_currentstate = EState.SUCCESS;
     /**
      * number of runs
      */
@@ -122,12 +118,6 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    public final EState getState()
-    {
-        return m_currentstate;
-    }
-
-    @Override
     public final Collection<IAnnotation<?>> getAnnotations()
     {
         return m_annotation.values();
@@ -153,7 +143,7 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {

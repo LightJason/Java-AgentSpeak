@@ -26,7 +26,7 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.language.IVariable;
-import lightjason.language.plan.IPlan;
+import lightjason.language.instantiable.plan.IPlan;
 
 import java.util.Set;
 

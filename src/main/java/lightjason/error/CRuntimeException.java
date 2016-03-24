@@ -35,7 +35,7 @@ public final class CRuntimeException extends RuntimeException
     /**
      * execution context
      */
-    private final IContext<?> m_context;
+    private final IContext m_context;
 
 
     /**
@@ -43,7 +43,7 @@ public final class CRuntimeException extends RuntimeException
      *
      * @param p_context execution context
      */
-    public CRuntimeException( final IContext<?> p_context )
+    public CRuntimeException( final IContext p_context )
     {
         super();
         m_context = p_context;
@@ -55,7 +55,7 @@ public final class CRuntimeException extends RuntimeException
      * @param p_message execution message
      * @param p_context execution context
      */
-    public CRuntimeException( final String p_message, final IContext<?> p_context )
+    public CRuntimeException( final String p_message, final IContext p_context )
     {
         super( p_message );
         m_context = p_context;
@@ -68,7 +68,7 @@ public final class CRuntimeException extends RuntimeException
      * @param p_cause execption cause
      * @param p_context execution context
      */
-    public CRuntimeException( final String p_message, final Throwable p_cause, final IContext<?> p_context )
+    public CRuntimeException( final String p_message, final Throwable p_cause, final IContext p_context )
     {
         super( p_message, p_cause );
         m_context = p_context;
@@ -80,7 +80,7 @@ public final class CRuntimeException extends RuntimeException
      * @param p_cause execption cause
      * @param p_context execution context
      */
-    public CRuntimeException( final Throwable p_cause, final IContext<?> p_context )
+    public CRuntimeException( final Throwable p_cause, final IContext p_context )
     {
         super( p_cause );
         m_context = p_context;
@@ -96,7 +96,7 @@ public final class CRuntimeException extends RuntimeException
      * @param p_context execution context
      */
     protected CRuntimeException( final String p_message, final Throwable p_cause, final boolean p_enableSuppression, final boolean p_writableStackTrace,
-                                 final IContext<?> p_context
+                                 final IContext p_context
     )
     {
         super( p_message, p_cause, p_enableSuppression, p_writableStackTrace );
@@ -108,7 +108,7 @@ public final class CRuntimeException extends RuntimeException
      *
      * @return context
      */
-    public final IContext<?> getContext()
+    public final IContext getContext()
     {
         return m_context;
     }

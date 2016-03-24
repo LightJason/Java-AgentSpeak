@@ -21,62 +21,15 @@
  * @endcond
  */
 
-package lightjason.language.plan.trigger;
+
+package lightjason.language.instantiable;
+
+import lightjason.language.execution.IExecution;
+
 
 /**
- * event definition
- *
- * @param T data type
+ * interface for plans and logical-rules
  */
-public interface ITrigger<T>
+public interface IPlanRule extends IExecution
 {
-
-    /**
-     * returns the type of the event
-     *
-     * @return type
-     */
-    EType getID();
-
-    /**
-     * returns the data or null
-     *
-     * @return data
-     */
-    T getData();
-
-
-    /**
-     * event types
-     */
-    enum EType
-    {
-        ADDBELIEF( "+" ),
-        DELETEBELIEF( "-" ),
-        CHANGEBELIEF( "-+" ),
-        ADDGOAL( "+!" ),
-        DELETEGOAL( "-!" );
-
-        /**
-         * text name of the enum
-         */
-        private final String m_name;
-
-        /**
-         * ctor
-         *
-         * @param p_name text name
-         */
-        EType( final String p_name )
-        {
-            m_name = p_name;
-        }
-
-        @Override
-        public String toString()
-        {
-            return m_name;
-        }
-    }
-
 }

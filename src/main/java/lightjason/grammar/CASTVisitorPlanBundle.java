@@ -68,16 +68,19 @@ import lightjason.language.execution.expression.numerical.CPower;
 import lightjason.language.execution.expression.numerical.CRelational;
 import lightjason.language.execution.unaryoperator.CDecrement;
 import lightjason.language.execution.unaryoperator.CIncrement;
-import lightjason.language.plan.CPlan;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.CTrigger;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.CPlan;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.CRule;
+import lightjason.language.instantiable.rule.IRule;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -104,6 +107,10 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
      * map with plans
      */
     protected final Multimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
+    /**
+     * map with logical rules
+     */
+    protected final Map<ILiteral, IRule> m_rules = new HashMap<>();
     /**
      * map with action definition
      */
@@ -155,13 +162,23 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
-        return this.visitChildren( p_context );
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        return null;
+    }
+
+    @Override
+    public Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
+    {
+        return new CRule(
+                (ILiteral) this.visitLiteral( p_context.literal() ),
+                p_context.logicalruledefinition().stream().map( i -> (List<IExecution>) this.visitLogicalruledefinition( i ) ).collect( Collectors.toList() )
+        );
     }
 
     @Override
     public Object visitLogicalruledefinition( final PlanBundleParser.LogicalruledefinitionContext p_context )
     {
-        return this.visitChildren( p_context );
+        return this.visitBody( p_context.body() );
     }
 
 
@@ -385,14 +402,6 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
                 ? null
                 : (IExpression) this.visitExpression( p_context.expression() )
         );
-    }
-
-
-
-    @Override
-    public Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
 
@@ -1015,9 +1024,9 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public final Map<String, Object> getRules()
+    public final Map<ILiteral, IRule> getRules()
     {
-        return null;
+        return m_rules;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -35,8 +35,8 @@ import lightjason.consistency.metric.CWeightedDifference;
 import lightjason.consistency.metric.IMetric;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import org.junit.Test;
 
 import java.text.MessageFormat;

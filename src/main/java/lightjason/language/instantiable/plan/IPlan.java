@@ -21,23 +21,42 @@
  * @endcond
  */
 
-package lightjason.language.rule;
+package lightjason.language.instantiable.plan;
 
-import lightjason.common.IPath;
 import lightjason.language.execution.IExecution;
+import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.instantiable.IPlanRule;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
+
+import java.util.Collection;
+import java.util.List;
 
 
 /**
- * interface of logical rule
+ * interface of plan
  */
-public interface IRule extends IExecution
+public interface IPlan extends IPlanRule
 {
 
     /**
-     * returns the name of the rule
+     * returns the trigger event
      *
-     * @return name without signature
+     * @return trigger event
      */
-    IPath getName();
+    ITrigger<?> getTrigger();
+
+    /**
+     * return unmodifieable annotation set
+     *
+     * @return set with annotation
+     */
+    Collection<IAnnotation<?>> getAnnotations();
+
+    /**
+     * returns unmodifieable list with plan actions
+     *
+     * @return action list;
+     */
+    List<IExecution> getBodyActions();
 
 }

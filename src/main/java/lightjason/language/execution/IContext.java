@@ -26,16 +26,15 @@ package lightjason.language.execution;
 import lightjason.agent.IAgent;
 import lightjason.common.IPath;
 import lightjason.language.IVariable;
+import lightjason.language.instantiable.IPlanRule;
 
 import java.util.Map;
 
 
 /**
  * execution context with local data
- *
- * @todo add inheritance of plan/rule interface
  */
-public interface IContext<T>
+public interface IContext
 {
 
     /**
@@ -49,11 +48,8 @@ public interface IContext<T>
      * returns the instance object
      *
      * @return instance object plan or rule
-     *
-     * @tparam N type
-     * @todo add inheritance of plan/rule interface
      */
-    <N> N getInstance();
+    IPlanRule getInstance();
 
     /**
      * returns the variables names and their current value
@@ -67,5 +63,6 @@ public interface IContext<T>
      *
      * @return shallow-copy of the context
      */
-    IContext<T> duplicate();
+    IContext duplicate();
+
 }

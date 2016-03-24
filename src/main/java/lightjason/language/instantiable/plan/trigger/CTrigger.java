@@ -21,66 +21,66 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.generic.storage;
+package lightjason.language.instantiable.plan.trigger;
 
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.common.IPath;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.text.MessageFormat;
 
 
 /**
- * removes all elements of the storage which are not forbidden
+ * event with literal data
  */
-public final class CClear extends IStorage
+public final class CTrigger implements ITrigger<IPath>
 {
-
     /**
-     * ctor
+     * literal path
      */
-    public CClear()
-    {
-        super();
-    }
-
+    private final IPath m_data;
     /**
-     * ctor
-     *
-     * @param p_forbidden forbidden keys
+     * event type
      */
-    public CClear( final String... p_forbidden )
-    {
-        super( Arrays.asList( p_forbidden ) );
-    }
+    private final EType m_event;
 
     /**
      * ctor
      *
-     * @param p_fordbidden forbidden keys
+     * @param p_event type
+     * @param p_data data
      */
-    public CClear( final Collection<String> p_fordbidden )
+    public CTrigger( final EType p_event, final IPath p_data )
     {
-        super( p_fordbidden );
+        m_data = p_data;
+        m_event = p_event;
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int hashCode()
     {
-        return 0;
+        return m_event.hashCode() + m_data.hashCode();
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final boolean equals( final Object p_object )
     {
-        p_context.getAgent().getStorage().keySet().parallelStream().filter( i -> !m_forbidden.contains( i ) ).forEach(
-                i -> p_context.getAgent().getStorage().remove( i ) );
-        return CBoolean.from( true );
+        return this.hashCode() == p_object.hashCode();
     }
 
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_event, m_data );
+    }
+
+    @Override
+    public final EType getID()
+    {
+        return m_event;
+    }
+
+    @Override
+    public final IPath getData()
+    {
+        return m_data;
+    }
 }

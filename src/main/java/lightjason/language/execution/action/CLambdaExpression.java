@@ -103,7 +103,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
@@ -162,9 +162,9 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_input input list
      * @return return list
      */
-    private List<?> executeSequential( final IContext<?> p_context, final List<ITerm> p_input )
+    private List<?> executeSequential( final IContext p_context, final List<ITerm> p_input )
     {
-        final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
+        final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
 
         return CCommon.flatList( p_input ).stream().map( i -> {
 
@@ -189,11 +189,11 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_input input list
      * @return return list
      */
-    private List<?> executeParallel( final IContext<?> p_context, final List<ITerm> p_input )
+    private List<?> executeParallel( final IContext p_context, final List<ITerm> p_input )
     {
         return CCommon.flatList( p_input ).parallelStream().map( i -> {
 
-            final Triple<IContext<?>, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
+            final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
             l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
             m_body.stream().forEach(
                     j -> j.execute(
@@ -213,7 +213,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_context local context
      * @return tripel with context, iterator variable and return variable
      */
-    private Triple<IContext<?>, IVariable<?>, IVariable<?>> getLocalContext( final IContext<?> p_context )
+    private Triple<IContext, IVariable<?>, IVariable<?>> getLocalContext( final IContext p_context )
     {
         final IVariable<?> l_iterator = m_value.shallowcopy();
         final IVariable<?> l_return = m_return != null ? m_return.shallowcopy() : null;
@@ -230,6 +230,6 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
             l_variables.add( l_return );
         }
 
-        return new ImmutableTriple<>( new CContext<>( p_context.getAgent(), p_context.getInstance(), l_variables ), l_iterator, l_return );
+        return new ImmutableTriple<>( new CContext( p_context.getAgent(), p_context.getInstance(), l_variables ), l_iterator, l_return );
     }
 }

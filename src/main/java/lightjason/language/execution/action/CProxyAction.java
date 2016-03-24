@@ -88,7 +88,7 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
@@ -157,7 +157,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument,
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
                                                    final List<ITerm> p_return,
                                                    final List<ITerm> p_annotation
         )
@@ -284,7 +284,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public IFuzzyValue<Boolean> execute( final IContext<?> p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                              final List<ITerm> p_annotation
         )
         {
@@ -336,7 +336,7 @@ public final class CProxyAction implements IExecution
          * @return return arguments of execution (flat list)
          */
         @SuppressWarnings( "unchecked" )
-        private List<ITerm> subexecute( final IContext<?> p_context, final Map<Integer, IExecution> p_execution )
+        private List<ITerm> subexecute( final IContext p_context, final Map<Integer, IExecution> p_execution )
         {
             return Collections.unmodifiableList( lightjason.language.CCommon.replaceFromContext(
                     p_context,

@@ -42,7 +42,7 @@ public interface IUnifier
      * @param p_variablenumber number of unified variables
      * @param p_expression expression can be null iif expression is not set  @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_expression );
+    IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_expression );
 
     /**
      * unifies a literal in parallel
@@ -52,6 +52,6 @@ public interface IUnifier
      * @param p_variablenumber number of unified variables
      * @param p_expression expression can be null iif expression is not set  @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_expression );
+    IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_expression );
 
 }

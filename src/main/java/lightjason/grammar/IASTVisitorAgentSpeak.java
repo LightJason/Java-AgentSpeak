@@ -25,8 +25,9 @@ package lightjason.grammar;
 
 import com.google.common.collect.Multimap;
 import lightjason.language.ILiteral;
-import lightjason.language.plan.IPlan;
-import lightjason.language.plan.trigger.ITrigger;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Map;
 import java.util.Set;
@@ -57,6 +58,6 @@ public interface IASTVisitorAgentSpeak extends IASTVisitor
      *
      * @return map with rules
      */
-    Map<String, Object> getRules();
+    Map<ILiteral, IRule> getRules();
 
 }

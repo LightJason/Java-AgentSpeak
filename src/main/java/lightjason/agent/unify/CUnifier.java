@@ -61,7 +61,7 @@ public final class CUnifier implements IUnifier
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final IFuzzyValue<Boolean> parallelunify( final IContext<?> p_context, final ILiteral p_literal, final long p_variablenumber,
+    public final IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
                                                      final IExpression p_expression
     )
     {
@@ -105,7 +105,7 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public final IFuzzyValue<Boolean> sequentialunify( final IContext<?> p_context, final ILiteral p_literal, final long p_variablenumber,
+    public final IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
                                                        final IExpression p_expression
     )
     {
@@ -156,7 +156,7 @@ public final class CUnifier implements IUnifier
      * @param p_unifiedvariables unified variables as stream
      * @return context reference
      */
-    private IContext<?> updatecontext( final IContext<?> p_context, final Stream<IVariable<?>> p_unifiedvariables )
+    private IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
         p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
         return p_context;

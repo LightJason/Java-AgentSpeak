@@ -65,7 +65,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext<?> p_context,
+    public final IFuzzyValue<Boolean> execute( final IContext p_context,
                                                final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
