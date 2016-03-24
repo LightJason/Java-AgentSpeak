@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * @todo hashcode / equals are missing
  * @todo annotation handling is incomplete
  */
-public class CPlan implements IPlan
+public final class CPlan implements IPlan
 {
     /**
      * trigger event
