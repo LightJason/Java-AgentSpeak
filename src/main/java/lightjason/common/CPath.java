@@ -51,7 +51,7 @@ public final class CPath implements IPath
     /**
      * list with path parts *
      */
-    private List<String> m_path = new ArrayList<>();
+    private final List<String> m_path;
     /**
      * separator of the path elements *
      */
@@ -76,8 +76,8 @@ public final class CPath implements IPath
      */
     public CPath( final IPath p_path )
     {
+        m_path = p_path.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
         m_separator = p_path.getSeparator();
-        m_path.addAll( p_path.stream().collect( Collectors.toList() ) );
     }
 
     /**
@@ -87,8 +87,15 @@ public final class CPath implements IPath
      */
     public CPath( final String... p_varargs )
     {
-        if ( ( p_varargs != null ) && ( p_varargs.length > 0 ) )
-            this.initialize( StringUtils.join( p_varargs, m_separator ) );
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            m_path = new ArrayList<>();
+        else
+        {
+            m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) ).filter( i -> !i.isEmpty() ).collect(
+                    Collectors.toList() );
+            if ( m_path.size() == 0 )
+                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "pathempty" ) );
+        }
     }
 
     /**
@@ -98,8 +105,9 @@ public final class CPath implements IPath
      */
     public CPath( final Collection<String> p_collection )
     {
-        if ( ( p_collection != null ) && ( !p_collection.isEmpty() ) )
-            m_path.addAll( p_collection );
+        m_path = p_collection == null
+                 ? new ArrayList<>()
+                 : p_collection.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
     }
 
     /**
@@ -235,14 +243,18 @@ public final class CPath implements IPath
     @Override
     public final IPath toLower()
     {
-        m_path = m_path.stream().map( i -> i.toLowerCase() ).collect( Collectors.toList() );
+        final List<String> l_path = m_path.stream().map( i -> i.toLowerCase() ).collect( Collectors.toList() );
+        m_path.clear();
+        m_path.addAll( l_path );
         return this;
     }
 
     @Override
     public final IPath toUpper()
     {
-        m_path = m_path.stream().map( i -> i.toUpperCase() ).collect( Collectors.toList() );
+        final List<String> l_path = m_path.stream().map( i -> i.toUpperCase() ).collect( Collectors.toList() );
+        m_path.clear();
+        m_path.addAll( l_path );
         return this;
     }
 
@@ -344,7 +356,8 @@ public final class CPath implements IPath
     {
         final ArrayList<String> l_path = p_path.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
         l_path.addAll( m_path );
-        m_path = l_path;
+        m_path.clear();
+        m_path.addAll( l_path );
         return this;
     }
 
@@ -410,13 +423,24 @@ public final class CPath implements IPath
         if ( m_path.isEmpty() )
             return this;
 
-        m_path = m_path.stream().filter( i -> !i.equals( "." ) ).collect( Collectors.toList() );
+        // create path-copy and nomalize (remove dot and double-dot
+        final List<String> l_dotremove = m_path.stream()
+                                               .filter( i -> !i.equals( "." ) )
+                                               .collect( Collectors.toList() );
 
-        final String l_last = m_path.get( m_path.size() - 1 );
-        m_path = IntStream.range( 0, m_path.size() - 1 ).boxed().filter( i -> !m_path.get( i + 1 ).equals( ".." ) ).map( i -> m_path.get( i ) ).collect(
-                Collectors.toList() );
+        final String l_last = l_dotremove.get( l_dotremove.size() - 1 );
+        final List<String> l_backremove = IntStream.range( 0, l_dotremove.size() - 1 )
+                                                   .boxed()
+                                                   .filter( i -> !l_dotremove.get( i + 1 ).equals( ".." ) )
+                                                   .map( i -> l_dotremove.get( i ) )
+                                                   .collect( Collectors.toList() );
         if ( !l_last.equals( ".." ) )
-            m_path.add( l_last );
+            l_backremove.add( l_last );
+
+        // clear internal path and add optimized path
+        m_path.clear();
+        ;
+        m_path.addAll( l_backremove );
 
         return this;
     }
@@ -427,16 +451,4 @@ public final class CPath implements IPath
         return Integer.compare( this.hashCode(), p_path.hashCode() );
     }
 
-
-    /**
-     * splits the string data
-     *
-     * @param p_fqn full path
-     */
-    private void initialize( final String p_fqn )
-    {
-        m_path = Arrays.stream( p_fqn.split( m_separator ) ).filter( i -> !i.isEmpty() ).collect( Collectors.toList() );
-        if ( m_path.size() == 0 )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "pathempty" ) );
-    }
 }
