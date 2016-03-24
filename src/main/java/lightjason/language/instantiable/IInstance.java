@@ -28,8 +28,8 @@ import lightjason.language.execution.IExecution;
 
 
 /**
- * interface for plans and logical-rules
+ * interface for (instantiable) plans and logical-rules
  */
-public interface IPlanRule extends IExecution
+public interface IInstance extends IExecution
 {
 }

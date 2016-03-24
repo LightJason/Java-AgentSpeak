@@ -25,7 +25,7 @@ package lightjason.language.instantiable.plan;
 
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.annotation.IAnnotation;
-import lightjason.language.instantiable.IPlanRule;
+import lightjason.language.instantiable.IInstance;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Collection;
@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * interface of plan
  */
-public interface IPlan extends IPlanRule
+public interface IPlan extends IInstance
 {
 
     /**

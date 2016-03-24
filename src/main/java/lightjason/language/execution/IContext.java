@@ -26,7 +26,7 @@ package lightjason.language.execution;
 import lightjason.agent.IAgent;
 import lightjason.common.IPath;
 import lightjason.language.IVariable;
-import lightjason.language.instantiable.IPlanRule;
+import lightjason.language.instantiable.IInstance;
 
 import java.util.Map;
 
@@ -49,7 +49,7 @@ public interface IContext
      *
      * @return instance object plan or rule
      */
-    IPlanRule getInstance();
+    IInstance getInstance();
 
     /**
      * returns the variables names and their current value
