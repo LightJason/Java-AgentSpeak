@@ -28,10 +28,7 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IView;
-import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
-import lightjason.language.IVariable;
-import lightjason.language.execution.CContext;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.plan.IPlan;
@@ -41,7 +38,6 @@ import lightjason.language.score.IAggregation;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -199,6 +195,12 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public final long getCycle()
+    {
+        return m_cycle;
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format( "{0} ( Cycle: {1} / Beliefbase: {2} )", super.toString(), m_cycle, m_beliefbase );
@@ -224,33 +226,7 @@ public class CAgent implements IAgent
             System.out.println( "=====>> " + i + " ===\n" );
             System.out.println(
                     "\n--> "
-                    + i.execute(
-                            new CContext( this, i,
-                                          Collections.unmodifiableSet(
-                                                  new HashSet<IVariable<?>>()
-                                                  {{
-                                                      // get plan variables
-                                                      addAll( i.getVariables() );
-
-                                                      // add customized variables and replace existing
-                                                      if ( m_variablebuilder != null )
-                                                          m_variablebuilder.generate( CAgent.this, i ).stream().forEach( i -> {
-                                                              remove( i );
-                                                              add( i );
-                                                          } );
-
-                                                      // remove all internal values if exist and add a new reference
-                                                      Arrays.stream( new IVariable<?>[]{
-                                                              new CConstant<>( "Score", i.score( m_aggregation, CAgent.this ) ),
-                                                              new CConstant<>( "Cycle", CAgent.this.m_cycle )
-                                                      } ).forEach( i -> {
-                                                          remove( i );
-                                                          add( i );
-                                                      } );
-                                                  }}
-                                          )
-                            ), false, null, null, null
-                    )
+                    + i.execute( i.getContext( this, m_aggregation, m_variablebuilder ), false, null, null, null )
                     + " <--\n" );
             System.out.println( "===================================================================" );
 

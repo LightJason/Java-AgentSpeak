@@ -33,7 +33,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CConstant;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.IInstance;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -185,7 +185,7 @@ public final class TestCAgent
 
         @Override
         @SuppressWarnings( "serial" )
-        public final <T extends IAgent, N extends IPlan> Set<IVariable<?>> generate( final T p_agent, final N p_runningcontext
+        public final Set<IVariable<?>> generate( final IAgent p_agent, final IInstance p_runningcontext
         )
         {
             return new HashSet<IVariable<?>>()

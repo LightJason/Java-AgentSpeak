@@ -26,7 +26,7 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.language.IVariable;
-import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.IInstance;
 
 import java.util.Set;
 
@@ -48,8 +48,7 @@ public interface IVariableBuilder
      * @return set with variables
      *
      * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
-     * @bug IPlan must be modified to general interface of rule & plan
      */
-    <T extends IAgent, N extends IPlan> Set<IVariable<?>> generate( final T p_agent, final N p_runningcontext );
+    Set<IVariable<?>> generate( final IAgent p_agent, final IInstance p_runningcontext );
 
 }

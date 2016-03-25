@@ -24,7 +24,12 @@
 
 package lightjason.language.instantiable;
 
+import lightjason.agent.IAgent;
+import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
+import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.score.IAggregation;
 
 
 /**
@@ -32,4 +37,26 @@ import lightjason.language.execution.IExecution;
  */
 public interface IInstance extends IExecution
 {
+
+    /**
+     * creates an individual execution context
+     *
+     * @param p_agent agent
+     * @param p_aggregation aggregation context
+     * @param p_variables optional variables
+     * @return individual context
+     */
+    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariable<?>... p_variables );
+
+    /**
+     * creates an individual execution context
+     *
+     * @param p_agent agent
+     * @param p_aggregation aggregation context
+     * @param p_variablebuilder variable builder or null
+     * @param p_variables optional variables
+     * @return individual context
+     */
+    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables );
+
 }

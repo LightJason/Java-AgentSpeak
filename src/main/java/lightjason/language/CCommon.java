@@ -26,15 +26,22 @@ package lightjason.language;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.google.common.reflect.ClassPath;
+import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.error.CIllegalArgumentException;
+import lightjason.language.execution.CContext;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.instantiable.IInstance;
+import lightjason.language.score.IAggregation;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,6 +58,53 @@ public final class CCommon
      */
     private CCommon()
     {
+    }
+
+    /**
+     * creates a default execution context
+     *
+     * @param p_instance instance object
+     * @param p_agent agent
+     * @param p_aggregation aggreagtion function
+     * @param p_variablebuilder optinal variablebuilder or null
+     * @param p_variables optional variables
+     * @return
+     */
+    public static IContext createContext( final IInstance p_instance, final IAgent p_agent, final IAggregation p_aggregation,
+                                          final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables
+    )
+    {
+        return new CContext(
+                p_agent,
+                p_instance,
+                Collections.unmodifiableSet(
+                        new HashSet<IVariable<?>>()
+                        {{
+                            // get plan variables
+                            addAll( p_instance.getVariables() );
+
+                            // add customized variables and replace existing
+                            if ( p_variablebuilder != null )
+                                p_variablebuilder.generate( p_agent, p_instance ).stream().forEach( i -> {
+                                    remove( i );
+                                    add( i );
+                                } );
+
+                            // remove all internal values if exist and add a new reference
+                            Arrays.stream( new IVariable<?>[]{
+                                    new CConstant<>( "Score", p_instance.score( p_aggregation, p_agent ) ),
+                                    new CConstant<>( "Cycle", p_agent.getCycle() )
+                            } ).forEach( i -> {
+                                remove( i );
+                                add( i );
+                            } );
+
+                            // add all optional variables
+                            if ( p_variables != null )
+                                addAll( Arrays.asList( p_variables ) );
+                        }}
+                )
+        );
     }
 
     /**

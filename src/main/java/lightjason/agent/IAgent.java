@@ -105,4 +105,11 @@ public interface IAgent extends Callable<IAgent>
      */
     long getLastCycleTime();
 
+    /**
+     * returns the current cycle
+     *
+     * @return cycle
+     */
+    long getCycle();
+
 }

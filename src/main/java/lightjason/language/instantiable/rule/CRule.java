@@ -30,6 +30,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
+import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
@@ -126,6 +127,20 @@ public final class CRule implements IRule
                 m_id,
                 m_action
         );
+    }
+
+    @Override
+    public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariable<?>... p_variables )
+    {
+        return this.getContext( p_agent, p_aggregation, null, p_variables );
+    }
+
+    @Override
+    public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
+                                      final IVariable<?>... p_variables
+    )
+    {
+        return CCommon.createContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
     }
 
 }

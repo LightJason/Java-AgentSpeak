@@ -24,10 +24,12 @@
 package lightjason.language.instantiable.plan;
 
 import lightjason.agent.IAgent;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
+import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
@@ -178,6 +180,20 @@ public final class CPlan implements IPlan
     public final Set<IVariable<?>> getVariables()
     {
         return m_action.parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() );
+    }
+
+    @Override
+    public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariable<?>... p_variables )
+    {
+        return this.getContext( p_agent, p_aggregation, null, p_variables );
+    }
+
+    @Override
+    public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
+                                      final IVariable<?>... p_variables
+    )
+    {
+        return CCommon.createContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
     }
 
     /**
