@@ -32,7 +32,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.CContext;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.instantiable.IInstance;
+import lightjason.language.instantiable.IInstantiable;
 import lightjason.language.score.IAggregation;
 
 import java.io.IOException;
@@ -70,7 +70,7 @@ public final class CCommon
      * @param p_variables optional variables
      * @return
      */
-    public static IContext createContext( final IInstance p_instance, final IAgent p_agent, final IAggregation p_aggregation,
+    public static IContext createContext( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
                                           final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables
     )
     {

@@ -24,13 +24,13 @@
 package lightjason.language.instantiable.rule;
 
 import lightjason.language.ILiteral;
-import lightjason.language.instantiable.IInstance;
+import lightjason.language.instantiable.IInstantiable;
 
 
 /**
  * interface of logical rule
  */
-public interface IRule extends IInstance
+public interface IRule extends IInstantiable
 {
 
     /**

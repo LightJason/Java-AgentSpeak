@@ -26,7 +26,7 @@ package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
 import lightjason.language.IVariable;
-import lightjason.language.instantiable.IInstance;
+import lightjason.language.instantiable.IInstantiable;
 
 import java.util.Set;
 
@@ -49,6 +49,6 @@ public interface IVariableBuilder
      *
      * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
      */
-    Set<IVariable<?>> generate( final IAgent p_agent, final IInstance p_runningcontext );
+    Set<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext );
 
 }

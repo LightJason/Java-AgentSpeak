@@ -35,7 +35,7 @@ import lightjason.language.score.IAggregation;
 /**
  * interface for (instantiable) plans and logical-rules
  */
-public interface IInstance extends IExecution
+public interface IInstantiable extends IExecution
 {
 
     /**
