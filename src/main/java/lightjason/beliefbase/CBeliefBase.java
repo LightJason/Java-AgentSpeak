@@ -125,7 +125,7 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final <T extends IAgent> void update( final T p_agent )
+    public void update( final IAgent p_agent )
     {
         m_storage.update( p_agent );
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );

@@ -69,8 +69,6 @@ public interface IView extends IStructure
      */
     boolean add( final ILiteral p_literal, final IGenerator p_generator );
 
-
-
     /**
      * view existing check
      *

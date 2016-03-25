@@ -147,6 +147,12 @@ public class CView implements IView
     }
 
     @Override
+    public void update( final IAgent p_agent )
+    {
+        m_beliefbase.update( p_agent );
+    }
+
+    @Override
     public final IView add( final IPath p_path, final IView p_view )
     {
         return this.add( p_path.normalize(), p_view, null );
@@ -198,12 +204,6 @@ public class CView implements IView
         return p_literal.getFunctorPath().isEmpty()
                ? m_beliefbase.remove( p_literal )
                : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.shallowcopySuffix() );
-    }
-
-    @Override
-    public <T extends IAgent> void update( final T p_agent )
-    {
-        m_beliefbase.update( p_agent );
     }
 
     @Override

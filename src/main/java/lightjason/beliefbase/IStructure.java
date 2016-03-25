@@ -105,8 +105,6 @@ public interface IStructure
      */
     int size();
 
-
-
     /**
      * updates all items
      *
@@ -115,7 +113,7 @@ public interface IStructure
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
-    <T extends IAgent> void update( final T p_agent );
+    void update( final IAgent p_agent );
 
     /**
      * returns a new view of the belief base
