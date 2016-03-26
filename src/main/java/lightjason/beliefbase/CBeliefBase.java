@@ -24,12 +24,23 @@
 package lightjason.beliefbase;
 
 
+import com.google.common.collect.Sets;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -48,6 +59,14 @@ public final class CBeliefBase implements IBeliefBase
      * storage with data
      */
     protected final IStorage<Pair<Boolean, ILiteral>, IView> m_storage;
+    /**
+     * weak reference queue of all masks to avoid memory-leaks of belief events
+     */
+    protected final ReferenceQueue<IView> m_maskreference = new ReferenceQueue<>();
+    /**
+     * map with events for a mask
+     */
+    protected final Map<IView, Set<ITrigger<IPath>>> m_events = new ConcurrentHashMap<>();
 
     /**
      * ctor
@@ -103,7 +122,13 @@ public final class CBeliefBase implements IBeliefBase
     @SuppressWarnings( "unchecked" )
     public <E extends IView> E create( final String p_name )
     {
-        return (E) new CView( p_name, this );
+        // add reference for the mask and the event structure
+        final IView l_view = new CView( p_name, this );
+
+        new PhantomReference<>( l_view, m_maskreference );
+        m_events.put( l_view, Sets.newConcurrentHashSet() );
+
+        return (E) l_view;
     }
 
     @Override
@@ -127,6 +152,12 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public void update( final IAgent p_agent )
     {
+        // check all references of mask and remove unused references
+        Reference<? extends IView> l_reference;
+        while ( ( l_reference = m_maskreference.poll() ) != null )
+            m_events.remove( l_reference.get() );
+
+        // run storage update
         m_storage.update( p_agent );
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
     }
@@ -135,6 +166,12 @@ public final class CBeliefBase implements IBeliefBase
     public final int size()
     {
         return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
+    }
+
+    @Override
+    public final Set<ITrigger<IPath>> getTrigger( final IView p_view )
+    {
+        return m_events.getOrDefault( p_view, Collections.<ITrigger<IPath>>emptySet() );
     }
 
     @Override

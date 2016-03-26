@@ -30,10 +30,12 @@ import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -83,6 +85,13 @@ public class CView implements IView
         m_name = p_name;
         m_beliefbase = p_beliefbase;
         m_parent = p_parent;
+    }
+
+    @Override
+    public final Set<ITrigger<IPath>> getTrigger()
+    {
+
+        return null;
     }
 
     @Override
