@@ -38,6 +38,7 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -140,6 +141,7 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final IView p_view )
     {
+        m_events.remove( p_view );
         return m_storage.getSingleElements().remove( p_view.getName() ) != null;
     }
 
@@ -171,7 +173,16 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final Set<ITrigger<IPath>> getTrigger( final IView p_view )
     {
-        return m_events.getOrDefault( p_view, Collections.<ITrigger<IPath>>emptySet() );
+        // get data or return an empty set
+        final Set<ITrigger<IPath>> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger<IPath>>emptySet() );
+        if ( l_trigger.isEmpty() )
+            return Collections.<ITrigger<IPath>>emptySet();
+
+        // create a copy of data and clear the internal structure
+        final Set<ITrigger<IPath>> l_copy = new HashSet<>( l_trigger );
+        l_trigger.clear();
+
+        return l_copy;
     }
 
     @Override
