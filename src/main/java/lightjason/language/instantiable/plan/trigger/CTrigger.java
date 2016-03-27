@@ -24,8 +24,7 @@
 package lightjason.language.instantiable.plan.trigger;
 
 import lightjason.common.IPath;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import lightjason.language.ILiteral;
 
 import java.text.MessageFormat;
 
@@ -33,12 +32,12 @@ import java.text.MessageFormat;
 /**
  * event with literal data
  */
-public final class CTrigger implements ITrigger<Pair<Boolean, IPath>>
+public final class CTrigger implements ITrigger<ILiteral>
 {
     /**
-     * literal path and negated flag
+     * literal with unified variables
      */
-    private final Pair<Boolean, IPath> m_data;
+    private final ILiteral m_literal;
     /**
      * event type
      */
@@ -48,55 +47,30 @@ public final class CTrigger implements ITrigger<Pair<Boolean, IPath>>
      * ctor
      *
      * @param p_event type
-     * @param p_data data
+     * @param p_literal literal with unified variables
      */
-    public CTrigger( final EType p_event, final IPath p_data )
+    public CTrigger( final EType p_event, final ILiteral p_literal )
     {
-        this( p_event, false, p_data );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_event type
-     * @param p_negated negated element
-     * @param p_data data
-     */
-    public CTrigger( final EType p_event, final boolean p_negated, final IPath p_data )
-    {
-        m_data = new ImmutablePair<>( p_negated, p_data );
         m_event = p_event;
+        m_literal = p_literal;
     }
 
     /**
      * creates a trigger event
      *
      * @param p_event event
-     * @param p_negated negated element
-     * @param p_path path of the literal
+     * @param p_literal
      * @return trigger object
      */
-    public static ITrigger<Pair<Boolean, IPath>> from( final EType p_event, final boolean p_negated, final IPath p_path )
+    public static ITrigger<ILiteral> from( final EType p_event, final ILiteral p_literal )
     {
-        return new CTrigger( p_event, p_negated, p_path );
-    }
-
-    /**
-     * creates a trigger event
-     *
-     * @param p_event event
-     * @param p_path path of the literal
-     * @return trigger object
-     */
-    public static ITrigger<Pair<Boolean, IPath>> from( final EType p_event, final IPath p_path )
-    {
-        return new CTrigger( p_event, p_path );
+        return new CTrigger( p_event, p_literal );
     }
 
     @Override
     public final int hashCode()
     {
-        return m_event.hashCode() + m_data.hashCode();
+        return m_event.hashCode() + m_literal.hashCode();
     }
 
     @Override
@@ -108,7 +82,7 @@ public final class CTrigger implements ITrigger<Pair<Boolean, IPath>>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_event, m_data );
+        return MessageFormat.format( "{0}{1}", m_event, m_literal );
     }
 
     @Override
@@ -118,8 +92,20 @@ public final class CTrigger implements ITrigger<Pair<Boolean, IPath>>
     }
 
     @Override
-    public final Pair<Boolean, IPath> getData()
+    public final ILiteral getData()
     {
-        return m_data;
+        return m_literal;
+    }
+
+    @Override
+    public final ITrigger<ILiteral> shallowcopy( final IPath... p_prefix )
+    {
+        return new CTrigger( m_event, m_literal.shallowcopy( p_prefix ) );
+    }
+
+    @Override
+    public final ITrigger<ILiteral> shallowcopySuffix()
+    {
+        return new CTrigger( m_event, m_literal.shallowcopySuffix() );
     }
 }

@@ -189,7 +189,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         final Set<IAnnotation<?>> l_annotation = (Set<IAnnotation<?>>) this.visitAnnotations( p_context.annotations() );
         final CTrigger l_trigger = new CTrigger(
                 (ITrigger.EType) this.visitPlan_trigger( p_context.plan_trigger() ),
-                ( (ILiteral) this.visitLiteral( p_context.literal() ) ).getFQNFunctor()
+                ( (ILiteral) this.visitLiteral( p_context.literal() ) )
         );
 
         return p_context.plandefinition().stream().map( i -> {

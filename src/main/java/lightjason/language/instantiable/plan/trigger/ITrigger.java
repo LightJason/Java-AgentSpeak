@@ -23,12 +23,13 @@
 
 package lightjason.language.instantiable.plan.trigger;
 
+import lightjason.language.IShallowCopy;
+
+
 /**
  * event definition
- *
- * @param T data type
  */
-public interface ITrigger<T>
+public interface ITrigger<T> extends IShallowCopy<ITrigger<T>>
 {
 
     /**

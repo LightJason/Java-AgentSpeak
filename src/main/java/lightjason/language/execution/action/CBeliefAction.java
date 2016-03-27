@@ -65,14 +65,13 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
     }
 
     /**
-     * @todo change event
+     * @todo change event incomplete
      */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        // push belief to the beliefbase
         switch ( m_action )
         {
             case ADD:

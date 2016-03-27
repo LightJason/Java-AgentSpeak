@@ -119,6 +119,10 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     {
         final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( BELIEFBASEROTTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
+
+        // clear all events of the initial beliefs
+        l_beliefbase.getTrigger();
+
         return l_beliefbase;
     }
 

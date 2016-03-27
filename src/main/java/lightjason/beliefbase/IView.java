@@ -27,7 +27,6 @@ package lightjason.beliefbase;
 import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
 import java.util.stream.Stream;
@@ -44,7 +43,7 @@ public interface IView extends IStructure
      *
      * @return set with trigger events
      */
-    Set<ITrigger<Pair<Boolean, IPath>>> getTrigger();
+    Set<ITrigger<ILiteral>> getTrigger();
 
     /**
      * adds view in the current structure
