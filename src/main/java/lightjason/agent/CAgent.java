@@ -26,6 +26,7 @@ package lightjason.agent;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
@@ -37,11 +38,11 @@ import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -74,11 +75,9 @@ public class CAgent implements IAgent
      */
     protected final IView m_beliefbase;
     /**
-     * execution goal list
-     *
-     * @todo incompelete usage
+     * execution trigger
      */
-    protected final Set<ILiteral> m_goals = Collections.newSetFromMap( new ConcurrentHashMap<>() );
+    protected final Set<ITrigger<ILiteral>> m_trigger = Sets.newConcurrentHashSet();
     /**
      * unifier
      *
@@ -126,7 +125,7 @@ public class CAgent implements IAgent
         m_variablebuilder = p_configuration.getVariableBuilder();
 
         if ( p_configuration.getInitialGoal() != null )
-            m_goals.add( p_configuration.getInitialGoal() );
+            m_trigger.add( p_configuration.getInitialGoal() );
     }
 
     @Override
@@ -152,9 +151,9 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public void trigger( final ITrigger<?> p_event )
+    public void trigger( final ITrigger<ILiteral> p_event )
     {
-
+        m_trigger.add( p_event );
     }
 
     @Override
@@ -214,6 +213,14 @@ public class CAgent implements IAgent
         if ( m_hibernate )
             // check wakup-event otherwise suspend
             return this;
+
+        // run for each trigger the execution element
+        Stream.concat(
+                m_trigger.parallelStream(),
+                m_beliefbase.getTrigger().parallelStream()
+        );
+        m_trigger.clear();
+
 
         // collect belief events
         // collect plan/goal events

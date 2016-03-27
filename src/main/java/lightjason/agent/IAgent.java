@@ -51,8 +51,9 @@ public interface IAgent extends Callable<IAgent>
      * trigger an event
      *
      * @param p_event event
+     * @todo check for immediatley run
      */
-    void trigger( final ITrigger<?> p_event );
+    void trigger( final ITrigger<ILiteral> p_event );
 
     /**
      * returns the beliefbase

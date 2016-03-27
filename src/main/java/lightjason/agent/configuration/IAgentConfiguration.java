@@ -27,6 +27,7 @@ import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 
@@ -48,7 +49,7 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return initial goal literal
      */
-    ILiteral getInitialGoal();
+    ITrigger<ILiteral> getInitialGoal();
 
     /**
      * returns the aggregate function

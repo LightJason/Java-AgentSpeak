@@ -30,6 +30,8 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
@@ -71,7 +73,13 @@ public final class CAchievementGoal extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( false );
+        // run immediatly
+        if ( m_immediately )
+            return CBoolean.from( false );
+
+        // otherwise register a new trigger cal
+        p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value ) );
+        return CBoolean.from( true );
     }
 
     @Override

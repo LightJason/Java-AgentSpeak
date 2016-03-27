@@ -31,6 +31,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
@@ -48,9 +49,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      */
     protected static final String BELIEFBASEROTTNAME = "beliefbase";
     /**
-     * initial goal
+     * initial goal trigger
      */
-    protected final ILiteral m_initialgoal;
+    protected final ITrigger<ILiteral> m_initialgoal;
     /**
      * instance of agent plans
      */
@@ -109,7 +110,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         m_plans = p_plans;
         m_aggregation = p_aggregation;
         m_variablebuilder = p_variablebuilder;
-        m_initialgoal = p_initialgoal;
+        m_initialgoal = CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal );
         m_initialbeliefs = p_initalbeliefs;
         m_unifier = p_unifier;
     }
@@ -127,7 +128,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final ILiteral getInitialGoal()
+    public final ITrigger<ILiteral> getInitialGoal()
     {
         return m_initialgoal;
     }
