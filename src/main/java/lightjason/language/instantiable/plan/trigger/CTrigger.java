@@ -97,7 +97,7 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final ILiteral getData()
+    public final ILiteral getLiteral()
     {
         return m_literal;
     }

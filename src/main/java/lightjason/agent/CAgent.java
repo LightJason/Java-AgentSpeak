@@ -29,7 +29,10 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IView;
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -44,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -157,6 +161,14 @@ public class CAgent implements IAgent
     @Override
     public IFuzzyValue<Boolean> trigger( final ITrigger p_event, final boolean... p_immediately )
     {
+        // check if literal does not store any variables
+        if ( Stream.concat(
+                p_event.getLiteral().orderedvalues(),
+                p_event.getLiteral().annotations()
+        ).filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "literalvariable", p_event ) );
+
+
         m_trigger.add( p_event );
         return CBoolean.from( true );
     }

@@ -41,11 +41,11 @@ public interface ITrigger extends IShallowCopy<ITrigger>
     EType getID();
 
     /**
-     * returns the data or null
+     * returns the literal of the event
      *
-     * @return data
+     * @return literal
      */
-    ILiteral getData();
+    ILiteral getLiteral();
 
 
     /**
