@@ -110,7 +110,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         m_plans = p_plans;
         m_aggregation = p_aggregation;
         m_variablebuilder = p_variablebuilder;
-        m_initialgoal = CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal );
+        m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
         m_initialbeliefs = p_initalbeliefs;
         m_unifier = p_unifier;
     }

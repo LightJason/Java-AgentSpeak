@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -215,11 +214,13 @@ public class CAgent implements IAgent
             return this;
 
         // run for each trigger the execution element
+        /*
         Stream.concat(
                 m_trigger.parallelStream(),
                 m_beliefbase.getTrigger().parallelStream()
         );
         m_trigger.clear();
+        */
 
 
         // collect belief events

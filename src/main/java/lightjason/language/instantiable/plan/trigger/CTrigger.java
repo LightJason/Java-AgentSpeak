@@ -23,7 +23,9 @@
 
 package lightjason.language.instantiable.plan.trigger;
 
+import lightjason.common.CCommon;
 import lightjason.common.IPath;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 
 import java.text.MessageFormat;
@@ -51,6 +53,9 @@ public final class CTrigger implements ITrigger<ILiteral>
      */
     public CTrigger( final EType p_event, final ILiteral p_literal )
     {
+        if ( ( p_event == null ) || ( p_literal == null ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
+
         m_event = p_event;
         m_literal = p_literal;
     }
