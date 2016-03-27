@@ -96,6 +96,7 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean add( final ILiteral p_literal )
     {
+        // @todo create trigger
         return m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
@@ -109,12 +110,14 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean modify( final ILiteral p_before, final ILiteral p_after )
     {
+        // @todo create trigger
         return this.remove( p_before ) && this.add( p_after );
     }
 
     @Override
     public final void clear()
     {
+        // @todo create trigger
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
         m_storage.clear();
     }
@@ -148,6 +151,7 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final ILiteral p_literal )
     {
+        // @todo create trigger
         return m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
@@ -171,16 +175,23 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<ITrigger<IPath>> getTrigger( final IView p_view )
     {
         // get data or return an empty set
         final Set<ITrigger<IPath>> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger<IPath>>emptySet() );
+
+        // create copy of all trigger and recursive elements
+        final Set<ITrigger<IPath>> l_copy = Collections.unmodifiableSet( new HashSet<ITrigger<IPath>>()
+        {{
+            addAll( l_trigger );
+            m_storage.getSingleElements().values().stream().forEach( i -> addAll( i.getTrigger() ) );
+        }} );
+
+        // clear all trigger elements if no trigger exists return an empty set
+        l_trigger.clear();
         if ( l_trigger.isEmpty() )
             return Collections.<ITrigger<IPath>>emptySet();
-
-        // create a copy of data and clear the internal structure
-        final Set<ITrigger<IPath>> l_copy = new HashSet<>( l_trigger );
-        l_trigger.clear();
 
         return l_copy;
     }
@@ -188,6 +199,7 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final String p_name )
     {
+        // @todo check trigger event
         final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
         final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
         return l_single || l_multi;
