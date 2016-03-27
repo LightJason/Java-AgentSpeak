@@ -557,13 +557,13 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
     {
         if ( p_context.PLUS() != null )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Add );
+            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.ADD );
 
         if ( p_context.MINUS() != null )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Delete );
+            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );
 
         if ( p_context.MINUSPLUS() != null )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.Change );
+            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.CHANGE );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
     }

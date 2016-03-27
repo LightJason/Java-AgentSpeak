@@ -25,6 +25,7 @@ package lightjason.beliefbase;
 
 import lightjason.common.IPath;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Set;
 
@@ -36,12 +37,12 @@ public interface IBeliefBase extends IStructure
 {
 
     /**
-     * retruns all trigger of the beliefbase
+     * returns all trigger of the beliefbase
      *
      * @param p_view mask for events
      * @return set with trigger events
      */
-    Set<ITrigger<IPath>> getTrigger( final IView p_view );
+    Set<ITrigger<Pair<Boolean, IPath>>> getTrigger( final IView p_view );
 
     /**
      * removes single- and multi-elements

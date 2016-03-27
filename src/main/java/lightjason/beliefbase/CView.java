@@ -87,10 +87,12 @@ public class CView implements IView
         m_parent = p_parent;
     }
 
+    /**
+     * @bug incomplete
+     */
     @Override
-    public final Set<ITrigger<IPath>> getTrigger()
+    public final Set<ITrigger<Pair<Boolean, IPath>>> getTrigger()
     {
-
         return null;
     }
 
@@ -114,7 +116,7 @@ public class CView implements IView
     }
 
     @Override
-    public final boolean modify( final ILiteral p_before, final ILiteral p_after )
+    public final boolean change( final ILiteral p_before, final ILiteral p_after )
     {
         return this.remove( p_before ) && this.add( p_after );
     }

@@ -25,6 +25,7 @@ package lightjason.language;
 
 
 import lightjason.common.IPath;
+import lightjason.language.execution.IContext;
 
 import java.util.stream.Stream;
 
@@ -86,4 +87,12 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * @return prefix is set
      */
     boolean hasAt();
+
+    /**
+     * unifies variables if exists
+     *
+     * @param p_context current execution context
+     * @return new literal instance with unified variables
+     */
+    ILiteral unify( final IContext p_context );
 }

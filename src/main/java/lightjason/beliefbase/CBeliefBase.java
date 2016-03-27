@@ -30,6 +30,7 @@ import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -67,7 +68,7 @@ public final class CBeliefBase implements IBeliefBase
     /**
      * map with events for a mask
      */
-    protected final Map<IView, Set<ITrigger<IPath>>> m_events = new ConcurrentHashMap<>();
+    protected final Map<IView, Set<ITrigger<Pair<Boolean, IPath>>>> m_events = new ConcurrentHashMap<>();
 
     /**
      * ctor
@@ -96,7 +97,8 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean add( final ILiteral p_literal )
     {
-        // @todo create trigger
+        // create add-event for the literal
+        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal.isNegated(), p_literal.getFQNFunctor() ) ) );
         return m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
@@ -108,16 +110,30 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final boolean modify( final ILiteral p_before, final ILiteral p_after )
+    public final boolean change( final ILiteral p_before, final ILiteral p_after )
     {
-        // @todo create trigger
-        return this.remove( p_before ) && this.add( p_after );
+        if ( ( !p_before.getFQNFunctor().equals( p_after.getFQNFunctor() ) ) && ( p_before.isNegated() == p_after.isNegated() ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "functorequal", p_before, p_after ) );
+
+        // create modified-event for the changed literal
+        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.CHANGEBELIEF, p_after.isNegated(), p_after.getFQNFunctor() ) ) );
+
+        // run remove and add manually
+        return m_storage.getMultiElements().remove( p_before.getFunctor(), new ImmutablePair<>( p_before.isNegated(), p_before ) )
+               && m_storage.getMultiElements().put( p_after.getFunctor(), new ImmutablePair<>( p_after.isNegated(), p_after ) );
     }
 
     @Override
     public final void clear()
     {
-        // @todo create trigger
+        // create delete-event for all literals
+        m_storage.getMultiElements().values().stream().forEach( j ->
+                                                                        m_events.values().stream().forEach( i -> i.add(
+                                                                                CTrigger.from( ITrigger.EType.CHANGEBELIEF, j.getLeft(),
+                                                                                               j.getRight().getFQNFunctor()
+                                                                                ) ) )
+        );
+
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
         m_storage.clear();
     }
@@ -151,7 +167,8 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final ILiteral p_literal )
     {
-        // @todo create trigger
+        // create delete-event for the literal
+        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal.isNegated(), p_literal.getFQNFunctor() ) ) );
         return m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
@@ -176,13 +193,13 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "serial" )
-    public final Set<ITrigger<IPath>> getTrigger( final IView p_view )
+    public final Set<ITrigger<Pair<Boolean, IPath>>> getTrigger( final IView p_view )
     {
         // get data or return an empty set
-        final Set<ITrigger<IPath>> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger<IPath>>emptySet() );
+        final Set<ITrigger<Pair<Boolean, IPath>>> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger<Pair<Boolean, IPath>>>emptySet() );
 
         // create copy of all trigger and recursive elements
-        final Set<ITrigger<IPath>> l_copy = Collections.unmodifiableSet( new HashSet<ITrigger<IPath>>()
+        final Set<ITrigger<Pair<Boolean, IPath>>> l_copy = Collections.unmodifiableSet( new HashSet<ITrigger<Pair<Boolean, IPath>>>()
         {{
             addAll( l_trigger );
             m_storage.getSingleElements().values().stream().forEach( i -> addAll( i.getTrigger() ) );
@@ -191,7 +208,7 @@ public final class CBeliefBase implements IBeliefBase
         // clear all trigger elements if no trigger exists return an empty set
         l_trigger.clear();
         if ( l_trigger.isEmpty() )
-            return Collections.<ITrigger<IPath>>emptySet();
+            return Collections.<ITrigger<Pair<Boolean, IPath>>>emptySet();
 
         return l_copy;
     }

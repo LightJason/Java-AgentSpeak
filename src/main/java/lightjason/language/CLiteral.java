@@ -39,6 +39,7 @@ import lightjason.grammar.IASTVisitorType;
 import lightjason.grammar.IGenericParser;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
+import lightjason.language.execution.IContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -273,6 +274,27 @@ public final class CLiteral implements ILiteral
     public final boolean hasAt()
     {
         return m_at;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final ILiteral unify( final IContext p_context )
+    {
+        return new CLiteral(
+                m_at,
+                m_negated,
+                m_functor,
+                m_orderedvalues.stream()
+                               .map( i -> {
+                                   if ( i instanceof IVariable<?> )
+                                       return CRawTerm.from( p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() ).get() );
+                                   if ( i instanceof ILiteral )
+                                       return ( (ILiteral) i ).unify( p_context );
+                                   return i;
+                               } )
+                               .collect( Collectors.toList() ),
+                m_annotations.values().stream().map( i -> i.unify( p_context ) ).collect( Collectors.toSet() )
+        );
     }
 
     @Override

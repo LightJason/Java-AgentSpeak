@@ -56,7 +56,7 @@ public interface IStructure
 
 
     /**
-     * modify an literal
+     * modify / change a literal
      *
      * @param p_before literal before modification
      * @param p_after literal after modification
@@ -64,7 +64,7 @@ public interface IStructure
      *
      * @note it is an atomic optation of remove and add
      */
-    boolean modify( final ILiteral p_before, final ILiteral p_after );
+    boolean change( final ILiteral p_before, final ILiteral p_after );
 
 
 

@@ -65,22 +65,25 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
     }
 
     /**
-     * @todo change literal event is missing
-     * @todo disable actions
+     * @todo change event
      */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
+        // push belief to the beliefbase
         switch ( m_action )
         {
-            case Add:
-                p_context.getAgent().getBeliefBase().add( m_value );
+            case ADD:
+                p_context.getAgent().getBeliefBase().add( m_value.unify( p_context ) );
                 break;
 
-            case Delete:
-                p_context.getAgent().getBeliefBase().remove( m_value );
+            case DELETE:
+                p_context.getAgent().getBeliefBase().remove( m_value.unify( p_context ) );
+                break;
+
+            case CHANGE:
                 break;
 
             default:
@@ -95,9 +98,9 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
      */
     public enum EAction
     {
-        Add( "+" ),
-        Delete( "-" ),
-        Change( "-+" );
+        ADD( "+" ),
+        DELETE( "-" ),
+        CHANGE( "-+" );
 
         /**
          * name
