@@ -23,12 +23,10 @@
 
 package lightjason.agent.configuration;
 
-import com.google.common.collect.SetMultimap;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 
-import java.util.Map;
 import java.util.Set;
 
 
@@ -40,7 +38,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     /**
      * instance of agent plans
      */
-    private final SetMultimap<ITrigger, IPlan> m_plans;
+    private final Set<IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
@@ -52,7 +50,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
      * @param p_plans plans
      * @param p_initalbeliefs initial beliefs
      */
-    public CDefaultPlanBundleConfiguration( final SetMultimap<ITrigger, IPlan> p_plans, final Set<ILiteral> p_initalbeliefs )
+    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<ILiteral> p_initalbeliefs )
     {
         m_plans = p_plans;
         m_initialbeliefs = p_initalbeliefs;
@@ -65,13 +63,13 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     }
 
     @Override
-    public final SetMultimap<ITrigger, IPlan> getPlans()
+    public final Set<IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public final Map<String, Object> getRules()
+    public final Set<IRule> getRules()
     {
         return null;
     }

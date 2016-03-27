@@ -23,13 +23,11 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.Multimap;
 import lightjason.agent.configuration.IPlanBundleConfiguration;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 
-import java.util.Map;
 import java.util.Set;
 
 
@@ -39,12 +37,9 @@ import java.util.Set;
 public class CPlanBundle implements IPlanBundle
 {
     /**
-     * thread-safe map with all existing plans
-     *
-     * @note plan list must be a linked-hashset
-     * to store the execution order of the plans
+     * set with plans
      */
-    protected final Multimap<ITrigger, IPlan> m_plans;
+    protected final Set<IPlan> m_plans;
 
 
     public CPlanBundle( final IPlanBundleConfiguration p_configuration )
@@ -59,13 +54,13 @@ public class CPlanBundle implements IPlanBundle
     }
 
     @Override
-    public final Multimap<ITrigger, IPlan> getPlans()
+    public final Set<IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public final Map<String, Object> getRules()
+    public final Set<IRule> getRules()
     {
         return null;
     }

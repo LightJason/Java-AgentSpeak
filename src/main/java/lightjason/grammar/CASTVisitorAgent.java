@@ -24,8 +24,6 @@
 package lightjason.grammar;
 
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -81,7 +79,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,11 +109,11 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     /**
      * map with plans
      */
-    protected final Multimap<ITrigger, IPlan> m_plans = HashMultimap.create();
+    protected final Set<IPlan> m_plans = new HashSet<>();
     /**
      * map with logical rules
      */
-    protected final Map<ILiteral, IRule> m_rules = new HashMap<>();
+    protected final Set<IRule> m_rules = new HashSet<>();
     /**
      * map with action definition
      */
@@ -180,7 +177,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         if ( p_context.plan() == null )
             return null;
 
-        p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.put( j.getTrigger(), j ) ) );
+        p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.add( j ) ) );
         return null;
     }
 
@@ -189,7 +186,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.add( i ) );
         return null;
     }
 
@@ -1057,13 +1054,13 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public final Multimap<ITrigger, IPlan> getPlans()
+    public final Set<IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public final Map<ILiteral, IRule> getRules()
+    public final Set<IRule> getRules()
     {
         return m_rules;
     }

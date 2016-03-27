@@ -23,7 +23,6 @@
 
 package lightjason.agent.configuration;
 
-import com.google.common.collect.Multimap;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
 import lightjason.beliefbase.IView;
@@ -33,10 +32,11 @@ import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -55,7 +55,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * instance of agent plans
      */
-    protected final Multimap<ITrigger, IPlan> m_plans;
+    protected final Set<IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
@@ -85,7 +85,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Set<IPlan> p_plans,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -102,7 +102,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Set<IPlan> p_plans,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -152,13 +152,13 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final Multimap<ITrigger, IPlan> getPlans()
+    public final Set<IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public final Map<String, Object> getRules()
+    public final Set<IRule> getRules()
     {
         return null;
     }

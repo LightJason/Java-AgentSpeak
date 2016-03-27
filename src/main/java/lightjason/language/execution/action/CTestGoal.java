@@ -35,6 +35,8 @@ import java.util.List;
 
 /**
  * test goal action
+ *
+ * @todo check correct test information
  */
 public final class CTestGoal extends IBaseExecution<ILiteral>
 {
@@ -60,7 +62,7 @@ public final class CTestGoal extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( p_context.getAgent().getRunningPlans().containsKey( m_value ) );
+        return CBoolean.from( p_context.getAgent().getRunningPlans().contains( m_value.getFQNFunctor() ) );
     }
 
 }

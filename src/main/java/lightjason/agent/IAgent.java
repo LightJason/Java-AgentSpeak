@@ -23,15 +23,14 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.Multimap;
 import lightjason.beliefbase.IView;
-import lightjason.language.ILiteral;
+import lightjason.common.IPath;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 
@@ -69,7 +68,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return map with running plans
      */
-    Multimap<ILiteral, IPlan> getRunningPlans();
+    Set<IPath> getRunningPlans();
 
     /**
      * returns the hibernate state

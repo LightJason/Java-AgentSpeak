@@ -23,15 +23,14 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IView;
 import lightjason.common.CCommon;
+import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
@@ -43,6 +42,7 @@ import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,11 +62,11 @@ public class CAgent implements IAgent
     /**
      * map with all existing plans
      */
-    protected final Multimap<ITrigger, IPlan> m_plans;
+    protected final Set<IPlan> m_plans;
     /**
      * running plans (thread-safe)
      */
-    protected final Multimap<ILiteral, IPlan> m_runningplans = HashMultimap.create();
+    protected final Set<IPlan> m_runningplans = new HashSet<>();
     /**
      * storage map
      *
@@ -174,9 +174,9 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final Multimap<ILiteral, IPlan> getRunningPlans()
+    public final Set<IPath> getRunningPlans()
     {
-        return m_runningplans;
+        return m_runningplans.stream().map( i -> i.getTrigger().getLiteral().getFQNFunctor() ).collect( Collectors.toSet() );
     }
 
     @Override
@@ -247,7 +247,7 @@ public class CAgent implements IAgent
 
         System.out.println( "=====>> " + this );
 
-        m_plans.values().stream().forEach( i -> {
+        m_plans.stream().forEach( i -> {
 
             System.out.println( "=====>> " + i + " ===\n" );
             System.out.println(
