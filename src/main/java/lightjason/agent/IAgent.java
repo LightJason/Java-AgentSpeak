@@ -27,6 +27,7 @@ import com.google.common.collect.Multimap;
 import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 
@@ -52,8 +53,9 @@ public interface IAgent extends Callable<IAgent>
      *
      * @param p_event event
      * @param p_immediately run element immediately
+     * @return execution finished correctly
      */
-    void trigger( final ITrigger p_event, final boolean... p_immediately );
+    IFuzzyValue<Boolean> trigger( final ITrigger p_event, final boolean... p_immediately );
 
     /**
      * returns the beliefbase

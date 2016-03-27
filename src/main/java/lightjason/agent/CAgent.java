@@ -32,6 +32,8 @@ import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
@@ -153,9 +155,10 @@ public class CAgent implements IAgent
      * @bug incomplete
      */
     @Override
-    public void trigger( final ITrigger p_event, final boolean... p_immediately )
+    public IFuzzyValue<Boolean> trigger( final ITrigger p_event, final boolean... p_immediately )
     {
         m_trigger.add( p_event );
+        return CBoolean.from( true );
     }
 
     @Override

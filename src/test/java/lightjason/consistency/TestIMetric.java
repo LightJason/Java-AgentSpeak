@@ -151,7 +151,7 @@ public final class TestIMetric
     {
         final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration(
                 Collections.<ILiteral>emptyList(),
-                ImmutableSetMultimap.<ITrigger<?>, IPlan>of(),
+                ImmutableSetMultimap.<ITrigger, IPlan>of(),
                 null, null, null
         ) );
         p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
