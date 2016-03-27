@@ -23,13 +23,14 @@
 
 package lightjason.language.instantiable.plan.trigger;
 
+import lightjason.language.ILiteral;
 import lightjason.language.IShallowCopy;
 
 
 /**
  * event definition
  */
-public interface ITrigger<T> extends IShallowCopy<ITrigger<T>>
+public interface ITrigger extends IShallowCopy<ITrigger>
 {
 
     /**
@@ -44,7 +45,7 @@ public interface ITrigger<T> extends IShallowCopy<ITrigger<T>>
      *
      * @return data
      */
-    T getData();
+    ILiteral getData();
 
 
     /**

@@ -41,7 +41,7 @@ public interface IConfiguration
      *
      * @return multimap
      */
-    Multimap<ITrigger<?>, IPlan> getPlans();
+    Multimap<ITrigger, IPlan> getPlans();
 
     /**
      * returns the rules / principles

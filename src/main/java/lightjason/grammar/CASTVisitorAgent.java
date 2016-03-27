@@ -112,7 +112,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     /**
      * map with plans
      */
-    protected final Multimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
+    protected final Multimap<ITrigger, IPlan> m_plans = HashMultimap.create();
     /**
      * map with logical rules
      */
@@ -1057,7 +1057,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public final Multimap<ITrigger<?>, IPlan> getPlans()
+    public final Multimap<ITrigger, IPlan> getPlans()
     {
         return m_plans;
     }

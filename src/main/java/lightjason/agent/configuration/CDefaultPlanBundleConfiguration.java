@@ -40,7 +40,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     /**
      * instance of agent plans
      */
-    private final SetMultimap<ITrigger<?>, IPlan> m_plans;
+    private final SetMultimap<ITrigger, IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
@@ -52,7 +52,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
      * @param p_plans plans
      * @param p_initalbeliefs initial beliefs
      */
-    public CDefaultPlanBundleConfiguration( final SetMultimap<ITrigger<?>, IPlan> p_plans, final Set<ILiteral> p_initalbeliefs )
+    public CDefaultPlanBundleConfiguration( final SetMultimap<ITrigger, IPlan> p_plans, final Set<ILiteral> p_initalbeliefs )
     {
         m_plans = p_plans;
         m_initialbeliefs = p_initalbeliefs;
@@ -65,7 +65,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     }
 
     @Override
-    public final SetMultimap<ITrigger<?>, IPlan> getPlans()
+    public final SetMultimap<ITrigger, IPlan> getPlans()
     {
         return m_plans;
     }

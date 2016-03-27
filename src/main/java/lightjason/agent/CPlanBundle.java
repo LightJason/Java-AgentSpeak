@@ -44,7 +44,7 @@ public class CPlanBundle implements IPlanBundle
      * @note plan list must be a linked-hashset
      * to store the execution order of the plans
      */
-    protected final Multimap<ITrigger<?>, IPlan> m_plans;
+    protected final Multimap<ITrigger, IPlan> m_plans;
 
 
     public CPlanBundle( final IPlanBundleConfiguration p_configuration )
@@ -59,7 +59,7 @@ public class CPlanBundle implements IPlanBundle
     }
 
     @Override
-    public final Multimap<ITrigger<?>, IPlan> getPlans()
+    public final Multimap<ITrigger, IPlan> getPlans()
     {
         return m_plans;
     }

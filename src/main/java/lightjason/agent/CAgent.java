@@ -56,7 +56,7 @@ public class CAgent implements IAgent
     /**
      * map with all existing plans
      */
-    protected final Multimap<ITrigger<?>, IPlan> m_plans;
+    protected final Multimap<ITrigger, IPlan> m_plans;
     /**
      * running plans (thread-safe)
      */
@@ -76,7 +76,7 @@ public class CAgent implements IAgent
     /**
      * execution trigger
      */
-    protected final Set<ITrigger<ILiteral>> m_trigger = Sets.newConcurrentHashSet();
+    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
     /**
      * unifier
      *
@@ -149,8 +149,11 @@ public class CAgent implements IAgent
         Arrays.stream( p_inspector ).parallel().forEach( i -> i.inspect( l_map ) );
     }
 
+    /**
+     * @bug incomplete
+     */
     @Override
-    public void trigger( final ITrigger<ILiteral> p_event )
+    public void trigger( final ITrigger p_event, final boolean... p_immediately )
     {
         m_trigger.add( p_event );
     }

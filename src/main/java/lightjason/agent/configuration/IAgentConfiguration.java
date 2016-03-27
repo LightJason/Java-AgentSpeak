@@ -24,7 +24,6 @@
 package lightjason.agent.configuration;
 
 import lightjason.beliefbase.IView;
-import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -49,7 +48,7 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return initial goal literal
      */
-    ITrigger<ILiteral> getInitialGoal();
+    ITrigger getInitialGoal();
 
     /**
      * returns the aggregate function

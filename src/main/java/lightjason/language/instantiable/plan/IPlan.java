@@ -43,7 +43,7 @@ public interface IPlan extends IInstantiable
      *
      * @return trigger event
      */
-    ITrigger<?> getTrigger();
+    ITrigger getTrigger();
 
     /**
      * return unmodifieable annotation set

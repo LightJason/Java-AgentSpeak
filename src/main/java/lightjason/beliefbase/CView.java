@@ -93,9 +93,9 @@ public class CView implements IView
      * @bug incomplete
      */
     @Override
-    public final Set<ITrigger<ILiteral>> getTrigger()
+    public final Set<ITrigger> getTrigger()
     {
-        final Set<ITrigger<ILiteral>> l_trigger = m_beliefbase.getTrigger( this );
+        final Set<ITrigger> l_trigger = m_beliefbase.getTrigger( this );
         if ( l_trigger.isEmpty() )
             return l_trigger;
 

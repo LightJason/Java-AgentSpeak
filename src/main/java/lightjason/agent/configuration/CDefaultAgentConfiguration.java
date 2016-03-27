@@ -51,11 +51,11 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * initial goal trigger
      */
-    protected final ITrigger<ILiteral> m_initialgoal;
+    protected final ITrigger m_initialgoal;
     /**
      * instance of agent plans
      */
-    protected final Multimap<ITrigger<?>, IPlan> m_plans;
+    protected final Multimap<ITrigger, IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
@@ -85,7 +85,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger<?>, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger, IPlan> p_plans,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -102,7 +102,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger<?>, IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Multimap<ITrigger, IPlan> p_plans,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -128,7 +128,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final ITrigger<ILiteral> getInitialGoal()
+    public final ITrigger getInitialGoal()
     {
         return m_initialgoal;
     }
@@ -152,7 +152,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final Multimap<ITrigger<?>, IPlan> getPlans()
+    public final Multimap<ITrigger, IPlan> getPlans()
     {
         return m_plans;
     }

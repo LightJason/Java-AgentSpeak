@@ -34,7 +34,7 @@ import java.text.MessageFormat;
 /**
  * event with literal data
  */
-public final class CTrigger implements ITrigger<ILiteral>
+public final class CTrigger implements ITrigger
 {
     /**
      * literal with unified variables
@@ -67,7 +67,7 @@ public final class CTrigger implements ITrigger<ILiteral>
      * @param p_literal
      * @return trigger object
      */
-    public static ITrigger<ILiteral> from( final EType p_event, final ILiteral p_literal )
+    public static ITrigger from( final EType p_event, final ILiteral p_literal )
     {
         return new CTrigger( p_event, p_literal );
     }
@@ -103,13 +103,13 @@ public final class CTrigger implements ITrigger<ILiteral>
     }
 
     @Override
-    public final ITrigger<ILiteral> shallowcopy( final IPath... p_prefix )
+    public final ITrigger shallowcopy( final IPath... p_prefix )
     {
         return new CTrigger( m_event, m_literal.shallowcopy( p_prefix ) );
     }
 
     @Override
-    public final ITrigger<ILiteral> shallowcopySuffix()
+    public final ITrigger shallowcopySuffix()
     {
         return new CTrigger( m_event, m_literal.shallowcopySuffix() );
     }

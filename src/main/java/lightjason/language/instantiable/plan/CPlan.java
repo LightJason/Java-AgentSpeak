@@ -61,7 +61,7 @@ public final class CPlan implements IPlan
     /**
      * trigger event
      */
-    protected final ITrigger<?> m_triggerevent;
+    protected final ITrigger m_triggerevent;
     /**
      * number of runs
      */
@@ -91,7 +91,7 @@ public final class CPlan implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger<?> p_event, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( final ITrigger p_event, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
     {
         this( p_event, null, p_body, p_annotation );
     }
@@ -104,7 +104,7 @@ public final class CPlan implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger<?> p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
+    public CPlan( final ITrigger p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
     )
     {
         m_triggerevent = p_event;
@@ -114,7 +114,7 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    public final ITrigger<?> getTrigger()
+    public final ITrigger getTrigger()
     {
         return m_triggerevent;
     }

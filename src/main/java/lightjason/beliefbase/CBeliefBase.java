@@ -67,7 +67,7 @@ public final class CBeliefBase implements IBeliefBase
     /**
      * map with events for a mask
      */
-    protected final Map<IView, Set<ITrigger<ILiteral>>> m_events = new ConcurrentHashMap<>();
+    protected final Map<IView, Set<ITrigger>> m_events = new ConcurrentHashMap<>();
 
     /**
      * ctor
@@ -190,13 +190,13 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "serial" )
-    public final Set<ITrigger<ILiteral>> getTrigger( final IView p_view )
+    public final Set<ITrigger> getTrigger( final IView p_view )
     {
         // get data or return an empty set
-        final Set<ITrigger<ILiteral>> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger<ILiteral>>emptySet() );
+        final Set<ITrigger> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger>emptySet() );
 
         // create copy of all trigger and recursive elements
-        final Set<ITrigger<ILiteral>> l_copy = Collections.unmodifiableSet( new HashSet<ITrigger<ILiteral>>()
+        final Set<ITrigger> l_copy = Collections.unmodifiableSet( new HashSet<ITrigger>()
         {{
             addAll( l_trigger );
             m_storage.getSingleElements().values().stream().forEach( i -> addAll( i.getTrigger() ) );
@@ -205,7 +205,7 @@ public final class CBeliefBase implements IBeliefBase
         // clear all trigger elements if no trigger exists return an empty set
         l_trigger.clear();
         if ( l_trigger.isEmpty() )
-            return Collections.<ITrigger<ILiteral>>emptySet();
+            return Collections.<ITrigger>emptySet();
 
         return l_copy;
     }

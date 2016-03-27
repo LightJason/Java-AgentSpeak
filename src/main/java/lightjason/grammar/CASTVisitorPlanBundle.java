@@ -106,7 +106,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with plans
      */
-    protected final Multimap<ITrigger<?>, IPlan> m_plans = HashMultimap.create();
+    protected final Multimap<ITrigger, IPlan> m_plans = HashMultimap.create();
     /**
      * map with logical rules
      */
@@ -1018,7 +1018,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public final Multimap<ITrigger<?>, IPlan> getPlans()
+    public final Multimap<ITrigger, IPlan> getPlans()
     {
         return m_plans;
     }

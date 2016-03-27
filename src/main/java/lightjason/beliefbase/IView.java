@@ -43,7 +43,7 @@ public interface IView extends IStructure
      *
      * @return set with trigger events
      */
-    Set<ITrigger<ILiteral>> getTrigger();
+    Set<ITrigger> getTrigger();
 
     /**
      * adds view in the current structure
