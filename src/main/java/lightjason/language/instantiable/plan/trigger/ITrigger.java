@@ -29,6 +29,9 @@ import lightjason.language.IShallowCopy;
 
 /**
  * event definition
+ *
+ * @note trigger are equal iif type and literal functor are equal,
+ * unification is used to define the literal variables
  */
 public interface ITrigger extends IShallowCopy<ITrigger>
 {

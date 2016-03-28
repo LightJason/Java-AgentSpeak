@@ -87,6 +87,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
         m_configuration = new CDefaultAgentConfiguration(
                 l_visitor.getInitialBeliefs(),
                 l_visitor.getPlans(),
+                l_visitor.getRules(),
                 l_visitor.getInitialGoal(),
                 p_unifier,
                 p_aggregation,

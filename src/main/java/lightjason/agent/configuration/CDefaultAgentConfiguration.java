@@ -23,9 +23,13 @@
 
 package lightjason.agent.configuration;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
 import lightjason.beliefbase.IView;
+import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
@@ -36,6 +40,7 @@ import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -49,21 +54,25 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      */
     protected static final String BELIEFBASEROTTNAME = "beliefbase";
     /**
+     * unifier instance
+     */
+    protected final IUnifier m_unifier;
+    /**
      * initial goal trigger
      */
     protected final ITrigger m_initialgoal;
     /**
-     * instance of agent plans
-     */
-    protected final Set<IPlan> m_plans;
-    /**
-     * instance of initial beliefs
-     */
-    protected final Collection<ILiteral> m_initialbeliefs;
-    /**
      * instance of the aggregate function
      */
     protected final IAggregation m_aggregation;
+    /**
+     * instance of agent plans
+     */
+    protected final Multimap<ITrigger, IPlan> m_plans;
+    /**
+     * instance of agent rules
+     */
+    protected final Multimap<IPath, IRule> m_rules;
     /**
      * instance of variable builder
      *
@@ -71,9 +80,10 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      */
     protected final IVariableBuilder m_variablebuilder;
     /**
-     * unifier instance
+     * instance of initial beliefs
      */
-    protected final IUnifier m_unifier;
+    protected final Collection<ILiteral> m_initialbeliefs;
+
 
 
     /**
@@ -81,15 +91,16 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      *
      * @param p_initalbeliefs set with initial beliefs
      * @param p_plans plans
+     * @param p_rules rules
      * @param p_initialgoal initial goal
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Set<IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
-        this( p_initalbeliefs, p_plans, p_initialgoal, p_unifier, p_aggregation, null );
+        this( p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, null );
     }
 
     /**
@@ -97,22 +108,31 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      *
      * @param p_initalbeliefs set with initial beliefs
      * @param p_plans plans
+     * @param p_rules rules
      * @param p_initialgoal initial goal
      * @param p_aggregation aggregation function
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Set<IPlan> p_plans,
+    public CDefaultAgentConfiguration( final Collection<ILiteral> p_initalbeliefs, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
     {
-        m_plans = p_plans;
+        m_unifier = p_unifier;
         m_aggregation = p_aggregation;
         m_variablebuilder = p_variablebuilder;
+        m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
+
+        final Multimap<ITrigger, IPlan> l_plans = HashMultimap.create();
+        p_plans.stream().forEach( i -> l_plans.put( i.getTrigger(), i ) );
+        m_plans = ImmutableMultimap.copyOf( l_plans );
+
+        final Multimap<IPath, IRule> l_rules = HashMultimap.create();
+        p_rules.stream().forEach( i -> l_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+        m_rules = ImmutableMultimap.copyOf( l_rules );
+
         m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
-        m_initialbeliefs = p_initalbeliefs;
-        m_unifier = p_unifier;
     }
 
     @Override
@@ -152,15 +172,15 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Multimap<ITrigger, IPlan> getPlans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Multimap<IPath, IRule> getRules()
     {
-        return null;
+        return m_rules;
     }
 
 }

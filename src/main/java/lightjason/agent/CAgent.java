@@ -23,6 +23,7 @@
 
 package lightjason.agent;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
@@ -38,11 +39,11 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -61,29 +62,11 @@ import java.util.stream.Stream;
 public class CAgent implements IAgent
 {
     /**
-     * map with all existing plans
-     */
-    protected final Set<IPlan> m_plans;
-    /**
-     * running plans (thread-safe)
-     */
-    protected final Set<IPlan> m_runningplans = new HashSet<>();
-    /**
-     * storage map
-     *
-     * @note must be thread-safe and need not to be null
-     */
-    protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
-    /**
      * beliefbase
      *
      * @warning need not to be null
      */
     protected final IView m_beliefbase;
-    /**
-     * execution trigger
-     */
-    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
     /**
      * unifier
      *
@@ -103,6 +86,23 @@ public class CAgent implements IAgent
      */
     protected final IVariableBuilder m_variablebuilder;
     /**
+     * map with all existing plans
+     */
+    protected final Multimap<IPath, IRule> m_rules;
+    /**
+     * map with all existing plans
+     */
+    protected final Multimap<ITrigger, IPlan> m_plans;
+    /**
+     * storage map
+     *
+     * @note must be thread-safe and need not to be null
+     */
+    protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
+
+
+
+    /**
      * curent agent cycle
      */
     protected long m_cycle;
@@ -111,9 +111,18 @@ public class CAgent implements IAgent
      */
     protected long m_cycletime;
     /**
+     * execution trigger
+     */
+    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
+    /**
+     * running plans (thread-safe)
+     */
+    protected final Set<IPlan> m_runningplans = new HashSet<>();
+    /**
      * hibernate state
      */
     private volatile boolean m_hibernate;
+
 
 
     /**
@@ -124,11 +133,12 @@ public class CAgent implements IAgent
     public CAgent( final IAgentConfiguration p_configuration )
     {
         // initialize agent
-        m_beliefbase = p_configuration.getBeliefbase();
-        m_plans = Collections.unmodifiableSet( p_configuration.getPlans() );
         m_unifier = p_configuration.getUnifier();
+        m_beliefbase = p_configuration.getBeliefbase();
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
+        m_plans = HashMultimap.create( p_configuration.getPlans() );
+        m_rules = HashMultimap.create( p_configuration.getRules() );
 
         if ( p_configuration.getInitialGoal() != null )
             m_trigger.add( p_configuration.getInitialGoal() );
@@ -168,7 +178,6 @@ public class CAgent implements IAgent
                 p_event.getLiteral().annotations()
         ).filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "literalvariable", p_event ) );
-
 
         m_trigger.add( p_event );
         return CBoolean.from( true );
@@ -236,10 +245,9 @@ public class CAgent implements IAgent
         this.getTrigger().parallel().forEach( i -> this.execute( i ) );
 
 
-
         System.out.println( "=====>> " + this );
 
-        m_plans.stream().forEach( i -> {
+        m_plans.values().stream().forEach( i -> {
 
             System.out.println( "=====>> " + i + " ===\n" );
             System.out.println(
@@ -285,7 +293,7 @@ public class CAgent implements IAgent
      */
     protected void execute( final ITrigger p_trigger )
     {
-        m_plans.parallelStream()
+        m_plans.get( p_trigger ).parallelStream()
                .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
                .forEach( i -> {
                } );

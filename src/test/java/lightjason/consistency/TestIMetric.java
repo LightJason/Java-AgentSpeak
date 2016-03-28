@@ -35,6 +35,7 @@ import lightjason.consistency.metric.IMetric;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.rule.IRule;
 import org.junit.Test;
 
 import java.text.MessageFormat;
@@ -150,6 +151,7 @@ public final class TestIMetric
         final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration(
                 Collections.<ILiteral>emptyList(),
                 Collections.<IPlan>emptySet(),
+                Collections.<IRule>emptySet(),
                 null, null, null
         ) );
         p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );

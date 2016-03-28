@@ -81,7 +81,7 @@ public final class CTrigger implements ITrigger
     @Override
     public final int hashCode()
     {
-        return m_event.hashCode() + m_literal.hashCode();
+        return m_event.hashCode() + m_literal.getFQNFunctor().hashCode();
     }
 
     @Override
