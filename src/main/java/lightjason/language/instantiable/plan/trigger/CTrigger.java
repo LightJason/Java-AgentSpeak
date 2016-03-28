@@ -27,8 +27,10 @@ import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 
 import java.text.MessageFormat;
+import java.util.stream.Stream;
 
 
 /**
@@ -55,6 +57,10 @@ public final class CTrigger implements ITrigger
     {
         if ( ( p_event == null ) || ( p_literal == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
+
+        // trigger literal does not need any variables
+        if ( Stream.concat( p_literal.values(), p_literal.annotations() ).parallel().filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "variable", p_event, p_literal ) );
 
         m_event = p_event;
         m_literal = p_literal;
