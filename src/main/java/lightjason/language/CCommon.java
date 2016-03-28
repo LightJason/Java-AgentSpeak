@@ -69,10 +69,10 @@ public final class CCommon
      * @param p_aggregation aggreagtion function
      * @param p_variablebuilder optinal variablebuilder or null
      * @param p_variables optional variables
-     * @return
+     * @return context object
      */
-    public static IContext createContext( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
-                                          final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables
+    public static IContext getContext( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
+                                       final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables
     )
     {
         return new CContext(

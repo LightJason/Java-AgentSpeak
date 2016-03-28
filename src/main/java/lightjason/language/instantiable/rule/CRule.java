@@ -140,7 +140,7 @@ public final class CRule implements IRule
                                       final IVariable<?>... p_variables
     )
     {
-        return CCommon.createContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
+        return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
     }
 
 }
