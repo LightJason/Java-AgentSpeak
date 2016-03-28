@@ -24,8 +24,11 @@
 package lightjason.language.execution;
 
 import lightjason.language.ILiteral;
+import lightjason.language.IVariable;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.Set;
 
 
 /**
@@ -53,5 +56,15 @@ public interface IUnifier
      * @param p_expression expression can be null iif expression is not set  @return boolean if a unify can be done
      */
     IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_expression );
+
+
+    /**
+     * unifies a literal
+     *
+     * @param p_source source literal with values
+     * @param p_target target literal with variables (creates a deep-copy)
+     * @return set with allocated variables
+     */
+    Set<IVariable<?>> literalunify( final ILiteral p_source, final ILiteral p_target );
 
 }

@@ -149,6 +149,32 @@ public final class CUnifier implements IUnifier
         return CBoolean.from( false );
     }
 
+    @Override
+    public final Set<IVariable<?>> literalunify( final ILiteral p_source, final ILiteral p_target )
+    {
+        final Set<IVariable<?>> l_result = new HashSet<>();
+        final ILiteral l_literal = (ILiteral) p_target.deepcopy();
+
+        // try to unify exact or if not possible by recursive on the value set
+        boolean l_succeed = l_literal.valuehash() == p_source.valuehash()
+                            ? m_hashbased.unify(
+                l_result, CCommon.recursiveterm( p_source.orderedvalues() ), CCommon.recursiveterm( l_literal.orderedvalues() ) )
+                            : m_recursive.unify( l_result, p_source.orderedvalues(), l_literal.orderedvalues() );
+        if ( !l_succeed )
+            return Collections.<IVariable<?>>emptySet();
+
+        // try to unify exact or if not possible by recursive on theannotation set
+        l_succeed = l_literal.annotationhash() == p_source.annotationhash()
+                    ? m_hashbased.unify(
+                l_result, CCommon.recursiveliteral( p_source.annotations() ), CCommon.recursiveliteral( l_literal.annotations() ) )
+                    : m_recursive.unify( l_result, p_source.annotations(), l_literal.annotations() );
+
+        if ( !l_succeed )
+            return Collections.<IVariable<?>>emptySet();
+
+        return l_result;
+    }
+
     /**
      * updates within an instance context all variables with the unified values
      *
@@ -179,30 +205,7 @@ public final class CUnifier implements IUnifier
     {
         return p_agent.getBeliefBase()
                       .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
-                      .map( i -> {
-                          final Set<IVariable<?>> l_result = new HashSet<>();
-                          final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
-
-                          // try to unify exact or if not possible by recursive on the value set
-                          boolean l_succeed = l_literal.valuehash() == i.valuehash()
-                                              ? m_hashbased.unify(
-                                  l_result, CCommon.recursiveterm( i.orderedvalues() ), CCommon.recursiveterm( l_literal.orderedvalues() ) )
-                                              : m_recursive.unify( l_result, i.orderedvalues(), l_literal.orderedvalues() );
-                          if ( !l_succeed )
-                              return Collections.<IVariable<?>>emptySet();
-
-                          // try to unify exact or if not possible by recursive on theannotation set
-                          l_succeed = l_literal.annotationhash() == i.annotationhash()
-                                      ? m_hashbased.unify(
-                                  l_result, CCommon.recursiveliteral( i.annotations() ), CCommon.recursiveliteral( l_literal.annotations() ) )
-                                      : m_recursive.unify( l_result, i.annotations(), l_literal.annotations() );
-
-                          if ( !l_succeed )
-                              return Collections.<IVariable<?>>emptySet();
-
-                          return l_result;
-
-                      } )
+                      .map( i -> this.literalunify( i, p_literal ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }

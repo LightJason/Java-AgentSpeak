@@ -91,7 +91,7 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final EType getID()
+    public final EType getType()
     {
         return m_event;
     }

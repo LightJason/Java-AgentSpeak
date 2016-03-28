@@ -42,6 +42,7 @@ import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -124,7 +125,7 @@ public class CAgent implements IAgent
     {
         // initialize agent
         m_beliefbase = p_configuration.getBeliefbase();
-        m_plans = p_configuration.getPlans();
+        m_plans = Collections.unmodifiableSet( p_configuration.getPlans() );
         m_unifier = p_configuration.getUnifier();
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
@@ -232,18 +233,9 @@ public class CAgent implements IAgent
             return this;
 
         // run for each trigger the execution element
-        /*
-        Stream.concat(
-                m_trigger.parallelStream(),
-                m_beliefbase.getTrigger().parallelStream()
-        );
-        m_trigger.clear();
-        */
+        this.getTrigger().parallel().forEach( i -> this.execute( i ) );
 
 
-        // collect belief events
-        // collect plan/goal events
-        // create execution list
 
         System.out.println( "=====>> " + this );
 
@@ -260,11 +252,43 @@ public class CAgent implements IAgent
 
         System.out.println( "=====>> " + this );
 
+
         // increment cycle and set the cycle time
         m_cycle++;
         m_cycletime = System.nanoTime();
 
         return this;
+    }
+
+    /**
+     * returns all trigger
+     *
+     * @return trigger stream
+     *
+     * @note clones the trigger and clear the member trigger elements
+     */
+    protected Stream<ITrigger> getTrigger()
+    {
+        final Set<ITrigger> l_trigger = new HashSet<>( m_trigger );
+        m_trigger.clear();
+        return Stream.concat(
+                l_trigger.parallelStream(),
+                m_beliefbase.getTrigger().parallelStream()
+        );
+    }
+
+
+    /**
+     * execute a plan based on a trigger
+     *
+     * @param p_trigger trigger
+     */
+    protected void execute( final ITrigger p_trigger )
+    {
+        m_plans.parallelStream()
+               .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
+               .forEach( i -> {
+               } );
     }
 
 }

@@ -38,7 +38,7 @@ public interface ITrigger extends IShallowCopy<ITrigger>
      *
      * @return type
      */
-    EType getID();
+    EType getType();
 
     /**
      * returns the literal of the event
