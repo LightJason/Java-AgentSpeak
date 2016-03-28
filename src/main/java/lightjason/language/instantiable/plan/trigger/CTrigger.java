@@ -39,6 +39,10 @@ import java.util.stream.Stream;
 public final class CTrigger implements ITrigger
 {
     /**
+     * variable number
+     */
+    private final int m_variables;
+    /**
      * literal with unified variables
      */
     private final ILiteral m_literal;
@@ -64,6 +68,7 @@ public final class CTrigger implements ITrigger
 
         m_event = p_event;
         m_literal = p_literal;
+        m_variables = lightjason.language.CCommon.getVariableFrequency( p_literal ).size();
     }
 
     /**
@@ -106,6 +111,12 @@ public final class CTrigger implements ITrigger
     public final ILiteral getLiteral()
     {
         return m_literal;
+    }
+
+    @Override
+    public final int getVariableSize()
+    {
+        return m_variables;
     }
 
     @Override

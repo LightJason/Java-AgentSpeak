@@ -50,6 +50,13 @@ public interface ITrigger extends IShallowCopy<ITrigger>
      */
     ILiteral getLiteral();
 
+    /**
+     * returns variable number
+     *
+     * @return number
+     */
+    int getVariableSize();
+
 
     /**
      * event types

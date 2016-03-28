@@ -41,6 +41,7 @@ import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -244,23 +245,6 @@ public class CAgent implements IAgent
         // run for each trigger the execution element
         this.getTrigger().parallel().forEach( i -> this.execute( i ) );
 
-
-        System.out.println( "=====>> " + this );
-
-        m_plans.values().stream().forEach( i -> {
-
-            System.out.println( "=====>> " + i + " ===\n" );
-            System.out.println(
-                    "\n--> "
-                    + i.execute( i.getContext( this, m_aggregation, m_variablebuilder ), false, null, null, null )
-                    + " <--\n" );
-            System.out.println( "===================================================================" );
-
-        } );
-
-        System.out.println( "=====>> " + this );
-
-
         // increment cycle and set the cycle time
         m_cycle++;
         m_cycletime = System.nanoTime();
@@ -290,13 +274,20 @@ public class CAgent implements IAgent
      * execute a plan based on a trigger
      *
      * @param p_trigger trigger
+     * @todo add variables to context
+     * @todo add plan data to running-plans set
      */
     protected final void execute( final ITrigger p_trigger )
     {
         m_plans.get( p_trigger ).parallelStream()
+               // filter for possible trigger
                .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
-               .forEach( i -> {
-               } );
+               // unify variables in plan definition
+               .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( p_trigger.getLiteral(), i.getTrigger().getLiteral() ) ) )
+               // avoid uninstantiated variables
+               .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
+               // execute plan
+               .forEach( i -> i.getLeft().execute( i.getLeft().getContext( this, m_aggregation, m_variablebuilder ), false, null, null, null ) );
     }
 
 }
