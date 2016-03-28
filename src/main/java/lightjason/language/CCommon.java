@@ -43,6 +43,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -106,6 +107,26 @@ public final class CCommon
                 )
         );
     }
+
+    /**
+     * consts the variables within a literal
+     *
+     * @param p_literal literal
+     * @return map with frequency
+     */
+    public static Map<IVariable<?>, Integer> getVariableFrequency( final ILiteral p_literal )
+    {
+        return Collections.unmodifiableMap(
+                Stream.concat(
+                        recursiveterm( p_literal.orderedvalues() ),
+                        recursiveliteral( p_literal.annotations() )
+                )
+                      .filter( i -> i instanceof IVariable<?> )
+                      .map( i -> (IVariable<?>) i )
+                      .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
+        );
+    }
+
 
     /**
      * get all classes within an Java package as action

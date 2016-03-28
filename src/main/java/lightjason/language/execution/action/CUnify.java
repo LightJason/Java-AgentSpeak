@@ -37,8 +37,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -84,13 +82,7 @@ public final class CUnify extends IBaseExecution<ILiteral>
         m_expression = p_expression;
 
         // check unique variables - get variable frequency especially any variable "_"
-        final Map<IVariable<?>, Integer> l_frequency = Stream.concat(
-                CCommon.recursiveterm( p_literal.orderedvalues() ),
-                CCommon.recursiveliteral( p_literal.annotations() )
-        ).filter( i -> i instanceof IVariable<?> )
-                                                             .map( i -> (IVariable<?>) i )
-                                                             .collect( Collectors.toConcurrentMap( i -> i, i -> 1, Integer::sum ) );
-
+        final Map<IVariable<?>, Integer> l_frequency = CCommon.getVariableFrequency( p_literal );
         if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "novariable" ) );
 

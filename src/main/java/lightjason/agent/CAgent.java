@@ -275,7 +275,7 @@ public class CAgent implements IAgent
      *
      * @note clones the trigger and clear the member trigger elements
      */
-    protected Stream<ITrigger> getTrigger()
+    protected final Stream<ITrigger> getTrigger()
     {
         final Set<ITrigger> l_trigger = new HashSet<>( m_trigger );
         m_trigger.clear();
@@ -291,7 +291,7 @@ public class CAgent implements IAgent
      *
      * @param p_trigger trigger
      */
-    protected void execute( final ITrigger p_trigger )
+    protected final void execute( final ITrigger p_trigger )
     {
         m_plans.get( p_trigger ).parallelStream()
                .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
