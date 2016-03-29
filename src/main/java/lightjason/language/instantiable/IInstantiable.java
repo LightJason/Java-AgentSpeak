@@ -31,6 +31,8 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.score.IAggregation;
 
+import java.util.Set;
+
 
 /**
  * interface for (instantiable) plans and logical-rules
@@ -43,20 +45,11 @@ public interface IInstantiable extends IExecution
      *
      * @param p_agent agent
      * @param p_aggregation aggregation context
-     * @param p_variables optional variables
-     * @return individual context
-     */
-    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariable<?>... p_variables );
-
-    /**
-     * creates an individual execution context
-     *
-     * @param p_agent agent
-     * @param p_aggregation aggregation context
      * @param p_variablebuilder variable builder or null
-     * @param p_variables optional variables
+     * @param p_variables variables
      * @return individual context
      */
-    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables );
+    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
+    );
 
 }

@@ -31,8 +31,9 @@ second(true).
 // --- plans ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 +!main
-    : @>>(foo(X), X > 2) <- true
-    : >>foo(X) && X > 2  <- generic/print("hallo")
+    // @bug NPE
+    //: @>>( hallo(X), generic/typ/isstring(X) ) <- generic/print("unify 'hallo'", X)
+    //: >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <- generic/print("unify 'hallo'", X)
     <-
         // --- manual individual & internal variables ----------------------------------------------------------------------------------------------------------
 

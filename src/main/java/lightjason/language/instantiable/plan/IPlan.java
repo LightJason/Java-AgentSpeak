@@ -23,8 +23,10 @@
 
 package lightjason.language.instantiable.plan;
 
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.IInstantiable;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 
@@ -58,5 +60,13 @@ public interface IPlan extends IInstantiable
      * @return action list;
      */
     List<IExecution> getBodyActions();
+
+    /**
+     * execute the plan condition
+     *
+     * @param p_context execution context
+     * @return execution result
+     */
+    IFuzzyValue<Boolean> condition( final IContext p_context );
 
 }

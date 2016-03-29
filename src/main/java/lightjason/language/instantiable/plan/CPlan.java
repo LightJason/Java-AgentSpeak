@@ -132,6 +132,20 @@ public final class CPlan implements IPlan
     }
 
     @Override
+    public final IFuzzyValue<Boolean> condition( final IContext p_context )
+    {
+        if ( m_condition == null )
+            return CBoolean.from( true );
+
+        final List<ITerm> l_return = new LinkedList<>();
+        if ( ( m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue() ) &&
+             ( l_return.size() == 1 ) )
+            return CBoolean.from( CCommon.getRawValue( l_return.get( 0 ) ) );
+
+        return CBoolean.from( false );
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format(
@@ -183,14 +197,8 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariable<?>... p_variables )
-    {
-        return this.getContext( p_agent, p_aggregation, null, p_variables );
-    }
-
-    @Override
     public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                                      final IVariable<?>... p_variables
+                                      final Set<IVariable<?>> p_variables
     )
     {
         return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );

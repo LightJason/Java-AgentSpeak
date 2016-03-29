@@ -68,11 +68,11 @@ public final class CCommon
      * @param p_agent agent
      * @param p_aggregation aggreagtion function
      * @param p_variablebuilder optinal variablebuilder or null
-     * @param p_variables optional variables
+     * @param p_variables variables
      * @return context object
      */
     public static IContext getContext( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
-                                       final IVariableBuilder p_variablebuilder, final IVariable<?>... p_variables
+                                       final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
     )
     {
         return new CContext(
@@ -101,8 +101,7 @@ public final class CCommon
                             } );
 
                             // add all optional variables
-                            if ( p_variables != null )
-                                addAll( Arrays.asList( p_variables ) );
+                            addAll( p_variables );
                         }}
                 )
         );

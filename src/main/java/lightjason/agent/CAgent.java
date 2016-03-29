@@ -286,8 +286,12 @@ public class CAgent implements IAgent
                .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( p_trigger.getLiteral(), i.getTrigger().getLiteral() ) ) )
                // avoid uninstantiated variables
                .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
+               // initialize context
+               .map( i -> new ImmutablePair<>( i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
+               // check plan condition
+               .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
                // execute plan
-               .forEach( i -> i.getLeft().execute( i.getLeft().getContext( this, m_aggregation, m_variablebuilder ), false, null, null, null ) );
+               .forEach( i -> i.getRight().execute( i.getLeft(), false, null, null, null ) );
     }
 
 }
