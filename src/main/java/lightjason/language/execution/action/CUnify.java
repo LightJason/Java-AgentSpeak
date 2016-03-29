@@ -98,7 +98,9 @@ public final class CUnify extends IBaseExecution<ILiteral>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value );
+        return m_expression == null
+               ? MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value )
+               : MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_expression );
     }
 
     @Override
