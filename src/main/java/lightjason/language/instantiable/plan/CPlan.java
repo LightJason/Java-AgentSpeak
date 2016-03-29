@@ -43,6 +43,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -137,12 +138,17 @@ public final class CPlan implements IPlan
         if ( m_condition == null )
             return CBoolean.from( true );
 
+        /*
         final List<ITerm> l_return = new LinkedList<>();
         if ( ( m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue() ) &&
              ( l_return.size() == 1 ) )
+        {
+            System.out.println("###====>>>       " + l_return);
             return CBoolean.from( CCommon.getRawValue( l_return.get( 0 ) ) );
+        }
+        */
 
-        return CBoolean.from( false );
+        return CBoolean.from( true );
     }
 
     @Override
@@ -191,9 +197,15 @@ public final class CPlan implements IPlan
     }
 
     @Override
+    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return m_action.parallelStream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toSet() );
+        return new HashSet<IVariable<?>>()
+        {{
+            m_action.stream().flatMap( i -> i.getVariables().stream() ).forEach( i -> add( i ) );
+            if ( m_condition != null )
+                addAll( m_condition.getVariables() );
+        }};
     }
 
     @Override

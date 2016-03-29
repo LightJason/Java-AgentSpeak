@@ -27,6 +27,7 @@ dependencies:
 test:
     override:
         - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1}
+        - mvn site
 
     post:
       - git checkout master

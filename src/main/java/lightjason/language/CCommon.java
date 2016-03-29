@@ -71,6 +71,7 @@ public final class CCommon
      * @param p_variables variables
      * @return context object
      */
+    @SuppressWarnings( "serial" )
     public static IContext getContext( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
     )

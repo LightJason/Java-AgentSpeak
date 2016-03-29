@@ -250,7 +250,7 @@
                 <executions>
                     <execution>
                         <id>doxygen</id>
-                        <phase>compile</phase>
+                        <phase>site</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>

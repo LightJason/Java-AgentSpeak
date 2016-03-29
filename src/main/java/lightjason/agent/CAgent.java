@@ -118,7 +118,7 @@ public class CAgent implements IAgent
     /**
      * running plans (thread-safe)
      */
-    protected final Set<IPlan> m_runningplans = new HashSet<>();
+    protected final Set<IPlan> m_runningplans = Sets.newConcurrentHashSet();
     /**
      * hibernate state
      */
@@ -274,7 +274,6 @@ public class CAgent implements IAgent
      * execute a plan based on a trigger
      *
      * @param p_trigger trigger
-     * @todo add variables to context
      * @todo add plan data to running-plans set
      */
     protected final void execute( final ITrigger p_trigger )
