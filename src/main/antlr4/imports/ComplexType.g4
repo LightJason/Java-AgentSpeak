@@ -50,10 +50,15 @@ term :
 
 /**
  * unification expression
+ * @todo add literal / variable unification
  **/
 unification :
  AT? RIGHTSHIFT
- ( literal | LEFTROUNDBRACKET literal COMMA expression RIGHTROUNDBRACKET )
+ (
+   literal
+   | LEFTROUNDBRACKET literal COMMA expression RIGHTROUNDBRACKET
+   //| LEFTROUNDBRACKET literal COMMA ( literal | variable ) RIGHTROUNDBRACKET
+ )
  ;
 
 /**
