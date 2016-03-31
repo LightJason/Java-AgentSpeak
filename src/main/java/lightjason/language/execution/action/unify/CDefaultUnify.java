@@ -41,6 +41,7 @@ import java.util.Set;
 
 /**
  * unify action
+ *
  * @note parallel is ignored
  */
 public class CDefaultUnify extends IBaseExecution<ILiteral>
