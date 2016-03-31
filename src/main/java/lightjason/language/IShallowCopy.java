@@ -28,6 +28,8 @@ import lightjason.common.IPath;
 
 /**
  * interface to create shallow-copy of objects
+ *
+ * @note methods must be thread-safe if necessary
  */
 public interface IShallowCopy<T> extends ICopy
 {

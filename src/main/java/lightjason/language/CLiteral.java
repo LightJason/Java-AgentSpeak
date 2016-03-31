@@ -371,7 +371,7 @@ public final class CLiteral implements ILiteral
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final ITerm deepcopy( final IPath... p_prefix )
+    public final synchronized ITerm deepcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 
@@ -392,7 +392,7 @@ public final class CLiteral implements ILiteral
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final ITerm deepcopySuffix()
+    public final synchronized ITerm deepcopySuffix()
     {
         return new CLiteral(
                 m_at, m_negated, CPath.from( m_functor.getSuffix() ),

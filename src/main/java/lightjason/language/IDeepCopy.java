@@ -28,6 +28,8 @@ import lightjason.common.IPath;
 
 /**
  * interface to create deep-copy of objects
+ *
+ * @note methods must be thread-safe if necessary
  */
 public interface IDeepCopy<T> extends ICopy
 {
