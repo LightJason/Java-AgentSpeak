@@ -37,7 +37,8 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CTernaryOperation;
-import lightjason.language.execution.action.CUnify;
+import lightjason.language.execution.action.unify.CDefaultUnify;
+import lightjason.language.execution.action.unify.CExpressionUnify;
 import lightjason.language.execution.expression.CAtom;
 import lightjason.language.execution.expression.CProxyReturnExpression;
 import lightjason.language.execution.expression.EOperator;
@@ -131,13 +132,34 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public Object visitUnification( final TypeParser.UnificationContext p_context )
     {
-        return new CUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                p_context.expression() == null
-                ? null
-                : (IExpression) this.visitExpression( p_context.expression() )
-        );
+        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
+
+        if ( l_constraint instanceof IExpression )
+            return new CExpressionUnify(
+                    p_context.AT() != null,
+                    (ILiteral) this.visitLiteral( p_context.literal() ),
+                    (IExpression) l_constraint
+            );
+
+        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
+
+    @Override
+    public Object visitUnification_constraint( final TypeParser.Unification_constraintContext p_context )
+    {
+        if ( p_context == null )
+            return null;
+
+        if ( p_context.literal() != null )
+            return this.visitLiteral( p_context.literal() );
+
+        if ( p_context.expression() != null )
+            return this.visitExpression( p_context.expression() );
+
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+
+        return null;
     }
 
 

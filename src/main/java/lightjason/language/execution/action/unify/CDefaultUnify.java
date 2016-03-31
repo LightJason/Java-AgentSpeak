@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.language.execution.action.unify;
 
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CCommon;
@@ -29,7 +29,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.action.IBaseExecution;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -42,20 +42,16 @@ import java.util.Set;
 /**
  * unify action
  */
-public final class CUnify extends IBaseExecution<ILiteral>
+public class CDefaultUnify extends IBaseExecution<ILiteral>
 {
     /**
      * parallel unification
      */
-    private final boolean m_parallel;
-    /**
-     * unification expression
-     */
-    private final IExpression m_expression;
+    protected final boolean m_parallel;
     /**
      * number of variables
      */
-    private final long m_variablenumber;
+    protected final long m_variablenumber;
 
     /**
      * ctor
@@ -63,23 +59,10 @@ public final class CUnify extends IBaseExecution<ILiteral>
      * @param p_parallel parallel execution
      * @param p_literal literal
      */
-    public CUnify( final boolean p_parallel, final ILiteral p_literal )
-    {
-        this( p_parallel, p_literal, null );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_parallel parallel execution
-     * @param p_literal literal
-     * @param p_expression expression based on the unification result
-     */
-    public CUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_expression )
+    public CDefaultUnify( final boolean p_parallel, final ILiteral p_literal )
     {
         super( p_literal );
         m_parallel = p_parallel;
-        m_expression = p_expression;
 
         // check unique variables - get variable frequency especially any variable "_"
         final Map<IVariable<?>, Integer> l_frequency = CCommon.getVariableFrequency( p_literal );
@@ -93,36 +76,28 @@ public final class CUnify extends IBaseExecution<ILiteral>
         m_variablenumber = l_frequency.size();
     }
 
-
-
     @Override
-    public final String toString()
+    public String toString()
     {
-        return m_expression == null
-               ? MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value )
-               : MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_expression );
+        return MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value );
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
     )
     {
         return m_parallel
-               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_variablenumber, m_expression )
-               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_variablenumber, m_expression );
+               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_variablenumber )
+               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_variablenumber );
     }
 
     @Override
     @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public Set<IVariable<?>> getVariables()
     {
         return new HashSet<IVariable<?>>()
         {{
-
-            if ( m_expression != null )
-                addAll( m_expression.getVariables() );
-
             // create a shallow-copy of all variables within the value- and annotation-definition
             CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
             CCommon.recursiveliteral( m_value.annotations() ).filter( i -> i instanceof IVariable<?> ).forEach(

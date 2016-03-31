@@ -21,69 +21,69 @@
  * @endcond
  */
 
-package lightjason.language.execution;
+package lightjason.language.execution.action.unify;
 
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 /**
- * interface of an unification algorithm
+ * unify expression
  */
-public interface IUnifier
+public final class CExpressionUnify extends CDefaultUnify
 {
     /**
-     * unifies a literal in parallel
-     *
-     * @param p_context running context
-     * @param p_literal literal
-     * @param p_variablenumber number of unified variables
+     * unification expression
      */
-    IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber );
+    private final IExpression m_expression;
 
     /**
-     * unifies a literal in parallel
+     * ctor
      *
-     * @param p_context running context
+     * @param p_parallel parallel execution
      * @param p_literal literal
-     * @param p_variablenumber number of unified variables
-     */
-    IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber );
-
-
-    /**
-     * unifies a literal in parallel
-     *
-     * @param p_context running context
-     * @param p_literal literal
-     * @param p_variablenumber number of unified variables
      * @param p_constraint expression
-     * @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
+    public CExpressionUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_constraint )
+    {
+        super( p_parallel, p_literal );
+        m_expression = p_constraint;
+    }
 
-    /**
-     * unifies a literal in parallel
-     *
-     * @param p_context running context
-     * @param p_literal literal
-     * @param p_variablenumber number of unified variables
-     * @param p_constraint expression
-     * @return boolean if a unify can be done
-     */
-    IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
 
-    /**
-     * unifies a literal
-     *
-     * @param p_source source literal with values
-     * @param p_target target literal with variables (creates a deep-copy)
-     * @return set with allocated variables
-     */
-    Set<IVariable<?>> literalunify( final ILiteral p_source, final ILiteral p_target );
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_expression );
+    }
 
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        return m_parallel
+               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_variablenumber, m_expression )
+               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_variablenumber, m_expression );
+    }
+
+    @Override
+    @SuppressWarnings( "serial" )
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet<IVariable<?>>()
+        {{
+            addAll( m_expression.getVariables() );
+            addAll( CExpressionUnify.super.getVariables() );
+        }};
+    }
 }

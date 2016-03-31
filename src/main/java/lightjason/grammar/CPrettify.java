@@ -223,6 +223,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
     }
 
     @Override
+    public Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
         return null;
@@ -608,6 +614,12 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
 
     @Override
     public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
+    {
+        return null;
+    }
+
+    @Override
+    public Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
     {
         return null;
     }

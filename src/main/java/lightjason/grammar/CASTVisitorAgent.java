@@ -50,7 +50,8 @@ import lightjason.language.execution.action.CRepair;
 import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.CTestGoal;
-import lightjason.language.execution.action.CUnify;
+import lightjason.language.execution.action.unify.CDefaultUnify;
+import lightjason.language.execution.action.unify.CExpressionUnify;
 import lightjason.language.execution.annotation.CAtomAnnotation;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
@@ -420,16 +421,35 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
-        return new CUnify(
-                p_context.AT() != null,
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                p_context.expression() == null
-                ? null
-                : (IExpression) this.visitExpression( p_context.expression() )
-        );
+        final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
+
+        if ( l_constraint instanceof IExpression )
+            return new CExpressionUnify(
+                    p_context.AT() != null,
+                    (ILiteral) this.visitLiteral( p_context.literal() ),
+                    (IExpression) l_constraint
+            );
+
+        return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
+    @Override
+    public Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
+    {
+        if ( p_context == null )
+            return null;
 
+        if ( p_context.literal() != null )
+            return this.visitLiteral( p_context.literal() );
+
+        if ( p_context.expression() != null )
+            return this.visitExpression( p_context.expression() );
+
+        if ( p_context.variable() != null )
+            return this.visitVariable( p_context.variable() );
+
+        return null;
+    }
 
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )

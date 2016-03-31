@@ -61,6 +61,24 @@ public final class CUnifier implements IUnifier
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Override
+    public final IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
+    {
+        return this.sequentialunify( p_context, p_literal, p_variablenumber );
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
+    {
+        // get all possible variables
+        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
+        if ( l_variables.isEmpty() )
+            return CBoolean.from( false );
+
+        this.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
+        return CBoolean.from( true );
+    }
+
+    @Override
     public final IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
                                                      final IExpression p_expression
     )
@@ -69,13 +87,6 @@ public final class CUnifier implements IUnifier
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
             return CBoolean.from( false );
-
-        // if no expression exists, returns the first unified structure
-        if ( p_expression == null )
-        {
-            this.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
-            return CBoolean.from( true );
-        }
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = l_variables.parallelStream()
@@ -114,13 +125,6 @@ public final class CUnifier implements IUnifier
         if ( l_variables.isEmpty() )
             return CBoolean.from( false );
 
-        // if no expression exists, returns the first unified structure
-        if ( p_expression == null )
-        {
-            this.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
-            return CBoolean.from( true );
-        }
-
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = l_variables.stream()
                                                       .filter( i -> {
@@ -145,7 +149,6 @@ public final class CUnifier implements IUnifier
             return CBoolean.from( false );
 
         this.updatecontext( p_context, l_result.parallelStream() );
-
         return CBoolean.from( false );
     }
 
