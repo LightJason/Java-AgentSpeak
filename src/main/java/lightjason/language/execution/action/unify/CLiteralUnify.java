@@ -78,7 +78,7 @@ public final class CLiteralUnify extends CDefaultUnify
                                                final List<ITerm> p_annotation
     )
     {
-        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literalunify( m_value, m_constraint );
+        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literalunify( m_constraint, m_value );
         if ( l_variables.size() != m_variablenumber )
             return CBoolean.from( false );
 

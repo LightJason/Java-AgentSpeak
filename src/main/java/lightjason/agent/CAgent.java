@@ -282,7 +282,7 @@ public class CAgent implements IAgent
                // filter for possible trigger
                .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
                // unify variables in plan definition
-               .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( p_trigger.getLiteral(), i.getTrigger().getLiteral() ) ) )
+               .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
                // avoid uninstantiated variables
                .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
                // initialize context

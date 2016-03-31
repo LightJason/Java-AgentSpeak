@@ -41,7 +41,7 @@ public interface IUnifier
      * unifies a literal in parallel
      *
      * @param p_context running context
-     * @param p_literal literal
+     * @param p_literal literal with variables (creates a deep-copy)
      * @param p_variablenumber number of unified variables
      */
     IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber );
@@ -50,7 +50,7 @@ public interface IUnifier
      * unifies a literal in parallel
      *
      * @param p_context running context
-     * @param p_literal literal
+     * @param p_literal literal with variables (creates a deep-copy)
      * @param p_variablenumber number of unified variables
      */
     IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber );
@@ -60,7 +60,7 @@ public interface IUnifier
      * unifies a literal in parallel
      *
      * @param p_context running context
-     * @param p_literal literal
+     * @param p_literal literal with variables (creates a deep-copy)
      * @param p_variablenumber number of unified variables
      * @param p_constraint expression
      * @return boolean if a unify can be done
@@ -71,7 +71,7 @@ public interface IUnifier
      * unifies a literal in parallel
      *
      * @param p_context running context
-     * @param p_literal literal
+     * @param p_literal literal with variables (creates a deep-copy)
      * @param p_variablenumber number of unified variables
      * @param p_constraint expression
      * @return boolean if a unify can be done
@@ -81,10 +81,10 @@ public interface IUnifier
     /**
      * unifies a literal
      *
-     * @param p_source source literal with values
-     * @param p_target target literal with variables (creates a deep-copy)
+     * @param p_literal literal with variables (creates a deep-copy)
+     * @param p_constraint source literal with values
      * @return set with allocated variables
      */
-    Set<IVariable<?>> literalunify( final ILiteral p_source, final ILiteral p_target );
+    Set<IVariable<?>> literalunify( final ILiteral p_literal, final ILiteral p_constraint );
 
 }
