@@ -30,6 +30,8 @@ second(true).
 
 // --- plans ---------------------------------------------------------------------------------------------------------------------------------------------------
 
++!mytest <- generic/print("my test plan").
+
 +!main
     : >>( hallo(X), generic/typ/isstring(X) ) <-
             generic/print("---", "first plan", "---", "unification variables", X)
@@ -309,6 +311,9 @@ second(true).
 
         // test-goal exists, so no repair handling (only the functor is checked)
         ?main;
+
+        // run plan immediatly
+        !!mytest;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -167,16 +167,24 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public IFuzzyValue<Boolean> trigger( final ITrigger p_event, final boolean... p_immediately )
+    public IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {
         // check if literal does not store any variables
         if ( Stream.concat(
-                p_event.getLiteral().orderedvalues(),
-                p_event.getLiteral().annotations()
+                p_trigger.getLiteral().orderedvalues(),
+                p_trigger.getLiteral().annotations()
         ).filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "literalvariable", p_event ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "literalvariable", p_trigger ) );
 
-        m_trigger.add( p_event );
+        // run plan immediatly and return
+        if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
+        {
+            this.executeplan( p_trigger );
+            return CBoolean.from( true );
+        }
+
+        // add trigger for the next cycle
+        m_trigger.add( p_trigger );
         return CBoolean.from( true );
     }
 
@@ -226,7 +234,14 @@ public class CAgent implements IAgent
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} ( Cycle: {1} / Beliefbase: {2} )", super.toString(), m_cycle, m_beliefbase );
+        return MessageFormat.format(
+                "{0} ( Cycle: {1} / Trigger: {2} / Running Plans: {3}  Beliefbase: {4} )",
+                super.toString(),
+                m_cycle,
+                m_trigger,
+                m_runningplans,
+                m_beliefbase
+        );
     }
 
     @Override
@@ -239,7 +254,9 @@ public class CAgent implements IAgent
             return this;
 
         // execute all possible plans
-        this.executeplan();
+        m_runningplans.clear();
+        Stream.concat( m_trigger.parallelStream(), m_beliefbase.getTrigger().parallelStream() ).forEach( i -> this.executeplan( i ) );
+        m_trigger.clear();
 
         // increment cycle and set the cycle time
         m_cycle++;
@@ -250,38 +267,34 @@ public class CAgent implements IAgent
 
 
     /**
-     * execute a plan based on a trigger
+     * execute plan
+     *
+     * @param p_trigger trigger
      */
-    protected void executeplan()
+    protected void executeplan( final ITrigger p_trigger )
     {
-        m_runningplans.clear();
+        m_plans.get( p_trigger ).parallelStream()
 
-        Stream.concat(
-                m_trigger.parallelStream(),
-                m_beliefbase.getTrigger().parallelStream()
-        ).forEach( j ->
+               // filter for possible trigger
+               .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
 
-                           m_plans.get( j ).parallelStream()
-                                  // filter for possible trigger
-                                  .filter( i -> i.getTrigger().getType().equals( j.getType() ) )
-                                  // unify variables in plan definition
-                                  .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), j.getLiteral() ) ) )
-                                  // avoid uninstantiated variables
-                                  .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() )
-                                                                                                  .size() )
-                                  // initialize context
-                                  .map( i -> new ImmutablePair<>(
-                                          i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
-                                  // check plan condition
-                                  .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
-                                  // execute plan and push plan to running plan set)
-                                  .forEach( i -> {
-                                      m_runningplans.add( i.getRight().getTrigger().getLiteral().getFQNFunctor() );
-                                      i.getRight().execute( i.getLeft(), false, null, null, null );
-                                  } )
-        );
+               // unify variables in plan definition
+               .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
 
-        m_trigger.clear();
+               // avoid uninstantiated variables
+               .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
+
+               // initialize context
+               .map( i -> new ImmutablePair<>( i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
+
+               // check plan condition
+               .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
+
+               // execute plan and push plan to running plan set)
+               .forEach( i -> {
+                   m_runningplans.add( i.getRight().getTrigger().getLiteral().getFQNFunctor() );
+                   i.getRight().execute( i.getLeft(), false, null, null, null );
+               } );
     }
 
 }

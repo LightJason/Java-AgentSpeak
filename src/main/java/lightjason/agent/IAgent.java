@@ -50,11 +50,11 @@ public interface IAgent extends Callable<IAgent>
     /**
      * trigger an event
      *
-     * @param p_event event
+     * @param p_trigger event trigger
      * @param p_immediately run element immediately
      * @return execution finished correctly
      */
-    IFuzzyValue<Boolean> trigger( final ITrigger p_event, final boolean... p_immediately );
+    IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately );
 
     /**
      * returns the beliefbase

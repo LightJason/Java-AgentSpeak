@@ -39,8 +39,6 @@ import java.util.List;
 
 /**
  * achievement goal action
- *
- * @bug not implemented
  */
 public final class CAchievementGoal extends IBaseExecution<ILiteral>
 {
