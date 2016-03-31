@@ -208,7 +208,7 @@ belief_action :
  * test-goal action
  **/
 test_goal_action :
-    QUESTIONMARK literal
+    QUESTIONMARK atom
     ;
 
 /**

@@ -573,7 +573,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitTest_goal_action( final PlanBundleParser.Test_goal_actionContext p_context )
     {
-        return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
     }
 
 

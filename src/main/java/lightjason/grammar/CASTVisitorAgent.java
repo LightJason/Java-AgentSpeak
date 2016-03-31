@@ -602,7 +602,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
     {
-        return new CTestGoal( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
     }
 
 

@@ -23,7 +23,7 @@
 
 package lightjason.language.execution.action;
 
-import lightjason.language.ILiteral;
+import lightjason.common.IPath;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
@@ -36,17 +36,17 @@ import java.util.List;
 /**
  * test goal action
  */
-public final class CTestGoal extends IBaseExecution<ILiteral>
+public final class CTestGoal extends IBaseExecution<IPath>
 {
 
     /**
      * ctor
      *
-     * @param p_literal literal
+     * @param p_plan literal
      */
-    public CTestGoal( final ILiteral p_literal )
+    public CTestGoal( final IPath p_plan )
     {
-        super( p_literal );
+        super( p_plan );
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class CTestGoal extends IBaseExecution<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( p_context.getAgent().getRunningPlans().contains( m_value.getFQNFunctor() ) );
+        return CBoolean.from( p_context.getAgent().getRunningPlans().contains( m_value ) );
     }
 
 }
