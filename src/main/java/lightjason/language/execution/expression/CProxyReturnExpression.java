@@ -29,7 +29,6 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
@@ -66,8 +65,9 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( m_execution.execute( p_context, p_parallel, p_argument, new LinkedList<>(), p_annotation ).getValue() ) );
-        return CBoolean.from( true );
+        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, new LinkedList<>(), p_annotation );
+        p_return.add( CRawTerm.from( l_return.getValue() ) );
+        return l_return;
     }
 
     @Override

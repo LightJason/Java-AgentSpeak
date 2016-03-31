@@ -142,7 +142,7 @@ public final class CUnifier implements IUnifier
             return CBoolean.from( false );
 
         CCommon.updatecontext( p_context, l_result.parallelStream() );
-        return CBoolean.from( false );
+        return CBoolean.from( true );
     }
 
     @Override
