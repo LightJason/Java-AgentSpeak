@@ -23,7 +23,6 @@
 
 package lightjason.language.execution.action.unify;
 
-import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -33,37 +32,32 @@ import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 
 /**
  * unify a literal
  */
-public final class CLiteralUnify extends CDefaultUnify
+public final class CVariableUnify extends CDefaultUnify
 {
     /**
-     * unification literal with values
+     * unification variable with literal
      */
-    private final ILiteral m_constraint;
+    private final IVariable<?> m_constraint;
 
     /**
      * ctor
      *
      * @param p_parallel parallel execution
-     * @param p_literal literal
+     * @param p_literal variable with literal
      * @param p_constraint expression
      */
-    public CLiteralUnify( final boolean p_parallel, final ILiteral p_literal, final ILiteral p_constraint )
+    public CVariableUnify( final boolean p_parallel, final ILiteral p_literal, final IVariable<?> p_constraint )
     {
         super( p_parallel, p_literal );
         m_constraint = p_constraint;
-
-        // literal does not use any variables
-        if ( Stream.concat( CCommon.recursiveterm( m_constraint.orderedvalues() ), CCommon.recursiveliteral( m_constraint.annotations() ) )
-                   .filter( i -> i instanceof IVariable<?> ).findAny().isPresent() )
-            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "literalvariable", p_literal ) );
     }
 
 
@@ -78,13 +72,23 @@ public final class CLiteralUnify extends CDefaultUnify
                                                final List<ITerm> p_annotation
     )
     {
-        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literalunify( m_constraint, m_value );
+        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literalunify( m_value, CCommon.getRawValue(
+                CCommon.replaceFromContext( p_context, m_constraint ) ) );
         if ( l_variables.size() != m_variablenumber )
             return CBoolean.from( false );
 
-        // set variables
-        l_variables.parallelStream().forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
+        CCommon.updatecontext( p_context, l_variables.stream() );
         return CBoolean.from( true );
     }
 
+    @Override
+    @SuppressWarnings( "serial" )
+    public final Set<IVariable<?>> getVariables()
+    {
+        return new HashSet<IVariable<?>>()
+        {{
+            addAll( CVariableUnify.super.getVariables() );
+            add( m_constraint.shallowcopy() );
+        }};
+    }
 }

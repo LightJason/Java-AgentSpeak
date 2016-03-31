@@ -40,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -61,20 +60,14 @@ public final class CUnifier implements IUnifier
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
-    {
-        return this.sequentialunify( p_context, p_literal, p_variablenumber );
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
+    public final IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
             return CBoolean.from( false );
 
-        this.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
+        CCommon.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
         return CBoolean.from( true );
     }
 
@@ -93,7 +86,7 @@ public final class CUnifier implements IUnifier
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
                                                           p_expression.execute(
-                                                                  this.updatecontext(
+                                                                  CCommon.updatecontext(
                                                                           p_context.duplicate(),
                                                                           i.parallelStream()
                                                                   ),
@@ -111,7 +104,7 @@ public final class CUnifier implements IUnifier
         if ( l_result.isEmpty() )
             return CBoolean.from( false );
 
-        this.updatecontext( p_context, l_result.parallelStream() );
+        CCommon.updatecontext( p_context, l_result.parallelStream() );
         return CBoolean.from( true );
     }
 
@@ -130,7 +123,7 @@ public final class CUnifier implements IUnifier
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
                                                           p_expression.execute(
-                                                                  this.updatecontext(
+                                                                  CCommon.updatecontext(
                                                                           p_context.duplicate(),
                                                                           i.parallelStream()
                                                                   ),
@@ -148,7 +141,7 @@ public final class CUnifier implements IUnifier
         if ( l_result.isEmpty() )
             return CBoolean.from( false );
 
-        this.updatecontext( p_context, l_result.parallelStream() );
+        CCommon.updatecontext( p_context, l_result.parallelStream() );
         return CBoolean.from( false );
     }
 
@@ -176,19 +169,6 @@ public final class CUnifier implements IUnifier
             return Collections.<IVariable<?>>emptySet();
 
         return l_result;
-    }
-
-    /**
-     * updates within an instance context all variables with the unified values
-     *
-     * @param p_context context
-     * @param p_unifiedvariables unified variables as stream
-     * @return context reference
-     */
-    private IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
-    {
-        p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
-        return p_context;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

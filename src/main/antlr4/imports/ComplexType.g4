@@ -63,9 +63,8 @@ unification :
  * unification constraint
  **/
 unification_constraint :
-    expression
-    | literal
-    | variable
+    variable
+    | expression
     ;
 
 /**

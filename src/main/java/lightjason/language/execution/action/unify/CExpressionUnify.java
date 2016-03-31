@@ -82,8 +82,9 @@ public final class CExpressionUnify extends CDefaultUnify
     {
         return new HashSet<IVariable<?>>()
         {{
-            addAll( m_expression.getVariables() );
             addAll( CExpressionUnify.super.getVariables() );
+            addAll( m_expression.getVariables() );
         }};
     }
+
 }

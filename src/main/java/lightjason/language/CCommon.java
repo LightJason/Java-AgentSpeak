@@ -62,6 +62,19 @@ public final class CCommon
     }
 
     /**
+     * updates within an instance context all variables with the variable
+     *
+     * @param p_context context
+     * @param p_unifiedvariables unified variables as stream
+     * @return context reference
+     */
+    public static IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
+    {
+        p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
+        return p_context;
+    }
+
+    /**
      * creates a default execution context
      *
      * @param p_instance instance object

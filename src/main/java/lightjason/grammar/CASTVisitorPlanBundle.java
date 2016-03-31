@@ -51,6 +51,7 @@ import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.CTestGoal;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
+import lightjason.language.execution.action.unify.CVariableUnify;
 import lightjason.language.execution.annotation.CAtomAnnotation;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.CSymbolicAnnotation;
@@ -402,6 +403,13 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
                     (IExpression) l_constraint
             );
 
+        if ( l_constraint instanceof IVariable<?> )
+            return new CVariableUnify(
+                    p_context.AT() != null,
+                    (ILiteral) this.visitLiteral( p_context.literal() ),
+                    (IVariable<?>) l_constraint
+            );
+
         return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
@@ -410,9 +418,6 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     {
         if ( p_context == null )
             return null;
-
-        if ( p_context.literal() != null )
-            return this.visitLiteral( p_context.literal() );
 
         if ( p_context.expression() != null )
             return this.visitExpression( p_context.expression() );

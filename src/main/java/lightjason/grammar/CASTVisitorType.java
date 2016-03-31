@@ -34,11 +34,13 @@ import lightjason.language.CRawTerm;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
+import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
+import lightjason.language.execution.action.unify.CVariableUnify;
 import lightjason.language.execution.expression.CAtom;
 import lightjason.language.execution.expression.CProxyReturnExpression;
 import lightjason.language.execution.expression.EOperator;
@@ -141,6 +143,13 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
                     (IExpression) l_constraint
             );
 
+        if ( l_constraint instanceof IVariable<?> )
+            return new CVariableUnify(
+                    p_context.AT() != null,
+                    (ILiteral) this.visitLiteral( p_context.literal() ),
+                    (IVariable<?>) l_constraint
+            );
+
         return new CDefaultUnify( p_context.AT() != null, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
@@ -149,9 +158,6 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     {
         if ( p_context == null )
             return null;
-
-        if ( p_context.literal() != null )
-            return this.visitLiteral( p_context.literal() );
 
         if ( p_context.expression() != null )
             return this.visitExpression( p_context.expression() );

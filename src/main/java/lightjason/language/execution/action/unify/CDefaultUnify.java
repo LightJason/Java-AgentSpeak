@@ -41,6 +41,7 @@ import java.util.Set;
 
 /**
  * unify action
+ * @note parallel is ignored
  */
 public class CDefaultUnify extends IBaseExecution<ILiteral>
 {
@@ -87,9 +88,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
                                          final List<ITerm> p_annotation
     )
     {
-        return m_parallel
-               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_variablenumber )
-               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_variablenumber );
+        return p_context.getAgent().getUnifier().unify( p_context, m_value, m_variablenumber );
     }
 
     @Override
@@ -105,4 +104,5 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
 
         }};
     }
+
 }
