@@ -291,7 +291,11 @@ second(true).
         // unfiy variable (I is defined on the deconstruct call on top)
         >>( blah(UN9), I ) << true;
 
-        generic/print("unifcation", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9 );
+        // manual literal parsing & unification
+        UN10 = generic/typ/parseliteral("foo(12345)");
+        >>( foo(UN11), UN10 ) << true;
+
+        generic/print("unifcation", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
