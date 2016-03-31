@@ -304,8 +304,11 @@ second(true).
 
         // --- repair handling ---------------------------------------------------------------------------------------------------------------------------------
 
-        //?foo;
-        ?foo << true;
+        // test-goal not exist, so use repair definition
+        ?plannotexist << true;
+
+        // test-goal exists, so no repair handling (only the functor is checked)
+        ?main;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

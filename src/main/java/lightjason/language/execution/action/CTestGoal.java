@@ -35,8 +35,6 @@ import java.util.List;
 
 /**
  * test goal action
- *
- * @todo check correct test information
  */
 public final class CTestGoal extends IBaseExecution<ILiteral>
 {

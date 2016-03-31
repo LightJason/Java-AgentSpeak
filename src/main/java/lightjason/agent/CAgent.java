@@ -45,6 +45,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -117,7 +118,7 @@ public class CAgent implements IAgent
     /**
      * running plans (thread-safe)
      */
-    protected final Set<IPlan> m_runningplans = Sets.newConcurrentHashSet();
+    protected final Set<IPath> m_runningplans = Sets.newConcurrentHashSet();
     /**
      * hibernate state
      */
@@ -186,7 +187,7 @@ public class CAgent implements IAgent
     @Override
     public final Set<IPath> getRunningPlans()
     {
-        return m_runningplans.stream().map( i -> i.getTrigger().getLiteral().getFQNFunctor() ).collect( Collectors.toSet() );
+        return Collections.unmodifiableSet( m_runningplans );
     }
 
     @Override
@@ -254,11 +255,11 @@ public class CAgent implements IAgent
 
     /**
      * execute a plan based on a trigger
-     *
-     * @todo add plan data to running-plans set
      */
     protected void executeplan()
     {
+        m_runningplans.clear();
+
         Stream.concat(
                 m_trigger.parallelStream(),
                 m_beliefbase.getTrigger().parallelStream()
@@ -277,8 +278,11 @@ public class CAgent implements IAgent
                                           i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
                                   // check plan condition
                                   .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
-                                  // execute plan
-                                  .forEach( i -> i.getRight().execute( i.getLeft(), false, null, null, null ) )
+                                  // execute plan and push plan to running plan set)
+                                  .forEach( i -> {
+                                      m_runningplans.add( i.getRight().getTrigger().getLiteral().getFQNFunctor() );
+                                      i.getRight().execute( i.getLeft(), false, null, null, null );
+                                  } )
         );
 
         m_trigger.clear();
