@@ -21,10 +21,11 @@
  * @endcond
  */
 
-package lightjason.language.execution;
+package lightjason.language.execution.action.unify;
 
 import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 

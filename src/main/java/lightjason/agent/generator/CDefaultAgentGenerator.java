@@ -29,8 +29,8 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.grammar.IASTVisitorAgent;
-import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.score.IAggregation;
 
 import java.io.IOException;

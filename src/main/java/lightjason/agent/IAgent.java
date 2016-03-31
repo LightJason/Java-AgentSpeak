@@ -25,7 +25,7 @@ package lightjason.agent;
 
 import lightjason.beliefbase.IView;
 import lightjason.common.IPath;
-import lightjason.language.execution.IUnifier;
+import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 

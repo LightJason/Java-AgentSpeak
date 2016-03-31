@@ -24,8 +24,8 @@
 package lightjason.agent.configuration;
 
 import lightjason.beliefbase.IView;
-import lightjason.language.execution.IUnifier;
 import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
