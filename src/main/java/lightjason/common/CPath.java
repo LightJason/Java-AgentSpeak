@@ -425,6 +425,8 @@ public final class CPath implements IPath
         final List<String> l_dotremove = m_path.stream()
                                                .filter( i -> !i.equals( "." ) )
                                                .collect( Collectors.toList() );
+        if ( l_dotremove.isEmpty() )
+            return this;
 
         final String l_last = l_dotremove.get( l_dotremove.size() - 1 );
         final List<String> l_backremove = IntStream.range( 0, l_dotremove.size() - 1 )

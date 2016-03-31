@@ -112,10 +112,16 @@ public final class TestCAgent
      *
      * @param p_args arguments
      */
-    public static void main( final String[] p_args )
+    public static void main( final String[] p_args ) throws Exception
     {
-        final TestCAgent l_test = new TestCAgent();
-        l_test.testASL();
+        // run test manually for catching execpetions
+        new CDefaultAgentGenerator(
+                new FileInputStream( "src/test/resources/agentsimple.asl" ),
+                ACTIONS.keySet(),
+                new CUnifier(),
+                new CAggregation( ACTIONS ),
+                new CVariableBuilder()
+        ).generate().call();
     }
 
     /**
