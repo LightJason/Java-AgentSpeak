@@ -43,7 +43,7 @@ public final class CFormat1D extends IFormat<DoubleMatrix1D>
     @Override
     protected String format( final DoubleMatrix1D p_data )
     {
-        return MessageFormat.format( "[{0}]({2})", p_data.size(), FORMATTER.toString( p_data ) );
+        return MessageFormat.format( "[{0}]({1})", p_data.size(), FORMATTER.toString( p_data ) );
     }
 
 }

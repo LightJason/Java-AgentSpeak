@@ -23,7 +23,6 @@
 
 package lightjason.agent.action.buildin.math.blas.vector;
 
-import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import lightjason.agent.action.buildin.IBuildinAction;
@@ -35,19 +34,20 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 
 /**
- * creates a dense- or sparse-vector from a list
+ * creates a dense- or sparse-vector from as string
+ * seperator is comma, semicolon or space
  */
-public final class CFromList extends IBuildinAction
+public final class CParse extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CFromList()
+    public CParse()
     {
         super( 4 );
     }
@@ -63,17 +63,14 @@ public final class CFromList extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument is the list type
-        // optional second argument is matrix type (default dense-matrix)
-        final List<Double> l_data = CCommon.getRawValue( p_argument.get( 0 ) );
         switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
-                p_return.add( assign( l_data, new DenseDoubleMatrix1D( l_data.size() ) ) );
+                p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) ) );
                 break;
 
             case SPARSE:
-                p_return.add( assign( l_data, new SparseDoubleMatrix1D( l_data.size() ) ) );
+                p_return.add( CRawTerm.from( new SparseDoubleMatrix1D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) ) );
                 break;
 
             default:
@@ -82,16 +79,18 @@ public final class CFromList extends IBuildinAction
     }
 
     /**
-     * assigns the list values to the vector
+     * parses the string
      *
-     * @param p_data list
-     * @param p_vector vector
-     * @return term
+     * @param p_string string
+     * @return double array
      */
-    private static ITerm assign( final List<Double> p_data, final DoubleMatrix1D p_vector )
+    private static double[] parse( final String p_string )
     {
-        IntStream.range( 0, p_data.size() ).boxed().forEach( i -> p_vector.setQuick( i, p_data.get( i ) ) );
-        return CRawTerm.from( p_vector );
+        return Arrays.stream( p_string.split( ";|,|\\s" ) )
+                     .map( i -> i.trim() )
+                     .filter( i -> !i.isEmpty() )
+                     .mapToDouble( i -> Double.parseDouble( i ) )
+                     .toArray();
     }
 
 }

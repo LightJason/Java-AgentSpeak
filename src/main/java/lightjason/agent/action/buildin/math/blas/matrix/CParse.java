@@ -21,11 +21,10 @@
  * @endcond
  */
 
-package lightjason.agent.action.buildin.math.blas.vector;
+package lightjason.agent.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.SparseDoubleMatrix1D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.agent.action.buildin.math.blas.EType;
 import lightjason.language.CCommon;
@@ -35,19 +34,23 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CBoolean;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
 /**
- * creates a dense- or sparse-vector from a list
+ * creates a dense- or sparse-matrix from a string
+ * semicolon splits the rows, spaces / comma splits the columns
  */
-public final class CFromList extends IBuildinAction
+public final class CParse extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CFromList()
+    public CParse()
     {
         super( 4 );
     }
@@ -63,35 +66,63 @@ public final class CFromList extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument is the list type
-        // optional second argument is matrix type (default dense-matrix)
-        final List<Double> l_data = CCommon.getRawValue( p_argument.get( 0 ) );
         switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
-                p_return.add( assign( l_data, new DenseDoubleMatrix1D( l_data.size() ) ) );
+                p_return.add(
+                        CRawTerm.from( new DenseDoubleMatrix2D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) )
+                );
                 break;
 
             case SPARSE:
-                p_return.add( assign( l_data, new SparseDoubleMatrix1D( l_data.size() ) ) );
+                p_return.add(
+                        CRawTerm.from( new SparseDoubleMatrix2D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) )
+                );
                 break;
 
             default:
         }
+
         return CBoolean.from( true );
     }
 
     /**
-     * assigns the list values to the vector
+     * parse the string in a list of lists with doubles
      *
-     * @param p_data list
-     * @param p_vector vector
-     * @return term
+     * @param p_string string
+     * @return 2D double array
      */
-    private static ITerm assign( final List<Double> p_data, final DoubleMatrix1D p_vector )
+    private static double[][] parse( final String p_string )
     {
-        IntStream.range( 0, p_data.size() ).boxed().forEach( i -> p_vector.setQuick( i, p_data.get( i ) ) );
-        return CRawTerm.from( p_vector );
+        final String[] l_rows = p_string.split( ";" );
+        final List<List<Double>> l_matrix = new ArrayList<>();
+
+        final double[][] l_return = new double[l_rows.length][
+                Arrays.stream( l_rows )
+                      .map( i -> Arrays.stream( i.trim().split( ",|\\s" ) )
+                                       .map( j -> j.trim() )
+                                       .filter( j -> !j.isEmpty() )
+                                       .mapToDouble( j -> Double.parseDouble( j ) )
+                                       .boxed()
+                                       .collect( Collectors.toList() )
+                      )
+                      .mapToInt( i -> {
+                          l_matrix.add( i );
+                          return i.size();
+                      } )
+                      .max()
+                      .getAsInt()
+                ];
+
+        IntStream.range( 0, l_return.length )
+                 .boxed()
+                 .forEach( i ->
+                                   IntStream.range( 0, l_return[i].length )
+                                            .boxed()
+                                            .forEach( j -> l_return[i][j] = l_matrix.get( i ).get( j ) )
+                 );
+
+        return l_return;
     }
 
 }
