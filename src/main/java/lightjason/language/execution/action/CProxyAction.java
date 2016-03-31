@@ -58,7 +58,6 @@ import java.util.stream.IntStream;
  *
  * @note inner annotations cannot be used on the
  * grammer definition, so the inner annotations are ignored
- * @todo check subexecution order and results
  */
 public final class CProxyAction implements IExecution
 {

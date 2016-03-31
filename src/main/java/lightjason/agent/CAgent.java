@@ -56,7 +56,6 @@ import java.util.stream.Stream;
 /**
  * agent class
  *
- * @bug remove test plan execution
  * @bug inspector call incomplete
  */
 @SuppressWarnings( "serial" )
@@ -167,9 +166,6 @@ public class CAgent implements IAgent
         Arrays.stream( p_inspector ).parallel().forEach( i -> i.inspect( l_map ) );
     }
 
-    /**
-     * @bug incomplete
-     */
     @Override
     public IFuzzyValue<Boolean> trigger( final ITrigger p_event, final boolean... p_immediately )
     {
