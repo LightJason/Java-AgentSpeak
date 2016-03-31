@@ -32,9 +32,17 @@ second(true).
 
 +!main
     // @bug NPE
-    //: @>>( hallo(X), generic/typ/isstring(X) ) <- generic/print("unify 'hallo'", X)
-    //: >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <- generic/print("unify 'hallo'", X)
+    : >>( hallo(X), generic/typ/isstring(X) ) <-
+            generic/print("---", "first plan", "---");
+            generic/print("unification variables", X)
+
+    : >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <-
+        generic/print("---", "second plan", "---");
+        generic/print("unification variables", X)
+
     <-
+        generic/print("---", "third plan", "---");
+
         // --- manual individual & internal variables ----------------------------------------------------------------------------------------------------------
 
         generic/print("constants", Score, Cycle, MyConstInt, MyConstString);

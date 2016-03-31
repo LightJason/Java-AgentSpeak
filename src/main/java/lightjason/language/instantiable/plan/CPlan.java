@@ -137,17 +137,15 @@ public final class CPlan implements IPlan
     {
         if ( m_condition == null )
             return CBoolean.from( true );
-
-        /*
+/*
         final List<ITerm> l_return = new LinkedList<>();
-        if ( ( m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue() ) &&
-             ( l_return.size() == 1 ) )
+        if ( ( m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue() )
+             && ( l_return.size() == 1 ) )
         {
             System.out.println("###====>>>       " + l_return);
             return CBoolean.from( CCommon.getRawValue( l_return.get( 0 ) ) );
         }
-        */
-
+*/
         return CBoolean.from( true );
     }
 

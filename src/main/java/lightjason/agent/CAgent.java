@@ -45,7 +45,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -242,8 +241,8 @@ public class CAgent implements IAgent
             // check wakup-event otherwise suspend
             return this;
 
-        // run for each trigger the execution element
-        this.getTrigger().parallel().forEach( i -> this.execute( i ) );
+        // execute all possible plans
+        this.executeplan();
 
         // increment cycle and set the cycle time
         m_cycle++;
@@ -252,45 +251,37 @@ public class CAgent implements IAgent
         return this;
     }
 
-    /**
-     * returns all trigger
-     *
-     * @return trigger stream
-     *
-     * @note clones the trigger and clear the member trigger elements
-     */
-    protected final Stream<ITrigger> getTrigger()
-    {
-        final Set<ITrigger> l_trigger = new HashSet<>( m_trigger );
-        m_trigger.clear();
-        return Stream.concat(
-                l_trigger.parallelStream(),
-                m_beliefbase.getTrigger().parallelStream()
-        );
-    }
-
 
     /**
      * execute a plan based on a trigger
      *
-     * @param p_trigger trigger
      * @todo add plan data to running-plans set
      */
-    protected final void execute( final ITrigger p_trigger )
+    protected void executeplan()
     {
-        m_plans.get( p_trigger ).parallelStream()
-               // filter for possible trigger
-               .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
-               // unify variables in plan definition
-               .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
-               // avoid uninstantiated variables
-               .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
-               // initialize context
-               .map( i -> new ImmutablePair<>( i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
-               // check plan condition
-               .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
-               // execute plan
-               .forEach( i -> i.getRight().execute( i.getLeft(), false, null, null, null ) );
+        Stream.concat(
+                m_trigger.parallelStream(),
+                m_beliefbase.getTrigger().parallelStream()
+        ).forEach( j ->
+
+                           m_plans.get( j ).parallelStream()
+                                  // filter for possible trigger
+                                  .filter( i -> i.getTrigger().getType().equals( j.getType() ) )
+                                  // unify variables in plan definition
+                                  .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), j.getLiteral() ) ) )
+                                  // avoid uninstantiated variables
+                                  .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() )
+                                                                                                  .size() )
+                                  // initialize context
+                                  .map( i -> new ImmutablePair<>(
+                                          i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
+                                  // check plan condition
+                                  .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
+                                  // execute plan
+                                  .forEach( i -> i.getRight().execute( i.getLeft(), false, null, null, null ) )
+        );
+
+        m_trigger.clear();
     }
 
 }
