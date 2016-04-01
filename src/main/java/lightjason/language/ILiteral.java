@@ -63,6 +63,20 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     Stream<ILiteral> annotations( final IPath... p_path );
 
     /**
+     * check for empty values
+     *
+     * @return empty flag
+     */
+    boolean emptyValues();
+
+    /**
+     * check for empty annotations
+     *
+     * @return empty flag
+     */
+    boolean emptyAnnotations();
+
+    /**
      * returns the hash of the annotations
      *
      * @return hash

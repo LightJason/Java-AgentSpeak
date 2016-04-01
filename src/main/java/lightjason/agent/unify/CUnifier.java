@@ -44,6 +44,8 @@ import java.util.stream.Collectors;
 
 /**
  * unification algorithm
+ *
+ * @bug empty literal create a successful unification
  */
 public final class CUnifier implements IUnifier
 {

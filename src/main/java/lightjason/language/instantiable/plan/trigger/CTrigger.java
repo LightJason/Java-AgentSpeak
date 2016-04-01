@@ -33,8 +33,6 @@ import java.text.MessageFormat;
 
 /**
  * event with literal data
- *
- * @bug hashcode does not distinguish trigger with and without variables - agent plan execution is not correct
  */
 public final class CTrigger implements ITrigger
 {

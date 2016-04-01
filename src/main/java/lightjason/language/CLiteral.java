@@ -253,6 +253,18 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final boolean emptyValues()
+    {
+        return m_values.isEmpty();
+    }
+
+    @Override
+    public final boolean emptyAnnotations()
+    {
+        return m_annotations.isEmpty();
+    }
+
+    @Override
     public final int annotationhash()
     {
         return m_annotationhash;
