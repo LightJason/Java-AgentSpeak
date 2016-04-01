@@ -44,8 +44,6 @@ import java.util.stream.Collectors;
 
 /**
  * unification algorithm
- *
- * @bug empty literal create a successful unification
  */
 public final class CUnifier implements IUnifier
 {
@@ -190,6 +188,7 @@ public final class CUnifier implements IUnifier
     {
         return p_agent.getBeliefBase()
                       .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                      .filter( i -> ( i.emptyValues() == p_literal.emptyValues() ) && ( i.emptyAnnotations() == p_literal.emptyAnnotations() ) )
                       .map( i -> this.literalunify( p_literal, i ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
