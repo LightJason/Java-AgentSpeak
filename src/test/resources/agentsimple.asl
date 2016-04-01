@@ -30,7 +30,9 @@ second(true).
 
 // --- plans ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-+!mytest <- generic/print("my test plan").
++!mytest <- generic/print("my test plan without variable").
+
++!mytest(X) <- generic/print("my test plan with variable", X).
 
 +!main
     : >>( hallo(X), generic/typ/isstring(X) ) <-
@@ -313,6 +315,7 @@ second(true).
         ?main;
 
         // run plan immediatly
+        !!mytest(5);
         !!mytest;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

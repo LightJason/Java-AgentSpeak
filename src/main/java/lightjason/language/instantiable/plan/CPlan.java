@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -191,12 +192,18 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    @SuppressWarnings( "serial" )
+    @SuppressWarnings( {"serial", "unchecked"} )
     public final Set<IVariable<?>> getVariables()
     {
         return new HashSet<IVariable<?>>()
         {{
             m_action.stream().flatMap( i -> i.getVariables().stream() ).forEach( i -> add( i ) );
+
+            addAll( Stream.concat(
+                    CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() ),
+                    CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
+            ).filter( i -> i instanceof IVariable<?> ).map( i -> ( (IVariable<?>) i ).shallowcopy() ).collect( Collectors.toSet() ) );
+
             if ( m_condition != null )
                 addAll( m_condition.getVariables() );
         }};

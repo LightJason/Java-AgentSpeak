@@ -26,6 +26,7 @@ package lightjason.agent;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.beliefbase.IView;
@@ -137,8 +138,8 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
-        m_plans = HashMultimap.create( p_configuration.getPlans() );
-        m_rules = HashMultimap.create( p_configuration.getRules() );
+        m_plans = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getPlans() ) );
+        m_rules = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getRules() ) );
 
         if ( p_configuration.getInitialGoal() != null )
             m_trigger.add( p_configuration.getInitialGoal() );
@@ -232,6 +233,18 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public final Multimap<ITrigger, IPlan> getPlans()
+    {
+        return m_plans;
+    }
+
+    @Override
+    public final Multimap<IPath, IRule> getRules()
+    {
+        return m_rules;
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format(
@@ -270,6 +283,7 @@ public class CAgent implements IAgent
      * execute plan
      *
      * @param p_trigger trigger
+     * @todo return fuzzy value
      */
     protected void executeplan( final ITrigger p_trigger )
     {

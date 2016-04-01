@@ -98,6 +98,10 @@ public final class CCommon
                             // get plan variables
                             addAll( p_instance.getVariables() );
 
+                            // add all optional variables and replace existsing
+                            removeAll( p_variables );
+                            addAll( p_variables );
+
                             // add customized variables and replace existing
                             if ( p_variablebuilder != null )
                                 p_variablebuilder.generate( p_agent, p_instance ).stream().forEach( i -> {
@@ -114,8 +118,6 @@ public final class CCommon
                                 add( i );
                             } );
 
-                            // add all optional variables
-                            addAll( p_variables );
                         }}
                 )
         );

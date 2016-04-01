@@ -23,11 +23,14 @@
 
 package lightjason.agent;
 
+import com.google.common.collect.Multimap;
 import lightjason.beliefbase.IView;
 import lightjason.common.IPath;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Map;
 import java.util.Set;
@@ -113,5 +116,17 @@ public interface IAgent extends Callable<IAgent>
      * @return cycle
      */
     long getCycle();
+
+    /**
+     * returns the internal map of plans
+     *
+     * @return plan map
+     */
+    Multimap<ITrigger, IPlan> getPlans();
+
+    /**
+     * returns the internal map of rules
+     */
+    Multimap<IPath, IRule> getRules();
 
 }
