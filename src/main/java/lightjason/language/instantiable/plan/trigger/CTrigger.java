@@ -33,6 +33,8 @@ import java.text.MessageFormat;
 
 /**
  * event with literal data
+ *
+ * @bug hashcode does not distinguish trigger with and without variables - agent plan execution is not correct
  */
 public final class CTrigger implements ITrigger
 {
@@ -48,6 +50,10 @@ public final class CTrigger implements ITrigger
      * event type
      */
     private final EType m_event;
+    /**
+     * hashcode
+     */
+    private final int m_hashcode;
 
     /**
      * ctor
@@ -63,6 +69,8 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = lightjason.language.CCommon.getVariableFrequency( p_literal ).size();
+        m_hashcode = m_event.hashCode()
+                     + m_literal.getFQNFunctor().hashCode();
     }
 
     /**
@@ -80,7 +88,7 @@ public final class CTrigger implements ITrigger
     @Override
     public final int hashCode()
     {
-        return m_event.hashCode() + m_literal.getFQNFunctor().hashCode();
+        return m_hashcode;
     }
 
     @Override
