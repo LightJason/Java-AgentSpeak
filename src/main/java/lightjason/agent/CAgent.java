@@ -292,14 +292,16 @@ public class CAgent implements IAgent
                // filter for possible trigger
                .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
 
+               // filter trigger-literal for avoid duplicated instantiation on non-existing values / annotations
+               .filter( i -> ( i.getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
+                             && ( i.getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
+               )
+
                // unify variables in plan definition
                .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
 
-               // avoid uninstantiated variables and duplicated instantiation on non-existing values / annotations
-               .filter( i -> ( i.getLeft().getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
-                             && ( i.getLeft().getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
-                             && ( i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
-               )
+               // avoid uninstantiated variables
+               .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
 
                // initialize context
                .map( i -> new ImmutablePair<>( i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
