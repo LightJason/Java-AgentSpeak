@@ -60,7 +60,7 @@ public final class CTestGoal extends IBaseExecution<IPath>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( p_context.getAgent().getRunningPlans().contains( m_value ) );
+        return CBoolean.from( p_context.getAgent().getRunningPlans().keySet().contains( m_value ) );
     }
 
 }

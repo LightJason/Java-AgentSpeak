@@ -24,6 +24,7 @@
 package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -33,6 +34,7 @@ import lightjason.beliefbase.IView;
 import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
+import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
@@ -46,7 +48,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -100,9 +101,6 @@ public class CAgent implements IAgent
      * @note must be thread-safe and need not to be null
      */
     protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
-
-
-
     /**
      * curent agent cycle
      */
@@ -118,7 +116,7 @@ public class CAgent implements IAgent
     /**
      * running plans (thread-safe)
      */
-    protected final Set<IPath> m_runningplans = Sets.newConcurrentHashSet();
+    protected final Multimap<IPath, ILiteral> m_runningplans = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
     /**
      * hibernate state
      */
@@ -190,9 +188,9 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final Set<IPath> getRunningPlans()
+    public final Multimap<IPath, ILiteral> getRunningPlans()
     {
-        return Collections.unmodifiableSet( m_runningplans );
+        return ImmutableMultimap.copyOf( m_runningplans );
     }
 
     @Override
@@ -304,15 +302,15 @@ public class CAgent implements IAgent
                .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
 
                // initialize context
-               .map( i -> new ImmutablePair<>( i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ), i.getLeft() ) )
+               .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ) ) )
 
                // check plan condition
-               .filter( i -> i.getRight().condition( i.getLeft() ).getValue() )
+               .filter( i -> i.getLeft().condition( i.getRight() ).getValue() )
 
                // execute plan and push plan to running plan set)
                .forEach( i -> {
-                   m_runningplans.add( i.getRight().getTrigger().getLiteral().getFQNFunctor() );
-                   i.getRight().execute( i.getLeft(), false, null, null, null );
+                   m_runningplans.put( i.getLeft().getTrigger().getLiteral().getFQNFunctor(), i.getLeft().getTrigger().getLiteral().unify( i.getRight() ) );
+                   i.getLeft().execute( i.getRight(), false, null, null, null );
                } );
     }
 
