@@ -38,32 +38,45 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
 {
 
     @Override
-    public Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    {
+        return CBooleanConjunction::factory;
+    }
+
+    @Override
+    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    {
+        return ( i, j ) -> {
+            i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) );
+            i.setValue( i.getValue() && j.getValue() );
+        };
+    }
+
+    @Override
+    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
         return null;
     }
 
     @Override
-    public BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
     {
         return null;
     }
 
     @Override
-    public BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
+    public final Set<Characteristics> characteristics()
     {
         return null;
     }
 
-    @Override
-    public Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    /**
+     * factory of the initialize value
+     *
+     * @return fuzzy value
+     */
+    private static IFuzzyValueMutable<Boolean> factory()
     {
-        return null;
-    }
-
-    @Override
-    public Set<Characteristics> characteristics()
-    {
-        return null;
+        return CFuzzyValueMutable.from( true, 1 );
     }
 }
