@@ -27,6 +27,7 @@ import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 
@@ -80,6 +81,12 @@ public final class CBoolean implements IFuzzyValue<Boolean>
     public final double getFuzzy()
     {
         return m_fuzzy;
+    }
+
+    @Override
+    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    {
+        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
     @Override

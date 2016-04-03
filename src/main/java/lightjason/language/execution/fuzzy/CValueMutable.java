@@ -23,6 +23,9 @@
 
 package lightjason.language.execution.fuzzy;
 
+import java.util.Arrays;
+
+
 /**
  * mutable fuzzy boolean
  */
@@ -66,5 +69,11 @@ public final class CValueMutable<T> implements IFuzzyValueMutable<T>
     public final double getFuzzy()
     {
         return m_fuzzy;
+    }
+
+    @Override
+    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    {
+        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 }

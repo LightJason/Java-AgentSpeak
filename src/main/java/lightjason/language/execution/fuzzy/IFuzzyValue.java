@@ -44,4 +44,12 @@ public interface IFuzzyValue<T>
      */
     double getFuzzy();
 
+    /**
+     * checkes assignable of the value
+     *
+     * @param p_class class
+     * @return assignable (on null always true)
+     */
+    boolean isValueAssignableTo( final Class<?>... p_class );
+
 }
