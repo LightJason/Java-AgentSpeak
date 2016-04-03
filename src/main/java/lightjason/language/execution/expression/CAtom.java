@@ -29,7 +29,7 @@ import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
@@ -69,7 +69,7 @@ public class CAtom implements IExpression
     {
         final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
         p_return.add( CRawTerm.from( CCommon.getRawValue( l_term ) ).throwNotAllocated( l_term.getFQNFunctor().toString() ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

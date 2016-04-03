@@ -29,7 +29,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
@@ -75,7 +75,7 @@ public final class CCreate extends IBuildinAction
                 )
         ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 

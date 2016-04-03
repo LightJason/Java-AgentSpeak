@@ -26,7 +26,7 @@ package lightjason.agent.action.buildin.math.linearprogram;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
@@ -76,7 +76,7 @@ public final class CValueConstraint extends IConstraint
                 )
         );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

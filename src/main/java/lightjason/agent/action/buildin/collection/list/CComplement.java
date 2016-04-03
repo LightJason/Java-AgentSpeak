@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
@@ -66,7 +66,7 @@ public final class CComplement extends IBuildinAction
         l_result.removeAll( CCommon.<Collection<?>, ITerm>getRawValue( p_argument.get( 1 ) ) );
         p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

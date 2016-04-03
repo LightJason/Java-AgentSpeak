@@ -38,7 +38,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -179,12 +179,12 @@ public class CAgent implements IAgent
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
         {
             this.executeplan( p_trigger );
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
         // add trigger for the next cycle
         m_trigger.add( p_trigger );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Base64;
@@ -70,7 +70,7 @@ public final class CBase64Decode extends IBuildinAction
                           .map( i -> CRawTerm.from( i ) )
                           .collect( Collectors.toList() )
         );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

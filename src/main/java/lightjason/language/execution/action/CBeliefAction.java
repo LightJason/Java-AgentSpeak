@@ -27,7 +27,7 @@ import lightjason.common.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -87,7 +87,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
                 throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
         }
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     /**

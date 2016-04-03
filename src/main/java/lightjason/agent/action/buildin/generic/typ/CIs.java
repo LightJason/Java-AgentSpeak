@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -66,11 +66,11 @@ public final class CIs extends IBuildinAction
                                           .isAssignableFrom( CCommon.getRawValue( p_argument.get( 0 ) ).getClass() );
 
             p_return.add( CRawTerm.from( l_return ) );
-            return CBoolean.from( l_return );
+            return CFuzzyValue.from( l_return );
         }
         catch ( final ClassNotFoundException p_exception )
         {
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
         }
 
     }

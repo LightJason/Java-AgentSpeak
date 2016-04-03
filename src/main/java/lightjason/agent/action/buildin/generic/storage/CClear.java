@@ -25,7 +25,7 @@ package lightjason.agent.action.buildin.generic.storage;
 
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public final class CClear extends IStorage
     {
         p_context.getAgent().getStorage().keySet().parallelStream().filter( i -> !m_forbidden.contains( i ) ).forEach(
                 i -> p_context.getAgent().getStorage().remove( i ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

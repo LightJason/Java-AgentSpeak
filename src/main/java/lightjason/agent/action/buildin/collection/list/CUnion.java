@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
@@ -67,7 +67,7 @@ public final class CUnion extends IBuildinAction
                 p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

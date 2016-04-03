@@ -31,7 +31,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
@@ -65,10 +65,10 @@ public final class CUnifier implements IUnifier
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         CCommon.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class CUnifier implements IUnifier
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = l_variables.parallelStream()
@@ -102,10 +102,10 @@ public final class CUnifier implements IUnifier
 
         // if no match
         if ( l_result.isEmpty() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         CCommon.updatecontext( p_context, l_result.parallelStream() );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override
@@ -116,7 +116,7 @@ public final class CUnifier implements IUnifier
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = l_variables.stream()
@@ -139,10 +139,10 @@ public final class CUnifier implements IUnifier
 
         // if no match
         if ( l_result.isEmpty() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         CCommon.updatecontext( p_context, l_result.parallelStream() );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

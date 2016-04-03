@@ -31,7 +31,7 @@ import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.ClassUtils;
 
@@ -288,10 +288,10 @@ public final class CBind<T>
             }
             catch ( final Throwable p_throwable )
             {
-                return CBoolean.from( false );
+                return CFuzzyValue.from( false );
             }
 
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
     }
@@ -382,7 +382,7 @@ public final class CBind<T>
             final Object l_reference = p_context.getAgent().getStorage().get(
                     m_storagename != null ? m_storagename : CCommon.getRawValue( p_argument.get( 0 ) ) );
             if ( l_reference == null )
-                return CBoolean.from( false );
+                return CFuzzyValue.from( false );
 
             try
             {
@@ -392,11 +392,11 @@ public final class CBind<T>
             }
             catch ( final Throwable p_throwable )
             {
-                return CBoolean.from( false );
+                return CFuzzyValue.from( false );
             }
 
 
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
     }

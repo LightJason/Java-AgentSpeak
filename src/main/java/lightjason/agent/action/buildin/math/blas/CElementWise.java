@@ -31,7 +31,7 @@ import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -62,32 +62,32 @@ public class CElementWise extends IBuildinAction
                         CCommon.getRawValue( p_argument.get( 0 ) ),
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
             case "-":
                 this.minus(
                         CCommon.getRawValue( p_argument.get( 0 ) ),
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
             case "*":
                 this.multiply(
                         CCommon.getRawValue( p_argument.get( 0 ) ),
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
             case "/":
                 this.divide(
                         CCommon.getRawValue( p_argument.get( 0 ) ),
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
 
             default:
-                return CBoolean.from( false );
+                return CFuzzyValue.from( false );
         }
     }
 

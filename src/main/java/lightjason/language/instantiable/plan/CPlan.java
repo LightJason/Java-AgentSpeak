@@ -33,7 +33,7 @@ import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
@@ -137,10 +137,10 @@ public final class CPlan implements IPlan
     public final IFuzzyValue<Boolean> condition( final IContext p_context )
     {
         if ( m_condition == null )
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
 
         final List<ITerm> l_return = new LinkedList<>();
-        return CBoolean.from(
+        return CFuzzyValue.from(
                 m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue()
                 && ( l_return.size() == 1 )
         );
@@ -167,12 +167,12 @@ public final class CPlan implements IPlan
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        return CBoolean.from(
+        return CFuzzyValue.from(
                 ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
                   ? m_action.parallelStream()
                   : m_action.stream()
                 ).map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
-                 .allMatch( CBoolean.isTrue() )
+                 .allMatch( CFuzzyValue.isTrue() )
                 || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
         );
     }

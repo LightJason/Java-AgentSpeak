@@ -28,7 +28,7 @@ import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
@@ -81,7 +81,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
         if ( l_variable.isValueAssignableTo( Integer.class ) )
             l_variable.set( (T) new Integer( l_variable.get().intValue() - 1 ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

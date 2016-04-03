@@ -27,7 +27,7 @@ import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
@@ -70,7 +70,7 @@ public final class CAddStatisticValue extends IBuildinAction
         if ( l_statistic instanceof DescriptiveStatistics )
             return this.push( (DescriptiveStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );
 
-        return CBoolean.from( false );
+        return CFuzzyValue.from( false );
     }
 
     /**
@@ -83,7 +83,7 @@ public final class CAddStatisticValue extends IBuildinAction
     private IFuzzyValue<Boolean> push( final SummaryStatistics p_statistic, final List<ITerm> p_value )
     {
         CCommon.flatList( p_value ).stream().forEach( i -> p_statistic.addValue( CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     /**
@@ -96,6 +96,6 @@ public final class CAddStatisticValue extends IBuildinAction
     private IFuzzyValue<Boolean> push( final DescriptiveStatistics p_statistic, final List<ITerm> p_value )
     {
         CCommon.flatList( p_value ).stream().forEach( i -> p_statistic.addValue( CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 }

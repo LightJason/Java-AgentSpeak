@@ -29,7 +29,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.io.UnsupportedEncodingException;
@@ -65,11 +65,11 @@ public final class CHash extends IBuildinAction
                     this.hash( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getBytes( p_argument.subList( 1, p_argument.size() ) ) )
             ) );
 
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
         catch ( final UnsupportedEncodingException | NoSuchAlgorithmException p_exception )
         {
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
         }
     }
 

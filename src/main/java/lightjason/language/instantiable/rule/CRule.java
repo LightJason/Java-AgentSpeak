@@ -31,7 +31,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
@@ -82,7 +82,7 @@ public final class CRule implements IRule
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( false );
+        return CFuzzyValue.from( false );
     }
 
     @Override

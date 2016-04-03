@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public final class CIsNumeric extends IBuildinAction
         final boolean l_return = CCommon.getRawValue( p_argument.get( 0 ) ) instanceof Number;
 
         p_return.add( CRawTerm.from( l_return ) );
-        return CBoolean.from( l_return );
+        return CFuzzyValue.from( l_return );
     }
 
 }

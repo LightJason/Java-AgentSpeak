@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -86,7 +86,7 @@ public final class CInTriangle extends IBuildinAction
         if ( ( l_s <= 0 ) || ( l_t <= 0 ) )
         {
             p_return.add( CRawTerm.from( false ) );
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
         p_return.add( CRawTerm.from(
@@ -95,7 +95,7 @@ public final class CInTriangle extends IBuildinAction
                             + l_point.get( 2 ) * ( l_point.get( 5 ) - l_point.get( 7 ) )
                             + l_point.get( 4 ) * l_point.get( 7 )
         ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

@@ -28,7 +28,7 @@ import lightjason.error.CRuntimeException;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -54,7 +54,7 @@ public final class CThrow extends IBuildinAction
         if ( CCommon.getRawValue( p_argument.get( 0 ) ) )
             throw p_argument.size() == 1 ? new CRuntimeException( p_context ) : new CRuntimeException(
                     CCommon.<String, ITerm>getRawValue( p_argument.get( 1 ) ), p_context );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

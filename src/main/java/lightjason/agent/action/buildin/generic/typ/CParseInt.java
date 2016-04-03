@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -64,11 +64,11 @@ public final class CParseInt extends IBuildinAction
         try
         {
             p_return.add( CRawTerm.from( Long.parseLong( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
         catch ( final Exception p_exception )
         {
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
         }
 
     }

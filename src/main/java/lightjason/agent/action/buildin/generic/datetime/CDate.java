@@ -27,7 +27,7 @@ import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.time.LocalDate;
@@ -67,7 +67,7 @@ public final class CDate extends IBuildinAction
         p_return.add( CCommon.getRawValue( l_date.getDayOfWeek() ) );
         p_return.add( CCommon.getRawValue( l_date.getDayOfYear() ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

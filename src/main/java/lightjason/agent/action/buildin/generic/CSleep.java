@@ -26,7 +26,7 @@ package lightjason.agent.action.buildin.generic;
 import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public final class CSleep extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( p_context.getAgent().hibernate( true ) );
+        return CFuzzyValue.from( p_context.getAgent().hibernate( true ) );
     }
 
 }

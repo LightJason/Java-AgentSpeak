@@ -28,7 +28,7 @@ import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public final class CReverse extends IBuildinAction
     {
         // all arguments are list references
         p_return.addAll( Lists.reverse( CCommon.flatList( p_argument ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

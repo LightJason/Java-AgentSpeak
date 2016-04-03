@@ -29,7 +29,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -68,15 +68,15 @@ public final class CAssign extends IBuildinAction
         if ( l_value instanceof Double )
         {
             p_return.add( CRawTerm.from( l_matrix.assign( (Double) l_value ) ) );
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
         if ( l_value instanceof DoubleMatrix2D )
         {
             p_return.add( CRawTerm.from( l_matrix.assign( (DoubleMatrix2D) l_value ) ) );
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
-        return CBoolean.from( false );
+        return CFuzzyValue.from( false );
     }
 }

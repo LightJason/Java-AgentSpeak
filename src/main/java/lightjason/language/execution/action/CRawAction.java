@@ -29,7 +29,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.HashSet;
@@ -108,7 +108,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
     private IFuzzyValue<Boolean> getTypedResult( final Boolean p_execution, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( p_execution ) );
-        return CBoolean.from( p_execution );
+        return CFuzzyValue.from( p_execution );
     }
 
     /**
@@ -126,13 +126,13 @@ public final class CRawAction<T> extends IBaseExecution<T>
         final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_execution );
 
         if ( !l_value.isAllocated() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         if ( l_value.isValueAssignableTo( Boolean.class ) )
-            return CBoolean.from( l_value.getTyped() );
+            return CFuzzyValue.from( l_value.getTyped() );
 
         p_return.add( CRawTerm.from( l_value.get() ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 
@@ -154,9 +154,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
     {
         final List<ITerm> l_return = new LinkedList<>();
         if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return, p_annotation ).getValue() ) || ( l_return.isEmpty() ) )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
-        return CBoolean.from( CCommon.getRawValue( l_return.get( 0 ) ) );
+        return CFuzzyValue.from( CCommon.getRawValue( l_return.get( 0 ) ) );
     }
 
 
@@ -171,6 +171,6 @@ public final class CRawAction<T> extends IBaseExecution<T>
     private IFuzzyValue<Boolean> getTypedResult( final T p_execution, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( p_execution ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 }

@@ -31,7 +31,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IBaseBinary;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
@@ -69,10 +69,10 @@ public final class CComparable extends IBaseBinary
         // run left-hand- and right-hand-side argument
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
@@ -82,14 +82,14 @@ public final class CComparable extends IBaseBinary
         {
             case EQUAL:
                 p_return.add( CRawTerm.from( l_argument.get( 0 ).equals( l_argument.get( 1 ) ) ) );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
             case NOTEQUAL:
                 p_return.add( CRawTerm.from( !l_argument.get( 0 ).equals( l_argument.get( 1 ) ) ) );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
             default:
-                return CBoolean.from( false );
+                return CFuzzyValue.from( false );
         }
     }
 }

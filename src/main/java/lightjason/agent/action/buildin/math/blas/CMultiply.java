@@ -30,7 +30,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -77,7 +77,7 @@ public final class CMultiply extends IAlgebra
         if ( ( l_first instanceof DoubleMatrix1D ) && ( l_second instanceof DoubleMatrix2D ) )
             return this.multiplyMatrixVector( (DoubleMatrix2D) l_second, (DoubleMatrix1D) l_first, p_return );
 
-        return CBoolean.from( false );
+        return CFuzzyValue.from( false );
     }
 
     /**
@@ -91,7 +91,7 @@ public final class CMultiply extends IAlgebra
     private IFuzzyValue<Boolean> multiplyVectorVector( final DoubleMatrix1D p_first, final DoubleMatrix1D p_second, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( m_algebra.multOuter( p_first, p_second, null ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     /**
@@ -105,7 +105,7 @@ public final class CMultiply extends IAlgebra
     private IFuzzyValue<Boolean> multiplyMatrixVector( final DoubleMatrix2D p_first, final DoubleMatrix1D p_second, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( m_algebra.mult( p_first, p_second ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     /**
@@ -119,7 +119,7 @@ public final class CMultiply extends IAlgebra
     private IFuzzyValue<Boolean> multiplyVectorVector( final DoubleMatrix2D p_first, final DoubleMatrix2D p_second, final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( m_algebra.mult( p_first, p_second ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

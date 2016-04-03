@@ -29,7 +29,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -79,7 +79,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
         final List<ITerm> l_argument = new LinkedList<>();
         if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
              ( l_argument.size() != 1 ) )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         return CCommon.getRawValue( l_argument.get( 0 ) )
                ? m_true.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_return, Collections.<ITerm>emptyList() )

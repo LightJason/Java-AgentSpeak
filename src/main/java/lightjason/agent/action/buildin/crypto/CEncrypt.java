@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -79,7 +79,7 @@ public final class CEncrypt extends IBuildinAction
                           ).filter( i -> i != null ).map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) ).collect( Collectors.toList() )
         );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -62,11 +62,11 @@ public final class CCreateKey extends IBuildinAction
             if ( l_key.getRight() != null )
                 p_return.add( CRawTerm.from( l_key.getRight() ) );
 
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
         catch ( final NoSuchAlgorithmException p_exception )
         {
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
         }
     }
 

@@ -36,7 +36,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
@@ -162,7 +162,7 @@ public final class CProxyAction implements IExecution
         )
         {
             p_return.add( m_value );
-            return CBoolean.from( true );
+            return CFuzzyValue.from( true );
         }
 
         @Override

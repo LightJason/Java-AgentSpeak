@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -71,7 +71,7 @@ public final class CInCircle extends IBuildinAction
                 Math.hypot( l_point.get( 0 ) - l_point.get( 2 ), l_point.get( 1 ) - l_point.get( 3 ) ) <= Math.pow( l_point.get( 4 ), 2 )
         ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

@@ -29,7 +29,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -68,7 +68,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     )
     {
         this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.getRawValue( m_righthand ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

@@ -28,7 +28,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -75,10 +75,10 @@ public final class CVariableUnify extends CDefaultUnify
         final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literalunify( m_value, CCommon.getRawValue(
                 CCommon.replaceFromContext( p_context, m_constraint ) ) );
         if ( l_variables.size() != m_variablenumber )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         CCommon.updatecontext( p_context, l_variables.stream() );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

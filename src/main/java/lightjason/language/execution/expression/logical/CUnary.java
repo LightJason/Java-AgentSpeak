@@ -31,7 +31,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IBaseUnary;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
@@ -66,7 +66,7 @@ public final class CUnary extends IBaseUnary
         final List<ITerm> l_argument = new LinkedList<>();
         if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
              ( l_argument.size() != 1 ) )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
 
         switch ( m_operator )
@@ -75,10 +75,10 @@ public final class CUnary extends IBaseUnary
                 p_return.add( CRawTerm.from(
                         !lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
                 ) );
-                return CBoolean.from( true );
+                return CFuzzyValue.from( true );
 
             default:
-                return CBoolean.from( false );
+                return CFuzzyValue.from( false );
         }
     }
 

@@ -26,7 +26,7 @@ package lightjason.language.execution.action;
 import lightjason.common.IPath;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -60,7 +60,7 @@ public final class CTestGoal extends IBaseExecution<IPath>
                                                final List<ITerm> p_annotation
     )
     {
-        return CBoolean.from( p_context.getAgent().getRunningPlans().keySet().contains( m_value ) );
+        return CFuzzyValue.from( p_context.getAgent().getRunningPlans().keySet().contains( m_value ) );
     }
 
 }

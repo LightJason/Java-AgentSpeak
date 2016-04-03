@@ -23,41 +23,63 @@
 
 package lightjason.language.execution.fuzzy;
 
+import lightjason.common.CCommon;
+import lightjason.error.CIllegalArgumentException;
+
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 
 /**
- * mutable fuzzy boolean
+ * immutable fuzzy value
  */
-public final class CValueMutable<T> implements IFuzzyValueMutable<T>
+public final class CFuzzyValue<T> implements IFuzzyValue<T>
 {
     /**
      * value
      */
-    private T m_value;
-    private double m_fuzzy;
+    private final T m_value;
+    /**
+     * fuzzy value
+     */
+    private final double m_fuzzy;
 
-
-
-    @Override
-    public final IFuzzyValueMutable<T> setValue( final T p_value )
+    /**
+     * ctor
+     *
+     * @param p_value fuzzy value
+     */
+    public CFuzzyValue( final IFuzzyValue<T> p_value )
     {
+        this( p_value.getValue(), p_value.getFuzzy() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value value
+     */
+    public CFuzzyValue( final T p_value )
+    {
+        this( p_value, 1 );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_value value
+     * @param p_fuzzy fuzzy
+     */
+    public CFuzzyValue( final T p_value, final double p_fuzzy )
+    {
+        if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_fuzzy ) );
+
+        m_fuzzy = p_fuzzy;
         m_value = p_value;
-        return this;
     }
 
-    @Override
-    public final IFuzzyValueMutable<T> setFuzzy( final double p_value )
-    {
-        m_fuzzy = p_value;
-        return this;
-    }
-
-    @Override
-    public final IFuzzyValue<T> immutable()
-    {
-        return null;
-    }
 
     @Override
     public final T getValue()
@@ -75,5 +97,49 @@ public final class CValueMutable<T> implements IFuzzyValueMutable<T>
     public final boolean isValueAssignableTo( final Class<?>... p_class )
     {
         return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
+    }
+
+    /**
+     * check fuzzy-trueness
+     *
+     * @return predicate
+     * @bug remove
+     */
+    @Deprecated
+    public static Predicate<IFuzzyValue<Boolean>> isTrue()
+    {
+        return p -> p.getValue();
+    }
+
+
+    /**
+     * factory
+     *
+     * @param p_value value
+     * @tparam N fuzzy type
+     * @return fuzzy value
+     */
+    public static <N> IFuzzyValue<N> from( final N p_value )
+    {
+        return new CFuzzyValue<>( p_value );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_value value
+     * @param p_fuzzy fuzzy value
+     * @tparam N fuzzy type
+     * @return fuzzy value
+     */
+    public static <N> IFuzzyValue<N> from( final N p_value, final double p_fuzzy )
+    {
+        return new CFuzzyValue<>( p_value, p_fuzzy );
     }
 }

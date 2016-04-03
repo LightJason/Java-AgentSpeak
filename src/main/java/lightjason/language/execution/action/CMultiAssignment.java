@@ -29,7 +29,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -72,7 +72,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         final List<ITerm> l_result = new LinkedList<>();
         if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result, Collections.<ITerm>emptyList() ).getValue() ) ||
              ( l_result.isEmpty() ) )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
 
         // position matching on list index
@@ -91,7 +91,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
                     CCommon.getRawValue( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
             );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

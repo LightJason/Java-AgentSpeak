@@ -27,7 +27,7 @@ import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public final class CKeys extends IBuildinAction
     {
         // first argument map reference
         p_return.add( CCommon.getRawValue( CCommon.<Map<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) ).keySet() ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

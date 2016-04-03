@@ -30,7 +30,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.CContext;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -110,14 +110,14 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         // run initialization
         final List<ITerm> l_initialization = new LinkedList<>();
         if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).getValue() )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         // run lambda expression
         final List<?> l_return = m_parallel ? this.executeParallel( p_context, l_initialization ) : this.executeSequential( p_context, l_initialization );
         if ( m_return != null )
             ( (IVariable<List<?>>) CCommon.replaceFromContext( p_context, m_return ) ).set( l_return );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

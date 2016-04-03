@@ -27,7 +27,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Arrays;
@@ -82,7 +82,7 @@ public final class CExists extends IStorage
     {
         final String l_key = CCommon.getRawValue( p_argument.get( 0 ) );
         p_return.add( CRawTerm.from( ( !m_forbidden.contains( l_key ) ) && ( p_context.getAgent().getStorage().containsKey( l_key ) ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

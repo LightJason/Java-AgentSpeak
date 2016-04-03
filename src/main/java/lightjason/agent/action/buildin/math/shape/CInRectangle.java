@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public final class CInRectangle extends IBuildinAction
                 && l_point.get( 3 ) <= l_point.get( 1 ) && l_point.get( 1 ) <= l_point.get( 5 )
         ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

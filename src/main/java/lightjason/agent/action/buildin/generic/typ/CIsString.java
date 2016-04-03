@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public final class CIsString extends IBuildinAction
         final boolean l_return = ( l_value instanceof String ) || ( l_value instanceof Character );
 
         p_return.add( CRawTerm.from( l_return ) );
-        return CBoolean.from( l_return );
+        return CFuzzyValue.from( l_return );
     }
 
 }

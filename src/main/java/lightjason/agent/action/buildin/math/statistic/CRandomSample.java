@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
@@ -79,7 +79,7 @@ public final class CRandomSample extends IBuildinAction
         else
             p_return.add( CRawTerm.from( CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) ).sample() ) );
 
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

@@ -27,7 +27,7 @@ import lightjason.agent.action.buildin.IBuildinAction;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class CCycleTime extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from( System.nanoTime() - p_context.getAgent().getLastCycleTime() ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

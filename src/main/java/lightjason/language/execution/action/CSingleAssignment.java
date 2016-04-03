@@ -28,7 +28,7 @@ import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
@@ -70,10 +70,10 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
         final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute(
                 p_context, p_parallel, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() );
         if ( ( !l_rightreturn.getValue() ) || ( l_return.isEmpty() ) )
-            return CBoolean.from( false );
+            return CFuzzyValue.from( false );
 
         ( (IVariable<?>) CCommon.replaceFromContext( p_context, m_value ) ).set( CCommon.getRawValue( l_return.get( 0 ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
     @Override

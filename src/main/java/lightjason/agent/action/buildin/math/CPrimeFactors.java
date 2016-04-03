@@ -28,7 +28,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.primes.Primes;
 
@@ -53,7 +53,7 @@ public final class CPrimeFactors extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from( Primes.nextPrime( CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue() ) ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }

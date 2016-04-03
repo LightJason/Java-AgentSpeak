@@ -29,7 +29,7 @@ import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CBoolean;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public final class CAsMap extends IBuildinAction
         p_return.add( CRawTerm.from(
                 CCommon.<HashMultimap<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) ).asMap()
         ) );
-        return CBoolean.from( true );
+        return CFuzzyValue.from( true );
     }
 
 }
