@@ -23,55 +23,41 @@
 
 package lightjason.language.execution.fuzzy;
 
-import lightjason.common.CCommon;
-import lightjason.error.CIllegalArgumentException;
-
-import java.text.MessageFormat;
-import java.util.function.Predicate;
-
-
 /**
- * boolean fuzzy value
+ * mutable fuzzy boolean
  */
-public final class CBoolean implements IFuzzyValue<Boolean>
+public final class CValueMutable<T> implements IFuzzyValueMutable<T>
 {
     /**
-     * boolean value
+     * value
      */
-    private final Boolean m_value;
-    /**
-     * fuzzy value
-     */
-    private final double m_fuzzy;
+    private T m_value;
+    private double m_fuzzy;
 
-    /**
-     * ctor
-     *
-     * @param p_value value
-     */
-    public CBoolean( final Boolean p_value )
-    {
-        this( p_value, 1 );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_value value
-     * @param p_fuzzy fuzzy
-     */
-    public CBoolean( final Boolean p_value, final double p_fuzzy )
-    {
-        if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_fuzzy ) );
-
-        m_fuzzy = p_fuzzy;
-        m_value = p_value;
-    }
 
 
     @Override
-    public final Boolean getValue()
+    public final IFuzzyValueMutable<T> setValue( final T p_value )
+    {
+        m_value = p_value;
+        return this;
+    }
+
+    @Override
+    public final IFuzzyValueMutable<T> setFuzzy( final double p_value )
+    {
+        m_fuzzy = p_value;
+        return this;
+    }
+
+    @Override
+    public final IFuzzyValue<T> immutable()
+    {
+        return null;
+    }
+
+    @Override
+    public final T getValue()
     {
         return m_value;
     }
@@ -80,45 +66,5 @@ public final class CBoolean implements IFuzzyValue<Boolean>
     public final double getFuzzy()
     {
         return m_fuzzy;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
-    }
-
-    /**
-     * check fuzzy-trueness
-     *
-     * @return predicate
-     * @bug remove
-     */
-    public static Predicate<IFuzzyValue<Boolean>> isTrue()
-    {
-        return p -> p.getValue();
-    }
-
-    /**
-     * factory
-     *
-     * @param p_value boolean value
-     * @return boolean object
-     */
-    public static CBoolean from( final boolean p_value )
-    {
-        return new CBoolean( p_value );
-    }
-
-    /**
-     * factory
-     *
-     * @param p_value boolean value
-     * @param p_fuzzy fuzzy value
-     * @return boolean object
-     */
-    public static CBoolean from( final boolean p_value, final double p_fuzzy )
-    {
-        return new CBoolean( p_value, p_fuzzy );
     }
 }

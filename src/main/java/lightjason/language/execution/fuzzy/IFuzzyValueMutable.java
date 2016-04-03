@@ -23,18 +23,35 @@
 
 package lightjason.language.execution.fuzzy;
 
-import java.util.stream.Collector;
-
-
 /**
- * defines a fuzzy t-norm
+ * interface for a mutable fuzzy value
  *
- * @see https://en.wikipedia.org/wiki/T-norm_fuzzy_logics
- * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
- * @see https://en.wikipedia.org/wiki/Construction_of_t-norms
- * @see https://zackehh.com/collecting-a-java-8-stream-into-a-jackson-arraynode/
+ * @tparam T fuzzy type
  */
-public interface IFuzzyCollector<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
 {
+
+    /**
+     * sets the fuzzy value
+     *
+     * @param p_value new value
+     * @return self reference
+     */
+    IFuzzyValueMutable<T> setValue( final T p_value );
+
+    /**
+     * sets the weight
+     *
+     * @param p_value weight
+     * @return self reference
+     */
+    IFuzzyValueMutable<T> setFuzzy( final double p_value );
+
+    /**
+     * returns an immutable instance of the object
+     *
+     * @return immutable instance
+     */
+    IFuzzyValue<T> immutable();
 
 }

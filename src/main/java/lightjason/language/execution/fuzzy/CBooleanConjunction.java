@@ -38,33 +38,32 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
 {
 
     @Override
-    public final Supplier<IFuzzyValue<Boolean>> supplier()
+    public Supplier<IFuzzyValueMutable<Boolean>> supplier()
     {
         return null;
     }
 
     @Override
-    public final BiConsumer<IFuzzyValue<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    public BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
     {
         return null;
     }
 
     @Override
-    public final BinaryOperator<IFuzzyValue<Boolean>> combiner()
+    public BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
         return null;
     }
 
     @Override
-    public final Function<IFuzzyValue<Boolean>, IFuzzyValue<Boolean>> finisher()
+    public Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
     {
         return null;
     }
 
     @Override
-    public final Set<Characteristics> characteristics()
+    public Set<Characteristics> characteristics()
     {
         return null;
     }
-
 }
