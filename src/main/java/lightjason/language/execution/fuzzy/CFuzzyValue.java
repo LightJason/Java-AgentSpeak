@@ -109,7 +109,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * check fuzzy-trueness
      *
      * @return predicate
-     * @bug remove
+     * @deprecated should be replaced with collector
      */
     @Deprecated
     public static Predicate<IFuzzyValue<Boolean>> isTrue()
