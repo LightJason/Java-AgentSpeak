@@ -39,6 +39,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
+import lightjason.language.execution.fuzzy.IDefuzzification;
 import lightjason.language.execution.fuzzy.IFuzzyOperator;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
@@ -106,6 +107,12 @@ public class CAgent implements IAgent
      * fuzzy result collector
      */
     protected final IFuzzyOperator<Boolean> m_resultoperator;
+    /**
+     * defuzzification
+     *
+     * @todo set from configuration
+     */
+    protected final IDefuzzification<Boolean> m_defuzzification = null;
     /**
      * curent agent cycle
      */
@@ -272,6 +279,9 @@ public class CAgent implements IAgent
         if ( m_hibernate )
             // check wakup-event otherwise suspend
             return this;
+
+        // update defuzzification
+        //m_defuzzification.update( this );
 
         // execute all possible plans
         m_runningplans.clear();

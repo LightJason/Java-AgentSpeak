@@ -83,8 +83,9 @@ public class CStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public <T extends IAgent> void update( final T p_agent )
+    public void update( final IAgent p_agent )
     {
+
     }
 
     @Override

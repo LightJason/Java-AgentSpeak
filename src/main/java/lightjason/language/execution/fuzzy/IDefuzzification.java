@@ -23,6 +23,9 @@
 
 package lightjason.language.execution.fuzzy;
 
+import lightjason.agent.IAgent;
+
+
 /**
  * defuzzification interface
  *
@@ -38,5 +41,11 @@ public interface IDefuzzification<T>
      * @return native value
      */
     T defuzzify( final IFuzzyValue<T> p_value );
+
+    /**
+     * update of the internal defuzzification
+     * structure on the agent-cycle
+     */
+    void update( final IAgent p_agent );
 
 }

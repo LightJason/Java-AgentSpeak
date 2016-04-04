@@ -79,7 +79,7 @@ public interface IStorage<N, M>
      *
      * @param p_agent agent which calls the update
      */
-    <T extends IAgent> void update( final T p_agent );
+    void update( final IAgent p_agent );
 
     /**
      * number of multi elements
