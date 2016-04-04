@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.fuzzy;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -31,8 +32,7 @@ import java.util.function.Supplier;
 
 
 /**
- * class for streaming reduce operations
- * of fuzzy-logical conjunction
+ * streaming reduce operations of fuzzy-logical conjunction
  */
 public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
 {
@@ -61,13 +61,13 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
     @Override
     public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
     {
-        return null;
+        return i -> i.immutable();
     }
 
     @Override
     public final Set<Characteristics> characteristics()
     {
-        return null;
+        return Collections.<Characteristics>emptySet();
     }
 
     /**

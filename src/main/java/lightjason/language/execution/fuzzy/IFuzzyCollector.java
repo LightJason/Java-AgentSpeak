@@ -33,6 +33,7 @@ import java.util.stream.Collector;
  * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
  * @see https://en.wikipedia.org/wiki/Construction_of_t-norms
  * @see https://zackehh.com/collecting-a-java-8-stream-into-a-jackson-arraynode/
+ * @see http://blog.radoszewski.pl/programming/java/2015/07/31/custom-java-8-collectors.html
  */
 public interface IFuzzyCollector<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
