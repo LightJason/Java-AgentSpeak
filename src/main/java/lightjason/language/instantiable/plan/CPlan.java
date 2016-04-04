@@ -33,6 +33,7 @@ import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
+import lightjason.language.execution.fuzzy.CBooleanConjunction;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -167,14 +168,13 @@ public final class CPlan implements IPlan
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        return CFuzzyValue.from(
-                ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
-                  ? m_action.parallelStream()
-                  : m_action.stream()
-                ).map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
-                 .allMatch( CFuzzyValue.isTrue() )
-                || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
-        );
+        final IFuzzyValue<Boolean> l_result = ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
+                                                ? m_action.parallelStream()
+                                                : m_action.stream()
+        ).map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
+         .collect( CBooleanConjunction.join() );
+
+        return CFuzzyValue.from( l_result.getValue() || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) );
     }
 
     @Override

@@ -109,6 +109,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * check fuzzy-trueness
      *
      * @return predicate
+     *
      * @deprecated should be replaced with collector
      */
     @Deprecated
@@ -122,8 +123,9 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * factory
      *
      * @param p_value value
-     * @tparam N fuzzy type
      * @return fuzzy value
+     *
+     * @tparam N fuzzy type
      */
     public static <N> IFuzzyValue<N> from( final N p_value )
     {
@@ -135,8 +137,9 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      *
      * @param p_value value
      * @param p_fuzzy fuzzy value
-     * @tparam N fuzzy type
      * @return fuzzy value
+     *
+     * @tparam N fuzzy type
      */
     public static <N> IFuzzyValue<N> from( final N p_value, final double p_fuzzy )
     {

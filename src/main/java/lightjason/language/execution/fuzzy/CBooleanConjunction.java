@@ -29,6 +29,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 
 /**
@@ -36,6 +37,13 @@ import java.util.function.Supplier;
  */
 public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
 {
+
+    /**
+     * private ctor
+     */
+    private CBooleanConjunction()
+    {
+    }
 
     @Override
     public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
@@ -46,16 +54,13 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
     @Override
     public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
     {
-        return ( i, j ) -> {
-            i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) );
-            i.setValue( i.getValue() && j.getValue() );
-        };
+        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
     }
 
     @Override
     public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
-        return null;
+        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
     }
 
     @Override
@@ -68,6 +73,16 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
     public final Set<Characteristics> characteristics()
     {
         return Collections.<Characteristics>emptySet();
+    }
+
+    /**
+     * factory
+     *
+     * @return collector
+     */
+    public static Collector<IFuzzyValue<Boolean>, ?, IFuzzyValue<Boolean>> join()
+    {
+        return new CBooleanConjunction();
     }
 
     /**

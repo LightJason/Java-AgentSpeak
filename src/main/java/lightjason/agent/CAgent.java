@@ -38,6 +38,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
+import lightjason.language.execution.fuzzy.CBooleanConjunction;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
@@ -177,10 +178,7 @@ public class CAgent implements IAgent
 
         // run plan immediatly and return
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
-        {
-            this.executeplan( p_trigger );
-            return CFuzzyValue.from( true );
-        }
+            return this.executeplan( p_trigger );
 
         // add trigger for the next cycle
         m_trigger.add( p_trigger );
@@ -281,37 +279,39 @@ public class CAgent implements IAgent
      * execute plan
      *
      * @param p_trigger trigger
-     * @todo return fuzzy value
      */
-    protected void executeplan( final ITrigger p_trigger )
+    protected IFuzzyValue<Boolean> executeplan( final ITrigger p_trigger )
     {
-        m_plans.get( p_trigger ).parallelStream()
+        return m_plans.get( p_trigger ).parallelStream()
 
-               // filter for possible trigger
-               .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
+                      // filter for possible trigger
+                      .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
 
-               // filter trigger-literal for avoid duplicated instantiation on non-existing values / annotations
-               .filter( i -> ( i.getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
+                      // filter trigger-literal for avoid duplicated instantiation on non-existing values / annotations
+                      .filter( i -> ( i.getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
                              && ( i.getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
                )
 
-               // unify variables in plan definition
-               .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
+                      // unify variables in plan definition
+                      .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
 
-               // avoid uninstantiated variables
-               .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
+                      // avoid uninstantiated variables
+                      .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
 
-               // initialize context
-               .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ) ) )
+                      // initialize context
+                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ) ) )
 
-               // check plan condition
-               .filter( i -> i.getLeft().condition( i.getRight() ).getValue() )
+                      // check plan condition
+                      .filter( i -> i.getLeft().condition( i.getRight() ).getValue() )
 
-               // execute plan and push plan to running plan set)
-               .forEach( i -> {
+                      // execute plan and push plan to running plan set)
+                      .map( i -> {
                    m_runningplans.put( i.getLeft().getTrigger().getLiteral().getFQNFunctor(), i.getLeft().getTrigger().getLiteral().unify( i.getRight() ) );
-                   i.getLeft().execute( i.getRight(), false, null, null, null );
-               } );
+                          return i.getLeft().execute( i.getRight(), false, null, null, null );
+                      } )
+
+                      // collect execution results
+                      .collect( CBooleanConjunction.join() );
     }
 
 }

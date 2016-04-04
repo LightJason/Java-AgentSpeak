@@ -43,6 +43,7 @@ public interface IUnifier
      * @param p_literal literal with variables (creates a deep-copy)
      * @param p_constraint source literal with values
      * @return set with allocated variables
+     *
      * @note check input literal and result of correct unification
      */
     Set<IVariable<?>> literalunify( final ILiteral p_literal, final ILiteral p_constraint );
