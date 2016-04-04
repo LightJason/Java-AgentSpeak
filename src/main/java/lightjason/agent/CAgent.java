@@ -306,7 +306,10 @@ public class CAgent implements IAgent
 
                       // execute plan and push plan to running plan set)
                       .map( i -> {
-                   m_runningplans.put( i.getLeft().getTrigger().getLiteral().getFQNFunctor(), i.getLeft().getTrigger().getLiteral().unify( i.getRight() ) );
+                          m_runningplans.put(
+                                  i.getLeft().getTrigger().getLiteral().getFQNFunctor(),
+                                  i.getLeft().getTrigger().getLiteral().unify( i.getRight() )
+                          );
                           return i.getLeft().execute( i.getRight(), false, null, null, null );
                       } )
 
