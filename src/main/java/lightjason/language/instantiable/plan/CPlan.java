@@ -33,7 +33,6 @@ import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
-import lightjason.language.execution.fuzzy.CBooleanConjunction;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -172,7 +171,7 @@ public final class CPlan implements IPlan
                                                 ? m_action.parallelStream()
                                                 : m_action.stream()
         ).map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
-         .collect( CBooleanConjunction.join() );
+         .collect( p_context.getAgent().getResultCollector() );
 
         return CFuzzyValue.from( l_result.getValue() || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) );
     }

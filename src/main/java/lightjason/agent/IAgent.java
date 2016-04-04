@@ -28,6 +28,7 @@ import lightjason.beliefbase.IView;
 import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.action.unify.IUnifier;
+import lightjason.language.execution.fuzzy.IFuzzyCollector;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -128,5 +129,13 @@ public interface IAgent extends Callable<IAgent>
      * returns the internal map of rules
      */
     Multimap<IPath, IRule> getRules();
+
+    /**
+     * returns the fuzzy-collector object
+     * to collect plan results
+     *
+     * @return collector object
+     */
+    IFuzzyCollector<Boolean> getResultCollector();
 
 }

@@ -34,13 +34,10 @@ import lightjason.consistency.metric.CWeightedDifference;
 import lightjason.consistency.metric.IMetric;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.rule.IRule;
 import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -148,12 +145,7 @@ public final class TestIMetric
      */
     private IAgent getAgent( final Collection<ILiteral> p_literals )
     {
-        final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration(
-                Collections.<ILiteral>emptyList(),
-                Collections.<IPlan>emptySet(),
-                Collections.<IRule>emptySet(),
-                null, null, null
-        ) );
+        final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration() );
         p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
         return l_agent;
     }

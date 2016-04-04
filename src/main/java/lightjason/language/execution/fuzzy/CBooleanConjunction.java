@@ -29,7 +29,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collector;
 
 
 /**
@@ -37,13 +36,6 @@ import java.util.stream.Collector;
  */
 public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
 {
-
-    /**
-     * private ctor
-     */
-    private CBooleanConjunction()
-    {
-    }
 
     @Override
     public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
@@ -73,16 +65,6 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
     public final Set<Characteristics> characteristics()
     {
         return Collections.<Characteristics>emptySet();
-    }
-
-    /**
-     * factory
-     *
-     * @return collector
-     */
-    public static Collector<IFuzzyValue<Boolean>, ?, IFuzzyValue<Boolean>> join()
-    {
-        return new CBooleanConjunction();
     }
 
     /**

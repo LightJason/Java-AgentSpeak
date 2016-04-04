@@ -21,65 +21,29 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.language.score;
 
-import lightjason.beliefbase.IView;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.IFuzzyCollector;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import com.google.common.collect.Multiset;
+import lightjason.agent.IAgent;
+import lightjason.agent.action.IAction;
+
+import java.util.Collection;
 
 
 /**
- * interface to define the agent configuration
+ * zero aggreation
  */
-public interface IAgentConfiguration extends IConfiguration
+public final class CZeroAggregation implements IAggregation
 {
+    @Override
+    public final double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+    {
+        return 0;
+    }
 
-    /**
-     * returns a beliefbase of the agent
-     *
-     * @return root view
-     */
-    IView getBeliefbase();
-
-    /**
-     * returns the initial goal
-     *
-     * @return initial goal literal
-     */
-    ITrigger getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy-collector object
-     * to collect plan results
-     *
-     * @return collector object
-     */
-    IFuzzyCollector<Boolean> getResultCollector();
-
-
+    @Override
+    public final double evaluate( final Collection<Double> p_values )
+    {
+        return 0;
+    }
 }
