@@ -94,4 +94,5 @@ public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
     {
         return CFuzzyValueMutable.from( true, 1 );
     }
+
 }

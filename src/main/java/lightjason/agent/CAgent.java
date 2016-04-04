@@ -289,8 +289,8 @@ public class CAgent implements IAgent
 
                       // filter trigger-literal for avoid duplicated instantiation on non-existing values / annotations
                       .filter( i -> ( i.getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
-                             && ( i.getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
-               )
+                                    && ( i.getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
+                      )
 
                       // unify variables in plan definition
                       .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
