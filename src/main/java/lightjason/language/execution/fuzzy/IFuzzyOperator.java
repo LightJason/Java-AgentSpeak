@@ -35,7 +35,7 @@ import java.util.stream.Collector;
  * @see https://zackehh.com/collecting-a-java-8-stream-into-a-jackson-arraynode/
  * @see http://blog.radoszewski.pl/programming/java/2015/07/31/custom-java-8-collectors.html
  */
-public interface IFuzzyCollector<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
 
 }

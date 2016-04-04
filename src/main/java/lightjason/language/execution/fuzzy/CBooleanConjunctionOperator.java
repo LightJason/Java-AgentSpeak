@@ -34,13 +34,13 @@ import java.util.function.Supplier;
 /**
  * streaming reduce operations of fuzzy-logical conjunction
  */
-public final class CBooleanConjunction implements IFuzzyCollector<Boolean>
+public final class CBooleanConjunctionOperator implements IFuzzyOperator<Boolean>
 {
 
     @Override
     public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
     {
-        return CBooleanConjunction::factory;
+        return CBooleanConjunctionOperator::factory;
     }
 
     @Override

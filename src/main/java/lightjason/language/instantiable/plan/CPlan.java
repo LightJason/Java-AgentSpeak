@@ -171,7 +171,7 @@ public final class CPlan implements IPlan
                                                 ? m_action.parallelStream()
                                                 : m_action.stream()
         ).map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
-         .collect( p_context.getAgent().getResultCollector() );
+         .collect( p_context.getAgent().getResultOperator() );
 
         return CFuzzyValue.from( l_result.getValue() || ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) );
     }

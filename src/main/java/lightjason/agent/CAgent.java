@@ -39,7 +39,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
-import lightjason.language.execution.fuzzy.IFuzzyCollector;
+import lightjason.language.execution.fuzzy.IFuzzyOperator;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -105,7 +105,7 @@ public class CAgent implements IAgent
     /**
      * fuzzy result collector
      */
-    protected final IFuzzyCollector<Boolean> m_resultcollector;
+    protected final IFuzzyOperator<Boolean> m_resultoperator;
     /**
      * curent agent cycle
      */
@@ -141,7 +141,7 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
-        m_resultcollector = p_configuration.getResultCollector();
+        m_resultoperator = p_configuration.getResultOperator();
         m_plans = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getPlans() ) );
         m_rules = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getRules() ) );
 
@@ -246,9 +246,9 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IFuzzyCollector<Boolean> getResultCollector()
+    public final IFuzzyOperator<Boolean> getResultOperator()
     {
-        return m_resultcollector;
+        return m_resultoperator;
     }
 
     @Override
@@ -325,7 +325,7 @@ public class CAgent implements IAgent
                       } )
 
                       // collect execution results
-                      .collect( m_resultcollector );
+                      .collect( m_resultoperator );
     }
 
 }
