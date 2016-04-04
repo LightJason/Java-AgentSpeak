@@ -34,7 +34,7 @@ import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.CBooleanConjunctionOperator;
+import lightjason.language.execution.fuzzy.CBoolConjunctionOperator;
 import lightjason.language.execution.fuzzy.IFuzzyOperator;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.CTrigger;
@@ -99,7 +99,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public CDefaultAgentConfiguration()
     {
         this(
-                new CBooleanConjunctionOperator(), Collections.<ILiteral>emptyList(), Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(), null,
+                new CBoolConjunctionOperator(), Collections.<ILiteral>emptyList(), Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(), null,
                 new CUnifier(), new CZeroAggregation()
         );
     }
