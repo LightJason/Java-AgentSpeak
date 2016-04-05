@@ -45,7 +45,7 @@ second(true).
 
         // --- manual individual & internal variables ----------------------------------------------------------------------------------------------------------
 
-        generic/print("constants", Score, Cycle, MyConstInt, MyConstString);
+        generic/print("constants", Score, Cycle, "    ", MyConstInt, MyConstString, "    ", PlanFail, PlanFailRatio, PlanSuccessful, PlanSuccessfulRatio);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

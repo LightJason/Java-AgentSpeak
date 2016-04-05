@@ -35,6 +35,7 @@ import lightjason.beliefbase.IView;
 import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
+import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
@@ -50,6 +51,7 @@ import org.apache.commons.lang3.tuple.MutableTriple;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -320,7 +322,24 @@ public class CAgent implements IAgent
                                                                                       .size() )
 
                       // initialize context
-                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ) ) )
+                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().getContext(
+                              this,
+                              m_aggregation,
+                              m_variablebuilder,
+                              new HashSet<IVariable<?>>()
+                              {{
+                                  addAll( i.getRight() );
+
+                                  // execution count
+                                  add( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) );
+                                  add( new CConstant<>( "PlanFail", i.getLeft().getRight() ) );
+
+                                  // execution ratio
+                                  double l_sum = i.getLeft().getMiddle() + i.getLeft().getRight();
+                                  add( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : i.getLeft().getMiddle() / l_sum ) );
+                                  add( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : i.getLeft().getRight() / l_sum ) );
+                              }}
+                      ) ) )
 
                       // check plan condition
                       .filter( i -> i.getLeft().getLeft().condition( i.getRight() ).getValue() )
