@@ -24,12 +24,12 @@
 package lightjason.agent;
 
 import com.google.common.collect.Multimap;
+import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.beliefbase.IView;
 import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
@@ -131,11 +131,9 @@ public interface IAgent extends Callable<IAgent>
     Multimap<IPath, IRule> getRules();
 
     /**
-     * returns the fuzzy-collector object
-     * to collect plan results
+     * return fuzzy operator
      *
-     * @return collector object
+     * @return operator
      */
-    IFuzzyOperator<Boolean> getResultOperator();
-
+    IFuzzy<Boolean> getFuzzy();
 }

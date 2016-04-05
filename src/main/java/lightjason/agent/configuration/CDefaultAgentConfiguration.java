@@ -26,6 +26,8 @@ package lightjason.agent.configuration;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import lightjason.agent.fuzzy.CBoolFuzzy;
+import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.agent.unify.CUnifier;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
@@ -34,8 +36,6 @@ import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
-import lightjason.language.execution.fuzzy.operator.bool.CIntersection;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
@@ -88,9 +88,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      */
     protected final Collection<ILiteral> m_initialbeliefs;
     /**
-     * result collector
+     * fuzzy operator
      */
-    protected final IFuzzyOperator<Boolean> m_resultoperator;
+    protected final IFuzzy<Boolean> m_fuzzy;
 
 
     /**
@@ -99,7 +99,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public CDefaultAgentConfiguration()
     {
         this(
-                new CIntersection(), Collections.<ILiteral>emptyList(), Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(), null,
+                new CBoolFuzzy(), Collections.<ILiteral>emptyList(), Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(), null,
                 new CUnifier(), new CZeroAggregation()
         );
     }
@@ -107,7 +107,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * ctor
      *
-     * @param p_resultoperator result collector
+     * @param p_fuzzy fuzzy operator
      * @param p_initalbeliefs set with initial beliefs
      * @param p_plans plans
      * @param p_rules rules
@@ -115,18 +115,18 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final IFuzzyOperator<Boolean> p_resultoperator, final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final Set<IPlan> p_plans,
                                        final Set<IRule> p_rules, final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
-        this( p_resultoperator, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, null );
+        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, null );
     }
 
     /**
      * ctor
      *
-     * @param p_resultoperator result collector
+     * @param p_fuzzy fuzzy operator
      * @param p_initalbeliefs set with initial beliefs
      * @param p_plans plans
      * @param p_rules rules
@@ -135,7 +135,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final IFuzzyOperator<Boolean> p_resultoperator, final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final Set<IPlan> p_plans,
                                        final Set<IRule> p_rules, final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
@@ -143,7 +143,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     {
         m_unifier = p_unifier;
         m_aggregation = p_aggregation;
-        m_resultoperator = p_resultoperator;
+        m_fuzzy = p_fuzzy;
         m_variablebuilder = p_variablebuilder;
         m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
 
@@ -195,9 +195,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IFuzzyOperator<Boolean> getResultOperator()
+    public final IFuzzy<Boolean> getFuzzy()
     {
-        return m_resultoperator;
+        return m_fuzzy;
     }
 
     @Override

@@ -28,10 +28,10 @@ import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
+import lightjason.agent.fuzzy.CBoolFuzzy;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.operator.bool.CIntersection;
 import lightjason.language.score.IAggregation;
 
 import java.io.IOException;
@@ -86,7 +86,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
-                new CIntersection(),
+                new CBoolFuzzy(),
                 l_visitor.getInitialBeliefs(),
                 l_visitor.getPlans(),
                 l_visitor.getRules(),

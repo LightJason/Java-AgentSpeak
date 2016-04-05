@@ -21,63 +21,31 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.agent.fuzzy;
 
-import lightjason.agent.fuzzy.IFuzzy;
-import lightjason.beliefbase.IView;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import lightjason.language.execution.fuzzy.defuzzification.IDefuzzification;
+import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 
 
 /**
- * interface to define the agent configuration
+ * fuzzy operators
  */
-public interface IAgentConfiguration extends IConfiguration
+public interface IFuzzy<T>
 {
 
     /**
-     * returns a beliefbase of the agent
+     * returns the fuzzy-collector object
+     * to collect results
      *
-     * @return root view
+     * @return collector object
      */
-    IView getBeliefbase();
+    IFuzzyOperator<T> getResultOperator();
 
     /**
-     * returns the initial goal
+     * returns the defuzzifcator of the agent
      *
-     * @return initial goal literal
+     * @return defuzzyification
      */
-    ITrigger getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy operator
-     *
-     * @return operator object
-     */
-    IFuzzy<Boolean> getFuzzy();
+    IDefuzzification<T> getDefuzzyfication();
 
 }

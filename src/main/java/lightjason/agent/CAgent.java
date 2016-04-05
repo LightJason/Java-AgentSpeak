@@ -30,6 +30,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import lightjason.agent.configuration.IAgentConfiguration;
+import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.beliefbase.IView;
 import lightjason.common.CCommon;
 import lightjason.common.IPath;
@@ -40,8 +41,6 @@ import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.execution.fuzzy.defuzzification.IDefuzzification;
-import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
@@ -106,13 +105,7 @@ public class CAgent implements IAgent
     /**
      * fuzzy result collector
      */
-    protected final IFuzzyOperator<Boolean> m_resultoperator;
-    /**
-     * defuzzification
-     *
-     * @todo set from configuration
-     */
-    protected final IDefuzzification<Boolean> m_defuzzification = null;
+    protected final IFuzzy<Boolean> m_fuzzy;
     /**
      * curent agent cycle
      */
@@ -148,7 +141,7 @@ public class CAgent implements IAgent
         m_beliefbase = p_configuration.getBeliefbase();
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
-        m_resultoperator = p_configuration.getResultOperator();
+        m_fuzzy = p_configuration.getFuzzy();
         m_plans = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getPlans() ) );
         m_rules = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getRules() ) );
 
@@ -253,9 +246,9 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IFuzzyOperator<Boolean> getResultOperator()
+    public final IFuzzy<Boolean> getFuzzy()
     {
-        return m_resultoperator;
+        return m_fuzzy;
     }
 
     @Override
@@ -281,7 +274,7 @@ public class CAgent implements IAgent
             return this;
 
         // update defuzzification
-        //m_defuzzification.update( this );
+        m_fuzzy.getDefuzzyfication().update( this );
 
         // execute all possible plans
         m_runningplans.clear();
@@ -335,7 +328,7 @@ public class CAgent implements IAgent
                       } )
 
                       // collect execution results
-                      .collect( m_resultoperator );
+                      .collect( m_fuzzy.getResultOperator() );
     }
 
 }

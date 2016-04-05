@@ -21,63 +21,58 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.agent.fuzzy;
 
-import lightjason.agent.fuzzy.IFuzzy;
-import lightjason.beliefbase.IView;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import lightjason.language.execution.fuzzy.defuzzification.CCrisp;
+import lightjason.language.execution.fuzzy.defuzzification.IDefuzzification;
+import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
+import lightjason.language.execution.fuzzy.operator.bool.CComplement;
+import lightjason.language.execution.fuzzy.operator.bool.CIntersection;
 
 
 /**
- * interface to define the agent configuration
+ * boolean fuzzy element
  */
-public interface IAgentConfiguration extends IConfiguration
+public final class CBoolFuzzy implements IFuzzy<Boolean>
 {
+    /**
+     * fuzzy operator
+     */
+    private final IFuzzyOperator<Boolean> m_operator;
+    /**
+     * defuzzyfication
+     */
+    private final IDefuzzification<Boolean> m_defuzzyfication;
 
     /**
-     * returns a beliefbase of the agent
-     *
-     * @return root view
+     * ctor
      */
-    IView getBeliefbase();
+    public CBoolFuzzy()
+    {
+        this( new CIntersection(), new CCrisp<>( new CComplement() ) );
+    }
 
     /**
-     * returns the initial goal
+     * ctor
      *
-     * @return initial goal literal
+     * @param p_operator fuzzy operator
+     * @param p_defuzzyfication defuzzyfication
      */
-    ITrigger getInitialGoal();
+    public CBoolFuzzy( final IFuzzyOperator<Boolean> p_operator, final IDefuzzification<Boolean> p_defuzzyfication )
+    {
+        m_operator = p_operator;
+        m_defuzzyfication = p_defuzzyfication;
+    }
 
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
+    @Override
+    public final IFuzzyOperator<Boolean> getResultOperator()
+    {
+        return m_operator;
+    }
 
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy operator
-     *
-     * @return operator object
-     */
-    IFuzzy<Boolean> getFuzzy();
-
+    @Override
+    public final IDefuzzification<Boolean> getDefuzzyfication()
+    {
+        return m_defuzzyfication;
+    }
 }
