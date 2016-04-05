@@ -21,65 +21,64 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.language.execution.fuzzy.operator;
 
-import lightjason.beliefbase.IView;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.operator.IFuzzyCollectionOperator;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import lightjason.language.execution.fuzzy.CFuzzyValueMutable;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 /**
- * interface to define the agent configuration
+ * fuzzy-boolean conjunction / intersection
  */
-public interface IAgentConfiguration extends IConfiguration
+public final class CBooleanIntersection implements IFuzzyCollectionOperator<Boolean>
 {
 
-    /**
-     * returns a beliefbase of the agent
-     *
-     * @return root view
-     */
-    IView getBeliefbase();
+    @Override
+    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    {
+        return CBooleanIntersection::factory;
+    }
+
+    @Override
+    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    {
+        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
+    }
+
+    @Override
+    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
+    {
+        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
+    }
+
+    @Override
+    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    {
+        return i -> i.immutable();
+    }
+
+    @Override
+    public final Set<Characteristics> characteristics()
+    {
+        return Collections.<Characteristics>emptySet();
+    }
 
     /**
-     * returns the initial goal
+     * factory of the initialize value
      *
-     * @return initial goal literal
+     * @return fuzzy value
      */
-    ITrigger getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy-collector object
-     * to collect plan results
-     *
-     * @return collector object
-     */
-    IFuzzyCollectionOperator<Boolean> getResultOperator();
-
+    private static IFuzzyValueMutable<Boolean> factory()
+    {
+        return CFuzzyValueMutable.from( true, 1 );
+    }
 
 }

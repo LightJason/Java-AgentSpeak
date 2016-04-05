@@ -21,60 +21,32 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy;
+package lightjason.language.execution.fuzzy.defuzzification;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import lightjason.agent.IAgent;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 
 /**
- * streaming reduce operations of fuzzy-logical disjunction
+ * defuzzification interface
+ *
+ * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public final class CBoolDisjunctionOperator implements IFuzzyOperator<Boolean>
+public interface IDefuzzification<T>
 {
 
-    @Override
-    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
-    {
-        return CBoolDisjunctionOperator::factory;
-    }
-
-    @Override
-    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
-    {
-        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
-    }
-
-    @Override
-    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
-    {
-        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
-    }
-
-    @Override
-    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
-    {
-        return i -> i.immutable();
-    }
-
-    @Override
-    public final Set<Characteristics> characteristics()
-    {
-        return Collections.<Characteristics>emptySet();
-    }
+    /**
+     * runs the defuzzyification algorithm
+     *
+     * @param p_value fuzzy value
+     * @return native value
+     */
+    T defuzzify( final IFuzzyValue<T> p_value );
 
     /**
-     * factory of the initialize value
-     *
-     * @return fuzzy value
+     * update of the internal defuzzification
+     * structure on the agent-cycle
      */
-    private static IFuzzyValueMutable<Boolean> factory()
-    {
-        return CFuzzyValueMutable.from( false, 0 );
-    }
+    void update( final IAgent p_agent );
 
 }

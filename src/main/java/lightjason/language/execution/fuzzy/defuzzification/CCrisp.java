@@ -21,60 +21,44 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy;
+package lightjason.language.execution.fuzzy.defuzzification;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import lightjason.agent.IAgent;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.execution.fuzzy.operator.IFuzzyComplement;
 
 
 /**
- * streaming reduce operations of fuzzy-logical conjunction
+ * defuzzification to a crisp value
  */
-public final class CBoolConjunctionOperator implements IFuzzyOperator<Boolean>
+public class CCrisp<T> implements IDefuzzification<T>
 {
 
-    @Override
-    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
-    {
-        return CBoolConjunctionOperator::factory;
-    }
-
-    @Override
-    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
-    {
-        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
-    }
-
-    @Override
-    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
-    {
-        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
-    }
-
-    @Override
-    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
-    {
-        return i -> i.immutable();
-    }
-
-    @Override
-    public final Set<Characteristics> characteristics()
-    {
-        return Collections.<Characteristics>emptySet();
-    }
+    /**
+     * fuzzy complement
+     */
+    private final IFuzzyComplement<T> m_complement;
 
     /**
-     * factory of the initialize value
+     * ctor
      *
-     * @return fuzzy value
+     * @param p_complement fuzzy complement operator
      */
-    private static IFuzzyValueMutable<Boolean> factory()
+    public CCrisp( final IFuzzyComplement<T> p_complement )
     {
-        return CFuzzyValueMutable.from( true, 1 );
+        m_complement = p_complement;
     }
 
+
+    @Override
+    public final T defuzzify( final IFuzzyValue<T> p_value )
+    {
+        return p_value.getFuzzy() <= 0.5 ? m_complement.complement( p_value ).getValue() : p_value.getValue();
+    }
+
+    @Override
+    public void update( final IAgent p_agent )
+    {
+
+    }
 }

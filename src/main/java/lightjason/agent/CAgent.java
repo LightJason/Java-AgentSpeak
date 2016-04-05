@@ -39,9 +39,9 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
-import lightjason.language.execution.fuzzy.IDefuzzification;
-import lightjason.language.execution.fuzzy.IFuzzyOperator;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.execution.fuzzy.defuzzification.IDefuzzification;
+import lightjason.language.execution.fuzzy.operator.IFuzzyCollectionOperator;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
@@ -106,7 +106,7 @@ public class CAgent implements IAgent
     /**
      * fuzzy result collector
      */
-    protected final IFuzzyOperator<Boolean> m_resultoperator;
+    protected final IFuzzyCollectionOperator<Boolean> m_resultoperator;
     /**
      * defuzzification
      *
@@ -253,7 +253,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IFuzzyOperator<Boolean> getResultOperator()
+    public final IFuzzyCollectionOperator<Boolean> getResultOperator()
     {
         return m_resultoperator;
     }

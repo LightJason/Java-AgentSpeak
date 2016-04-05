@@ -21,31 +21,64 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy;
+package lightjason.language.execution.fuzzy.operator;
 
-import lightjason.agent.IAgent;
+import lightjason.language.execution.fuzzy.CFuzzyValueMutable;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 /**
- * defuzzification interface
- *
- * @see https://en.wikipedia.org/wiki/Defuzzification
+ * fuzzy-boolean disjunction / union
  */
-public interface IDefuzzification<T>
+public final class CBooleanUnion implements IFuzzyCollectionOperator<Boolean>
 {
 
-    /**
-     * runs the defuzzyification algorithm
-     *
-     * @param p_value fuzzy value
-     * @return native value
-     */
-    T defuzzify( final IFuzzyValue<T> p_value );
+    @Override
+    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    {
+        return CBooleanUnion::factory;
+    }
+
+    @Override
+    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    {
+        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
+    }
+
+    @Override
+    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
+    {
+        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
+    }
+
+    @Override
+    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    {
+        return i -> i.immutable();
+    }
+
+    @Override
+    public final Set<Characteristics> characteristics()
+    {
+        return Collections.<Characteristics>emptySet();
+    }
 
     /**
-     * update of the internal defuzzification
-     * structure on the agent-cycle
+     * factory of the initialize value
+     *
+     * @return fuzzy value
      */
-    void update( final IAgent p_agent );
+    private static IFuzzyValueMutable<Boolean> factory()
+    {
+        return CFuzzyValueMutable.from( false, 0 );
+    }
 
 }

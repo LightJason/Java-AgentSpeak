@@ -21,65 +21,23 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.language.execution.fuzzy.operator;
 
-import lightjason.beliefbase.IView;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.operator.IFuzzyCollectionOperator;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 
 /**
- * interface to define the agent configuration
+ * fuzzy complement
  */
-public interface IAgentConfiguration extends IConfiguration
+public interface IFuzzyComplement<T>
 {
 
     /**
-     * returns a beliefbase of the agent
+     * creates the complement of a fuzzy value
      *
-     * @return root view
+     * @param p_value value
+     * @return complement value
      */
-    IView getBeliefbase();
-
-    /**
-     * returns the initial goal
-     *
-     * @return initial goal literal
-     */
-    ITrigger getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy-collector object
-     * to collect plan results
-     *
-     * @return collector object
-     */
-    IFuzzyCollectionOperator<Boolean> getResultOperator();
-
+    IFuzzyValue<T> complement( final IFuzzyValue<T> p_value );
 
 }

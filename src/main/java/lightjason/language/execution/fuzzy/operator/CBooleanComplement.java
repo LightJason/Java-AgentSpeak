@@ -21,65 +21,20 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.language.execution.fuzzy.operator;
 
-import lightjason.beliefbase.IView;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.operator.IFuzzyCollectionOperator;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 
 /**
- * interface to define the agent configuration
+ * fuzzy-boolean complement
  */
-public interface IAgentConfiguration extends IConfiguration
+public final class CBooleanComplement implements IFuzzyComplement<Boolean>
 {
-
-    /**
-     * returns a beliefbase of the agent
-     *
-     * @return root view
-     */
-    IView getBeliefbase();
-
-    /**
-     * returns the initial goal
-     *
-     * @return initial goal literal
-     */
-    ITrigger getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy-collector object
-     * to collect plan results
-     *
-     * @return collector object
-     */
-    IFuzzyCollectionOperator<Boolean> getResultOperator();
-
-
+    @Override
+    public final IFuzzyValue<Boolean> complement( final IFuzzyValue<Boolean> p_value )
+    {
+        return CFuzzyValue.from( !p_value.getValue(), 1 - p_value.getFuzzy() );
+    }
 }

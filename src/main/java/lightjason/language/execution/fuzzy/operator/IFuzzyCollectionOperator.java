@@ -21,7 +21,10 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy;
+package lightjason.language.execution.fuzzy.operator;
+
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
 
 import java.util.stream.Collector;
 
@@ -35,7 +38,7 @@ import java.util.stream.Collector;
  * @see https://zackehh.com/collecting-a-java-8-stream-into-a-jackson-arraynode/
  * @see http://blog.radoszewski.pl/programming/java/2015/07/31/custom-java-8-collectors.html
  */
-public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public interface IFuzzyCollectionOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
 
 }

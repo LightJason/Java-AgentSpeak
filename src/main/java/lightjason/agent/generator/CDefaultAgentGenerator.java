@@ -31,7 +31,7 @@ import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.CBoolConjunctionOperator;
+import lightjason.language.execution.fuzzy.operator.CBooleanIntersection;
 import lightjason.language.score.IAggregation;
 
 import java.io.IOException;
@@ -86,7 +86,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
-                new CBoolConjunctionOperator(),
+                new CBooleanIntersection(),
                 l_visitor.getInitialBeliefs(),
                 l_visitor.getPlans(),
                 l_visitor.getRules(),
