@@ -46,6 +46,8 @@ import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -93,9 +95,9 @@ public class CAgent implements IAgent
      */
     protected final Multimap<IPath, IRule> m_rules;
     /**
-     * map with all existing plans
+     * map with all existing plans and fails / successfull runs
      */
-    protected final Multimap<ITrigger, IPlan> m_plans;
+    protected final Multimap<ITrigger, Triple<IPlan, Long, Long>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
      * storage map
      *
@@ -142,8 +144,13 @@ public class CAgent implements IAgent
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
         m_fuzzy = p_configuration.getFuzzy();
-        m_plans = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getPlans() ) );
         m_rules = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getRules() ) );
+
+        // initial plans with default values
+        p_configuration.getPlans().asMap().entrySet().parallelStream()
+                       .forEach( i -> i.getValue().stream()
+                                       .forEach( j -> m_plans.put( i.getKey(), new ImmutableTriple<>( j, new Long( 0 ), new Long( 0 ) ) ) )
+                       );
 
         if ( p_configuration.getInitialGoal() != null )
             m_trigger.add( p_configuration.getInitialGoal() );
@@ -234,7 +241,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final Multimap<ITrigger, IPlan> getPlans()
+    public final Multimap<ITrigger, Triple<IPlan, Long, Long>> getPlans()
     {
         return m_plans;
     }
@@ -299,32 +306,33 @@ public class CAgent implements IAgent
         return m_plans.get( p_trigger ).parallelStream()
 
                       // filter for possible trigger
-                      .filter( i -> i.getTrigger().getType().equals( p_trigger.getType() ) )
+                      .filter( i -> i.getLeft().getTrigger().getType().equals( p_trigger.getType() ) )
 
                       // filter trigger-literal for avoid duplicated instantiation on non-existing values / annotations
-                      .filter( i -> ( i.getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
-                                    && ( i.getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
+                      .filter( i -> ( i.getLeft().getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
+                                    && ( i.getLeft().getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
                       )
 
                       // unify variables in plan definition
-                      .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
+                      .map( i -> new ImmutablePair<>( i, m_unifier.literalunify( i.getLeft().getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
 
                       // avoid uninstantiated variables
-                      .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getTrigger().getLiteral() ).size() )
+                      .filter( i -> i.getRight().size() == lightjason.language.CCommon.getVariableFrequency( i.getLeft().getLeft().getTrigger().getLiteral() )
+                                                                                      .size() )
 
                       // initialize context
-                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ) ) )
+                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().getContext( this, m_aggregation, m_variablebuilder, i.getRight() ) ) )
 
                       // check plan condition
-                      .filter( i -> i.getLeft().condition( i.getRight() ).getValue() )
+                      .filter( i -> i.getLeft().getLeft().condition( i.getRight() ).getValue() )
 
                       // execute plan and push plan to running plan set)
                       .map( i -> {
                           m_runningplans.put(
-                                  i.getLeft().getTrigger().getLiteral().getFQNFunctor(),
-                                  i.getLeft().getTrigger().getLiteral().unify( i.getRight() )
+                                  i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
+                                  i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
                           );
-                          return i.getLeft().execute( i.getRight(), false, null, null, null );
+                          return i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
                       } )
 
                       // collect execution results
