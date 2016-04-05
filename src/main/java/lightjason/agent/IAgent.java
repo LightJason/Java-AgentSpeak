@@ -29,7 +29,7 @@ import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.execution.fuzzy.operator.IFuzzyCollectionOperator;
+import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
@@ -136,6 +136,6 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return collector object
      */
-    IFuzzyCollectionOperator<Boolean> getResultOperator();
+    IFuzzyOperator<Boolean> getResultOperator();
 
 }

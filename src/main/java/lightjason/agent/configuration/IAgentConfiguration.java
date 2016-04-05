@@ -26,7 +26,7 @@ package lightjason.agent.configuration;
 import lightjason.beliefbase.IView;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.execution.fuzzy.operator.IFuzzyCollectionOperator;
+import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
@@ -79,7 +79,6 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return collector object
      */
-    IFuzzyCollectionOperator<Boolean> getResultOperator();
-
+    IFuzzyOperator<Boolean> getResultOperator();
 
 }

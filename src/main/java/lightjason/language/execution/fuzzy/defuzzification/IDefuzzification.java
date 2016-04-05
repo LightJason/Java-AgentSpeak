@@ -30,6 +30,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 /**
  * defuzzification interface
  *
+ * @tparam T fuzzy type
  * @see https://en.wikipedia.org/wiki/Defuzzification
  */
 public interface IDefuzzification<T>

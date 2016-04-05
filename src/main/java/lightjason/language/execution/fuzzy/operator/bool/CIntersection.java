@@ -21,11 +21,12 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy.operator;
+package lightjason.language.execution.fuzzy.operator.bool;
 
 import lightjason.language.execution.fuzzy.CFuzzyValueMutable;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
+import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 
 import java.util.Collections;
 import java.util.Set;
@@ -38,13 +39,13 @@ import java.util.function.Supplier;
 /**
  * fuzzy-boolean conjunction / intersection
  */
-public final class CBooleanIntersection implements IFuzzyCollectionOperator<Boolean>
+public final class CIntersection implements IFuzzyOperator<Boolean>
 {
 
     @Override
     public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
     {
-        return CBooleanIntersection::factory;
+        return CIntersection::factory;
     }
 
     @Override

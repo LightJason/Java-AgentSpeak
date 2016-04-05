@@ -21,64 +21,21 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy.operator;
+package lightjason.language.execution.fuzzy.operator.bool;
 
-import lightjason.language.execution.fuzzy.CFuzzyValueMutable;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import lightjason.language.execution.fuzzy.operator.IFuzzyComplement;
 
 
 /**
- * fuzzy-boolean disjunction / union
+ * fuzzy-boolean complement
  */
-public final class CBooleanUnion implements IFuzzyCollectionOperator<Boolean>
+public final class CComplement implements IFuzzyComplement<Boolean>
 {
-
     @Override
-    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    public final IFuzzyValue<Boolean> complement( final IFuzzyValue<Boolean> p_value )
     {
-        return CBooleanUnion::factory;
+        return CFuzzyValue.from( !p_value.getValue(), 1 - p_value.getFuzzy() );
     }
-
-    @Override
-    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
-    {
-        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
-    }
-
-    @Override
-    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
-    {
-        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
-    }
-
-    @Override
-    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
-    {
-        return i -> i.immutable();
-    }
-
-    @Override
-    public final Set<Characteristics> characteristics()
-    {
-        return Collections.<Characteristics>emptySet();
-    }
-
-    /**
-     * factory of the initialize value
-     *
-     * @return fuzzy value
-     */
-    private static IFuzzyValueMutable<Boolean> factory()
-    {
-        return CFuzzyValueMutable.from( false, 0 );
-    }
-
 }

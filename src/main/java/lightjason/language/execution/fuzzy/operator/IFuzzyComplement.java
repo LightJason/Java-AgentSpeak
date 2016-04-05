@@ -28,6 +28,8 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 /**
  * fuzzy complement
+ *
+ * @tparam T fuzzy type
  */
 public interface IFuzzyComplement<T>
 {

@@ -23,18 +23,18 @@
 
 package lightjason.language.execution.fuzzy.operator;
 
-import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
+
+import java.util.stream.Collector;
 
 
 /**
- * fuzzy-boolean complement
+ * defines a fuzzy t-norm
+ *
+ * @tparam T fuzzy type
  */
-public final class CBooleanComplement implements IFuzzyComplement<Boolean>
+public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
-    @Override
-    public final IFuzzyValue<Boolean> complement( final IFuzzyValue<Boolean> p_value )
-    {
-        return CFuzzyValue.from( !p_value.getValue(), 1 - p_value.getFuzzy() );
-    }
+
 }

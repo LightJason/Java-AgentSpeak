@@ -21,24 +21,65 @@
  * @endcond
  */
 
-package lightjason.language.execution.fuzzy.operator;
+package lightjason.language.execution.fuzzy.operator.bool;
 
+import lightjason.language.execution.fuzzy.CFuzzyValueMutable;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
+import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 
-import java.util.stream.Collector;
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 /**
- * defines a fuzzy t-norm
- *
- * @see https://en.wikipedia.org/wiki/T-norm_fuzzy_logics
- * @see https://en.wikipedia.org/wiki/Fuzzy_set_operations
- * @see https://en.wikipedia.org/wiki/Construction_of_t-norms
- * @see https://zackehh.com/collecting-a-java-8-stream-into-a-jackson-arraynode/
- * @see http://blog.radoszewski.pl/programming/java/2015/07/31/custom-java-8-collectors.html
+ * fuzzy-boolean disjunction / union
  */
-public interface IFuzzyCollectionOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public final class CUnion implements IFuzzyOperator<Boolean>
 {
+
+    @Override
+    public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
+    {
+        return CUnion::factory;
+    }
+
+    @Override
+    public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
+    {
+        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
+    }
+
+    @Override
+    public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
+    {
+        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
+    }
+
+    @Override
+    public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
+    {
+        return i -> i.immutable();
+    }
+
+    @Override
+    public final Set<Characteristics> characteristics()
+    {
+        return Collections.<Characteristics>emptySet();
+    }
+
+    /**
+     * factory of the initialize value
+     *
+     * @return fuzzy value
+     */
+    private static IFuzzyValueMutable<Boolean> factory()
+    {
+        return CFuzzyValueMutable.from( false, 0 );
+    }
 
 }
