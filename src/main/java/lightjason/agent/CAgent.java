@@ -46,8 +46,7 @@ import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.lang3.tuple.MutableTriple;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -95,9 +94,9 @@ public class CAgent implements IAgent
      */
     protected final Multimap<IPath, IRule> m_rules;
     /**
-     * map with all existing plans and fails / successfull runs
+     * map with all existing plans and successful / fail runs
      */
-    protected final Multimap<ITrigger, Triple<IPlan, Long, Long>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
+    protected final Multimap<ITrigger, MutableTriple<IPlan, Long, Long>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
      * storage map
      *
@@ -149,7 +148,7 @@ public class CAgent implements IAgent
         // initial plans with default values
         p_configuration.getPlans().asMap().entrySet().parallelStream()
                        .forEach( i -> i.getValue().stream()
-                                       .forEach( j -> m_plans.put( i.getKey(), new ImmutableTriple<>( j, new Long( 0 ), new Long( 0 ) ) ) )
+                                       .forEach( j -> m_plans.put( i.getKey(), new MutableTriple<>( j, new Long( 0 ), new Long( 0 ) ) ) )
                        );
 
         if ( p_configuration.getInitialGoal() != null )
@@ -241,7 +240,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final Multimap<ITrigger, Triple<IPlan, Long, Long>> getPlans()
+    public final Multimap<ITrigger, MutableTriple<IPlan, Long, Long>> getPlans()
     {
         return m_plans;
     }
@@ -332,7 +331,15 @@ public class CAgent implements IAgent
                                   i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
                                   i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
                           );
-                          return i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
+
+                          // execute plan and increment counter based on the defuzzyfication value
+                          final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
+                          if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
+                              i.getLeft().setMiddle( i.getLeft().getMiddle() + 1 );
+                          else
+                              i.getLeft().setRight( i.getLeft().getRight() + 1 );
+
+                          return l_result;
                       } )
 
                       // collect execution results
