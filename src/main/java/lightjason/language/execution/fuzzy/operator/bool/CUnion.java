@@ -28,6 +28,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValueMutable;
 import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -70,6 +71,12 @@ public final class CUnion implements IFuzzyOperator<Boolean>
     public final Set<Characteristics> characteristics()
     {
         return Collections.<Characteristics>emptySet();
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> result( final IFuzzyValue<Boolean>... p_values )
+    {
+        return Arrays.stream( p_values ).collect( this );
     }
 
     /**

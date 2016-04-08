@@ -37,4 +37,12 @@ import java.util.stream.Collector;
 public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
 
+    /**
+     * calculates for a array of values the result
+     *
+     * @param p_values values
+     * @return result value
+     */
+    IFuzzyValue<Boolean> result( final IFuzzyValue<Boolean>... p_values );
+
 }
