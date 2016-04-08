@@ -28,7 +28,6 @@ import lightjason.error.CIllegalArgumentException;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.function.Predicate;
 
 
 /**
@@ -104,20 +103,6 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
     {
         return MessageFormat.format( "{0}({1})", m_value, m_fuzzy );
     }
-
-    /**
-     * check fuzzy-trueness
-     *
-     * @return predicate
-     *
-     * @deprecated should be replaced with collector
-     */
-    @Deprecated
-    public static Predicate<IFuzzyValue<Boolean>> isTrue()
-    {
-        return p -> p.getValue();
-    }
-
 
     /**
      * factory
