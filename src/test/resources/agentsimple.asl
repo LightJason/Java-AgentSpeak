@@ -35,13 +35,12 @@ second(true).
 +!mytest(X) <- generic/print("my test plan with variable", X).
 
 +!main
-/*
     : >>( hallo(X), generic/typ/isstring(X) ) <-
             generic/print("---", "first plan", "---", "unification variables", X)
 
     : >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <-
         generic/print("---", "second plan", "---", "unification variables", X)
-*/
+
     <-
 
         // --- manual individual & internal variables ----------------------------------------------------------------------------------------------------------

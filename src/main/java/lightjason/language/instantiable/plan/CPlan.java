@@ -159,9 +159,6 @@ public final class CPlan implements IPlan
         );
     }
 
-    /**
-     * @bug plan execution on action failing is not stopped
-     */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
@@ -170,20 +167,12 @@ public final class CPlan implements IPlan
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
         // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
-        final List<IFuzzyValue<Boolean>> l_resultcollect = Collections.synchronizedList( new LinkedList<>() );
-
-        ( ( m_annotation.containsKey( IAnnotation.EType.PARALLEL ) )
-          ? m_action.parallelStream()
-          : m_action.stream()
-        ).forEach( i -> {
-            final IFuzzyValue<Boolean> l_result = i.execute(
-                    p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
-            l_resultcollect.add( l_result );
-            //return p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_result );
-        } );
-        l_resultcollect.add( CFuzzyValue.from( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) );
-
-        return l_resultcollect.stream().collect( p_context.getAgent().getFuzzy().getResultOperator() );
+        final List<IFuzzyValue<Boolean>> l_result = m_annotation.containsKey( IAnnotation.EType.PARALLEL )
+                                                    ? this.executeparallel( p_context )
+                                                    : this.executesequential( p_context );
+        // add atomic flag
+        l_result.add( CFuzzyValue.from( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) ) );
+        return l_result.stream().collect( p_context.getAgent().getFuzzy().getResultOperator() );
     }
 
     @Override
@@ -238,5 +227,45 @@ public final class CPlan implements IPlan
 
         l_map.putIfAbsent( IAnnotation.EType.FUZZY, new CNumberAnnotation<>( IAnnotation.EType.FUZZY, 1.0 ) );
         return Collections.unmodifiableMap( l_map );
+    }
+
+    /**
+     * execute plan sequential
+     *
+     * @param p_context execution context
+     * @return list with execution results
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    private List<IFuzzyValue<Boolean>> executesequential( final IContext p_context )
+    {
+        final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new LinkedList<>() );
+
+        m_action.stream()
+                .map( i -> {
+                    final IFuzzyValue<Boolean> l_return = i.execute(
+                            p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
+                    l_result.add( l_return );
+                    return p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return );
+                } )
+                .filter( i -> !i )
+                .findFirst();
+
+        return l_result;
+    }
+
+    /**
+     * execute plan parallel
+     *
+     * @param p_context execution context
+     * @return list with execution results
+     *
+     * @note each element is executed
+     */
+    private List<IFuzzyValue<Boolean>> executeparallel( final IContext p_context )
+    {
+        return m_action.parallelStream()
+                       .map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
+                       .collect( Collectors.toList() );
     }
 }
