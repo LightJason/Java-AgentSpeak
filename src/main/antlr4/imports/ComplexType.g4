@@ -135,7 +135,7 @@ expression_logical_element :
  * negated expression
  **/
 expression_logical_negation :
-    EXCLAMATIONMARK expression
+    STRONGNEGATION expression
     ;
 
 /**

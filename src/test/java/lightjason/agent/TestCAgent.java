@@ -51,6 +51,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertTrue;
 
@@ -138,8 +139,19 @@ public final class TestCAgent
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CVariableBuilder() ).generate()
-                                                                                                                                                   .call();
+            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CVariableBuilder() ).generate();
+
+            // run 5 cycles
+            IntStream.range( 0, 5 ).forEach( i -> {
+                try
+                {
+                    l_agent.call();
+                }
+                catch ( final Exception p_exception )
+                {
+                }
+            } );
+
         }
         catch ( final Exception p_exception )
         {

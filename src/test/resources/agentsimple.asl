@@ -32,7 +32,7 @@ second(true).
 
 +!mytest <- generic/print("my test plan without variable").
 
-+!mytest(X) <- generic/print("my test plan with variable", X).
++!mytest(X) <- generic/print("my test plan with variable", X, "   ", PlanFail, PlanFailRatio, PlanSuccessful, PlanSuccessfulRatio).
 
 +!main
     : >>( hallo(X), generic/typ/isstring(X) ) <-
@@ -317,6 +317,9 @@ second(true).
         // run plan immediatly
         !!mytest(5);
         !!mytest;
+
+        // run plan within the next cycle
+        !mytest(10);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

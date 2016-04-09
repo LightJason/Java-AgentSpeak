@@ -284,10 +284,12 @@ public class CAgent implements IAgent
         // update defuzzification
         m_fuzzy.getDefuzzyfication().update( this );
 
-        // execute all possible plans
+        // execute all possible plans, clear running plans and trigger list first,
+        // create a local cache of the executable triggers and run the trigger in parallel
+        final Set<ITrigger> l_trigger = Stream.concat( m_trigger.parallelStream(), m_beliefbase.getTrigger().parallelStream() ).collect( Collectors.toSet() );
         m_runningplans.clear();
-        Stream.concat( m_trigger.parallelStream(), m_beliefbase.getTrigger().parallelStream() ).forEach( i -> this.executeplan( i ) );
         m_trigger.clear();
+        l_trigger.parallelStream().forEach( i -> this.executeplan( i ) );
 
         // increment cycle and set the cycle time
         m_cycle++;
