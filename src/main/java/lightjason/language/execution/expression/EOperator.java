@@ -40,7 +40,7 @@ public enum EOperator
     OR( "||" ),
     AND( "&&" ),
     XOR( "^" ),
-    NEGATION( "!" ),
+    NEGATION( "~" ),
 
     EQUAL( "==" ),
     NOTEQUAL( "\\==" ),
