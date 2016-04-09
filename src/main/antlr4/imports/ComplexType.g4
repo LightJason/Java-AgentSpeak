@@ -118,7 +118,7 @@ expression_logical_and :
  * logical xor-expression
  **/
 expression_logical_xor :
-    ( expression_logical_element | expression_logical_negation | expression_numeric ) ( XOR expression )*
+    ( expression_logical_negation | expression_logical_element | expression_numeric ) ( XOR expression )*
     ;
 
 /**
