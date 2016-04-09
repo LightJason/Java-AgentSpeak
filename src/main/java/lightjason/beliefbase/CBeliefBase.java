@@ -38,10 +38,11 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -188,6 +189,9 @@ public final class CBeliefBase implements IBeliefBase
         return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
     }
 
+    /**
+     * @bug get with view does not work correct
+     */
     @Override
     @SuppressWarnings( "serial" )
     public final Set<ITrigger> getTrigger( final IView p_view )
@@ -196,17 +200,16 @@ public final class CBeliefBase implements IBeliefBase
         final Set<ITrigger> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger>emptySet() );
 
         // create copy of all trigger and recursive elements
-        final Set<ITrigger> l_copy = Collections.unmodifiableSet( new HashSet<ITrigger>()
-        {{
-            addAll( l_trigger );
-            m_storage.getSingleElements().values().stream().forEach( i -> addAll( i.getTrigger() ) );
-        }} );
+        final Set<ITrigger> l_copy = Collections.unmodifiableSet(
+                Stream.concat(
+                        l_trigger.parallelStream(),
+                        m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger().stream() )
+                )
+                      .collect( Collectors.toSet() )
+        );
 
         // clear all trigger elements if no trigger exists return an empty set
         l_trigger.clear();
-        if ( l_trigger.isEmpty() )
-            return Collections.<ITrigger>emptySet();
-
         return l_copy;
     }
 

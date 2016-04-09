@@ -30,6 +30,8 @@ second(true).
 
 // --- plans ---------------------------------------------------------------------------------------------------------------------------------------------------
 
++mybelief(X) <- generic/print("belief added with variable", X).
+
 +!mytest <- generic/print("my test plan without variable").
 
 +!mytest(X) <- generic/print("my test plan with variable", X, "   ", PlanFail, PlanFailRatio, PlanSuccessful, PlanSuccessfulRatio).
