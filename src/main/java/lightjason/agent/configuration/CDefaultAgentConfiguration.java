@@ -56,7 +56,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * name of the root beliefbase
      */
-    protected static final String BELIEFBASEROTTNAME = "beliefbase";
+    protected static final String BELIEFBASEROOTNAME = "beliefbase";
     /**
      * unifier instance
      */
@@ -161,7 +161,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     @Override
     public final IView getBeliefbase()
     {
-        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( BELIEFBASEROTTNAME );
+        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs
