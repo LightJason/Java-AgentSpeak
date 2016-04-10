@@ -340,7 +340,7 @@ public class CView implements IView
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "[name : {0}, fqn : {1}, storage : {2}]", m_name, this.getPath(), m_beliefbase.getStorage() );
+        return MessageFormat.format( "{0} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.getPath(), m_beliefbase.getStorage() );
     }
 
     /**
