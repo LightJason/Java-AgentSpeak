@@ -33,6 +33,7 @@ to describe an optimizing process.
 * Beliefs must be exists iif a expression is computed (beliefs can be exist on the fly)
 * Belief addition triggers a plan with the definition ```+belief``` 
 * Belief retraction triggers a plan with the definition ```-belief```
+* Belief modification with ```-+``` does not exists anymore 
 * If a literal of a belief is named equal to an [action](#action) the action will not be executed (store the value of the action within a variable, which is used within the belief literal)
 * [Variables](#variable) within a belief literal will be unified before the belief is added to the beliefbase
 
@@ -61,9 +62,9 @@ to describe an optimizing process.
  
 * The plan has got additional [constant variables](#variable), that are added in the context condition (values are calculated before plan execution is started)
     * _Score_ returns the current score-value of the plan
-    * _Failrun_ stores the number of fail runs
-    * _Successrun_ stores the number of successful runs
-    * _Runs_ number of runs of the plan (fail + successful runs)
+    * _PlanFail_ stores the number of fail runs and _PlanFailRatio_ normalized value in [0,1]
+    * _PlanSuccessful_ stores the number of successful runs and _PlanSuccessfulRatio_ normalized value in [0,1] 
+    * _PlanRuns_ number of runs of the plan (fail + successful runs)
     * _Cycle_ agent-cycle number
     
 #### <a name="fuzzy">Fuzziness</a>

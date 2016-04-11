@@ -361,6 +361,7 @@ public class CAgent implements IAgent
                                   double l_sum = l_succeed + l_fails;
                                   add( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) );
                                   add( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) );
+                                  add( new CConstant<>( "PlanRuns", l_sum ) );
                               }}
                       ) ) )
 
