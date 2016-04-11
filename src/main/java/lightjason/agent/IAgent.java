@@ -37,6 +37,7 @@ import org.apache.commons.lang3.tuple.MutableTriple;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -124,7 +125,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return plan map
      */
-    Multimap<ITrigger, MutableTriple<IPlan, Long, Long>> getPlans();
+    Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> getPlans();
 
     /**
      * returns the internal map of rules

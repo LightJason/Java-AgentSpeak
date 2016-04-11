@@ -38,6 +38,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CConstant;
 import lightjason.language.ILiteral;
 import lightjason.language.IVariable;
+import lightjason.language.execution.IContext;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
@@ -48,13 +49,16 @@ import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -98,7 +102,7 @@ public class CAgent implements IAgent
     /**
      * map with all existing plans and successful / fail runs
      */
-    protected final Multimap<ITrigger, MutableTriple<IPlan, Long, Long>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
+    protected final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
      * storage map
      *
@@ -150,7 +154,7 @@ public class CAgent implements IAgent
         // initial plans with default values
         p_configuration.getPlans().asMap().entrySet().parallelStream()
                        .forEach( i -> i.getValue().stream()
-                                       .forEach( j -> m_plans.put( i.getKey(), new MutableTriple<>( j, new Long( 0 ), new Long( 0 ) ) ) )
+                                       .forEach( j -> m_plans.put( i.getKey(), new MutableTriple<>( j, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) )
                        );
 
         if ( p_configuration.getInitialGoal() != null )
@@ -191,7 +195,7 @@ public class CAgent implements IAgent
 
         // run plan immediatly and return
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
-            return this.executeplan( p_trigger );
+            return this.execute( this.executionlist( p_trigger ) );
 
         // add trigger for the next cycle
         m_trigger.add( p_trigger );
@@ -242,7 +246,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final Multimap<ITrigger, MutableTriple<IPlan, Long, Long>> getPlans()
+    public final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> getPlans()
     {
         return m_plans;
     }
@@ -284,12 +288,17 @@ public class CAgent implements IAgent
         // update defuzzification
         m_fuzzy.getDefuzzyfication().update( this );
 
-        // execute all possible plans, clear running plans and trigger list first,
-        // create a local cache of the executable triggers and run the trigger in parallel
-        final Set<ITrigger> l_trigger = Stream.concat( m_trigger.parallelStream(), m_beliefbase.getTrigger().parallelStream() ).collect( Collectors.toSet() );
+        // create a list of all possible execution elements and create a local cache for well-defined executionl
+        final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
+                m_trigger.parallelStream(),
+                m_beliefbase.getTrigger().parallelStream()
+        ).flatMap( i -> this.executionlist( i ).parallelStream() )
+                                                                                                           .collect( Collectors.toList() );
+
+        // clear running plan- and trigger list and execute elements
         m_runningplans.clear();
         m_trigger.clear();
-        l_trigger.parallelStream().forEach( i -> this.executeplan( i ) );
+        this.execute( l_execution );
 
         // increment cycle and set the cycle time
         m_cycle++;
@@ -300,11 +309,12 @@ public class CAgent implements IAgent
 
 
     /**
-     * execute plan
+     * create execution list with plan and context
      *
      * @param p_trigger trigger
+     * @return list with tupel of plan-triple and context for execution
      */
-    protected IFuzzyValue<Boolean> executeplan( final ITrigger p_trigger )
+    protected Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
     {
         return m_plans.get( p_trigger ).parallelStream()
 
@@ -337,34 +347,48 @@ public class CAgent implements IAgent
                                   add( new CConstant<>( "PlanFail", i.getLeft().getRight() ) );
 
                                   // execution ratio
-                                  double l_sum = i.getLeft().getMiddle() + i.getLeft().getRight();
-                                  add( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : i.getLeft().getMiddle() / l_sum ) );
-                                  add( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : i.getLeft().getRight() / l_sum ) );
+                                  double l_fails = i.getLeft().getMiddle().get();
+                                  double l_succeed = i.getLeft().getRight().get();
+                                  double l_sum = l_succeed + l_fails;
+                                  add( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) );
+                                  add( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) );
                               }}
                       ) ) )
 
                       // check plan condition
                       .filter( i -> i.getLeft().getLeft().condition( i.getRight() ).getValue() )
 
-                      // execute plan and push plan to running plan set)
-                      .map( i -> {
-                          m_runningplans.put(
-                                  i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
-                                  i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
-                          );
+                      // create execution collection
+                      .collect( Collectors.toList() );
+    }
 
-                          // execute plan and increment counter based on the defuzzyfication value
-                          final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
-                          if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
-                              i.getLeft().setMiddle( i.getLeft().getMiddle() + 1 );
-                          else
-                              i.getLeft().setRight( i.getLeft().getRight() + 1 );
+    /**
+     * execute list of plans
+     *
+     * @param p_execution execution list
+     * @return fuzzy result
+     */
+    protected IFuzzyValue<Boolean> execute( final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
+    {
+        // update executable plan list, so that test-goals are defined all the time
+        p_execution.parallelStream().forEach( i -> m_runningplans.put(
+                i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
+                i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
+        ) );
 
-                          return l_result;
-                      } )
+        // execute plan and return values
+        return p_execution.parallelStream().map( i -> {
 
-                      // collect execution results
-                      .collect( m_fuzzy.getResultOperator() );
+            final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
+            if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
+                i.getLeft().getMiddle().getAndIncrement();
+            else
+                i.getLeft().getRight().getAndIncrement();
+
+            return l_result;
+        } )
+                          // collect execution results
+                          .collect( m_fuzzy.getResultOperator() );
     }
 
 }
