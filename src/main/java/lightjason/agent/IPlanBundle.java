@@ -23,12 +23,8 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.Multimap;
-import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Set;
 
@@ -51,13 +47,6 @@ public interface IPlanBundle
      *
      * @return multimap plans
      */
-    Multimap<ITrigger, IPlan> getPlans();
-
-    /**
-     * returns the rules / principles
-     *
-     * @return multimap rules
-     */
-    Multimap<IPath, IRule> getRules();
+    Set<IPlan> getPlans();
 
 }

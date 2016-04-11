@@ -30,8 +30,10 @@ import lightjason.grammar.CASTVisitorAgent;
 import lightjason.grammar.CErrorListener;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.grammar.IGenericParser;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -59,7 +61,7 @@ public final class CDefaultAgentParser extends IGenericParser<IASTVisitorAgent, 
     @Override
     public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions );
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, Collections.<IRule>emptySet() );
         l_visitor.visit( this.getParser( p_stream ).agent() );
         return l_visitor;
     }

@@ -154,6 +154,7 @@ public final class TestCAgent
                 }
                 catch ( final Exception p_exception )
                 {
+                    assertTrue( p_exception.getMessage(), false );
                 }
             } );
 

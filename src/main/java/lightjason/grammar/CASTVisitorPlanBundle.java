@@ -112,7 +112,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with logical rules
      */
-    protected final Set<IRule> m_rules = new HashSet<>();
+    protected final Map<IPath, IRule> m_rules;
     /**
      * map with action definition
      */
@@ -122,10 +122,12 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
      * ctor
      *
      * @param p_actions set with actions
+     * @param p_rules set with rules
      */
-    public CASTVisitorPlanBundle( final Set<IAction> p_actions )
+    public CASTVisitorPlanBundle( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
-        m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
+        m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier().getFQNFunctor(), i -> i ) );
     }
 
 
@@ -164,7 +166,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.add( i ) );
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
         return null;
     }
 
@@ -342,7 +344,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public final Object visitBody_formula( final PlanBundleParser.Body_formulaContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions, m_rules );
     }
 
 
@@ -353,13 +355,13 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
         if ( p_context.repair_formula() == null )
-            return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions );
+            return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions, m_rules );
 
 
         // if there exists any repair element, build a sequential hierarchie of repair calls
         if ( p_context.term() != null )
             return new CRepair(
-                    (IExecution) lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions ),
+                    (IExecution) lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
@@ -503,7 +505,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     {
         return new CSingleAssignment<>(
                 (IVariable<?>) this.visitVariable( p_context.variable() ),
-                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions )
+                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules )
         );
     }
 
@@ -514,7 +516,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions )
+                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules )
         );
     }
 
@@ -566,14 +568,14 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
     }
 
 
     @Override
     public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
     }
 
 
@@ -1054,7 +1056,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public final Set<IRule> getRules()
     {
-        return m_rules;
+        return new HashSet<>( m_rules.values() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

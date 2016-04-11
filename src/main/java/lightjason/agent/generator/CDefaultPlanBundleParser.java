@@ -30,8 +30,10 @@ import lightjason.grammar.IASTVisitorPlanBundle;
 import lightjason.grammar.IGenericParser;
 import lightjason.grammar.PlanBundleLexer;
 import lightjason.grammar.PlanBundleParser;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -59,7 +61,7 @@ public final class CDefaultPlanBundleParser extends IGenericParser<IASTVisitorPl
     @Override
     public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions );
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, Collections.<IRule>emptySet() );
         l_visitor.visit( this.getParser( p_stream ).planbundle() );
         return l_visitor;
     }

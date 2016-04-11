@@ -45,7 +45,6 @@ import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
@@ -102,10 +101,6 @@ public class CAgent implements IAgent
      */
     protected final IVariableBuilder m_variablebuilder;
     /**
-     * map with all existing plans
-     */
-    protected final Multimap<IPath, IRule> m_rules;
-    /**
      * map with all existing plans and successful / fail runs
      */
     protected final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
@@ -155,13 +150,10 @@ public class CAgent implements IAgent
         m_aggregation = p_configuration.getAggregate();
         m_variablebuilder = p_configuration.getVariableBuilder();
         m_fuzzy = p_configuration.getFuzzy();
-        m_rules = Multimaps.synchronizedMultimap( HashMultimap.create( p_configuration.getRules() ) );
 
-        // initial plans with default values
-        p_configuration.getPlans().asMap().entrySet().parallelStream()
-                       .forEach( i -> i.getValue().stream()
-                                       .forEach( j -> m_plans.put( i.getKey(), new MutableTriple<>( j, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) )
-                       );
+        // initial plans
+        p_configuration.getPlans().parallelStream()
+                       .forEach( i -> m_plans.put( i.getTrigger(), new MutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
 
         if ( p_configuration.getInitialGoal() != null )
             m_trigger.add( p_configuration.getInitialGoal() );
@@ -257,12 +249,6 @@ public class CAgent implements IAgent
     public final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> getPlans()
     {
         return m_plans;
-    }
-
-    @Override
-    public final Multimap<IPath, IRule> getRules()
-    {
-        return m_rules;
     }
 
     @Override

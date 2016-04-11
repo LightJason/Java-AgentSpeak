@@ -23,13 +23,9 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.Multimap;
 import lightjason.agent.configuration.IPlanBundleConfiguration;
-import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Set;
 
@@ -42,11 +38,7 @@ public class CPlanBundle implements IPlanBundle
     /**
      * map with all existing plans
      */
-    protected final Multimap<IPath, IRule> m_rules;
-    /**
-     * map with all existing plans
-     */
-    protected final Multimap<ITrigger, IPlan> m_plans;
+    protected final Set<IPlan> m_plans;
     /**
      * initial beliefs
      */
@@ -60,7 +52,6 @@ public class CPlanBundle implements IPlanBundle
      */
     public CPlanBundle( final IPlanBundleConfiguration p_configuration )
     {
-        m_rules = p_configuration.getRules();
         m_plans = p_configuration.getPlans();
         m_initialbeliefs = p_configuration.getBeliefs();
     }
@@ -72,14 +63,9 @@ public class CPlanBundle implements IPlanBundle
     }
 
     @Override
-    public final Multimap<ITrigger, IPlan> getPlans()
+    public final Set<IPlan> getPlans()
     {
         return m_plans;
     }
 
-    @Override
-    public final Multimap<IPath, IRule> getRules()
-    {
-        return m_rules;
-    }
 }

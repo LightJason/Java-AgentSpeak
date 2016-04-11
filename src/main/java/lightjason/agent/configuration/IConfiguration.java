@@ -23,11 +23,9 @@
 
 package lightjason.agent.configuration;
 
-import com.google.common.collect.Multimap;
-import lightjason.common.IPath;
 import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
+
+import java.util.Set;
 
 
 /**
@@ -41,15 +39,8 @@ public interface IConfiguration
     /**
      * get a multimap with event-plan matching
      *
-     * @return map of trigger and plans
+     * @return set plans
      */
-    Multimap<ITrigger, IPlan> getPlans();
-
-    /**
-     * returns the rules / principles
-     *
-     * @return map of trigger and rule
-     */
-    Multimap<IPath, IRule> getRules();
+    Set<IPlan> getPlans();
 
 }

@@ -33,6 +33,7 @@ import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.expression.logical.CBinary;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -79,9 +80,10 @@ public final class CCommon
      *
      * @param p_item any parsed item (term rule)
      * @param p_actions map with agent actions
+     * @param p_rules map with agent rules
      * @return execution structure or null
      */
-    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions )
+    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Map<IPath, IRule> p_rules )
     {
         // null value will be passed
         if ( p_item == null )
@@ -92,8 +94,12 @@ public final class CCommon
             return (IExecution) p_item;
 
         // literals are actions
-        if ( p_item instanceof ILiteral )
+        if ( ( p_item instanceof ILiteral ) ) //&& (p_actions.containsKey( ((ILiteral) p_item).getFQNFunctor() )) )
             return new CProxyAction( p_actions, (ILiteral) p_item );
+
+        // literals are rules
+        //if ( ( p_item instanceof ILiteral ) && (p_rules.containsKey( ((ILiteral) p_item).getFQNFunctor() )) )
+        //    return p_rules.get( ((ILiteral) p_item).getFQNFunctor() );
 
         // otherwise only simple types encapsulate
         return new CRawAction<>( p_item );

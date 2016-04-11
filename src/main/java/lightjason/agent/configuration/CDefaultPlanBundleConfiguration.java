@@ -23,14 +23,8 @@
 
 package lightjason.agent.configuration;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Collections;
 import java.util.Set;
@@ -44,11 +38,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     /**
      * instance of plans
      */
-    private final Multimap<ITrigger, IPlan> m_plans;
-    /**
-     * instance of rules
-     */
-    private final Multimap<IPath, IRule> m_rules;
+    private final Set<IPlan> m_plans;
     /**
      * instance of initial beliefs
      */
@@ -58,20 +48,12 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
      * ctor
      *
      * @param p_plans plans
-     * @param p_rules rules
      * @param p_initalbeliefs initial beliefs
      */
-    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )
+    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<ILiteral> p_initalbeliefs )
     {
         m_initialbeliefs = Collections.unmodifiableSet( p_initalbeliefs );
-
-        final Multimap<ITrigger, IPlan> l_plans = HashMultimap.create();
-        p_plans.stream().forEach( i -> l_plans.put( i.getTrigger(), i ) );
-        m_plans = ImmutableMultimap.copyOf( l_plans );
-
-        final Multimap<IPath, IRule> l_rules = HashMultimap.create();
-        p_rules.stream().forEach( i -> l_rules.put( i.getIdentifier(), i ) );
-        m_rules = ImmutableMultimap.copyOf( l_rules );
+        m_plans = Collections.unmodifiableSet( p_plans );
     }
 
     @Override
@@ -81,14 +63,9 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     }
 
     @Override
-    public final Multimap<ITrigger, IPlan> getPlans()
+    public final Set<IPlan> getPlans()
     {
         return m_plans;
     }
 
-    @Override
-    public final Multimap<IPath, IRule> getRules()
-    {
-        return m_rules;
-    }
 }

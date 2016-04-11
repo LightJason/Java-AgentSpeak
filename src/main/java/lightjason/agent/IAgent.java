@@ -32,7 +32,6 @@ import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
 import org.apache.commons.lang3.tuple.MutableTriple;
 
 import java.util.Map;
@@ -126,11 +125,6 @@ public interface IAgent extends Callable<IAgent>
      * @return plan map
      */
     Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> getPlans();
-
-    /**
-     * returns the internal map of rules
-     */
-    Multimap<IPath, IRule> getRules();
 
     /**
      * return fuzzy operator

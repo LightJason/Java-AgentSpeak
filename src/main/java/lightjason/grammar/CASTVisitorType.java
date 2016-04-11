@@ -51,6 +51,7 @@ import lightjason.language.execution.expression.numerical.CComparable;
 import lightjason.language.execution.expression.numerical.CMultiplicative;
 import lightjason.language.execution.expression.numerical.CPower;
 import lightjason.language.execution.expression.numerical.CRelational;
+import lightjason.language.instantiable.rule.IRule;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 import java.util.Collection;
@@ -71,6 +72,10 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
      */
     protected final Map<IPath, IAction> m_actions;
     /**
+     * map with logical rules
+     */
+    protected final Map<IPath, IRule> m_rules;
+    /**
      * parsed literal
      */
     protected ILiteral m_literal;
@@ -89,7 +94,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
      */
     public CASTVisitorType()
     {
-        this( Collections.<IAction>emptySet() );
+        this( Collections.<IAction>emptySet(), Collections.<IRule>emptySet() );
     }
 
     /**
@@ -97,9 +102,10 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
      *
      * @param p_actions set with actions
      */
-    public CASTVisitorType( final Set<IAction> p_actions )
+    public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
-        m_actions = p_actions.stream().collect( Collectors.toMap( IAction::getName, i -> i ) );
+        m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier().getFQNFunctor(), i -> i ) );
     }
 
     // --- start rules -----------------------------------------------------------------------------------------------------------------------------------------
@@ -185,7 +191,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public final Object visitTernary_operation_true( final TypeParser.Ternary_operation_trueContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
     }
 
 
@@ -193,7 +199,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public final Object visitTernary_operation_false( final TypeParser.Ternary_operation_falseContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions );
+        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
