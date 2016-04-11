@@ -159,7 +159,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         m_plans = ImmutableMultimap.copyOf( l_plans );
 
         final Multimap<IPath, IRule> l_rules = HashMultimap.create();
-        p_rules.stream().forEach( i -> l_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+        p_rules.stream().forEach( i -> l_rules.put( i.getIdentifier(), i ) );
         m_rules = ImmutableMultimap.copyOf( l_rules );
 
         m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;

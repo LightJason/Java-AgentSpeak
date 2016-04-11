@@ -23,7 +23,7 @@
 
 package lightjason.language.instantiable.rule;
 
-import lightjason.language.ILiteral;
+import lightjason.common.IPath;
 import lightjason.language.instantiable.IInstantiable;
 
 
@@ -38,6 +38,6 @@ public interface IRule extends IInstantiable
      *
      * @return identifier without signature
      */
-    ILiteral getIdentifier();
+    IPath getIdentifier();
 
 }

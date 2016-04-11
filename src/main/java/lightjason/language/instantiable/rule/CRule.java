@@ -24,6 +24,7 @@
 package lightjason.language.instantiable.rule;
 
 import lightjason.agent.IAgent;
+import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
@@ -72,9 +73,9 @@ public final class CRule implements IRule
     }
 
     @Override
-    public final ILiteral getIdentifier()
+    public final IPath getIdentifier()
     {
-        return m_id;
+        return m_id.getFQNFunctor();
     }
 
     @Override
