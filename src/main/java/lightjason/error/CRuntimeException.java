@@ -23,7 +23,11 @@
 
 package lightjason.error;
 
+import lightjason.common.CCommon;
 import lightjason.language.execution.IContext;
+
+import java.text.MessageFormat;
+import java.util.logging.Logger;
 
 
 /**
@@ -32,6 +36,10 @@ import lightjason.language.execution.IContext;
 @SuppressWarnings( "serial" )
 public final class CRuntimeException extends RuntimeException
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
     /**
      * execution context
      */
@@ -47,6 +55,7 @@ public final class CRuntimeException extends RuntimeException
     {
         super();
         m_context = p_context;
+        LOGGER.warning( MessageFormat.format( "exception is thrown: {0}", m_context ) );
     }
 
     /**
@@ -59,6 +68,7 @@ public final class CRuntimeException extends RuntimeException
     {
         super( p_message );
         m_context = p_context;
+        LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }
 
     /**
@@ -72,6 +82,7 @@ public final class CRuntimeException extends RuntimeException
     {
         super( p_message, p_cause );
         m_context = p_context;
+        LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }
 
     /**
@@ -84,6 +95,7 @@ public final class CRuntimeException extends RuntimeException
     {
         super( p_cause );
         m_context = p_context;
+        LOGGER.warning( MessageFormat.format( "{0}: {1}", p_cause.getMessage(), m_context ) );
     }
 
     /**
@@ -101,6 +113,7 @@ public final class CRuntimeException extends RuntimeException
     {
         super( p_message, p_cause, p_enableSuppression, p_writableStackTrace );
         m_context = p_context;
+        LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }
 
     /**

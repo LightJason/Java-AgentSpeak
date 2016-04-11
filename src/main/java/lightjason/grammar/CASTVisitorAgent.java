@@ -106,7 +106,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
      * logger
      */
     protected final static Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
-
     /**
      * initial goal
      */
@@ -156,6 +155,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
     {
         p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
+        LOGGER.info( MessageFormat.format( "parsed initial beliefs: {0}", m_InitialBeliefs ) );
         return null;
     }
 
@@ -165,6 +165,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
     {
         m_InitialGoal = CLiteral.from( (String) this.visitAtom( p_context.atom() ) );
+        LOGGER.info( MessageFormat.format( "parsed initial-goal: {0}", m_InitialGoal ) );
         return null;
     }
 
@@ -188,6 +189,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
             return null;
 
         p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.add( j ) ) );
+        LOGGER.info( MessageFormat.format( "parsed plans: {0}", m_plans ) );
         return null;
     }
 
@@ -197,6 +199,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
         p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.add( i ) );
+        LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules ) );
         return null;
     }
 
@@ -252,8 +255,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;
-
-        LOGGER.info( MessageFormat.format( "visit annotations: {0}", p_context.getText() ) );
 
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
         if ( p_context.annotation_atom() != null )
@@ -417,8 +418,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitBarrier( final AgentParser.BarrierContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit barrier: {0}", p_context.getText() ) );
-
         return p_context.integernumber_positive() == null
                ? new CBarrier( (IExpression) this.visitExpression( p_context.expression() ) )
                : new CBarrier(
@@ -484,8 +483,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitLambda( final AgentParser.LambdaContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit lambda-expression: {0}", p_context.getText() ) );
-
         if ( p_context.lambda_return() != null )
             return new CLambdaExpression(
                     p_context.AT() != null,
@@ -530,7 +527,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public final Object visitAssignment_expression( final AgentParser.Assignment_expressionContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit assignment: {0}", p_context.getText() ) );
         return this.visitChildren( p_context );
     }
 
@@ -579,8 +575,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit achievment-goal: {0}", p_context.getText() ) );
-
         if ( p_context.literal() != null )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
@@ -659,7 +653,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit literal: {0}", p_context.getText() ) );
         return new CLiteral(
                 p_context.AT() != null,
                 p_context.STRONGNEGATION() != null,
@@ -818,7 +811,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitVariable( final AgentParser.VariableContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit variable: {0}", p_context.getText() ) );
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
 
@@ -827,8 +819,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
-        LOGGER.info( MessageFormat.format( "visit expression: {0}", p_context.getText() ) );
-
         // bracket expression
         if ( p_context.expression_bracket() != null )
             return this.visitExpression_bracket( p_context.expression_bracket() );

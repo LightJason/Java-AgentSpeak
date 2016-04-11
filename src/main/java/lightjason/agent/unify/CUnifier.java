@@ -34,6 +34,7 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -50,11 +51,31 @@ public final class CUnifier implements IUnifier
     /**
      * hash-based unify algorithm
      */
-    private final IAlgorithm m_hashbased = new CHash();
+    private final IAlgorithm m_hashbased;
     /**
      * recursive unify algorithm
      */
-    private final IAlgorithm m_recursive = new CRecursive();
+    private final IAlgorithm m_recursive;
+
+    /**
+     * ctor
+     */
+    public CUnifier()
+    {
+        this( new CHash(), new CRecursive() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_hashbased hash-based unification algorithm
+     * @param p_recursive recursive-based unification algorithm
+     */
+    public CUnifier( final IAlgorithm p_hashbased, final IAlgorithm p_recursive )
+    {
+        m_hashbased = p_hashbased;
+        m_recursive = p_recursive;
+    }
 
 
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
@@ -176,6 +197,26 @@ public final class CUnifier implements IUnifier
 
     // --- unifying algorithm of a literal ---------------------------------------------------------------------------------------------------------------------
 
+    @Override
+    public final int hashCode()
+    {
+        return m_hashbased.hashCode() + m_recursive.hashCode();
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "hash-based unification: {0} / recursive unification: {1}", m_hashbased, m_recursive );
+    }
+
     /**
      * search all relevant literals within the agent beliefbase and unifies the variables
      *
@@ -193,7 +234,4 @@ public final class CUnifier implements IUnifier
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 }

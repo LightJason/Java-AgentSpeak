@@ -24,6 +24,11 @@
 package lightjason.error;
 
 
+import lightjason.common.CCommon;
+
+import java.util.logging.Logger;
+
+
 /**
  * exception for parsing error
  *
@@ -33,6 +38,10 @@ package lightjason.error;
 @SuppressWarnings( "serial" )
 public final class CSyntaxErrorException extends IllegalStateException
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CSyntaxErrorException.class );
 
     /**
      * ctor
@@ -40,6 +49,7 @@ public final class CSyntaxErrorException extends IllegalStateException
     public CSyntaxErrorException()
     {
         super();
+        LOGGER.warning( "exception is thrown" );
     }
 
     /**
@@ -50,6 +60,7 @@ public final class CSyntaxErrorException extends IllegalStateException
     public CSyntaxErrorException( final String p_message )
     {
         super( p_message );
+        LOGGER.warning( p_message );
     }
 
     /**
@@ -61,6 +72,7 @@ public final class CSyntaxErrorException extends IllegalStateException
     public CSyntaxErrorException( final String p_message, final Throwable p_cause )
     {
         super( p_message, p_cause );
+        LOGGER.warning( p_message );
     }
 
     /**
@@ -71,5 +83,6 @@ public final class CSyntaxErrorException extends IllegalStateException
     public CSyntaxErrorException( final Throwable p_cause )
     {
         super( p_cause );
+        LOGGER.warning( p_cause.getMessage() );
     }
 }

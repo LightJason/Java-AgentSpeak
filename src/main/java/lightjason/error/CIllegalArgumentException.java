@@ -23,12 +23,21 @@
 
 package lightjason.error;
 
+import lightjason.common.CCommon;
+
+import java.util.logging.Logger;
+
+
 /**
  * illegal argument exception
  */
 @SuppressWarnings( "serial" )
 public final class CIllegalArgumentException extends IllegalArgumentException
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CIllegalArgumentException.class );
 
     /**
      * ctor
@@ -36,16 +45,18 @@ public final class CIllegalArgumentException extends IllegalArgumentException
     public CIllegalArgumentException()
     {
         super();
+        LOGGER.warning( "exception is thrown" );
     }
 
     /**
      * ctor
      *
-     * @param p_string message
+     * @param p_message message
      */
-    public CIllegalArgumentException( final String p_string )
+    public CIllegalArgumentException( final String p_message )
     {
-        super( p_string );
+        super( p_message );
+        LOGGER.warning( p_message );
     }
 
     /**
@@ -57,6 +68,7 @@ public final class CIllegalArgumentException extends IllegalArgumentException
     public CIllegalArgumentException( final String p_message, final Throwable p_cause )
     {
         super( p_message, p_cause );
+        LOGGER.warning( p_message );
     }
 
     /**
@@ -67,5 +79,6 @@ public final class CIllegalArgumentException extends IllegalArgumentException
     public CIllegalArgumentException( final Throwable p_cause )
     {
         super( p_cause );
+        LOGGER.warning( p_cause.getMessage() );
     }
 }

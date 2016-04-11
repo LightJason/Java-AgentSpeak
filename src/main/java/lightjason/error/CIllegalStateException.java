@@ -23,6 +23,11 @@
 
 package lightjason.error;
 
+import lightjason.common.CCommon;
+
+import java.util.logging.Logger;
+
+
 /**
  * illegal state exception
  */
@@ -30,11 +35,17 @@ package lightjason.error;
 public final class CIllegalStateException extends IllegalStateException
 {
     /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
+
+    /**
      * ctor
      */
     public CIllegalStateException()
     {
         super();
+        LOGGER.warning( "exception is thrown" );
     }
 
     /**
@@ -45,6 +56,7 @@ public final class CIllegalStateException extends IllegalStateException
     public CIllegalStateException( final String p_message )
     {
         super( p_message );
+        LOGGER.warning( p_message );
     }
 
     /**
@@ -56,6 +68,7 @@ public final class CIllegalStateException extends IllegalStateException
     public CIllegalStateException( final String p_message, final Throwable p_cause )
     {
         super( p_message, p_cause );
+        LOGGER.warning( p_message );
     }
 
     /**
@@ -66,5 +79,6 @@ public final class CIllegalStateException extends IllegalStateException
     public CIllegalStateException( final Throwable p_cause )
     {
         super( p_cause );
+        LOGGER.warning( p_cause.getMessage() );
     }
 }
