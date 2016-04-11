@@ -38,7 +38,8 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.action.CAchievementGoal;
+import lightjason.language.execution.action.CAchievementGoalLiteral;
+import lightjason.language.execution.action.CAchievementGoalVariable;
 import lightjason.language.execution.action.CBarrier;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
@@ -566,7 +567,13 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
-        return new CAchievementGoal( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+        if ( p_context.literal() != null )
+            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+
+        if ( p_context.variable() != null )
+            return new CAchievementGoalVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
     }
 
 

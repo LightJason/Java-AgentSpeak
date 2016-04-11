@@ -25,37 +25,30 @@ package lightjason.language.execution.action;
 
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
-import lightjason.language.ILiteral;
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.plan.trigger.CTrigger;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 
 /**
- * achievement goal action
+ * abstract achievment-goal class for definied base structure of goal execution
  */
-public final class CAchievementGoal extends IBaseExecution<ILiteral>
+public abstract class IAchievementGoal<T> extends IBaseExecution<T>
 {
     /**
      * flag to run immediately
      */
-    private final boolean m_immediately;
+    protected final boolean m_immediately;
 
     /**
      * ctor
      *
-     * @param p_literal literal
+     * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoal( final ILiteral p_literal, final boolean p_immediately )
+    protected IAchievementGoal( final T p_type, final boolean p_immediately )
     {
-        super( p_literal );
+        super( p_type );
         m_immediately = p_immediately;
     }
 
@@ -63,14 +56,6 @@ public final class CAchievementGoal extends IBaseExecution<ILiteral>
     public final String toString()
     {
         return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        return p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
     }
 
     @Override
