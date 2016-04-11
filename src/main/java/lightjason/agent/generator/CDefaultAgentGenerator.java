@@ -29,6 +29,7 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.agent.fuzzy.CBoolFuzzy;
+import lightjason.common.CCommon;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
@@ -36,7 +37,10 @@ import lightjason.language.score.IAggregation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -46,6 +50,10 @@ import java.util.stream.IntStream;
  */
 public class CDefaultAgentGenerator implements IAgentGenerator
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CDefaultAgentGenerator.class );
     /**
      * configuration of an agent
      */
@@ -100,6 +108,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     @Override
     public <T> IAgent generate( final T... p_data ) throws Exception
     {
+        LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ) );
         return new CAgent( m_configuration );
     }
 

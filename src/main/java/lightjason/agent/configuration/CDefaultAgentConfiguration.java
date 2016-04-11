@@ -32,6 +32,7 @@ import lightjason.agent.unify.CUnifier;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
 import lightjason.beliefbase.IView;
+import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IVariableBuilder;
@@ -43,9 +44,11 @@ import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.CZeroAggregation;
 import lightjason.language.score.IAggregation;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.logging.Logger;
 
 
 /**
@@ -53,6 +56,11 @@ import java.util.Set;
  */
 public class CDefaultAgentConfiguration implements IAgentConfiguration
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CDefaultAgentConfiguration.class );
+
     /**
      * name of the root beliefbase
      */
@@ -156,6 +164,8 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         m_rules = ImmutableMultimap.copyOf( l_rules );
 
         m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
+
+        LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
     }
 
     @Override
@@ -212,4 +222,20 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         return m_rules;
     }
 
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format(
+                "{0} ( unifier: {1} / aggregation {2} / {3} / variable-builder: {4} / initial-goal: {5} / initial beliefs: {6} / plan-trigger: {7} / rule-trigger: {8} )",
+                super.toString(),
+                m_unifier,
+                m_aggregation,
+                m_fuzzy,
+                m_variablebuilder,
+                m_initialgoal,
+                m_initialbeliefs,
+                m_plans.keySet(),
+                m_rules.keySet()
+        );
+    }
 }

@@ -43,6 +43,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 
 /**
@@ -85,6 +86,18 @@ public final class CCommon
     private CCommon()
     {
     }
+
+    /**
+     * returns a logger instance
+     *
+     * @param p_class class type
+     * @return logger
+     */
+    public static Logger getLogger( final Class<?> p_class )
+    {
+        return Logger.getLogger( p_class.getName() );
+    }
+
 
     /**
      * returns the language bundle

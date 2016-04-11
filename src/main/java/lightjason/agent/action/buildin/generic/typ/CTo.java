@@ -31,13 +31,12 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
  * action to cast any java object type
- *
- * @todo add logger on exception
  */
 public final class CTo extends IBuildinAction
 {
@@ -72,6 +71,7 @@ public final class CTo extends IBuildinAction
         }
         catch ( final ClassNotFoundException p_exception )
         {
+            LOGGER.warning( MessageFormat.format( "casting [{0}] error: {1}", p_argument.get( 0 ), p_exception ) );
             return CFuzzyValue.from( false );
         }
     }

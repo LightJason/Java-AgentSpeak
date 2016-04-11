@@ -29,6 +29,8 @@ import lightjason.language.execution.fuzzy.operator.IFuzzyOperator;
 import lightjason.language.execution.fuzzy.operator.bool.CComplement;
 import lightjason.language.execution.fuzzy.operator.bool.CIntersection;
 
+import java.text.MessageFormat;
+
 
 /**
  * boolean fuzzy element
@@ -74,5 +76,11 @@ public final class CBoolFuzzy implements IFuzzy<Boolean>
     public final IDefuzzification<Boolean> getDefuzzyfication()
     {
         return m_defuzzyfication;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "defuzzyfication: {0} / fuzzy-operator: {1}", m_defuzzyfication, m_operator );
     }
 }

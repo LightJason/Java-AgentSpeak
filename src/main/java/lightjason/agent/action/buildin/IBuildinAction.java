@@ -24,11 +24,13 @@
 package lightjason.agent.action.buildin;
 
 import lightjason.agent.action.IBaseAction;
+import lightjason.common.CCommon;
 import lightjason.common.CPath;
 import lightjason.common.IPath;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -37,6 +39,11 @@ import java.util.List;
  */
 public abstract class IBuildinAction extends IBaseAction
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( IBuildinAction.class );
+
     /**
      * action name
      */

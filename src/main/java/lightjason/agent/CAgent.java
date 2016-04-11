@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,6 +72,11 @@ import java.util.stream.Stream;
 @SuppressWarnings( "serial" )
 public class CAgent implements IAgent
 {
+    /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CAgent.class );
+
     /**
      * beliefbase
      *
@@ -159,6 +165,8 @@ public class CAgent implements IAgent
 
         if ( p_configuration.getInitialGoal() != null )
             m_trigger.add( p_configuration.getInitialGoal() );
+
+        LOGGER.info( MessageFormat.format( "create agent: {0}", this ) );
     }
 
     @Override
@@ -279,6 +287,8 @@ public class CAgent implements IAgent
     @Override
     public IAgent call() throws Exception
     {
+        LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
+
         // run beliefbase update, because environment can be changed
         m_beliefbase.update( this );
         if ( m_hibernate )

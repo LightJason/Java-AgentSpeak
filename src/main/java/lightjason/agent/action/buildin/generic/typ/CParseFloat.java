@@ -31,17 +31,15 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
  * action for parsing a float from string
- *
- * @todo add logger to exeception
  */
 public final class CParseFloat extends IBuildinAction
 {
-
     /**
      * ctor
      */
@@ -68,6 +66,7 @@ public final class CParseFloat extends IBuildinAction
         }
         catch ( final Exception p_exception )
         {
+            LOGGER.warning( MessageFormat.format( "parsing float [{0}] error: {1}", p_argument.get( 0 ), p_exception ) );
             return CFuzzyValue.from( false );
         }
 
