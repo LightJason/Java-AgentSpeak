@@ -288,12 +288,11 @@ public class CAgent implements IAgent
         // update defuzzification
         m_fuzzy.getDefuzzyfication().update( this );
 
-        // create a list of all possible execution elements and create a local cache for well-defined executionl
+        // create a list of all possible execution elements, that is a local cache for well-defined execution
         final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
                 m_trigger.parallelStream(),
                 m_beliefbase.getTrigger().parallelStream()
-        ).flatMap( i -> this.executionlist( i ).parallelStream() )
-                                                                                                           .collect( Collectors.toList() );
+        ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
 
         // clear running plan- and trigger list and execute elements
         m_runningplans.clear();
@@ -376,7 +375,7 @@ public class CAgent implements IAgent
                 i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
         ) );
 
-        // execute plan and return values
+        // execute plan and return values and return execution result
         return p_execution.parallelStream().map( i -> {
 
             final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
@@ -386,9 +385,7 @@ public class CAgent implements IAgent
                 i.getLeft().getRight().getAndIncrement();
 
             return l_result;
-        } )
-                          // collect execution results
-                          .collect( m_fuzzy.getResultOperator() );
+        } ).collect( m_fuzzy.getResultOperator() );
     }
 
 }
