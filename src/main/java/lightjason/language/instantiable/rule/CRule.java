@@ -88,7 +88,7 @@ public final class CRule implements IRule
     @Override
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
-        return 0;
+        return p_aggregate.evaluate( m_action.parallelStream().flatMap( i -> i.parallelStream() ).mapToDouble( i -> i.score( p_aggregate, p_agent ) ).boxed() );
     }
 
     @Override

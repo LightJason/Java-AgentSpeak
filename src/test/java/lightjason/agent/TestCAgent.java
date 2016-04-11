@@ -43,7 +43,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,6 +52,7 @@ import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertTrue;
 
@@ -193,9 +193,9 @@ public final class TestCAgent
         }
 
         @Override
-        public final double evaluate( final Collection<Double> p_values )
+        public final double evaluate( final Stream<Double> p_values )
         {
-            return p_values.parallelStream().mapToDouble( i -> i ).sum();
+            return p_values.mapToDouble( i -> i ).sum();
         }
     }
 

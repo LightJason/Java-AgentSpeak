@@ -27,7 +27,7 @@ import com.google.common.collect.Multiset;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 
 /**
@@ -42,7 +42,7 @@ public final class CZeroAggregation implements IAggregation
     }
 
     @Override
-    public final double evaluate( final Collection<Double> p_values )
+    public final double evaluate( final Stream<Double> p_values )
     {
         return 0;
     }

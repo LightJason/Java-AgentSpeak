@@ -27,7 +27,7 @@ import com.google.common.collect.Multiset;
 import lightjason.agent.IAgent;
 import lightjason.agent.action.IAction;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 
 /**
@@ -53,6 +53,6 @@ public interface IAggregation
      * @param p_values list with single score values
      * @return full aggregated score value of a plan
      */
-    double evaluate( final Collection<Double> p_values );
+    double evaluate( final Stream<Double> p_values );
 
 }
