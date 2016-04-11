@@ -89,9 +89,6 @@ public class CView implements IView
         m_parent = p_parent;
     }
 
-    /**
-     * @bug incomplete
-     */
     @Override
     public final Set<ITrigger> getTrigger()
     {
