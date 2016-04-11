@@ -110,26 +110,12 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final boolean change( final ILiteral p_before, final ILiteral p_after )
-    {
-        if ( ( !p_before.getFQNFunctor().equals( p_after.getFQNFunctor() ) ) && ( p_before.isNegated() == p_after.isNegated() ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "functorequal", p_before, p_after ) );
-
-        // create modified-event for the changed literal
-        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.CHANGEBELIEF, p_after ) ) );
-
-        // run remove and add manually
-        return m_storage.getMultiElements().remove( p_before.getFunctor(), new ImmutablePair<>( p_before.isNegated(), p_before ) )
-               && m_storage.getMultiElements().put( p_after.getFunctor(), new ImmutablePair<>( p_after.isNegated(), p_after ) );
-    }
-
-    @Override
     public final void clear()
     {
         // create delete-event for all literals
         m_storage.getMultiElements().values().stream()
                  .forEach( j -> m_events.values().stream()
-                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.CHANGEBELIEF, j.getRight() ) ) )
+                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) )
                  );
 
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );

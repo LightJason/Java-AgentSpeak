@@ -201,7 +201,7 @@ repair_formula :
  * belief-action operator
  **/
 belief_action :
-    ( PLUS | MINUS | MINUSPLUS ) literal
+    ( PLUS | MINUS ) literal
     ;
 
 /**

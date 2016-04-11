@@ -315,8 +315,6 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
                 return ITrigger.EType.ADDBELIEF;
             case "-":
                 return ITrigger.EType.DELETEBELIEF;
-            case "-+":
-                return ITrigger.EType.CHANGEBELIEF;
 
             default:
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );
@@ -593,9 +591,6 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
         if ( p_context.MINUS() != null )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );
-
-        if ( p_context.MINUSPLUS() != null )
-            return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.CHANGE );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
     }

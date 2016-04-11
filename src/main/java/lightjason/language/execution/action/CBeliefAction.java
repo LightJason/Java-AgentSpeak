@@ -62,9 +62,6 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
         return MessageFormat.format( "{0}{1}", m_action, m_value );
     }
 
-    /**
-     * @todo change event incomplete
-     */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
@@ -80,9 +77,6 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
                 p_context.getAgent().getBeliefBase().remove( m_value.unify( p_context ) );
                 break;
 
-            case CHANGE:
-                break;
-
             default:
                 throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
         }
@@ -96,9 +90,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
     public enum EAction
     {
         ADD( "+" ),
-        DELETE( "-" ),
-        CHANGE( "-+" );
-
+        DELETE( "-" );
         /**
          * name
          */

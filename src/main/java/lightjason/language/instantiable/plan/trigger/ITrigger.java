@@ -65,7 +65,6 @@ public interface ITrigger extends IShallowCopy<ITrigger>
     {
         ADDBELIEF( "+" ),
         DELETEBELIEF( "-" ),
-        CHANGEBELIEF( "-+" ),
         ADDGOAL( "+!" ),
         DELETEGOAL( "-!" );
 

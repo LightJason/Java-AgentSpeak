@@ -123,12 +123,6 @@ public class CView implements IView
     }
 
     @Override
-    public final boolean change( final ILiteral p_before, final ILiteral p_after )
-    {
-        return this.remove( p_before ) && this.add( p_after );
-    }
-
-    @Override
     public final void clear()
     {
         m_beliefbase.clear();

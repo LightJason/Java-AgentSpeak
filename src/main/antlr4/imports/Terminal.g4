@@ -34,7 +34,6 @@ STRONGNEGATION             : '~';
 COMMA                      : ',';
 PLUS                       : '+';
 MINUS                      : '-';
-MINUSPLUS                  : '-+';
 DOUBLEEXCLAMATIONMARK      : '!!';
 QUESTIONMARK               : '?';
 

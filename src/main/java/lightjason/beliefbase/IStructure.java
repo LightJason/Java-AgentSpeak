@@ -54,20 +54,6 @@ public interface IStructure
     IView add( final IView p_view );
 
 
-
-    /**
-     * modify / change a literal
-     *
-     * @param p_before literal before modification
-     * @param p_after literal after modification
-     * @return boolean for correct modification
-     *
-     * @note it is an atomic optation of remove and add
-     */
-    boolean change( final ILiteral p_before, final ILiteral p_after );
-
-
-
     /**
      * removes a view in the current structure
      *
