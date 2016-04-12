@@ -23,6 +23,8 @@
 
 package lightjason.grammar;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -110,7 +112,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with logical rules
      */
-    protected final Map<IPath, IRule> m_rules;
+    protected final Multimap<ILiteral, IRule> m_rules = HashMultimap.create();
     /**
      * map with action definition
      */
@@ -125,7 +127,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public CASTVisitorPlanBundle( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier().getFQNFunctor(), i -> i ) );
+        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier(), i ) );
     }
 
 
@@ -164,7 +166,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
         return null;
     }
 

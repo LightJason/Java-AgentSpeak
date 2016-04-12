@@ -23,6 +23,7 @@
 
 package lightjason.grammar;
 
+import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.IPath;
 import lightjason.error.CSyntaxErrorException;
@@ -83,7 +84,7 @@ public final class CCommon
      * @param p_rules map with agent rules
      * @return execution structure or null
      */
-    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Map<IPath, IRule> p_rules )
+    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Multimap<ILiteral, IRule> p_rules )
     {
         // null value will be passed
         if ( p_item == null )

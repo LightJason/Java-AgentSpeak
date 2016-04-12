@@ -24,6 +24,8 @@
 package lightjason.grammar;
 
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -119,7 +121,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     /**
      * map with logical rules
      */
-    protected final Map<IPath, IRule> m_rules;
+    protected final Multimap<ILiteral, IRule> m_rules = HashMultimap.create();
     /**
      * map with action definition
      */
@@ -134,7 +136,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public CASTVisitorAgent( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier().getFQNFunctor(), i -> i ) );
+        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier(), i ) );
 
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions, m_rules ) );
     }
@@ -201,7 +203,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
         LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
         return null;
     }
