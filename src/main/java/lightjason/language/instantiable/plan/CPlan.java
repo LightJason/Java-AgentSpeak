@@ -170,11 +170,10 @@ public final class CPlan implements IPlan
         final List<IFuzzyValue<Boolean>> l_result = m_annotation.containsKey( IAnnotation.EType.PARALLEL )
                                                     ? this.executeparallel( p_context )
                                                     : this.executesequential( p_context );
-        // add atomic flag if exists
-        if ( m_annotation.containsKey( IAnnotation.EType.ATOMIC ) )
-            l_result.add( CFuzzyValue.from( true ) );
-
-        return l_result.stream().collect( p_context.getAgent().getFuzzy().getResultOperator() );
+        // if atomic flag if exists use this for return value
+        return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
+               ? CFuzzyValue.from( true )
+               : l_result.stream().collect( p_context.getAgent().getFuzzy().getResultOperator() );
     }
 
     @Override

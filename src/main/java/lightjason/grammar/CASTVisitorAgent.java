@@ -197,7 +197,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
+    /**
+     * @todo use placeholder rules for referencing
+     */
     @Override
     public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
@@ -269,7 +271,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-
+    /**
+     * @todo remove exclusive
+     */
     @Override
     public Object visitAnnotation_atom( final AgentParser.Annotation_atomContext p_context )
     {
