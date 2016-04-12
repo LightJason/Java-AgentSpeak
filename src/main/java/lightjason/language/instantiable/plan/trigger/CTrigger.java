@@ -67,8 +67,7 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = lightjason.language.CCommon.getVariableFrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode()
-                     + m_literal.getFQNFunctor().hashCode();
+        m_hashcode = m_event.hashCode() + m_literal.hashCode();
     }
 
     /**

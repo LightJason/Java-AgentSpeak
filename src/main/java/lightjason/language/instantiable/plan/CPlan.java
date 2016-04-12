@@ -55,7 +55,6 @@ import java.util.stream.Stream;
 /**
  * plan structure
  *
- * @todo hashcode / equals are missing
  * @todo annotation handling is incomplete
  */
 public final class CPlan implements IPlan
@@ -216,6 +215,21 @@ public final class CPlan implements IPlan
     )
     {
         return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
+    }
+
+    /**
+     * @bug hashcode buggy for plan definition
+     */
+    @Override
+    public final int hashCode()
+    {
+        return super.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
     }
 
     /**
