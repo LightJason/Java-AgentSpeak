@@ -45,7 +45,7 @@ public final class CNumberAnnotation<T extends Number> extends IBaseAnnotation<T
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}({1})", m_type, m_data );
+        return MessageFormat.format( "{0}({1})", m_type, m_value );
     }
 
 }

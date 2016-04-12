@@ -93,9 +93,7 @@ to describe an optimizing process.
 * The following annotation can be used
     * ```@Fuzzy``` sets the [fuzzy value](#fuzzy)
     * ```@Score``` adds an individual score value
-    * ```@Expires``` defines a belief which stops the [plan](#plan) execution immediatly
     * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the [actions](#action) can fail)
-    * ```@Exclusive``` no other [plan](#plan) / [rule](#rule) will run simulaneously
     * ```@Parallel``` all items will be run in parallel
  
 ### <a name="goal">Goals</a>

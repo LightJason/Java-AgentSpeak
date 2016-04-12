@@ -24,6 +24,9 @@
 package lightjason.language.execution.annotation;
 
 
+import java.util.Arrays;
+
+
 /**
  * annotation base
  *
@@ -34,7 +37,7 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     /**
      * number data
      */
-    protected final T m_data;
+    protected final T m_value;
     /**
      * annotation type
      */
@@ -44,11 +47,11 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
      * ctor
      *
      * @param p_type type
-     * @param p_data data
+     * @param p_value data
      */
-    protected IBaseAnnotation( final EType p_type, final T p_data )
+    protected IBaseAnnotation( final EType p_type, final T p_value )
     {
-        m_data = p_data;
+        m_value = p_value;
         m_type = p_type;
     }
 
@@ -71,8 +74,15 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     }
 
     @Override
-    public final T getData()
+    @SuppressWarnings( "unchecked" )
+    public final <N> N getValue()
     {
-        return m_data;
+        return (N) m_value;
+    }
+
+    @Override
+    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    {
+        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 }

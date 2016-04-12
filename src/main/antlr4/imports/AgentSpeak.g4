@@ -107,15 +107,14 @@ annotations :
  **/
 annotation_atom :
     AT
-    (ATOMIC | EXCLUSIVE | PARALLEL)
+    (ATOMIC | PARALLEL)
     ;
 
 /**
  * annotation with parameter
  **/
 annotation_literal :
-    AT
-    ( annotation_numeric_literal | annotation_symbolic_literal )
+    AT annotation_numeric_literal
     ;
 
 /**
@@ -125,16 +124,6 @@ annotation_numeric_literal :
     ( FUZZY | SCORE )
     LEFTROUNDBRACKET
     number
-    RIGHTROUNDBRACKET
-    ;
-
-/**
- * annotation with symbolic value
- **/
-annotation_symbolic_literal :
-    EXPIRES
-    LEFTROUNDBRACKET
-    atom
     RIGHTROUNDBRACKET
     ;
 

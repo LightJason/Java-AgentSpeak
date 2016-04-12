@@ -121,12 +121,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
     }
 
     @Override
-    public Object visitAnnotation_symbolic_literal( final AgentParser.Annotation_symbolic_literalContext p_context )
-    {
-        return null;
-    }
-
-    @Override
     public Object visitPlan_trigger( final AgentParser.Plan_triggerContext p_context )
     {
         return null;
@@ -512,12 +506,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
 
     @Override
     public Object visitAnnotation_numeric_literal( final PlanBundleParser.Annotation_numeric_literalContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitAnnotation_symbolic_literal( final PlanBundleParser.Annotation_symbolic_literalContext p_context )
     {
         return null;
     }

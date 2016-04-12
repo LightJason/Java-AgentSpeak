@@ -185,7 +185,7 @@ public final class CPlan implements IPlan
                         m_action.parallelStream().mapToDouble( i -> i.score( p_aggregate, p_agent ) ).boxed(),
                         Stream.of(
                                 m_annotation.containsKey( IAnnotation.EType.SCORE )
-                                ? ( (CNumberAnnotation<Number>) m_annotation.get( IAnnotation.EType.SCORE ) ).getData().doubleValue()
+                                ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()
                                 : 0
                         )
                 )

@@ -56,7 +56,6 @@ import lightjason.language.execution.action.unify.CExpressionUnify;
 import lightjason.language.execution.action.unify.CVariableUnify;
 import lightjason.language.execution.annotation.CAtomAnnotation;
 import lightjason.language.execution.annotation.CNumberAnnotation;
-import lightjason.language.execution.annotation.CSymbolicAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.CAtom;
 import lightjason.language.execution.expression.CProxyReturnExpression;
@@ -271,20 +270,15 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-    /**
-     * @todo remove exclusive
-     */
+
     @Override
     public Object visitAnnotation_atom( final AgentParser.Annotation_atomContext p_context )
     {
         if ( p_context.ATOMIC() != null )
-            return new CAtomAnnotation( IAnnotation.EType.ATOMIC );
-
-        if ( p_context.EXCLUSIVE() != null )
-            return new CAtomAnnotation( IAnnotation.EType.EXCLUSIVE );
+            return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
 
         if ( p_context.PARALLEL() != null )
-            return new CAtomAnnotation( IAnnotation.EType.PARALLEL );
+            return new CAtomAnnotation<>( IAnnotation.EType.PARALLEL );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "atomannotation", p_context.getText() ) );
     }
@@ -309,17 +303,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
             return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).doubleValue() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
-    }
-
-
-
-    @Override
-    public Object visitAnnotation_symbolic_literal( final AgentParser.Annotation_symbolic_literalContext p_context )
-    {
-        if ( p_context.EXPIRES() != null )
-            return new CSymbolicAnnotation( IAnnotation.EType.EXPIRES, (ILiteral) this.visitAtom( p_context.atom() ) );
-
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "symbolicliteralannotation", p_context.getText() ) );
     }
 
 

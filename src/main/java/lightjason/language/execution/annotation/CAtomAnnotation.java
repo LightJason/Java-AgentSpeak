@@ -26,7 +26,7 @@ package lightjason.language.execution.annotation;
 /**
  * annotation without parameter
  */
-public final class CAtomAnnotation extends IBaseAnnotation<Object>
+public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
 {
 
     /**

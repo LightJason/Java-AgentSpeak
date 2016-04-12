@@ -42,7 +42,15 @@ public interface IAnnotation<T>
      *
      * @return data or null
      */
-    T getData();
+    <N> N getValue();
+
+    /**
+     * checkes assignable of the value
+     *
+     * @param p_class class
+     * @return assignable (on null always true)
+     */
+    boolean isValueAssignableTo( final Class<?>... p_class );
 
 
     /**
@@ -52,9 +60,7 @@ public interface IAnnotation<T>
     {
         FUZZY( "@Fuzzy" ),
         SCORE( "@Score" ),
-        EXPIRES( "@Expires" ),
         ATOMIC( "@Atomic" ),
-        EXCLUSIVE( "@Exclusive" ),
         PARALLEL( "@Parallel" );
 
         /**
