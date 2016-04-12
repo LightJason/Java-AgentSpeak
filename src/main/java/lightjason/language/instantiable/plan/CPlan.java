@@ -25,7 +25,6 @@ package lightjason.language.instantiable.plan;
 
 import lightjason.agent.IAgent;
 import lightjason.language.CCommon;
-import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -36,9 +35,7 @@ import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.IInstantiable;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.StringUtils;
 
@@ -219,13 +216,6 @@ public final class CPlan implements IPlan
     )
     {
         return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
-    }
-
-    @Override
-    public final IInstantiable replaceplaceholder( final Map<ITrigger, IPlan> p_plans, final Map<ILiteral, IRule> p_rules
-    )
-    {
-        return null;
     }
 
     /**
