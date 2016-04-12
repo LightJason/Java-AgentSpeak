@@ -205,12 +205,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
     }
 
     @Override
-    public Object visitBarrier( final AgentParser.BarrierContext p_context )
-    {
-        return null;
-    }
-
-    @Override
     public Object visitUnification( final AgentParser.UnificationContext p_context )
     {
         return null;
@@ -590,12 +584,6 @@ public class CPrettify extends AbstractParseTreeVisitor<Object> implements IASTP
 
     @Override
     public Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
-    {
-        return null;
-    }
-
-    @Override
-    public Object visitBarrier( final PlanBundleParser.BarrierContext p_context )
     {
         return null;
     }

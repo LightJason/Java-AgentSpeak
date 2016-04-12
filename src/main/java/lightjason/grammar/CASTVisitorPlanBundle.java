@@ -39,7 +39,6 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CAchievementGoalLiteral;
 import lightjason.language.execution.action.CAchievementGoalVariable;
-import lightjason.language.execution.action.CBarrier;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
 import lightjason.language.execution.action.CLambdaExpression;
@@ -363,18 +362,6 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
             );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "repairelement", p_context.getText() ) );
-    }
-
-
-    @Override
-    public Object visitBarrier( final PlanBundleParser.BarrierContext p_context )
-    {
-        return p_context.integernumber_positive() == null
-               ? new CBarrier( (IExpression) this.visitExpression( p_context.expression() ) )
-               : new CBarrier(
-                       (IExpression) this.visitExpression( p_context.expression() ),
-                       (Long) this.visitIntegernumber_positive( p_context.integernumber_positive() )
-               );
     }
 
 

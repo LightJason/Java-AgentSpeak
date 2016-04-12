@@ -106,19 +106,18 @@ annotations :
  * atomic annotations (without parameter)
  **/
 annotation_atom :
-    AT
-    (ATOMIC | PARALLEL)
+    AT (ATOMIC | PARALLEL)
     ;
 
 /**
- * annotation with parameter
+ * annotation (with parameter)
  **/
 annotation_literal :
     AT annotation_numeric_literal
     ;
 
 /**
- * annotations with numerical parameter
+ * annotations (with numerical parameter)
  **/
 annotation_numeric_literal :
     ( FUZZY | SCORE )
@@ -168,7 +167,6 @@ body :
  **/
 body_formula :
     repair_formula
-    | barrier
     | belief_action
 
     | deconstruct_expression
@@ -214,13 +212,6 @@ deconstruct_expression :
     variablelist
     DECONSTRUCT
     ( literal | variable )
-    ;
-
-/**
- * barrier expression (synchronization)
- **/
-barrier :
-    LESS expression ( COMMA integernumber_positive )? GREATER
     ;
 
 /**
