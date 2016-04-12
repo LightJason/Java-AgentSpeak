@@ -21,50 +21,11 @@
  * @endcond
  */
 
-
 package lightjason.language.instantiable;
 
-import lightjason.agent.IAgent;
-import lightjason.language.ILiteral;
-import lightjason.language.IVariable;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.IExecution;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.instantiable.rule.IRule;
-import lightjason.language.score.IAggregation;
-
-import java.util.Map;
-import java.util.Set;
-
-
 /**
- * interface for (instantiable) plans and logical-rules
+ * interface for placeholder structures
  */
-public interface IInstantiable extends IExecution
+public interface IPlaceholder
 {
-
-    /**
-     * creates an individual execution context
-     *
-     * @param p_agent agent
-     * @param p_aggregation aggregation context
-     * @param p_variablebuilder variable builder or null
-     * @param p_variables variables
-     * @return individual context
-     */
-    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                         final Set<IVariable<?>> p_variables
-    );
-
-    /**
-     * replaces all placeholder objects and reinstantiate object
-     *
-     * @param p_plans full instantiated plans
-     * @param p_rules full instantiated rules
-     * @return new object instance without placeholders
-     */
-    IInstantiable replaceplaceholder( final Map<ITrigger, IPlan> p_plans, final Map<ILiteral, IRule> p_rules );
-
 }

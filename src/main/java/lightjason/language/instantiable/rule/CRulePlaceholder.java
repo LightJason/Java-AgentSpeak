@@ -32,11 +32,16 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.IInstantiable;
+import lightjason.language.instantiable.IPlaceholder;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -48,13 +53,18 @@ import java.util.Set;
  * with this class a placeholder is used first and after that we replace
  * the placeholder with the correct rule object
  */
-public final class CRulePlaceholder implements IRule
+public final class CRulePlaceholder implements IRule, IPlaceholder
 {
     /**
      * identifier of the rule
      */
     protected final ILiteral m_id;
 
+    /**
+     * ctor
+     *
+     * @param p_id rule literal
+     */
     public CRulePlaceholder( final ILiteral p_id )
     {
         m_id = p_id;
@@ -73,6 +83,13 @@ public final class CRulePlaceholder implements IRule
     )
     {
         return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
+    }
+
+    @Override
+    public final IInstantiable replaceplaceholder( final Map<ITrigger, IPlan> p_plans, final Map<ILiteral, IRule> p_rules
+    )
+    {
+        return this;
     }
 
     @Override
