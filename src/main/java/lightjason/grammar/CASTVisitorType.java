@@ -74,7 +74,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     /**
      * map with logical rules
      */
-    protected final Map<ILiteral, IRule> m_rules;
+    protected final Map<IPath, IRule> m_rules;
     /**
      * parsed literal
      */
@@ -105,7 +105,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier().getFQNFunctor(), i -> i ) );
     }
 
     // --- start rules -----------------------------------------------------------------------------------------------------------------------------------------

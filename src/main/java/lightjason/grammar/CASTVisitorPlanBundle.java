@@ -117,7 +117,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with logical rules
      */
-    protected final Map<ILiteral, IRule> m_rules;
+    protected final Map<IPath, IRule> m_rules;
     /**
      * map with action definition
      */
@@ -132,7 +132,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public CASTVisitorPlanBundle( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier().getFQNFunctor(), i -> i ) );
 
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions, m_rules ) );
     }
@@ -175,13 +175,14 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
         // create placeholder objects first and run parsing again to build full-qualified rule objects
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) ).forEach(
+                i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
         final Map<ILiteral, IRule> l_rules = p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).collect(
                 Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
 
         // clear rule list and replace placeholder objects
         m_rules.clear();
-        l_rules.values().parallelStream().map( i -> i.replaceplaceholder( l_rules ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        l_rules.values().parallelStream().map( i -> i.replaceplaceholder( l_rules ) ).forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
         LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
         return null;

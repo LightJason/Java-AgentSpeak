@@ -25,6 +25,7 @@ package lightjason.grammar;
 
 import lightjason.agent.action.IAction;
 import lightjason.common.IPath;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IExecution;
@@ -85,7 +86,7 @@ public final class CCommon
      *
      * @bug add proxy-rule-action
      */
-    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Map<ILiteral, IRule> p_rules )
+    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Map<IPath, IRule> p_rules )
     {
         // null value will be passed
         if ( p_item == null )
@@ -95,13 +96,17 @@ public final class CCommon
         if ( p_item instanceof IExecution )
             return (IExecution) p_item;
 
-        // literals are actions
-        if ( ( p_item instanceof ILiteral ) && ( p_actions.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) ) )
-            return new CProxyAction( p_actions, (ILiteral) p_item );
+        // literals are actions or rules
+        if ( p_item instanceof ILiteral )
+        {
+            if ( p_actions.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) )
+                return new CProxyAction( p_actions, (ILiteral) p_item );
 
-        // literals are rules
-        if ( ( p_item instanceof ILiteral ) && ( p_rules.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) ) )
-            return p_rules.get( ( (ILiteral) p_item ).getFQNFunctor() );
+            if ( p_rules.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) )
+                return p_rules.get( ( (ILiteral) p_item ).getFQNFunctor() );
+
+            throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notexecutable", p_item ) );
+        }
 
         // otherwise only simple types encapsulate
         return new CRawAction<>( p_item );
