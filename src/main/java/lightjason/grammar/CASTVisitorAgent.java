@@ -24,8 +24,6 @@
 package lightjason.grammar;
 
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -122,7 +120,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     /**
      * map with logical rules
      */
-    protected final Multimap<ILiteral, IRule> m_rules = HashMultimap.create();
+    protected final Map<ILiteral, IRule> m_rules;
     /**
      * map with action definition
      */
@@ -137,7 +135,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public CASTVisitorAgent( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
 
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions, m_rules ) );
     }
@@ -198,18 +196,18 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
 
-    /**
-     * @todo use placeholder rules for referencing
-     */
+
     @Override
     public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
-        // create placeholder objects first
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) ).forEach( i -> {
-            m_rules.put( i.getIdentifier(), i );
-        } );
-        // parse rules again and replace placeholder with definied objects
+        // create placeholder objects first and run parsing again to build full-qualified rule objects
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        final Map<ILiteral, IRule> l_rules = p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).collect(
+                Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
 
+        // clear rule list and replace placeholder objects
+        m_rules.clear();
+        l_rules.values().parallelStream().map( i -> i.replaceplaceholder( l_rules ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
 
         LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
         return null;

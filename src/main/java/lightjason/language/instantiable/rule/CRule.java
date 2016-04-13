@@ -33,9 +33,6 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.IInstantiable;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
@@ -79,6 +76,19 @@ public final class CRule implements IRule
     public final ILiteral getIdentifier()
     {
         return m_id;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final IRule replaceplaceholder( final Map<ILiteral, IRule> p_rules )
+    {
+        return new CRule( m_id, m_action.stream().map(
+                i -> i.stream().map( j -> j instanceof CRulePlaceholder
+                                          ? p_rules.get( ( (CRulePlaceholder) j ).getIdentifier() )
+                                          : j
+                ).collect( Collectors.toList() )
+        ).collect( Collectors.toList() )
+        );
     }
 
     @Override
@@ -139,13 +149,6 @@ public final class CRule implements IRule
     )
     {
         return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
-    }
-
-    @Override
-    public final IInstantiable replaceplaceholder( final Map<ITrigger, IPlan> p_plans, final Map<ILiteral, IRule> p_rules
-    )
-    {
-        return null;
     }
 
 }

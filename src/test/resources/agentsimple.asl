@@ -32,7 +32,7 @@ second(true).
 
 fibonacci(X, Y)
     :- X <= 2; Y=1
-    //:- fibonacci(X-1,A); fibonacci(X-2,B); Y = A+B
+    :- fibonacci(X-1,A); fibonacci(X-2,B); Y = A+B
     .
 
 myfunction(X) :- generic/print("my logical rule", X).

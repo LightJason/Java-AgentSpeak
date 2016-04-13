@@ -49,7 +49,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -71,7 +70,7 @@ public final class TestCAgent
     static
     {
         // disable logger
-        LogManager.getLogManager().reset();
+        //LogManager.getLogManager().reset();
 
         // create actions
         final Random l_random = new Random();

@@ -25,8 +25,6 @@ package lightjason.language.instantiable.rule;
 
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.IInstantiable;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Map;
 
@@ -47,10 +45,9 @@ public interface IRule extends IInstantiable
     /**
      * replaces all placeholder objects and reinstantiate object
      *
-     * @param p_plans full instantiated plans
      * @param p_rules full instantiated rules
      * @return new object instance without placeholders
      */
-    IInstantiable replaceplaceholder( final Map<ITrigger, IPlan> p_plans, final Map<ILiteral, IRule> p_rules );
+    IRule replaceplaceholder( final Map<ILiteral, IRule> p_rules );
 
 }

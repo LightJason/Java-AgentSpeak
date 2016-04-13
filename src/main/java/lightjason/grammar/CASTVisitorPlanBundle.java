@@ -23,8 +23,6 @@
 
 package lightjason.grammar;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.common.CPath;
@@ -74,11 +72,13 @@ import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.CRule;
+import lightjason.language.instantiable.rule.CRulePlaceholder;
 import lightjason.language.instantiable.rule.IRule;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -86,6 +86,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -102,6 +103,10 @@ import java.util.stream.Collectors;
 public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle
 {
     /**
+     * logger
+     */
+    protected final static Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
+    /**
      * set with initial beliefs
      */
     protected final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
@@ -112,7 +117,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with logical rules
      */
-    protected final Multimap<ILiteral, IRule> m_rules = HashMultimap.create();
+    protected final Map<ILiteral, IRule> m_rules;
     /**
      * map with action definition
      */
@@ -127,7 +132,9 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public CASTVisitorPlanBundle( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
+
+        LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions, m_rules ) );
     }
 
 
@@ -158,6 +165,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
             return null;
 
         p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.add( j ) ) );
+        LOGGER.info( MessageFormat.format( "parsed plans: {0}", m_plans ) );
         return null;
     }
 
@@ -166,7 +174,16 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        // create placeholder objects first and run parsing again to build full-qualified rule objects
+        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        final Map<ILiteral, IRule> l_rules = p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).collect(
+                Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
+
+        // clear rule list and replace placeholder objects
+        m_rules.clear();
+        l_rules.values().parallelStream().map( i -> i.replaceplaceholder( l_rules ) ).forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+
+        LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
         return null;
     }
 
@@ -1031,6 +1048,17 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public final Set<IRule> getRules()
     {
         return new HashSet<>( m_rules.values() );
+    }
+
+    /**
+     * create a rule placeholder object
+     *
+     * @param p_context logical rule context
+     * @return placeholder rule
+     */
+    protected Object visitLogicrulePlaceHolder( final PlanBundleParser.LogicruleContext p_context )
+    {
+        return new CRulePlaceholder( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

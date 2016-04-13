@@ -23,8 +23,6 @@
 
 package lightjason.grammar;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CPath;
 import lightjason.common.IPath;
@@ -76,7 +74,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     /**
      * map with logical rules
      */
-    protected final Multimap<ILiteral, IRule> m_rules = HashMultimap.create();
+    protected final Map<ILiteral, IRule> m_rules;
     /**
      * parsed literal
      */
@@ -107,7 +105,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier(), i ) );
+        m_rules = p_rules.stream().collect( Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
     }
 
     // --- start rules -----------------------------------------------------------------------------------------------------------------------------------------
