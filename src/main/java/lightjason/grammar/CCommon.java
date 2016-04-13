@@ -30,6 +30,7 @@ import lightjason.error.CSyntaxErrorException;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
+import lightjason.language.execution.action.CProxyRule;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
@@ -103,7 +104,7 @@ public final class CCommon
                 return new CProxyAction( p_actions, (ILiteral) p_item );
 
             if ( p_rules.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) )
-                return p_rules.get( ( (ILiteral) p_item ).getFQNFunctor() );
+                return new CProxyRule( p_rules.get( ( (ILiteral) p_item ).getFQNFunctor() ), (ILiteral) p_item );
 
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notexecutable", p_item ) );
         }
