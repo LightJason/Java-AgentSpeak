@@ -23,34 +23,60 @@
 
 package lightjason.agent;
 
-import com.google.common.collect.Multimap;
+import lightjason.language.ILiteral;
+import lightjason.language.instantiable.plan.IPlan;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+
+import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
  * inspector interface to read agent internal data
- *
- * @todo refactor inspector structure for a more generic data stucture
  */
 public interface IInspector
 {
-    /**
-     * inspector method
-     *
-     * @param p_data agent data
-     */
-    void inspect( final Multimap<EValue, ?> p_data );
 
     /**
-     * value types of the inspector map
+     * inspect hibernate value
+     *
+     * @param p_value value
      */
-    enum EValue
-    {
-        CYCLE,
-        BELIEF,
-        HIBERNATE,
-        STORAGE,
-        PLANS,
-        RUNNINGPLAN
-    }
+    void inspecthibernate( final boolean p_value );
+
+    /**
+     * inspect cycle value
+     *
+     * @param p_value value
+     */
+    void inspectcycle( final long p_value );
+
+    /**
+     * inspect beliefs
+     *
+     * @param p_value belief stream
+     */
+    void inspectbelief( final Stream<ILiteral> p_value );
+
+    /**
+     * inspect plans
+     *
+     * @param p_value plan stream
+     */
+    void inspectplans( final Stream<ImmutableTriple<IPlan, Long, Long>> p_value );
+
+    /**
+     * inspect running plans
+     *
+     * @param p_value literal stream
+     */
+    void inspectrunningplans( final Stream<ILiteral> p_value );
+
+    /**
+     * inspect storage values
+     *
+     * @param p_value storage values
+     */
+    void inspectstorage( final Stream<? extends Map.Entry<String, ?>> p_value );
 
 }

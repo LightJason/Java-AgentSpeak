@@ -25,7 +25,6 @@ package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
@@ -47,6 +46,7 @@ import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -171,16 +171,16 @@ public class CAgent implements IAgent
         if ( p_inspector == null )
             return;
 
-        final Multimap<IInspector.EValue, Object> l_map = new ImmutableSetMultimap.Builder<IInspector.EValue, Object>()
-                .put( IInspector.EValue.CYCLE, m_cycle )
-                .put( IInspector.EValue.BELIEF, m_beliefbase.parallelStream() )
-                .put( IInspector.EValue.HIBERNATE, m_hibernate )
-                .putAll( IInspector.EValue.STORAGE, m_storage.entrySet().parallelStream() )
-                .putAll( IInspector.EValue.PLANS, m_plans.values().parallelStream() )
-                .putAll( IInspector.EValue.RUNNINGPLAN, m_storage.entrySet().parallelStream() )
-                .build();
-
-        Arrays.stream( p_inspector ).parallel().forEach( i -> i.inspect( l_map ) );
+        Arrays.stream( p_inspector ).parallel().forEach( i -> {
+            i.inspectcycle( m_cycle );
+            i.inspecthibernate( m_hibernate );
+            i.inspectbelief( m_beliefbase.parallelStream() );
+            i.inspectplans( m_plans.entries().parallelStream().map( j -> new ImmutableTriple<>( j.getValue().getLeft(), j.getValue().getMiddle().get(),
+                                                                                                j.getValue().getRight().get()
+            ) ) );
+            i.inspectrunningplans( m_runningplans.values().parallelStream() );
+            i.inspectstorage( m_storage.entrySet().parallelStream() );
+        } );
     }
 
     @Override
