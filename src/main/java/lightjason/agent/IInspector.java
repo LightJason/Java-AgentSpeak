@@ -28,6 +28,8 @@ import com.google.common.collect.Multimap;
 
 /**
  * inspector interface to read agent internal data
+ *
+ * @todo refactor inspector structure for a more generic data stucture
  */
 public interface IInspector
 {
@@ -45,9 +47,10 @@ public interface IInspector
     {
         CYCLE,
         BELIEF,
-        RUNNINGPLAN,
         HIBERNATE,
-        STORAGE
+        STORAGE,
+        PLANS,
+        RUNNINGPLAN
     }
 
 }

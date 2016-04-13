@@ -65,8 +65,6 @@ import java.util.stream.Stream;
 
 /**
  * agent class
- *
- * @bug inspector call incomplete
  */
 @SuppressWarnings( "serial" )
 public class CAgent implements IAgent
@@ -175,9 +173,11 @@ public class CAgent implements IAgent
 
         final Multimap<IInspector.EValue, Object> l_map = new ImmutableSetMultimap.Builder<IInspector.EValue, Object>()
                 .put( IInspector.EValue.CYCLE, m_cycle )
+                .put( IInspector.EValue.BELIEF, m_beliefbase.parallelStream() )
                 .put( IInspector.EValue.HIBERNATE, m_hibernate )
-                .putAll( IInspector.EValue.STORAGE, m_storage.entrySet().stream().collect( Collectors.toList() ).iterator() )
-                .putAll( IInspector.EValue.RUNNINGPLAN, m_storage.entrySet().stream().collect( Collectors.toList() ).iterator() )
+                .putAll( IInspector.EValue.STORAGE, m_storage.entrySet().parallelStream() )
+                .putAll( IInspector.EValue.PLANS, m_plans.values().parallelStream() )
+                .putAll( IInspector.EValue.RUNNINGPLAN, m_storage.entrySet().parallelStream() )
                 .build();
 
         Arrays.stream( p_inspector ).parallel().forEach( i -> i.inspect( l_map ) );
