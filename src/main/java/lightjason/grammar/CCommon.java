@@ -23,6 +23,7 @@
 
 package lightjason.grammar;
 
+import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
@@ -87,7 +88,7 @@ public final class CCommon
      *
      * @bug add proxy-rule-action
      */
-    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Map<IPath, IRule> p_rules )
+    public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Multimap<IPath, IRule> p_rules )
     {
         // null value will be passed
         if ( p_item == null )
@@ -104,7 +105,7 @@ public final class CCommon
                 return new CProxyAction( p_actions, (ILiteral) p_item );
 
             if ( p_rules.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) )
-                return new CProxyRule( p_rules.get( ( (ILiteral) p_item ).getFQNFunctor() ), (ILiteral) p_item );
+                return new CProxyRule( p_rules, (ILiteral) p_item );
 
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notexecutable", p_item ) );
         }

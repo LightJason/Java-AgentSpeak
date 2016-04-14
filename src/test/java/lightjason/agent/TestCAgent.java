@@ -154,7 +154,13 @@ public final class TestCAgent
                 }
                 catch ( final Exception p_exception )
                 {
-                    assertTrue( p_exception.getMessage(), false );
+                    assertTrue(
+                            MessageFormat.format( "{0} {1}",
+                                                  p_exception.getClass().getName(),
+                                                  p_exception.getMessage().isEmpty() ? "" : p_exception.getMessage()
+                            ).trim(),
+                            false
+                    );
                 }
             } );
 

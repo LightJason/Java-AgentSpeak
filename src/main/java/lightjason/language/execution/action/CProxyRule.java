@@ -23,7 +23,9 @@
 
 package lightjason.language.execution.action;
 
+import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
+import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -31,9 +33,11 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -58,11 +62,14 @@ public final class CProxyRule implements IExecution
     /**
      * ctor
      *
-     * @param p_execution
+     * @param p_rules map with rules
+     * @param p_literal literal of the call
      */
-    public CProxyRule( final IExecution p_execution, final ILiteral p_literal )
+    public CProxyRule( final Multimap<IPath, IRule> p_rules, final ILiteral p_literal )
     {
-        m_execution = p_execution;
+        System.out.println(p_rules);
+
+        m_execution = null;
         m_literal = p_literal;
     }
 
