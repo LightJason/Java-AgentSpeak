@@ -43,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -139,14 +140,14 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
-    @SuppressWarnings( "serial" )
     public final Set<IVariable<?>> getVariables()
     {
-        return m_return == null ? m_initialize.getVariables() : new HashSet<IVariable<?>>()
-        {{
-            add( m_return );
-            addAll( m_initialize.getVariables() );
-        }};
+        return m_return == null
+               ? m_initialize.getVariables()
+               : Stream.concat(
+                       Stream.of( m_return.shallowcopy() ),
+                       m_initialize.getVariables().stream()
+               ).collect( Collectors.toSet() );
     }
 
     @Override

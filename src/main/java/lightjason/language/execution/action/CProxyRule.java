@@ -25,7 +25,9 @@ package lightjason.language.execution.action;
 
 import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
+import lightjason.common.CCommon;
 import lightjason.common.IPath;
+import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
@@ -36,9 +38,12 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -47,17 +52,22 @@ import java.util.Set;
  * @note inner annotations cannot be used on the
  * grammer definition, so the inner annotations are ignored
  * @bug not working
+ * @todo check cyclic rule reference on score calculation A -> B -> A
  */
 public final class CProxyRule implements IExecution
 {
     /**
-     * execution
-     */
-    private final IExecution m_execution;
-    /**
      * literal definition
      */
     private final ILiteral m_literal;
+    /**
+     * collection with possible rules
+     */
+    private final Collection<IRule> m_rules;
+    /**
+     * object hash
+     */
+    private final int m_hash;
 
     /**
      * ctor
@@ -67,11 +77,12 @@ public final class CProxyRule implements IExecution
      */
     public CProxyRule( final Multimap<IPath, IRule> p_rules, final ILiteral p_literal )
     {
-        System.out.println( "#####>>> " + p_rules );
-        System.out.println( "#####>>> " + p_literal );
+        if ( !p_rules.asMap().containsKey( p_literal.getFQNFunctor() ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "ruleunknown", p_literal ) );
 
-        m_execution = null;
         m_literal = p_literal;
+        m_rules = Collections.unmodifiableCollection( p_rules.asMap().get( p_literal.getFQNFunctor() ) );
+        m_hash = m_rules.parallelStream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
@@ -79,21 +90,27 @@ public final class CProxyRule implements IExecution
                                                final List<ITerm> p_annotation
     )
     {
+        System.out.println( "####>>> " + m_literal.unify( p_context ) );
         return CFuzzyValue.from( true );
     }
 
     @Override
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
-        //return m_execution.score( p_aggregate, p_agent );
-        return 0;
+        return m_rules.parallelStream().filter( i -> !m_rules.contains( i ) ).mapToDouble( i -> i.score( p_aggregate, p_agent ) ).sum();
     }
 
     @Override
     public final Set<IVariable<?>> getVariables()
     {
-        //return m_execution.getVariables();
-        return Collections.<IVariable<?>>emptySet();
+        return Stream.concat(
+                lightjason.language.CCommon.recursiveterm( m_literal.orderedvalues() ),
+                lightjason.language.CCommon.recursiveliteral( m_literal.annotations() )
+        )
+                     .parallel()
+                     .filter( i -> i instanceof IVariable<?> )
+                     .map( i -> ( (IVariable<?>) i ).shallowcopy() )
+                     .collect( Collectors.toSet() );
     }
 
     @Override
@@ -105,7 +122,7 @@ public final class CProxyRule implements IExecution
     @Override
     public final int hashCode()
     {
-        return m_execution.hashCode();
+        return m_hash;
     }
 
     @Override

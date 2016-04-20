@@ -51,6 +51,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -183,13 +184,9 @@ public final class CProxyAction implements IExecution
          * @param p_value variable type
          * @return variable set (empty)
          */
-        @SuppressWarnings( "serial" )
         private Set<IVariable<?>> getVariableSet( final IVariable<?> p_value )
         {
-            return new HashSet<IVariable<?>>()
-            {{
-                add( p_value.shallowcopy() );
-            }};
+            return Stream.of( p_value.shallowcopy() ).collect( Collectors.toSet() );
         }
 
         /**
