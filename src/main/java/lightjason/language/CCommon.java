@@ -89,10 +89,18 @@ public final class CCommon
                                        final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
     )
     {
+        final HashSet<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
+        l_variables.removeAll( p_variables );
+        l_variables.addAll( p_variables );
+
         return new CContext(
                 p_agent,
                 p_instance,
                 Collections.unmodifiableSet(
+                        null
+
+
+                        /*
                         new HashSet<IVariable<?>>()
                         {{
                             // get plan variables
@@ -119,6 +127,7 @@ public final class CCommon
                             } );
 
                         }}
+                        */
                 )
         );
     }
