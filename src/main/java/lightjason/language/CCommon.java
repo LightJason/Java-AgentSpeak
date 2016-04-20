@@ -88,7 +88,7 @@ public final class CCommon
                                        final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
     )
     {
-        final Set<IVariable<?>> l_variables = p_instance.getVariables().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
+        final Set<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
         Stream.of(
                 p_variables.stream(),
                 p_variablebuilder != null ? p_variablebuilder.generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
