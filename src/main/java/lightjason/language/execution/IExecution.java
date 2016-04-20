@@ -62,12 +62,9 @@ public interface IExecution
     double score( final IAggregation p_aggregate, final IAgent p_agent );
 
     /**
-     * returns a map with all used variables
+     * returns a stream with all used variables
      *
-     * @return variable map
-     *
-     * @warning must create an individual / local set, because
-     * variables will be instantiate locally, so variables must be cloned
+     * @return variable stream (variables will be cloned on instantiation)
      */
-    Stream<? extends IVariable<?>> getVariables();
+    Stream<IVariable<?>> getVariables();
 }

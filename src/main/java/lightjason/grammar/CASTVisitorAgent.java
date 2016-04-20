@@ -77,7 +77,6 @@ import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.CRule;
 import lightjason.language.instantiable.rule.CRulePlaceholder;
 import lightjason.language.instantiable.rule.IRule;
-import org.antlr.v4.runtime.misc.MultiMap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;

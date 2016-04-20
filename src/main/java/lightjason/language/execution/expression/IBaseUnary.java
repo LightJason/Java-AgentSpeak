@@ -77,7 +77,7 @@ public abstract class IBaseUnary implements IUnaryExpression
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return m_expression.getVariables();
     }

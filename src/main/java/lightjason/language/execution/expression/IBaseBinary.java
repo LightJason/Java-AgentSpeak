@@ -113,7 +113,7 @@ public abstract class IBaseBinary implements IBinaryExpression
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat( m_lefthandside.getVariables(), m_righthandside.getVariables() );
     }

@@ -100,7 +100,7 @@ public final class CProxyRule implements IExecution
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 lightjason.language.CCommon.recursiveterm( m_literal.orderedvalues() ),

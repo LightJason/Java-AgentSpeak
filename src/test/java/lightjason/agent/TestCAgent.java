@@ -45,10 +45,8 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -155,9 +153,10 @@ public final class TestCAgent
                 catch ( final Exception p_exception )
                 {
                     assertTrue(
-                            MessageFormat.format( "{0} {1}",
-                                                  p_exception.getClass().getName(),
-                                                  p_exception.getMessage().isEmpty() ? "" : p_exception.getMessage()
+                            MessageFormat.format(
+                                    "{0} {1}",
+                                    p_exception.getClass().getName(),
+                                    p_exception.getMessage().isEmpty() ? "" : p_exception.getMessage()
                             ).trim(),
                             false
                     );
@@ -214,16 +213,11 @@ public final class TestCAgent
     {
 
         @Override
-        @SuppressWarnings( "serial" )
-        public final Set<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext
-        )
+        public final Stream<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext )
         {
-            return new HashSet<IVariable<?>>()
-            {{
-                add( new CConstant<>( "MyConstInt", 123 ) );
-                add( new CConstant<>( "MyConstString", "here is a test string" ) );
-            }};
+            return Stream.of( new CConstant<>( "MyConstInt", 123 ), new CConstant<>( "MyConstString", "here is a test string" ) );
         }
+
     }
 
 

@@ -66,7 +66,7 @@ public class CRepair extends IBaseExecution<IExecution>
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 m_value.getVariables(),

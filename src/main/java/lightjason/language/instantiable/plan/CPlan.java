@@ -191,10 +191,10 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    @SuppressWarnings( {"serial", "unchecked"} )
-    public final Stream<? extends IVariable<?>> getVariables()
+    @SuppressWarnings( "unchecked" )
+    public final Stream<IVariable<?>> getVariables()
     {
-        return Stream.of(
+        return (Stream<IVariable<?>>) Stream.of(
                 m_condition != null
                 ? m_condition.getVariables()
                 : Stream.<IVariable<?>>empty(),
@@ -204,14 +204,14 @@ public final class CPlan implements IPlan
 
                 CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
                        .filter( i -> i instanceof IVariable<?> )
-                       .map( i -> ( (IVariable<?>) i ) ),
+                       .map( i -> (IVariable<?>) i ),
 
                 CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
                        .filter( i -> i instanceof IVariable<?> )
                        .map( i -> ( (IVariable<?>) i ) )
         )
-                     .reduce( Stream::concat )
-                     .orElseGet( Stream::<IVariable<?>>empty );
+                                            .reduce( Stream::concat )
+                                            .orElseGet( Stream::<IVariable<?>>empty );
     }
 
     @Override

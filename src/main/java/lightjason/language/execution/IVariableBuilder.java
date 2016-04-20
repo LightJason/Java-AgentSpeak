@@ -28,7 +28,7 @@ import lightjason.agent.IAgent;
 import lightjason.language.IVariable;
 import lightjason.language.instantiable.IInstantiable;
 
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -45,10 +45,10 @@ public interface IVariableBuilder
      *
      * @param p_agent agent which is run
      * @param p_runningcontext plan or rule
-     * @return set with variables
+     * @return variable stream
      *
      * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
      */
-    Set<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext );
+    Stream<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext );
 
 }

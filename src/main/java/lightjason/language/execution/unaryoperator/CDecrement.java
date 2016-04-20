@@ -90,7 +90,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.of( m_variable );
     }

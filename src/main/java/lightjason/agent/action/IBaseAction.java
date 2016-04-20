@@ -56,7 +56,7 @@ public abstract class IBaseAction implements IAction
     }
 
     @Override
-    public Stream<? extends IVariable<?>> getVariables()
+    public Stream<IVariable<?>> getVariables()
     {
         return Stream.<IVariable<?>>empty();
     }

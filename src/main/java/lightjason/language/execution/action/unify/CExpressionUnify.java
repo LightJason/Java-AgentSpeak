@@ -76,7 +76,7 @@ public final class CExpressionUnify extends CDefaultUnify
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 m_expression.getVariables(),

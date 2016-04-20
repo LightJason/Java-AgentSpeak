@@ -102,7 +102,7 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.<IVariable<?>>empty();
     }

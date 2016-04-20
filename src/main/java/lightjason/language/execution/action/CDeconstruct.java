@@ -90,7 +90,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return m_value.stream();
     }

@@ -82,7 +82,7 @@ public final class CVariableUnify extends CDefaultUnify
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 Stream.of( m_constraint ),

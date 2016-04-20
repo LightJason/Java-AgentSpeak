@@ -111,7 +111,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 m_righthand.getVariables(),

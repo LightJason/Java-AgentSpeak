@@ -140,7 +140,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return m_return == null
                ? m_initialize.getVariables()

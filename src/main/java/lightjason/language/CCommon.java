@@ -41,7 +41,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,47 +88,20 @@ public final class CCommon
                                        final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
     )
     {
-        final HashSet<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
-        l_variables.removeAll( p_variables );
-        l_variables.addAll( p_variables );
+        final Set<IVariable<?>> l_variables = p_instance.getVariables().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
+        Stream.of(
+                p_variables.stream(),
+                p_variablebuilder != null ? p_variablebuilder.generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
+                Stream.of( new CConstant<>( "Score", p_instance.score( p_aggregation, p_agent ) ) ),
+                Stream.of( new CConstant<>( "Cycle", p_agent.getCycle() ) )
+        ).reduce( Stream::concat )
+              .orElseGet( Stream::<IVariable<?>>empty )
+              .forEach( i -> {
+                  l_variables.remove( i );
+                  l_variables.add( i );
+              } );
 
-        return new CContext(
-                p_agent,
-                p_instance,
-                Collections.unmodifiableSet(
-                        null
-
-
-                        /*
-                        new HashSet<IVariable<?>>()
-                        {{
-                            // get plan variables
-                            addAll( p_instance.getVariables() );
-
-                            // add all optional variables and replace existsing
-                            removeAll( p_variables );
-                            addAll( p_variables );
-
-                            // add customized variables and replace existing
-                            if ( p_variablebuilder != null )
-                                p_variablebuilder.generate( p_agent, p_instance ).stream().forEach( i -> {
-                                    remove( i );
-                                    add( i );
-                                } );
-
-                            // remove all internal values if exist and add a new reference
-                            Arrays.stream( new IVariable<?>[]{
-                                    new CConstant<>( "Score", p_instance.score( p_aggregation, p_agent ) ),
-                                    new CConstant<>( "Cycle", p_agent.getCycle() )
-                            } ).forEach( i -> {
-                                remove( i );
-                                add( i );
-                            } );
-
-                        }}
-                        */
-                )
-        );
+        return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
     }
 
     /**

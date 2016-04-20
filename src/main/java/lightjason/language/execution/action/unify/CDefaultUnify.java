@@ -93,7 +93,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Stream<? extends IVariable<?>> getVariables()
+    public Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),

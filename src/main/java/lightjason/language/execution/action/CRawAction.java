@@ -55,7 +55,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         if ( m_value instanceof IVariable<?> )
             return Stream.of( (IVariable<?>) m_value );

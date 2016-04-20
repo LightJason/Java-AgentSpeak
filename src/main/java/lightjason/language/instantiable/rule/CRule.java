@@ -107,7 +107,7 @@ public final class CRule implements IRule
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<? extends IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
                 CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
