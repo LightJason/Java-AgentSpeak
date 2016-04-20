@@ -32,9 +32,8 @@ import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -91,13 +90,9 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            add( m_variable.shallowcopy() );
-        }};
+        return Stream.of( m_variable );
     }
 
 }

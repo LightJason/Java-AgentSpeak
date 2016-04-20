@@ -44,11 +44,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -103,13 +101,9 @@ public final class CProxyAction implements IExecution
 
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_execution.getVariables() );
-        }};
+        return m_execution.getVariables();
     }
 
     @Override
@@ -173,7 +167,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Set<IVariable<?>> getVariables()
+        public final Stream<? extends IVariable<?>> getVariables()
         {
             return this.getVariableSet( m_value );
         }
@@ -184,9 +178,9 @@ public final class CProxyAction implements IExecution
          * @param p_value variable type
          * @return variable set (empty)
          */
-        private Set<IVariable<?>> getVariableSet( final IVariable<?> p_value )
+        private Stream<IVariable<?>> getVariableSet( final IVariable<?> p_value )
         {
-            return Stream.of( p_value.shallowcopy() ).collect( Collectors.toSet() );
+            return Stream.of( p_value );
         }
 
         /**
@@ -195,9 +189,9 @@ public final class CProxyAction implements IExecution
          * @param p_value term type
          * @return variable set (empty)
          */
-        private Set<IVariable<?>> getVariableSet( final T p_value )
+        private Stream<IVariable<?>> getVariableSet( final T p_value )
         {
-            return Collections.emptySet();
+            return Stream.<IVariable<?>>empty();
         }
     }
 
@@ -298,7 +292,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Set<IVariable<?>> getVariables()
+        public final Stream<? extends IVariable<?>> getVariables()
         {
             return m_action.getVariables();
         }

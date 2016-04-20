@@ -30,9 +30,8 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -67,14 +66,12 @@ public class CRepair extends IBaseExecution<IExecution>
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_value.getVariables() );
-            addAll( m_fallback.getVariables() );
-        }};
+        return Stream.concat(
+                m_value.getVariables(),
+                m_fallback.getVariables()
+        );
     }
 
     @Override

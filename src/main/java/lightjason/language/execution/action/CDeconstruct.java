@@ -36,8 +36,8 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -90,9 +90,9 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return m_value.stream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
+        return m_value.stream();
     }
 
     /**

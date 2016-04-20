@@ -34,12 +34,10 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -113,13 +111,11 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_value.stream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
-            addAll( m_righthand.getVariables() );
-        }};
+        return Stream.concat(
+                m_righthand.getVariables(),
+                m_value.stream()
+        );
     }
 }

@@ -7,7 +7,7 @@ import lightjason.language.IVariable;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -77,7 +77,7 @@ public abstract class IBaseUnary implements IUnaryExpression
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
         return m_expression.getVariables();
     }

@@ -33,10 +33,8 @@ import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -79,13 +77,11 @@ public class CAtom implements IExpression
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return m_value instanceof IVariable<?> ? new HashSet<IVariable<?>>()
-        {{
-            add( ( (IVariable<?>) m_value ).shallowcopy() );
-        }} : Collections.<IVariable<?>>emptySet();
+        return m_value instanceof IVariable<?>
+               ? Stream.of( (IVariable<?>) m_value )
+               : Stream.empty();
     }
 
     @Override

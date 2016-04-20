@@ -35,10 +35,10 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -102,9 +102,9 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return Collections.<IVariable<?>>emptySet();
+        return Stream.<IVariable<?>>empty();
     }
 
     @Override

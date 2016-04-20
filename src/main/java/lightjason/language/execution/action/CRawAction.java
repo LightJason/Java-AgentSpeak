@@ -32,10 +32,9 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -55,14 +54,11 @@ public final class CRawAction<T> extends IBaseExecution<T>
     }
 
     @Override
-    @SuppressWarnings( {"unchecked", "serial"} )
-    public final Set<IVariable<?>> getVariables()
+    @SuppressWarnings( "unchecked" )
+    public final Stream<? extends IVariable<?>> getVariables()
     {
         if ( m_value instanceof IVariable<?> )
-            return new HashSet<IVariable<?>>()
-            {{
-                add( ( (IVariable<?>) m_value ).shallowcopy() );
-            }};
+            return Stream.of( (IVariable<?>) m_value );
 
         if ( m_value instanceof IExpression )
             return ( (IExpression) m_value ).getVariables();

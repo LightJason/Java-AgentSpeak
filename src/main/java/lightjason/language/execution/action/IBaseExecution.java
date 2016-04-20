@@ -30,8 +30,7 @@ import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.score.IAggregation;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -86,9 +85,9 @@ public abstract class IBaseExecution<T> implements IExecution
     }
 
     @Override
-    public Set<IVariable<?>> getVariables()
+    public Stream<? extends IVariable<?>> getVariables()
     {
-        return Collections.<IVariable<?>>emptySet();
+        return Stream.<IVariable<?>>empty();
     }
 
     @Override

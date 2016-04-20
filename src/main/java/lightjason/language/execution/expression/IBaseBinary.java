@@ -30,8 +30,7 @@ import lightjason.language.IVariable;
 import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -114,12 +113,8 @@ public abstract class IBaseBinary implements IBinaryExpression
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_lefthandside.getVariables() );
-            addAll( m_righthandside.getVariables() );
-        }};
+        return Stream.concat( m_lefthandside.getVariables(), m_righthandside.getVariables() );
     }
 }

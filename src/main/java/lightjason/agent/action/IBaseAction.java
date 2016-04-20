@@ -28,8 +28,7 @@ import lightjason.agent.IAgent;
 import lightjason.language.IVariable;
 import lightjason.language.score.IAggregation;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -57,9 +56,9 @@ public abstract class IBaseAction implements IAction
     }
 
     @Override
-    public Set<IVariable<?>> getVariables()
+    public Stream<? extends IVariable<?>> getVariables()
     {
-        return Collections.emptySet();
+        return Stream.<IVariable<?>>empty();
     }
 
 }

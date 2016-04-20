@@ -33,10 +33,9 @@ import lightjason.language.execution.action.IBaseExecution;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -93,17 +92,13 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public Set<IVariable<?>> getVariables()
+    @SuppressWarnings( "unchecked" )
+    public Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            // create a shallow-copy of all variables within the value- and annotation-definition
-            CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
-            CCommon.recursiveliteral( m_value.annotations() ).filter( i -> i instanceof IVariable<?> ).forEach(
-                    i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
-
-        }};
+        return Stream.concat(
+                CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
+                CCommon.recursiveliteral( m_value.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+        );
     }
 
 }

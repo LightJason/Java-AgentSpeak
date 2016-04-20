@@ -30,7 +30,7 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
 
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -69,5 +69,5 @@ public interface IExecution
      * @warning must create an individual / local set, because
      * variables will be instantiate locally, so variables must be cloned
      */
-    Set<IVariable<?>> getVariables();
+    Stream<? extends IVariable<?>> getVariables();
 }

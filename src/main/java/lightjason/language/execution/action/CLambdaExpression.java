@@ -140,14 +140,14 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
         return m_return == null
                ? m_initialize.getVariables()
                : Stream.concat(
-                       Stream.of( m_return.shallowcopy() ),
-                       m_initialize.getVariables().stream()
-               ).collect( Collectors.toSet() );
+                       Stream.of( m_return ),
+                       m_initialize.getVariables()
+               );
     }
 
     @Override
@@ -221,7 +221,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
         final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
 
-        l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables().stream() ).collect( Collectors.toList() ) );
+        l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables() ).collect( Collectors.toList() ) );
         l_variables.remove( l_iterator );
         l_variables.add( l_iterator );
 

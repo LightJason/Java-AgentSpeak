@@ -32,9 +32,9 @@ import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -82,13 +82,11 @@ public final class CVariableUnify extends CDefaultUnify
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( CVariableUnify.super.getVariables() );
-            add( m_constraint.shallowcopy() );
-        }};
+        return Stream.concat(
+                Stream.of( m_constraint ),
+                CVariableUnify.super.getVariables()
+        );
     }
 }

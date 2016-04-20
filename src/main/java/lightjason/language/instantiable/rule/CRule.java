@@ -37,11 +37,11 @@ import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -106,18 +106,13 @@ public final class CRule implements IRule
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    @SuppressWarnings( "unchecked" )
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-
-            CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
-            CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).forEach( i -> add( ( (IVariable<?>) i ).shallowcopy() ) );
-
-            m_action.parallelStream().flatMap( i -> i.stream().flatMap( j -> j.getVariables().stream() ) ).forEach( i -> add( i ) );
-
-        }};
+        return Stream.concat(
+                CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
+                CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+        );
     }
 
     @Override

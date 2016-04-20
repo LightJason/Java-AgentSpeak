@@ -41,8 +41,6 @@ import lightjason.language.score.IAggregation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -101,7 +99,8 @@ public final class CProxyRule implements IExecution
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    @SuppressWarnings( "unchecked" )
+    public final Stream<? extends IVariable<?>> getVariables()
     {
         return Stream.concat(
                 lightjason.language.CCommon.recursiveterm( m_literal.orderedvalues() ),
@@ -109,8 +108,7 @@ public final class CProxyRule implements IExecution
         )
                      .parallel()
                      .filter( i -> i instanceof IVariable<?> )
-                     .map( i -> ( (IVariable<?>) i ).shallowcopy() )
-                     .collect( Collectors.toSet() );
+                     .map( i -> ( (IVariable<?>) i ) );
     }
 
     @Override

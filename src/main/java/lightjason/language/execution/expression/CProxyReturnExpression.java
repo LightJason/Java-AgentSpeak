@@ -34,7 +34,7 @@ import lightjason.language.score.IAggregation;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -77,7 +77,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
     }
 
     @Override
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
         return m_execution.getVariables();
     }

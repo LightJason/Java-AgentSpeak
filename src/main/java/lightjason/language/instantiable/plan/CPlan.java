@@ -43,7 +43,6 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -193,20 +192,26 @@ public final class CPlan implements IPlan
 
     @Override
     @SuppressWarnings( {"serial", "unchecked"} )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            m_action.stream().flatMap( i -> i.getVariables().stream() ).forEach( i -> add( i ) );
+        return Stream.of(
+                m_condition != null
+                ? m_condition.getVariables()
+                : Stream.<IVariable<?>>empty(),
 
-            addAll( Stream.concat(
-                    CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() ),
-                    CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
-            ).filter( i -> i instanceof IVariable<?> ).map( i -> ( (IVariable<?>) i ).shallowcopy() ).collect( Collectors.toSet() ) );
+                m_action.stream()
+                        .flatMap( i -> i.getVariables() ),
 
-            if ( m_condition != null )
-                addAll( m_condition.getVariables() );
-        }};
+                CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
+                       .filter( i -> i instanceof IVariable<?> )
+                       .map( i -> ( (IVariable<?>) i ) ),
+
+                CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
+                       .filter( i -> i instanceof IVariable<?> )
+                       .map( i -> ( (IVariable<?>) i ) )
+        )
+                     .reduce( Stream::concat )
+                     .orElseGet( Stream::<IVariable<?>>empty );
     }
 
     @Override

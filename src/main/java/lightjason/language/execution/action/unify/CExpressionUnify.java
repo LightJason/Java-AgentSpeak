@@ -31,9 +31,8 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -77,14 +76,12 @@ public final class CExpressionUnify extends CDefaultUnify
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( CExpressionUnify.super.getVariables() );
-            addAll( m_expression.getVariables() );
-        }};
+        return Stream.concat(
+                m_expression.getVariables(),
+                CExpressionUnify.super.getVariables()
+        );
     }
 
 }

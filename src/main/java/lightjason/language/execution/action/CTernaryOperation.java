@@ -34,10 +34,9 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -105,13 +104,8 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     }
 
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<IVariable<?>> getVariables()
+    public final Stream<? extends IVariable<?>> getVariables()
     {
-        return new HashSet<IVariable<?>>()
-        {{
-            addAll( m_true.getVariables() );
-            addAll( m_false.getVariables() );
-        }};
+        return Stream.concat( m_true.getVariables(), m_false.getVariables() );
     }
 }
