@@ -36,8 +36,8 @@ import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -67,7 +67,8 @@ public final class CProxyRule implements IExecution
      */
     public CProxyRule( final Multimap<IPath, IRule> p_rules, final ILiteral p_literal )
     {
-        System.out.println(p_rules);
+        System.out.println( "#####>>> " + p_rules );
+        System.out.println( "#####>>> " + p_literal );
 
         m_execution = null;
         m_literal = p_literal;
@@ -84,13 +85,15 @@ public final class CProxyRule implements IExecution
     @Override
     public final double score( final IAggregation p_aggregate, final IAgent p_agent )
     {
-        return m_execution.score( p_aggregate, p_agent );
+        //return m_execution.score( p_aggregate, p_agent );
+        return 0;
     }
 
     @Override
     public final Set<IVariable<?>> getVariables()
     {
-        return m_execution.getVariables();
+        //return m_execution.getVariables();
+        return Collections.<IVariable<?>>emptySet();
     }
 
     @Override
