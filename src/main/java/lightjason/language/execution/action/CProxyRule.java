@@ -23,6 +23,7 @@
 
 package lightjason.language.execution.action;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
@@ -32,6 +33,7 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CMutexVariable;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
+import lightjason.language.IRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -44,6 +46,8 @@ import lightjason.language.score.IAggregation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -93,12 +97,29 @@ public final class CProxyRule implements IExecution
     {
         // unify literal with current context values and get un-unified variables,
         // these variable will be replaced with a relocated-variable to create
-        // the back-referencing and avoid overwriting on backtracking failure
-        /*
-        final Set<IRelocateVariable> l_relocated = StreamUtils.zip(
-                m_literal.unify( p_context )
-        )
+        // the back-referencing and avoid overwriting on backtracking failure.
 
+
+        // iterate over literal of the rule and unified literal, on the position
+        // which has a non-allocated term on the unifed literal and a variable
+        // on the rule literal, the variable will be replaced on the backtracking return
+        final ILiteral l_unified = m_literal.unify( p_context );
+        final Set<IVariable<?>> l_relocated = StreamUtils.zip(
+                Stream.concat(
+                        lightjason.language.CCommon.recursiveterm( l_unified.values() ),
+                        lightjason.language.CCommon.recursiveliteral( l_unified.annotations() )
+                ),
+                Stream.concat(
+                        lightjason.language.CCommon.recursiveterm( m_literal.values() ),
+                        lightjason.language.CCommon.recursiveliteral( m_literal.annotations() )
+                ),
+                ( u, l ) -> ( u instanceof IRawTerm<?> ) && ( !( (IRawTerm<?>) u ).isAllocated() ) && ( l instanceof IVariable<?> ) ? l : null
+        )
+                                                         .filter( i -> i != null )
+                                                         .map( i -> (IVariable<?>) i )
+                                                         .collect( Collectors.toSet() );
+
+        /*
         (
                 m_literal.hasAt()
                 ? m_rules.parallelStream()

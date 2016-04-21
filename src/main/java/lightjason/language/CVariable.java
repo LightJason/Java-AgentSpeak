@@ -129,6 +129,12 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    public boolean hasMutex()
+    {
+        return false;
+    }
+
+    @Override
     public IVariable<T> throwNotAllocated() throws IllegalStateException
     {
         if ( !this.isAllocated() )

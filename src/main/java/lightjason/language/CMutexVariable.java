@@ -151,4 +151,9 @@ public class CMutexVariable<T> extends CVariable<T>
         return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
     }
 
+    @Override
+    public final boolean hasMutex()
+    {
+        return true;
+    }
 }

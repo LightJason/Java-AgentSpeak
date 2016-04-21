@@ -70,6 +70,12 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
     boolean isAny();
 
     /**
+     * flag to check if variable has is
+     * concurrency- / thread-safe
+     */
+    boolean hasMutex();
+
+    /**
      * throws an illegal state exception
      * iif the variable is not allocated
      *
