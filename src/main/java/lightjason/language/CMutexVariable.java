@@ -31,7 +31,7 @@ import lightjason.common.IPath;
  *
  * @tparam T data type
  */
-public final class CMutexVariable<T> extends CVariable<T>
+public class CMutexVariable<T> extends CVariable<T>
 {
 
     /**
@@ -137,7 +137,7 @@ public final class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final IVariable<T> shallowcopy( final IPath... p_prefix )
+    public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CMutexVariable<T>( m_functor, m_value )
@@ -146,7 +146,7 @@ public final class CMutexVariable<T> extends CVariable<T>
 
 
     @Override
-    public final IVariable<T> shallowcopySuffix()
+    public IVariable<T> shallowcopySuffix()
     {
         return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
     }
