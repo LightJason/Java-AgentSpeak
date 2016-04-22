@@ -104,35 +104,12 @@ public final class CProxyRule implements IExecution
         // these variable will be replaced with a relocated-variable to create
         // the back-referencing and avoid overwriting on backtracking failure.
 
-
-        // iterate over literal of the rule and unified literal, on the position
-        // which has a non-allocated term on the unifed literal and a variable
-        // on the rule literal, the variable will be replaced on the backtracking return
+        // unify in a first step the caller literal with the current execution context
+        // after that, run each rule and unify the rule trigger, if unification
+        // is successful, instantiate and execute rule, on rule finish set the backreference
+        // if needed
         final ILiteral l_unified = m_callerliteral.unify( p_context );
         /*
-        final Set<IVariable<?>> l_relocated = StreamUtils.zip(
-                Stream.concat(
-                        lightjason.language.CCommon.recursiveterm( l_unified.values() ),
-                        lightjason.language.CCommon.recursiveliteral( l_unified.annotations() )
-                ),
-                StreamUtils.zip(
-                Stream.concat(
-                        lightjason.language.CCommon.recursiveterm( m_signatureliteral.values() ),
-                        lightjason.language.CCommon.recursiveliteral( m_signatureliteral.annotations() )
-                ),
-                Stream.concat(
-                        lightjason.language.CCommon.recursiveterm( m_callerliteral.values() ),
-                        lightjason.language.CCommon.recursiveliteral( m_callerliteral.annotations() )
-                ),
-                (s, c) ->
-                ),
-                ( u, l ) -> ( u instanceof IRawTerm<?> ) && ( !( (IRawTerm<?>) u ).isAllocated() ) && ( l instanceof IVariable<?> ) ? l : null
-        )
-                                                         .filter( i -> i != null )
-                                                         .map( i -> (IVariable<?>) i )
-                                                         //.map( i -> i.hasMutex() ? new CRelocateMutexVariable<>( , i ) )
-                                                         .collect( Collectors.toSet() );
-
         (
                 m_literal.hasAt()
                 ? m_rules.parallelStream()
