@@ -23,7 +23,6 @@
 
 package lightjason.language.execution.action;
 
-import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
@@ -33,7 +32,6 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CMutexVariable;
 import lightjason.language.CVariable;
 import lightjason.language.ILiteral;
-import lightjason.language.IRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
@@ -46,8 +44,6 @@ import lightjason.language.score.IAggregation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -62,9 +58,13 @@ import java.util.stream.Stream;
 public final class CProxyRule implements IExecution
 {
     /**
-     * literal definition
+     * literal of the execution call
      */
-    private final ILiteral m_literal;
+    private final ILiteral m_callerliteral;
+    /**
+     * literal of the signature of the rule
+     */
+    private final ILiteral m_signatureliteral;
     /**
      * collection with possible rules
      */
@@ -78,15 +78,20 @@ public final class CProxyRule implements IExecution
      * ctor
      *
      * @param p_rules map with rules
-     * @param p_literal literal of the call
+     * @param p_callerliteral literal of the call
      */
-    public CProxyRule( final Multimap<IPath, IRule> p_rules, final ILiteral p_literal )
+    public CProxyRule( final Multimap<IPath, IRule> p_rules, final ILiteral p_callerliteral )
     {
-        if ( !p_rules.asMap().containsKey( p_literal.getFQNFunctor() ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "ruleunknown", p_literal ) );
+        if ( !p_rules.asMap().containsKey( p_callerliteral.getFQNFunctor() ) )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "ruleunknown", p_callerliteral ) );
 
-        m_literal = p_literal;
-        m_rules = Collections.unmodifiableCollection( p_rules.asMap().get( p_literal.getFQNFunctor() ) );
+        // get all possible rules
+        m_rules = Collections.unmodifiableCollection( p_rules.asMap().get( p_callerliteral.getFQNFunctor() ) );
+
+        m_callerliteral = p_callerliteral;
+        m_signatureliteral = m_rules.iterator().next().getIdentifier();
+
+        // calculate object hash based on all possible rule elements
         m_hash = m_rules.parallelStream().mapToInt( i -> i.hashCode() ).sum();
     }
 
@@ -103,23 +108,31 @@ public final class CProxyRule implements IExecution
         // iterate over literal of the rule and unified literal, on the position
         // which has a non-allocated term on the unifed literal and a variable
         // on the rule literal, the variable will be replaced on the backtracking return
-        final ILiteral l_unified = m_literal.unify( p_context );
+        final ILiteral l_unified = m_callerliteral.unify( p_context );
+        /*
         final Set<IVariable<?>> l_relocated = StreamUtils.zip(
                 Stream.concat(
                         lightjason.language.CCommon.recursiveterm( l_unified.values() ),
                         lightjason.language.CCommon.recursiveliteral( l_unified.annotations() )
                 ),
+                StreamUtils.zip(
                 Stream.concat(
-                        lightjason.language.CCommon.recursiveterm( m_literal.values() ),
-                        lightjason.language.CCommon.recursiveliteral( m_literal.annotations() )
+                        lightjason.language.CCommon.recursiveterm( m_signatureliteral.values() ),
+                        lightjason.language.CCommon.recursiveliteral( m_signatureliteral.annotations() )
+                ),
+                Stream.concat(
+                        lightjason.language.CCommon.recursiveterm( m_callerliteral.values() ),
+                        lightjason.language.CCommon.recursiveliteral( m_callerliteral.annotations() )
+                ),
+                (s, c) ->
                 ),
                 ( u, l ) -> ( u instanceof IRawTerm<?> ) && ( !( (IRawTerm<?>) u ).isAllocated() ) && ( l instanceof IVariable<?> ) ? l : null
         )
                                                          .filter( i -> i != null )
                                                          .map( i -> (IVariable<?>) i )
+                                                         //.map( i -> i.hasMutex() ? new CRelocateMutexVariable<>( , i ) )
                                                          .collect( Collectors.toSet() );
 
-        /*
         (
                 m_literal.hasAt()
                 ? m_rules.parallelStream()
@@ -127,7 +140,7 @@ public final class CProxyRule implements IExecution
         );
         */
 
-        System.out.println( "####>>> " + m_literal.unify( p_context ) );
+        System.out.println( "####>>> " + m_callerliteral + "    " + l_unified );
         return CFuzzyValue.from( true );
     }
 
@@ -142,8 +155,8 @@ public final class CProxyRule implements IExecution
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                lightjason.language.CCommon.recursiveterm( m_literal.orderedvalues() ),
-                lightjason.language.CCommon.recursiveliteral( m_literal.annotations() )
+                lightjason.language.CCommon.recursiveterm( m_callerliteral.orderedvalues() ),
+                lightjason.language.CCommon.recursiveliteral( m_callerliteral.annotations() )
         )
                      .parallel()
                      .filter( i -> i instanceof IVariable<?> )
@@ -165,7 +178,7 @@ public final class CProxyRule implements IExecution
     @Override
     public final String toString()
     {
-        return m_literal.toString();
+        return m_callerliteral.toString();
     }
 
 

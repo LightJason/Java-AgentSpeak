@@ -30,9 +30,9 @@ second(true).
 
 // --- logical rules -------------------------------------------------------------------------------------------------------------------------------------------
 
-fibonacci(X, Y)
-    :- X <= 2; Y=1
-    :- TA = X - 1; TB = Y - 1; fibonacci(TA,A); fibonacci(TB,B); Y = A+B
+fibonacci(X, R)
+    :- X <= 2; R=1
+    :- TA = X - 1; TB = X - 2; fibonacci(TA,A); fibonacci(TB,B); R = A+B
     .
 
 myfunction(X) :- generic/print("my logical rule", X).
