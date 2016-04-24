@@ -41,15 +41,15 @@ public interface IUnifier
      * unifies a literal
      *
      * @param p_literal literal with variables (creates a deep-copy)
-     * @param p_constraint source literal with values
+     * @param p_value source literal with values
      * @return set with allocated variables
      *
      * @note check input literal and result of correct unification
      */
-    Set<IVariable<?>> literalunify( final ILiteral p_literal, final ILiteral p_constraint );
+    Set<IVariable<?>> literal( final ILiteral p_literal, final ILiteral p_value );
 
     /**
-     * unifies a literal - first found literal matches
+     * unifies a literal - first found literal matches within the beliefbase
      *
      * @param p_context running context
      * @param p_literal literal with variables (creates a deep-copy)
@@ -68,7 +68,7 @@ public interface IUnifier
      * @param p_constraint expression
      * @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
+    IFuzzyValue<Boolean> parallel( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
 
     /**
      * unifies a literal in sequential - checks all possible literals in sequential with the given expression, first expression
@@ -80,6 +80,6 @@ public interface IUnifier
      * @param p_constraint expression
      * @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
+    IFuzzyValue<Boolean> sequential( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
 
 }

@@ -72,7 +72,7 @@ public final class CVariableUnify extends CDefaultUnify
                                                final List<ITerm> p_annotation
     )
     {
-        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literalunify( m_value, CCommon.getRawValue(
+        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( m_value, CCommon.getRawValue(
                 CCommon.replaceFromContext( p_context, m_constraint ) ) );
         if ( l_variables.size() != m_variablenumber )
             return CFuzzyValue.from( false );

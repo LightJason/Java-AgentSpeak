@@ -93,8 +93,8 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public final IFuzzyValue<Boolean> parallelunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
-                                                     final IExpression p_expression
+    public final IFuzzyValue<Boolean> parallel( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
+                                                final IExpression p_expression
     )
     {
         // get all possible variables
@@ -130,8 +130,8 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public final IFuzzyValue<Boolean> sequentialunify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
-                                                       final IExpression p_expression
+    public final IFuzzyValue<Boolean> sequential( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
+                                                  final IExpression p_expression
     )
     {
         // get all possible variables
@@ -167,24 +167,24 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public final Set<IVariable<?>> literalunify( final ILiteral p_literal, final ILiteral p_constraint )
+    public final Set<IVariable<?>> literal( final ILiteral p_literal, final ILiteral p_value )
     {
         final Set<IVariable<?>> l_result = new HashSet<>();
         final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
 
         // try to unify exact or if not possible by recursive on the value set
-        boolean l_succeed = l_literal.valuehash() == p_constraint.valuehash()
+        boolean l_succeed = l_literal.valuehash() == p_value.valuehash()
                             ? m_hashbased.unify(
-                l_result, CCommon.recursiveterm( p_constraint.orderedvalues() ), CCommon.recursiveterm( l_literal.orderedvalues() ) )
-                            : m_recursive.unify( l_result, p_constraint.orderedvalues(), l_literal.orderedvalues() );
+                l_result, CCommon.recursiveterm( p_value.orderedvalues() ), CCommon.recursiveterm( l_literal.orderedvalues() ) )
+                            : m_recursive.unify( l_result, p_value.orderedvalues(), l_literal.orderedvalues() );
         if ( !l_succeed )
             return Collections.<IVariable<?>>emptySet();
 
         // try to unify exact or if not possible by recursive on theannotation set
-        l_succeed = l_literal.annotationhash() == p_constraint.annotationhash()
+        l_succeed = l_literal.annotationhash() == p_value.annotationhash()
                     ? m_hashbased.unify(
-                l_result, CCommon.recursiveliteral( p_constraint.annotations() ), CCommon.recursiveliteral( l_literal.annotations() ) )
-                    : m_recursive.unify( l_result, p_constraint.annotations(), l_literal.annotations() );
+                l_result, CCommon.recursiveliteral( p_value.annotations() ), CCommon.recursiveliteral( l_literal.annotations() ) )
+                    : m_recursive.unify( l_result, p_value.annotations(), l_literal.annotations() );
 
         if ( !l_succeed )
             return Collections.<IVariable<?>>emptySet();
@@ -230,7 +230,7 @@ public final class CUnifier implements IUnifier
         return p_agent.getBeliefBase()
                       .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                       .filter( i -> ( i.emptyValues() == p_literal.emptyValues() ) && ( i.emptyAnnotations() == p_literal.emptyAnnotations() ) )
-                      .map( i -> this.literalunify( p_literal, i ) )
+                      .map( i -> this.literal( p_literal, i ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }

@@ -71,8 +71,8 @@ public final class CExpressionUnify extends CDefaultUnify
     )
     {
         return m_parallel
-               ? p_context.getAgent().getUnifier().parallelunify( p_context, m_value, m_variablenumber, m_expression )
-               : p_context.getAgent().getUnifier().sequentialunify( p_context, m_value, m_variablenumber, m_expression );
+               ? p_context.getAgent().getUnifier().parallel( p_context, m_value, m_variablenumber, m_expression )
+               : p_context.getAgent().getUnifier().sequential( p_context, m_value, m_variablenumber, m_expression );
     }
 
     @Override
