@@ -25,7 +25,7 @@ package lightjason.agent.unify;
 
 import com.codepoetics.protonpack.StreamUtils;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
+import lightjason.language.variable.IVariable;
 
 import java.util.Set;
 import java.util.stream.Stream;

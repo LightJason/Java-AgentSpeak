@@ -27,6 +27,7 @@ import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
+import lightjason.language.variable.IVariable;
 
 import java.util.Arrays;
 

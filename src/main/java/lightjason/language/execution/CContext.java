@@ -27,8 +27,8 @@ import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.IVariable;
 import lightjason.language.instantiable.IInstantiable;
+import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.Collection;

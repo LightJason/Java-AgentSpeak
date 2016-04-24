@@ -25,11 +25,11 @@
 package lightjason.language.instantiable;
 
 import lightjason.agent.IAgent;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.score.IAggregation;
+import lightjason.language.variable.IVariable;
 
 import java.util.Set;
 

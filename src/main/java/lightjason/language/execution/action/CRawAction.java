@@ -26,11 +26,11 @@ package lightjason.language.execution.action;
 import lightjason.language.CCommon;
 import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.variable.IVariable;
 
 import java.util.LinkedList;
 import java.util.List;

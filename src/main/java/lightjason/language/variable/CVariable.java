@@ -21,12 +21,13 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.language.variable;
 
 import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
+import lightjason.language.ITerm;
 
 import java.text.MessageFormat;
 import java.util.Arrays;

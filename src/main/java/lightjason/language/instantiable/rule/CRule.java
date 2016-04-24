@@ -27,13 +27,13 @@ import lightjason.agent.IAgent;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
+import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.Collections;

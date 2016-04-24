@@ -27,10 +27,10 @@ import lightjason.error.CIllegalArgumentException;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.action.IBaseExecution;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.List;

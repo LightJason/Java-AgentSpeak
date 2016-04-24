@@ -28,7 +28,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import lightjason.language.ILiteral;
 import lightjason.language.IRawTerm;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
+import lightjason.language.variable.IVariable;
 
 import java.util.List;
 import java.util.Set;

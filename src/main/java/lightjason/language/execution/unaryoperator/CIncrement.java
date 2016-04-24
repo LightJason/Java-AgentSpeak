@@ -26,11 +26,11 @@ package lightjason.language.execution.unaryoperator;
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
+import lightjason.language.variable.IVariable;
 
 import java.util.List;
 import java.util.stream.Stream;

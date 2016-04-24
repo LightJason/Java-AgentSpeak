@@ -34,6 +34,8 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.IInstantiable;
 import lightjason.language.score.IAggregation;
+import lightjason.language.variable.CConstant;
+import lightjason.language.variable.IVariable;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

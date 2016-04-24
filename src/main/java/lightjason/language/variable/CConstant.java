@@ -21,17 +21,19 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.language.variable;
 
+import lightjason.common.CCommon;
 import lightjason.common.IPath;
+import lightjason.error.CIllegalStateException;
 
 
 /**
- * thread-safe variable
+ * constant definition
  *
  * @tparam T data type
  */
-public class CMutexVariable<T> extends CVariable<T>
+public final class CConstant<T> extends CVariable<T>
 {
 
     /**
@@ -39,7 +41,7 @@ public class CMutexVariable<T> extends CVariable<T>
      *
      * @param p_functor name
      */
-    public CMutexVariable( final String p_functor )
+    public CConstant( final String p_functor )
     {
         super( p_functor );
     }
@@ -50,7 +52,7 @@ public class CMutexVariable<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CMutexVariable( final String p_functor, final T p_value )
+    public CConstant( final String p_functor, final T p_value )
     {
         super( p_functor, p_value );
     }
@@ -60,7 +62,7 @@ public class CMutexVariable<T> extends CVariable<T>
      *
      * @param p_functor name
      */
-    public CMutexVariable( final IPath p_functor )
+    public CConstant( final IPath p_functor )
     {
         super( p_functor );
     }
@@ -71,89 +73,30 @@ public class CMutexVariable<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CMutexVariable( final IPath p_functor, final T p_value )
+    public CConstant( final IPath p_functor, final T p_value )
     {
         super( p_functor, p_value );
     }
 
     @Override
-    public final synchronized IVariable<T> set( final T p_value )
+    public final IVariable<T> set( final T p_value )
     {
-        return super.set( p_value );
+        throw new CIllegalStateException( CCommon.getLanguageString( this, "set", m_functor ) );
     }
 
     @Override
-    public final synchronized T get()
-    {
-        return super.get();
-    }
-
-    @Override
-    public final synchronized <N> N getTyped()
-    {
-        return super.getTyped();
-    }
-
-    @Override
-    public final synchronized IVariable<T> throwNotAllocated() throws IllegalStateException
-    {
-        return super.throwNotAllocated();
-    }
-
-    @Override
-    public final synchronized IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
-    {
-        return super.throwValueNotAssignableTo( p_class );
-    }
-
-    @Override
-    public final synchronized boolean isAllocated()
-    {
-        return super.isAllocated();
-    }
-
-    @Override
-    public final synchronized boolean isValueAssignableTo( final Class<?>... p_class )
-    {
-        return super.isValueAssignableTo( p_class );
-    }
-
-    @Override
-    public final synchronized int hashCode()
-    {
-        return super.hashCode();
-    }
-
-    @Override
-    public final synchronized boolean equals( final Object p_object )
-    {
-        return super.equals( p_object );
-    }
-
-    @Override
-    public final synchronized String toString()
-    {
-        return super.toString();
-    }
-
-    @Override
-    public IVariable<T> shallowcopy( final IPath... p_prefix )
+    public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CMutexVariable<T>( m_functor, m_value )
-               : new CMutexVariable<T>( p_prefix[0].append( m_functor ), m_value );
+               ? new CConstant<T>( m_functor, m_value )
+               : new CConstant<T>( p_prefix[0].append( m_functor ), m_value );
     }
 
 
     @Override
-    public IVariable<T> shallowcopySuffix()
+    public final IVariable<T> shallowcopySuffix()
     {
-        return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
+        return new CConstant<T>( m_functor.getSuffix(), m_value );
     }
 
-    @Override
-    public final boolean hasMutex()
-    {
-        return true;
-    }
 }

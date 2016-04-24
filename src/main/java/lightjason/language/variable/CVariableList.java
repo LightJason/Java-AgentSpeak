@@ -21,82 +21,37 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.language.variable;
 
-import lightjason.common.CCommon;
-import lightjason.common.IPath;
-import lightjason.error.CIllegalStateException;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
- * constant definition
- *
- * @tparam T data type
+ * list for variables with head-tail definition
  */
-public final class CConstant<T> extends CVariable<T>
+public class CVariableList
 {
+    private final List<IVariable<?>> m_variables;
 
     /**
      * ctor
      *
-     * @param p_functor name
+     * @param p_list list of variables
      */
-    public CConstant( final String p_functor )
+    public CVariableList( final List<IVariable<?>> p_list )
     {
-        super( p_functor );
+        m_variables = Collections.unmodifiableList( p_list );
     }
 
     /**
-     * ctor
+     * list getter
      *
-     * @param p_functor name
-     * @param p_value value
+     * @return unmodifiable list
      */
-    public CConstant( final String p_functor, final T p_value )
+    public List<IVariable<?>> get()
     {
-        super( p_functor, p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     */
-    public CConstant( final IPath p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     * @param p_value value
-     */
-    public CConstant( final IPath p_functor, final T p_value )
-    {
-        super( p_functor, p_value );
-    }
-
-    @Override
-    public final IVariable<T> set( final T p_value )
-    {
-        throw new CIllegalStateException( CCommon.getLanguageString( this, "set", m_functor ) );
-    }
-
-    @Override
-    public final IVariable<T> shallowcopy( final IPath... p_prefix )
-    {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CConstant<T>( m_functor, m_value )
-               : new CConstant<T>( p_prefix[0].append( m_functor ), m_value );
-    }
-
-
-    @Override
-    public final IVariable<T> shallowcopySuffix()
-    {
-        return new CConstant<T>( m_functor.getSuffix(), m_value );
+        return m_variables;
     }
 
 }

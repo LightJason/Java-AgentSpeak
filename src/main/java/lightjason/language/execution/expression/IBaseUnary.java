@@ -3,8 +3,8 @@ package lightjason.language.execution.expression;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.IVariable;
 import lightjason.language.score.IAggregation;
+import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.stream.Stream;

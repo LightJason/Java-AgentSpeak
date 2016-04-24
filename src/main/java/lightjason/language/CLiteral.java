@@ -40,6 +40,7 @@ import lightjason.grammar.IGenericParser;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
 import lightjason.language.execution.IContext;
+import lightjason.language.variable.IVariable;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

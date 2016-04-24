@@ -21,7 +21,11 @@
  * @endcond
  */
 
-package lightjason.language;
+package lightjason.language.variable;
+
+import lightjason.language.IShallowCopy;
+import lightjason.language.ITerm;
+
 
 /**
  * variable defintion

@@ -25,8 +25,8 @@
 package lightjason.language.execution;
 
 import lightjason.agent.IAgent;
-import lightjason.language.IVariable;
 import lightjason.language.instantiable.IInstantiable;
+import lightjason.language.variable.IVariable;
 
 import java.util.stream.Stream;
 

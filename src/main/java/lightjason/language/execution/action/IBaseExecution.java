@@ -26,9 +26,9 @@ package lightjason.language.execution.action;
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.IVariable;
 import lightjason.language.execution.IExecution;
 import lightjason.language.score.IAggregation;
+import lightjason.language.variable.IVariable;
 
 import java.util.stream.Stream;
 
