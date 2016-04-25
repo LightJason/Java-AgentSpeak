@@ -28,10 +28,12 @@ import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.beliefbase.IView;
 import lightjason.common.IPath;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.MutableTriple;
 
 import java.util.Map;
@@ -132,4 +134,19 @@ public interface IAgent extends Callable<IAgent>
      * @return operator
      */
     IFuzzy<Boolean> getFuzzy();
+
+    /**
+     * returns the aggregation function
+     *
+     * @return aggregation function
+     */
+    IAggregation getAggregation();
+
+    /**
+     * returns the variable builder function
+     *
+     * @return variable builder function
+     */
+    IVariableBuilder getVariableBuilder();
+
 }

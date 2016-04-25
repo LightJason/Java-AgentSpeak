@@ -53,7 +53,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -258,6 +257,18 @@ public class CAgent implements IAgent
     }
 
     @Override
+    public final IAggregation getAggregation()
+    {
+        return m_aggregation;
+    }
+
+    @Override
+    public final IVariableBuilder getVariableBuilder()
+    {
+        return m_variablebuilder;
+    }
+
+    @Override
     public final String toString()
     {
         return MessageFormat.format(
@@ -309,6 +320,7 @@ public class CAgent implements IAgent
      * @param p_trigger trigger
      * @return list with tupel of plan-triple and context for execution
      */
+    @SuppressWarnings( "unchecked" )
     protected Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
     {
         return m_plans.get( p_trigger ).parallelStream()
@@ -329,27 +341,30 @@ public class CAgent implements IAgent
                                                                                       .size() )
 
                       // initialize context
-                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
-                              this,
-                              m_aggregation,
-                              m_variablebuilder,
-                              new HashSet<IVariable<?>>()
-                              {{
-                                  addAll( i.getRight() );
+                      .map( i -> {
+                          double l_fails = i.getLeft().getMiddle().get();
+                          double l_succeed = i.getLeft().getRight().get();
+                          double l_sum = l_succeed + l_fails;
 
-                                  // execution count
-                                  add( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) );
-                                  add( new CConstant<>( "PlanFail", i.getLeft().getRight() ) );
+                          return new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
+                                  this,
+                                  (Stream<IVariable<?>>) Stream.of(
+                                          i.getRight().stream(),
 
-                                  // execution ratio
-                                  double l_fails = i.getLeft().getMiddle().get();
-                                  double l_succeed = i.getLeft().getRight().get();
-                                  double l_sum = l_succeed + l_fails;
-                                  add( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) );
-                                  add( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) );
-                                  add( new CConstant<>( "PlanRuns", l_sum ) );
-                              }}
-                      ) ) )
+                                          // execution count
+                                          Stream.of( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) ),
+                                          Stream.of( new CConstant<>( "PlanFail", i.getLeft().getRight() ) ),
+                                          Stream.of( new CConstant<>( "PlanRuns", l_sum ) ),
+
+                                          // execution ratio
+                                          Stream.of( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) ),
+                                          Stream.of( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) )
+
+                                  )
+                                                               .reduce( Stream::concat )
+                                                               .orElseGet( Stream::<IVariable<?>>empty )
+                          ) );
+                      } )
 
                       // check plan condition
                       .filter( i -> i.getLeft().getLeft().condition( i.getRight() ).getValue() )

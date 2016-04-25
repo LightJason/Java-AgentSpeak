@@ -27,11 +27,9 @@ package lightjason.language.instantiable;
 import lightjason.agent.IAgent;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,13 +42,9 @@ public interface IInstantiable extends IExecution
      * creates an individual execution context
      *
      * @param p_agent agent
-     * @param p_aggregation aggregation context
-     * @param p_variablebuilder variable builder or null
-     * @param p_variables variables
+     * @param p_variable variable stream
      * @return individual context
      */
-    IContext instantiate( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                          final Set<IVariable<?>> p_variables
-    );
+    IContext instantiate( final IAgent p_agent, final Stream<IVariable<?>> p_variable );
 
 }

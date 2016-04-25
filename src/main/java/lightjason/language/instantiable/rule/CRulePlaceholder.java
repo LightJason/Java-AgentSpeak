@@ -28,7 +28,6 @@ import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.score.IAggregation;
@@ -37,7 +36,6 @@ import lightjason.language.variable.IVariable;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -80,11 +78,11 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final IContext instantiate( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                                       final Set<IVariable<?>> p_variables
+    public final IContext instantiate( final IAgent p_agent,
+                                       final Stream<IVariable<?>> p_variable
     )
     {
-        return CCommon.instantiate( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
+        return CCommon.instantiate( this, p_agent, p_variable );
     }
 
     @Override

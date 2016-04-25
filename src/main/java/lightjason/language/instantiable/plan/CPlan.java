@@ -28,7 +28,6 @@ import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
@@ -215,11 +214,9 @@ public final class CPlan implements IPlan
     }
 
     @Override
-    public final IContext instantiate( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                                       final Set<IVariable<?>> p_variables
-    )
+    public final IContext instantiate( final IAgent p_agent, final Stream<IVariable<?>> p_variable )
     {
-        return CCommon.instantiate( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
+        return CCommon.instantiate( this, p_agent, p_variable );
     }
 
     /**

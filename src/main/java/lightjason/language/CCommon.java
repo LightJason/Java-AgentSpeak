@@ -31,9 +31,7 @@ import lightjason.agent.action.IAction;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.CContext;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.IInstantiable;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.CConstant;
 import lightjason.language.variable.IVariable;
 
@@ -80,21 +78,16 @@ public final class CCommon
      *
      * @param p_instance instance object
      * @param p_agent agent
-     * @param p_aggregation aggreagtion function
-     * @param p_variablebuilder optinal variablebuilder or null
-     * @param p_variables variables
+     * @param p_variable variable stream
      * @return context object
      */
-    @SuppressWarnings( "serial" )
-    public static IContext instantiate( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
-                                        final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
-    )
+    public static IContext instantiate( final IInstantiable p_instance, final IAgent p_agent, final Stream<IVariable<?>> p_variable )
     {
         final Set<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
         Stream.of(
-                p_variables.stream(),
-                p_variablebuilder != null ? p_variablebuilder.generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
-                Stream.of( new CConstant<>( "Score", p_instance.score( p_aggregation, p_agent ) ) ),
+                p_variable,
+                p_agent.getVariableBuilder() != null ? p_agent.getVariableBuilder().generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
+                Stream.of( new CConstant<>( "Score", p_instance.score( p_agent.getAggregation(), p_agent ) ) ),
                 Stream.of( new CConstant<>( "Cycle", p_agent.getCycle() ) )
         ).reduce( Stream::concat )
               .orElseGet( Stream::<IVariable<?>>empty )
