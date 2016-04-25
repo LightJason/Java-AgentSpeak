@@ -19,7 +19,8 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
 
     /**
      * ctor
-     *  @param p_variable original variable, which should be used
+     *
+     * @param p_variable original variable, which should be used
      * @param p_relocate variable which should be relocated
      */
     public CRelocateVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )

@@ -49,8 +49,8 @@ public interface IInstantiable extends IExecution
      * @param p_variables variables
      * @return individual context
      */
-    IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                         final Set<IVariable<?>> p_variables
+    IContext instantiate( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
+                          final Set<IVariable<?>> p_variables
     );
 
 }

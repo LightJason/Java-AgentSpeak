@@ -139,11 +139,11 @@ public final class CRule implements IRule
     }
 
     @Override
-    public final IContext getContext( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
-                                      final Set<IVariable<?>> p_variables
+    public final IContext instantiate( final IAgent p_agent, final IAggregation p_aggregation, final IVariableBuilder p_variablebuilder,
+                                       final Set<IVariable<?>> p_variables
     )
     {
-        return CCommon.getContext( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
+        return CCommon.instantiate( this, p_agent, p_aggregation, p_variablebuilder, p_variables );
     }
 
 }

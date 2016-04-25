@@ -76,7 +76,7 @@ public final class CCommon
     }
 
     /**
-     * creates a default execution context
+     * creates the instantiate execution context
      *
      * @param p_instance instance object
      * @param p_agent agent
@@ -86,8 +86,8 @@ public final class CCommon
      * @return context object
      */
     @SuppressWarnings( "serial" )
-    public static IContext getContext( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
-                                       final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
+    public static IContext instantiate( final IInstantiable p_instance, final IAgent p_agent, final IAggregation p_aggregation,
+                                        final IVariableBuilder p_variablebuilder, final Set<IVariable<?>> p_variables
     )
     {
         final Set<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );

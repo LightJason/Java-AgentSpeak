@@ -329,7 +329,7 @@ public class CAgent implements IAgent
                                                                                       .size() )
 
                       // initialize context
-                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().getContext(
+                      .map( i -> new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
                               this,
                               m_aggregation,
                               m_variablebuilder,

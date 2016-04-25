@@ -17,7 +17,8 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
 
     /**
      * ctor
-     *  @param p_variable original variable, which should be used
+     *
+     * @param p_variable original variable, which should be used
      * @param p_relocate variable which should be relocated
      */
     public CRelocateMutexVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )

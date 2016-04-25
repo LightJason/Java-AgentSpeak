@@ -90,23 +90,24 @@ public final class CProxyRule implements IExecution
                                                final List<ITerm> p_annotation
     )
     {
-        // unify literal with current context values and get un-unified variables,
-        // these variable will be replaced with a relocated-variable to create
-        // the back-referencing and avoid overwriting on backtracking failure.
-
-        // unify in a first step the caller literal with the current execution context
-        // after that, run each rule and unify the rule trigger, if unification
-        // is successful, instantiate and execute rule, on rule finish set the backreference
-        // if needed
+        // first step is the unification of the caller literal, so variables will be set from the current execution context
         final ILiteral l_unified = m_callerliteral.unify( p_context );
+
+        // second step is the unification of each possible rule
         (
                 m_callerliteral.hasAt()
                 ? m_rules.parallelStream()
                 : m_rules.stream()
         ).forEach( i -> {
-
-            System.out.println( p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ) );
-
+            System.out.println( "####>>> " + p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ) );
+            /*
+            i.instantiate(
+                    p_context.getAgent(),
+                    null,
+                    null,
+                    p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified )
+            );
+            */
         } );
 
         System.out.println( "####>>> " + m_callerliteral + "    " + l_unified );
