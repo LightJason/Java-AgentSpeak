@@ -80,6 +80,10 @@ public final class CPlan implements IPlan
      * map with annotation (enum value for getting annotation object)
      */
     protected final Map<IAnnotation.EType, IAnnotation<?>> m_annotation;
+    /**
+     * object hash
+     */
+    private final int m_hash;
 
 
     /**
@@ -106,9 +110,14 @@ public final class CPlan implements IPlan
     )
     {
         m_triggerevent = p_event;
+        m_condition = p_condition;
         m_action = Collections.unmodifiableList( p_body );
         m_annotation = this.addDefault( p_annotation );
-        m_condition = p_condition;
+
+        m_hash = m_triggerevent.hashCode() +
+                 ( m_condition == null ? 0 : m_condition.hashCode() ) +
+                 m_action.stream().mapToInt( i -> i.hashCode() ).sum() +
+                 m_annotation.values().stream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
@@ -218,13 +227,10 @@ public final class CPlan implements IPlan
         return CCommon.instantiate( this, p_agent, p_variable );
     }
 
-    /**
-     * @bug hashcode buggy for plan definition
-     */
     @Override
     public final int hashCode()
     {
-        return super.hashCode();
+        return m_hash;
     }
 
     @Override

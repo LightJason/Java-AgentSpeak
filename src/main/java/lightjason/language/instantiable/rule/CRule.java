@@ -58,6 +58,10 @@ public final class CRule implements IRule
      * action list
      */
     protected final List<IExecution> m_action;
+    /**
+     * hash code
+     */
+    private final int m_hash;
 
     /**
      * ctor
@@ -69,6 +73,7 @@ public final class CRule implements IRule
     {
         m_id = p_id;
         m_action = Collections.unmodifiableList( p_action );
+        m_hash = m_id.hashCode() + m_action.stream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
@@ -109,16 +114,19 @@ public final class CRule implements IRule
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> getVariables()
     {
-        return Stream.concat(
+        return (Stream<IVariable<?>>) Stream.of(
                 CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
                 CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
-        );
+
+        )
+                                            .reduce( Stream::concat )
+                                            .orElseGet( Stream::<IVariable<?>>empty );
     }
 
     @Override
     public final int hashCode()
     {
-        return m_id.hashCode();
+        return m_hash;
     }
 
     @Override

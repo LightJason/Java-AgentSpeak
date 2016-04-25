@@ -213,7 +213,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
         // clear rule list and replace placeholder objects
         m_rules.clear();
-        l_rules.values().parallelStream().map( i -> i.replaceplaceholder( l_rules ) ).forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+        l_rules.values().parallelStream()
+               .map( i -> i.replaceplaceholder( l_rules ) )
+               .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
         LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
         return null;
