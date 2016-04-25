@@ -59,10 +59,6 @@ public final class CProxyRule implements IExecution
      */
     private final ILiteral m_callerliteral;
     /**
-     * literal of the signature of the rule
-     */
-    private final ILiteral m_signatureliteral;
-    /**
      * collection with possible rules
      */
     private final Collection<IRule> m_rules;
@@ -82,12 +78,9 @@ public final class CProxyRule implements IExecution
         if ( !p_rules.asMap().containsKey( p_callerliteral.getFQNFunctor() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "ruleunknown", p_callerliteral ) );
 
+        m_callerliteral = p_callerliteral;
         // get all possible rules
         m_rules = Collections.unmodifiableCollection( p_rules.asMap().get( p_callerliteral.getFQNFunctor() ) );
-
-        m_callerliteral = p_callerliteral;
-        m_signatureliteral = m_rules.iterator().next().getIdentifier();
-
         // calculate object hash based on all possible rule elements
         m_hash = m_rules.parallelStream().mapToInt( i -> i.hashCode() ).sum();
     }
@@ -106,13 +99,15 @@ public final class CProxyRule implements IExecution
         // is successful, instantiate and execute rule, on rule finish set the backreference
         // if needed
         final ILiteral l_unified = m_callerliteral.unify( p_context );
-        /*
         (
-                m_literal.hasAt()
+                m_callerliteral.hasAt()
                 ? m_rules.parallelStream()
                 : m_rules.stream()
-        );
-        */
+        ).forEach( i -> {
+
+            System.out.println( p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ) );
+
+        } );
 
         System.out.println( "####>>> " + m_callerliteral + "    " + l_unified );
         return CFuzzyValue.from( true );

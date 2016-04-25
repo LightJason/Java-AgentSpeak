@@ -59,4 +59,5 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     {
         return new CRelocateMutexVariable<>( this, m_relocate );
     }
+
 }

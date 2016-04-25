@@ -2,6 +2,8 @@ package lightjason.language.variable;
 
 import lightjason.common.IPath;
 
+import java.text.MessageFormat;
+
 
 /**
  * class for a relocated variable
@@ -23,7 +25,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public CRelocateVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )
     {
         super( p_variable.getFunctor(), p_variable.getTyped() );
-        m_relocate = p_variable;
+        m_relocate = p_relocate;
     }
 
     /**
@@ -57,5 +59,11 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public final IVariable<T> shallowcopySuffix()
     {
         return new CRelocateVariable<>( this, m_relocate );
+    }
+
+    @Override
+    public String toString()
+    {
+        return MessageFormat.format( "{0}({1})>{2}", m_functor, m_value == null ? "" : m_value, m_relocate );
     }
 }
