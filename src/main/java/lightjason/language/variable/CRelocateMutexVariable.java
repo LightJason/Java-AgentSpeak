@@ -1,6 +1,5 @@
 package lightjason.language.variable;
 
-import lightjason.common.CPath;
 import lightjason.common.IPath;
 
 
@@ -18,14 +17,13 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
 
     /**
      * ctor
-     *
-     * @param p_functor original functor of the variable, which should be used
-     * @param p_variable variable which should be relocated
+     *  @param p_variable original variable, which should be used
+     * @param p_relocate variable which should be relocated
      */
-    public CRelocateMutexVariable( final IPath p_functor, final IVariable<?> p_variable )
+    public CRelocateMutexVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )
     {
-        super( p_functor );
-        m_relocate = p_variable;
+        super( p_variable.getFunctor(), p_variable.getTyped() );
+        m_relocate = p_relocate;
     }
 
     /**
@@ -59,6 +57,6 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     @Override
     public final IVariable<T> shallowcopySuffix()
     {
-        return new CRelocateMutexVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate );
+        return new CRelocateMutexVariable<>( this, m_relocate );
     }
 }

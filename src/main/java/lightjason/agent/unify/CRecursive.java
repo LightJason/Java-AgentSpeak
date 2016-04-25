@@ -28,6 +28,8 @@ import com.codepoetics.protonpack.StreamUtils;
 import lightjason.language.ILiteral;
 import lightjason.language.IRawTerm;
 import lightjason.language.ITerm;
+import lightjason.language.variable.CRelocateMutexVariable;
+import lightjason.language.variable.CRelocateVariable;
 import lightjason.language.variable.IVariable;
 
 import java.util.List;
@@ -60,14 +62,25 @@ public final class CRecursive implements IAlgorithm
                 l_target.stream(),
                 ( s, t ) -> {
 
-                    // if a variable exists -> unify
+                    // if s and t are variable create a realocated variable for backtracking
+                    if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) && ( !( (IVariable<?>) s ).isAllocated() ) )
+                    {
+                        p_variables.add(
+                                ( (IVariable<?>) t ).hasMutex()
+                                ? new CRelocateMutexVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                                : new CRelocateVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                        );
+                        return true;
+                    }
+
+                    // if target type is a variable set the value
                     if ( t instanceof IVariable<?> )
                     {
                         p_variables.add( ( (IVariable<Object>) t ).set( s ) );
                         return true;
                     }
 
-                    // if both raw values -> equality
+                    // if both raw values -> equality check
                     if ( ( s instanceof IRawTerm<?> ) || ( t instanceof IRawTerm<?> ) )
                         return s.equals( t );
 

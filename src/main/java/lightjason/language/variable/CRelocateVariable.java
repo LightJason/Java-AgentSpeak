@@ -1,6 +1,5 @@
 package lightjason.language.variable;
 
-import lightjason.common.CPath;
 import lightjason.common.IPath;
 
 
@@ -18,13 +17,12 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
 
     /**
      * ctor
-     *
-     * @param p_functor original functor of the variable, which should be used
-     * @param p_variable variable which should be relocated
+     *  @param p_variable original variable, which should be used
+     * @param p_relocate variable which should be relocated
      */
-    public CRelocateVariable( final IPath p_functor, final IVariable<?> p_variable )
+    public CRelocateVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )
     {
-        super( p_functor );
+        super( p_variable.getFunctor(), p_variable.getTyped() );
         m_relocate = p_variable;
     }
 
@@ -58,6 +56,6 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final IVariable<T> shallowcopySuffix()
     {
-        return new CRelocateVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate );
+        return new CRelocateVariable<>( this, m_relocate );
     }
 }
