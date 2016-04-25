@@ -2,17 +2,22 @@ package lightjason.language.instantiable;
 
 import lightjason.agent.IAgent;
 import lightjason.language.CCommon;
+import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.variable.IVariable;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -81,6 +86,63 @@ public abstract class IBaseInstantiable implements IInstantiable
     public Stream<IVariable<?>> getVariables()
     {
         return m_action.stream().flatMap( i -> i.getVariables() );
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
+        // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
+        // because we need to allocate memory of any possible element, otherwise an unsupported operation exception is thrown
+        final List<IFuzzyValue<Boolean>> l_result = m_annotation.containsKey( IAnnotation.EType.PARALLEL )
+                                                    ? this.executeparallel( p_context )
+                                                    : this.executesequential( p_context );
+        // if atomic flag if exists use this for return value
+        return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
+               ? CFuzzyValue.from( true )
+               : l_result.stream().collect( p_context.getAgent().getFuzzy().getResultOperator() );
+    }
+
+    /**
+     * execute plan sequential
+     *
+     * @param p_context execution context
+     * @return list with execution results
+     *
+     * @note stream is stopped iif an execution is failed
+     */
+    private List<IFuzzyValue<Boolean>> executesequential( final IContext p_context )
+    {
+        final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new LinkedList<>() );
+
+        m_action.stream()
+                .map( i -> {
+                    final IFuzzyValue<Boolean> l_return = i.execute(
+                            p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
+                    l_result.add( l_return );
+                    return p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return );
+                } )
+                .filter( i -> !i )
+                .findFirst();
+
+        return l_result;
+    }
+
+    /**
+     * execute plan parallel
+     *
+     * @param p_context execution context
+     * @return list with execution results
+     *
+     * @note each element is executed
+     */
+    private List<IFuzzyValue<Boolean>> executeparallel( final IContext p_context )
+    {
+        return m_action.parallelStream()
+                       .map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
+                       .collect( Collectors.toList() );
     }
 
 }

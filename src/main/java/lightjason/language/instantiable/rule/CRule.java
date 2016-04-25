@@ -27,13 +27,9 @@ import com.google.common.collect.Multimap;
 import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyRule;
 import lightjason.language.execution.annotation.IAnnotation;
-import lightjason.language.execution.fuzzy.CFuzzyValue;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.IBaseInstantiable;
 import lightjason.language.variable.IVariable;
 
@@ -92,14 +88,6 @@ public final class CRule extends IBaseInstantiable implements IRule
                                                : i
                 ).collect( Collectors.toList() )
         );
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        return CFuzzyValue.from( false );
     }
 
     @Override
