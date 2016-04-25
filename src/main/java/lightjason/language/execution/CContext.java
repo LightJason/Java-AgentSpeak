@@ -114,7 +114,7 @@ public final class CContext implements IContext
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_agent, m_instance, m_variables );
+        return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_variables, m_instance, m_agent );
     }
 
 }
