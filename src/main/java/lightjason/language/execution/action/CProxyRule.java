@@ -26,6 +26,7 @@ package lightjason.language.execution.action;
 import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
+import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
@@ -130,6 +131,7 @@ public final class CProxyRule implements IExecution
                   return j;
               } )
               .forEach( j -> System.out.println( "##>> " + ( (IRelocateVariable) j ).relocate() ) );
+             System.out.println( "##>> " + p_context.getInstanceVariables().get( CPath.from( "FIB" ) ) );
 
              return i.getMiddle();
          } )
