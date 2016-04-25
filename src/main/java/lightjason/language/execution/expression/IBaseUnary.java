@@ -3,7 +3,6 @@ package lightjason.language.execution.expression;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
 import lightjason.error.CIllegalArgumentException;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
@@ -53,7 +52,7 @@ public abstract class IBaseUnary implements IUnaryExpression
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
         return 0;
     }

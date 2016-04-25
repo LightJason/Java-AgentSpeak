@@ -26,7 +26,6 @@ package lightjason.language.execution;
 import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.util.List;
@@ -55,11 +54,10 @@ public interface IExecution
     /**
      * returns the scoring value of the execution structure
      *
-     * @param p_aggregate aggregation function
      * @param p_agent agent for which calculates the score value
      * @return score value
      */
-    double score( final IAggregation p_aggregate, final IAgent p_agent );
+    double score( final IAgent p_agent );
 
     /**
      * returns a stream with all used variables

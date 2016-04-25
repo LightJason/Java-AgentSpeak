@@ -202,10 +202,14 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public Object visitLogicrules( final AgentParser.LogicrulesContext p_context )
     {
         // create placeholder objects first and run parsing again to build full-qualified rule objects
-        p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) ).forEach(
-                i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
-        final Map<ILiteral, IRule> l_rules = p_context.logicrule().stream().map( i -> (IRule) this.visitLogicrule( i ) ).collect(
-                Collectors.toMap( i -> i.getIdentifier(), i -> i ) );
+        p_context.logicrule().stream()
+                 .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
+                 .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+
+        final Multimap<IPath, IRule> l_rules = HashMultimap.create();
+        p_context.logicrule().stream()
+                 .flatMap( i -> ( (List<IRule>) this.visitLogicrule( i ) ).stream() )
+                 .forEach( i -> l_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
         // clear rule list and replace placeholder objects
         m_rules.clear();
@@ -218,10 +222,10 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitLogicrule( final AgentParser.LogicruleContext p_context )
     {
-        return new CRule(
-                (ILiteral) this.visitLiteral( p_context.literal() ),
-                p_context.logicalruledefinition().stream().map( i -> (List<IExecution>) this.visitLogicalruledefinition( i ) ).collect( Collectors.toList() )
-        );
+        final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );
+        return p_context.logicalruledefinition().stream()
+                        .map( i -> new CRule( l_literal, (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
+                        .collect( Collectors.toList() );
     }
 
     @Override

@@ -34,7 +34,6 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -175,11 +174,11 @@ public final class CPlan implements IPlan
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
-        return p_aggregate.evaluate(
+        return p_agent.getAggregation().evaluate(
                 Stream.concat(
-                        m_action.parallelStream().mapToDouble( i -> i.score( p_aggregate, p_agent ) ).boxed(),
+                        m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed(),
                         Stream.of(
                                 m_annotation.containsKey( IAnnotation.EType.SCORE )
                                 ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()

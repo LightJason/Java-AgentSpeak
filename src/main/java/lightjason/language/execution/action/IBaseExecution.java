@@ -27,7 +27,6 @@ import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.execution.IExecution;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.util.stream.Stream;
@@ -79,9 +78,9 @@ public abstract class IBaseExecution<T> implements IExecution
     }
 
     @Override
-    public double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public double score( final IAgent p_agent )
     {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
     @Override

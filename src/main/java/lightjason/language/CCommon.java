@@ -87,7 +87,7 @@ public final class CCommon
         Stream.of(
                 p_variable,
                 p_agent.getVariableBuilder() != null ? p_agent.getVariableBuilder().generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
-                Stream.of( new CConstant<>( "Score", p_instance.score( p_agent.getAggregation(), p_agent ) ) ),
+                Stream.of( new CConstant<>( "Score", p_instance.score( p_agent ) ) ),
                 Stream.of( new CConstant<>( "Cycle", p_agent.getCycle() ) )
         ).reduce( Stream::concat )
               .orElseGet( Stream::<IVariable<?>>empty )

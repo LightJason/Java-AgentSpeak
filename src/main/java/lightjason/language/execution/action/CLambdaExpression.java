@@ -31,7 +31,6 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
@@ -134,7 +133,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
         return 0;
     }

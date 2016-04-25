@@ -78,6 +78,7 @@ public final class CSummary
     /**
      * returns the current data
      */
+    @SuppressWarnings( {"serial", "unchecked"} )
     public final Map<String, Map<String, Double>> get()
     {
         return Collections.unmodifiableMap(
@@ -97,7 +98,7 @@ public final class CSummary
                                                   put( "75-percentile", i.getValue().getPercentile( 75 ) );
                                                   put( "standard deviation", i.getValue().getStandardDeviation() );
                                                   put( "skewness", i.getValue().getSkewness() );
-                                                  put( "count", new Double( i.getValue().getN() ) );
+                                                  put( "count", (double) i.getValue().getN() );
                                                   put( "sum", i.getValue().getSum() );
                                                   put( "sum square", i.getValue().getSumsq() );
                                                   put( "variance", i.getValue().getVariance() );

@@ -23,19 +23,19 @@
 
 package lightjason.language.instantiable.rule;
 
+import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
+import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -72,7 +72,7 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final IRule replaceplaceholder( final Map<ILiteral, IRule> p_rules )
+    public final IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules )
     {
         return this;
     }
@@ -94,7 +94,7 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
         return 0;
     }

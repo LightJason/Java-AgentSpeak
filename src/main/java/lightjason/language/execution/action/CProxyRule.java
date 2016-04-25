@@ -35,7 +35,6 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.util.Collection;
@@ -99,19 +98,22 @@ public final class CProxyRule implements IExecution
                 ? m_rules.parallelStream()
                 : m_rules.stream()
         ).forEach( i -> {
-            System.out.println( "####>>> " + p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ) );
-            System.out.println(
-                    "####>>> " + i.instantiate( p_context.getAgent(), p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ).stream() ) );
+            i.execute(
+                    i.instantiate( p_context.getAgent(), p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ).stream() ),
+                    false,
+                    Collections.<ITerm>emptyList(),
+                    Collections.<ITerm>emptyList(),
+                    Collections.<ITerm>emptyList()
+            );
         } );
 
-        System.out.println( "####>>> " + m_callerliteral + "    " + l_unified );
         return CFuzzyValue.from( true );
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
-        return m_rules.parallelStream().filter( i -> !m_rules.contains( i ) ).mapToDouble( i -> i.score( p_aggregate, p_agent ) ).sum();
+        return m_rules.parallelStream().filter( i -> !m_rules.contains( i ) ).mapToDouble( i -> i.score( p_agent ) ).sum();
     }
 
     @Override

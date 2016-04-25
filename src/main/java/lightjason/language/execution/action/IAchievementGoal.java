@@ -25,7 +25,6 @@ package lightjason.language.execution.action;
 
 import com.google.common.collect.ImmutableMultiset;
 import lightjason.agent.IAgent;
-import lightjason.language.score.IAggregation;
 
 import java.text.MessageFormat;
 
@@ -59,9 +58,9 @@ public abstract class IAchievementGoal<T> extends IBaseExecution<T>
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
 }

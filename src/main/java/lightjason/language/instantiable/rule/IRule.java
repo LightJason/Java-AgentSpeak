@@ -23,10 +23,10 @@
 
 package lightjason.language.instantiable.rule;
 
+import com.google.common.collect.Multimap;
+import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.IInstantiable;
-
-import java.util.Map;
 
 
 /**
@@ -48,6 +48,6 @@ public interface IRule extends IInstantiable
      * @param p_rules full instantiated rules
      * @return new object instance without placeholders
      */
-    IRule replaceplaceholder( final Map<ILiteral, IRule> p_rules );
+    IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules );
 
 }

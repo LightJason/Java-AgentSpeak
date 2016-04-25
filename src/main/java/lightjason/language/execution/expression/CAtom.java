@@ -30,7 +30,6 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.util.List;
@@ -71,7 +70,7 @@ public class CAtom implements IExpression
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
         return 0;
     }

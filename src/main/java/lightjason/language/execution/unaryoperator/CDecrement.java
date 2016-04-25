@@ -29,7 +29,6 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.score.IAggregation;
 import lightjason.language.variable.IVariable;
 
 import java.util.List;
@@ -84,9 +83,9 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public final double score( final IAggregation p_aggregate, final IAgent p_agent )
+    public final double score( final IAgent p_agent )
     {
-        return p_aggregate.evaluate( p_agent, ImmutableMultiset.of() );
+        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
     @Override
