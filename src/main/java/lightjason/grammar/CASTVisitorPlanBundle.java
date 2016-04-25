@@ -97,9 +97,7 @@ import java.util.stream.Collectors;
  *
  * @note methods are implemented twice agent and plan-bundle, because both use equal
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
- * @todo add barrier check to plan generating
  * @bug execption messages are not within the resource files
- * @todo add logger
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
 public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle

@@ -103,6 +103,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
      * ctor
      *
      * @param p_actions set with actions
+     * @param p_rules set with rules
      */
     public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {

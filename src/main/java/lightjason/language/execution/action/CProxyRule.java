@@ -52,8 +52,7 @@ import java.util.stream.Stream;
  *
  * @note inner annotations cannot be used on the
  * grammer definition, so the inner annotations are ignored
- * @bug not working
- * @todo check cyclic rule reference on score calculation A -> B -> A
+ * @bug incomplete
  */
 public final class CProxyRule implements IExecution
 {
@@ -89,8 +88,7 @@ public final class CProxyRule implements IExecution
     }
 
     /**
-     * @bug instantiation incorrect
-     * @bug result not set
+     * @bug retur variables incomplete
      */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
