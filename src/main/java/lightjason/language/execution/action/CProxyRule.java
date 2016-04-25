@@ -100,14 +100,8 @@ public final class CProxyRule implements IExecution
                 : m_rules.stream()
         ).forEach( i -> {
             System.out.println( "####>>> " + p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ) );
-            /*
-            i.instantiate(
-                    p_context.getAgent(),
-                    null,
-                    null,
-                    p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified )
-            );
-            */
+            System.out.println(
+                    "####>>> " + i.instantiate( p_context.getAgent(), p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ).stream() ) );
         } );
 
         System.out.println( "####>>> " + m_callerliteral + "    " + l_unified );
