@@ -32,7 +32,7 @@ second(true).
 
 fibonacci(X, R)
     :- X <= 2; R=1
-    :- TA = X - 1; TB = X - 2; fibonacci(TA,A); fibonacci(TB,B); R = A+B
+    //:- TA = X - 1; TB = X - 2; fibonacci(TA,A); fibonacci(TB,B); R = A+B
     .
 
 myfunction(X) :- generic/print("my logical rule", X).
@@ -350,8 +350,9 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
 
-        //fibonacci(3,Y);
         myfunction("fooooooo");
+        fibonacci(2, FIB);
+        generic/print("rule execution", FIB);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

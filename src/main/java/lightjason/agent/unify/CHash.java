@@ -48,7 +48,7 @@ public final class CHash implements IAlgorithm
                 p_target,
                 ( s, t ) -> {
                     // if s and t are variable create a realocated variable for backtracking
-                    if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )
+                    if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) && ( !( (IVariable<?>) s ).isAllocated() ) )
                     {
                         p_variables.add(
                                 ( (IVariable<?>) t ).hasMutex()
