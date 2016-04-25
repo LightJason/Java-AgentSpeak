@@ -100,14 +100,17 @@ public final class CProxyRule implements IExecution
         // first step is the unification of the caller literal, so variables will be set from the current execution context
         final ILiteral l_unified = m_callerliteral.unify( p_context );
 
-        // second step is the unification of each possible rule
+        // second step execute backtracking rules sequential / parallel
         return (
                 m_callerliteral.hasAt()
                 ? m_rules.parallelStream()
                 : m_rules.stream()
         ).map( i -> {
 
+            // instantiate variables by unification of the rule literal
             final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
+
+            // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
                     i.instantiate( p_context.getAgent(), l_variables.stream() ),
                     false,
@@ -116,14 +119,18 @@ public final class CProxyRule implements IExecution
                     Collections.<ITerm>emptyList()
             );
 
+            // create rule result with fuzzy- and defuzzificated value and instantiate variable set
             return new ImmutableTriple<>( p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
 
         } )
+
+         // find first successfull ended rule
          .filter( i -> i.getLeft() )
          .findFirst()
+
+         // realocate rule instantiated variables back to execution context
          .map( i -> {
 
-             // reallocate variables
              i.getRight().parallelStream()
               .filter( j -> j instanceof IRelocateVariable )
               .map( j -> {
@@ -135,6 +142,8 @@ public final class CProxyRule implements IExecution
 
              return i.getMiddle();
          } )
+
+         // otherwise rule fails (default behaviour)
          .orElse( CFuzzyValue.from( false ) );
     }
 
