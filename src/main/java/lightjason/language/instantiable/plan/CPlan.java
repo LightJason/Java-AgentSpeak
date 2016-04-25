@@ -28,11 +28,11 @@ import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.IBaseInstantiable;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.variable.IVariable;
 import org.apache.commons.lang3.StringUtils;
@@ -40,10 +40,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,7 +52,7 @@ import java.util.stream.Stream;
  *
  * @todo annotation handling is incomplete
  */
-public final class CPlan implements IPlan
+public final class CPlan extends IBaseInstantiable implements IPlan
 {
     /**
      * trigger event
@@ -72,18 +70,6 @@ public final class CPlan implements IPlan
      * execution condition / expression
      */
     protected final IExpression m_condition;
-    /**
-     * action list
-     */
-    protected final List<IExecution> m_action;
-    /**
-     * map with annotation (enum value for getting annotation object)
-     */
-    protected final Map<IAnnotation.EType, IAnnotation<?>> m_annotation;
-    /**
-     * object hash
-     */
-    private final int m_hash;
 
 
     /**
@@ -109,15 +95,18 @@ public final class CPlan implements IPlan
     public CPlan( final ITrigger p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
     )
     {
+        super(
+                p_body,
+                p_annotation,
+                p_event.hashCode()
+                + ( p_condition == null ? 0 : p_condition.hashCode() )
+                + p_body.stream().mapToInt( i -> i.hashCode() ).sum()
+                + p_annotation.stream().mapToInt( i -> i.hashCode() ).sum()
+        );
+
+
         m_triggerevent = p_event;
         m_condition = p_condition;
-        m_action = Collections.unmodifiableList( p_body );
-        m_annotation = this.addDefault( p_annotation );
-
-        m_hash = m_triggerevent.hashCode() +
-                 ( m_condition == null ? 0 : m_condition.hashCode() ) +
-                 m_action.stream().mapToInt( i -> i.hashCode() ).sum() +
-                 m_annotation.values().stream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
@@ -187,7 +176,7 @@ public final class CPlan implements IPlan
     {
         return p_agent.getAggregation().evaluate(
                 Stream.concat(
-                        m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed(),
+                        Stream.of( super.score( p_agent ) ),
                         Stream.of(
                                 m_annotation.containsKey( IAnnotation.EType.SCORE )
                                 ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()
@@ -206,8 +195,7 @@ public final class CPlan implements IPlan
                 ? m_condition.getVariables()
                 : Stream.<IVariable<?>>empty(),
 
-                m_action.stream()
-                        .flatMap( i -> i.getVariables() ),
+                super.getVariables(),
 
                 CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
                        .filter( i -> i instanceof IVariable<?> )
@@ -219,38 +207,6 @@ public final class CPlan implements IPlan
         )
                                             .reduce( Stream::concat )
                                             .orElseGet( Stream::<IVariable<?>>empty );
-    }
-
-    @Override
-    public final IContext instantiate( final IAgent p_agent, final Stream<IVariable<?>> p_variable )
-    {
-        return CCommon.instantiate( this, p_agent, p_variable );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_hash;
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.hashCode() == p_object.hashCode();
-    }
-
-    /**
-     * add default values to the annotation map
-     *
-     * @param p_annotation set with annotation
-     * @return unmodifiable map
-     */
-    protected Map<IAnnotation.EType, IAnnotation<?>> addDefault( final Set<IAnnotation<?>> p_annotation )
-    {
-        final Map<IAnnotation.EType, IAnnotation<?>> l_map = p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll );
-
-        l_map.putIfAbsent( IAnnotation.EType.FUZZY, new CNumberAnnotation<>( IAnnotation.EType.FUZZY, 1.0 ) );
-        return Collections.unmodifiableMap( l_map );
     }
 
     /**

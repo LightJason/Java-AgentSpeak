@@ -24,7 +24,6 @@
 package lightjason.language.instantiable.rule;
 
 import com.google.common.collect.Multimap;
-import lightjason.agent.IAgent;
 import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
@@ -32,8 +31,10 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyRule;
+import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.IBaseInstantiable;
 import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
@@ -48,32 +49,29 @@ import java.util.stream.Stream;
  *
  * @bug incomplete e.g. annotations are not existing
  */
-public final class CRule implements IRule
+public final class CRule extends IBaseInstantiable implements IRule
 {
     /**
      * identifier of the rule
      */
     protected final ILiteral m_id;
-    /**
-     * action list
-     */
-    protected final List<IExecution> m_action;
-    /**
-     * hash code
-     */
-    private final int m_hash;
 
     /**
      * ctor
      *
      * @param p_id literal with signature
      * @param p_action action list
+     * @bug refactor empty annotations
      */
     public CRule( final ILiteral p_id, final List<IExecution> p_action )
     {
+        super(
+                p_action,
+                Collections.<IAnnotation<?>>emptySet(),
+                p_id.hashCode()
+                + p_action.stream().mapToInt( i -> i.hashCode() ).sum()
+        );
         m_id = p_id;
-        m_action = Collections.unmodifiableList( p_action );
-        m_hash = m_id.hashCode() + m_action.stream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
@@ -105,34 +103,16 @@ public final class CRule implements IRule
     }
 
     @Override
-    public final double score( final IAgent p_agent )
-    {
-        return p_agent.getAggregation().evaluate( m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed() );
-    }
-
-    @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> getVariables()
     {
         return (Stream<IVariable<?>>) Stream.of(
                 CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-                CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
-
+                CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
+                super.getVariables()
         )
                                             .reduce( Stream::concat )
                                             .orElseGet( Stream::<IVariable<?>>empty );
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_hash;
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return m_id.hashCode() == p_object.hashCode();
     }
 
     @Override
@@ -144,13 +124,6 @@ public final class CRule implements IRule
                 m_id,
                 m_action
         );
-    }
-
-    @Override
-    public final IContext instantiate( final IAgent p_agent, final Stream<IVariable<?>> p_variable
-    )
-    {
-        return CCommon.instantiate( this, p_agent, p_variable );
     }
 
 }
