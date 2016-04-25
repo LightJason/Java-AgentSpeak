@@ -84,6 +84,10 @@ public final class CProxyRule implements IExecution
         m_hash = m_rules.parallelStream().mapToInt( i -> i.hashCode() ).sum();
     }
 
+    /**
+     * @bug instantiation incorrect
+     * @bug result not set
+     */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
