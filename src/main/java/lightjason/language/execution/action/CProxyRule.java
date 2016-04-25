@@ -35,11 +35,14 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
+import lightjason.language.variable.IRelocateVariable;
 import lightjason.language.variable.IVariable;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -97,21 +100,40 @@ public final class CProxyRule implements IExecution
         final ILiteral l_unified = m_callerliteral.unify( p_context );
 
         // second step is the unification of each possible rule
-        (
+        return (
                 m_callerliteral.hasAt()
                 ? m_rules.parallelStream()
                 : m_rules.stream()
-        ).forEach( i -> {
-            i.execute(
-                    i.instantiate( p_context.getAgent(), p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified ).stream() ),
+        ).map( i -> {
+
+            final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
+            final IFuzzyValue<Boolean> l_return = i.execute(
+                    i.instantiate( p_context.getAgent(), l_variables.stream() ),
                     false,
                     Collections.<ITerm>emptyList(),
                     Collections.<ITerm>emptyList(),
                     Collections.<ITerm>emptyList()
             );
-        } );
 
-        return CFuzzyValue.from( true );
+            return new ImmutableTriple<>( p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
+
+        } )
+         .filter( i -> i.getLeft() )
+         .findFirst()
+         .map( i -> {
+
+             // reallocate variables
+             i.getRight().parallelStream()
+              .filter( j -> j instanceof IRelocateVariable )
+              .map( j -> {
+                  System.out.println( "####>>>> " + j );
+                  return j;
+              } )
+              .forEach( j -> System.out.println( "##>> " + ( (IRelocateVariable) j ).relocate() ) );
+
+             return i.getMiddle();
+         } )
+         .orElse( CFuzzyValue.from( false ) );
     }
 
     @Override
