@@ -300,9 +300,10 @@ public final class CLiteral implements ILiteral
                 m_orderedvalues.stream()
                                .map( i -> {
                                    if ( i instanceof IVariable<?> )
-                                       return ( (IVariable<?>) i ).isAllocated()
-                                              ? CRawTerm.from( p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() ).get() )
-                                              : i;
+                                   {
+                                       final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
+                                       return l_variable.isAllocated() ? CRawTerm.from( l_variable ) : i;
+                                   }
                                    if ( i instanceof ILiteral )
                                        return ( (ILiteral) i ).unify( p_context );
                                    return i;
