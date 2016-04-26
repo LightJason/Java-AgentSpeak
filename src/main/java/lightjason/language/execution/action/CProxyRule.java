@@ -129,13 +129,12 @@ public final class CProxyRule implements IExecution
          // realocate rule instantiated variables back to execution context
          .map( i -> {
 
+
              i.getRight().parallelStream()
               .filter( j -> j instanceof IRelocateVariable )
-              .map( j -> {
-                  System.out.println( "####>>>> " + j );
-                  return j;
-              } )
               .forEach( j -> System.out.println( "##>> " + ( (IRelocateVariable) j ).relocate() ) );
+
+             System.out.println( "##>> " + i.getRight() );
              System.out.println( "##>> " + p_context.getInstanceVariables().get( CPath.from( "FIB" ) ) );
 
              return i.getMiddle();

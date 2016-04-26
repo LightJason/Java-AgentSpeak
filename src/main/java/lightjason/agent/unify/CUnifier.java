@@ -180,7 +180,7 @@ public final class CUnifier implements IUnifier
         if ( !l_succeed )
             return Collections.<IVariable<?>>emptySet();
 
-        // try to unify exact or if not possible by recursive on theannotation set
+        // try to unify exact or if not possible by recursive on the annotation set
         l_succeed = l_literal.annotationhash() == p_value.annotationhash()
                     ? m_hashbased.unify(
                 l_result, CCommon.recursiveliteral( p_value.annotations() ), CCommon.recursiveliteral( l_literal.annotations() ) )
