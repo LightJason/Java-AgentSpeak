@@ -26,7 +26,6 @@ package lightjason.language.execution.action;
 import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
-import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
@@ -95,6 +94,8 @@ public final class CProxyRule implements IExecution
                                                final List<ITerm> p_annotation
     )
     {
+        System.out.println( "##>> " + p_context.getInstanceVariables().values() );
+
         // first step is the unification of the caller literal, so variables will be set from the current execution context
         final ILiteral l_unified = m_callerliteral.unify( p_context );
 
@@ -132,10 +133,11 @@ public final class CProxyRule implements IExecution
 
              i.getRight().parallelStream()
               .filter( j -> j instanceof IRelocateVariable )
-              .forEach( j -> System.out.println( "##>> " + ( (IRelocateVariable) j ).relocate() ) );
+              .map( j -> ( (IRelocateVariable) j ).relocate() )
 
+              .forEach( System.out::println );
              System.out.println( "##>> " + i.getRight() );
-             System.out.println( "##>> " + p_context.getInstanceVariables().get( CPath.from( "FIB" ) ) );
+             System.out.println( "##>> " + p_context.getInstanceVariables() );
 
              return i.getMiddle();
          } )
