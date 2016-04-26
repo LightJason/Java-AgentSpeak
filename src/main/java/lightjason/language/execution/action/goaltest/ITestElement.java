@@ -21,46 +21,25 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.language.execution.action.goaltest;
 
 import lightjason.common.IPath;
-import lightjason.language.ITerm;
-import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CFuzzyValue;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
-
-import java.text.MessageFormat;
-import java.util.List;
+import lightjason.language.execution.action.IBaseExecution;
 
 
 /**
- * test goal action
+ * abstract class of test-goal / test-rule action
  */
-public final class CTestGoal extends IBaseExecution<IPath>
+abstract class ITestElement extends IBaseExecution<IPath>
 {
-
     /**
      * ctor
      *
-     * @param p_plan literal
+     * @param p_value atom
      */
-    public CTestGoal( final IPath p_plan )
+    ITestElement( final IPath p_value )
     {
-        super( p_plan );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "?{0}", m_value );
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        return CFuzzyValue.from( p_context.getAgent().getRunningPlans().keySet().contains( m_value ) );
+        super( p_value );
     }
 
 }

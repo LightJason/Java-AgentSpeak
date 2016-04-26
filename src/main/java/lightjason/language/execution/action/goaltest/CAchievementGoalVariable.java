@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.language.execution.action.goaltest;
 
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
@@ -32,13 +32,14 @@ import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.variable.IVariable;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * achievement goal action
+ * achievement-goal action based on variables
  */
-public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
+public final class CAchievementGoalVariable extends IAchievementElement<IVariable<?>>
 {
 
     /**
@@ -50,6 +51,12 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?
     public CAchievementGoalVariable( final IVariable<?> p_type, final boolean p_immediately )
     {
         super( p_type, p_immediately );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Override

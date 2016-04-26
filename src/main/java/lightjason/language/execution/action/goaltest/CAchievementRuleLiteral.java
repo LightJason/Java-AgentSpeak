@@ -21,33 +21,40 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.language.execution.action.goaltest;
 
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.plan.trigger.CTrigger;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * achievement goal action
+ * achievement-rule action based on a literal
+ *
+ * @bug execution incomplete
  */
-public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
+public class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
 {
-
     /**
      * ctor
      *
      * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalLiteral( final ILiteral p_type, final boolean p_immediately )
+    public CAchievementRuleLiteral( final ILiteral p_type, final boolean p_immediately )
     {
         super( p_type, p_immediately );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}:-{1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Override
@@ -55,7 +62,6 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
+        return CFuzzyValue.from( false );
     }
-
 }

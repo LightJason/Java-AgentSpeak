@@ -37,8 +37,6 @@ import lightjason.language.CRawTerm;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.action.CAchievementGoalLiteral;
-import lightjason.language.execution.action.CAchievementGoalVariable;
 import lightjason.language.execution.action.CBeliefAction;
 import lightjason.language.execution.action.CDeconstruct;
 import lightjason.language.execution.action.CLambdaExpression;
@@ -48,7 +46,12 @@ import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CRepair;
 import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTernaryOperation;
-import lightjason.language.execution.action.CTestGoal;
+import lightjason.language.execution.action.goaltest.CAchievementGoalLiteral;
+import lightjason.language.execution.action.goaltest.CAchievementGoalVariable;
+import lightjason.language.execution.action.goaltest.CAchievementRuleLiteral;
+import lightjason.language.execution.action.goaltest.CAchievementRuleVariable;
+import lightjason.language.execution.action.goaltest.CTestGoal;
+import lightjason.language.execution.action.goaltest.CTestRule;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
 import lightjason.language.execution.action.unify.CVariableUnify;
@@ -534,9 +537,15 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public Object visitAchievement_rule_action( final AgentParser.Achievement_rule_actionContext ctx )
+    public Object visitAchievement_rule_action( final AgentParser.Achievement_rule_actionContext p_context )
     {
-        return null;
+        if ( p_context.literal() != null )
+            return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+
+        if ( p_context.variable() != null )
+            return new CAchievementRuleVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmenttest", p_context.getText() ) );
     }
 
     @Override
@@ -568,9 +577,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public Object visitTest_rule_action( final AgentParser.Test_rule_actionContext ctx )
+    public Object visitTest_rule_action( final AgentParser.Test_rule_actionContext p_context )
     {
-        return null;
+        return new CTestRule( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
     }
 
     @Override

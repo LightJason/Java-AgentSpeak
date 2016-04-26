@@ -33,6 +33,7 @@ import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
 import org.apache.commons.lang3.tuple.MutableTriple;
 
@@ -148,5 +149,13 @@ public interface IAgent extends Callable<IAgent>
      * @return variable builder function
      */
     IVariableBuilder getVariableBuilder();
+
+    /**
+     * returns amultimap with literal-rule functor
+     * and rle objects
+     *
+     * @return multimap
+     */
+    Multimap<IPath, IRule> getRules();
 
 }

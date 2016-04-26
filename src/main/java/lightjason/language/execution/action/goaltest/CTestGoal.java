@@ -21,63 +21,46 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.language.execution.action.goaltest;
 
-import lightjason.language.ILiteral;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.rule.IRule;
+import lightjason.common.IPath;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.List;
 
 
 /**
- *
+ * test-goal action
  */
-public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
+public final class CTestGoal extends ITestElement
 {
-    /**
-     * instance of plans
-     */
-    private final Set<IPlan> m_plans;
-    /**
-     * rule instance
-     */
-    private final Set<IRule> m_rules;
-    /**
-     * instance of initial beliefs
-     */
-    private final Set<ILiteral> m_initialbeliefs;
 
     /**
      * ctor
      *
-     * @param p_plans plans
-     * @param p_initalbeliefs initial beliefs
+     * @param p_value atom
      */
-    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )
+    public CTestGoal( final IPath p_value )
     {
-        m_initialbeliefs = Collections.unmodifiableSet( p_initalbeliefs );
-        m_plans = Collections.unmodifiableSet( p_plans );
-        m_rules = Collections.unmodifiableSet( p_rules );
+        super( p_value );
     }
 
     @Override
-    public final Set<ILiteral> getBeliefs()
+    public final String toString()
     {
-        return m_initialbeliefs;
+        return MessageFormat.format( "?{0}", m_value );
     }
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
     {
-        return m_plans;
-    }
-
-    @Override
-    public final Set<IRule> getRules()
-    {
-        return m_rules;
+        return CFuzzyValue.from( p_context.getAgent().getRunningPlans().keySet().contains( m_value ) );
     }
 
 }

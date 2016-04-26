@@ -216,7 +216,7 @@ achievement_goal_action :
  * achivement-rule action
  **/
 achievement_rule_action :
-    EXCLAMATIONMARK RULEOPERATOR ( literal | variable )
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) RULEOPERATOR ( literal | variable )
     ;
 
 /**

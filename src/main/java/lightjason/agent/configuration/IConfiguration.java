@@ -24,6 +24,7 @@
 package lightjason.agent.configuration;
 
 import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Set;
 
@@ -37,10 +38,16 @@ public interface IConfiguration
 {
 
     /**
-     * get a multimap with event-plan matching
+     * get a set with plans
      *
-     * @return set plans
+     * @return plan set
      */
     Set<IPlan> getPlans();
 
+    /**
+     * get a set with rules
+     *
+     * @return rule set
+     */
+    Set<IRule> getRules();
 }

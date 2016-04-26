@@ -21,63 +21,40 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.language.execution.action.goaltest;
 
-import lightjason.language.ILiteral;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.rule.IRule;
-
-import java.util.Collections;
-import java.util.Set;
+import com.google.common.collect.ImmutableMultiset;
+import lightjason.agent.IAgent;
+import lightjason.language.ITerm;
+import lightjason.language.execution.action.IBaseExecution;
 
 
 /**
- *
+ * abstract achievment-goal class for definied base structure of goal execution
  */
-public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
+abstract class IAchievementElement<T extends ITerm> extends IBaseExecution<T>
 {
     /**
-     * instance of plans
+     * flag to run immediately
      */
-    private final Set<IPlan> m_plans;
-    /**
-     * rule instance
-     */
-    private final Set<IRule> m_rules;
-    /**
-     * instance of initial beliefs
-     */
-    private final Set<ILiteral> m_initialbeliefs;
+    final boolean m_immediately;
 
     /**
      * ctor
      *
-     * @param p_plans plans
-     * @param p_initalbeliefs initial beliefs
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )
+    protected IAchievementElement( final T p_type, final boolean p_immediately )
     {
-        m_initialbeliefs = Collections.unmodifiableSet( p_initalbeliefs );
-        m_plans = Collections.unmodifiableSet( p_plans );
-        m_rules = Collections.unmodifiableSet( p_rules );
+        super( p_type );
+        m_immediately = p_immediately;
     }
 
     @Override
-    public final Set<ILiteral> getBeliefs()
+    public final double score( final IAgent p_agent )
     {
-        return m_initialbeliefs;
-    }
-
-    @Override
-    public final Set<IPlan> getPlans()
-    {
-        return m_plans;
-    }
-
-    @Override
-    public final Set<IRule> getRules()
-    {
-        return m_rules;
+        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
 }
