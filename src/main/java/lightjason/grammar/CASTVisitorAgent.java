@@ -534,6 +534,12 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
+    public Object visitAchievement_rule_action( final AgentParser.Achievement_rule_actionContext ctx )
+    {
+        return null;
+    }
+
+    @Override
     public Object visitTernary_operation( final AgentParser.Ternary_operationContext p_context )
     {
         return new CTernaryOperation(
@@ -559,6 +565,12 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
     {
         return new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
+    }
+
+    @Override
+    public Object visitTest_rule_action( final AgentParser.Test_rule_actionContext ctx )
+    {
+        return null;
     }
 
     @Override

@@ -180,7 +180,7 @@ body_formula :
  * repairable formula
  **/
 repair_formula :
-    ( term | test_goal_action | achievement_goal_action )
+    ( term | test_goal_action | test_rule_action | achievement_goal_action | achievement_rule_action )
     ( LEFTSHIFT repair_formula )?
     ;
 
@@ -199,10 +199,24 @@ test_goal_action :
     ;
 
 /**
+ * test-rule action
+ **/
+test_rule_action :
+    QUESTIONMARK RULEOPERATOR atom
+    ;
+
+/**
  * achivement-goal action
  **/
 achievement_goal_action :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | variable )
+    ;
+
+/**
+ * achivement-rule action
+ **/
+achievement_rule_action :
+    EXCLAMATIONMARK RULEOPERATOR ( literal | variable )
     ;
 
 /**

@@ -550,6 +550,12 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
     }
 
+    @Override
+    public Object visitAchievement_rule_action( final PlanBundleParser.Achievement_rule_actionContext ctx )
+    {
+        return null;
+    }
+
 
 
     @Override
@@ -581,6 +587,12 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public Object visitTest_goal_action( final PlanBundleParser.Test_goal_actionContext p_context )
     {
         return new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
+    }
+
+    @Override
+    public Object visitTest_rule_action( final PlanBundleParser.Test_rule_actionContext ctx )
+    {
+        return null;
     }
 
 
