@@ -98,8 +98,7 @@ public final class TestCAgent
         final Map<String, String> l_testing = new HashMap<String, String>()
         {{
 
-            //put( "src/test/resources/agentsuccess.asl", "successful agent" );
-            put( "src/test/resources/agentsimple.asl", "simple agent" );
+            put( "src/test/resources/agent/complete.asl", "full-test agent" );
 
         }};
 
@@ -120,7 +119,7 @@ public final class TestCAgent
     {
         // run test manually for catching execpetions
         new CDefaultAgentGenerator(
-                new FileInputStream( "src/test/resources/agentsimple.asl" ),
+                new FileInputStream( "src/test/resources/agent/complete.asl" ),
                 ACTIONS.keySet(),
                 new CUnifier(),
                 new CAggregation( ACTIONS ),
