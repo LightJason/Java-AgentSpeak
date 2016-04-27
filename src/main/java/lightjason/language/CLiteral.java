@@ -302,7 +302,7 @@ public final class CLiteral implements ILiteral
                                    if ( i instanceof IVariable<?> )
                                    {
                                        final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
-                                       return l_variable.isAllocated() ? CRawTerm.from( l_variable ) : i;
+                                       return l_variable.isAllocated() ? CRawTerm.from( l_variable ) : l_variable;
                                    }
                                    if ( i instanceof ILiteral )
                                        return ( (ILiteral) i ).unify( p_context );

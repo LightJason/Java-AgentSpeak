@@ -50,15 +50,15 @@ myfunction(X) :- generic/print("my logical rule", X).
 +!mytest(X) <- generic/print("my test plan with variable", X, "   ", PlanFail, PlanFailRatio, PlanSuccessful, PlanSuccessfulRatio).
 
 +!main
-/*
+
     : >>( hallo(X), generic/typ/isstring(X) ) <-
             generic/print("---", "first plan", "---", "unification variables", X)
 
     : >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <-
         generic/print("---", "second plan", "---", "unification variables", X)
-*/
+
     <-
-/*
+
         // --- manual individual & internal variables ----------------------------------------------------------------------------------------------------------
 
         generic/print("constants", Score, Cycle, "    ", MyConstInt, MyConstString, "    ", PlanFail, PlanFailRatio, PlanSuccessful, PlanSuccessfulRatio);
@@ -350,23 +350,23 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
-*/
+
         myfunction("fooooooo");
         fibonacci(2, FIB);
-        generic/print("rule execution", FIB)
+        generic/print("rule execution (fibonacci)", FIB);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
         // --- condition & plan passing ------------------------------------------------------------------------------------------------------------------------
-/*
+
         Text = Z > 100.0 ? "Z greater equal 100" : "Z is less 100";
         generic/print("ternary operator", Text);
 
         Z < 100.0;
         generic/print("plan passed")
-*/
+
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
         .

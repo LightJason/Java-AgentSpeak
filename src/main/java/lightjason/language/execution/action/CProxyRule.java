@@ -94,8 +94,6 @@ public final class CProxyRule implements IExecution
                                                final List<ITerm> p_annotation
     )
     {
-        System.out.println( "##>> " + p_context.getInstanceVariables().values() );
-
         // first step is the unification of the caller literal, so variables will be set from the current execution context
         final ILiteral l_unified = m_callerliteral.unify( p_context );
 
@@ -130,16 +128,12 @@ public final class CProxyRule implements IExecution
          // realocate rule instantiated variables back to execution context
          .map( i -> {
 
-
              i.getRight().parallelStream()
               .filter( j -> j instanceof IRelocateVariable )
-              .map( j -> ( (IRelocateVariable) j ).relocate() )
-
-              .forEach( System.out::println );
-             System.out.println( "##>> " + i.getRight() );
-             System.out.println( "##>> " + p_context.getInstanceVariables() );
+              .forEach( j -> ( (IRelocateVariable) j ).relocate() );
 
              return i.getMiddle();
+
          } )
 
          // otherwise rule fails (default behaviour)
