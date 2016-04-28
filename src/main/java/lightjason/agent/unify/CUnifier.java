@@ -175,16 +175,30 @@ public final class CUnifier implements IUnifier
         // try to unify exact or if not possible by recursive on the value set
         boolean l_succeed = l_literal.valuehash() == p_value.valuehash()
                             ? m_hashbased.unify(
-                l_result, CCommon.recursiveterm( p_value.orderedvalues() ), CCommon.recursiveterm( l_literal.orderedvalues() ) )
-                            : m_recursive.unify( l_result, p_value.orderedvalues(), l_literal.orderedvalues() );
+                l_result,
+                CCommon.recursiveterm( p_value.orderedvalues() ),
+                CCommon.recursiveterm( l_literal.orderedvalues() )
+        )
+                            : m_recursive.unify(
+                                    l_result,
+                                    p_value.orderedvalues(),
+                                    l_literal.orderedvalues()
+                            );
         if ( !l_succeed )
             return Collections.<IVariable<?>>emptySet();
 
         // try to unify exact or if not possible by recursive on the annotation set
         l_succeed = l_literal.annotationhash() == p_value.annotationhash()
                     ? m_hashbased.unify(
-                l_result, CCommon.recursiveliteral( p_value.annotations() ), CCommon.recursiveliteral( l_literal.annotations() ) )
-                    : m_recursive.unify( l_result, p_value.annotations(), l_literal.annotations() );
+                l_result,
+                CCommon.recursiveliteral( p_value.annotations() ),
+                CCommon.recursiveliteral( l_literal.annotations() )
+        )
+                    : m_recursive.unify(
+                            l_result,
+                            p_value.annotations(),
+                            l_literal.annotations()
+                    );
 
         if ( !l_succeed )
             return Collections.<IVariable<?>>emptySet();

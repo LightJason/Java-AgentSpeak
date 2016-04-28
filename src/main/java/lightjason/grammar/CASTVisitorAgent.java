@@ -229,7 +229,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     {
         final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );
         return p_context.logicalruledefinition().stream()
-                        .map( i -> new CRule( l_literal, (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
+                        .map( i -> new CRule( (ILiteral) l_literal.deepcopy(), (List<IExecution>) this.visitLogicalruledefinition( i ) ) )
                         .collect( Collectors.toList() );
     }
 

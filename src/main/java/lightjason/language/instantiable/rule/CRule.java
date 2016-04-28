@@ -84,7 +84,9 @@ public final class CRule extends IBaseInstantiable implements IRule
                 m_id,
                 m_action.stream().map( i ->
                                                i instanceof CRulePlaceholder
-                                               ? new CProxyRule( ( (CRulePlaceholder) i ).getIdentifier() )
+                                               // create a full deep-copy of the literal for avoid indeterminisitic
+                                               // behaviour on rule unification
+                                               ? new CProxyRule( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
                                                : i
                 ).collect( Collectors.toList() )
         );
