@@ -36,6 +36,7 @@ PLUS                       : '+';
 MINUS                      : '-';
 DOUBLEEXCLAMATIONMARK      : '!!';
 QUESTIONMARK               : '?';
+DOLLAR                     : '$';
 
 LEFTARROW                  : '<-';
 RIGHTARROW                 : '->';

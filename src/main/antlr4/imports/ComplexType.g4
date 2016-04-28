@@ -190,6 +190,21 @@ expression_numeric_element :
 // --- complex-data-types ----------------------------------------------------------------
 
 /**
+ * rule for an action
+ **/
+execute_action :
+    literal
+    ;
+
+/**
+ * rule for execute a rule
+ **/
+execute_rule :
+    DOLLAR literal
+    ;
+
+
+/**
  * clause represent a literal structure existing
  * atom, optional argument, optional annotations
  **/
