@@ -43,11 +43,8 @@ import java.util.stream.Stream;
 
 
 /**
- * proxy action to encapsulate all rules
+ * proxy rule to encapsulate all rules
  *
- * @note inner annotations cannot be used on the
- * grammer definition, so the inner annotations are ignored
- * @bug incomplete
  */
 public final class CProxyRule implements IExecution
 {
@@ -125,16 +122,18 @@ public final class CProxyRule implements IExecution
          .orElse( CFuzzyValue.from( false ) );
     }
 
-    /**
-     * @bug fix cyclic reference
-     */
     @Override
     public final double score( final IAgent p_agent )
     {
+        // rules can create a cyclic reference so on calculate the score value
+        // a cyclic reference must be ignored
         final Collection<IRule> l_rules = p_agent.getRules().get( m_callerliteral.getFQNFunctor() );
         return l_rules == null
                ? p_agent.getAggregation().error()
-               : 0; // l_rules.parallelStream().mapToDouble( i -> i.score( p_agent ) ).sum();
+               : l_rules.parallelStream()
+                        .filter( i -> this.equals( i ) )
+                        .mapToDouble( i -> i.score( p_agent ) )
+                        .sum();
     }
 
     @Override
