@@ -170,37 +170,37 @@ public final class CUnifier implements IUnifier
     public final Set<IVariable<?>> literal( final ILiteral p_literal, final ILiteral p_value )
     {
         final Set<IVariable<?>> l_result = new HashSet<>();
-        final ILiteral l_literal = (ILiteral) p_literal.deepcopy();
 
         // try to unify exact or if not possible by recursive on the value set
-        boolean l_succeed = l_literal.valuehash() == p_value.valuehash()
-                            ? m_hashbased.unify(
-                l_result,
-                CCommon.recursiveterm( p_value.orderedvalues() ),
-                CCommon.recursiveterm( l_literal.orderedvalues() )
-        )
-                            : m_recursive.unify(
-                                    l_result,
-                                    p_value.orderedvalues(),
-                                    l_literal.orderedvalues()
-                            );
-        if ( !l_succeed )
+        if ( !(
+                p_literal.valuehash() == p_value.valuehash()
+                ? m_hashbased.unify(
+                        l_result,
+                        CCommon.recursiveterm( p_value.orderedvalues() ),
+                        CCommon.recursiveterm( p_literal.orderedvalues() )
+                )
+                : m_recursive.unify(
+                        l_result,
+                        p_value.orderedvalues(),
+                        p_literal.orderedvalues()
+                )
+        ) )
             return Collections.<IVariable<?>>emptySet();
 
         // try to unify exact or if not possible by recursive on the annotation set
-        l_succeed = l_literal.annotationhash() == p_value.annotationhash()
-                    ? m_hashbased.unify(
-                l_result,
-                CCommon.recursiveliteral( p_value.annotations() ),
-                CCommon.recursiveliteral( l_literal.annotations() )
-        )
-                    : m_recursive.unify(
-                            l_result,
-                            p_value.annotations(),
-                            l_literal.annotations()
-                    );
-
-        if ( !l_succeed )
+        if ( !(
+                p_literal.annotationhash() == p_value.annotationhash()
+                ? m_hashbased.unify(
+                        l_result,
+                        CCommon.recursiveliteral( p_value.annotations() ),
+                        CCommon.recursiveliteral( p_literal.annotations() )
+                )
+                : m_recursive.unify(
+                        l_result,
+                        p_value.annotations(),
+                        p_literal.annotations()
+                )
+        ) )
             return Collections.<IVariable<?>>emptySet();
 
         return l_result;
@@ -239,12 +239,13 @@ public final class CUnifier implements IUnifier
      * @param p_variablenumber number of unified variables
      * @return list of literal sets
      **/
+    @SuppressWarnings( "unchecked" )
     private List<Set<IVariable<?>>> unify( final IAgent p_agent, final ILiteral p_literal, final long p_variablenumber )
     {
         return p_agent.getBeliefBase()
                       .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                       .filter( i -> ( i.emptyValues() == p_literal.emptyValues() ) && ( i.emptyAnnotations() == p_literal.emptyAnnotations() ) )
-                      .map( i -> this.literal( p_literal, i ) )
+                      .map( i -> this.literal( (ILiteral) p_literal.deepcopy(), i ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }
