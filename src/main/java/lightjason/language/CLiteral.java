@@ -123,8 +123,8 @@ public final class CLiteral implements ILiteral
     {
         m_at = p_at;
         m_negated = p_negated;
-        m_functor = p_functor.normalize();
-
+        // create a full copy of the functor, because concurrency modification
+        m_functor = new CPath( p_functor ).normalize();
 
         // create immutable structures
         final Multimap<IPath, ILiteral> l_annotations = HashMultimap.create();
