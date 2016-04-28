@@ -384,6 +384,9 @@ public final class CPath implements IPath
         return m_path.size();
     }
 
+    /**
+     * remove for-loop
+     */
     @Override
     public final boolean startsWith( final IPath p_path )
     {
@@ -421,9 +424,9 @@ public final class CPath implements IPath
         if ( m_path.isEmpty() )
             return this;
 
-        // create path-copy and nomalize (remove dot and double-dot
+        // create path-copy and nomalize (remove dot, double-dot and empty values)
         final List<String> l_dotremove = m_path.stream()
-                                               .filter( i -> !i.equals( "." ) )
+                                               .filter( i -> ( i != null ) && ( !i.isEmpty() ) && ( !i.equals( "." ) ) )
                                                .collect( Collectors.toList() );
         if ( l_dotremove.isEmpty() )
             return this;
