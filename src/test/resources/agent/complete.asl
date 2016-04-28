@@ -353,7 +353,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
 
-        myfunction("fooooooo");
+        //myfunction("fooooooo");
         fibonacci(8, FIB);
         generic/print("rule execution (fibonacci)", FIB);
         FIB == 21.0;

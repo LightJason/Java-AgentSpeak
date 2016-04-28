@@ -202,6 +202,12 @@ public final class TestCAgent
         {
             return p_values.mapToDouble( i -> i ).sum();
         }
+
+        @Override
+        public final double error()
+        {
+            return Double.POSITIVE_INFINITY;
+        }
     }
 
 

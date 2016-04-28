@@ -103,7 +103,7 @@ public final class CCommon
                 return new CProxyAction( p_actions, (ILiteral) p_item );
 
             if ( p_rules.containsKey( ( (ILiteral) p_item ).getFQNFunctor() ) )
-                return new CProxyRule( p_rules, (ILiteral) p_item );
+                return new CProxyRule( (ILiteral) p_item );
 
             throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( CCommon.class, "notexecutable", p_item ) );
         }

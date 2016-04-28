@@ -55,4 +55,11 @@ public interface IAggregation
      */
     double evaluate( final Stream<Double> p_values );
 
+    /**
+     * returns a cost value on errors e.g. non-existing
+     *
+     * @return error costs
+     */
+    double error();
+
 }

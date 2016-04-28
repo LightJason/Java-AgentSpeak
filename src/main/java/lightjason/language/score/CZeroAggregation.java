@@ -46,4 +46,10 @@ public final class CZeroAggregation implements IAggregation
     {
         return 0;
     }
+
+    @Override
+    public final double error()
+    {
+        return 0;
+    }
 }

@@ -23,11 +23,7 @@
 
 package lightjason.language.execution.action;
 
-import com.google.common.collect.Multimap;
 import lightjason.agent.IAgent;
-import lightjason.common.CCommon;
-import lightjason.common.IPath;
-import lightjason.error.CIllegalArgumentException;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
@@ -59,31 +55,15 @@ public final class CProxyRule implements IExecution
      * literal of the execution call
      */
     private final ILiteral m_callerliteral;
-    /**
-     * collection with possible rules
-     */
-    private final Collection<IRule> m_rules;
-    /**
-     * object hash
-     */
-    private final int m_hash;
 
     /**
      * ctor
      *
-     * @param p_rules map with rules
      * @param p_callerliteral literal of the call
      */
-    public CProxyRule( final Multimap<IPath, IRule> p_rules, final ILiteral p_callerliteral )
+    public CProxyRule( final ILiteral p_callerliteral )
     {
-        if ( !p_rules.asMap().containsKey( p_callerliteral.getFQNFunctor() ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "ruleunknown", p_callerliteral ) );
-
         m_callerliteral = p_callerliteral;
-        // get all possible rules
-        m_rules = Collections.unmodifiableCollection( p_rules.asMap().get( p_callerliteral.getFQNFunctor() ) );
-        // calculate object hash based on all possible rule elements
-        m_hash = m_rules.parallelStream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     /**
@@ -94,14 +74,19 @@ public final class CProxyRule implements IExecution
                                                final List<ITerm> p_annotation
     )
     {
+        // read current rules, if not exists execution fails
+        final Collection<IRule> l_rules = p_context.getAgent().getRules().get( m_callerliteral.getFQNFunctor() );
+        if ( l_rules == null )
+            return CFuzzyValue.from( false );
+
         // first step is the unification of the caller literal, so variables will be set from the current execution context
         final ILiteral l_unified = m_callerliteral.unify( p_context );
 
         // second step execute backtracking rules sequential / parallel
         return (
                 m_callerliteral.hasAt()
-                ? m_rules.parallelStream()
-                : m_rules.stream()
+                ? l_rules.parallelStream()
+                : l_rules.stream()
         ).map( i -> {
 
             // instantiate variables by unification of the rule literal
@@ -140,10 +125,16 @@ public final class CProxyRule implements IExecution
          .orElse( CFuzzyValue.from( false ) );
     }
 
+    /**
+     * @bug fix cyclic reference
+     */
     @Override
     public final double score( final IAgent p_agent )
     {
-        return m_rules.parallelStream().filter( i -> !m_rules.contains( i ) ).mapToDouble( i -> i.score( p_agent ) ).sum();
+        final Collection<IRule> l_rules = p_agent.getRules().get( m_callerliteral.getFQNFunctor() );
+        return l_rules == null
+               ? p_agent.getAggregation().error()
+               : 0; // l_rules.parallelStream().mapToDouble( i -> i.score( p_agent ) ).sum();
     }
 
     @Override
@@ -168,7 +159,7 @@ public final class CProxyRule implements IExecution
     @Override
     public final int hashCode()
     {
-        return m_hash;
+        return m_callerliteral.hashCode();
     }
 
     @Override

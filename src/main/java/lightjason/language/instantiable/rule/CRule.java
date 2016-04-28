@@ -84,7 +84,7 @@ public final class CRule extends IBaseInstantiable implements IRule
                 m_id,
                 m_action.stream().map( i ->
                                                i instanceof CRulePlaceholder
-                                               ? new CProxyRule( p_rules, ( (CRulePlaceholder) i ).getIdentifier() )
+                                               ? new CProxyRule( ( (CRulePlaceholder) i ).getIdentifier() )
                                                : i
                 ).collect( Collectors.toList() )
         );
