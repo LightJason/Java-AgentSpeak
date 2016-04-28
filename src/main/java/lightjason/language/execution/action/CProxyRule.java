@@ -64,7 +64,7 @@ public final class CProxyRule implements IExecution
     }
 
     /**
-     * @bug retur variables incomplete
+     * @bug some indeterministic execution
      */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
