@@ -31,9 +31,11 @@ second(true).
 // --- logical rules -------------------------------------------------------------------------------------------------------------------------------------------
 
 fibonacci(X, R)
-    :- X <= 2; R=1
-    //:- TA = X - 1; TB = X - 2; fibonacci(TA,A); fibonacci(TB,B); R = A+B
-    .
+    // order of the rules are indeterministic, so for avoid indeterminisitic behaviour
+    // add the condition, when the rule can be executed first
+    :- X <= 2;  R = 1
+    :- X > 2;   TA = X - 1; TB = X - 2; fibonacci(TA,A); fibonacci(TB,B); R = A+B
+.
 
 myfunction(X) :- generic/print("my logical rule", X).
 
@@ -352,8 +354,9 @@ myfunction(X) :- generic/print("my logical rule", X).
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
 
         myfunction("fooooooo");
-        fibonacci(2, FIB);
+        fibonacci(8, FIB);
         generic/print("rule execution (fibonacci)", FIB);
+        FIB == 21.0;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -361,12 +364,12 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- condition & plan passing ------------------------------------------------------------------------------------------------------------------------
 
-        Text = Z > 100.0 ? "Z greater equal 100" : "Z is less 100";
+        Text = Z > 100 ? "Z greater equal 100" : "Z is less 100";
         generic/print("ternary operator", Text);
 
-        Z < 100.0;
+        Z < 100;
         generic/print("plan passed")
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-        .
+.

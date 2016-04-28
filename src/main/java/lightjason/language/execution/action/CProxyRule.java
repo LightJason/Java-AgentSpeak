@@ -121,7 +121,7 @@ public final class CProxyRule implements IExecution
 
         } )
 
-         // find first successfull ended rule
+         // find successfully ended rule
          .filter( i -> i.getLeft() )
          .findFirst()
 
