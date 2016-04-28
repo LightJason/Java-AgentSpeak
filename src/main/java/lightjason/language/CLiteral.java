@@ -291,7 +291,7 @@ public final class CLiteral implements ILiteral
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final ILiteral unify( final IContext p_context )
+    public final synchronized ILiteral unify( final IContext p_context )
     {
         return new CLiteral(
                 m_at,
