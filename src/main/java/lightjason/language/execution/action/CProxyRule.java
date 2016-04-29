@@ -44,7 +44,6 @@ import java.util.stream.Stream;
 
 /**
  * proxy rule to encapsulate all rules
- *
  */
 public final class CProxyRule implements IExecution
 {

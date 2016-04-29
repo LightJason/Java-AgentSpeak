@@ -31,7 +31,22 @@ import Terminal;
 // --- expression context ----------------------------------------------------------------
 
 /**
- * terms are predictable structures
+ * executable-terms are predictable structures
+ **/
+ executable_term :
+    string
+    | number
+    | logicalvalue
+
+    | executable_action
+    | executable_rule
+
+    | expression
+    | ternary_operation
+    ;
+
+/**
+ * terms are non-predictable structures
  **/
 term :
     string
@@ -192,14 +207,14 @@ expression_numeric_element :
 /**
  * rule for an action
  **/
-execute_action :
+executable_action :
     literal
     ;
 
 /**
  * rule for execute a rule
  **/
-execute_rule :
+executable_rule :
     DOLLAR literal
     ;
 
