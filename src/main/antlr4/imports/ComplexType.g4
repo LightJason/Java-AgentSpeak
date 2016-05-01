@@ -142,7 +142,8 @@ expression_logical_xor :
 expression_logical_element :
     logicalvalue
     | variable
-    | literal
+    | executable_action
+    | executable_rule
     | unification
     ;
 
@@ -194,7 +195,8 @@ expression_numeric_power :
 expression_numeric_element :
     number
     | variable
-    | literal
+    | executable_action
+    | executable_rule
     | LEFTROUNDBRACKET expression_numeric RIGHTROUNDBRACKET
     ;
 
