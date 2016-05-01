@@ -486,9 +486,26 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public Object visitExecutable_term( final AgentParser.Executable_termContext ctx )
+    public Object visitExecutable_term( final AgentParser.Executable_termContext p_context )
     {
-        return null;
+        if ( p_context.string() != null )
+            return new CRawAction<>( this.visitString( p_context.string() ) );
+        if ( p_context.number() != null )
+            return new CRawAction<>( this.visitNumber( p_context.number() ) );
+        if ( p_context.logicalvalue() != null )
+            return new CRawAction<>( this.visitLogicalvalue( p_context.logicalvalue() ) );
+
+        if ( p_context.executable_action() != null )
+            return this.visitExecutable_action( p_context.executable_action() );
+        if ( p_context.executable_rule() != null )
+            return this.visitExecutable_rule( p_context.executable_rule() );
+
+        if ( p_context.expression() != null )
+            return this.visitExpression( p_context.expression() );
+        if ( p_context.ternary_operation() != null )
+            return this.visitTernary_operation( p_context.ternary_operation() );
+
+        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
 
     @Override

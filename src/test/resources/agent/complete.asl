@@ -34,7 +34,7 @@ fibonacci(X, R)
     // order of the rules are indeterministic, so for avoid indeterminisitic behaviour
     // add the condition, when the rule can be executed first
     :- X <= 2;  R = 1
-    :- X > 2;   TA = X - 1; TB = X - 2; fibonacci(TA,A); fibonacci(TB,B); R = A+B
+    :- X > 2;   TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B
 .
 
 myfunction(X) :- generic/print("my logical rule", X).
@@ -353,8 +353,8 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
 
-        myfunction("fooooooo");
-        fibonacci(8, FIB);
+        $myfunction("fooooooo");
+        $fibonacci(8, FIB);
         generic/print("rule execution (fibonacci)", FIB);
         FIB == 21.0;
 

@@ -37,6 +37,7 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CProxyRule;
+import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
@@ -137,9 +138,26 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     }
 
     @Override
-    public Object visitExecutable_term( final TypeParser.Executable_termContext ctx )
+    public Object visitExecutable_term( final TypeParser.Executable_termContext p_context )
     {
-        return null;
+        if ( p_context.string() != null )
+            return new CRawAction<>( this.visitString( p_context.string() ) );
+        if ( p_context.number() != null )
+            return new CRawAction<>( this.visitNumber( p_context.number() ) );
+        if ( p_context.logicalvalue() != null )
+            return new CRawAction<>( this.visitLogicalvalue( p_context.logicalvalue() ) );
+
+        if ( p_context.executable_action() != null )
+            return this.visitExecutable_action( p_context.executable_action() );
+        if ( p_context.executable_rule() != null )
+            return this.visitExecutable_rule( p_context.executable_rule() );
+
+        if ( p_context.expression() != null )
+            return this.visitExpression( p_context.expression() );
+        if ( p_context.ternary_operation() != null )
+            return this.visitTernary_operation( p_context.ternary_operation() );
+
+        throw new CIllegalArgumentException( lightjason.common.CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
