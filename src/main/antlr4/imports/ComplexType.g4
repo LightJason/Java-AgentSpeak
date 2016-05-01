@@ -33,7 +33,7 @@ import Terminal;
 /**
  * executable-terms are predictable structures
  **/
- executable_term :
+executable_term :
     string
     | number
     | logicalvalue
@@ -96,7 +96,7 @@ ternary_operation :
  **/
 ternary_operation_true :
     QUESTIONMARK
-    term
+    executable_term
     ;
 
 /**
@@ -104,7 +104,7 @@ ternary_operation_true :
  **/
 ternary_operation_false :
     COLON
-    term
+    executable_term
     ;
 
 /**
