@@ -36,6 +36,7 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
+import lightjason.language.execution.action.CProxyRule;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
@@ -135,6 +136,12 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         return null;
     }
 
+    @Override
+    public Object visitExecutable_term( final TypeParser.Executable_termContext ctx )
+    {
+        return null;
+    }
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -194,7 +201,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public final Object visitTernary_operation_true( final TypeParser.Ternary_operation_trueContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
+        return this.visitExecutable_term( p_context.executable_term() );
     }
 
 
@@ -202,7 +209,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public final Object visitTernary_operation_false( final TypeParser.Ternary_operation_falseContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
+        return this.visitExecutable_term( p_context.executable_term() );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -463,8 +470,11 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         if ( p_context.unification() != null )
             return new CProxyReturnExpression<>( (IExecution) this.visitUnification( p_context.unification() ) );
 
-        if ( p_context.literal() != null )
-            return new CProxyReturnExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
+        if ( p_context.executable_action() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );
+
+        if ( p_context.executable_rule() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -616,10 +626,25 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
-            return new CProxyReturnExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
+        if ( p_context.executable_action() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );
+
+        if ( p_context.executable_rule() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
         throw new CSyntaxErrorException( lightjason.common.CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitExecutable_action( final TypeParser.Executable_actionContext p_context )
+    {
+        return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
+
+    @Override
+    public Object visitExecutable_rule( final TypeParser.Executable_ruleContext p_context )
+    {
+        return new CProxyRule( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
 

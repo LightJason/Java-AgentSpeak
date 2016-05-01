@@ -41,6 +41,7 @@ import lightjason.language.execution.action.CDeconstruct;
 import lightjason.language.execution.action.CLambdaExpression;
 import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
+import lightjason.language.execution.action.CProxyRule;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CRepair;
 import lightjason.language.execution.action.CSingleAssignment;
@@ -369,9 +370,9 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
         // if there exists any repair element, build a sequential hierarchie of repair calls
-        if ( p_context.term() != null )
+        if ( p_context.executable_term() != null )
             return new CRepair(
-                    (IExecution) lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules ),
+                    (IExecution) this.visitExecutable_term( p_context.executable_term() ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
@@ -488,6 +489,12 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         return this.visitVariable( p_context.variable() );
     }
 
+    @Override
+    public Object visitExecutable_term( final PlanBundleParser.Executable_termContext ctx )
+    {
+        return null;
+    }
+
 
 
     @Override
@@ -503,7 +510,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     {
         return new CSingleAssignment<>(
                 (IVariable<?>) this.visitVariable( p_context.variable() ),
-                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules )
+                (IExecution) this.visitExecutable_term( p_context.executable_term() )
         );
     }
 
@@ -514,7 +521,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-                lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules )
+                (IExecution) this.visitExecutable_term( p_context.executable_term() )
         );
     }
 
@@ -572,14 +579,14 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public final Object visitTernary_operation_true( final PlanBundleParser.Ternary_operation_trueContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
+        return this.visitExecutable_term( p_context.executable_term() );
     }
 
 
     @Override
     public final Object visitTernary_operation_false( final PlanBundleParser.Ternary_operation_falseContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitTerm( p_context.term() ), m_actions, m_rules );
+        return this.visitExecutable_term( p_context.executable_term() );
     }
 
 
@@ -872,8 +879,11 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.unification() != null )
             return new CProxyReturnExpression<>( (IExecution) this.visitUnification( p_context.unification() ) );
 
-        if ( p_context.literal() != null )
-            return new CProxyReturnExpression<>( new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) ) );
+        if ( p_context.executable_action() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );
+
+        if ( p_context.executable_rule() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
     }
@@ -1025,10 +1035,25 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
-            return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
+        if ( p_context.executable_action() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );
+
+        if ( p_context.executable_rule() != null )
+            return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
         throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitExecutable_action( final PlanBundleParser.Executable_actionContext p_context )
+    {
+        return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
+    }
+
+    @Override
+    public Object visitExecutable_rule( final PlanBundleParser.Executable_ruleContext p_context )
+    {
+        return new CProxyRule( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
 

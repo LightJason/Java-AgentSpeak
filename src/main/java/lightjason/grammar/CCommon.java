@@ -85,7 +85,9 @@ public final class CCommon
      * @param p_actions map with agent actions
      * @param p_rules map with agent rules
      * @return execution structure or null
+     * @deprecated
      */
+    @Deprecated
     public static IExecution getTermExecution( final Object p_item, final Map<IPath, IAction> p_actions, final Multimap<IPath, IRule> p_rules )
     {
         // null value will be passed
