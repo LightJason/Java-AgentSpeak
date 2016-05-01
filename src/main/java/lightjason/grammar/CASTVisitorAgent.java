@@ -363,7 +363,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public final Object visitBody_formula( final AgentParser.Body_formulaContext p_context )
     {
-        return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions, m_rules );
+        return this.visitChildren( p_context );
     }
 
     @Override
@@ -372,7 +372,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
         if ( p_context.repair_formula() == null )
-            return lightjason.grammar.CCommon.getTermExecution( this.visitChildren( p_context ), m_actions, m_rules );
+            return this.visitChildren( p_context );
 
 
         // if there exists any repair element, build a sequential hierarchie of repair calls
