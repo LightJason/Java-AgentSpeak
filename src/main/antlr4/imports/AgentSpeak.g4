@@ -180,7 +180,7 @@ body_formula :
  * repairable formula
  **/
 repair_formula :
-    ( term | test_goal_action | test_rule_action | achievement_goal_action | achievement_rule_action )
+    ( executable_term | test_goal_action | test_rule_action | achievement_goal_action | achievement_rule_action )
     ( LEFTSHIFT repair_formula )?
     ;
 
@@ -242,7 +242,7 @@ assignment_expression :
 assignment_expression_singlevariable :
     variable
     ASSIGN
-    term
+    executable_term
     ;
 
 /**
@@ -251,7 +251,7 @@ assignment_expression_singlevariable :
 assignment_expression_multivariable :
     variablelist
     ASSIGN
-    term
+    executable_term
     ;
 
 /**
