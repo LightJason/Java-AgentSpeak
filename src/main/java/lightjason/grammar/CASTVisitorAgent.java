@@ -25,6 +25,7 @@ package lightjason.grammar;
 
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
@@ -209,14 +210,14 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
                  .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
                  .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
-        final Multimap<IPath, IRule> l_rules = HashMultimap.create();
+        final Multimap<IPath, IRule> l_rules = LinkedHashMultimap.create();
         p_context.logicrule().stream()
                  .flatMap( i -> ( (List<IRule>) this.visitLogicrule( i ) ).stream() )
                  .forEach( i -> l_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
         // clear rule list and replace placeholder objects
         m_rules.clear();
-        l_rules.values().parallelStream()
+        l_rules.values().stream()
                .map( i -> i.replaceplaceholder( l_rules ) )
                .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
