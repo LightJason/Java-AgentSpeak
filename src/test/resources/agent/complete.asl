@@ -362,16 +362,16 @@ myfunction(X) :- generic/print("my logical rule", X).
         $myfunction("fooooooo");
         $fibonacci(8, FIB);
 
-        $ackermann(3, 3, ACK);
-        generic/print("rule execution (ackermann)", ACK);
-        ACK == 61.0;
-
         FIB2 = 0;
         RULE = generic/typ/parseliteral("fibonacci(4,FIB2)");
         $RULE;
 
         generic/print("rule execution (fibonacci)", FIB, FIB2);
         FIB == 21.0;
+
+        $ackermann(3, 3, ACK);
+        generic/print("rule execution (ackermann)", ACK);
+        ACK == 61.0;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
