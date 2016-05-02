@@ -37,6 +37,12 @@ fibonacci(X, R)
     :- X > 2;   TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B
 .
 
+ackermann(N, M, R)
+    :- N == 0; M > 0; R = M+1
+    :- M == 0; N > 0; TN = N-1; $ackermann(TN, 1, RA); R = RA
+    :- N > 0; M > 0; TN = N-1; TM = M-1; $ackermann(N, TM, RI); $ackermann(TN, RI, RO); R = RO
+.
+
 myfunction(X) :- generic/print("my logical rule", X).
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -355,6 +361,10 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         $myfunction("fooooooo");
         $fibonacci(8, FIB);
+
+        $ackermann(3, 3, ACK);
+        generic/print("rule execution (ackermann)", ACK);
+        ACK == 61.0;
 
         FIB2 = 0;
         RULE = generic/typ/parseliteral("fibonacci(4,FIB2)");
