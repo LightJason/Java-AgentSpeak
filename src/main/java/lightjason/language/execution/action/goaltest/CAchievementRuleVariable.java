@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @bug execution incomplete
  */
-public class CAchievementRuleVariable extends IAchievementElement<IVariable<?>>
+public final class CAchievementRuleVariable extends IAchievementElement<IVariable<?>>
 {
 
     /**
@@ -55,7 +55,7 @@ public class CAchievementRuleVariable extends IAchievementElement<IVariable<?>>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}:-{1}", m_immediately ? "!!" : "!", m_value );
+        return MessageFormat.format( "{0}${1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Override

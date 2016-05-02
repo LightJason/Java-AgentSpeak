@@ -28,8 +28,10 @@ import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -38,7 +40,7 @@ import java.util.List;
  *
  * @bug execution incomplete
  */
-public class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
+public final class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
 {
     /**
      * ctor
@@ -54,7 +56,7 @@ public class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}:-{1}", m_immediately ? "!!" : "!", m_value );
+        return MessageFormat.format( "{0}${1}", m_immediately ? "!!" : "!", m_value );
     }
 
     @Override
@@ -62,6 +64,10 @@ public class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( false );
+        final Collection<IRule> l_rules = p_context.getAgent().getRules().asMap().get( m_value.getFQNFunctor() );
+        if ( ( l_rules == null ) && ( l_rules.isEmpty() ) )
+            return CFuzzyValue.from( false );
+
+        return CFuzzyValue.from( true );
     }
 }

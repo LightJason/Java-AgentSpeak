@@ -65,7 +65,9 @@ public final class CAchievementGoalVariable extends IAchievementElement<IVariabl
     )
     {
         return p_context.getAgent().trigger(
-                CTrigger.from( ITrigger.EType.ADDGOAL, CCommon.<ILiteral, ITerm>getRawValue( m_value ).unify( p_context ) ), m_immediately );
+                CTrigger.from( ITrigger.EType.ADDGOAL, CCommon.<ILiteral, ITerm>getRawValue( m_value ).unify( p_context ) ),
+                m_immediately
+        );
     }
 
 }
