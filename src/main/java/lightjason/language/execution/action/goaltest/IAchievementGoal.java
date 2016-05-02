@@ -30,7 +30,7 @@ import lightjason.language.execution.action.IBaseExecution;
 
 
 /**
- * abstract achievment-goal class for definied base structure of goal execution
+ * abstract achievement-goal class for goal execution
  */
 abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
 {

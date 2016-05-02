@@ -17,7 +17,7 @@ import java.util.Set;
 
 
 /**
- * abstract class for execute a logical rule
+ * abstract class for execute a logical-rule
  */
 abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 {
@@ -37,7 +37,8 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
      * @param p_context execution context
      * @param p_value execution literal
      * @param p_parallel parallel execution
-     * @return boolean
+     * @return boolean result
+     * @bug some indeterministic execution
      */
     protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
     {

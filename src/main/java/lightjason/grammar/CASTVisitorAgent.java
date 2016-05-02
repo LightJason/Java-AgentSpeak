@@ -49,6 +49,7 @@ import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.goaltest.CAchievementGoalLiteral;
 import lightjason.language.execution.action.goaltest.CAchievementGoalVariable;
 import lightjason.language.execution.action.goaltest.CAchievementRuleLiteral;
+import lightjason.language.execution.action.goaltest.CAchievementRuleVariable;
 import lightjason.language.execution.action.goaltest.CTestGoal;
 import lightjason.language.execution.action.goaltest.CTestRule;
 import lightjason.language.execution.action.unify.CDefaultUnify;
@@ -993,7 +994,13 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitExecutable_rule( final AgentParser.Executable_ruleContext p_context )
     {
-        return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        if ( p_context.literal() != null )
+            return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
+
+        if ( p_context.variable() != null )
+            return new CAchievementRuleVariable( (IVariable<?>) this.visitVariable( p_context.variable() ) );
+
+        return null;
     }
 
     @Override

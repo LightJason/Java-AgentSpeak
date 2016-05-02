@@ -23,52 +23,57 @@
 
 package lightjason.language.execution.action.goaltest;
 
+import lightjason.agent.IAgent;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.plan.trigger.CTrigger;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * achievement-goal action based on variables
+ * achievement for rule-variable execution
  */
-public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
+public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?>>
 {
-
     /**
      * ctor
      *
      * @param p_type value of the achievment-goal
-     * @param p_immediately immediately execution
      */
-    public CAchievementGoalVariable( final IVariable<?> p_type, final boolean p_immediately )
+    public CAchievementRuleVariable( final IVariable<?> p_type )
     {
-        super( p_type, p_immediately );
+        super( p_type );
+    }
+
+    @Override
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
+    )
+    {
+        return execute( p_context, CCommon.<ILiteral, ITerm>getRawValue( CCommon.replaceFromContext( p_context, m_value ) ), m_value.hasMutex() );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+        return MessageFormat.format( "${0}", m_value );
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final double score( final IAgent p_agent )
     {
-        return p_context.getAgent().trigger(
-                CTrigger.from(
-                        ITrigger.EType.ADDGOAL, CCommon.<ILiteral, ITerm>getRawValue( CCommon.replaceFromContext( p_context, m_value ) ).unify( p_context ) ),
-                m_immediately
-        );
+        return 0;
     }
 
+    @Override
+    public Stream<IVariable<?>> getVariables()
+    {
+        return Stream.of( m_value );
+    }
 }

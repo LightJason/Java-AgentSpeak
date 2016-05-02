@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 
 
 /**
- * proxy rule to encapsulate all rules
+ * achievement for rule-literal execution
  */
 public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 {
@@ -53,15 +53,12 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
         super( p_literal );
     }
 
-    /**
-     * @bug some indeterministic execution
-     */
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        return this.execute( p_context, m_value, m_value.hasAt() );
+        return execute( p_context, m_value, m_value.hasAt() );
     }
 
     @Override
