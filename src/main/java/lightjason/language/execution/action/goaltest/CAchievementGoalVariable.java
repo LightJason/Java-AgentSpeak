@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * achievement-goal action based on variables
  */
-public final class CAchievementGoalVariable extends IAchievementElement<IVariable<?>>
+public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
 {
 
     /**

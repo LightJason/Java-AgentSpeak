@@ -46,11 +46,11 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     /**
      * ctor
      *
-     * @param p_callerliteral literal of the call
+     * @param p_literal literal of the call
      */
-    public CAchievementRuleLiteral( final ILiteral p_callerliteral )
+    public CAchievementRuleLiteral( final ILiteral p_literal )
     {
-        super( p_callerliteral, true );
+        super( p_literal );
     }
 
     /**
@@ -61,7 +61,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return this.execute( p_context, m_value );
+        return this.execute( p_context, m_value, m_value.hasAt() );
     }
 
     @Override

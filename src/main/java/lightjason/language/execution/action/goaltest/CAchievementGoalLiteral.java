@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * achievement-goal action based on a literal
  */
-public final class CAchievementGoalLiteral extends IAchievementElement<ILiteral>
+public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
 {
 
     /**

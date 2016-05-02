@@ -32,7 +32,7 @@ import lightjason.language.execution.action.IBaseExecution;
 /**
  * abstract achievment-goal class for definied base structure of goal execution
  */
-abstract class IAchievementElement<T extends ITerm> extends IBaseExecution<T>
+abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
 {
     /**
      * flag to run immediately
@@ -45,7 +45,7 @@ abstract class IAchievementElement<T extends ITerm> extends IBaseExecution<T>
      * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    protected IAchievementElement( final T p_type, final boolean p_immediately )
+    protected IAchievementGoal( final T p_type, final boolean p_immediately )
     {
         super( p_type );
         m_immediately = p_immediately;

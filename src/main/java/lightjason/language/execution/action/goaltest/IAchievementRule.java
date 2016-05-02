@@ -3,6 +3,7 @@ package lightjason.language.execution.action.goaltest;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
+import lightjason.language.execution.action.IBaseExecution;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
@@ -18,27 +19,27 @@ import java.util.Set;
 /**
  * abstract class for execute a logical rule
  */
-abstract class IAchievementRule<T extends ITerm> extends IAchievementElement<T>
+abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 {
     /**
      * ctor
      *
      * @param p_type value of the achievment-goal
-     * @param p_immediately immediately execution
      */
-    IAchievementRule( final T p_type, final boolean p_immediately )
+    IAchievementRule( final T p_type )
     {
-        super( p_type, p_immediately );
+        super( p_type );
     }
 
     /**
      * execute rule from context
      *
-     * @param p_context
-     * @param p_value
-     * @return
+     * @param p_context execution context
+     * @param p_value execution literal
+     * @param p_parallel parallel execution
+     * @return boolean
      */
-    protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value )
+    protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
     {
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.getAgent().getRules().get( p_value.getFQNFunctor() );
@@ -50,7 +51,7 @@ abstract class IAchievementRule<T extends ITerm> extends IAchievementElement<T>
 
         // second step execute backtracking rules sequential / parallel
         return (
-                p_value.hasAt()
+                p_parallel
                 ? l_rules.parallelStream()
                 : l_rules.stream()
         ).map( i -> {
