@@ -36,9 +36,9 @@ import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
-import lightjason.language.execution.action.CProxyRule;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CTernaryOperation;
+import lightjason.language.execution.action.goaltest.CAchievmentRule;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
 import lightjason.language.execution.action.unify.CVariableUnify;
@@ -662,7 +662,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public Object visitExecutable_rule( final TypeParser.Executable_ruleContext p_context )
     {
-        return new CProxyRule( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return new CAchievmentRule( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
 

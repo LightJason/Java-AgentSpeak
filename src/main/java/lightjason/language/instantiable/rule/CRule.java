@@ -28,7 +28,7 @@ import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.action.CProxyRule;
+import lightjason.language.execution.action.goaltest.CAchievmentRule;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.instantiable.IBaseInstantiable;
 import lightjason.language.variable.IVariable;
@@ -86,7 +86,7 @@ public final class CRule extends IBaseInstantiable implements IRule
                                                i instanceof CRulePlaceholder
                                                // create a full deep-copy of the literal for avoid indeterminisitic
                                                // behaviour on rule unification
-                                               ? new CProxyRule( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
+                                               ? new CAchievmentRule( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
                                                : i
                 ).collect( Collectors.toList() )
         );

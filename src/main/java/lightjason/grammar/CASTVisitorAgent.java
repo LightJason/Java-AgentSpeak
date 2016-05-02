@@ -42,13 +42,13 @@ import lightjason.language.execution.action.CDeconstruct;
 import lightjason.language.execution.action.CLambdaExpression;
 import lightjason.language.execution.action.CMultiAssignment;
 import lightjason.language.execution.action.CProxyAction;
-import lightjason.language.execution.action.CProxyRule;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CRepair;
 import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.goaltest.CAchievementGoalLiteral;
 import lightjason.language.execution.action.goaltest.CAchievementGoalVariable;
+import lightjason.language.execution.action.goaltest.CAchievmentRule;
 import lightjason.language.execution.action.goaltest.CTestGoal;
 import lightjason.language.execution.action.goaltest.CTestRule;
 import lightjason.language.execution.action.unify.CDefaultUnify;
@@ -993,7 +993,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitExecutable_rule( final AgentParser.Executable_ruleContext p_context )
     {
-        return new CProxyRule( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return new CAchievmentRule( (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
     @Override

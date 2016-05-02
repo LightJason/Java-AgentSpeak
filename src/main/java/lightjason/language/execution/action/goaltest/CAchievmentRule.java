@@ -21,13 +21,12 @@
  * @endcond
  */
 
-package lightjason.language.execution.action;
+package lightjason.language.execution.action.goaltest;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.IExecution;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
@@ -35,6 +34,7 @@ import lightjason.language.variable.IRelocateVariable;
 import lightjason.language.variable.IVariable;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -45,21 +45,17 @@ import java.util.stream.Stream;
 /**
  * proxy rule to encapsulate all rules
  */
-public final class CProxyRule implements IExecution
+public final class CAchievmentRule extends IAchievementElement<ILiteral>
 {
-    /**
-     * literal of the execution call
-     */
-    private final ILiteral m_callerliteral;
 
     /**
      * ctor
      *
      * @param p_callerliteral literal of the call
      */
-    public CProxyRule( final ILiteral p_callerliteral )
+    public CAchievmentRule( final ILiteral p_callerliteral )
     {
-        m_callerliteral = p_callerliteral;
+        super( p_callerliteral, true );
     }
 
     /**
@@ -71,16 +67,16 @@ public final class CProxyRule implements IExecution
     )
     {
         // read current rules, if not exists execution fails
-        final Collection<IRule> l_rules = p_context.getAgent().getRules().get( m_callerliteral.getFQNFunctor() );
+        final Collection<IRule> l_rules = p_context.getAgent().getRules().get( m_value.getFQNFunctor() );
         if ( l_rules == null )
             return CFuzzyValue.from( false );
 
         // first step is the unification of the caller literal, so variables will be set from the current execution context
-        final ILiteral l_unified = m_callerliteral.unify( p_context );
+        final ILiteral l_unified = m_value.unify( p_context );
 
         // second step execute backtracking rules sequential / parallel
         return (
-                m_callerliteral.hasAt()
+                m_value.hasAt()
                 ? l_rules.parallelStream()
                 : l_rules.stream()
         ).map( i -> {
@@ -126,7 +122,7 @@ public final class CProxyRule implements IExecution
     {
         // rules can create a cyclic reference so on calculate the score value
         // a cyclic reference must be ignored
-        final Collection<IRule> l_rules = p_agent.getRules().get( m_callerliteral.getFQNFunctor() );
+        final Collection<IRule> l_rules = p_agent.getRules().get( m_value.getFQNFunctor() );
         return l_rules == null
                ? p_agent.getAggregation().error()
                : l_rules.parallelStream()
@@ -140,8 +136,8 @@ public final class CProxyRule implements IExecution
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                lightjason.language.CCommon.recursiveterm( m_callerliteral.orderedvalues() ),
-                lightjason.language.CCommon.recursiveliteral( m_callerliteral.annotations() )
+                lightjason.language.CCommon.recursiveterm( m_value.orderedvalues() ),
+                lightjason.language.CCommon.recursiveliteral( m_value.annotations() )
         )
                      .parallel()
                      .filter( i -> i instanceof IVariable<?> )
@@ -157,13 +153,13 @@ public final class CProxyRule implements IExecution
     @Override
     public final int hashCode()
     {
-        return m_callerliteral.hashCode();
+        return m_value.hashCode();
     }
 
     @Override
     public final String toString()
     {
-        return m_callerliteral.toString();
+        return MessageFormat.format( "$", m_value );
     }
 
 }
