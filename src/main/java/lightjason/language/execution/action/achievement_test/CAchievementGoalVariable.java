@@ -21,23 +21,25 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
+import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * achievement-goal action based on a literal
+ * achievement-goal action based on variables
  */
-public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
+public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
 {
 
     /**
@@ -46,7 +48,7 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
      * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalLiteral( final ILiteral p_type, final boolean p_immediately )
+    public CAchievementGoalVariable( final IVariable<?> p_type, final boolean p_immediately )
     {
         super( p_type, p_immediately );
     }
@@ -62,7 +64,11 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
+        return p_context.getAgent().trigger(
+                CTrigger.from(
+                        ITrigger.EType.ADDGOAL, CCommon.<ILiteral, ITerm>getRawValue( CCommon.replaceFromContext( p_context, m_value ) ).unify( p_context ) ),
+                m_immediately
+        );
     }
 
 }

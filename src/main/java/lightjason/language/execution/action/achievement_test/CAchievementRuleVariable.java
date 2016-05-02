@@ -21,30 +21,34 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
-import lightjason.common.IPath;
+import lightjason.agent.IAgent;
+import lightjason.language.CCommon;
+import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.variable.IVariable;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * test-rule action
+ * achievement for rule-variable execution
  */
-public final class CTestRule extends ITestElement
+public final class CAchievementRuleVariable extends IAchievementRule<IVariable<?>>
 {
     /**
      * ctor
      *
-     * @param p_value atom
+     * @param p_type value of the achievment-goal
      */
-    public CTestRule( final IPath p_value )
+    public CAchievementRuleVariable( final IVariable<?> p_type )
     {
-        super( p_value );
+        super( p_type );
     }
 
     @Override
@@ -52,6 +56,24 @@ public final class CTestRule extends ITestElement
                                          final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( p_context.getAgent().getRules().asMap().containsKey( m_value ) );
+        return execute( p_context, CCommon.<ILiteral, ITerm>getRawValue( CCommon.replaceFromContext( p_context, m_value ) ), m_value.hasMutex() );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "${0}", m_value );
+    }
+
+    @Override
+    public final double score( final IAgent p_agent )
+    {
+        return 0;
+    }
+
+    @Override
+    public Stream<IVariable<?>> getVariables()
+    {
+        return Stream.of( m_value );
     }
 }

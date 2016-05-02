@@ -38,7 +38,7 @@ import lightjason.language.execution.IExecution;
 import lightjason.language.execution.action.CProxyAction;
 import lightjason.language.execution.action.CRawAction;
 import lightjason.language.execution.action.CTernaryOperation;
-import lightjason.language.execution.action.goaltest.CAchievementRuleLiteral;
+import lightjason.language.execution.action.achievement_test.CAchievementRuleLiteral;
 import lightjason.language.execution.action.unify.CDefaultUnify;
 import lightjason.language.execution.action.unify.CExpressionUnify;
 import lightjason.language.execution.action.unify.CVariableUnify;

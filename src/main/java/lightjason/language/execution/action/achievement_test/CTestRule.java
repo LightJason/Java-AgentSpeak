@@ -21,40 +21,37 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
-import com.google.common.collect.ImmutableMultiset;
-import lightjason.agent.IAgent;
+import lightjason.common.IPath;
 import lightjason.language.ITerm;
-import lightjason.language.execution.action.IBaseExecution;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 
 
 /**
- * abstract achievement-goal class for goal execution
+ * test-rule action
  */
-abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
+public final class CTestRule extends ITest
 {
-    /**
-     * flag to run immediately
-     */
-    final boolean m_immediately;
-
     /**
      * ctor
      *
-     * @param p_type value of the achievment-goal
-     * @param p_immediately immediately execution
+     * @param p_value atom
      */
-    protected IAchievementGoal( final T p_type, final boolean p_immediately )
+    public CTestRule( final IPath p_value )
     {
-        super( p_type );
-        m_immediately = p_immediately;
+        super( p_value );
     }
 
     @Override
-    public double score( final IAgent p_agent )
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
+    )
     {
-        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
+        return CFuzzyValue.from( p_context.getAgent().getRules().asMap().containsKey( m_value ) );
     }
-
 }
