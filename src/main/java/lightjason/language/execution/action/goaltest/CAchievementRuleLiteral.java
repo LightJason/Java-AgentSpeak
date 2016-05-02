@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 /**
  * proxy rule to encapsulate all rules
  */
-public final class CAchievmentRule extends IAchievementElement<ILiteral>
+public final class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
 {
 
     /**
@@ -53,7 +53,7 @@ public final class CAchievmentRule extends IAchievementElement<ILiteral>
      *
      * @param p_callerliteral literal of the call
      */
-    public CAchievmentRule( final ILiteral p_callerliteral )
+    public CAchievementRuleLiteral( final ILiteral p_callerliteral )
     {
         super( p_callerliteral, true );
     }
