@@ -382,15 +382,15 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
-        if ( p_context.test_goal_action() != null )
+        if ( p_context.test_action() != null )
             return new CRepair(
-                    (IExecution) this.visitTest_goal_action( p_context.test_goal_action() ),
+                    (IExecution) this.visitTest_action( p_context.test_action() ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
-        if ( p_context.achievement_goal_action() != null )
+        if ( p_context.achievement_action() != null )
             return new CRepair(
-                    (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
+                    (IExecution) this.visitAchievement_action( p_context.achievement_action() ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
@@ -549,8 +549,21 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
+    public Object visitAchievement_action( final AgentParser.Achievement_actionContext p_context )
     {
+        //check if a rule execution is necessary
+        if ( p_context.DOLLAR() != null )
+        {
+            if ( p_context.literal() != null )
+                return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+
+            if ( p_context.variable() != null )
+                return new CAchievementRuleVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
+        }
+
+        // no rule execution, so it can be a goal achievment only
         if ( p_context.literal() != null )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
@@ -558,18 +571,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
             return new CAchievementGoalVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
-    }
-
-    @Override
-    public Object visitAchievement_rule_action( final AgentParser.Achievement_rule_actionContext p_context )
-    {
-        if ( p_context.literal() != null )
-            return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
-
-        if ( p_context.variable() != null )
-            return new CAchievementRuleVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
-
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmenttest", p_context.getText() ) );
     }
 
     @Override
@@ -595,15 +596,12 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public Object visitTest_goal_action( final AgentParser.Test_goal_actionContext p_context )
+    public Object visitTest_action( final AgentParser.Test_actionContext p_context )
     {
-        return new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
-    }
-
-    @Override
-    public Object visitTest_rule_action( final AgentParser.Test_rule_actionContext p_context )
-    {
-        return new CTestRule( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
+        // dollar sign is used to recognize a rule
+        return p_context.DOLLAR() != null
+               ? new CTestRule( CPath.from( (String) this.visitAtom( p_context.atom() ) ) )
+               : new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
     }
 
     @Override

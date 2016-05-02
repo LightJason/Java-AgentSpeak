@@ -180,7 +180,7 @@ body_formula :
  * repairable formula
  **/
 repair_formula :
-    ( executable_term | test_goal_action | test_rule_action | achievement_goal_action | achievement_rule_action )
+    ( executable_term | test_action | achievement_action )
     ( LEFTSHIFT repair_formula )?
     ;
 
@@ -192,31 +192,18 @@ belief_action :
     ;
 
 /**
- * test-goal action
+ * test-goal / -rule action
  **/
-test_goal_action :
-    QUESTIONMARK atom
+test_action :
+    QUESTIONMARK DOLLAR? atom
     ;
 
 /**
- * test-rule action
+ * achivement-goal / -rule action
+ * @note on rule double and single exclamation mark are equal
  **/
-test_rule_action :
-    QUESTIONMARK RULEOPERATOR atom
-    ;
-
-/**
- * achivement-goal action
- **/
-achievement_goal_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | variable )
-    ;
-
-/**
- * achivement-rule action
- **/
-achievement_rule_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) RULEOPERATOR ( literal | variable )
+achievement_action :
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) DOLLAR? ( literal | variable )
     ;
 
 /**
