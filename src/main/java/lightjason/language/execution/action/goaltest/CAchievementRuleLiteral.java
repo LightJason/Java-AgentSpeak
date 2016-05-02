@@ -27,25 +27,20 @@ import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.rule.IRule;
-import lightjason.language.variable.IRelocateVariable;
 import lightjason.language.variable.IVariable;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 
 /**
  * proxy rule to encapsulate all rules
  */
-public final class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
+public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 {
 
     /**
@@ -66,55 +61,7 @@ public final class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        // read current rules, if not exists execution fails
-        final Collection<IRule> l_rules = p_context.getAgent().getRules().get( m_value.getFQNFunctor() );
-        if ( l_rules == null )
-            return CFuzzyValue.from( false );
-
-        // first step is the unification of the caller literal, so variables will be set from the current execution context
-        final ILiteral l_unified = m_value.unify( p_context );
-
-        // second step execute backtracking rules sequential / parallel
-        return (
-                m_value.hasAt()
-                ? l_rules.parallelStream()
-                : l_rules.stream()
-        ).map( i -> {
-
-            // instantiate variables by unification of the rule literal
-            final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
-
-            // execute rule
-            final IFuzzyValue<Boolean> l_return = i.execute(
-                    i.instantiate( p_context.getAgent(), l_variables.stream() ),
-                    false,
-                    Collections.<ITerm>emptyList(),
-                    Collections.<ITerm>emptyList(),
-                    Collections.<ITerm>emptyList()
-            );
-
-            // create rule result with fuzzy- and defuzzificated value and instantiate variable set
-            return new ImmutableTriple<>( p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
-
-        } )
-
-         // find successfully ended rule
-         .filter( i -> i.getLeft() )
-         .findFirst()
-
-         // realocate rule instantiated variables back to execution context
-         .map( i -> {
-
-             i.getRight().parallelStream()
-              .filter( j -> j instanceof IRelocateVariable )
-              .forEach( j -> ( (IRelocateVariable) j ).relocate() );
-
-             return i.getMiddle();
-
-         } )
-
-         // otherwise rule fails (default behaviour)
-         .orElse( CFuzzyValue.from( false ) );
+        return this.execute( p_context, m_value );
     }
 
     @Override

@@ -662,7 +662,10 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     @Override
     public Object visitExecutable_rule( final TypeParser.Executable_ruleContext p_context )
     {
-        return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        if ( p_context.literal() != null )
+            return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
+
+        return null;
     }
 
 

@@ -214,10 +214,10 @@ executable_action :
     ;
 
 /**
- * rule for execute a rule
+ * rule for execute a logical-rule
  **/
 executable_rule :
-    DOLLAR literal
+    DOLLAR ( literal | variable )
     ;
 
 
