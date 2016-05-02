@@ -105,10 +105,10 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     /**
      * unifies variables if exists
      *
-     * @note unification is not thread-safe on default
      * @param p_context current execution context
      * @return new literal instance with unified variables
      *
+     * @note unification is not thread-safe on default
      * @note un-unifyable variables will be returned
      */
     ILiteral unify( final IContext p_context );

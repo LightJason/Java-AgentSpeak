@@ -37,7 +37,9 @@ import java.util.List;
  * achievement-rule action based on variables
  *
  * @bug execution incomplete
+ * @deprecated
  */
+@Deprecated
 public final class CAchievementRuleVariable extends IAchievementElement<IVariable<?>>
 {
 

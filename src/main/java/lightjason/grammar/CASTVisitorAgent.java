@@ -49,8 +49,6 @@ import lightjason.language.execution.action.CSingleAssignment;
 import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.goaltest.CAchievementGoalLiteral;
 import lightjason.language.execution.action.goaltest.CAchievementGoalVariable;
-import lightjason.language.execution.action.goaltest.CAchievementRuleLiteral;
-import lightjason.language.execution.action.goaltest.CAchievementRuleVariable;
 import lightjason.language.execution.action.goaltest.CTestGoal;
 import lightjason.language.execution.action.goaltest.CTestRule;
 import lightjason.language.execution.action.unify.CDefaultUnify;
@@ -388,9 +386,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
-        if ( p_context.achievement_action() != null )
+        if ( p_context.achievement_goal_action() != null )
             return new CRepair(
-                    (IExecution) this.visitAchievement_action( p_context.achievement_action() ),
+                    (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
                     (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
@@ -549,21 +547,8 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     }
 
     @Override
-    public Object visitAchievement_action( final AgentParser.Achievement_actionContext p_context )
+    public Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
-        //check if a rule execution is necessary
-        if ( p_context.DOLLAR() != null )
-        {
-            if ( p_context.literal() != null )
-                return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
-
-            if ( p_context.variable() != null )
-                return new CAchievementRuleVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
-
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
-        }
-
-        // no rule execution, so it can be a goal achievment only
         if ( p_context.literal() != null )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 

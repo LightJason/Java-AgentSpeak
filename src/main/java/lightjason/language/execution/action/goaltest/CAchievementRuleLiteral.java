@@ -39,7 +39,9 @@ import java.util.List;
  * achievement-rule action based on a literal
  *
  * @bug execution incomplete
+ * @deprecated
  */
+@Deprecated
 public final class CAchievementRuleLiteral extends IAchievementElement<ILiteral>
 {
     /**

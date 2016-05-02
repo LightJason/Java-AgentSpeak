@@ -180,7 +180,7 @@ body_formula :
  * repairable formula
  **/
 repair_formula :
-    ( executable_term | test_action | achievement_action )
+    ( executable_term | test_action | achievement_goal_action )
     ( LEFTSHIFT repair_formula )?
     ;
 
@@ -199,11 +199,10 @@ test_action :
     ;
 
 /**
- * achivement-goal / -rule action
- * @note on rule double and single exclamation mark are equal
+ * achivement-goal action
  **/
-achievement_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) DOLLAR? ( literal | variable )
+achievement_goal_action :
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | variable )
     ;
 
 /**
