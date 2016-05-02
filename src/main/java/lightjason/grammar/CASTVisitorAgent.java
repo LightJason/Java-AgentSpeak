@@ -24,7 +24,6 @@
 package lightjason.grammar;
 
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
@@ -125,7 +124,7 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     /**
      * map with logical rules
      */
-    protected final Multimap<IPath, IRule> m_rules = HashMultimap.create();
+    protected final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
     /**
      * map with action definition
      */
