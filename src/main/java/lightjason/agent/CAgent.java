@@ -381,7 +381,7 @@ public class CAgent implements IAgent
                       } )
 
                       // check plan condition
-                      .filter( i -> i.getLeft().getLeft().condition( i.getRight() ).getValue() )
+                      .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) )
 
                       // create execution collection
                       .collect( Collectors.toList() );
