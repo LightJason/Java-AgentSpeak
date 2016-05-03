@@ -21,58 +21,42 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.variable;
 
-import lightjason.agent.IAgent;
+import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.variable.IVariable;
-import lightjason.language.variable.IVariableEvaluate;
 
-import java.text.MessageFormat;
-import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * achievement for rule-variable execution
+ *
  */
-public final class CAchievementRuleVariable extends IAchievementRule<IVariableEvaluate>
+public interface IVariableEvaluate extends ITerm
 {
+
     /**
-     * ctor
+     * returns mutex flag
      *
-     * @param p_type value of the rule
+     * @return mutex flag
      */
-    public CAchievementRuleVariable( final IVariableEvaluate p_type )
-    {
-        super( p_type );
-    }
+    boolean hasMutex();
 
-    @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
-    )
-    {
-        return execute( p_context, m_value.evaluate( p_context ), m_value.hasMutex() );
-    }
+    /**
+     * evaluates the content of the variable
+     *
+     * @param p_context execution context
+     * @return unified literal
+     */
+    ILiteral evaluate( final IContext p_context );
 
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "${0}", m_value );
-    }
 
-    @Override
-    public final double score( final IAgent p_agent )
-    {
-        return 0;
-    }
+    /**
+     * returns a stream with all used variables
+     *
+     * @return variable stream (variables will be cloned on instantiation)
+     */
+    Stream<IVariable<?>> getVariables();
 
-    @Override
-    public Stream<IVariable<?>> getVariables()
-    {
-        return m_value.getVariables();
-    }
 }

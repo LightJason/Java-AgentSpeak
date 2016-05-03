@@ -217,9 +217,17 @@ executable_action :
  * rule for execute a logical-rule
  **/
 executable_rule :
-    DOLLAR ( literal | variable )
+    DOLLAR ( literal | variable_evaluate )
     ;
 
+/**
+ * variable-evaluation will be used for an executable call
+ * like X(1,2,Y), it is possible for passing variables and parameters
+ **/
+variable_evaluate :
+    variable
+    ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
+    ;
 
 /**
  * clause represent a literal structure existing

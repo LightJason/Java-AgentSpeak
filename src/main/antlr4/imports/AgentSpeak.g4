@@ -202,7 +202,7 @@ test_action :
  * achivement-goal action
  **/
 achievement_goal_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | variable )
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | variable_evaluate )
     ;
 
 /**

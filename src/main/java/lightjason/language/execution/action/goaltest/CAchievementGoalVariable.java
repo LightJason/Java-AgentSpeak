@@ -23,23 +23,23 @@
 
 package lightjason.language.execution.action.goaltest;
 
-import lightjason.language.CCommon;
-import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.variable.IVariable;
+import lightjason.language.variable.IVariableEvaluate;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
  * achievement-goal action based on variables
  */
-public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?>>
+public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEvaluate>
 {
 
     /**
@@ -48,7 +48,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?
      * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalVariable( final IVariable<?> p_type, final boolean p_immediately )
+    public CAchievementGoalVariable( final IVariableEvaluate p_type, final boolean p_immediately )
     {
         super( p_type, p_immediately );
     }
@@ -66,9 +66,16 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariable<?
     {
         return p_context.getAgent().trigger(
                 CTrigger.from(
-                        ITrigger.EType.ADDGOAL, CCommon.<ILiteral, ITerm>getRawValue( CCommon.replaceFromContext( p_context, m_value ) ).unify( p_context ) ),
+                        ITrigger.EType.ADDGOAL,
+                        m_value.evaluate( p_context )
+                ),
                 m_immediately
         );
     }
 
+    @Override
+    public final Stream<IVariable<?>> getVariables()
+    {
+        return m_value.getVariables();
+    }
 }

@@ -48,6 +48,7 @@ import lightjason.language.execution.action.CTernaryOperation;
 import lightjason.language.execution.action.goaltest.CAchievementGoalLiteral;
 import lightjason.language.execution.action.goaltest.CAchievementGoalVariable;
 import lightjason.language.execution.action.goaltest.CAchievementRuleLiteral;
+import lightjason.language.execution.action.goaltest.CAchievementRuleVariable;
 import lightjason.language.execution.action.goaltest.CTestGoal;
 import lightjason.language.execution.action.goaltest.CTestRule;
 import lightjason.language.execution.action.unify.CDefaultUnify;
@@ -77,7 +78,9 @@ import lightjason.language.instantiable.rule.CRulePlaceholder;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.variable.CMutexVariable;
 import lightjason.language.variable.CVariable;
+import lightjason.language.variable.CVariableEvaluate;
 import lightjason.language.variable.IVariable;
+import lightjason.language.variable.IVariableEvaluate;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -568,8 +571,9 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.literal() != null )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
-        if ( p_context.variable() != null )
-            return new CAchievementGoalVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+        if ( p_context.variable_evaluate() != null )
+            return new CAchievementGoalVariable(
+                    (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
     }
@@ -1060,7 +1064,22 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     @Override
     public Object visitExecutable_rule( final PlanBundleParser.Executable_ruleContext p_context )
     {
-        return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        if ( p_context.literal() != null )
+            return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
+
+        if ( p_context.variable_evaluate() != null )
+            return new CAchievementRuleVariable( (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ) );
+
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "executablerule", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitVariable_evaluate( final PlanBundleParser.Variable_evaluateContext p_context )
+    {
+        return new CVariableEvaluate(
+                (IVariable<?>) this.visitVariable( p_context.variable() ),
+                (List<ITerm>) this.visitTermlist( p_context.termlist() )
+        );
     }
 
 

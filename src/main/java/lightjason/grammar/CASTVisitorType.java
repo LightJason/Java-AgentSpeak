@@ -668,6 +668,12 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
         return null;
     }
 
+    @Override
+    public Object visitVariable_evaluate( final TypeParser.Variable_evaluateContext ctx )
+    {
+        return null;
+    }
+
 
 
     @Override

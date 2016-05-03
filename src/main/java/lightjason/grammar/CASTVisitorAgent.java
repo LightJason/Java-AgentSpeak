@@ -79,7 +79,9 @@ import lightjason.language.instantiable.rule.CRulePlaceholder;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.variable.CMutexVariable;
 import lightjason.language.variable.CVariable;
+import lightjason.language.variable.CVariableEvaluate;
 import lightjason.language.variable.IVariable;
+import lightjason.language.variable.IVariableEvaluate;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -553,8 +555,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         if ( p_context.literal() != null )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
-        if ( p_context.variable() != null )
-            return new CAchievementGoalVariable( (IVariable<?>) this.visitVariable( p_context.variable() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+        if ( p_context.variable_evaluate() != null )
+            return new CAchievementGoalVariable(
+                    (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
     }
@@ -666,11 +669,13 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     public Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
+            return Collections.<ITerm>emptyList();
 
-        return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
-        ).collect( Collectors.toList() );
+        return p_context.term().stream()
+                        .map( i -> this.visitTerm( i ) )
+                        .filter( i -> i != null )
+                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
+                        .collect( Collectors.toList() );
     }
 
     @Override
@@ -997,10 +1002,19 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         if ( p_context.literal() != null )
             return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
 
-        if ( p_context.variable() != null )
-            return new CAchievementRuleVariable( (IVariable<?>) this.visitVariable( p_context.variable() ) );
+        if ( p_context.variable_evaluate() != null )
+            return new CAchievementRuleVariable( (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ) );
 
-        return null;
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "executablerule", p_context.getText() ) );
+    }
+
+    @Override
+    public Object visitVariable_evaluate( final AgentParser.Variable_evaluateContext p_context )
+    {
+        return new CVariableEvaluate(
+                (IVariable<?>) this.visitVariable( p_context.variable() ),
+                (List<ITerm>) this.visitTermlist( p_context.termlist() )
+        );
     }
 
     @Override

@@ -339,8 +339,9 @@ myfunction(X) :- generic/print("my logical rule", X).
         ?main;
 
         // run plan immediatly
-        !!mytest(5);
-        !!mytest;
+        PLAN = "mytest";
+        !!PLAN;
+        !!PLAN(5);
 
         // run plan within the next cycle
         !mytest(10);
@@ -362,12 +363,12 @@ myfunction(X) :- generic/print("my logical rule", X).
         $myfunction("fooooooo");
         $fibonacci(8, FIB);
 
-        FIB2 = 0;
-        RULE = generic/typ/parseliteral("fibonacci(4,FIB2)");
-        $RULE;
+        RULE = "fibonacci";
+        $RULE(8,FIB2);
 
         generic/print("rule execution (fibonacci)", FIB, FIB2);
         FIB == 21.0;
+        FIB2 == 21.0;
 
         $ackermann(3, 3, ACK);
         generic/print("rule execution (ackermann)", ACK);
