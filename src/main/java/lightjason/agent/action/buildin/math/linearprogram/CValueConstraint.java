@@ -37,8 +37,7 @@ import java.util.List;
 
 
 /**
- * adds an linear value constraint to
- * the LP with the definition
+ * add an linear value constraint to the LP with the definition
  * \f$ \sum_{i=1} c_i \cdot x_i   =      v \f$,
  * \f$ \sum_{i=1} c_i \cdot x_i   \geq   v \f$
  * \f$ \sum_{i=1} c_i \cdot x_i   \leq   v \f$

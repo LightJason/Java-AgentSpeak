@@ -1,4 +1,4 @@
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
 import lightjason.language.ILiteral;
 import lightjason.language.ITerm;

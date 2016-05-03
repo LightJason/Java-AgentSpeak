@@ -21,48 +21,58 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
-import lightjason.language.ILiteral;
+import lightjason.agent.IAgent;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
-import lightjason.language.instantiable.plan.trigger.CTrigger;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.variable.IVariable;
+import lightjason.language.variable.IVariableEvaluate;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * achievement-goal action based on a literal
+ * achievement for rule-variable execution
  */
-public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
+public final class CAchievementRuleVariable extends IAchievementRule<IVariableEvaluate>
 {
-
     /**
      * ctor
      *
-     * @param p_type value of the achievment-goal
-     * @param p_immediately immediately execution
+     * @param p_type value of the rule
      */
-    public CAchievementGoalLiteral( final ILiteral p_type, final boolean p_immediately )
+    public CAchievementRuleVariable( final IVariableEvaluate p_type )
     {
-        super( p_type, p_immediately );
+        super( p_type );
+    }
+
+    @Override
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
+    )
+    {
+        return execute( p_context, m_value.evaluate( p_context ), m_value.hasMutex() );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+        return MessageFormat.format( "${0}", m_value );
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final double score( final IAgent p_agent )
     {
-        return p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
+        return 0;
     }
 
+    @Override
+    public Stream<IVariable<?>> getVariables()
+    {
+        return m_value.getVariables();
+    }
 }

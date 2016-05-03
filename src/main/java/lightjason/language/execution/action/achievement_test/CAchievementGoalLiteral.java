@@ -21,37 +21,48 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
-import lightjason.common.IPath;
+import lightjason.language.ILiteral;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
-import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * test-rule action
+ * achievement-goal action based on a literal
  */
-public final class CTestRule extends ITestElement
+public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
 {
+
     /**
      * ctor
      *
-     * @param p_value atom
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    public CTestRule( final IPath p_value )
+    public CAchievementGoalLiteral( final ILiteral p_type, final boolean p_immediately )
     {
-        super( p_value );
+        super( p_type, p_immediately );
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( p_context.getAgent().getRules().asMap().containsKey( m_value ) );
+        return p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
     }
+
 }

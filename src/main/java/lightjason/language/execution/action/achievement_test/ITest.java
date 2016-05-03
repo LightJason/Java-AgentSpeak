@@ -21,40 +21,25 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
-import com.google.common.collect.ImmutableMultiset;
-import lightjason.agent.IAgent;
-import lightjason.language.ITerm;
+import lightjason.common.IPath;
 import lightjason.language.execution.action.IBaseExecution;
 
 
 /**
- * abstract achievement-goal class for goal execution
+ * abstract class of test-goal / test-rule action
  */
-abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
+abstract class ITest extends IBaseExecution<IPath>
 {
-    /**
-     * flag to run immediately
-     */
-    final boolean m_immediately;
-
     /**
      * ctor
      *
-     * @param p_type value of the achievment-goal
-     * @param p_immediately immediately execution
+     * @param p_value atom
      */
-    protected IAchievementGoal( final T p_type, final boolean p_immediately )
+    ITest( final IPath p_value )
     {
-        super( p_type );
-        m_immediately = p_immediately;
-    }
-
-    @Override
-    public double score( final IAgent p_agent )
-    {
-        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
+        super( p_value );
     }
 
 }

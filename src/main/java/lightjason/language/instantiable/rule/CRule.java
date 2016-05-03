@@ -28,7 +28,7 @@ import lightjason.common.IPath;
 import lightjason.language.CCommon;
 import lightjason.language.ILiteral;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.action.goaltest.CAchievementRuleLiteral;
+import lightjason.language.execution.action.achievement_test.CAchievementRuleLiteral;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.instantiable.IBaseInstantiable;
 import lightjason.language.variable.IVariable;

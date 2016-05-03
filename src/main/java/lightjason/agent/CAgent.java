@@ -25,6 +25,7 @@ package lightjason.agent;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
@@ -101,7 +102,7 @@ public class CAgent implements IAgent
     /**
      * multimap with rules
      */
-    protected final Multimap<IPath, IRule> m_rules = Multimaps.synchronizedMultimap( HashMultimap.create() );
+    protected final Multimap<IPath, IRule> m_rules = Multimaps.synchronizedMultimap( LinkedHashMultimap.create() );
     /**
      * map with all existing plans and successful / fail runs
      */

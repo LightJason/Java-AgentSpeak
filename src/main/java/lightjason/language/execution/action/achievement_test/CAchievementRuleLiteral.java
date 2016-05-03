@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
 import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;

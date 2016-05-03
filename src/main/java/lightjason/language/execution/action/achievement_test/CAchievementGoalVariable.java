@@ -21,25 +21,61 @@
  * @endcond
  */
 
-package lightjason.language.execution.action.goaltest;
+package lightjason.language.execution.action.achievement_test;
 
-import lightjason.common.IPath;
-import lightjason.language.execution.action.IBaseExecution;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.variable.IVariable;
+import lightjason.language.variable.IVariableEvaluate;
+
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * abstract class of test-goal / test-rule action
+ * achievement-goal action based on variables
  */
-abstract class ITestElement extends IBaseExecution<IPath>
+public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEvaluate>
 {
+
     /**
      * ctor
      *
-     * @param p_value atom
+     * @param p_type value of the achievment-goal
+     * @param p_immediately immediately execution
      */
-    ITestElement( final IPath p_value )
+    public CAchievementGoalVariable( final IVariableEvaluate p_type, final boolean p_immediately )
     {
-        super( p_value );
+        super( p_type, p_immediately );
     }
 
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        return p_context.getAgent().trigger(
+                CTrigger.from(
+                        ITrigger.EType.ADDGOAL,
+                        m_value.evaluate( p_context )
+                ),
+                m_immediately
+        );
+    }
+
+    @Override
+    public final Stream<IVariable<?>> getVariables()
+    {
+        return m_value.getVariables();
+    }
 }
