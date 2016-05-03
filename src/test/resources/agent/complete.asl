@@ -367,12 +367,12 @@ myfunction(X) :- generic/print("my logical rule", X).
         $RULE(8,FIB2);
 
         generic/print("rule execution (fibonacci)", FIB, FIB2);
-        FIB == 21.0;
-        FIB2 == 21.0;
+        FIB == 21;
+        FIB2 == 21;
 
         $ackermann(3, 3, ACK);
         generic/print("rule execution (ackermann)", ACK);
-        ACK == 61.0;
+        ACK == 61;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

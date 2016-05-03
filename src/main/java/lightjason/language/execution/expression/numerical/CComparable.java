@@ -77,19 +77,37 @@ public final class CComparable extends IBaseBinary
         if ( l_argument.size() != 2 )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
 
-
         switch ( m_operator )
         {
             case EQUAL:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).equals( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case NOTEQUAL:
-                p_return.add( CRawTerm.from( !l_argument.get( 0 ).equals( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( !checkequal( l_argument.get( 0 ), l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             default:
                 return CFuzzyValue.from( false );
         }
     }
+
+    /**
+     * check method with number handling
+     *
+     * @param p_value1 term value
+     * @param p_value2 term value
+     * @return equality flag
+     */
+    @SuppressWarnings( "unchecked" )
+    private static boolean checkequal( final ITerm p_value1, final ITerm p_value2 )
+    {
+        final Object l_value1 = lightjason.language.CCommon.getRawValue( p_value1 );
+        final Object l_value2 = lightjason.language.CCommon.getRawValue( p_value2 );
+
+        return ( l_value1 instanceof Number ) && ( l_value2 instanceof Number )
+               ? ( (Number) l_value1 ).doubleValue() == ( (Number) l_value2 ).doubleValue()
+               : l_value1.equals( l_value2 );
+    }
+
 }
