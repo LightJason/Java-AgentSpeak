@@ -35,6 +35,8 @@ import java.util.stream.Stream;
 
 /**
  * unify on at hash-based quality
+ *
+ * @todo modify variable binding so that variables will bind everytime for allow variable overwriting
  */
 public final class CHash implements IAlgorithm
 {

@@ -40,6 +40,8 @@ import java.util.stream.Stream;
 
 /**
  * recursive unify
+ *
+ * @todo modify variable binding so that variables will bind everytime for allow variable overwriting
  */
 public final class CRecursive implements IAlgorithm
 {
