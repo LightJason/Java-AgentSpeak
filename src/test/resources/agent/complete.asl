@@ -57,7 +57,8 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 +!mytest(X)
     <- generic/print("my test plan with variable value", X, "in cycle", Cycle);
-       !mytest(3)
+       Y = X-1;
+       !mytest(Y)
 .
 
 +!main
