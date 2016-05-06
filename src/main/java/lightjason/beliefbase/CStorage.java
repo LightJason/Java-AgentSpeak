@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @tparam N multi-element type
  * @tparam M single-element type
+ * @todo modify update method with interface structure
  */
 public class CStorage<N, M> implements IStorage<N, M>
 {

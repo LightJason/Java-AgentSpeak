@@ -38,8 +38,6 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
      * @param p_value execution literal
      * @param p_parallel parallel execution
      * @return boolean result
-     *
-     * @bug some indeterministic execution
      */
     protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
     {

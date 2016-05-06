@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 /**
  * rule structure
  *
- * @bug incomplete e.g. annotations are not existing
+ * @bug annotation handling is incomplete
  */
 public final class CRule extends IBaseInstantiable implements IRule
 {
@@ -57,7 +57,6 @@ public final class CRule extends IBaseInstantiable implements IRule
      *
      * @param p_id literal with signature
      * @param p_action action list
-     * @bug refactor empty annotations
      */
     public CRule( final ILiteral p_id, final List<IExecution> p_action )
     {
