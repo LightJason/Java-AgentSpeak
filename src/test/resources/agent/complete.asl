@@ -53,12 +53,12 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 +mybelief(X) <- generic/print("belief added with variable in Cycle", X, Cycle).
 
-+!mytest
-    <- generic/print("my test plan without variable in cycle", Cycle);
-    !mytest(3)
-.
++!mytest <- generic/print("my test plan without variable in cycle", Cycle).
 
-+!mytest(X) <- generic/print("my test plan with variable in cycle", X, Cycle).
++!mytest(X)
+    <- generic/print("my test plan with variable value", X, "in cycle", Cycle);
+       !mytest(3)
+.
 
 +!main
 
@@ -348,6 +348,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // run plan within the next cycle
         !mytest;
+        !mytest(4);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
