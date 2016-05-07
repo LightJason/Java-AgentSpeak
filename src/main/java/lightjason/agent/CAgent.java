@@ -127,7 +127,6 @@ public class CAgent implements IAgent
     protected long m_cycletime;
     /**
      * execution trigger
-     * @bug multiple trigger for plan with equal name not working
      */
     protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
     /**

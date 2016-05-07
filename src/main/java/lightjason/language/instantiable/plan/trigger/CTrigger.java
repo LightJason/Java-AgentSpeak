@@ -59,6 +59,7 @@ public final class CTrigger implements ITrigger
      * @param p_event type
      * @param p_literal literal with unified variables
      */
+    @SuppressWarnings( "unchecked" )
     public CTrigger( final EType p_event, final ILiteral p_literal )
     {
         if ( ( p_event == null ) || ( p_literal == null ) )
@@ -67,7 +68,7 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = lightjason.language.CCommon.getVariableFrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() + m_literal.getFQNFunctor().hashCode();
+        m_hashcode = m_event.hashCode() + m_literal.getFQNFunctor().hashCode() + (int) p_literal.values().count() + (int) p_literal.annotations().count();
     }
 
     /**
