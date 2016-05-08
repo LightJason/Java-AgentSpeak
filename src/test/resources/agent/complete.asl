@@ -51,7 +51,8 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 // --- plans ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-+counter(X) <- generic/print("belief added with variable in Cycle", X, Cycle).
+# root name must be removed
++beliefbase/counter(X) <- generic/print("belief added with variable in Cycle", X, Cycle).
 
 +!mytest <- generic/print("my test plan without variable in cycle", Cycle).
 

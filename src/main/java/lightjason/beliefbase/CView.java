@@ -86,6 +86,9 @@ public class CView implements IView
         m_parent = p_parent;
     }
 
+    /**
+     * @todo root element must be removed
+     */
     @Override
     public final Stream<ITrigger> getTrigger()
     {
