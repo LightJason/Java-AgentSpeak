@@ -207,6 +207,31 @@ public final class CLiteral implements ILiteral
     }
 
     /**
+     * stream factory
+     *
+     * @param p_functor functor
+     * @param p_values value stream
+     * @param p_annotations annotation stream
+     * @return literal
+     */
+    public static ILiteral from( final String p_functor, final Stream<ITerm> p_values, final Stream<ILiteral> p_annotations )
+    {
+        return from( p_functor, p_values.collect( Collectors.toList() ), p_annotations.collect( Collectors.toList() ) );
+    }
+
+    /**
+     * stream factory
+     *
+     * @param p_functor functor
+     * @param p_values value stream
+     * @return literal
+     */
+    public static ILiteral from( final String p_functor, final Stream<ITerm> p_values )
+    {
+        return from( p_functor, p_values.collect( Collectors.toList() ) );
+    }
+
+    /**
      * factory
      *
      * @param p_literal literal string

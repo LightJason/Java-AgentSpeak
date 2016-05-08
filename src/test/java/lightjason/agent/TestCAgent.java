@@ -30,6 +30,8 @@ import lightjason.agent.action.buildin.bind.IActionBind;
 import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.agent.unify.CUnifier;
 import lightjason.language.CCommon;
+import lightjason.language.CLiteral;
+import lightjason.language.CRawTerm;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.IInstantiable;
 import lightjason.language.score.IAggregation;
@@ -117,14 +119,7 @@ public final class TestCAgent
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        // run test manually for catching execpetions
-        new CDefaultAgentGenerator(
-                new FileInputStream( "src/test/resources/agent/complete.asl" ),
-                ACTIONS.keySet(),
-                new CUnifier(),
-                new CAggregation( ACTIONS ),
-                new CVariableBuilder()
-        ).generate().call();
+        new TestCAgent().testASL();
     }
 
     /**
@@ -147,7 +142,7 @@ public final class TestCAgent
             IntStream.range( 0, 5 ).forEach( i -> {
                 try
                 {
-                    l_agent.call();
+                    l_agent.call().getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
                 }
                 catch ( final Exception p_exception )
                 {
