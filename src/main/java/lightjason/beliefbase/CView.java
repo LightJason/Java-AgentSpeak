@@ -35,9 +35,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -90,14 +87,10 @@ public class CView implements IView
     }
 
     @Override
-    public final Set<ITrigger> getTrigger()
+    public final Stream<ITrigger> getTrigger()
     {
-        final Set<ITrigger> l_trigger = m_beliefbase.getTrigger( this );
-        if ( l_trigger.isEmpty() )
-            return l_trigger;
-
         final IPath l_path = this.getPath();
-        return Collections.unmodifiableSet( l_trigger.parallelStream().map( i -> i.shallowcopy( l_path ) ).collect( Collectors.toSet() ) );
+        return m_beliefbase.getTrigger( this ).map( i -> i.shallowcopy( l_path ) );
     }
 
     @Override

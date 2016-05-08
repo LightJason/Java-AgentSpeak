@@ -25,7 +25,7 @@ package lightjason.beliefbase;
 
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -40,7 +40,7 @@ public interface IBeliefBase extends IStructure
      * @param p_view mask for events
      * @return set with trigger events
      */
-    Set<ITrigger> getTrigger( final IView p_view );
+    Stream<ITrigger> getTrigger( final IView p_view );
 
     /**
      * removes single- and multi-elements

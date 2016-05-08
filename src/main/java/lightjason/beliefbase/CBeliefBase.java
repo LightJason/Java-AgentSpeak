@@ -179,8 +179,7 @@ public final class CBeliefBase implements IBeliefBase
      * @bug get with view does not work correct
      */
     @Override
-    @SuppressWarnings( "serial" )
-    public final Set<ITrigger> getTrigger( final IView p_view )
+    public final Stream<ITrigger> getTrigger( final IView p_view )
     {
         // get data or return an empty set
         final Set<ITrigger> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger>emptySet() );
@@ -189,14 +188,14 @@ public final class CBeliefBase implements IBeliefBase
         final Set<ITrigger> l_copy = Collections.unmodifiableSet(
                 Stream.concat(
                         l_trigger.parallelStream(),
-                        m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger().stream() )
+                        m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger() )
                 )
                       .collect( Collectors.toSet() )
         );
 
         // clear all trigger elements if no trigger exists return an empty set
         l_trigger.clear();
-        return l_copy;
+        return l_copy.stream();
     }
 
     @Override

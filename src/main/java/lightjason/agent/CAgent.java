@@ -312,7 +312,7 @@ public class CAgent implements IAgent
         // create a list of all possible execution elements, that is a local cache for well-defined execution
         final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
                 m_trigger.parallelStream(),
-                m_beliefbase.getTrigger().parallelStream()
+                m_beliefbase.getTrigger().parallel()
         ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
 
         // clear running plan- and trigger list and execute elements

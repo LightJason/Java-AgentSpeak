@@ -28,7 +28,6 @@ import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -43,7 +42,7 @@ public interface IView extends IStructure
      *
      * @return set with trigger events
      */
-    Set<ITrigger> getTrigger();
+    Stream<ITrigger> getTrigger();
 
     /**
      * adds view in the current structure
