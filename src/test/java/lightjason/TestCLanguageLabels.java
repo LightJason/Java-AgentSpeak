@@ -34,19 +34,27 @@ import lightjason.common.CCommon;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -62,6 +70,10 @@ public final class TestCLanguageLabels
      * search path
      **/
     private static final URI SEARCHPATH;
+    /**
+     * property filenames with language data
+     */
+    private static final Map<String, URI> LANGUAGEPROPERY = new HashMap<>();
     /**
      * list of all project packages for searching classes
      *
@@ -95,12 +107,16 @@ public final class TestCLanguageLabels
      */
     private final Pattern m_language = Pattern.compile( m_translatemethod + ".+\\)" );
 
+
     static
     {
         URI l_uri = null;
         try
         {
             l_uri = CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI();
+
+            LANGUAGEPROPERY.put( "en", CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/resources/language.properties" ).toURI() );
+            LANGUAGEPROPERY.put( "de", CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/resources/language_de.properties" ).toURI() );
         }
         catch ( final Exception p_exception )
         {
@@ -126,7 +142,7 @@ public final class TestCLanguageLabels
             );
 
             for ( final Path l_item : l_files )
-                this.checkFile( l_item );
+                this.parsefile( l_item );
 
         }
         catch ( final Exception p_exception )
@@ -137,19 +153,28 @@ public final class TestCLanguageLabels
 
 
         // --- check label -> property definition
-        /*
-        for ( final String l_language : CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
-        {
-            Locale.setDefault( Locale.forLanguageTag( l_language ) );
-            final Set<String> l_labels = CCommon.getLanguageBundle().keySet();
-            l_labels.removeAll( m_labels );
+        Arrays.stream( CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
+              .forEach( i -> {
+                  try
+                  {
+                      final Properties l_property = new Properties();
+                      l_property.load( new FileInputStream( new File( LANGUAGEPROPERY.get( i ) ) ) );
 
-            assertTrue(
-                    String.format( "the following keys in language [%s] are unused: %s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
-            );
-        }
-        */
+                      final Set<String> l_labels = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
+                      l_labels.removeAll( m_labels );
 
+                      assertTrue(
+                              String.format( "the following keys in language [%s] are unused: %s", i, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
+                      );
+                  }
+                  catch ( final FileNotFoundException l_exception )
+                  {
+                  }
+                  catch ( IOException p_e )
+                  {
+                      p_e.printStackTrace();
+                  }
+              } );
     }
 
     /**
@@ -171,7 +196,7 @@ public final class TestCLanguageLabels
      *
      * @param p_file
      */
-    private void checkFile( final Path p_file ) throws IOException
+    private void parsefile( final Path p_file ) throws IOException
     {
         if ( ( !p_file.toString().endsWith( ".java" ) ) || ( SKIPFILES.contains( SEARCHPATH.relativize( p_file.toUri() ).normalize().toString() ) ) )
             return;
