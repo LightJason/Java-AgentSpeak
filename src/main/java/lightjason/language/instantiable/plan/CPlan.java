@@ -33,6 +33,7 @@ import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.IBaseInstantiable;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.variable.IVariable;
 import org.apache.commons.lang3.StringUtils;
@@ -124,6 +125,20 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final List<IExecution> getBodyActions()
     {
         return m_action;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+
+        // create delete-goal trigger
+        if ( !p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_result ) )
+            p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
+
+        return l_result;
     }
 
     @Override

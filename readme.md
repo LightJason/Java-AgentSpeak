@@ -30,11 +30,10 @@ to describe an optimizing process.
 
 * Beliefs implicitly describe the current state of the agent
 * Beliefs will be updated before the cycle is run (beliefbase uses an update mechanism)
-* Beliefs must be exists iif a expression is computed (beliefs can be exist on the fly)
+* Beliefs must be exists iif an expression is computed (beliefs can be exist on the fly)
 * Belief addition triggers a plan with the definition ```+belief``` 
 * Belief retraction triggers a plan with the definition ```-belief```
 * Belief modification with ```-+``` does not exists anymore 
-* If a literal of a belief is named equal to an [action](#action) the action will not be executed (store the value of the action within a variable, which is used within the belief literal)
 * [Variables](#variable) within a belief literal will be unified before the belief is added to the beliefbase
 
 
@@ -54,8 +53,8 @@ to describe an optimizing process.
 * Plans fail iif an item of the plan fails
 * Plans returns a boolean value which defines fail (false) and success (true)
 * Plans run items in sequential order on default
-* If the plan calls an _achievement [goal](#goal) addition_, the [goal](#goal) is added to the global [goal](#goal) list and the current plan is paused until the goal is reached
-* If the plan calls an _achievement [goal](#goal) deletion_, the [goal](#goal) is removed from the global [goal](#goal) list iif exists and returns true otherwise it returns false and the plan can fail
+* If the plan calls an _achievement [goal](#goal) addition_, the [goal](#goal) is added to the global [goal](#goal) list and the current plan will be continued, the _achievement [goal](#goal)_ will be run within the next cycle
+* An _achievement [goal](#goal) deletion_ does not exists anymore
 * All items results will be concatenated with a logical _and_ to calculate the plan result value
     
 #### <a name="planinternal">Internals Constants</a>
@@ -73,13 +72,13 @@ to describe an optimizing process.
 * Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
 * Each [action](#action) in a fuzzy-plan returns also a fuzzy value to define the fuzziness
 * The [plan](#plan) or [rule](#rule) result returns true / false and the aggregated fuzzy value
-* If a test or achievement [goal](#goal) is called it triggers all [plans](#plan) which are matched by the calculated fuzzy value
 
 
 ### <a name="rule">Rules</a>
 
 * Rules are similar to [plans](#plan) without the context condition
 * Rules cannot be triggered by a goal, so they must be called from a plan
+* Rules will be executed with the prefix ```$```
 * Rules run immediatly
 * Rules run sequentially on default
 * Rules returns a boolean value which defines fail (false) and success (true)
@@ -99,9 +98,9 @@ to describe an optimizing process.
 ### <a name="goal">Goals</a>
 
 * Semantically a goal marks a certain state of the world an agent _wishes to bring about_ [AgentSpeak, p.40]
-* New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition/deletion_ which leads to the execution of a corresponding [plan](#plan)
+* New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition_ which leads to the execution of a corresponding [plan](#plan)
 * On agent start, there can exists one _initial goal_ only (like the ```main``` function in Java, C/C++)
-* Each agent can track _more than one goal_ otherwise the agent is idles (the suspending state is not used)
+* Each agent can track _more than one goal_ otherwise the agent idles (the suspending state is not used)
 * Goals are triggered by external events which will match by the goal name
 * Goals will be resolved into [plans](#plan) with equal name (and allowed context), the [plan](#plan) is the intantiiation of the goal
 * Goals are run in parallel independed from other goals
@@ -134,6 +133,7 @@ to describe an optimizing process.
 
 * Variables are written with an upper-case letter at begin
 * Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
+* Variables can store a literal or string to call a [rule](#rule) or [plan](#plan) e.g. !X(3,2) calls a pan or !$X(2,1) calls a rule
 
 ### <a name="at-annotation">Action / Term Annotation</a>
 
@@ -197,8 +197,9 @@ to describe an optimizing process.
 
 Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
-1. run update beliefbase
-    * write waiting / marked beliefs into the beliefbase
+1. run beliefbase update
+    * run update on the beliefbase updater
+    * add new beliefs into the bleliefbase
     * generate beliefbase events
 
 2. if agent is in suspend state
@@ -206,34 +207,23 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     
 3. run agent cycle
 
-    1. collect plans, which match the belief-events
-    2. collect plans, which match the goal-events
-    3. create plan execution list of _earmarked executing plans_ and _collected plans_
-    4. execute collected plans in parallel and apply the following rules for each body formula
+    1. run update of defuzzifcation
+    2. collect plans, which match belief-events and goal-events
+    3. create plan execution list of instantiated plans
+    4. execute instantiated plans in parallel and apply the following rules for each body formula
 
         1. if an item is an _action_ or _rule_ execute it immediatly
         2. if an item is a _test goal_ check instantiated plans if a plan is found return true otherwise false
         3. if an item is an _achievment goal_ and
-            * begins with ```!``` add it to the _earmarked executing plans list_ and set the current plan to _waiting state_
+            * begins with ```!``` add a new trigger-event for the next cycle to instantiate a possible plan
             * begins with ```!!``` the plan which is matched by the goal is executated immediately within the current plan context          
         4. if an item is a belief-
-            * addition, mark the literal for adding into the beliefbase
-            * deletion, mark the literal for removing from beliefbase
-            * changing, mark the literal with changes for update within the beliefbase
+            * addition, unify the literal and add it into the beliefbase and create a trigger-event
+            * deletion, unify the literal and remove it from the beliefbase and create a trigger-event
 
-    5. if a plan is finished check plan towards the _waiting state plan list_ and move waiting plans to the _earmarked executing plans list_
-        * if the plan fails create a ```-!goal``` event 
+    5. if a plan is finished check plan result, if it is false / fail create a ```-!goal``` event 
 
 4. increment cycle value
-
-
-### <a name="buildinbelief">Build-in Beliefs</a>
-
-* ```my/awake``` exists when the agent is resumed from suspending, generate ```+``` event in cycle t and ```-``` event in cycle t+1 with value of suspended cycles
-* ```my/size/beliefbase``` number of beliefs within the current beliefbase, generates no event
-* ```my/size/planbase``` number of plans, generates no event
-* ```my/current/plans/``` planname with state [pause|running] as string value
-
 
 
 
@@ -253,7 +243,6 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ### <a name="devaction">Developing Buildin Actions & Components</a>
 
-* Prettyfier component for source code layout
 * [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html) see [example](http://commons.apache.org/proper/commons-math/userguide/ode.html)
 * [Curve Fitting](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/package-summary.html)
 * [Genetic Algorithm](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/genetics/package-summary.html)

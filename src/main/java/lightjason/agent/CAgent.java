@@ -406,8 +406,10 @@ public class CAgent implements IAgent
 
             final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
             if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
+                // increment successful runs
                 i.getLeft().getMiddle().getAndIncrement();
             else
+                // increment failed runs and create delete goal-event
                 i.getLeft().getRight().getAndIncrement();
 
             return l_result;
