@@ -35,6 +35,7 @@ import cern.jet.math.Functions;
 import cern.jet.math.Mult;
 import lightjason.agent.IAgent;
 import lightjason.common.CCommon;
+import lightjason.consistency.filter.IFilter;
 import lightjason.consistency.metric.IMetric;
 import lightjason.error.CIllegalStateException;
 
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -86,15 +88,21 @@ public final class CConsistency implements Callable<CConsistency>
     /**
      * metric object to create the value of two objects
      **/
-    private IMetric m_metric;
+    private final IMetric m_metric;
+    /**
+     * metric filter
+     */
+    private final IFilter m_filter;
 
     /**
      * ctor - use numeric algorithm
      *
+     * @param p_filter metric filter
      * @param p_metric object metric
      */
-    public CConsistency( final IMetric p_metric )
+    public CConsistency( final IFilter p_filter, final IMetric p_metric )
     {
+        m_filter = p_filter;
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Numeric;
         m_iteration = 0;
@@ -108,8 +116,9 @@ public final class CConsistency implements Callable<CConsistency>
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CConsistency( final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    public CConsistency( final IFilter p_filter, final IMetric p_metric, final int p_iteration, final double p_epsilon )
     {
+        m_filter = p_filter;
         m_metric = p_metric;
         m_algorithm = EAlgorithm.Iteration;
         m_iteration = p_iteration;
@@ -185,26 +194,6 @@ public final class CConsistency implements Callable<CConsistency>
     }
 
     /**
-     * gets the current metric
-     *
-     * @return get metric
-     */
-    public final IMetric getMetric()
-    {
-        return m_metric;
-    }
-
-    /**
-     * sets the metric
-     *
-     * @param p_metric metric
-     */
-    public final void setMetric( final IMetric p_metric )
-    {
-        m_metric = p_metric;
-    }
-
-    /**
      * removes an object
      *
      * @param p_object removing object
@@ -263,7 +252,10 @@ public final class CConsistency implements Callable<CConsistency>
         if ( p_first.equals( p_second ) )
             return 0;
 
-        return m_metric.calculate( p_first, p_second );
+        return m_metric.calculate(
+                m_filter.filter( p_first ).collect( Collectors.toList() ),
+                m_filter.filter( p_second ).collect( Collectors.toList() )
+        );
     }
 
     /**

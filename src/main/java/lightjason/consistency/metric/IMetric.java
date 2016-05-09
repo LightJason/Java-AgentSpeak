@@ -24,8 +24,7 @@
 package lightjason.consistency.metric;
 
 
-import lightjason.agent.IAgent;
-import lightjason.common.IPath;
+import lightjason.language.ILiteral;
 
 import java.util.Collection;
 
@@ -39,20 +38,12 @@ public interface IMetric
 {
 
     /**
-     * calculates the metric value between two objects
+     * calculates the metric value between literal collections
      *
-     * @param p_first first object
-     * @param p_second second object
+     * @param p_first first literal collection
+     * @param p_second second literal collection
      * @return double metric
      */
-    double calculate( final IAgent p_first, final IAgent p_second );
-
-
-    /**
-     * returns the selectors
-     *
-     * @return selector
-     */
-    Collection<IPath> getSelector();
+    double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second );
 
 }

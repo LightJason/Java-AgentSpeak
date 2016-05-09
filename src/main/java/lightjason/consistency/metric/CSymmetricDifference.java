@@ -23,8 +23,7 @@
 
 package lightjason.consistency.metric;
 
-import lightjason.agent.IAgent;
-import lightjason.common.IPath;
+import lightjason.language.ILiteral;
 
 import java.util.Collection;
 import java.util.stream.Stream;
@@ -33,40 +32,16 @@ import java.util.stream.Stream;
 /**
  * metric on collections returns the size of symmetric difference
  */
-@SuppressWarnings( "serial" )
-public final class CSymmetricDifference extends IBaseMetric
+public final class CSymmetricDifference implements IMetric
 {
 
-    /**
-     * ctor
-     *
-     * @param p_paths for reading agent value
-     */
-    public CSymmetricDifference( final IPath... p_paths )
-    {
-        super( p_paths );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_paths collection of path
-     */
-    public CSymmetricDifference( final Collection<IPath> p_paths )
-    {
-        super( p_paths );
-    }
-
     @Override
-    public final double calculate( final IAgent p_first, final IAgent p_second )
+    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
     {
-        // build filter
-        final IPath[] l_filter = m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] );
-
         // element aggregation and return distance
-        return 2.0 * Stream.concat( p_first.getBeliefBase().stream( l_filter ), p_second.getBeliefBase().stream( l_filter ) ).sorted().distinct().count()
-               - p_first.getBeliefBase().stream( l_filter ).count()
-               - p_second.getBeliefBase().stream( l_filter ).sorted().count();
+        return 2.0 * Stream.concat( p_first.stream(), p_second.stream() ).sorted().distinct().count()
+               - p_first.stream().count()
+               - p_second.stream().count();
     }
 
 }

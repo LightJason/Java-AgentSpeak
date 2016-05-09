@@ -29,6 +29,8 @@ import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
 import lightjason.beliefbase.IView;
+import lightjason.consistency.filter.CAll;
+import lightjason.consistency.filter.IFilter;
 import lightjason.consistency.metric.CSymmetricDifference;
 import lightjason.consistency.metric.CWeightedDifference;
 import lightjason.consistency.metric.IMetric;
@@ -40,6 +42,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,6 +66,7 @@ public final class TestIMetric
     @Test
     public final void testSymmetricWeight()
     {
+        final IFilter l_filter = new CAll();
         final IMetric l_metric = new CSymmetricDifference();
 
         final Set<ILiteral> l_beliefs = new HashSet<>();
@@ -73,8 +77,8 @@ public final class TestIMetric
         l_beliefs.add( CLiteral.from( "second/sub2" ) );
         l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
 
-        this.check( "symmetric difference equality", l_metric, l_beliefs, l_beliefs, 0, 0 );
-        this.check( "symmetric difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
+        this.check( "symmetric difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 0, 0 );
+        this.check( "symmetric difference inequality", l_filter, l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
         {{
             add( CLiteral.from( "diff" ) );
         }}, 1, 0 );
@@ -87,6 +91,7 @@ public final class TestIMetric
     @Test
     public final void testWeight()
     {
+        final IFilter l_filter = new CAll();
         final IMetric l_metric = new CWeightedDifference();
 
         final Set<ILiteral> l_beliefs = new HashSet<>();
@@ -97,8 +102,8 @@ public final class TestIMetric
         l_beliefs.add( CLiteral.from( "second/sub2" ) );
         l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
 
-        this.check( "weight difference equality", l_metric, l_beliefs, l_beliefs, 24, 0 );
-        this.check( "weight difference inequality", l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
+        this.check( "weight difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 24, 0 );
+        this.check( "weight difference inequality", l_filter, l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
         {{
             add( CLiteral.from( "diff" ) );
         }}, 28 + 1.0 / 6, 0 );
@@ -127,11 +132,15 @@ public final class TestIMetric
      * @param p_excepted expected value
      * @param p_delta delta
      */
-    private void check( final String p_message, final IMetric p_metric, final Collection<ILiteral> p_belief1, final Collection<ILiteral> p_belief2,
+    private void check( final String p_message, final IFilter p_filter, final IMetric p_metric, final Collection<ILiteral> p_belief1,
+                        final Collection<ILiteral> p_belief2,
                         final double p_excepted, final double p_delta
     )
     {
-        final double l_value = p_metric.calculate( this.getAgent( p_belief1 ), this.getAgent( p_belief2 ) );
+        final double l_value = p_metric.calculate(
+                p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
+                p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
+        );
         assertEquals( p_message, l_value, p_excepted, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
     }

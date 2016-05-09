@@ -21,26 +21,55 @@
  * @endcond
  */
 
-package lightjason.consistency.metric;
+package lightjason.consistency.filter;
 
+import lightjason.common.IPath;
 
-import lightjason.language.ILiteral;
-
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * generic discrete metric
- *
- * @see http://mathworld.wolfram.com/DiscreteMetric.html
+ * default metric with an optional set of path values
  */
-public final class CDiscrete implements IMetric
+abstract class IBaseFilter implements IFilter
 {
+    /**
+     * set with paths
+     */
+    protected final Set<IPath> m_paths = new HashSet<>();
 
-    @Override
-    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
+    /**
+     * ctor
+     *
+     * @param p_paths for reading agent value
+     */
+    protected IBaseFilter( final IPath... p_paths )
     {
-        return ( p_first.containsAll( p_second ) ) && ( p_second.containsAll( p_first ) ) ? 0 : 1;
+        if ( p_paths != null )
+            m_paths.addAll( Arrays.asList( p_paths ) );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_paths collection of path
+     */
+    protected IBaseFilter( final Collection<IPath> p_paths )
+    {
+        if ( p_paths != null )
+            m_paths.addAll( p_paths );
+    }
+
+    /**
+     * returns the selectors
+     *
+     * @return selector
+     */
+    public final Collection<IPath> getSelector()
+    {
+        return m_paths;
+    }
 }

@@ -21,26 +21,26 @@
  * @endcond
  */
 
-package lightjason.consistency.metric;
+package lightjason.consistency.filter;
 
-
+import lightjason.agent.IAgent;
 import lightjason.language.ILiteral;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 
 /**
- * generic discrete metric
- *
- * @see http://mathworld.wolfram.com/DiscreteMetric.html
+ * filtering  interface of agent literal values for metric
  */
-public final class CDiscrete implements IMetric
+public interface IFilter
 {
 
-    @Override
-    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
-    {
-        return ( p_first.containsAll( p_second ) ) && ( p_second.containsAll( p_first ) ) ? 0 : 1;
-    }
+    /**
+     * filter to return literal stream
+     *
+     * @param p_agent agent
+     * @return literal stream for metric calculation
+     */
+    Stream<ILiteral> filter( final IAgent p_agent );
 
 }

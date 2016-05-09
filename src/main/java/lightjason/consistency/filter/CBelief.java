@@ -21,26 +21,44 @@
  * @endcond
  */
 
-package lightjason.consistency.metric;
+package lightjason.consistency.filter;
 
-
+import lightjason.agent.IAgent;
+import lightjason.common.IPath;
 import lightjason.language.ILiteral;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 
 /**
- * generic discrete metric
- *
- * @see http://mathworld.wolfram.com/DiscreteMetric.html
+ * filtering for all beliefs
  */
-public final class CDiscrete implements IMetric
+public final class CBelief extends IBaseFilter
 {
-
-    @Override
-    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
+    /**
+     * ctor
+     *
+     * @param p_paths path list
+     */
+    public CBelief( final IPath... p_paths )
     {
-        return ( p_first.containsAll( p_second ) ) && ( p_second.containsAll( p_first ) ) ? 0 : 1;
+        super( p_paths );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_paths path collection
+     */
+    public CBelief( final Collection<IPath> p_paths )
+    {
+        super( p_paths );
+    }
+
+    @Override
+    public final Stream<ILiteral> filter( final IAgent p_agent )
+    {
+        return p_agent.getBeliefBase().stream( m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] ) );
+    }
 }

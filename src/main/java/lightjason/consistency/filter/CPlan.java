@@ -21,51 +21,22 @@
  * @endcond
  */
 
-package lightjason.consistency.metric;
+package lightjason.consistency.filter;
 
-import lightjason.common.IPath;
+import lightjason.agent.IAgent;
+import lightjason.language.ILiteral;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
- * default metric with an optional set of path values
+ * filtering for all execution plans & beliefs
  */
-public abstract class IBaseMetric implements IMetric
+public final class CPlan implements IFilter
 {
-    /**
-     * set with paths
-     */
-    protected final Set<IPath> m_paths = new HashSet<>();
-
-    /**
-     * ctor
-     *
-     * @param p_paths for reading agent value
-     */
-    protected IBaseMetric( final IPath... p_paths )
-    {
-        if ( p_paths != null )
-            m_paths.addAll( Arrays.asList( p_paths ) );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_paths collection of path
-     */
-    protected IBaseMetric( final Collection<IPath> p_paths )
-    {
-        if ( p_paths != null )
-            m_paths.addAll( p_paths );
-    }
-
     @Override
-    public final Collection<IPath> getSelector()
+    public final Stream<ILiteral> filter( final IAgent p_agent )
     {
-        return m_paths;
+        return p_agent.getRunningPlans().values().stream();
     }
 }
