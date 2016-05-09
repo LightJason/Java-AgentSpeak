@@ -51,13 +51,12 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 // --- plans ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-# root name must be removed
-+beliefbase/counter(X) <- generic/print("belief added with variable in Cycle", X, Cycle).
++counter(X) <- generic/print("belief 'counter' added with variable value [", X, "] in Cycle [", Cycle, "]").
 
-+!mytest <- generic/print("my test plan without variable in cycle", Cycle).
++!mytest <- generic/print("my test plan without variable in cycle [", Cycle, "]").
 
 +!mytest(X)
-    <- generic/print("my test plan with variable value", X, "in cycle", Cycle);
+    <- generic/print("my test plan with variable value [", X, "] in cycle[", Cycle, "]");
        Y = X-1;
        !mytest(Y)
 .
@@ -358,7 +357,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- test belief calls -------------------------------------------------------------------------------------------------------------------------------
 
-        +mybelief(UN8);
+        +counter(UN8);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

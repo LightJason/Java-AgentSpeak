@@ -175,9 +175,6 @@ public final class CBeliefBase implements IBeliefBase
         return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
     }
 
-    /**
-     * @bug get with view does not work correct
-     */
     @Override
     public final Stream<ITrigger> getTrigger( final IView p_view )
     {

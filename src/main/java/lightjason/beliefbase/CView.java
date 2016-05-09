@@ -86,13 +86,12 @@ public class CView implements IView
         m_parent = p_parent;
     }
 
-    /**
-     * @todo root element must be removed
-     */
     @Override
     public final Stream<ITrigger> getTrigger()
     {
-        final IPath l_path = this.getPath();
+        // remove the root element (position 0), because the root element
+        // is not used on the agent (asl) side
+        final IPath l_path = this.getPath().remove( 0 );
         return m_beliefbase.getTrigger( this ).map( i -> i.shallowcopy( l_path ) );
     }
 
