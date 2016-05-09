@@ -158,6 +158,13 @@ public interface IView extends IStructure
 
 
     /**
+     * clears all elements
+     *
+     * @param p_path path values
+     */
+    void clear( final IPath... p_path );
+
+    /**
      * returns the full path
      *
      * @return path

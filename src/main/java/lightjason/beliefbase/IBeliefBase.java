@@ -50,4 +50,9 @@ public interface IBeliefBase extends IStructure
      */
     boolean remove( final String p_name );
 
+    /**
+     * clears all elements
+     */
+    void clear();
+
 }

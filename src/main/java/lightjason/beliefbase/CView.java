@@ -115,9 +115,13 @@ public final class CView implements IView
     }
 
     @Override
-    public final void clear()
+    public final void clear( final IPath... p_path )
     {
-        m_beliefbase.clear();
+        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+            m_beliefbase.clear();
+        else
+            Arrays.stream( p_path ).parallel()
+                  .forEach( i -> this.walk( i.normalize(), this, null ).clear() );
     }
 
     @Override

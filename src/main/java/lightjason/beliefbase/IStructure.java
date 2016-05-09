@@ -73,11 +73,6 @@ public interface IStructure
 
 
     /**
-     * clears all elements
-     */
-    void clear();
-
-    /**
      * checks if the structure empty
      *
      * @return empty boolean

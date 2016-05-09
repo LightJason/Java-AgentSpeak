@@ -24,6 +24,9 @@
 package lightjason.agent.action.buildin.generic;
 
 import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.common.CPath;
+import lightjason.common.IPath;
+import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
@@ -34,8 +37,6 @@ import java.util.List;
 
 /**
  * clears all elements from the beliefbase
- *
- * @todo modify clear with path elements
  */
 public final class CClearBeliefbase extends IBuildinAction
 {
@@ -51,7 +52,13 @@ public final class CClearBeliefbase extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_context.getAgent().getBeliefBase().clear();
+        p_context.getAgent().getBeliefBase().clear(
+                p_argument.size() == 0
+                ? null
+                : p_argument.parallelStream()
+                            .map( i -> CPath.from( CCommon.getRawValue( i ) ) )
+                            .toArray( IPath[]::new )
+        );
         return CFuzzyValue.from( true );
     }
 
