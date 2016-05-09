@@ -61,6 +61,13 @@ myfunction(X) :- generic/print("my logical rule", X).
        !mytest(Y)
 .
 
+-!errorplan <- generic/print("fail plan (deletion goal) in cycle [", Cycle, "]").
+
++!errorplan
+    <- generic/print("fail plan is failing in cycle [", Cycle, "]");
+       fail
+.
+
 +!main
 
     : >>( hallo(X), generic/typ/isstring(X) ) <-
@@ -350,6 +357,7 @@ myfunction(X) :- generic/print("my logical rule", X).
         // run plan within the next cycle
         !mytest;
         !mytest(4);
+        !errorplan;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
