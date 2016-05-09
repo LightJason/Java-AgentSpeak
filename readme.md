@@ -199,7 +199,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 1. run beliefbase update
     * run update on the beliefbase updater
-    * add new beliefs into the bleliefbase
+    * add new beliefs into the beliefbase
     * generate beliefbase events
 
 2. if agent is in suspend state
