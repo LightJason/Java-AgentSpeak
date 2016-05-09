@@ -126,6 +126,7 @@ public final class TestIMetric
      * runs the check
      *
      * @param p_message error / successful message
+     * @param p_filter agent filter
      * @param p_metric metric value
      * @param p_belief1 belief set 1
      * @param p_belief2 belief set 2

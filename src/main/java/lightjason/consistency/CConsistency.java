@@ -111,6 +111,7 @@ public final class CConsistency implements IConsistency
     /**
      * ctor - use stochastic algorithm
      *
+     * @param p_filter metric filter
      * @param p_metric object metric
      * @param p_iteration iterations
      * @param p_epsilon epsilon value

@@ -53,6 +53,7 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
      * ctor
      *
      * @param p_plans plans
+     * @param p_rules rules
      * @param p_initalbeliefs initial beliefs
      */
     public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )

@@ -1,6 +1,9 @@
 package lightjason.language.variable;
 
+import com.rits.cloning.Cloner;
+import lightjason.common.CPath;
 import lightjason.common.IPath;
+import lightjason.language.ITerm;
 
 import java.text.MessageFormat;
 
@@ -60,6 +63,24 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public final IVariable<T> shallowcopySuffix()
     {
         return new CRelocateVariable<>( this, m_relocate );
+    }
+
+    @Override
+    public final ITerm deepcopy( final IPath... p_prefix )
+    {
+        return new CRelocateVariable<>(
+                ( p_prefix == null ) || ( p_prefix.length == 0 )
+                ? m_functor
+                : m_functor.append( p_prefix[0] ),
+                new Cloner().deepClone( m_value ),
+                m_relocate
+        );
+    }
+
+    @Override
+    public final ITerm deepcopySuffix()
+    {
+        return new CRelocateVariable<>( CPath.from( m_functor.getSuffix() ), new Cloner().deepClone( m_value ), m_relocate );
     }
 
     @Override

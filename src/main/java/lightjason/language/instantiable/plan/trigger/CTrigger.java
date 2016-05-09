@@ -33,8 +33,6 @@ import java.text.MessageFormat;
 
 /**
  * event with literal data
- *
- * @todo check hashcode for correct execution matching
  */
 public final class CTrigger implements ITrigger
 {

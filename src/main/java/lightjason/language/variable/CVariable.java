@@ -23,6 +23,7 @@
 
 package lightjason.language.variable;
 
+import com.rits.cloning.Cloner;
 import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
@@ -37,7 +38,6 @@ import java.util.Arrays;
  * default variable definition
  *
  * @note variable set is not thread-safe on default
- * @todo deep-copy value copy incorrect
  */
 public class CVariable<T> implements IVariable<T>
 {
@@ -212,15 +212,20 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public final ITerm deepcopy( final IPath... p_prefix )
+    public ITerm deepcopy( final IPath... p_prefix )
     {
-        return this.shallowcopy( p_prefix );
+        return new CVariable<T>(
+                ( p_prefix == null ) || ( p_prefix.length == 0 )
+                ? m_functor
+                : m_functor.append( p_prefix[0] ),
+                new Cloner().deepClone( m_value )
+        );
     }
 
     @Override
-    public final ITerm deepcopySuffix()
+    public ITerm deepcopySuffix()
     {
-        return this.shallowcopySuffix();
+        return new CVariable<T>( m_functor.getSuffix(), new Cloner().deepClone( m_value ) );
     }
 
     /**

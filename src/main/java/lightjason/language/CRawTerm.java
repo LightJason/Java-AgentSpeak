@@ -23,6 +23,7 @@
 
 package lightjason.language;
 
+import com.rits.cloning.Cloner;
 import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
@@ -36,7 +37,6 @@ import java.util.Arrays;
  * term structure for simple datatypes
  *
  * @warning hash code is defined on the input data type
- * @todo deep-copy value copy incorrect
  */
 public final class CRawTerm<T> implements IRawTerm<T>
 {
@@ -185,7 +185,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
-        return CRawTerm.from( m_value );
+        return CRawTerm.from( new Cloner().deepClone( m_value ) );
     }
 
     @Override

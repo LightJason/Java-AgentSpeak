@@ -1,6 +1,9 @@
 package lightjason.language.variable;
 
+import com.rits.cloning.Cloner;
+import lightjason.common.CPath;
 import lightjason.common.IPath;
+import lightjason.language.ITerm;
 
 
 /**
@@ -53,6 +56,24 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CRelocateMutexVariable<T>( m_functor, m_value, m_relocate )
                : new CRelocateMutexVariable<T>( p_prefix[0].append( m_functor ), m_value, m_relocate );
+    }
+
+    @Override
+    public final ITerm deepcopySuffix()
+    {
+        return new CRelocateMutexVariable<>( CPath.from( m_functor.getSuffix() ), new Cloner().deepClone( m_value ), m_relocate );
+    }
+
+    @Override
+    public final ITerm deepcopy( final IPath... p_prefix )
+    {
+        return new CRelocateMutexVariable<>(
+                ( p_prefix == null ) || ( p_prefix.length == 0 )
+                ? m_functor
+                : m_functor.append( p_prefix[0] ),
+                new Cloner().deepClone( m_value ),
+                m_relocate
+        );
     }
 
     @Override
