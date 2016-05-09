@@ -39,18 +39,40 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @tparam N multi-element type
  * @tparam M single-element type
- * @todo modify update method with interface structure
  */
-public class CStorage<N, M> implements IStorage<N, M>
+public final class CStorage<N, M> implements IStorage<N, M>
 {
     /**
      * map with elements
      **/
-    protected final SetMultimap<String, N> m_multielements = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
+    private final SetMultimap<String, N> m_multielements = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
     /**
      * map with single elements
      **/
-    protected final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
+    private final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
+    /**
+     * beliefbase update object
+     */
+    private final IBeliefBaseUpdate m_update;
+
+    /**
+     * ctor
+     */
+    public CStorage()
+    {
+        this( null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_update update object
+     */
+    public CStorage( final IBeliefBaseUpdate p_update )
+    {
+        m_update = p_update;
+    }
+
 
     @Override
     public final SetMultimap<String, N> getMultiElements()
@@ -65,7 +87,7 @@ public class CStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_multielements.clear();
         m_singleelements.clear();
@@ -84,9 +106,9 @@ public class CStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public void update( final IAgent p_agent )
+    public final IAgent update( final IAgent p_agent )
     {
-
+        return m_update != null ? m_update.beliefupdate( p_agent ) : p_agent;
     }
 
     @Override

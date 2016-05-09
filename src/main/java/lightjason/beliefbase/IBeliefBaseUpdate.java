@@ -23,68 +23,21 @@
 
 package lightjason.beliefbase;
 
-
-import com.google.common.collect.SetMultimap;
 import lightjason.agent.IAgent;
-
-import java.util.Map;
 
 
 /**
- * interface of a beliefbase storage
- *
- * @tparam N multiple elements
- * @tparam M single elements
- * @warning internal data structure must be thread-safe
+ * interface to generate beliefbase updates
  */
-public interface IStorage<N, M>
+public interface IBeliefBaseUpdate
 {
 
     /**
-     * returns the map with multiple elements
+     * runs the update process of an agent
      *
-     * @return multimap
-     */
-    SetMultimap<String, N> getMultiElements();
-
-    /**
-     * returns the map with single elements
-     *
-     * @return map
-     */
-    Map<String, M> getSingleElements();
-
-    /**
-     * clears all elements
-     */
-    void clear();
-
-    /**
-     * checks any element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    boolean contains( final String p_key );
-
-    /**
-     * checks if a storage is empty
-     *
-     * @return empty boolean
-     */
-    boolean isEmpty();
-
-    /**
-     * updates all items
-     *
-     * @param p_agent agent which calls the update
+     * @param p_agent agent
      * @return agent
      */
-    IAgent update( final IAgent p_agent );
-
-    /**
-     * number of multi elements
-     */
-    int size();
+    IAgent beliefupdate( final IAgent p_agent );
 
 }

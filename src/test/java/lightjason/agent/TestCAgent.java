@@ -29,6 +29,7 @@ import lightjason.agent.action.buildin.bind.CBind;
 import lightjason.agent.action.buildin.bind.IActionBind;
 import lightjason.agent.generator.CDefaultAgentGenerator;
 import lightjason.agent.unify.CUnifier;
+import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.language.CCommon;
 import lightjason.language.CLiteral;
 import lightjason.language.CRawTerm;
@@ -136,7 +137,8 @@ public final class TestCAgent
                 final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator( l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CVariableBuilder() ).generate();
+            l_agent = new CDefaultAgentGenerator(
+                    l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CBeliefBaseUpdate(), new CVariableBuilder() ).generate();
 
             // run 5 cycles
             IntStream.range( 0, 5 ).forEach( i -> {
@@ -164,6 +166,22 @@ public final class TestCAgent
         }
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * beliefbase update e.g. environment updates
+     */
+    private static final class CBeliefBaseUpdate implements IBeliefBaseUpdate
+    {
+
+        @Override
+        public final IAgent beliefupdate( final IAgent p_agent )
+        {
+            return p_agent;
+        }
     }
 
     /**

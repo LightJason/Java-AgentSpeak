@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * view of a beliefbase
  */
-public class CView implements IView
+public final class CView implements IView
 {
     /**
      * view name
@@ -151,9 +151,9 @@ public class CView implements IView
     }
 
     @Override
-    public void update( final IAgent p_agent )
+    public final IAgent update( final IAgent p_agent )
     {
-        m_beliefbase.update( p_agent );
+        return m_beliefbase.update( p_agent );
     }
 
     @Override
@@ -223,7 +223,7 @@ public class CView implements IView
     }
 
     @Override
-    public IView clone( final IView p_parent )
+    public final IView clone( final IView p_parent )
     {
         return new CView( m_name, m_beliefbase, p_parent );
     }

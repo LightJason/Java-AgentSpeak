@@ -28,6 +28,7 @@ import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.agent.unify.CUnifier;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
+import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.beliefbase.IView;
 import lightjason.common.CCommon;
 import lightjason.language.ILiteral;
@@ -94,6 +95,10 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * rules
      */
     protected final Set<IRule> m_rules;
+    /**
+     * beliefbase updater
+     */
+    protected final IBeliefBaseUpdate m_beliefbaseupdate;
 
 
     /**
@@ -103,7 +108,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     {
         this(
                 new CBoolFuzzy(), Collections.<ILiteral>emptyList(),
-                Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
+                null, Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
                 null, new CUnifier(), new CZeroAggregation()
         );
     }
@@ -113,6 +118,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      *
      * @param p_fuzzy fuzzy operator
      * @param p_initalbeliefs set with initial beliefs
+     * @param p_beliefbaseupdate beliefbase updater
      * @param p_plans plans
      * @param p_rules rules
      * @param p_initialgoal initial goal
@@ -120,11 +126,11 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_aggregation aggregation function
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final IBeliefBaseUpdate p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
-        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, null );
+        this( p_fuzzy, p_initalbeliefs, p_beliefbaseupdate, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, null );
     }
 
     /**
@@ -132,6 +138,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      *
      * @param p_fuzzy fuzzy operator
      * @param p_initalbeliefs set with initial beliefs
+     * @param p_beliefbaseupdate beliefbase updated
      * @param p_plans plans
      * @param p_rules rules
      * @param p_initialgoal initial goal
@@ -140,7 +147,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_variablebuilder variable builder
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final IBeliefBaseUpdate p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -149,7 +156,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
         m_aggregation = p_aggregation;
         m_fuzzy = p_fuzzy;
         m_variablebuilder = p_variablebuilder;
+
         m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
+        m_beliefbaseupdate = p_beliefbaseupdate;
 
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
@@ -161,7 +170,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     @Override
     public final IView getBeliefbase()
     {
-        final IView l_beliefbase = new CBeliefBase( new CStorage<>() ).create( BELIEFBASEROOTNAME );
+        final IView l_beliefbase = new CBeliefBase( new CStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs

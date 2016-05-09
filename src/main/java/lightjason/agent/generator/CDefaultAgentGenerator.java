@@ -29,6 +29,7 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.agent.fuzzy.CBoolFuzzy;
+import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.common.CCommon;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IVariableBuilder;
@@ -72,7 +73,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_unifier, p_aggregation, null );
+        this( p_stream, p_actions, p_unifier, p_aggregation, null, null );
     }
 
     /**
@@ -82,10 +83,12 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * @param p_actions set with action
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
+     * @param p_beliefbaseupdate beliefbase updater
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws IOException thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier, final IAggregation p_aggregation,
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier,
+                                   final IAggregation p_aggregation, final IBeliefBaseUpdate p_beliefbaseupdate,
                                    final IVariableBuilder p_variablebuilder
     )
     throws Exception
@@ -96,6 +99,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
         m_configuration = new CDefaultAgentConfiguration(
                 new CBoolFuzzy(),
                 l_visitor.getInitialBeliefs(),
+                p_beliefbaseupdate,
                 l_visitor.getPlans(),
                 l_visitor.getRules(),
                 l_visitor.getInitialGoal(),

@@ -46,14 +46,12 @@ import java.util.stream.Stream;
 
 
 /**
- * default beliefbase
+ * beliefbase, reference counting is used to collect the events for each beliefbase view
  *
- * @todo event storing must be implement, use weak-reference or reference-counting to store view relation with event replication
- * (event methods: clear, add, remove(Literal | String), modify -> event is generated on successfully operation)
- * @todo reference counting with http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html /
- * http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
- * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references /
- * @todo check if a map with hash values optimize runtime access
+ * @todo check reference counting on delete views
+ * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
+ * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
+ * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
 public final class CBeliefBase implements IBeliefBase
 {
@@ -124,7 +122,7 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <E extends IView> E create( final String p_name )
+    public final <E extends IView> E create( final String p_name )
     {
         // add reference for the mask and the event structure
         final IView l_view = new CView( p_name, this );
@@ -157,7 +155,7 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public void update( final IAgent p_agent )
+    public final IAgent update( final IAgent p_agent )
     {
         // check all references of mask and remove unused references
         Reference<? extends IView> l_reference;
@@ -167,6 +165,8 @@ public final class CBeliefBase implements IBeliefBase
         // run storage update
         m_storage.update( p_agent );
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
+
+        return p_agent;
     }
 
     @Override
@@ -198,7 +198,6 @@ public final class CBeliefBase implements IBeliefBase
     @Override
     public final boolean remove( final String p_name )
     {
-        // @todo check trigger event
         final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
         final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
         return l_single || l_multi;

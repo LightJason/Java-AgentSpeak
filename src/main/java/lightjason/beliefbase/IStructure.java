@@ -95,11 +95,13 @@ public interface IStructure
      * updates all items
      *
      * @param p_agent agent which runs the update call
+     * @return agent
+     *
      * @warning call update on a storage and on all storage-view, if exists different views
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
-    void update( final IAgent p_agent );
+    IAgent update( final IAgent p_agent );
 
     /**
      * returns a new view of the belief base
