@@ -41,7 +41,6 @@ import lightjason.error.CIllegalStateException;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -52,7 +51,7 @@ import java.util.stream.IntStream;
  *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
-public final class CConsistency implements Callable<CConsistency>
+public final class CConsistency implements IConsistency
 {
     /**
      * algebra object
@@ -125,29 +124,20 @@ public final class CConsistency implements Callable<CConsistency>
         m_epsilon = p_epsilon;
     }
 
-    /**
-     * returns the consistency value of an object
-     *
-     * @param p_object object
-     * @return value
-     */
-    public final Double getValue( final IAgent p_object )
+    @Override
+    public final double get( final IAgent p_object )
     {
-        return m_data.get( p_object );
+        return m_data.getOrDefault( p_object, 0.0 );
     }
 
-    /**
-     * adds a new object
-     *
-     * @param p_object new object
-     */
+    @Override
     public final boolean add( final IAgent p_object )
     {
         return m_data.putIfAbsent( p_object, new Double( 0 ) ) == null;
     }
 
     @Override
-    public final CConsistency call() throws Exception
+    public final IConsistency call() throws Exception
     {
         if ( m_data.size() < 2 )
             return this;
@@ -193,14 +183,22 @@ public final class CConsistency implements Callable<CConsistency>
         return this;
     }
 
-    /**
-     * removes an object
-     *
-     * @param p_object removing object
-     */
+    @Override
     public final boolean remove( final IAgent p_object )
     {
         return m_data.remove( p_object ) != null;
+    }
+
+    @Override
+    public final IMetric getMetric()
+    {
+        return m_metric;
+    }
+
+    @Override
+    public final IFilter getFilter()
+    {
+        return m_filter;
     }
 
     /**
