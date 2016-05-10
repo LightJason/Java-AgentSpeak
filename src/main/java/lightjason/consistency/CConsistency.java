@@ -38,6 +38,7 @@ import lightjason.common.CCommon;
 import lightjason.consistency.filter.IFilter;
 import lightjason.consistency.metric.IMetric;
 import lightjason.error.CIllegalStateException;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -77,6 +78,18 @@ public final class CConsistency implements IConsistency
      **/
     private final Map<IAgent, Double> m_data = new ConcurrentHashMap<>();
     /**
+     * descriptive statistic
+     */
+    private final DescriptiveStatistics m_statistic = new DescriptiveStatistics();
+    /**
+     * metric filter
+     */
+    private final IFilter m_filter;
+    /**
+     * metric object to create the value of two objects
+     **/
+    private final IMetric m_metric;
+    /**
      * epsilon value to create an aperiodic markow-chain
      **/
     private final double m_epsilon;
@@ -84,14 +97,7 @@ public final class CConsistency implements IConsistency
      * number of iterations of the stochastic algorithm
      **/
     private final int m_iteration;
-    /**
-     * metric object to create the value of two objects
-     **/
-    private final IMetric m_metric;
-    /**
-     * metric filter
-     */
-    private final IFilter m_filter;
+
 
     /**
      * ctor - use numeric algorithm
@@ -103,7 +109,7 @@ public final class CConsistency implements IConsistency
     {
         m_filter = p_filter;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.Numeric;
+        m_algorithm = EAlgorithm.NUMERICAL;
         m_iteration = 0;
         m_epsilon = 0.001;
     }
@@ -120,7 +126,7 @@ public final class CConsistency implements IConsistency
     {
         m_filter = p_filter;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.Iteration;
+        m_algorithm = EAlgorithm.FIXPOINT;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
     }
@@ -129,6 +135,12 @@ public final class CConsistency implements IConsistency
     public final double get( final IAgent p_object )
     {
         return m_data.getOrDefault( p_object, 0.0 );
+    }
+
+    @Override
+    public final DescriptiveStatistics getStatistic()
+    {
+        return m_statistic;
     }
 
     @Override
@@ -168,18 +180,23 @@ public final class CConsistency implements IConsistency
             l_matrix.setQuick( i, i, m_epsilon );
         } );
 
-        final DoubleMatrix1D l_eigenvector;
-        if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
-            l_eigenvector = new DenseDoubleMatrix1D( m_data.size() );
-        else
-            l_eigenvector = this.getStationaryDistribution( l_matrix );
+        // check for a zero-matrix
+        final DoubleMatrix1D l_eigenvector = l_matrix.zSum() <= m_data.size() * m_epsilon
+                                             ? new DenseDoubleMatrix1D( m_data.size() )
+                                             : m_algorithm.getStationaryDistribution( m_iteration, l_matrix );
 
         // calculate the inverted probability and normalize with 1-norm
         l_eigenvector.assign( PROBABILITYINVERT );
         l_eigenvector.assign( Functions.div( ALGEBRA.norm1( l_eigenvector ) ) );
 
-        // set consistency value for each entry
-        IntStream.range( 0, l_keys.size() ).boxed().forEach( i -> m_data.put( l_keys.get( i ), l_eigenvector.get( i ) ) );
+        // set consistency value for each entry and update statistic
+        m_statistic.clear();
+        IntStream.range( 0, l_keys.size() )
+                 .boxed()
+                 .forEach( i -> {
+                     m_statistic.addValue( l_eigenvector.get( i ) );
+                     m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
+                 } );
 
         return this;
     }
@@ -203,50 +220,13 @@ public final class CConsistency implements IConsistency
     }
 
     /**
-     * get the largest eigen vector with QR decomposition
-     *
-     * @param p_matrix matrix
-     * @return largest eigenvector (not normalized)
-     */
-    private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
-    {
-        final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
-
-        // gets the position of the largest eigenvalue in parallel and returns the eigenvector
-        final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();
-        return l_eigen.getV().viewColumn(
-                IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()
-                         .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).getAsInt()
-        );
-    }
-
-    /**
-     * get the largest eigen vector based on the perron-frobenius theorem
-     *
-     * @param p_matrix matrix
-     * @param p_iteration number of iterations
-     * @return largest eigenvector (not normalized)
-     *
-     * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
-     */
-    private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix, final int p_iteration )
-    {
-        final DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
-        IntStream.range( 0, p_iteration ).forEach( i -> {
-            l_probability.assign( ALGEBRA.mult( p_matrix, l_probability ) );
-            l_probability.assign( Mult.div( ALGEBRA.norm2( l_probability ) ) );
-        } );
-        return l_probability;
-    }
-
-    /**
      * returns metric value
      *
      * @param p_first first element
      * @param p_second secend element
      * @return metric value
      */
-    private final double getMetricValue( final IAgent p_first, final IAgent p_second )
+    private double getMetricValue( final IAgent p_first, final IAgent p_second )
     {
         if ( p_first.equals( p_second ) )
             return 0;
@@ -257,36 +237,7 @@ public final class CConsistency implements IConsistency
         );
     }
 
-    /**
-     * calculates the stationary distribution
-     *
-     * @param p_matrix transition matrix
-     * @return stationary distribution
-     */
-    private DoubleMatrix1D getStationaryDistribution( final DoubleMatrix2D p_matrix )
-    {
-        final DoubleMatrix1D l_eigenvector;
 
-        switch ( m_algorithm )
-        {
-            case Iteration:
-                l_eigenvector = getLargestEigenvector( p_matrix, m_iteration );
-                break;
-
-            case Numeric:
-                l_eigenvector = getLargestEigenvector( p_matrix );
-                break;
-
-            default:
-                throw new CIllegalStateException( CCommon.getLanguageLabel( this.getClass(), "algorithm" ) );
-        }
-
-        // normalize eigenvector and create positiv oriantation
-        l_eigenvector.assign( Mult.div( ALGEBRA.norm1( l_eigenvector ) ) );
-        l_eigenvector.assign( Functions.abs );
-
-        return l_eigenvector;
-    }
 
     /**
      * numeric algorithm structure
@@ -296,11 +247,81 @@ public final class CConsistency implements IConsistency
         /**
          * use numeric algorithm (QR decomposition)
          **/
-        Numeric,
+        NUMERICAL,
         /**
          * use stochastic algorithm (fixpoint iteration)
          **/
-        Iteration
+        FIXPOINT;
+
+
+
+        /**
+         * calculates the stationary distribution
+         *
+         * @param p_matrix transition matrix
+         * @return stationary distribution
+         */
+        public final DoubleMatrix1D getStationaryDistribution( final int p_iteration, final DoubleMatrix2D p_matrix )
+        {
+            final DoubleMatrix1D l_eigenvector;
+            switch ( this )
+            {
+                case FIXPOINT:
+                    l_eigenvector = getLargestEigenvector( p_matrix, p_iteration );
+                    break;
+
+                case NUMERICAL:
+                    l_eigenvector = getLargestEigenvector( p_matrix );
+                    break;
+
+                default:
+                    throw new CIllegalStateException( CCommon.getLanguageLabel( this.getClass(), "algorithm" ) );
+            }
+
+            // normalize eigenvector and create positiv oriantation
+            l_eigenvector.assign( Mult.div( ALGEBRA.norm1( l_eigenvector ) ) );
+            l_eigenvector.assign( Functions.abs );
+
+            return l_eigenvector;
+        }
+
+        /**
+         * get the largest eigen vector based on the perron-frobenius theorem
+         *
+         * @param p_matrix matrix
+         * @param p_iteration number of iterations
+         * @return largest eigenvector (not normalized)
+         *
+         * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
+         */
+        private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix, final int p_iteration )
+        {
+            final DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
+            IntStream.range( 0, p_iteration ).forEach( i -> {
+                l_probability.assign( ALGEBRA.mult( p_matrix, l_probability ) );
+                l_probability.assign( Mult.div( ALGEBRA.norm2( l_probability ) ) );
+            } );
+            return l_probability;
+        }
+
+        /**
+         * get the largest eigen vector with QR decomposition
+         *
+         * @param p_matrix matrix
+         * @return largest eigenvector (not normalized)
+         */
+        private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
+        {
+            final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
+
+            // gets the position of the largest eigenvalue in parallel and returns the eigenvector
+            final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();
+            return l_eigen.getV().viewColumn(
+                    IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()
+                             .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).getAsInt()
+            );
+        }
+
     }
 
 }

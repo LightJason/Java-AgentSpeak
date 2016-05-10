@@ -26,6 +26,7 @@ package lightjason.consistency;
 import lightjason.agent.IAgent;
 import lightjason.consistency.filter.IFilter;
 import lightjason.consistency.metric.IMetric;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.concurrent.Callable;
 
@@ -43,6 +44,13 @@ public interface IConsistency extends Callable<IConsistency>
      * @return value or default value
      */
     double get( final IAgent p_object );
+
+    /**
+     * returns statistic data of the consistency values
+     *
+     * @return statistic
+     */
+    DescriptiveStatistics getStatistic();
 
     /**
      * adds a new object
