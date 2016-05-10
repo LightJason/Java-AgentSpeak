@@ -53,6 +53,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * test all resource strings
@@ -90,10 +92,7 @@ public final class TestCLanguageLabels
     {{
         add( "lightjason/grammar/CASTErrorListener.java" );
     }};
-    /**
-     * set with all labels *
-     */
-    private final Set<String> m_labels = new HashSet<>();
+
 
     static
     {
@@ -120,6 +119,8 @@ public final class TestCLanguageLabels
     @Test
     public void testResourceString() throws IOException
     {
+        final Set<String> l_labels = new HashSet<>();
+
         // --- check source -> label definition
         Files.walk( Paths.get( SEARCHPATH ) )
              .filter( Files::isRegularFile )
@@ -129,7 +130,9 @@ public final class TestCLanguageLabels
 
                  try
                  {
-                     new CJavaVistor().visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
+                     final CJavaVistor l_parser = new CJavaVistor();
+                     l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
+                     l_labels.addAll( l_parser.getLabel() );
                  }
                  catch ( final ParseException | IOException p_exception )
                  {
@@ -146,12 +149,13 @@ public final class TestCLanguageLabels
                       final Properties l_property = new Properties();
                       l_property.load( new FileInputStream( new File( LANGUAGEPROPERY.get( i ) ) ) );
 
-                      final Set<String> l_labels = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
-                      l_labels.removeAll( m_labels );
+                      final Set<String> l_resource = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
+                      l_resource.removeAll( l_labels );
 
-                      //assertTrue(
-                      //        String.format( "the following keys in language [%s] are unused: %s", i, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
-                      //);
+                      assertTrue(
+                              String.format( "the following keys in language [%s] are unused: %s", i, StringUtils.join( l_resource, ", " ) ),
+                              l_resource.isEmpty()
+                      );
                   }
                   catch ( final IOException l_exception )
                   {
@@ -258,10 +262,8 @@ public final class TestCLanguageLabels
         {
             final String l_label = this.getLabel( p_methodcall.toStringWithoutComments() );
             if ( !l_label.isEmpty() )
-                System.out.println( "###>>> " + l_label );
+                m_label.add( l_label );
 
-            //if ( l_label != null )
-            //    this.checkLabel( l_label[0], l_label[1] );
             super.visit( p_methodcall, p_arg );
         }
 
@@ -394,7 +396,6 @@ public final class TestCLanguageLabels
 
             final String[] l_split = l_matcher.group( 0 ).split( "," );
             final String[] l_return = new String[2];
-
 
             // class name
             l_return[0] = l_split[0].replace( TRANSLATEMETHOD, "" ).replace( "(", "" ).trim();
