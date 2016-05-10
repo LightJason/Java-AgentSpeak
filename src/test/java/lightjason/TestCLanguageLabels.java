@@ -23,6 +23,7 @@
 
 package lightjason;
 
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -33,20 +34,18 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import lightjason.common.CCommon;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -54,7 +53,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -98,15 +96,6 @@ public final class TestCLanguageLabels
      * set with all labels *
      */
     private final Set<String> m_labels = new HashSet<>();
-    /**
-     * method to translate strings
-     */
-    private final String m_translatemethod = "CCommon.getLanguageString";
-    /**
-     * reg expression to extract label data *
-     */
-    private final Pattern m_language = Pattern.compile( m_translatemethod + ".+\\)" );
-
 
     static
     {
@@ -130,26 +119,25 @@ public final class TestCLanguageLabels
      *
      * @bug disable unused label checking
      */
-    //@Test
-    public void testResourceString()
+    @Test
+    public void testResourceString() throws IOException
     {
         // --- check source -> label definition
-        try
-        {
-            final List<Path> l_files = new ArrayList<>();
-            Files.walk( Paths.get( SEARCHPATH ) ).filter( Files::isRegularFile ).forEach(
-                    i -> l_files.add( i )
-            );
+        Files.walk( Paths.get( SEARCHPATH ) )
+             .filter( Files::isRegularFile )
+             .forEach( i -> {
+                 if ( ( !i.toString().endsWith( ".java" ) ) || ( SKIPFILES.contains( SEARCHPATH.relativize( i.toUri() ).normalize().toString() ) ) )
+                     return;
 
-            for ( final Path l_item : l_files )
-                this.parsefile( l_item );
-
-        }
-        catch ( final Exception p_exception )
-        {
-            fail( p_exception.getMessage() );
-            return;
-        }
+                 try
+                 {
+                     new CJavaVistor().visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
+                 }
+                 catch ( final ParseException | IOException p_exception )
+                 {
+                     fail( MessageFormat.format( "{0}: {1}", i, p_exception.getMessage() ) );
+                 }
+             } );
 
 
         // --- check label -> property definition
@@ -163,18 +151,25 @@ public final class TestCLanguageLabels
                       final Set<String> l_labels = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
                       l_labels.removeAll( m_labels );
 
-                      assertTrue(
-                              String.format( "the following keys in language [%s] are unused: %s", i, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
-                      );
+                      //assertTrue(
+                      //        String.format( "the following keys in language [%s] are unused: %s", i, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
+                      //);
                   }
-                  catch ( final FileNotFoundException l_exception )
+                  catch ( final IOException l_exception )
                   {
-                  }
-                  catch ( IOException p_e )
-                  {
-                      p_e.printStackTrace();
                   }
               } );
+    }
+
+    /**
+     * main method
+     *
+     * @param p_args arguments
+     * @throws IOException in file error
+     */
+    public static void main( final String[] p_args ) throws IOException
+    {
+        new TestCLanguageLabels().testResourceString();
     }
 
     /**
@@ -185,40 +180,25 @@ public final class TestCLanguageLabels
      */
     private static String getPackagePath( final String... p_names )
     {
-        String l_return = "";
-        for ( int i = 0; i < p_names.length - 1; i++ )
-            l_return = l_return + p_names[i] + ClassUtils.PACKAGE_SEPARATOR;
-        return l_return + p_names[p_names.length - 1];
+        return StringUtils.join( p_names, ClassUtils.PACKAGE_SEPARATOR );
     }
 
-    /**
-     * checks all labels within a Java file
-     *
-     * @param p_file
-     */
-    private void parsefile( final Path p_file ) throws IOException
-    {
-        if ( ( !p_file.toString().endsWith( ".java" ) ) || ( SKIPFILES.contains( SEARCHPATH.relativize( p_file.toUri() ).normalize().toString() ) ) )
-            return;
 
-        try
-                (
-                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() )
-                )
-        {
-            new CJavaVistor().visit( JavaParser.parse( l_stream ), null );
-        }
-        catch ( final ParseException p_exception )
-        {
-            fail( p_file.toFile() + ": " + p_exception.getMessage() );
-        }
-    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * AST visitor class
      */
-    private class CJavaVistor extends VoidVisitorAdapter<Object>
+    private static class CJavaVistor extends VoidVisitorAdapter<Object>
     {
+        /**
+         * method to translate strings
+         */
+        private static final String TRANSLATEMETHOD = "CCommon.getLanguageString";
+        /**
+         * reg expression to extract label data
+         */
+        private static final Pattern LANGUAGE = Pattern.compile( TRANSLATEMETHOD + ".+\\)" );
         /**
          * inner class name *
          */
@@ -231,68 +211,19 @@ public final class TestCLanguageLabels
          * package name *
          */
         private String m_package = "";
+        /**
+         * label set
+         */
+        private Set<String> m_label = new HashSet<>();
 
-        @Override
-        public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
+        /**
+         * returns the translated labels
+         *
+         * @return set with labels
+         */
+        public final Set<String> getLabel()
         {
-            if ( m_outerclass.isEmpty() )
-            {
-
-                m_outerclass = p_class.getName();
-                m_innerclass = m_outerclass;
-            }
-            else
-                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_class.getName();
-
-            super.visit( p_class, p_arg );
-        }
-
-        @Override
-        public void visit( final EnumDeclaration p_enum, final Object p_arg )
-        {
-
-            final String l_resetinner;
-            final String l_resetouter;
-
-            if ( m_outerclass.isEmpty() )
-            {
-                l_resetinner = null;
-                l_resetouter = null;
-
-                m_outerclass = p_enum.getName();
-                m_innerclass = m_outerclass;
-            }
-            else if ( m_innerclass.isEmpty() )
-            {
-                l_resetinner = null;
-                l_resetouter = null;
-
-                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
-            }
-            else
-            {
-                l_resetinner = m_innerclass;
-                l_resetouter = m_outerclass;
-
-                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + m_innerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
-
-            }
-
-            super.visit( p_enum, p_arg );
-
-            if ( l_resetinner != null )
-                m_innerclass = l_resetinner;
-            if ( l_resetouter != null )
-                m_outerclass = l_resetouter;
-        }
-
-        @Override
-        public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
-        {
-            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_outerclass, m_innerclass );
-            if ( l_label != null )
-                this.checkLabel( l_label[0], l_label[1] );
-            super.visit( p_methodcall, p_arg );
+            return m_label;
         }
 
         @Override
@@ -300,6 +231,56 @@ public final class TestCLanguageLabels
         {
             m_package = p_package.getName().toStringWithoutComments();
             super.visit( p_package, p_arg );
+        }
+
+        @Override
+        public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
+        {
+            if ( m_outerclass.isEmpty() )
+                m_outerclass = p_class.getName();
+            else
+                m_innerclass = p_class.getName();
+
+            super.visit( p_class, p_arg );
+        }
+
+        @Override
+        public void visit( final EnumDeclaration p_enum, final Object p_arg )
+        {
+            if ( m_outerclass.isEmpty() )
+                m_outerclass = p_enum.getName();
+            else
+                m_innerclass = p_enum.getName();
+
+            super.visit( p_enum, p_arg );
+        }
+
+        @Override
+        public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
+        {
+            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_outerclass, m_innerclass );
+            if ( l_label != null )
+                System.out.println( "###>>> " + Arrays.asList( l_label ) );
+
+            //if ( l_label != null )
+            //    this.checkLabel( l_label[0], l_label[1] );
+            super.visit( p_methodcall, p_arg );
+        }
+
+        /**
+         * returns full qualified class name
+         * (inner & outer class)
+         *
+         * @return full-qualified class name
+         */
+        private final String fqnclassname()
+        {
+            return MessageFormat.format(
+                    "{0}{1}{2}{3}{4}",
+                    m_package, ClassUtils.PACKAGE_SEPARATOR,
+                    m_outerclass, m_innerclass.isEmpty() ? "" : ClassUtils.INNER_CLASS_SEPARATOR,
+                    m_innerclass
+            );
         }
 
         /**
@@ -342,8 +323,9 @@ public final class TestCLanguageLabels
                 {
                     return;
                 }
-            */
+
             m_labels.add( CCommon.getLanguageLabel( l_class, p_label ) );
+            */
         }
 
         /**
@@ -402,7 +384,7 @@ public final class TestCLanguageLabels
          */
         private String[] getParameter( final String p_line, final String p_package, final String p_outerclass, final String p_innerclass )
         {
-            final Matcher l_matcher = m_language.matcher( p_line );
+            final Matcher l_matcher = LANGUAGE.matcher( p_line );
             if ( !l_matcher.find() )
                 return null;
 
@@ -410,7 +392,7 @@ public final class TestCLanguageLabels
             final String[] l_return = new String[2];
 
             // class name
-            l_return[0] = l_split[0].replace( m_translatemethod, "" ).replace( "(", "" ).trim();
+            l_return[0] = l_split[0].replace( TRANSLATEMETHOD, "" ).replace( "(", "" ).trim();
             // label name
             l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
 
@@ -428,6 +410,7 @@ public final class TestCLanguageLabels
 
             return l_return;
         }
+
     }
 
 }
