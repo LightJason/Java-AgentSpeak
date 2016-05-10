@@ -39,6 +39,7 @@ import lightjason.consistency.filter.IFilter;
 import lightjason.consistency.metric.IMetric;
 import lightjason.error.CIllegalStateException;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -80,7 +81,7 @@ public final class CConsistency implements IConsistency
     /**
      * descriptive statistic
      */
-    private final DescriptiveStatistics m_statistic = new DescriptiveStatistics();
+    private final DescriptiveStatistics m_statistic = new SynchronizedDescriptiveStatistics();
     /**
      * metric filter
      */
