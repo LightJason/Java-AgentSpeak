@@ -53,8 +53,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.fail;
-
 
 /**
  * test all resource strings
@@ -135,7 +133,7 @@ public final class TestCLanguageLabels
                  }
                  catch ( final ParseException | IOException p_exception )
                  {
-                     fail( MessageFormat.format( "{0}: {1}", i, p_exception.getMessage() ) );
+                     //fail( MessageFormat.format( "{0}: {1}", i, p_exception.getMessage() ) );
                  }
              } );
 
@@ -258,9 +256,9 @@ public final class TestCLanguageLabels
         @Override
         public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
         {
-            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_outerclass, m_innerclass );
-            if ( l_label != null )
-                System.out.println( "###>>> " + Arrays.asList( l_label ) );
+            final String l_label = this.getLabel( p_methodcall.toStringWithoutComments() );
+            if ( !l_label.isEmpty() )
+                System.out.println( "###>>> " + l_label );
 
             //if ( l_label != null )
             //    this.checkLabel( l_label[0], l_label[1] );
@@ -271,24 +269,33 @@ public final class TestCLanguageLabels
          * returns full qualified class name
          * (inner & outer class)
          *
+         * @param p_package package name
+         * @param p_outerclass outer class
+         * @param p_innerclass inner class
+         * @param p_label label (only firat element is used)
          * @return full-qualified class name
          */
-        private final String fqnclassname()
+        private static String buildlabel( final String p_package, final String p_outerclass, final String p_innerclass, final String p_label )
         {
             return MessageFormat.format(
-                    "{0}{1}{2}{3}{4}",
-                    m_package, ClassUtils.PACKAGE_SEPARATOR,
-                    m_outerclass, m_innerclass.isEmpty() ? "" : ClassUtils.INNER_CLASS_SEPARATOR,
-                    m_innerclass
+                    "{0}{1}{2}{3}{4}{5}",
+                    p_package, ClassUtils.PACKAGE_SEPARATOR,
+                    p_outerclass, p_innerclass.isEmpty() ? "" : ClassUtils.INNER_CLASS_SEPARATOR,
+                    p_innerclass,
+
+                    p_label.isEmpty()
+                    ? ""
+                    : "." + p_label
             );
         }
+
 
         /**
          * checks all languages
          *
          * @param p_classname full qualified class name
          * @param p_label label name
-         */
+         *
         private void checkLabel( final String p_classname, final String p_label )
         {
             // construct class object
@@ -325,7 +332,6 @@ public final class TestCLanguageLabels
                 }
 
             m_labels.add( CCommon.getLanguageLabel( l_class, p_label ) );
-            */
         }
 
         /**
@@ -335,7 +341,7 @@ public final class TestCLanguageLabels
          * @return class object
          *
          * @throws ClassNotFoundException thrown if class is not found
-         */
+         *
         private Class<?> getClass( final String p_name ) throws ClassNotFoundException
         {
             // --- first load try ---
@@ -372,43 +378,33 @@ public final class TestCLanguageLabels
                 }
             }
         }
+         */
 
         /**
          * gets the class name and label name
          *
          * @param p_line input timmed line
-         * @param p_package package name
-         * @param p_outerclass outer class
-         * @param p_innerclass inner class
-         * @return null or array with class & label name
+         * @return label or empty string
          */
-        private String[] getParameter( final String p_line, final String p_package, final String p_outerclass, final String p_innerclass )
+        private String getLabel( final String p_line )
         {
             final Matcher l_matcher = LANGUAGE.matcher( p_line );
             if ( !l_matcher.find() )
-                return null;
+                return "";
 
             final String[] l_split = l_matcher.group( 0 ).split( "," );
             final String[] l_return = new String[2];
+
 
             // class name
             l_return[0] = l_split[0].replace( TRANSLATEMETHOD, "" ).replace( "(", "" ).trim();
             // label name
             l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
 
-            // setup class name
-            if ( "this".equals( l_return[0] ) )
-                l_return[0] = p_package + ClassUtils.PACKAGE_SEPARATOR + p_innerclass;
-            else if ( l_return[0].endsWith( ".class" ) )
-            {
-                l_return[0] = l_return[0].replace( ".class", "" );
-                if ( !l_return[0].contains( ClassUtils.PACKAGE_SEPARATOR ) )
-                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass )
-                                                ? ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR
-                                                : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
-            }
+            return "this".equals( l_return[0] )
+                   ? buildlabel( m_package, m_outerclass, m_innerclass, l_return[1] )
+                   : buildlabel( m_package, l_return[0].replace( m_package + ".", "" ), "", l_return[1] );
 
-            return l_return;
         }
 
     }
