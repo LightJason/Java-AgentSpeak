@@ -56,7 +56,7 @@
 
     <!-- project build configuration -->
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>3.0.1</maven>
     </prerequisites>
 
     <properties>
@@ -179,7 +179,7 @@
     <!-- main build -->
     <build>
         <!-- default goal is set to package and checking dependency updates -->
-        <defaultGoal>package versions:display-dependency-updates</defaultGoal>
+        <defaultGoal>package versions:display-dependency-updates versions:display-plugin-updates</defaultGoal>
 
         <!-- include resource directory with replacing configuration variables -->
         <resources>
@@ -202,7 +202,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.14.1</version>
+                            <version>6.18</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -216,7 +216,7 @@
             <!-- GPG Sign plugin -->
             <plugin>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.4</version>
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -232,7 +232,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.5.1-1</version>
+                <version>4.5.3</version>
                 <configuration>
                     <visitor>true</visitor>
                     <listener>false</listener>
@@ -253,7 +253,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
+                <version>1.5.0</version>
                 <executions>
                     <execution>
                         <id>doxygen</id>
@@ -274,7 +274,7 @@
             <!-- compiler settings -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.5.1</version>
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
@@ -287,6 +287,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
             </plugin>
+
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.0</version>
