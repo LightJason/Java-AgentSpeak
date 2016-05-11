@@ -124,7 +124,7 @@ public final class CCommon
      *
      * @return string package path
      */
-    public static String getPackage()
+    public static String getPackageRoot()
     {
         return PACKAGEROOT;
     }
