@@ -44,6 +44,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -52,7 +53,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -93,7 +96,6 @@ public final class TestCLanguageLabels
         add( "lightjason/grammar/CASTErrorListener.java" );
     }};
 
-
     static
     {
         URI l_uri = null;
@@ -112,6 +114,43 @@ public final class TestCLanguageLabels
     }
 
     /**
+     * check package translation configuration versus property items
+     */
+    @Test
+    public void testTranslation()
+    {
+        final Set<String> l_translation = Collections.unmodifiableSet(
+                Arrays.stream( CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
+                      .map( i -> i.trim().toLowerCase() )
+                      .collect( Collectors.toSet() )
+        );
+
+
+        final Set<String> l_translationtesting = new HashSet<>( l_translation );
+        l_translationtesting.removeAll( LANGUAGEPROPERY.keySet() );
+        assertFalse(
+                MessageFormat.format(
+                        "configuration defines {1,choice,1#translation|1<translations} {0} that {1,choice,1#is|1<are} not tested",
+                        l_translationtesting,
+                        l_translationtesting.size()
+                ),
+                !l_translationtesting.isEmpty()
+        );
+
+
+        final Set<String> l_translationusing = new HashSet<>( LANGUAGEPROPERY.keySet() );
+        l_translationusing.removeAll( l_translation );
+        assertFalse(
+                MessageFormat.format(
+                        "{1,choice,1#translation|1<translations} {0} {1,choice,1#is|1<are} checked, which will not be used within the package configuration",
+                        l_translationusing,
+                        l_translationusing.size()
+                ),
+                !l_translationusing.isEmpty()
+        );
+    }
+
+    /**
      * test-case all resource strings
      *
      * @bug disable unused label checking
@@ -119,48 +158,56 @@ public final class TestCLanguageLabels
     @Test
     public void testResourceString() throws IOException
     {
-        final Set<String> l_labels = new HashSet<>();
 
-        // --- check source -> label definition
-        Files.walk( Paths.get( SEARCHPATH ) )
-             .filter( Files::isRegularFile )
-             .forEach( i -> {
-                 if ( ( !i.toString().endsWith( ".java" ) ) || ( SKIPFILES.contains( SEARCHPATH.relativize( i.toUri() ).normalize().toString() ) ) )
-                     return;
 
-                 try
-                 {
-                     final CJavaVistor l_parser = new CJavaVistor();
-                     l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
-                     l_labels.addAll( l_parser.getLabel() );
-                 }
-                 catch ( final ParseException | IOException p_exception )
-                 {
-                     //fail( MessageFormat.format( "{0}: {1}", i, p_exception.getMessage() ) );
-                 }
-             } );
-
+        // --- parse source -> label definition
+        final Set<String> l_label = Collections.unmodifiableSet(
+                Files.walk( Paths.get( SEARCHPATH ) )
+                     .filter( Files::isRegularFile )
+                     .filter( i -> ( i.toString().endsWith( ".java" ) ) && ( !SKIPFILES.contains( SEARCHPATH.relativize( i.toUri() ).normalize()
+                                                                                                            .toString() ) ) )
+                     .flatMap( i -> {
+                         try
+                         {
+                             final CJavaVistor l_parser = new CJavaVistor();
+                             l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
+                             return l_parser.getLabel().stream();
+                         }
+                         catch ( final ParseException | IOException p_exception )
+                         {
+                             //fail( MessageFormat.format( "{0}: {1}", i, p_exception.getMessage() ) );
+                             return Stream.<String>empty();
+                         }
+                     } )
+                     .collect( Collectors.toSet() )
+        );
 
         // --- check label -> property definition
-        Arrays.stream( CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
-              .forEach( i -> {
-                  try
-                  {
-                      final Properties l_property = new Properties();
-                      l_property.load( new FileInputStream( new File( LANGUAGEPROPERY.get( i ) ) ) );
+        LANGUAGEPROPERY.entrySet()
+                       .forEach( i -> {
+                           try
+                           {
+                               final Properties l_property = new Properties();
+                               l_property.load( new FileInputStream( new File( i.getValue() ) ) );
 
-                      final Set<String> l_resource = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
-                      l_resource.removeAll( l_labels );
+                               final Set<String> l_resource = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
+                               System.out.println( l_label );
+                               System.out.println( l_resource );
+                               System.out.println();
 
-                      assertTrue(
-                              String.format( "the following keys in language [%s] are unused: %s", i, StringUtils.join( l_resource, ", " ) ),
-                              l_resource.isEmpty()
-                      );
-                  }
-                  catch ( final IOException l_exception )
-                  {
-                  }
-              } );
+                               l_resource.removeAll( l_label );
+
+
+                               assertTrue(
+                                       String.format(
+                                               "the following keys in language [%s] are not exists: %s", i.getKey(), StringUtils.join( l_resource, ", " ) ),
+                                       !l_resource.isEmpty()
+                               );
+                           }
+                           catch ( final IOException l_exception )
+                           {
+                           }
+                       } );
     }
 
     /**
@@ -171,7 +218,9 @@ public final class TestCLanguageLabels
      */
     public static void main( final String[] p_args ) throws IOException
     {
-        new TestCLanguageLabels().testResourceString();
+        final TestCLanguageLabels l_test = new TestCLanguageLabels();
+        l_test.testTranslation();
+        l_test.testResourceString();
     }
 
     /**
@@ -300,40 +349,40 @@ public final class TestCLanguageLabels
          *
         private void checkLabel( final String p_classname, final String p_label )
         {
-            // construct class object
-            final Class<?> l_class;
-            try
-            {
-                l_class = this.getClass( p_classname );
-            }
-            catch ( final ClassNotFoundException p_exception )
-            {
-                fail( String.format( "class [%s] not found", p_classname ) );
-                return;
-            }
+        // construct class object
+        final Class<?> l_class;
+        try
+        {
+        l_class = this.getClass( p_classname );
+        }
+        catch ( final ClassNotFoundException p_exception )
+        {
+        fail( String.format( "class [%s] not found", p_classname ) );
+        return;
+        }
 
-            /*
-            // check resource - build a set with all strings because the fallback is always english and
-            // if a translation does not exists the string must be included in english
-            final Set<String> l_used = new HashSet<>();
-            for ( final String l_language : CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
-                try
-                {
-                    final String l_translation = CCommon.getLanguageString( l_language, l_class, p_label );
-                    assertFalse(
-                            String.format(
-                                    "label [%s] in language [%s] within class [%s] not found", CCommon.getLanguageLabel( l_class, p_label ), l_language,
-                                    p_classname
-                            ), ( l_translation == null ) || ( l_translation.isEmpty() || (l_used.contains( l_translation )) )
-                    );
-                    l_used.add( l_translation );
-                }
-                catch ( final IllegalStateException p_exception )
-                {
-                    return;
-                }
+        /*
+        // check resource - build a set with all strings because the fallback is always english and
+        // if a translation does not exists the string must be included in english
+        final Set<String> l_used = new HashSet<>();
+        for ( final String l_language : CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
+        try
+        {
+        final String l_translation = CCommon.getLanguageString( l_language, l_class, p_label );
+        assertFalse(
+        String.format(
+        "label [%s] in language [%s] within class [%s] not found", CCommon.getLanguageLabel( l_class, p_label ), l_language,
+        p_classname
+        ), ( l_translation == null ) || ( l_translation.isEmpty() || (l_used.contains( l_translation )) )
+        );
+        l_used.add( l_translation );
+        }
+        catch ( final IllegalStateException p_exception )
+        {
+        return;
+        }
 
-            m_labels.add( CCommon.getLanguageLabel( l_class, p_label ) );
+        m_labels.add( CCommon.getLanguageLabel( l_class, p_label ) );
         }
 
         /**
@@ -346,39 +395,39 @@ public final class TestCLanguageLabels
          *
         private Class<?> getClass( final String p_name ) throws ClassNotFoundException
         {
-            // --- first load try ---
-            try
-            {
-                // try to load class with default behaviour
-                return Class.forName( p_name );
-            }
-            catch ( final ClassNotFoundException l_fornameexception )
-            {
-                // --- second load try ---
-                try
-                {
-                    // try to load class depended on the current classloader
-                    return this.getClass().getClassLoader().loadClass( p_name );
-                }
-                catch ( final ClassNotFoundException l_loaderexception )
-                {
-                    // --- third load try ---
-                    // create a name without package
-                    final String[] l_part = StringUtils.split( p_name, ClassUtils.PACKAGE_SEPARATOR );
-                    final String l_name = l_part[l_part.length - 1];
+        // --- first load try ---
+        try
+        {
+        // try to load class with default behaviour
+        return Class.forName( p_name );
+        }
+        catch ( final ClassNotFoundException l_fornameexception )
+        {
+        // --- second load try ---
+        try
+        {
+        // try to load class depended on the current classloader
+        return this.getClass().getClassLoader().loadClass( p_name );
+        }
+        catch ( final ClassNotFoundException l_loaderexception )
+        {
+        // --- third load try ---
+        // create a name without package
+        final String[] l_part = StringUtils.split( p_name, ClassUtils.PACKAGE_SEPARATOR );
+        final String l_name = l_part[l_part.length - 1];
 
-                    // try to load class within the defined search pathes
-                    for ( final String l_package : SEARCHPACKAGES )
-                        try
-                        {
-                            return this.getClass().getClassLoader().loadClass( getPackagePath( l_package, l_name ) );
-                        }
-                        catch ( final ClassNotFoundException l_iteratingexception )
-                        {
-                        }
-                    throw new ClassNotFoundException();
-                }
-            }
+        // try to load class within the defined search pathes
+        for ( final String l_package : SEARCHPACKAGES )
+        try
+        {
+        return this.getClass().getClassLoader().loadClass( getPackagePath( l_package, l_name ) );
+        }
+        catch ( final ClassNotFoundException l_iteratingexception )
+        {
+        }
+        throw new ClassNotFoundException();
+        }
+        }
         }
          */
 
