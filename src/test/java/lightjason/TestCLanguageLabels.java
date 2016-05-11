@@ -186,15 +186,18 @@ public final class TestCLanguageLabels
 
                                System.out.println( "\n\n\n\n" );
                                assertTrue(
-                                       String.format(
-                                               "the following keys in language [%s] are not existing within the source code: %s", i.getKey(),
+                                       MessageFormat.format(
+                                               "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the source code:\n{2}",
+                                               i.getKey(),
+                                               l_resource.size(),
                                                StringUtils.join( l_resource, ", " )
                                        ),
                                        l_resource.isEmpty()
                                );
                            }
-                           catch ( final IOException l_exception )
+                           catch ( final IOException p_exception )
                            {
+                               assertTrue( MessageFormat.format( "io exception: {0}", p_exception.getMessage() ), false );
                            }
                        } );
     }
