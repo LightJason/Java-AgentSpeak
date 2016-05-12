@@ -107,6 +107,7 @@ to describe an optimizing process.
 * A goal is a sequence of [plans](#plan) which must all finished successfully
 * A goal is part of exactly one [intention](#intention)
 * If a goal can match a [desire](#desire) (the goal is near to the desire) it can add an event to match the desire [belief](#belief)
+* If the agent is in sleeping / hibernate state and the ```wakeup``` method is called, it triggers the wakeup-goal
 
 #### <a name="testgoal">Test Goals</a>
 
@@ -202,8 +203,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     * add new beliefs into the beliefbase
     * generate beliefbase events
 
-2. if agent is in suspend state
-    * check wake-up goal iif match, wake-up agent otherwise stop execution
+2. if agent is in suspend state stop execution
     
 3. run agent cycle
 
