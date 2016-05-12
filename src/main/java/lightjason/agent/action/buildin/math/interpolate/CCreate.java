@@ -94,28 +94,28 @@ public final class CCreate extends IBuildinAction
         /**
          * returns the interpolate objext
          *
-         * @param p_x x-values
-         * @param p_y y-values
+         * @param p_xvalues x-values
+         * @param p_yvalues y-values
          * @return interpolate object
          */
-        public final UnivariateFunction get( final double[] p_x, final double[] p_y )
+        public final UnivariateFunction get( final double[] p_xvalues, final double[] p_yvalues )
         {
             switch ( this )
             {
                 case AKIMA:
-                    return new AkimaSplineInterpolator().interpolate( p_x, p_y );
+                    return new AkimaSplineInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 case DIVIDEDDIFFERENCE:
-                    return new DividedDifferenceInterpolator().interpolate( p_x, p_y );
+                    return new DividedDifferenceInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 case LINEAR:
-                    return new LinearInterpolator().interpolate( p_x, p_y );
+                    return new LinearInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 case LOESS:
-                    return new LoessInterpolator().interpolate( p_x, p_y );
+                    return new LoessInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 case NEVILLE:
-                    return new NevilleInterpolator().interpolate( p_x, p_y );
+                    return new NevilleInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 default:
                     throw new CIllegalStateException( lightjason.common.CCommon.getLanguageString( this, "unknown", this ) );

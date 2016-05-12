@@ -137,6 +137,8 @@ public final class TestCLanguageLabels
 
     /**
      * test-case all resource strings
+     *
+     * @throws IOException throws on io errors
      */
     @Test
     public void testResourceString() throws IOException

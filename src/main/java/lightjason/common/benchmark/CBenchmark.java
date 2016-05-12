@@ -48,6 +48,7 @@ public final class CBenchmark
      *
      * @param p_args arguments of the agent - will pass to the normal main
      * @param p_instrumentation instrumentation to inject class data
+     * @throws NotFoundException on class not found
      */
     public static void premain( final String p_args, final Instrumentation p_instrumentation ) throws NotFoundException
     {

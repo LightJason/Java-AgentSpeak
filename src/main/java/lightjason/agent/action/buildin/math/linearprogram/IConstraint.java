@@ -46,7 +46,7 @@ public abstract class IConstraint extends IBuildinAction
      * returns the enum of a relationship by a string value
      *
      * @param p_symbol string symbol
-     * @return
+     * @return relationship
      */
     protected final Relationship getRelation( final String p_symbol )
     {

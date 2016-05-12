@@ -57,7 +57,9 @@
 
     <module name = "TreeWalker">
 
-        <module name = "AbbreviationAsWordInName" />
+        <module name = "AbbreviationAsWordInName">
+            <property name = "allowedAbbreviationLength" value = "5" />
+        </module>
 
         <module name = "AbstractClassName">
             <property name = "format" value = "I[A-Z]{1,3}([a-z0-9]+[A-Z]{0,2})*$" />
@@ -79,7 +81,7 @@
 
         <module name = "AtclauseOrder">
             <property name = "tagOrder"
-                      value = " @param, @return, @exception, @throws, @see, @deprecated, @bug, @todo, @author, @version,  @since, @serial, @serialField, @serialData" />
+                      value = " @param, @return, @exception, @throws, @bug, @todo, @see, @deprecated, @author, @version, @since, @serial, @serialField, @serialData" />
         </module>
 
         <module name = "AvoidEscapedUnicodeCharacters" />
@@ -235,7 +237,7 @@
         </module>
 
         <module name = "LineLength">
-            <property name = "max" value = "160" />
+            <property name = "max" value = "175" />
         </module>
 
         <module name = "LocalFinalVariableName">
@@ -261,7 +263,7 @@
         </module>
 
         <module name = "MethodLength">
-            <property name = "max" value = "40" />
+            <property name = "max" value = "100" />
             <property name = "countEmpty" value = "false" />
         </module>
 
@@ -370,7 +372,7 @@
         </module>
 
         <module name = "ReturnCount">
-            <property name = "max" value = "10" />
+            <property name = "max" value = "20" />
         </module>
 
         <module name = "RightCurly">

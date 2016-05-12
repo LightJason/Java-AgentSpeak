@@ -69,9 +69,9 @@ public final class CTo extends IBuildinAction
 
             return CFuzzyValue.from( true );
         }
-        catch ( final ClassNotFoundException p_exception )
+        catch ( final ClassNotFoundException l_exception )
         {
-            LOGGER.warning( MessageFormat.format( "casting [{0}] error: {1}", p_argument.get( 0 ), p_exception ) );
+            LOGGER.warning( MessageFormat.format( "casting [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
             return CFuzzyValue.from( false );
         }
     }

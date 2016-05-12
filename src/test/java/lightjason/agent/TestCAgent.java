@@ -261,9 +261,9 @@ public final class TestCAgent
         /**
          * protected method with parameter
          */
-        protected final int calculate( final int p_a, final int p_b )
+        protected final int calculate( final int p_left, final int p_right )
         {
-            return p_a + p_b;
+            return p_left + p_right;
         }
 
         /**

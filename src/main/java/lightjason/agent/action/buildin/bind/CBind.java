@@ -225,7 +225,7 @@ public final class CBind<T>
         /**
          * binded object
          */
-        public final T m_bindobject;
+        private final T m_bindobject;
         /**
          * action name
          */
@@ -286,7 +286,7 @@ public final class CBind<T>
                 m_method.getHandle().bindTo( m_bindobject ).invokeWithArguments(
                         p_argument.stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toList() ) );
             }
-            catch ( final Throwable p_throwable )
+            catch ( final Throwable l_throwable )
             {
                 return CFuzzyValue.from( false );
             }

@@ -58,9 +58,12 @@ public final class CReflection
      * @param p_class class
      * @param p_field fieldname
      * @return getter / setter handle object
+     * @throws IllegalArgumentException on wrong argument
+     * @throws IllegalAccessException on class error access
+     * @throws NoSuchFieldException on field exceptions
      */
     public static CGetSet getClassField( final Class<?> p_class, final String p_field )
-    throws IllegalArgumentException, NoSuchFieldException, IllegalAccessException
+    throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException
     {
         Field l_field = null;
         for ( Class<?> l_class = p_class; ( l_field == null ) && ( l_class != Object.class ); l_class = l_class.getSuperclass() )
@@ -78,6 +81,7 @@ public final class CReflection
      *
      * @param p_class class
      * @return map with field name and getter / setter handle
+     * @throws IllegalAccessException on class error access
      */
     public static Map<String, CGetSet> getClassFields( final Class<?> p_class ) throws IllegalAccessException
     {
@@ -90,6 +94,7 @@ public final class CReflection
      * @param p_class class
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
+     * @throws IllegalAccessException on class error access
      */
     public static Map<String, CGetSet> getClassFields( final Class<?> p_class, final IFilter<Field> p_filter ) throws IllegalAccessException
     {
@@ -118,6 +123,9 @@ public final class CReflection
      * @param p_class class
      * @param p_method methodname
      * @return method
+     * @throws IllegalArgumentException on wrong argument
+     * @throws IllegalAccessException on class error access
+     * @throws NoSuchMethodException on method exceptions
      */
     public static CMethod getClassMethod( final Class<?> p_class, final String p_method )
     throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException
@@ -134,6 +142,9 @@ public final class CReflection
      * @param p_parameter array with type-classes to define method parameter e.g. new Class[]{Integer.TYPE,
      * Integer.TYPE};
      * @return method
+     * @throws IllegalArgumentException on wrong argument
+     * @throws IllegalAccessException on class error access
+     * @throws NoSuchMethodException on method exceptions
      */
     public static CMethod getClassMethod( final Class<?> p_class, final String p_method, final Class<?>[] p_parameter )
     throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException
@@ -178,7 +189,7 @@ public final class CReflection
                             {
                                 return new CMethod( i.getValue() );
                             }
-                            catch ( final IllegalAccessException p_exception )
+                            catch ( final IllegalAccessException l_exception )
                             {
                                 return null;
                             }
@@ -347,6 +358,7 @@ public final class CReflection
          * ctor
          *
          * @param p_method method object
+         * @throws IllegalAccessException on illegal method access
          */
         public CMethod( final Method p_method ) throws IllegalAccessException
         {
@@ -357,6 +369,7 @@ public final class CReflection
          * ctor
          *
          * @param p_methods collection of equal methods (equal name)
+         * @throws IllegalAccessException on illegal method access
          */
         public CMethod( final Collection<Method> p_methods ) throws IllegalAccessException
         {
@@ -368,6 +381,7 @@ public final class CReflection
          *
          * @param p_method method object
          * @param p_minimalarguments minimal number of arguments
+         * @throws IllegalAccessException on illegal method access
          */
         public CMethod( final Method p_method, final int p_minimalarguments ) throws IllegalAccessException
         {
@@ -415,8 +429,8 @@ public final class CReflection
         @Override
         public final boolean equals( final Object p_object )
         {
-            return ( m_method.hashCode() == p_object.hashCode() ) || ( m_handle.hashCode() == p_object.hashCode() ) ||
-                   ( this.hashCode() == p_object.hashCode() );
+            return ( m_method.hashCode() == p_object.hashCode() ) || ( m_handle.hashCode() == p_object.hashCode() )
+                   || ( this.hashCode() == p_object.hashCode() );
         }
 
         @Override

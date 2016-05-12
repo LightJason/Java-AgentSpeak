@@ -27,7 +27,6 @@ import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
 import lightjason.grammar.IASTVisitorPlanBundle;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with actions
-     * @throws IOException thrown on error
+     * @throws Exception thrown on error
      */
     public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 
 /**
- *
+ * base unary expression
  */
 public abstract class IBaseUnary implements IUnaryExpression
 {

@@ -72,7 +72,7 @@ public final class CBase64Encode extends IBuildinAction
                               {
                                   return Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) );
                               }
-                              catch ( final UnsupportedEncodingException p_exception )
+                              catch ( final UnsupportedEncodingException l_exception )
                               {
                                   return null;
                               }

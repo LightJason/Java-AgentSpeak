@@ -66,8 +66,8 @@ public final class CBinary extends IBaseBinary
     {
         // get left-hand-side argument and run fastcheck
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
-             ( l_argument.isEmpty() ) )
+        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+             || ( l_argument.isEmpty() ) )
             return CFuzzyValue.from( false );
 
         if ( this.fastCheck( l_argument, p_return ) )
