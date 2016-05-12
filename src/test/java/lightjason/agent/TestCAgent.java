@@ -84,7 +84,7 @@ public final class TestCAgent
 
             l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );
         }
-        catch ( final IOException p_exception )
+        catch ( final IOException l_exception )
         {
             l_map = Collections.emptyMap();
         }
@@ -146,13 +146,13 @@ public final class TestCAgent
                 {
                     l_agent.call().getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
                 }
-                catch ( final Exception p_exception )
+                catch ( final Exception l_exception )
                 {
                     assertTrue(
                             MessageFormat.format(
                                     "{0} {1}",
-                                    p_exception.getClass().getName(),
-                                    p_exception.getMessage().isEmpty() ? "" : p_exception.getMessage()
+                                    l_exception.getClass().getName(),
+                                    l_exception.getMessage().isEmpty() ? "" : l_exception.getMessage()
                             ).trim(),
                             false
                     );
@@ -160,9 +160,9 @@ public final class TestCAgent
             } );
 
         }
-        catch ( final Exception p_exception )
+        catch ( final Exception l_exception )
         {
-            return new ImmutablePair<>( false, MessageFormat.format( "{0} passed with failure: {1}", p_name, p_exception ) );
+            return new ImmutablePair<>( false, MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
         }
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );

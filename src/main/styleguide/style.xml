@@ -9,7 +9,7 @@
     and is realigned at a hungarian notation and excerpts of
     the Google styleguide
 
-    @see http://checkstyle.sourceforge.net/availablechecks.html
+    @see http://checkstyle.sourceforge.net/checks.html
 
 -->
 
@@ -29,7 +29,7 @@
     </module>
 
     <module name = "Header">
-        <!-- <property name = "headerFile" value = "src/main/styleguide/header.txt" /> -->
+        <!-- <property name = "headerFile" value = "${basedir}/src/main/styleguide/header.txt" /> -->
         <property name = "fileExtensions" value = "java" />
     </module>
 
@@ -95,7 +95,7 @@
         </module>
 
         <module name = "AvoidStaticImport">
-            <property name = "excludes" value = "org.junit.Assert.*" />
+            <property name = "excludes" value = "org.junit.Assert.*, org.junit.Assume.*" />
         </module>
 
         <module name = "BooleanExpressionComplexity">
@@ -111,7 +111,7 @@
         </module>
 
         <module name = "ConstantName">
-            <property name = "format" value = "[A-Z0-9]{3,}$" />
+            <property name = "format" value = "[A-Z0-9]{2,}$" />
         </module>
 
         <module name = "CovariantEquals" />
@@ -160,7 +160,10 @@
 
         <module name = "FinalLocalVariable" />
 
-        <module name = "FinalParameters" />
+        <module name = "FinalParameters">
+            <property name = "tokens" value = "METHOD_DEF, CTOR_DEF, LITERAL_CATCH, FOR_EACH_CLAUSE" />
+            <property name = "ignorePrimitiveTypes" value = "true" />
+        </module>
 
         <module name = "GenericWhitespace" />
 
@@ -168,13 +171,13 @@
 
         <!-- <module name="HideUtilityClassConstructor"/> -->
 
-        <module name = "IllegalCatch" />
+        <!-- <module name = "IllegalCatch" /> -->
 
         <module name = "IllegalImport" />
 
         <module name = "IllegalInstantiation" />
 
-        <module name = "IllegalThrows" />
+        <!-- <module name = "IllegalThrows" /> -->
 
         <module name = "IllegalToken">
             <property name = "tokens" value = "LITERAL_NATIVE" />
@@ -254,11 +257,11 @@
         </module>
 
         <module name = "MethodCount">
-            <property name = "maxTotal" value = "20" />
+            <property name = "maxTotal" value = "50" />
         </module>
 
         <module name = "MethodLength">
-            <property name = "max" value = "35" />
+            <property name = "max" value = "40" />
             <property name = "countEmpty" value = "false" />
         </module>
 
@@ -367,7 +370,7 @@
         </module>
 
         <module name = "ReturnCount">
-            <property name = "max" value = "3" />
+            <property name = "max" value = "10" />
         </module>
 
         <module name = "RightCurly">

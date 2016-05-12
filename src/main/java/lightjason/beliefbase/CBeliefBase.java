@@ -48,10 +48,10 @@ import java.util.stream.Stream;
 /**
  * beliefbase, reference counting is used to collect the events for each beliefbase view
  *
- * @todo check reference counting on delete views
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
+ * @todo check reference counting on delete views
  */
 public final class CBeliefBase implements IBeliefBase
 {

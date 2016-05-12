@@ -37,7 +37,7 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     /**
      * flag to run immediately
      */
-    final boolean m_immediately;
+    protected final boolean m_immediately;
 
     /**
      * ctor

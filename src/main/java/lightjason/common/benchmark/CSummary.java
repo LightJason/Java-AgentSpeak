@@ -44,23 +44,18 @@ public final class CSummary
     /**
      * singleton instance
      **/
-    private static final CSummary c_instance = new CSummary();
+    public static final CSummary INSTANCE = new CSummary();
     /**
      * statistic object
      **/
     private final Map<String, DescriptiveStatistics> m_result = new ConcurrentHashMap<>();
 
-
     /**
-     * retruns singleton instance
-     *
-     * @return object
+     * ctor
      */
-    public static CSummary getInstance()
+    private CSummary()
     {
-        return c_instance;
     }
-
 
     /**
      * sets the time value

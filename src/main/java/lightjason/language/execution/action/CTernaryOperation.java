@@ -76,8 +76,8 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
-             ( l_argument.size() != 1 ) )
+        if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+             || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 
         return CCommon.getRawValue( l_argument.get( 0 ) )

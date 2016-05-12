@@ -159,6 +159,9 @@ public final class CCommon
      *
      * @param p_file file
      * @return URL of file or null
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
      */
     public static URL getResourceURL( final String p_file ) throws URISyntaxException, MalformedURLException
     {
@@ -210,7 +213,7 @@ public final class CCommon
         {
             return MessageFormat.format( LANGUAGE.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
         }
-        catch ( final MissingResourceException p_exception )
+        catch ( final MissingResourceException l_exception )
         {
         }
 
@@ -311,7 +314,7 @@ public final class CCommon
                 return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
 
             }
-            catch ( final Exception p_exception )
+            catch ( final Exception l_exception )
             {
             }
             finally
