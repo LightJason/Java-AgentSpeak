@@ -62,6 +62,8 @@ public interface IAgent extends Callable<IAgent>
      * @param p_trigger event trigger
      * @param p_immediately run element immediately
      * @return execution finished correctly
+     *
+     * @note the trigger is ignored iif the agent is sleeping / hibernating
      */
     IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately );
 

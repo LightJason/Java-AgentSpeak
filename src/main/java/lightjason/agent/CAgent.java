@@ -197,6 +197,9 @@ public class CAgent implements IAgent
     @Override
     public IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {
+        if ( m_hibernate )
+            return CFuzzyValue.from( false );
+
         // check if literal does not store any variables
         if ( Stream.concat(
                 p_trigger.getLiteral().orderedvalues(),
