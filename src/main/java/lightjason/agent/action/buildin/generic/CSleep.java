@@ -49,7 +49,7 @@ public final class CSleep extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( p_context.getAgent().hibernate( true ) );
+        return CFuzzyValue.from( p_context.getAgent().sleep().isSleeping() );
     }
 
 }

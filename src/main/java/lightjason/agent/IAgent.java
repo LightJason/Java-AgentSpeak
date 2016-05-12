@@ -28,6 +28,7 @@ import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.beliefbase.IView;
 import lightjason.common.IPath;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
@@ -79,19 +80,26 @@ public interface IAgent extends Callable<IAgent>
     Multimap<IPath, ILiteral> getRunningPlans();
 
     /**
-     * returns the hibernate state
+     * returns hibernate / sleeping state
      *
-     * @return boolean state value
+     * @return sleeping flag
      */
-    boolean hibernate();
+    boolean isSleeping();
 
     /**
-     * returns and sets the hibernate state
+     * pushs the agent into hibernating / sleeping state
      *
-     * @param p_value new hibernate state
-     * @return boolean new state value
+     * @return agent reference
      */
-    boolean hibernate( final boolean p_value );
+    IAgent sleep();
+
+    /**
+     * wake-up the agent by generating wakeup-goal
+     *
+     * @param p_value any term value which will push into the wake-up plan
+     * @return agent reference
+     */
+    IAgent wakeup( final ITerm... p_value );
 
     /**
      * storage access

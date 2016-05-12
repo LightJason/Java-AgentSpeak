@@ -35,13 +35,16 @@ import lightjason.beliefbase.IView;
 import lightjason.common.CCommon;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;
+import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
+import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.instantiable.rule.IRule;
 import lightjason.language.score.IAggregation;
@@ -216,16 +219,38 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final boolean hibernate()
+    public final boolean isSleeping()
     {
         return m_hibernate;
     }
 
     @Override
-    public final boolean hibernate( final boolean p_value )
+    public final IAgent sleep()
     {
-        m_hibernate = p_value;
-        return m_hibernate;
+        m_hibernate = true;
+        return this;
+    }
+
+    @Override
+    public final IAgent wakeup( final ITerm... p_value )
+    {
+        if ( !m_hibernate )
+            return this;
+
+        m_trigger.add(
+                CTrigger.from(
+                        ITrigger.EType.ADDGOAL,
+                        CLiteral.from(
+                                "wakeup",
+                                p_value == null
+                                ? Stream.<ITerm>empty()
+                                : Arrays.stream( p_value )
+                        )
+                )
+        );
+
+        m_hibernate = false;
+        return this;
     }
 
     @Override

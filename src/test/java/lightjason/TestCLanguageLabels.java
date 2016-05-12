@@ -137,8 +137,6 @@ public final class TestCLanguageLabels
 
     /**
      * test-case all resource strings
-     *
-     * @bug disable unused label checking
      */
     @Test
     public void testResourceString() throws IOException
