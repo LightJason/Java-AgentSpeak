@@ -36,7 +36,6 @@ import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.score.IAggregation;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -54,7 +53,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CDefaultAgentGenerator.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CDefaultAgentGenerator.class );
     /**
      * configuration of an agent
      */
@@ -68,7 +67,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * @param p_actions set with action
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
-     * @throws IOException thrown on error
+     * @throws Exception thrown on error
      */
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier, final IAggregation p_aggregation )
     throws Exception
@@ -85,7 +84,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * @param p_aggregation aggregation function
      * @param p_beliefbaseupdate beliefbase updater
      * @param p_variablebuilder variable builder (can be set to null)
-     * @throws IOException thrown on error
+     * @throws Exception thrown on error
      */
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier,
                                    final IAggregation p_aggregation, final IBeliefBaseUpdate p_beliefbaseupdate,
@@ -124,7 +123,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
             {
                 return this.generate( p_data );
             }
-            catch ( final Exception p_exception )
+            catch ( final Exception l_exception )
             {
                 return null;
             }

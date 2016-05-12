@@ -32,7 +32,7 @@ import java.util.Set;
 
 
 /**
- *
+ * default plan bundle configuration
  */
 public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
 {

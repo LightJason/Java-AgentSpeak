@@ -86,18 +86,18 @@ public final class CBinary extends IBaseBinary
         {
 
             case AND:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) &&
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                                             && lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case OR:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) ||
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                                             || lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case XOR:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) ^
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                                             ^ lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             default:

@@ -85,9 +85,9 @@ public final class TestCLanguageLabels
             LANGUAGEPROPERY.put( "en", CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/resources/language.properties" ).toURI() );
             LANGUAGEPROPERY.put( "de", CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/resources/language_de.properties" ).toURI() );
         }
-        catch ( final Exception p_exception )
+        catch ( final Exception l_exception )
         {
-            assumeTrue( MessageFormat.format( "source directory cannot be read: {0}", p_exception.getMessage() ), false );
+            assumeTrue( MessageFormat.format( "source directory cannot be read: {0}", l_exception.getMessage() ), false );
         }
 
         SEARCHPATH = l_uri;
@@ -157,12 +157,12 @@ public final class TestCLanguageLabels
                              l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
                              return l_parser.getLabel().stream();
                          }
-                         catch ( final IOException p_excpetion )
+                         catch ( final IOException l_excpetion )
                          {
-                             assertTrue( MessageFormat.format( "io error on file [{0}]: {1}", i, p_excpetion.getMessage() ), false );
+                             assertTrue( MessageFormat.format( "io error on file [{0}]: {1}", i, l_excpetion.getMessage() ), false );
                              return Stream.<String>empty();
                          }
-                         catch ( final ParseException p_exception )
+                         catch ( final ParseException l_exception )
                          {
                              // add label build by class path to the ignore list
                              l_ignoredlabel.add(
@@ -187,7 +187,7 @@ public final class TestCLanguageLabels
                                       .replace( CCommon.getPackageRoot() + ".", "" )
                              );
 
-                             System.err.println( MessageFormat.format( "parsing error on file [{0}]:\n{1}", i, p_exception.getMessage() ) );
+                             System.err.println( MessageFormat.format( "parsing error on file [{0}]:\n{1}", i, l_exception.getMessage() ) );
                              return Stream.<String>empty();
                          }
                      } )
@@ -236,9 +236,9 @@ public final class TestCLanguageLabels
                                        l_ignoredpropertyitems.isEmpty()
                                );
                            }
-                           catch ( final IOException p_exception )
+                           catch ( final IOException l_exception )
                            {
-                               assertTrue( MessageFormat.format( "io exception: {0}", p_exception.getMessage() ), false );
+                               assertTrue( MessageFormat.format( "io exception: {0}", l_exception.getMessage() ), false );
                            }
                        } );
     }

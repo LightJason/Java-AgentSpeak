@@ -75,7 +75,7 @@ public final class CTrigger implements ITrigger
      * creates a trigger event
      *
      * @param p_event event
-     * @param p_literal
+     * @param p_literal trigger literal
      * @return trigger object
      */
     public static ITrigger from( final EType p_event, final ILiteral p_literal )

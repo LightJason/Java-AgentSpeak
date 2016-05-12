@@ -73,7 +73,7 @@ public final class CCommon
             PROPERTIES.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
             l_packageroot = PROPERTIES.getProperty( "rootpackage" );
         }
-        catch ( final IOException p_exception )
+        catch ( final IOException l_exception )
         {
         }
 

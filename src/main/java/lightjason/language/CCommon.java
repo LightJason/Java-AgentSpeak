@@ -124,6 +124,7 @@ public final class CCommon
      *
      * @param p_package full-qualified package name or empty for default package
      * @return action set
+     * @throws IOException on io errors
      *
      * @todo can be moved to an own class
      */
@@ -144,12 +145,14 @@ public final class CCommon
                                             try
                                             {
                                                 final Class<?> l_class = i.load();
-                                                if ( ( !Modifier.isAbstract( l_class.getModifiers() ) ) && ( !Modifier.isInterface(
-                                                        l_class.getModifiers() ) ) &&
-                                                     ( Modifier.isPublic( l_class.getModifiers() ) ) && ( IAction.class.isAssignableFrom( l_class ) ) )
+                                                if ( ( !Modifier.isAbstract( l_class.getModifiers() ) )
+                                                     && ( !Modifier.isInterface( l_class.getModifiers() ) )
+                                                     && ( Modifier.isPublic( l_class.getModifiers() ) )
+                                                     && ( IAction.class.isAssignableFrom( l_class ) )
+                                                        )
                                                     return (IAction) l_class.newInstance();
                                             }
-                                            catch ( final IllegalAccessException | InstantiationException p_exception )
+                                            catch ( final IllegalAccessException | InstantiationException l_exception )
                                             {
                                             }
 
@@ -157,7 +160,7 @@ public final class CCommon
                                         } )
                                         .filter( i -> i != null );
                     }
-                    catch ( final IOException p_exception )
+                    catch ( final IOException l_exception )
                     {
                     }
 

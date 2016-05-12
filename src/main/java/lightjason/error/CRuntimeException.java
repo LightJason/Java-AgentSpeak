@@ -39,7 +39,7 @@ public final class CRuntimeException extends RuntimeException
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
     /**
      * execution context
      */

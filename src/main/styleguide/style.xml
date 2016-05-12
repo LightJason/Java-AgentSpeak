@@ -29,7 +29,7 @@
     </module>
 
     <module name = "Header">
-        <property name = "headerFile" value = "src/main/styleguide/header.txt" />
+        <!-- <property name = "headerFile" value = "src/main/styleguide/header.txt" /> -->
         <property name = "fileExtensions" value = "java" />
     </module>
 
@@ -338,7 +338,7 @@
         <module name = "PackageDeclaration" />
 
         <module name = "PackageName">
-            <property name = "format" value = "^[a-z]{3,}(\.[a-z]{2,}[a-z0-9]*)*$" />
+            <property name = "format" value = "^[a-z]{3,}(\.[a-z]{2,}[a-z_0-9]*)*$" />
         </module>
 
         <module name = "ParameterAssignment" />
