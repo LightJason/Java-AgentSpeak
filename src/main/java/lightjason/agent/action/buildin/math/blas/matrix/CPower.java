@@ -63,7 +63,7 @@ public final class CPower extends IAlgebra
         // first argument must be a term with a matrix object, second argument must be the exponent
         p_return.add(
                 CRawTerm.from(
-                        m_algebra.pow(
+                        ALGEBRA.pow(
                                 CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ),
                                 CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue()
                         )

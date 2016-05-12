@@ -63,7 +63,7 @@ public final class COneNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
                 CRawTerm.from(
-                        m_algebra.norm1( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
+                        ALGEBRA.norm1( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
                 )
         );
 

@@ -63,7 +63,7 @@ public final class CRank extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
                 CRawTerm.from(
-                        m_algebra.rank( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
+                        ALGEBRA.rank( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
                 )
         );
 

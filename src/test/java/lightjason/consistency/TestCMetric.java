@@ -50,8 +50,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * metric tests
  */
-@SuppressWarnings( "serial" )
-public final class TestIMetric
+public final class TestCMetric
 {
     /**
      * literal view generator
@@ -64,6 +63,7 @@ public final class TestIMetric
      * test symmetric weight metric
      */
     @Test
+    @SuppressWarnings( "serial" )
     public final void testSymmetricWeight()
     {
         final IFilter l_filter = new CAll();
@@ -89,6 +89,7 @@ public final class TestIMetric
      * test symmetric metric
      */
     @Test
+    @SuppressWarnings( "serial" )
     public final void testWeight()
     {
         final IFilter l_filter = new CAll();
@@ -116,7 +117,7 @@ public final class TestIMetric
      */
     public static void main( final String[] p_args )
     {
-        final TestIMetric l_test = new TestIMetric();
+        final TestCMetric l_test = new TestCMetric();
 
         l_test.testSymmetricWeight();
         l_test.testWeight();

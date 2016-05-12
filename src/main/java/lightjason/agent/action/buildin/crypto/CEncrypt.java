@@ -71,7 +71,8 @@ public final class CEncrypt extends IBuildinAction
                                     {
                                         return l_algorithm.getEncryptCipher( l_key ).doFinal( i );
                                     }
-                                    catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException p_exception )
+                                    catch ( final NoSuchPaddingException | NoSuchAlgorithmException |
+                                            InvalidKeyException | BadPaddingException | IllegalBlockSizeException l_exception )
                                     {
                                         return null;
                                     }
