@@ -63,7 +63,7 @@ public final class CTimer
         if ( m_start < 0 )
             throw new IllegalStateException( CCommon.getLanguageString( this, "stop" ) );
 
-        CSummary.getInstance().setTime( p_label, this.getTime() - m_start );
+        CSummary.INSTANCE.setTime( p_label, this.getTime() - m_start );
         m_start = -1;
         return this;
     }

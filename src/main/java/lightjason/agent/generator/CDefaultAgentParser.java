@@ -45,7 +45,7 @@ public final class CDefaultAgentParser extends IGenericParser<IASTVisitorAgent, 
     /**
      * set with actions
      */
-    final Set<IAction> m_actions;
+    private final Set<IAction> m_actions;
 
     /**
      * ctor

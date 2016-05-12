@@ -236,6 +236,8 @@ public final class CLiteral implements ILiteral
      *
      * @param p_literal literal string
      * @return literal
+     *
+     * @throws Exception parsing and stream exception
      */
     public static ILiteral parse( final String p_literal ) throws Exception
     {

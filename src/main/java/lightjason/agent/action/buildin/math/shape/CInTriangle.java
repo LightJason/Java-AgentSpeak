@@ -73,27 +73,27 @@ public final class CInTriangle extends IBuildinAction
                                                .boxed()
                                                .collect( Collectors.toList() );
 
-        final double l_s = l_point.get( 3 ) * l_point.get( 6 )
-                           - l_point.get( 2 ) * l_point.get( 7 )
-                           + ( l_point.get( 7 ) - l_point.get( 3 ) ) * l_point.get( 0 )
-                           + ( l_point.get( 2 ) - l_point.get( 6 ) ) * l_point.get( 1 );
+        final double l_xvalue = l_point.get( 3 ) * l_point.get( 6 )
+                                - l_point.get( 2 ) * l_point.get( 7 )
+                                + ( l_point.get( 7 ) - l_point.get( 3 ) ) * l_point.get( 0 )
+                                + ( l_point.get( 2 ) - l_point.get( 6 ) ) * l_point.get( 1 );
 
-        final double l_t = l_point.get( 2 ) * l_point.get( 5 )
-                           - l_point.get( 3 ) * l_point.get( 4 )
-                           + ( l_point.get( 3 ) - l_point.get( 5 ) ) * l_point.get( 0 )
-                           + ( l_point.get( 4 ) - l_point.get( 2 ) ) * l_point.get( 1 );
+        final double l_yvalue = l_point.get( 2 ) * l_point.get( 5 )
+                                - l_point.get( 3 ) * l_point.get( 4 )
+                                + ( l_point.get( 3 ) - l_point.get( 5 ) ) * l_point.get( 0 )
+                                + ( l_point.get( 4 ) - l_point.get( 2 ) ) * l_point.get( 1 );
 
-        if ( ( l_s <= 0 ) || ( l_t <= 0 ) )
+        if ( ( l_xvalue <= 0 ) || ( l_yvalue <= 0 ) )
         {
             p_return.add( CRawTerm.from( false ) );
             return CFuzzyValue.from( true );
         }
 
         p_return.add( CRawTerm.from(
-                l_s + l_t < -l_point.get( 5 ) * l_point.get( 6 )
-                            + l_point.get( 3 ) * ( -l_point.get( 4 ) + l_point.get( 6 ) )
-                            + l_point.get( 2 ) * ( l_point.get( 5 ) - l_point.get( 7 ) )
-                            + l_point.get( 4 ) * l_point.get( 7 )
+                l_xvalue + l_yvalue < -l_point.get( 5 ) * l_point.get( 6 )
+                                      + l_point.get( 3 ) * ( -l_point.get( 4 ) + l_point.get( 6 ) )
+                                      + l_point.get( 2 ) * ( l_point.get( 5 ) - l_point.get( 7 ) )
+                                      + l_point.get( 4 ) * l_point.get( 7 )
         ) );
         return CFuzzyValue.from( true );
     }

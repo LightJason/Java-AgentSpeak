@@ -36,7 +36,7 @@ public abstract class IAlgebra extends IBuildinAction
     /**
      * algebra reference
      */
-    protected static final Algebra m_algebra = new Algebra();
+    protected static final Algebra ALGEBRA = new Algebra();
 
     /**
      * ctor

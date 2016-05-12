@@ -68,7 +68,7 @@ public final class CIs extends IBuildinAction
             p_return.add( CRawTerm.from( l_return ) );
             return CFuzzyValue.from( l_return );
         }
-        catch ( final ClassNotFoundException p_exception )
+        catch ( final ClassNotFoundException l_exception )
         {
             return CFuzzyValue.from( false );
         }

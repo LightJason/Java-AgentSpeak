@@ -31,7 +31,7 @@ import java.lang.instrument.Instrumentation;
 /**
  * premain executable class for benchmarking
  *
- * @note Jar file must be performtemplate with @code java -javaagent:<Jar> -jar <Jar> @endcode
+ * @note Jar file must be performtemplate with @code java -javaagent:Jar -jar Jar @endcode
  */
 public final class CBenchmark
 {
@@ -48,6 +48,7 @@ public final class CBenchmark
      *
      * @param p_args arguments of the agent - will pass to the normal main
      * @param p_instrumentation instrumentation to inject class data
+     * @throws NotFoundException on class not found
      */
     public static void premain( final String p_args, final Instrumentation p_instrumentation ) throws NotFoundException
     {

@@ -90,7 +90,7 @@ public final class CMultiply extends IAlgebra
      */
     private IFuzzyValue<Boolean> multiplyVectorVector( final DoubleMatrix1D p_first, final DoubleMatrix1D p_second, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( m_algebra.multOuter( p_first, p_second, null ) ) );
+        p_return.add( CRawTerm.from( ALGEBRA.multOuter( p_first, p_second, null ) ) );
         return CFuzzyValue.from( true );
     }
 
@@ -104,7 +104,7 @@ public final class CMultiply extends IAlgebra
      */
     private IFuzzyValue<Boolean> multiplyMatrixVector( final DoubleMatrix2D p_first, final DoubleMatrix1D p_second, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( m_algebra.mult( p_first, p_second ) ) );
+        p_return.add( CRawTerm.from( ALGEBRA.mult( p_first, p_second ) ) );
         return CFuzzyValue.from( true );
     }
 
@@ -118,7 +118,7 @@ public final class CMultiply extends IAlgebra
      */
     private IFuzzyValue<Boolean> multiplyVectorVector( final DoubleMatrix2D p_first, final DoubleMatrix2D p_second, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( m_algebra.mult( p_first, p_second ) ) );
+        p_return.add( CRawTerm.from( ALGEBRA.mult( p_first, p_second ) ) );
         return CFuzzyValue.from( true );
     }
 

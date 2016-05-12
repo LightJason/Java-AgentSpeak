@@ -46,7 +46,7 @@ public final class CInjection implements ClassFileTransformer
     /**
      * class pool
      */
-    private static final ClassPool c_pool = ClassPool.getDefault();
+    private static final ClassPool POOL = ClassPool.getDefault();
     /**
      * timer class
      */
@@ -59,7 +59,7 @@ public final class CInjection implements ClassFileTransformer
      */
     public CInjection() throws NotFoundException
     {
-        m_timerclass = c_pool.getCtClass( CTimer.class.getCanonicalName() );
+        m_timerclass = POOL.getCtClass( CTimer.class.getCanonicalName() );
     }
 
 
@@ -72,7 +72,7 @@ public final class CInjection implements ClassFileTransformer
         {
             return this.inject( p_classname );
         }
-        catch ( final NotFoundException | IOException | CannotCompileException p_exception )
+        catch ( final NotFoundException | IOException | CannotCompileException l_exception )
         {
         }
         return p_binary;
@@ -97,7 +97,7 @@ public final class CInjection implements ClassFileTransformer
         if ( !l_classname.startsWith( CCommon.getConfiguration().getProperty( "rootpackage" ) ) )
             throw new IllegalArgumentException();
 
-        final CtClass l_class = c_pool.getCtClass( l_classname );
+        final CtClass l_class = POOL.getCtClass( l_classname );
         l_class.stopPruning( false );
 
         Arrays.stream( l_class.getDeclaredMethods() )
@@ -106,7 +106,7 @@ public final class CInjection implements ClassFileTransformer
                   {
                       return i.getAnnotation( IMethodBenchmark.class ) != null;
                   }
-                  catch ( final ClassNotFoundException p_exception )
+                  catch ( final ClassNotFoundException l_exception )
                   {
                       return false;
                   }
@@ -116,10 +116,10 @@ public final class CInjection implements ClassFileTransformer
                   {
                       i.addLocalVariable( "l_bechmarktimer", m_timerclass );
                       i.insertBefore( "final l_bechmarktimer = new " + CTimer.class.getCanonicalName() + "().start();" );
-                      i.insertAfter( "l_bechmarktimer.stop(\"" + i.getLongName().replace( CCommon.getConfiguration().getProperty( "rootpackage" ) + ".", "" ) +
-                                     "\");" );
+                      i.insertAfter( "l_bechmarktimer.stop(\"" + i.getLongName().replace( CCommon.getConfiguration().getProperty( "rootpackage" ) + ".", "" )
+                                     + "\");" );
                   }
-                  catch ( final CannotCompileException p_exception )
+                  catch ( final CannotCompileException l_exception )
                   {
                   }
               } );

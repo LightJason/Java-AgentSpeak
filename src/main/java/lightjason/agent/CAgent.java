@@ -76,7 +76,7 @@ public class CAgent implements IAgent
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CAgent.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CAgent.class );
 
     /**
      * beliefbase
@@ -385,9 +385,9 @@ public class CAgent implements IAgent
 
                       // initialize context
                       .map( i -> {
-                          double l_fails = i.getLeft().getMiddle().get();
-                          double l_succeed = i.getLeft().getRight().get();
-                          double l_sum = l_succeed + l_fails;
+                          final double l_fails = i.getLeft().getMiddle().get();
+                          final double l_succeed = i.getLeft().getRight().get();
+                          final double l_sum = l_succeed + l_fails;
 
                           return new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
                                   this,

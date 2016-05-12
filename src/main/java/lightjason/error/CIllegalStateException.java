@@ -37,7 +37,7 @@ public final class CIllegalStateException extends IllegalStateException
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
 
     /**
      * ctor

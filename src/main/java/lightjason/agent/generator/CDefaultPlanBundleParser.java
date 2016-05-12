@@ -45,7 +45,7 @@ public final class CDefaultPlanBundleParser extends IGenericParser<IASTVisitorPl
     /**
      * set with actions
      */
-    final Set<IAction> m_actions;
+    private final Set<IAction> m_actions;
 
     /**
      * ctor

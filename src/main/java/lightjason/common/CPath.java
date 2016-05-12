@@ -437,7 +437,7 @@ public final class CPath implements IPath
                                                    .filter( i -> !l_dotremove.get( i + 1 ).equals( ".." ) )
                                                    .map( i -> l_dotremove.get( i ) )
                                                    .collect( Collectors.toList() );
-        if ( !l_last.equals( ".." ) )
+        if ( !"..".equals( l_last ) )
             l_backremove.add( l_last );
 
         // clear internal path and add optimized path

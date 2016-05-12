@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 
 
 /**
- *
+ * interface for evaluate variables
  */
 public interface IVariableEvaluate extends ITerm
 {

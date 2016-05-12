@@ -53,7 +53,7 @@ public final class CSolve extends IAlgebra
     {
         // first argument matrix, second argument result matrix
         p_return.add( CRawTerm.from(
-                m_algebra.solve(
+                ALGEBRA.solve(
                         CCommon.getRawValue( p_return.get( 0 ) ),
                         CCommon.getRawValue( p_return.get( 1 ) )
                 )

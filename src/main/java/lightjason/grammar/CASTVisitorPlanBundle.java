@@ -104,12 +104,12 @@ import java.util.stream.Collectors;
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle
+public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle
 {
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
     /**
      * set with initial beliefs
      */
@@ -145,7 +145,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     // --- plan bundle rules -----------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitPlanbundle( final PlanBundleParser.PlanbundleContext p_context )
+    public final Object visitPlanbundle( final PlanBundleParser.PlanbundleContext p_context )
     {
         return this.visitChildren( p_context );
     }
@@ -155,7 +155,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     // --- AgentSpeak(L) rules ---------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitBelief( final PlanBundleParser.BeliefContext p_context )
+    public final Object visitBelief( final PlanBundleParser.BeliefContext p_context )
     {
         return this.visitLiteral( p_context.literal() );
     }
@@ -163,7 +163,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitPlans( final PlanBundleParser.PlansContext p_context )
+    public final Object visitPlans( final PlanBundleParser.PlansContext p_context )
     {
         if ( p_context.plan() == null )
             return null;
@@ -176,7 +176,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
+    public final Object visitLogicrules( final PlanBundleParser.LogicrulesContext p_context )
     {
         // create placeholder objects first and run parsing again to build full-qualified rule objects
         p_context.logicrule().stream()
@@ -199,7 +199,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
+    public final Object visitLogicrule( final PlanBundleParser.LogicruleContext p_context )
     {
         final ILiteral l_literal = (ILiteral) this.visitLiteral( p_context.literal() );
         return p_context.logicalruledefinition().stream()
@@ -208,7 +208,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public Object visitLogicalruledefinition( final PlanBundleParser.LogicalruledefinitionContext p_context )
+    public final Object visitLogicalruledefinition( final PlanBundleParser.LogicalruledefinitionContext p_context )
     {
         return this.visitBody( p_context.body() );
     }
@@ -216,7 +216,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitPlan( final PlanBundleParser.PlanContext p_context )
+    public final Object visitPlan( final PlanBundleParser.PlanContext p_context )
     {
         final Set<IAnnotation<?>> l_annotation = (Set<IAnnotation<?>>) this.visitAnnotations( p_context.annotations() );
         final CTrigger l_trigger = new CTrigger(
@@ -235,7 +235,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
+    public final Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
     {
         return new ImmutablePair<IExpression, List<IExecution>>(
                 p_context.expression() == null ? null : (IExpression) this.visitExpression( p_context.expression() ),
@@ -246,7 +246,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAnnotations( final PlanBundleParser.AnnotationsContext p_context )
+    public final Object visitAnnotations( final PlanBundleParser.AnnotationsContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;
@@ -266,7 +266,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAnnotation_atom( final PlanBundleParser.Annotation_atomContext p_context )
+    public final Object visitAnnotation_atom( final PlanBundleParser.Annotation_atomContext p_context )
     {
         if ( p_context.ATOMIC() != null )
             return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
@@ -288,7 +288,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAnnotation_numeric_literal( final PlanBundleParser.Annotation_numeric_literalContext p_context )
+    public final Object visitAnnotation_numeric_literal( final PlanBundleParser.Annotation_numeric_literalContext p_context )
     {
         if ( p_context.FUZZY() != null )
             return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
@@ -310,7 +310,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitPlan_goal_trigger( final PlanBundleParser.Plan_goal_triggerContext p_context )
+    public final Object visitPlan_goal_trigger( final PlanBundleParser.Plan_goal_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -327,7 +327,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitPlan_belief_trigger( final PlanBundleParser.Plan_belief_triggerContext p_context )
+    public final Object visitPlan_belief_trigger( final PlanBundleParser.Plan_belief_triggerContext p_context )
     {
         switch ( p_context.getText() )
         {
@@ -367,7 +367,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
+    public final Object visitRepair_formula( final PlanBundleParser.Repair_formulaContext p_context )
     {
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
@@ -400,7 +400,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitUnification( final PlanBundleParser.UnificationContext p_context )
+    public final Object visitUnification( final PlanBundleParser.UnificationContext p_context )
     {
         final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
 
@@ -422,7 +422,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
+    public final Object visitUnification_constraint( final PlanBundleParser.Unification_constraintContext p_context )
     {
         if ( p_context == null )
             return null;
@@ -454,7 +454,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitLambda( final PlanBundleParser.LambdaContext p_context )
+    public final Object visitLambda( final PlanBundleParser.LambdaContext p_context )
     {
         if ( p_context.lambda_return() != null )
             return new CLambdaExpression(
@@ -476,7 +476,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
+    public final Object visitLambda_initialization( final PlanBundleParser.Lambda_initializationContext p_context )
     {
         if ( p_context.variable() != null )
             return new CRawAction<>( this.visitVariable( p_context.variable() ) );
@@ -490,13 +490,13 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
+    public final Object visitLambda_return( final PlanBundleParser.Lambda_returnContext p_context )
     {
         return this.visitVariable( p_context.variable() );
     }
 
     @Override
-    public Object visitExecutable_term( final PlanBundleParser.Executable_termContext p_context )
+    public final Object visitExecutable_term( final PlanBundleParser.Executable_termContext p_context )
     {
         if ( p_context.string() != null )
             return new CRawAction<>( this.visitString( p_context.string() ) );
@@ -529,7 +529,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
+    public final Object visitAssignment_expression_singlevariable( final PlanBundleParser.Assignment_expression_singlevariableContext p_context )
     {
         return new CSingleAssignment<>(
                 (IVariable<?>) this.visitVariable( p_context.variable() ),
@@ -540,7 +540,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
+    public final Object visitAssignment_expression_multivariable( final PlanBundleParser.Assignment_expression_multivariableContext p_context )
     {
         return new CMultiAssignment<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
@@ -551,7 +551,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
+    public final Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
     {
         switch ( p_context.unaryoperator().getText() )
         {
@@ -568,7 +568,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
+    public final Object visitAchievement_goal_action( final PlanBundleParser.Achievement_goal_actionContext p_context )
     {
         if ( p_context.literal() != null )
             return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
@@ -584,7 +584,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
+    public final Object visitTernary_operation( final PlanBundleParser.Ternary_operationContext p_context )
     {
         return new CTernaryOperation(
                 (IExpression) this.visitExpression( p_context.expression() ),
@@ -609,7 +609,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
+    public final Object visitTest_action( final PlanBundleParser.Test_actionContext p_context )
     {
         // dollar sign is used to recognize a rule
         return p_context.DOLLAR() != null
@@ -619,7 +619,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
+    public final Object visitBelief_action( final PlanBundleParser.Belief_actionContext p_context )
     {
         if ( p_context.PLUS() != null )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.ADD );
@@ -632,7 +632,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
+    public final Object visitDeconstruct_expression( final PlanBundleParser.Deconstruct_expressionContext p_context )
     {
         return new CDeconstruct<>(
                 p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
@@ -646,7 +646,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
+    public final Object visitLiteral( final PlanBundleParser.LiteralContext p_context )
     {
         return new CLiteral(
                 p_context.AT() != null,
@@ -660,7 +660,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitLiteralset( final PlanBundleParser.LiteralsetContext p_context )
+    public final Object visitLiteralset( final PlanBundleParser.LiteralsetContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -671,7 +671,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitTerm( final PlanBundleParser.TermContext p_context )
+    public final Object visitTerm( final PlanBundleParser.TermContext p_context )
     {
         if ( p_context.string() != null )
             return this.visitString( p_context.string() );
@@ -698,7 +698,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
+    public final Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.<ITerm>emptyList();
@@ -740,7 +740,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
+    public final Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -748,7 +748,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitIntegernumber_negative( final PlanBundleParser.Integernumber_negativeContext p_context )
+    public final Object visitIntegernumber_negative( final PlanBundleParser.Integernumber_negativeContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -756,7 +756,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitFloatnumber( final PlanBundleParser.FloatnumberContext p_context )
+    public final Object visitFloatnumber( final PlanBundleParser.FloatnumberContext p_context )
     {
         if ( p_context.getText().equals( "infinity" ) )
             return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
@@ -770,7 +770,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitLogicalvalue( final PlanBundleParser.LogicalvalueContext p_context )
+    public final Object visitLogicalvalue( final PlanBundleParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null;
     }
@@ -785,7 +785,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitString( final PlanBundleParser.StringContext p_context )
+    public final Object visitString( final PlanBundleParser.StringContext p_context )
     {
         // remove quotes
         final String l_text = p_context.getText();
@@ -794,7 +794,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitAtom( final PlanBundleParser.AtomContext p_context )
+    public final Object visitAtom( final PlanBundleParser.AtomContext p_context )
     {
         return p_context.getText();
     }
@@ -802,7 +802,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitVariable( final PlanBundleParser.VariableContext p_context )
+    public final Object visitVariable( final PlanBundleParser.VariableContext p_context )
     {
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
@@ -810,7 +810,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
+    public final Object visitExpression( final PlanBundleParser.ExpressionContext p_context )
     {
         // bracket expression
         if ( p_context.expression_bracket() != null )
@@ -838,7 +838,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_logical_and( final PlanBundleParser.Expression_logical_andContext p_context )
+    public final Object visitExpression_logical_and( final PlanBundleParser.Expression_logical_andContext p_context )
     {
         return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.AND,
@@ -853,7 +853,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_logical_xor( final PlanBundleParser.Expression_logical_xorContext p_context )
+    public final Object visitExpression_logical_xor( final PlanBundleParser.Expression_logical_xorContext p_context )
     {
         if ( p_context.expression_logical_element() != null )
             return lightjason.grammar.CCommon.createLogicalBinaryExpression(
@@ -877,7 +877,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
+    public final Object visitExpression_logical_negation( final PlanBundleParser.Expression_logical_negationContext p_context )
     {
         return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
@@ -885,7 +885,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
+    public final Object visitExpression_logical_element( final PlanBundleParser.Expression_logical_elementContext p_context )
     {
         if ( p_context.logicalvalue() != null )
             return new CAtom( this.visitLogicalvalue( p_context.logicalvalue() ) );
@@ -908,7 +908,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
+    public final Object visitExpression_numeric( final PlanBundleParser.Expression_numericContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
@@ -933,7 +933,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_numeric_relation( final PlanBundleParser.Expression_numeric_relationContext p_context )
+    public final Object visitExpression_numeric_relation( final PlanBundleParser.Expression_numeric_relationContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
@@ -972,7 +972,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_numeric_additive( final PlanBundleParser.Expression_numeric_additiveContext p_context )
+    public final Object visitExpression_numeric_additive( final PlanBundleParser.Expression_numeric_additiveContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );
@@ -997,7 +997,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
+    public final Object visitExpression_numeric_multiplicative( final PlanBundleParser.Expression_numeric_multiplicativeContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_power( p_context.expression_numeric_power() );
@@ -1029,7 +1029,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_numeric_power( final PlanBundleParser.Expression_numeric_powerContext p_context )
+    public final Object visitExpression_numeric_power( final PlanBundleParser.Expression_numeric_powerContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_element( p_context.expression_numeric_element() );
@@ -1044,7 +1044,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
 
     @Override
-    public Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
+    public final Object visitExpression_numeric_element( final PlanBundleParser.Expression_numeric_elementContext p_context )
     {
         if ( p_context.number() != null )
             return new CAtom( this.visitNumber( p_context.number() ) );
@@ -1062,13 +1062,13 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public Object visitExecutable_action( final PlanBundleParser.Executable_actionContext p_context )
+    public final Object visitExecutable_action( final PlanBundleParser.Executable_actionContext p_context )
     {
         return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
     @Override
-    public Object visitExecutable_rule( final PlanBundleParser.Executable_ruleContext p_context )
+    public final Object visitExecutable_rule( final PlanBundleParser.Executable_ruleContext p_context )
     {
         if ( p_context.literal() != null )
             return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
@@ -1080,7 +1080,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public Object visitVariable_evaluate( final PlanBundleParser.Variable_evaluateContext p_context )
+    public final Object visitVariable_evaluate( final PlanBundleParser.Variable_evaluateContext p_context )
     {
         return new CVariableEvaluate(
                 (IVariable<?>) this.visitVariable( p_context.variable() ),

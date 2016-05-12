@@ -68,8 +68,8 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     )
     {
         final List<ITerm> l_result = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result, Collections.<ITerm>emptyList() ).getValue() ) ||
-             ( l_result.isEmpty() ) )
+        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result, Collections.<ITerm>emptyList() ).getValue() )
+             || ( l_result.isEmpty() ) )
             return CFuzzyValue.from( false );
 
 
@@ -77,10 +77,9 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         final List<ITerm> l_flatresult = CCommon.flatList( l_result );
         final List<ITerm> l_assign = CCommon.replaceFromContext( p_context, m_value );
 
-
-        IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) ).boxed().forEach(
-                i -> ( (IVariable<?>) l_assign.get( i ) ).set( CCommon.getRawValue( l_flatresult.get( i ) ) )
-        );
+        IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )
+                 .boxed()
+                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( CCommon.getRawValue( l_flatresult.get( i ) ) ) );
 
 
         // tail matching

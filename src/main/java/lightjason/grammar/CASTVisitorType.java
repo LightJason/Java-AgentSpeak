@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
  * parser for complex-datatypes
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
-public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements IASTVisitorType
+public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements IASTVisitorType
 {
     /**
      * map with action definition
@@ -138,7 +138,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     }
 
     @Override
-    public Object visitExecutable_term( final TypeParser.Executable_termContext p_context )
+    public final Object visitExecutable_term( final TypeParser.Executable_termContext p_context )
     {
         if ( p_context.string() != null )
             return new CRawAction<>( this.visitString( p_context.string() ) );
@@ -166,7 +166,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     // --- term element rules ----------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitUnification( final TypeParser.UnificationContext p_context )
+    public final Object visitUnification( final TypeParser.UnificationContext p_context )
     {
         final Object l_constraint = this.visitUnification_constraint( p_context.unification_constraint() );
 
@@ -188,7 +188,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     }
 
     @Override
-    public Object visitUnification_constraint( final TypeParser.Unification_constraintContext p_context )
+    public final Object visitUnification_constraint( final TypeParser.Unification_constraintContext p_context )
     {
         if ( p_context == null )
             return null;
@@ -205,7 +205,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitTernary_operation( final TypeParser.Ternary_operationContext p_context )
+    public final Object visitTernary_operation( final TypeParser.Ternary_operationContext p_context )
     {
         return new CTernaryOperation(
                 (IExpression) this.visitExpression( p_context.expression() ),
@@ -236,7 +236,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public Object visitLiteral( final TypeParser.LiteralContext p_context )
+    public final Object visitLiteral( final TypeParser.LiteralContext p_context )
     {
         return new CLiteral(
                 p_context.AT() != null,
@@ -250,7 +250,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitLiteralset( final TypeParser.LiteralsetContext p_context )
+    public final Object visitLiteralset( final TypeParser.LiteralsetContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_LIST;
@@ -261,7 +261,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitTerm( final TypeParser.TermContext p_context )
+    public final Object visitTerm( final TypeParser.TermContext p_context )
     {
         if ( p_context.string() != null )
             return this.visitString( p_context.string() );
@@ -288,7 +288,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitTermlist( final TypeParser.TermlistContext p_context )
+    public final Object visitTermlist( final TypeParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.<ITerm>emptyList();
@@ -331,7 +331,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitIntegernumber_positive( final TypeParser.Integernumber_positiveContext p_context )
+    public final Object visitIntegernumber_positive( final TypeParser.Integernumber_positiveContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -339,7 +339,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitIntegernumber_negative( final TypeParser.Integernumber_negativeContext p_context )
+    public final Object visitIntegernumber_negative( final TypeParser.Integernumber_negativeContext p_context )
     {
         return Long.valueOf( p_context.getText() );
     }
@@ -347,7 +347,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitFloatnumber( final TypeParser.FloatnumberContext p_context )
+    public final Object visitFloatnumber( final TypeParser.FloatnumberContext p_context )
     {
         if ( p_context.getText().equals( "infinity" ) )
             return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
@@ -362,7 +362,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitLogicalvalue( final TypeParser.LogicalvalueContext p_context )
+    public final Object visitLogicalvalue( final TypeParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null;
     }
@@ -378,7 +378,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitString( final TypeParser.StringContext p_context )
+    public final Object visitString( final TypeParser.StringContext p_context )
     {
         // remove quotes
         final String l_text = p_context.getText();
@@ -388,7 +388,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitAtom( final TypeParser.AtomContext p_context )
+    public final Object visitAtom( final TypeParser.AtomContext p_context )
     {
         return p_context.getText();
     }
@@ -396,7 +396,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitVariable( final TypeParser.VariableContext p_context )
+    public final Object visitVariable( final TypeParser.VariableContext p_context )
     {
         return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
     }
@@ -404,7 +404,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression( final TypeParser.ExpressionContext p_context )
+    public final Object visitExpression( final TypeParser.ExpressionContext p_context )
     {
         // bracket expression
         if ( p_context.expression_bracket() != null )
@@ -432,7 +432,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_logical_and( final TypeParser.Expression_logical_andContext p_context )
+    public final Object visitExpression_logical_and( final TypeParser.Expression_logical_andContext p_context )
     {
         return lightjason.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.AND,
@@ -447,7 +447,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_logical_xor( final TypeParser.Expression_logical_xorContext p_context )
+    public final Object visitExpression_logical_xor( final TypeParser.Expression_logical_xorContext p_context )
     {
         if ( p_context.expression_logical_element() != null )
             return lightjason.grammar.CCommon.createLogicalBinaryExpression(
@@ -471,7 +471,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_logical_negation( final TypeParser.Expression_logical_negationContext p_context )
+    public final Object visitExpression_logical_negation( final TypeParser.Expression_logical_negationContext p_context )
     {
         return new CUnary( EOperator.NEGATION, (IExpression) this.visitExpression( p_context.expression() ) );
     }
@@ -479,7 +479,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_logical_element( final TypeParser.Expression_logical_elementContext p_context )
+    public final Object visitExpression_logical_element( final TypeParser.Expression_logical_elementContext p_context )
     {
         if ( p_context.logicalvalue() != null )
             return new CAtom( this.visitLogicalvalue( p_context.logicalvalue() ) );
@@ -502,7 +502,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_numeric( final TypeParser.Expression_numericContext p_context )
+    public final Object visitExpression_numeric( final TypeParser.Expression_numericContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
@@ -527,7 +527,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_numeric_relation( final TypeParser.Expression_numeric_relationContext p_context )
+    public final Object visitExpression_numeric_relation( final TypeParser.Expression_numeric_relationContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
@@ -566,7 +566,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_numeric_additive( final TypeParser.Expression_numeric_additiveContext p_context )
+    public final Object visitExpression_numeric_additive( final TypeParser.Expression_numeric_additiveContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );
@@ -591,7 +591,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_numeric_multiplicative( final TypeParser.Expression_numeric_multiplicativeContext p_context )
+    public final Object visitExpression_numeric_multiplicative( final TypeParser.Expression_numeric_multiplicativeContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_power( p_context.expression_numeric_power() );
@@ -623,7 +623,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_numeric_power( final TypeParser.Expression_numeric_powerContext p_context )
+    public final Object visitExpression_numeric_power( final TypeParser.Expression_numeric_powerContext p_context )
     {
         if ( p_context.expression_numeric() == null )
             return this.visitExpression_numeric_element( p_context.expression_numeric_element() );
@@ -638,7 +638,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
 
 
     @Override
-    public Object visitExpression_numeric_element( final TypeParser.Expression_numeric_elementContext p_context )
+    public final Object visitExpression_numeric_element( final TypeParser.Expression_numeric_elementContext p_context )
     {
         if ( p_context.number() != null )
             return new CAtom( this.visitNumber( p_context.number() ) );
@@ -656,13 +656,13 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     }
 
     @Override
-    public Object visitExecutable_action( final TypeParser.Executable_actionContext p_context )
+    public final Object visitExecutable_action( final TypeParser.Executable_actionContext p_context )
     {
         return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
     }
 
     @Override
-    public Object visitExecutable_rule( final TypeParser.Executable_ruleContext p_context )
+    public final Object visitExecutable_rule( final TypeParser.Executable_ruleContext p_context )
     {
         if ( p_context.literal() != null )
             return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
@@ -671,7 +671,7 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     }
 
     @Override
-    public Object visitVariable_evaluate( final TypeParser.Variable_evaluateContext ctx )
+    public final Object visitVariable_evaluate( final TypeParser.Variable_evaluateContext p_context )
     {
         return null;
     }

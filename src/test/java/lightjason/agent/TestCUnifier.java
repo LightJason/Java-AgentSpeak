@@ -80,6 +80,8 @@ public final class TestCUnifier
 
     /**
      * traversion of literal value content
+     *
+     * @throws Exception parser exeception
      */
     @Test
     public final void testLiteralValueSequentialTraversing() throws Exception
@@ -112,6 +114,8 @@ public final class TestCUnifier
 
     /**
      * traversion of literal annotation content
+     *
+     * @throws Exception parser exception
      */
     @Test
     public final void testLiteralAnnotationTraversing() throws Exception
@@ -126,6 +130,8 @@ public final class TestCUnifier
 
     /**
      * literal value hashing
+     *
+     * @throws Exception parser exception
      */
     @Test
     public final void testValueHash() throws Exception
@@ -156,6 +162,8 @@ public final class TestCUnifier
 
     /**
      * literal annotation
+     *
+     * @throws Exception parser exception
      */
     @Test
     public final void testAnnotationHash() throws Exception
@@ -178,6 +186,7 @@ public final class TestCUnifier
      * manuell running test
      *
      * @param p_args arguments
+     * @throws Exception parser exception
      */
     public static void main( final String[] p_args ) throws Exception
     {

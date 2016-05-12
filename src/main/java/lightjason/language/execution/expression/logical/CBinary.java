@@ -66,8 +66,8 @@ public final class CBinary extends IBaseBinary
     {
         // get left-hand-side argument and run fastcheck
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() ) ||
-             ( l_argument.isEmpty() ) )
+        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+             || ( l_argument.isEmpty() ) )
             return CFuzzyValue.from( false );
 
         if ( this.fastCheck( l_argument, p_return ) )
@@ -86,18 +86,18 @@ public final class CBinary extends IBaseBinary
         {
 
             case AND:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) &&
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                                             && lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case OR:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) ||
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                                             || lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case XOR:
-                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) ) ^
-                                             lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                                             ^ lightjason.language.CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             default:
