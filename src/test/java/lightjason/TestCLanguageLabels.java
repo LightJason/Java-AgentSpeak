@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
@@ -147,6 +148,8 @@ public final class TestCLanguageLabels
     {
         assumeTrue( "no languages are defined for checking", !LANGUAGEPROPERY.isEmpty() );
 
+        final Set<String> l_ignoredlabel = new HashSet<>();
+
         // --- parse source and get label definition
         final Set<String> l_label = Collections.unmodifiableSet(
                 Files.walk( Paths.get( SEARCHPATH ) )
@@ -166,6 +169,29 @@ public final class TestCLanguageLabels
                          }
                          catch ( final ParseException p_exception )
                          {
+                             // add label build by class path to the ignore list
+                             l_ignoredlabel.add(
+                                     i.toAbsolutePath().toString()
+                                      // remove path to class directory
+                                      .replace(
+                                              FileSystems.getDefault()
+                                                         .provider()
+                                                         .getPath( SEARCHPATH )
+                                                         .toAbsolutePath()
+                                                         .toString()
+                                              , "" )
+                                      // string starts with path separator
+                                      .substring( 1 )
+                                      // remove file extension
+                                      .replace( ".java", "" )
+                                      // replace separators with dots
+                                      .replace( "/", "." )
+                                      // convert to lower-case
+                                      .toLowerCase()
+                                      // remove package-root name
+                                      .replace( CCommon.getPackageRoot() + ".", "" )
+                             );
+
                              System.err.println( MessageFormat.format( "parsing error on file [{0}]:\n{1}", i, p_exception.getMessage() ) );
                              return Stream.<String>empty();
                          }
@@ -174,6 +200,9 @@ public final class TestCLanguageLabels
         );
 
         // --- check label towards the property definition
+        if ( l_ignoredlabel.size() > 0 )
+            System.err.println( MessageFormat.format( "labels that starts with {0} are ignored, because parsing errors are occurred", l_ignoredlabel ) );
+
         LANGUAGEPROPERY.entrySet()
                        .forEach( i -> {
                            try
@@ -197,16 +226,19 @@ public final class TestCLanguageLabels
                                );
 
 
-                               // --- check if all parsed labels within the property item
+                               // --- check if all parsed labels within the property item and remove ignored labels
                                l_propertyitems.removeAll( l_label );
+                               final Set<String> l_ignoredpropertyitems = l_propertyitems.parallelStream().filter(
+                                       j -> l_ignoredlabel.parallelStream().map( l -> j.startsWith( l ) ).allMatch( l -> false ) ).collect(
+                                       Collectors.toSet() );
                                assertTrue(
                                        MessageFormat.format(
                                                "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the source code:\n{2}",
                                                i.getKey(),
-                                               l_propertyitems.size(),
-                                               StringUtils.join( l_propertyitems, ", " )
+                                               l_ignoredpropertyitems.size(),
+                                               StringUtils.join( l_ignoredpropertyitems, ", " )
                                        ),
-                                       l_propertyitems.isEmpty()
+                                       l_ignoredpropertyitems.isEmpty()
                                );
                            }
                            catch ( final IOException p_exception )
