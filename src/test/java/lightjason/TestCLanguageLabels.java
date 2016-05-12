@@ -337,7 +337,7 @@ public final class TestCLanguageLabels
             return MessageFormat.format(
                     "{0}{1}{2}{3}{4}{5}",
                     p_package, ClassUtils.PACKAGE_SEPARATOR,
-                    p_outerclass, p_innerclass.isEmpty() ? "" : ClassUtils.INNER_CLASS_SEPARATOR,
+                    p_outerclass, p_innerclass.isEmpty() ? "" : ClassUtils.PACKAGE_SEPARATOR,
                     p_innerclass,
 
                     p_label.isEmpty()
