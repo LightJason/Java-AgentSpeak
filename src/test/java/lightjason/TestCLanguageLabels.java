@@ -299,6 +299,8 @@ public final class TestCLanguageLabels
                 m_innerclass = p_class.getName();
 
             super.visit( p_class, p_arg );
+
+            m_innerclass = "";
         }
 
         @Override
@@ -310,6 +312,8 @@ public final class TestCLanguageLabels
                 m_innerclass = p_enum.getName();
 
             super.visit( p_enum, p_arg );
+
+            m_innerclass = "";
         }
 
         @Override
