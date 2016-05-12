@@ -47,9 +47,7 @@ public final class CErrorListener implements ANTLRErrorListener
                              final RecognitionException p_exception
     )
     {
-        final String l_message = CCommon.getLanguageString(
-                this, p_exception == null ? "generic" : p_exception.getClass().getSimpleName(), p_line, p_charposition );
-        throw new CSyntaxErrorException( l_message.isEmpty() ? p_message : l_message, p_exception );
+        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "syntax", p_line, p_charposition ) );
     }
 
     @Override
