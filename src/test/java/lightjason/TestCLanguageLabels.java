@@ -63,10 +63,7 @@ import static org.junit.Assume.assumeTrue;
 
 /**
  * test all resource strings
- *
- * @todo add ignore class definitions
  */
-@SuppressWarnings( "serial" )
 public final class TestCLanguageLabels
 {
     /**
