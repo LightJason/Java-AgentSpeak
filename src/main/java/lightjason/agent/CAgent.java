@@ -190,6 +190,7 @@ public class CAgent implements IAgent
             ) ) );
             i.inspectrunningplans( m_runningplans.values().parallelStream() );
             i.inspectstorage( m_storage.entrySet().parallelStream() );
+            i.inspectrules( m_rules.values().parallelStream() );
         } );
     }
 

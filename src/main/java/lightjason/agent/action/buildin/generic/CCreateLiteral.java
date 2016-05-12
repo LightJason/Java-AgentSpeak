@@ -21,70 +21,46 @@
  * @endcond
  */
 
-package lightjason.agent;
+package lightjason.agent.action.buildin.generic;
 
-import lightjason.language.ILiteral;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.rule.IRule;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
+import lightjason.agent.action.buildin.IBuildinAction;
+import lightjason.language.CCommon;
+import lightjason.language.CLiteral;
+import lightjason.language.ITerm;
+import lightjason.language.execution.IContext;
+import lightjason.language.execution.fuzzy.CFuzzyValue;
+import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
- * inspector interface to read agent internal data
+ * creates a literal by the input data
  */
-public interface IInspector
+public final class CCreateLiteral extends IBuildinAction
 {
 
-    /**
-     * inspect hibernate value
-     *
-     * @param p_value value
-     */
-    void inspecthibernate( final boolean p_value );
+    @Override
+    public final int getMinimalArgumentNumber()
+    {
+        return 1;
+    }
 
-    /**
-     * inspect cycle value
-     *
-     * @param p_value value
-     */
-    void inspectcycle( final long p_value );
-
-    /**
-     * inspect beliefs
-     *
-     * @param p_value belief stream
-     */
-    void inspectbelief( final Stream<ILiteral> p_value );
-
-    /**
-     * inspect plans
-     *
-     * @param p_value plan stream
-     */
-    void inspectplans( final Stream<ImmutableTriple<IPlan, Long, Long>> p_value );
-
-    /**
-     * inspect rules
-     *
-     * @param p_value rule stream
-     */
-    void inspectrules( final Stream<IRule> p_value );
-
-    /**
-     * inspect running plans
-     *
-     * @param p_value literal stream
-     */
-    void inspectrunningplans( final Stream<ILiteral> p_value );
-
-    /**
-     * inspect storage values
-     *
-     * @param p_value storage values
-     */
-    void inspectstorage( final Stream<? extends Map.Entry<String, ?>> p_value );
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        p_return.add(
+                CLiteral.from(
+                        CCommon.getRawValue( p_argument.get( 0 ) ),
+                        p_argument.size() > 1
+                        ? p_argument.subList( 1, p_argument.size() )
+                        : Collections.<ITerm>emptyList()
+                )
+        );
+        return CFuzzyValue.from( true );
+    }
 
 }
