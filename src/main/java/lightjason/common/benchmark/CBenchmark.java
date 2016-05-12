@@ -31,7 +31,7 @@ import java.lang.instrument.Instrumentation;
 /**
  * premain executable class for benchmarking
  *
- * @note Jar file must be performtemplate with @code java -javaagent:<Jar> -jar <Jar> @endcode
+ * @note Jar file must be performtemplate with @code java -javaagent:Jar -jar Jar @endcode
  */
 public final class CBenchmark
 {
