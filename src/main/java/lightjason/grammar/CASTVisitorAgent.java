@@ -109,7 +109,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
     /**
      * initial goal
      */

@@ -671,7 +671,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public final Object visitVariable_evaluate( final TypeParser.Variable_evaluateContext ctx )
+    public final Object visitVariable_evaluate( final TypeParser.Variable_evaluateContext p_context )
     {
         return null;
     }

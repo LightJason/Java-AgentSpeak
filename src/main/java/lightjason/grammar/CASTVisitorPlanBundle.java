@@ -109,7 +109,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     /**
      * logger
      */
-    protected final static Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
+    protected static final Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
     /**
      * set with initial beliefs
      */

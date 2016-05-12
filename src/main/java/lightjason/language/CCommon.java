@@ -124,8 +124,8 @@ public final class CCommon
      *
      * @param p_package full-qualified package name or empty for default package
      * @return action set
-     * @throws IOException on io errors
      *
+     * @throws IOException on io errors
      * @todo can be moved to an own class
      */
     @SuppressWarnings( "unchecked" )
