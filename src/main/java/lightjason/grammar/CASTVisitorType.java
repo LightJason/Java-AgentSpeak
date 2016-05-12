@@ -291,11 +291,13 @@ public class CASTVisitorType extends AbstractParseTreeVisitor<Object> implements
     public Object visitTermlist( final TypeParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
+            return Collections.<ITerm>emptyList();
 
-        return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
-        ).collect( Collectors.toList() );
+        return p_context.term().stream()
+                        .map( i -> this.visitTerm( i ) )
+                        .filter( i -> i != null )
+                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
+                        .collect( Collectors.toList() );
     }
 
 

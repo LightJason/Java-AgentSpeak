@@ -23,7 +23,6 @@
 
 package lightjason.grammar;
 
-
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
@@ -273,9 +272,12 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;
 
+
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
+
         if ( p_context.annotation_atom() != null )
             p_context.annotation_atom().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
+
         if ( p_context.annotation_literal() != null )
             p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
 
@@ -557,7 +559,9 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
 
         if ( p_context.variable_evaluate() != null )
             return new CAchievementGoalVariable(
-                    (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+                    (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
+                    p_context.DOUBLEEXCLAMATIONMARK() != null
+            );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
     }
@@ -614,6 +618,11 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
@@ -625,11 +634,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
                 (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
         );
     }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- simple datatypes ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Object visitLiteralset( final AgentParser.LiteralsetContext p_context )
@@ -684,16 +688,17 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
         return this.visitChildren( p_context );
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
+
     @Override
     public final Object visitNumber( final AgentParser.NumberContext p_context )
     {
         return this.visitChildren( p_context );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final Object visitIntegernumber( final AgentParser.IntegernumberContext p_context )
@@ -974,7 +979,6 @@ public class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> implement
     @Override
     public Object visitExpression_numeric_element( final AgentParser.Expression_numeric_elementContext p_context )
     {
-
         if ( p_context.number() != null )
             return new CAtom( this.visitNumber( p_context.number() ) );
 

@@ -23,7 +23,7 @@
 
 package lightjason.grammar;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
@@ -102,7 +102,6 @@ import java.util.stream.Collectors;
  *
  * @note methods are implemented twice agent and plan-bundle, because both use equal
  * AgentSpeak(L) grammer, but AntLR visitor does not support inheritance by the grammar definition
- * @bug execption messages are not within the resource files
  */
 @SuppressWarnings( {"all", "warnings", "unchecked", "unused", "cast"} )
 public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> implements IASTVisitorPlanBundle
@@ -122,7 +121,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with logical rules
      */
-    protected final Multimap<IPath, IRule> m_rules = HashMultimap.create();
+    protected final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
     /**
      * map with action definition
      */
@@ -184,14 +183,14 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
                  .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
                  .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
-        final Multimap<IPath, IRule> l_rules = HashMultimap.create();
+        final Multimap<IPath, IRule> l_rules = LinkedHashMultimap.create();
         p_context.logicrule().stream()
                  .flatMap( i -> ( (List<IRule>) this.visitLogicrule( i ) ).stream() )
                  .forEach( i -> l_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
         // clear rule list and replace placeholder objects
         m_rules.clear();
-        l_rules.values().parallelStream()
+        l_rules.values().stream()
                .map( i -> i.replaceplaceholder( l_rules ) )
                .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
@@ -252,9 +251,12 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
             return Collections.EMPTY_SET;
 
+
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
+
         if ( p_context.annotation_atom() != null )
             p_context.annotation_atom().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
+
         if ( p_context.annotation_literal() != null )
             p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
 
@@ -292,7 +294,7 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
             return new CNumberAnnotation<>( IAnnotation.EType.FUZZY, (Number) this.visitNumber( p_context.number() ) );
 
         if ( p_context.SCORE() != null )
-            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).longValue() );
+            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).doubleValue() );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
     }
@@ -573,7 +575,9 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
 
         if ( p_context.variable_evaluate() != null )
             return new CAchievementGoalVariable(
-                    (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+                    (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
+                    p_context.DOUBLEEXCLAMATIONMARK() != null
+            );
 
         throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
     }
@@ -697,11 +701,13 @@ public class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object> impl
     public Object visitTermlist( final PlanBundleParser.TermlistContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
+            return Collections.<ITerm>emptyList();
 
-        return p_context.term().stream().map( i -> this.visitTerm( i ) ).filter( i -> i != null ).map(
-                i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i )
-        ).collect( Collectors.toList() );
+        return p_context.term().stream()
+                        .map( i -> this.visitTerm( i ) )
+                        .filter( i -> i != null )
+                        .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
+                        .collect( Collectors.toList() );
     }
 
 
