@@ -64,10 +64,16 @@ public final class CToList extends IBuildinAction
     {
         // first argument must be a term with a vector object
         p_return.add( CRawTerm.from(
-                p_parallel == true
-                ? Collections.synchronizedList( Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray() ).boxed()
-                                                      .collect( Collectors.toList() ) )
-                : Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray() ).boxed().collect( Collectors.toList() )
+                p_parallel
+                ? Collections.synchronizedList(
+                        Arrays.stream(
+                                CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray()
+                        )
+                              .boxed()
+                              .collect( Collectors.toList() ) )
+                : Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray() )
+                        .boxed()
+                        .collect( Collectors.toList() )
         ) );
         return CFuzzyValue.from( true );
     }
