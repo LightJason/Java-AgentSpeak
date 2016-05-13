@@ -29,7 +29,7 @@
     </module>
 
     <module name = "Header">
-        <!-- <property name = "headerFile" value = "src/main/styleguide/header.txt" /> -->
+        <property name = "headerFile" value = "src/main/styleguide/header.txt" />
         <property name = "fileExtensions" value = "java" />
     </module>
 
@@ -70,7 +70,7 @@
         </module>
 
         <module name = "AnonInnerLengthCheck">
-            <property name = "max" value = "15" />
+            <property name = "max" value = "25" />
         </module>
 
         <module name = "AnnotationUseStyle" />
