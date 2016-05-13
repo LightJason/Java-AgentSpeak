@@ -80,28 +80,18 @@ public class CAgent implements IAgent
 
     /**
      * beliefbase
-     *
-     * @warning need not to be null
      */
     protected final IView m_beliefbase;
     /**
-     * unifier
+     * storage map
      *
-     * @warning need not to be null
+     * @note must be thread-safe
      */
-    protected final IUnifier m_unifier;
+    protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
     /**
-     * aggregation function
-     *
-     * @warning need not to be null
+     * execution trigger
      */
-    protected final IAggregation m_aggregation;
-    /**
-     * variable builder
-     *
-     * @warning can be set to null
-     */
-    protected final IVariableBuilder m_variablebuilder;
+    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
     /**
      * multimap with rules
      */
@@ -111,36 +101,39 @@ public class CAgent implements IAgent
      */
     protected final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
-     * storage map
-     *
-     * @note must be thread-safe and need not to be null
-     */
-    protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
-    /**
-     * fuzzy result collector
-     */
-    protected final IFuzzy<Boolean> m_fuzzy;
-    /**
      * curent agent cycle
      */
-    protected long m_cycle;
+    private long m_cycle;
     /**
      * nano seconds at the last cycle
      */
-    protected long m_cycletime;
-    /**
-     * execution trigger
-     */
-    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
-    /**
-     * running plans (thread-safe)
-     */
-    protected final Multimap<IPath, ILiteral> m_runningplans = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
+    private long m_cycletime;
     /**
      * hibernate state
      */
     private volatile boolean m_hibernate;
-
+    /**
+     * unifier
+     */
+    private final IUnifier m_unifier;
+    /**
+     * aggregation function
+     */
+    private final IAggregation m_aggregation;
+    /**
+     * variable builder
+     *
+     * @warning can be set to null
+     */
+    private final IVariableBuilder m_variablebuilder;
+    /**
+     * fuzzy result collector
+     */
+    private final IFuzzy<Boolean> m_fuzzy;
+    /**
+     * running plans (thread-safe)
+     */
+    private final Multimap<IPath, ILiteral> m_runningplans = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
 
 
     /**
@@ -325,7 +318,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IAgent call() throws Exception
+    public IAgent call() throws Exception
     {
         LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
 
@@ -364,7 +357,7 @@ public class CAgent implements IAgent
      * @return list with tupel of plan-triple and context for execution
      */
     @SuppressWarnings( "unchecked" )
-    protected final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
+    private Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
     {
         return m_plans.get( p_trigger ).parallelStream()
 
@@ -422,7 +415,7 @@ public class CAgent implements IAgent
      * @param p_execution execution list
      * @return fuzzy result
      */
-    protected final IFuzzyValue<Boolean> execute( final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
+    private IFuzzyValue<Boolean> execute( final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(

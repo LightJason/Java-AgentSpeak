@@ -69,6 +69,10 @@
             <property name = "allowSamelineSingleParameterlessAnnotation" value = "false" />
         </module>
 
+        <module name = "AnonInnerLengthCheck">
+            <property name = "max" value = "15" />
+        </module>
+
         <module name = "AnnotationUseStyle" />
 
         <module name = "AnonInnerLength">
