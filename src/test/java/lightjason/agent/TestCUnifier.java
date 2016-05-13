@@ -44,14 +44,16 @@ import static org.junit.Assert.assertTrue;
 /**
  * test for unification
  */
-@SuppressWarnings( "serial" )
 public final class TestCUnifier
 {
 
     /**
      * traversion of literal value content
+     *
+     * @throws Exception on parsing exception
      */
     @Test
+    @SuppressWarnings( "serial" )
     public final void testLiteralValueTraversing() throws Exception
     {
         final Set<ILiteral> l_test = new HashSet<ILiteral>()
@@ -84,6 +86,7 @@ public final class TestCUnifier
      * @throws Exception parser exeception
      */
     @Test
+    @SuppressWarnings( "serial" )
     public final void testLiteralValueSequentialTraversing() throws Exception
     {
         final Stack<ILiteral> l_test = new Stack<ILiteral>()

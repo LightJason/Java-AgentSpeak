@@ -112,10 +112,9 @@ public final class CPrint extends IBuildinAction
         m_stream.println(
                 MessageFormat.format(
                         "{0}{1}", this.getString( p_argument ),
-                        ( p_annotation.isEmpty()
-                          ? ""
-                          : MessageFormat.format( "{0}{1}", m_seperator, this.getString( p_annotation ) )
-                        )
+                        p_annotation.isEmpty()
+                        ? ""
+                        : MessageFormat.format( "{0}{1}", m_seperator, this.getString( p_annotation ) )
                 )
         );
         return CFuzzyValue.from( true );
@@ -149,11 +148,12 @@ public final class CPrint extends IBuildinAction
      *
      * @tparam any type
      */
-    public static abstract class IFormatter<T>
+    public abstract static class IFormatter<T>
     {
         /**
          * checks if a type is assigneable
          *
+         * @param p_class assignable class
          * @return assignable flag
          */
         public final boolean isAssignableTo( final Class<?> p_class )

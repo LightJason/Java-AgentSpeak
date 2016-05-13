@@ -140,7 +140,7 @@ public enum EOperator
      */
     public final boolean isPower()
     {
-        return ( this == POWER );
+        return this == POWER;
     }
 
     /**

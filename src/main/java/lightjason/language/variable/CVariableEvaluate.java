@@ -84,7 +84,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
     @SuppressWarnings( "unchecked" )
     public final ILiteral evaluate( final IContext p_context )
     {
-        final IVariable<?> l_variable = ( (IVariable<?>) CCommon.replaceFromContext( p_context, m_variable ) );
+        final IVariable<?> l_variable = (IVariable<?>) CCommon.replaceFromContext( p_context, m_variable );
         if ( !l_variable.isAllocated() )
             throw new CIllegalStateException();
 

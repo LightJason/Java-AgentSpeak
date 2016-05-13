@@ -85,7 +85,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
         )
                      .parallel()
                      .filter( i -> i instanceof IVariable<?> )
-                     .map( i -> ( (IVariable<?>) i ) );
+                     .map( i -> (IVariable<?>) i );
     }
 
     @Override

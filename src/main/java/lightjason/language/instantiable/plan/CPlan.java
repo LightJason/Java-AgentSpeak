@@ -202,7 +202,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
                 CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
                        .filter( i -> i instanceof IVariable<?> )
-                       .map( i -> ( (IVariable<?>) i ) )
+                       .map( i -> (IVariable<?>) i )
         )
                                             .reduce( Stream::concat )
                                             .orElseGet( Stream::<IVariable<?>>empty );
