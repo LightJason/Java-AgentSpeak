@@ -121,7 +121,13 @@
         <!-- <module name="CustomImportOrder"/> -->
 
         <module name = "CyclomaticComplexity">
-            <property name = "max" value = "6" />
+            <property name = "max" value = "15" />
+            <property name = "tokens" value = "LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_CATCH, QUESTION, LAND, LOR" />
+        </module>
+
+        <module name = "CyclomaticComplexity">
+            <property name = "max" value = "20" />
+            <property name = "tokens" value = "LITERAL_CASE" />
         </module>
 
         <module name = "DeclarationOrder" />

@@ -65,9 +65,9 @@ public final class CParseInt extends IBuildinAction
             p_return.add( CRawTerm.from( Long.parseLong( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
             return CFuzzyValue.from( true );
         }
-        catch ( final Exception p_exception )
+        catch ( final Exception l_exception )
         {
-            LOGGER.warning( MessageFormat.format( "parsing integer [{0}] error: {1}", p_argument.get( 0 ), p_exception ) );
+            LOGGER.warning( MessageFormat.format( "parsing integer [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
             return CFuzzyValue.from( false );
         }
 

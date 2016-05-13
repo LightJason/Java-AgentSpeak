@@ -223,8 +223,9 @@ public final class CBind<T>
      *
      * @note useful for static object
      * @tparam T object type
+     * @bug implement execution
      */
-    public static class CObjectAction<T> extends IBaseAction
+    public static final class CObjectAction<T> extends IBaseAction
     {
         /**
          * binded object
@@ -276,9 +277,6 @@ public final class CBind<T>
             return m_arguments;
         }
 
-        /**
-         * @bug implement execution
-         */
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
                                                    final List<ITerm> p_return,
@@ -311,7 +309,7 @@ public final class CBind<T>
      * @note usefull for dynammic binding depend on an element
      * within the agent storage
      */
-    public static class CStorageElementAction extends IBaseAction
+    public static final class CStorageElementAction extends IBaseAction
     {
         /**
          * storage name
@@ -377,9 +375,6 @@ public final class CBind<T>
             return m_arguments;
         }
 
-        /**
-         * @bug implement execution
-         */
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
                                                    final List<ITerm> p_return,

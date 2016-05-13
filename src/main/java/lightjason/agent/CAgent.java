@@ -195,7 +195,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
+    public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {
         if ( m_hibernate )
             return CFuzzyValue.from( false );
@@ -325,7 +325,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public IAgent call() throws Exception
+    public final IAgent call() throws Exception
     {
         LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
 
@@ -364,7 +364,7 @@ public class CAgent implements IAgent
      * @return list with tupel of plan-triple and context for execution
      */
     @SuppressWarnings( "unchecked" )
-    protected Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
+    protected final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
     {
         return m_plans.get( p_trigger ).parallelStream()
 
@@ -422,7 +422,7 @@ public class CAgent implements IAgent
      * @param p_execution execution list
      * @return fuzzy result
      */
-    protected IFuzzyValue<Boolean> execute( final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
+    protected final IFuzzyValue<Boolean> execute( final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(

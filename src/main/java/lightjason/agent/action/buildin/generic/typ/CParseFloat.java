@@ -64,9 +64,9 @@ public final class CParseFloat extends IBuildinAction
             p_return.add( CRawTerm.from( Double.parseDouble( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
             return CFuzzyValue.from( true );
         }
-        catch ( final Exception p_exception )
+        catch ( final Exception l_exception )
         {
-            LOGGER.warning( MessageFormat.format( "parsing float [{0}] error: {1}", p_argument.get( 0 ), p_exception ) );
+            LOGGER.warning( MessageFormat.format( "parsing float [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
             return CFuzzyValue.from( false );
         }
 
