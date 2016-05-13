@@ -68,6 +68,9 @@ myfunction(X) :- generic/print("my logical rule", X).
        fail
 .
 
+-!myexternal <- generic/print("external trigger in cycle [", Cycle, "]").
+
+
 +!main
 
     : >>( hallo(X), generic/typ/isstring(X) ) <-

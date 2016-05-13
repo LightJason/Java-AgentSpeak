@@ -35,6 +35,8 @@ import lightjason.language.CLiteral;
 import lightjason.language.CRawTerm;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.instantiable.IInstantiable;
+import lightjason.language.instantiable.plan.trigger.CTrigger;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
 import lightjason.language.variable.CConstant;
 import lightjason.language.variable.IVariable;
@@ -117,6 +119,7 @@ public final class TestCAgent
      * manuell running test
      *
      * @param p_args arguments
+     * @throws Exception on parsing exception
      */
     public static void main( final String[] p_args ) throws Exception
     {
@@ -144,7 +147,11 @@ public final class TestCAgent
             IntStream.range( 0, 5 ).forEach( i -> {
                 try
                 {
-                    l_agent.call().getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
+                    l_agent.call();
+                    l_agent.getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
+                    l_agent.trigger(
+                            CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
+                    );
                 }
                 catch ( final Exception l_exception )
                 {
