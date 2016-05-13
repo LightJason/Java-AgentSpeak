@@ -29,7 +29,7 @@
     </module>
 
     <module name = "Header">
-        <property name = "headerFile" value = "src/main/styleguide/header.txt" />
+        <!-- <property name = "headerFile" value = "src/main/styleguide/header.txt" /> -->
         <property name = "fileExtensions" value = "java" />
     </module>
 
@@ -220,6 +220,8 @@
         <module name = "JavadocMethod">
             <property name = "minLineCount" value = "1" />
             <property name = "scope" value = "public" />
+            <!-- @param is substitute with @tparam so allow missing tags -->
+            <property name = "allowMissingParamTags" value = "true" />
         </module>
 
         <!-- <module name="JavadocPackage"/> -->
@@ -237,7 +239,7 @@
         <module name = "JavadocType">
             <property name = "scope" value = "public" />
             <property name = "allowUnknownTags" value = "true" />
-            <!-- Doxygen @tparam tag must be ignored -->
+            <!-- @param is substitute with @tparam so allow missing tags -->
             <property name = "allowMissingParamTags" value = "true" />
         </module>
 
