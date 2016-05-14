@@ -142,7 +142,7 @@
 
         <!-- <module name="DescendantToken"/> -->
 
-        <module name = "DesignForExtension" />
+        <!-- <module name = "DesignForExtension" /> -->
 
         <module name = "EmptyBlock" />
 
