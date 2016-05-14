@@ -30,11 +30,11 @@ import lightjason.language.ITerm;
 import org.junit.Test;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -53,26 +53,18 @@ public final class TestCUnifier
      * @throws Exception on parsing exception
      */
     @Test
-    @SuppressWarnings( "serial" )
     public final void testLiteralValueTraversing() throws Exception
     {
-        final Set<ILiteral> l_test = new HashSet<ILiteral>()
-        {{
+        final Set<ILiteral> l_test = Stream.of(
+                CLiteral.parse( "first('Hello')" ),
+                CLiteral.parse( "first('Foo')" )
+        ).collect( Collectors.toSet() );
 
-            add( CLiteral.parse( "first('Hello')" ) );
-            add( CLiteral.parse( "first('Foo')" ) );
-
-        }};
-
-        final ILiteral l_literal = CLiteral.from( "toplevel", new HashSet<ITerm>()
-        {{
-
-            addAll( l_test );
-            add( CLiteral.parse( "second/sub(1)" ) );
-            add( CLiteral.parse( "second/sub(2)" ) );
-            add( CLiteral.parse( "second/sub(3)" ) );
-
-        }} );
+        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
+                CLiteral.parse( "second/sub(1)" ),
+                CLiteral.parse( "second/sub(2)" ),
+                CLiteral.parse( "second/sub(3)" )
+        ) ).collect( Collectors.toSet() ) );
 
         final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
@@ -86,26 +78,18 @@ public final class TestCUnifier
      * @throws Exception parser exeception
      */
     @Test
-    @SuppressWarnings( "serial" )
     public final void testLiteralValueSequentialTraversing() throws Exception
     {
-        final Stack<ILiteral> l_test = new Stack<ILiteral>()
-        {{
+        final Stack<ILiteral> l_test = Stream.of(
+                CLiteral.parse( "first('Hello')" ),
+                CLiteral.parse( "first('Foo')" )
+        ).collect( Collectors.toCollection( Stack::new ) );
 
-            add( CLiteral.parse( "first('Hello')" ) );
-            add( CLiteral.parse( "first('Foo')" ) );
-
-        }};
-
-        final ILiteral l_literal = CLiteral.from( "toplevel", new HashSet<ITerm>()
-        {{
-
-            add( CLiteral.parse( "second/sub(1)" ) );
-            add( CLiteral.parse( "second/sub(2)" ) );
-            add( CLiteral.parse( "second/sub(3)" ) );
-            addAll( l_test );
-
-        }} );
+        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
+                CLiteral.parse( "second/sub(1)" ),
+                CLiteral.parse( "second/sub(2)" ),
+                CLiteral.parse( "second/sub(3)" )
+        ) ).collect( Collectors.toSet() ) );
 
         assertTrue(
                 MessageFormat.format( "literal sequential traversing in {0} is wrong for {1}", l_literal, l_test ),

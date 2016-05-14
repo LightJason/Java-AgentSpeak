@@ -23,6 +23,7 @@
 
 package lightjason.agent;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Multiset;
 import lightjason.agent.action.IAction;
 import lightjason.agent.action.buildin.bind.CBind;
@@ -48,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,13 +102,19 @@ public final class TestCAgent
     @Test
     public final void testASL()
     {
-        final Map<String, String> l_testing = new HashMap<String, String>()
-        {{
+        final Map<String, String> l_testing = StreamUtils.zip(
 
-            put( "src/test/resources/agent/complete.asl", "full-test agent" );
+                Stream.of(
+                        "src/test/resources/agent/complete.asl"
+                ),
 
-        }};
+                Stream.of(
+                        "full-test agent"
+                ),
 
+                ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v )
+
+        ).collect( Collectors.toConcurrentMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
         l_testing.entrySet().stream().forEach( i -> {
             final Pair<Boolean, String> l_result = this.testAgent( i.getKey(), i.getValue() );

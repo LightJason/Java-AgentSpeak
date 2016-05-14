@@ -40,9 +40,9 @@ import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 
@@ -56,32 +56,36 @@ public final class TestCMetric
      * literal view generator
      */
     private final IView.IGenerator m_generator = new CGenerator();
-    ;
 
 
     /**
      * test symmetric weight metric
      */
     @Test
-    @SuppressWarnings( "serial" )
     public final void testSymmetricWeight()
     {
         final IFilter l_filter = new CAll();
         final IMetric l_metric = new CSymmetricDifference();
 
-        final Set<ILiteral> l_beliefs = new HashSet<>();
-        l_beliefs.add( CLiteral.from( "toplevel" ) );
-        l_beliefs.add( CLiteral.from( "first/sub1" ) );
-        l_beliefs.add( CLiteral.from( "first/sub2" ) );
-        l_beliefs.add( CLiteral.from( "second/sub1" ) );
-        l_beliefs.add( CLiteral.from( "second/sub2" ) );
-        l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
+        final Set<ILiteral> l_beliefs = Stream.of(
+                CLiteral.from( "toplevel" ),
+                CLiteral.from( "first/sub1" ),
+                CLiteral.from( "first/sub2" ),
+                CLiteral.from( "second/sub1" ),
+                CLiteral.from( "second/sub2" ),
+                CLiteral.from( "second/sub/sub1" )
+        ).collect( Collectors.toSet() );
 
         this.check( "symmetric difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 0, 0 );
-        this.check( "symmetric difference inequality", l_filter, l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
-        {{
-            add( CLiteral.from( "diff" ) );
-        }}, 1, 0 );
+        this.check(
+                "symmetric difference inequality",
+                l_filter,
+                l_metric,
+                l_beliefs,
+                Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+                1,
+                0
+        );
     }
 
 
@@ -89,25 +93,30 @@ public final class TestCMetric
      * test symmetric metric
      */
     @Test
-    @SuppressWarnings( "serial" )
     public final void testWeight()
     {
         final IFilter l_filter = new CAll();
         final IMetric l_metric = new CWeightedDifference();
 
-        final Set<ILiteral> l_beliefs = new HashSet<>();
-        l_beliefs.add( CLiteral.from( "toplevel" ) );
-        l_beliefs.add( CLiteral.from( "first/sub1" ) );
-        l_beliefs.add( CLiteral.from( "first/sub2" ) );
-        l_beliefs.add( CLiteral.from( "second/sub1" ) );
-        l_beliefs.add( CLiteral.from( "second/sub2" ) );
-        l_beliefs.add( CLiteral.from( "second/sub/sub1" ) );
+        final Set<ILiteral> l_beliefs = Stream.of(
+                CLiteral.from( "toplevel" ),
+                CLiteral.from( "first/sub1" ),
+                CLiteral.from( "first/sub2" ),
+                CLiteral.from( "second/sub1" ),
+                CLiteral.from( "second/sub2" ),
+                CLiteral.from( "second/sub/sub1" )
+        ).collect( Collectors.toSet() );
 
         this.check( "weight difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 24, 0 );
-        this.check( "weight difference inequality", l_filter, l_metric, l_beliefs, new HashSet<ILiteral>( l_beliefs )
-        {{
-            add( CLiteral.from( "diff" ) );
-        }}, 28 + 1.0 / 6, 0 );
+        this.check(
+                "weight difference inequality",
+                l_filter,
+                l_metric,
+                l_beliefs,
+                Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+                28 + 1.0 / 6,
+                0
+        );
     }
 
     /**
