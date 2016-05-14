@@ -23,16 +23,20 @@
 
 package lightjason.grammar;
 
+import com.codepoetics.protonpack.StreamUtils;
 import lightjason.error.CSyntaxErrorException;
 import lightjason.language.execution.expression.EOperator;
 import lightjason.language.execution.expression.IExpression;
 import lightjason.language.execution.expression.logical.CBinary;
 
+import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,21 +48,35 @@ public final class CCommon
     /**
      * numeric constant values - infinity is defined manually
      */
-    @SuppressWarnings( "serial" )
-    public static final Map<String, Double> NUMERICCONSTANT = new HashMap<String, Double>()
-    {{
+    static final Map<String, Double> NUMERICCONSTANT = Collections.unmodifiableMap(
+            StreamUtils.zip(
+                    Stream.of(
+                            "pi",
+                            "euler",
+                            "lightspeed",
+                            "avogadro",
+                            "boltzmann",
+                            "gravity",
+                            "electron",
+                            "neutron",
+                            "proton"
+                    ),
 
-        put( "pi", Math.PI );
-        put( "euler", Math.E );
-        put( "lightspeed", 299792458.0 );
-        put( "avogadro", 6.0221412927e23 );
-        put( "boltzmann", 8.617330350e-15 );
-        put( "gravity", 6.67408e-11 );
-        put( "electron", 9.10938356e-31 );
-        put( "neutron", 1674927471214e-27 );
-        put( "proton", 1.6726219e-27 );
+                    Stream.of(
+                            Math.PI,
+                            Math.E,
+                            299792458.0,
+                            6.0221412927e23,
+                            8.617330350e-15,
+                            6.67408e-11,
+                            9.10938356e-31,
+                            1674927471214e-27,
+                            1.6726219e-27
+                    ),
 
-    }};
+                    ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v )
+            ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) ) );
+
 
     /**
      * ctor
@@ -75,8 +93,8 @@ public final class CCommon
      * @param p_righthandside right-hand-side expressions
      * @return concat expression
      */
-    public static IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
-                                                             final Collection<IExpression> p_righthandside
+    static IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
+                                                      final Collection<IExpression> p_righthandside
     )
     {
         if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )
