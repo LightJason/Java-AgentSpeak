@@ -68,7 +68,7 @@ public final class CInCircle extends IBuildinAction
                                                .collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
-                Math.hypot( l_point.get( 0 ) - l_point.get( 2 ), l_point.get( 1 ) - l_point.get( 3 ) ) <= Math.pow( l_point.get( 4 ), 2 )
+            Math.hypot( l_point.get( 0 ) - l_point.get( 2 ), l_point.get( 1 ) - l_point.get( 3 ) ) <= Math.pow( l_point.get( 4 ), 2 )
         ) );
 
         return CFuzzyValue.from( true );

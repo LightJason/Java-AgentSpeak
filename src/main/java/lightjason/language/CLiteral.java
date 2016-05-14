@@ -201,8 +201,9 @@ public final class CLiteral implements ILiteral
     public static ILiteral from( final String p_functor, final Collection<ITerm> p_values, final Collection<ILiteral> p_annotations )
     {
         return new CLiteral(
-                p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ), p_values,
-                p_annotations
+            p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
+            p_values,
+            p_annotations
         );
     }
 
@@ -321,22 +322,22 @@ public final class CLiteral implements ILiteral
     public final ILiteral unify( final IContext p_context )
     {
         return new CLiteral(
-                m_at,
-                m_negated,
-                m_functor,
-                m_orderedvalues.stream()
-                               .map( i -> {
-                                   if ( i instanceof IVariable<?> )
-                                   {
-                                       final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
-                                       return ( l_variable == null ) || ( l_variable.isAllocated() ) ? CRawTerm.from( l_variable ) : l_variable;
-                                   }
-                                   if ( i instanceof ILiteral )
-                                       return ( (ILiteral) i ).unify( p_context );
-                                   return i;
-                               } )
-                               .collect( Collectors.toList() ),
-                m_annotations.values().stream().map( i -> i.unify( p_context ) ).collect( Collectors.toSet() )
+            m_at,
+            m_negated,
+            m_functor,
+            m_orderedvalues.stream()
+                           .map( i -> {
+                               if ( i instanceof IVariable<?> )
+                               {
+                                   final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
+                                   return ( l_variable == null ) || ( l_variable.isAllocated() ) ? CRawTerm.from( l_variable ) : l_variable;
+                               }
+                               if ( i instanceof ILiteral )
+                                   return ( (ILiteral) i ).unify( p_context );
+                               return i;
+                           } )
+                           .collect( Collectors.toList() ),
+            m_annotations.values().stream().map( i -> i.unify( p_context ) ).collect( Collectors.toSet() )
         );
     }
 
@@ -377,16 +378,16 @@ public final class CLiteral implements ILiteral
 
                ?
                new CLiteral(
-                       m_at, m_negated, m_functor,
-                       m_values.values(),
-                       m_annotations.values()
+                   m_at, m_negated, m_functor,
+                   m_values.values(),
+                   m_annotations.values()
                )
 
                :
                new CLiteral(
-                       m_at, m_negated, p_prefix[0].append( m_functor ),
-                       m_values.values(),
-                       m_annotations.values()
+                   m_at, m_negated, p_prefix[0].append( m_functor ),
+                   m_values.values(),
+                   m_annotations.values()
                );
     }
 
@@ -394,9 +395,9 @@ public final class CLiteral implements ILiteral
     public final ILiteral shallowcopySuffix()
     {
         return new CLiteral(
-                m_at, m_negated, CPath.from( m_functor.getSuffix() ),
-                m_values.values(),
-                m_annotations.values()
+            m_at, m_negated, CPath.from( m_functor.getSuffix() ),
+            m_values.values(),
+            m_annotations.values()
         );
     }
 
@@ -420,16 +421,16 @@ public final class CLiteral implements ILiteral
 
                ?
                new CLiteral(
-                       m_at, m_negated, m_functor,
-                       m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
-                       m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+                   m_at, m_negated, m_functor,
+                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
+                   m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
                )
 
                :
                new CLiteral(
-                       m_at, m_negated, p_prefix[0].append( m_functor ),
-                       m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
-                       m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+                   m_at, m_negated, p_prefix[0].append( m_functor ),
+                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
+                   m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
                );
     }
 
@@ -438,9 +439,9 @@ public final class CLiteral implements ILiteral
     public final synchronized ITerm deepcopySuffix()
     {
         return new CLiteral(
-                m_at, m_negated, CPath.from( m_functor.getSuffix() ),
-                m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
-                m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+            m_at, m_negated, CPath.from( m_functor.getSuffix() ),
+            m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
+            m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
         );
     }
 

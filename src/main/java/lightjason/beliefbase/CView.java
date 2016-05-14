@@ -247,10 +247,10 @@ public final class CView implements IView
 
                ?
                Stream.concat(
-                       m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().shallowcopy( l_path ) ),
-                       m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream()
-                                                                                                              .map( j -> j.shallowcopy( l_path ) )
-                       )
+                   m_beliefbase.getStorage().getMultiElements().values().parallelStream().map( i -> i.getRight().shallowcopy( l_path ) ),
+                   m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream()
+                                                                                                          .map( j -> j.shallowcopy( l_path ) )
+                   )
                )
 
                :
@@ -277,12 +277,12 @@ public final class CView implements IView
 
                ?
                Stream.concat(
-                       m_beliefbase.getStorage().getMultiElements().values().parallelStream()
-                                   .filter( i -> i.getLeft() == p_negated )
-                                   .map( i -> i.getRight().shallowcopy( l_path ) ),
-                       m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream( p_negated )
-                                                                                                              .map( j -> j.shallowcopy( l_path ) )
-                       )
+                   m_beliefbase.getStorage().getMultiElements().values().parallelStream()
+                               .filter( i -> i.getLeft() == p_negated )
+                               .map( i -> i.getRight().shallowcopy( l_path ) ),
+                   m_beliefbase.getStorage().getSingleElements().values().parallelStream().flatMap( i -> i.parallelStream( p_negated )
+                                                                                                          .map( j -> j.shallowcopy( l_path ) )
+                   )
                )
 
                :
@@ -341,8 +341,8 @@ public final class CView implements IView
     public final Stream<IView> root()
     {
         return Stream.concat(
-                Stream.of( this ),
-                Stream.of( this.getParent() ).filter( i -> i != null )
+            Stream.of( this ),
+            Stream.of( this.getParent() ).filter( i -> i != null )
         );
     }
 

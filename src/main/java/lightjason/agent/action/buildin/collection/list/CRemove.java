@@ -60,10 +60,10 @@ public final class CRemove extends IBuildinAction
     {
         // first argument list reference, second key-value
         p_return.add(
-                CRawTerm.from(
-                        CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
-                                .remove( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                )
+            CRawTerm.from(
+                CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
+                    .remove( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
+            )
         );
         return CFuzzyValue.from( true );
     }

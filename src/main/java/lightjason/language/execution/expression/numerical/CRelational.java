@@ -82,37 +82,37 @@ public final class CRelational extends IBaseBinary
         {
             case GREATER:
                 p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) > 0 )
+                    this.compare(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                    ) > 0 )
                 );
                 return CFuzzyValue.from( true );
 
             case GREATEREQUAL:
                 p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) >= 0 )
+                    this.compare(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                    ) >= 0 )
                 );
                 return CFuzzyValue.from( true );
 
             case LESS:
                 p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) < 0 )
+                    this.compare(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                    ) < 0 )
                 );
                 return CFuzzyValue.from( true );
 
             case LESSEQUAL:
                 p_return.add( CRawTerm.from(
-                        this.compare(
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                                lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
-                        ) <= 0 )
+                    this.compare(
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                    ) <= 0 )
                 );
                 return CFuzzyValue.from( true );
 

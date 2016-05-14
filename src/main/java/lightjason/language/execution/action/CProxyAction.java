@@ -242,16 +242,16 @@ public final class CProxyAction implements IExecution
             // check number of arguments and add action to the score cache
             if ( p_literal.orderedvalues().count() < m_action.getMinimalArgumentNumber() )
                 throw new CIllegalArgumentException(
-                        CCommon.getLanguageString( this, "argumentnumber", p_literal, m_action.getMinimalArgumentNumber() ) );
+                    CCommon.getLanguageString( this, "argumentnumber", p_literal, m_action.getMinimalArgumentNumber() ) );
 
             p_scorecache.add( m_action );
 
 
             // resolve action arguments and annotation
             m_arguments = Collections.unmodifiableMap(
-                    this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions, p_scorecache ) );
+                this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions, p_scorecache ) );
             m_annotation = Collections.unmodifiableMap(
-                    this.createSubExecutions( p_literal.annotations().collect( Collectors.toSet() ), p_actions, p_scorecache ) );
+                this.createSubExecutions( p_literal.annotations().collect( Collectors.toSet() ), p_actions, p_scorecache ) );
         }
 
         @Override
@@ -278,9 +278,9 @@ public final class CProxyAction implements IExecution
         )
         {
             return m_action.execute(
-                    p_context, m_parallel,
-                    this.subexecute( p_context, m_arguments ), p_return,
-                    this.subexecute( p_context, m_annotation )
+                p_context, m_parallel,
+                this.subexecute( p_context, m_arguments ), p_return,
+                this.subexecute( p_context, m_annotation )
             );
         }
 
@@ -328,15 +328,16 @@ public final class CProxyAction implements IExecution
         private List<ITerm> subexecute( final IContext p_context, final Map<Integer, IExecution> p_execution )
         {
             return Collections.unmodifiableList( lightjason.language.CCommon.replaceFromContext(
-                    p_context,
-                    (Collection<? extends ITerm>) ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
-                            .flatMap( i -> {
+                p_context,
+                (Collection<? extends ITerm>) ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
+                    .flatMap( i -> {
 
-                                final List<ITerm> l_return = new LinkedList<ITerm>();
-                                i.getValue().execute( p_context, m_parallel, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() );
-                                return l_return.stream();
+                        final List<ITerm> l_return = new LinkedList<ITerm>();
+                        i.getValue().execute(
+                            p_context, m_parallel, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() );
+                        return l_return.stream();
 
-                            } ).collect( Collectors.toList() )
+                    } ).collect( Collectors.toList() )
             ) );
         }
     }

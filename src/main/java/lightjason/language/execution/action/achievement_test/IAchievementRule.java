@@ -74,9 +74,9 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
         // second step execute backtracking rules sequential / parallel
         return (
-                p_parallel
-                ? l_rules.parallelStream()
-                : l_rules.stream()
+            p_parallel
+            ? l_rules.parallelStream()
+            : l_rules.stream()
         ).map( i -> {
 
             // instantiate variables by unification of the rule literal
@@ -84,11 +84,11 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
-                    i.instantiate( p_context.getAgent(), l_variables.stream() ),
-                    false,
-                    Collections.<ITerm>emptyList(),
-                    Collections.<ITerm>emptyList(),
-                    Collections.<ITerm>emptyList()
+                i.instantiate( p_context.getAgent(), l_variables.stream() ),
+                false,
+                Collections.<ITerm>emptyList(),
+                Collections.<ITerm>emptyList(),
+                Collections.<ITerm>emptyList()
             );
 
             // create rule result with fuzzy- and defuzzificated value and instantiate variable set

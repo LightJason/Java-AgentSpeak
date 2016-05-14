@@ -107,14 +107,14 @@ public final class CUnifier implements IUnifier
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
                                                           p_expression.execute(
-                                                                  CCommon.updatecontext(
-                                                                          p_context.duplicate(),
-                                                                          i.parallelStream()
-                                                                  ),
-                                                                  false,
-                                                                  Collections.<ITerm>emptyList(),
-                                                                  l_return,
-                                                                  Collections.<ITerm>emptyList()
+                                                              CCommon.updatecontext(
+                                                                  p_context.duplicate(),
+                                                                  i.parallelStream()
+                                                              ),
+                                                              false,
+                                                              Collections.<ITerm>emptyList(),
+                                                              l_return,
+                                                              Collections.<ITerm>emptyList()
                                                           );
                                                           return ( l_return.size() == 1 ) && ( CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) ) );
                                                       } )
@@ -144,14 +144,14 @@ public final class CUnifier implements IUnifier
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
                                                           p_expression.execute(
-                                                                  CCommon.updatecontext(
-                                                                          p_context.duplicate(),
-                                                                          i.parallelStream()
-                                                                  ),
-                                                                  false,
-                                                                  Collections.<ITerm>emptyList(),
-                                                                  l_return,
-                                                                  Collections.<ITerm>emptyList()
+                                                              CCommon.updatecontext(
+                                                                  p_context.duplicate(),
+                                                                  i.parallelStream()
+                                                              ),
+                                                              false,
+                                                              Collections.<ITerm>emptyList(),
+                                                              l_return,
+                                                              Collections.<ITerm>emptyList()
                                                           );
                                                           return ( l_return.size() == 1 ) && ( CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) ) );
                                                       } )
@@ -173,33 +173,33 @@ public final class CUnifier implements IUnifier
 
         // try to unify exact or if not possible by recursive on the value set
         if ( !(
-                p_literal.valuehash() == p_value.valuehash()
-                ? m_hashbased.unify(
-                        l_result,
-                        CCommon.recursiveterm( p_value.orderedvalues() ),
-                        CCommon.recursiveterm( p_literal.orderedvalues() )
-                )
-                : m_recursive.unify(
-                        l_result,
-                        p_value.orderedvalues(),
-                        p_literal.orderedvalues()
-                )
+            p_literal.valuehash() == p_value.valuehash()
+            ? m_hashbased.unify(
+                l_result,
+                CCommon.recursiveterm( p_value.orderedvalues() ),
+                CCommon.recursiveterm( p_literal.orderedvalues() )
+            )
+            : m_recursive.unify(
+                l_result,
+                p_value.orderedvalues(),
+                p_literal.orderedvalues()
+            )
         ) )
             return Collections.<IVariable<?>>emptySet();
 
         // try to unify exact or if not possible by recursive on the annotation set
         if ( !(
-                p_literal.annotationhash() == p_value.annotationhash()
-                ? m_hashbased.unify(
-                        l_result,
-                        CCommon.recursiveliteral( p_value.annotations() ),
-                        CCommon.recursiveliteral( p_literal.annotations() )
-                )
-                : m_recursive.unify(
-                        l_result,
-                        p_value.annotations(),
-                        p_literal.annotations()
-                )
+            p_literal.annotationhash() == p_value.annotationhash()
+            ? m_hashbased.unify(
+                l_result,
+                CCommon.recursiveliteral( p_value.annotations() ),
+                CCommon.recursiveliteral( p_literal.annotations() )
+            )
+            : m_recursive.unify(
+                l_result,
+                p_value.annotations(),
+                p_literal.annotations()
+            )
         ) )
             return Collections.<IVariable<?>>emptySet();
 

@@ -54,8 +54,8 @@ public final class CFactorial extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-                CCommon.flatList( p_argument ).stream().map( i -> CombinatoricsUtils.factorial( CCommon.<Number, ITerm>getRawValue( i ).intValue() ) )
-                       .collect( Collectors.toList() )
+            CCommon.flatList( p_argument ).stream().map( i -> CombinatoricsUtils.factorial( CCommon.<Number, ITerm>getRawValue( i ).intValue() ) )
+                   .collect( Collectors.toList() )
         ) );
         return CFuzzyValue.from( true );
     }

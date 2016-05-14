@@ -79,54 +79,54 @@ public final class CSummary
     public final Map<String, Map<String, Double>> get()
     {
         return Collections.unmodifiableMap(
-                m_result.entrySet().parallelStream()
-                        .map( i ->
-                                      new AbstractMap.SimpleImmutableEntry<>(
-                                              i.getKey(),
-                                              Collections.unmodifiableMap(
-                                                      StreamUtils.zip(
+            m_result.entrySet().parallelStream()
+                    .map( i ->
+                              new AbstractMap.SimpleImmutableEntry<>(
+                                  i.getKey(),
+                                  Collections.unmodifiableMap(
+                                      StreamUtils.zip(
 
-                                                              Stream.of(
-                                                                      "max",
-                                                                      "min",
-                                                                      "kurtosis",
-                                                                      "arithmetic mean",
-                                                                      "geometric mean",
-                                                                      "50-percentile",
-                                                                      "25-percentile",
-                                                                      "75-percentile",
-                                                                      "standard deviation",
-                                                                      "skewness",
-                                                                      "count",
-                                                                      "sum",
-                                                                      "sum square",
-                                                                      "variance"
-                                                              ),
+                                          Stream.of(
+                                              "max",
+                                              "min",
+                                              "kurtosis",
+                                              "arithmetic mean",
+                                              "geometric mean",
+                                              "50-percentile",
+                                              "25-percentile",
+                                              "75-percentile",
+                                              "standard deviation",
+                                              "skewness",
+                                              "count",
+                                              "sum",
+                                              "sum square",
+                                              "variance"
+                                          ),
 
-                                                              Stream.of(
-                                                                      i.getValue().getMax(),
-                                                                      i.getValue().getMin(),
-                                                                      i.getValue().getKurtosis(),
-                                                                      i.getValue().getMean(),
-                                                                      i.getValue().getGeometricMean(),
-                                                                      i.getValue().getPercentile( 50 ),
-                                                                      i.getValue().getPercentile( 25 ),
-                                                                      i.getValue().getPercentile( 75 ),
-                                                                      i.getValue().getStandardDeviation(),
-                                                                      i.getValue().getSkewness(),
-                                                                      i.getValue().getN(),
-                                                                      i.getValue().getSum(),
-                                                                      i.getValue().getSumsq(),
-                                                                      i.getValue().getVariance()
-                                                              ),
+                                          Stream.of(
+                                              i.getValue().getMax(),
+                                              i.getValue().getMin(),
+                                              i.getValue().getKurtosis(),
+                                              i.getValue().getMean(),
+                                              i.getValue().getGeometricMean(),
+                                              i.getValue().getPercentile( 50 ),
+                                              i.getValue().getPercentile( 25 ),
+                                              i.getValue().getPercentile( 75 ),
+                                              i.getValue().getStandardDeviation(),
+                                              i.getValue().getSkewness(),
+                                              i.getValue().getN(),
+                                              i.getValue().getSum(),
+                                              i.getValue().getSumsq(),
+                                              i.getValue().getVariance()
+                                          ),
 
-                                                              ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v.doubleValue() )
+                                          ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v.doubleValue() )
 
-                                                      ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) )
-                                              )
-                                      )
-                        )
-                        .collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) )
+                                      ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) )
+                                  )
+                              )
+                    )
+                    .collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) )
         );
     }
 

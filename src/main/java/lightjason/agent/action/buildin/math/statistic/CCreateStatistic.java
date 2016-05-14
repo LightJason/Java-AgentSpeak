@@ -66,10 +66,10 @@ public final class CCreateStatistic extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-                ( p_argument.size() == 0
-                  ? EType.SUMMARY
-                  : EType.valueOf( lightjason.language.CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() )
-                ).generate( p_parallel )
+            ( p_argument.size() == 0
+              ? EType.SUMMARY
+              : EType.valueOf( lightjason.language.CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() )
+            ).generate( p_parallel )
         ) );
 
         return CFuzzyValue.from( true );

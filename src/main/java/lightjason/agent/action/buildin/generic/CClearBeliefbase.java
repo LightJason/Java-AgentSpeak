@@ -53,11 +53,11 @@ public final class CClearBeliefbase extends IBuildinAction
     )
     {
         p_context.getAgent().getBeliefBase().clear(
-                p_argument.size() == 0
-                ? null
-                : p_argument.parallelStream()
-                            .map( i -> CPath.from( CCommon.getRawValue( i ) ) )
-                            .toArray( IPath[]::new )
+            p_argument.size() == 0
+            ? null
+            : p_argument.parallelStream()
+                        .map( i -> CPath.from( CCommon.getRawValue( i ) ) )
+                        .toArray( IPath[]::new )
         );
         return CFuzzyValue.from( true );
     }

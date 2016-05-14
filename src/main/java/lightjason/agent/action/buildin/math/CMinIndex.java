@@ -55,12 +55,12 @@ public final class CMinIndex extends IBuildinAction
         final List<ITerm> l_list = CCommon.flatList( p_argument );
 
         p_return.add( CRawTerm.from(
-                IntStream.range( 0, l_list.size() - 1 ).parallel()
-                         .reduce( ( i, j ) ->
-                                          CCommon.<Number, ITerm>getRawValue( l_list.get( i ) ).doubleValue() < CCommon.<Number, ITerm>getRawValue(
-                                                  l_list.get( j ) ).doubleValue()
-                                          ? i : j
-                         ).getAsInt()
+            IntStream.range( 0, l_list.size() - 1 ).parallel()
+                     .reduce( ( i, j ) ->
+                                  CCommon.<Number, ITerm>getRawValue( l_list.get( i ) ).doubleValue() < CCommon.<Number, ITerm>getRawValue(
+                                      l_list.get( j ) ).doubleValue()
+                                  ? i : j
+                     ).getAsInt()
         ) );
 
         return CFuzzyValue.from( true );

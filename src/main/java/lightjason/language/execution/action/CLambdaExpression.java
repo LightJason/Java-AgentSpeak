@@ -144,8 +144,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return m_return == null
                ? m_initialize.getVariables()
                : Stream.concat(
-                       Stream.of( m_return ),
-                       m_initialize.getVariables()
+                   Stream.of( m_return ),
+                   m_initialize.getVariables()
                );
     }
 
@@ -170,13 +170,13 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
             l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
             m_body.stream().forEach(
-                    j -> j.execute(
-                            l_localcontext.getLeft(),
-                            m_parallel,
-                            Collections.<ITerm>emptyList(),
-                            new LinkedList<>(),
-                            Collections.<ITerm>emptyList()
-                    ) );
+                j -> j.execute(
+                    l_localcontext.getLeft(),
+                    m_parallel,
+                    Collections.<ITerm>emptyList(),
+                    new LinkedList<>(),
+                    Collections.<ITerm>emptyList()
+                ) );
             return l_localcontext.getRight() != null ? CCommon.getRawValue( l_localcontext.getRight() ) : null;
 
         } ).filter( i -> i != null ).collect( Collectors.toList() );
@@ -196,10 +196,10 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
             final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
             l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
             m_body.stream().forEach(
-                    j -> j.execute(
-                            l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
-                            Collections.<ITerm>emptyList()
-                    ) );
+                j -> j.execute(
+                    l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
+                    Collections.<ITerm>emptyList()
+                ) );
             return l_localcontext.getRight() != null ? CCommon.getRawValue( l_localcontext.getRight() ) : null;
 
         } ).filter( i -> i != null ).collect( Collectors.toList() );

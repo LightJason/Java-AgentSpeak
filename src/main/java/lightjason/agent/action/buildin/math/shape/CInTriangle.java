@@ -90,10 +90,10 @@ public final class CInTriangle extends IBuildinAction
         }
 
         p_return.add( CRawTerm.from(
-                l_xvalue + l_yvalue < -l_point.get( 5 ) * l_point.get( 6 )
-                                      + l_point.get( 3 ) * ( -l_point.get( 4 ) + l_point.get( 6 ) )
-                                      + l_point.get( 2 ) * ( l_point.get( 5 ) - l_point.get( 7 ) )
-                                      + l_point.get( 4 ) * l_point.get( 7 )
+            l_xvalue + l_yvalue < -l_point.get( 5 ) * l_point.get( 6 )
+                                  + l_point.get( 3 ) * ( -l_point.get( 4 ) + l_point.get( 6 ) )
+                                  + l_point.get( 2 ) * ( l_point.get( 5 ) - l_point.get( 7 ) )
+                                  + l_point.get( 4 ) * l_point.get( 7 )
         ) );
         return CFuzzyValue.from( true );
     }

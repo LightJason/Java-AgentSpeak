@@ -60,47 +60,47 @@ public final class CRecursive implements IAlgorithm
             return false;
 
         return StreamUtils.zip(
-                l_source.stream(),
-                l_target.stream(),
-                ( s, t ) -> {
+            l_source.stream(),
+            l_target.stream(),
+            ( s, t ) -> {
 
-                    // if s and t are variable create a realocated variable for backtracking
-                    if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) && ( !( (IVariable<?>) s ).isAllocated() ) )
-                    {
-                        p_variables.add(
-                                ( (IVariable<?>) t ).hasMutex()
-                                ? new CRelocateMutexVariable<>( (IVariable<?>) t, (IVariable<?>) s )
-                                : new CRelocateVariable<>( (IVariable<?>) t, (IVariable<?>) s )
-                        );
-                        return true;
-                    }
-
-                    // if target type is a variable set the value
-                    if ( t instanceof IVariable<?> )
-                    {
-                        p_variables.add( ( (IVariable<Object>) t ).set( s ) );
-                        return true;
-                    }
-
-                    // if both raw values -> equality check
-                    if ( ( s instanceof IRawTerm<?> ) || ( t instanceof IRawTerm<?> ) )
-                        return s.equals( t );
-
-                    // if a literal exists -> source and target literal must be equal with the functor -> recursive descent
-                    if ( ( s instanceof ILiteral ) && ( t instanceof ILiteral ) )
-                    {
-                        final ILiteral l_sourceliteral = (ILiteral) s;
-                        final ILiteral l_targetliteral = (ILiteral) t;
-
-                        if ( !l_sourceliteral.getFQNFunctor().equals( l_targetliteral.getFQNFunctor() ) )
-                            return false;
-
-                        return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
-                    }
-
-                    // otherwise false
-                    return false;
+                // if s and t are variable create a realocated variable for backtracking
+                if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) && ( !( (IVariable<?>) s ).isAllocated() ) )
+                {
+                    p_variables.add(
+                        ( (IVariable<?>) t ).hasMutex()
+                        ? new CRelocateMutexVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                        : new CRelocateVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                    );
+                    return true;
                 }
+
+                // if target type is a variable set the value
+                if ( t instanceof IVariable<?> )
+                {
+                    p_variables.add( ( (IVariable<Object>) t ).set( s ) );
+                    return true;
+                }
+
+                // if both raw values -> equality check
+                if ( ( s instanceof IRawTerm<?> ) || ( t instanceof IRawTerm<?> ) )
+                    return s.equals( t );
+
+                // if a literal exists -> source and target literal must be equal with the functor -> recursive descent
+                if ( ( s instanceof ILiteral ) && ( t instanceof ILiteral ) )
+                {
+                    final ILiteral l_sourceliteral = (ILiteral) s;
+                    final ILiteral l_targetliteral = (ILiteral) t;
+
+                    if ( !l_sourceliteral.getFQNFunctor().equals( l_targetliteral.getFQNFunctor() ) )
+                        return false;
+
+                    return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );
+                }
+
+                // otherwise false
+                return false;
+            }
         ).allMatch( i -> i );
     }
 

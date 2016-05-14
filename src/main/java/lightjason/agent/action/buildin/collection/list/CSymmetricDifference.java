@@ -68,9 +68,9 @@ public final class CSymmetricDifference extends IBuildinAction
         final List<?> l_result = l_count.entrySet().parallelStream().filter( i -> i.getCount() % 2 == 1 ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( l_result )
-                : l_result
+            p_parallel
+            ? Collections.synchronizedList( l_result )
+            : l_result
         ) );
 
         return CFuzzyValue.from( true );

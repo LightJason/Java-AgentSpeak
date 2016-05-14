@@ -77,19 +77,19 @@ public final class CEquationConstraint extends IConstraint
 
         // create linear constraint based on an equation
         CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
-                new LinearConstraint(
-                        p_argument.subList( 1, l_index - 2 ).stream()
-                                  .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
-                                  .toArray(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( l_index - 1 ) ).doubleValue(),
+            new LinearConstraint(
+                p_argument.subList( 1, l_index - 2 ).stream()
+                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                          .toArray(),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( l_index - 1 ) ).doubleValue(),
 
-                        this.getRelation( CCommon.getRawValue( p_argument.get( l_index ) ) ),
+                this.getRelation( CCommon.getRawValue( p_argument.get( l_index ) ) ),
 
-                        p_argument.subList( l_index + 1, p_argument.size() ).stream()
-                                  .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
-                                  .toArray(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
-                )
+                p_argument.subList( l_index + 1, p_argument.size() ).stream()
+                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                          .toArray(),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+            )
         );
 
         return CFuzzyValue.from( true );

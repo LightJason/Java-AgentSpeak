@@ -61,12 +61,12 @@ public final class CSubList extends IBuildinAction
     {
         // first argument set reference, second key-value
         p_return.addAll(
-                CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
-                        .subList(
-                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
-                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue()
-                        )
-                        .stream().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+            CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
+                .subList(
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue()
+                )
+                .stream().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );
     }

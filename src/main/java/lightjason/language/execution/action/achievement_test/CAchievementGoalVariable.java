@@ -65,11 +65,11 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
     )
     {
         return p_context.getAgent().trigger(
-                CTrigger.from(
-                        ITrigger.EType.ADDGOAL,
-                        m_value.evaluate( p_context )
-                ),
-                m_immediately
+            CTrigger.from(
+                ITrigger.EType.ADDGOAL,
+                m_value.evaluate( p_context )
+            ),
+            m_immediately
         );
     }
 

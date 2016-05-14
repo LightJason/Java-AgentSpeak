@@ -70,13 +70,13 @@ public final class CParse extends IBuildinAction
         {
             case DENSE:
                 p_return.add(
-                        CRawTerm.from( new DenseDoubleMatrix2D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) )
+                    CRawTerm.from( new DenseDoubleMatrix2D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) )
                 );
                 break;
 
             case SPARSE:
                 p_return.add(
-                        CRawTerm.from( new SparseDoubleMatrix2D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) )
+                    CRawTerm.from( new SparseDoubleMatrix2D( parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) )
                 );
                 break;
 
@@ -98,29 +98,27 @@ public final class CParse extends IBuildinAction
         final List<List<Double>> l_matrix = new ArrayList<>();
 
         final double[][] l_return = new double[l_rows.length][
-                Arrays.stream( l_rows )
-                      .map( i -> Arrays.stream( i.trim().split( ",|\\s" ) )
-                                       .map( j -> j.trim() )
-                                       .filter( j -> !j.isEmpty() )
-                                       .mapToDouble( j -> Double.parseDouble( j ) )
-                                       .boxed()
-                                       .collect( Collectors.toList() )
-                      )
-                      .mapToInt( i -> {
-                          l_matrix.add( i );
-                          return i.size();
-                      } )
-                      .max()
-                      .getAsInt()
-                ];
+            Arrays.stream( l_rows )
+                  .map( i -> Arrays.stream( i.trim().split( ",|\\s" ) )
+                                   .map( j -> j.trim() )
+                                   .filter( j -> !j.isEmpty() )
+                                   .mapToDouble( j -> Double.parseDouble( j ) )
+                                   .boxed()
+                                   .collect( Collectors.toList() )
+                  )
+                  .mapToInt( i -> {
+                      l_matrix.add( i );
+                      return i.size();
+                  } )
+                  .max()
+                  .getAsInt()
+            ];
 
         IntStream.range( 0, l_return.length )
                  .boxed()
-                 .forEach( i ->
-                                   IntStream.range( 0, l_return[i].length )
-                                            .boxed()
-                                            .forEach( j -> l_return[i][j] = l_matrix.get( i ).get( j ) )
-                 );
+                 .forEach( i -> IntStream.range( 0, l_return[i].length )
+                                         .boxed()
+                                         .forEach( j -> l_return[i][j] = l_matrix.get( i ).get( j ) ) );
 
         return l_return;
     }

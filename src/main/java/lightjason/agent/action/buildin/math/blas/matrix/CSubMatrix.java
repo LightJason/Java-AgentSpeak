@@ -62,13 +62,13 @@ public final class CSubMatrix extends IAlgebra
         // second begin row index, third end row index
         // forth begin column index, fifth end column index
         p_return.add( CRawTerm.from(
-                ALGEBRA.subMatrix(
-                        CCommon.getRawValue( p_argument.get( 0 ) ),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 3 ) ).intValue(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 4 ) ).intValue()
-                )
+            ALGEBRA.subMatrix(
+                CCommon.getRawValue( p_argument.get( 0 ) ),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue(),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 3 ) ).intValue(),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 4 ) ).intValue()
+            )
         ) );
 
         return CFuzzyValue.from( true );

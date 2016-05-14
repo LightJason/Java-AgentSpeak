@@ -66,15 +66,15 @@ public final class CRandomSample extends IBuildinAction
         // first argument distribution reference, second optional value number of random values
         if ( p_argument.size() > 1 )
             p_return.add( CRawTerm.from(
-                    p_parallel
-                    ? Collections.synchronizedList( Arrays.stream(
-                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
-                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                    ).boxed().collect( Collectors.toList() ) )
-                    : Arrays.stream(
-                            CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
-                                    .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
-                    ).boxed().collect( Collectors.toList() )
+                p_parallel
+                ? Collections.synchronizedList( Arrays.stream(
+                    CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
+                        .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
+                ).boxed().collect( Collectors.toList() ) )
+                : Arrays.stream(
+                    CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) )
+                        .sample( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
+                ).boxed().collect( Collectors.toList() )
             ) );
         else
             p_return.add( CRawTerm.from( CCommon.<AbstractRealDistribution, ITerm>getRawValue( p_argument.get( 0 ) ).sample() ) );

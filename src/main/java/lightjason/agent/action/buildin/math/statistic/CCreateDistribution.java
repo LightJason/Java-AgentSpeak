@@ -101,13 +101,13 @@ public final class CCreateDistribution extends IBuildinAction
 
 
         p_return.add( CRawTerm.from(
-                l_distribution.get(
-                        ( p_argument.size() > l_requiredarguments
-                          ? EGenerator.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( l_requiredarguments + 1 ) ).trim().toUpperCase() )
-                          : EGenerator.MERSENNETWISTER ).get(),
-                        p_argument.subList( 1, l_requiredarguments ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).boxed()
-                                  .collect( Collectors.toList() )
-                )
+            l_distribution.get(
+                ( p_argument.size() > l_requiredarguments
+                  ? EGenerator.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( l_requiredarguments + 1 ) ).trim().toUpperCase() )
+                  : EGenerator.MERSENNETWISTER ).get(),
+                p_argument.subList( 1, l_requiredarguments ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).boxed()
+                          .collect( Collectors.toList() )
+            )
         ) );
 
         return CFuzzyValue.from( true );
@@ -209,7 +209,9 @@ public final class CCreateDistribution extends IBuildinAction
 
                 case NAKAGAMI:
                     return new NakagamiDistribution(
-                            p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ), NakagamiDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY );
+                        p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ),
+                        NakagamiDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY
+                    );
 
                 case NORMAL:
                     return new NormalDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );

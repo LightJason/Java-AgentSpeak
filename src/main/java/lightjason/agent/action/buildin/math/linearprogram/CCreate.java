@@ -65,14 +65,14 @@ public final class CCreate extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-                new ImmutablePair<>(
-                        new LinearObjectiveFunction(
-                                p_argument.subList( 0, p_argument.size() - 1 ).stream()
-                                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray(),
-                                CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
-                        ),
-                        new HashSet<LinearConstraint>()
-                )
+            new ImmutablePair<>(
+                new LinearObjectiveFunction(
+                    p_argument.subList( 0, p_argument.size() - 1 ).stream()
+                              .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray(),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+                ),
+                new HashSet<LinearConstraint>()
+            )
         ) );
 
         return CFuzzyValue.from( true );

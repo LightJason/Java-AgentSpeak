@@ -61,11 +61,11 @@ public final class CLower extends IBuildinAction
     )
     {
         p_return.addAll(
-                p_argument.stream()
-                          .map( i -> CCommon.<String, ITerm>getRawValue( i ) )
-                          .map( i -> i.toLowerCase() )
-                          .map( i -> CRawTerm.from( i ) )
-                          .collect( Collectors.toList() )
+            p_argument.stream()
+                      .map( i -> CCommon.<String, ITerm>getRawValue( i ) )
+                      .map( i -> i.toLowerCase() )
+                      .map( i -> CRawTerm.from( i ) )
+                      .collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );
     }

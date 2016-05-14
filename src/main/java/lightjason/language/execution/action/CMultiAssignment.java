@@ -85,7 +85,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         // tail matching
         if ( l_assign.size() < l_flatresult.size() )
             ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
-                    CCommon.getRawValue( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
+                CCommon.getRawValue( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
             );
 
         return CFuzzyValue.from( true );
@@ -113,8 +113,8 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                m_righthand.getVariables(),
-                m_value.stream()
+            m_righthand.getVariables(),
+            m_value.stream()
         );
     }
 }

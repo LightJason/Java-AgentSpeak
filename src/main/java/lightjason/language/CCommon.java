@@ -85,10 +85,10 @@ public final class CCommon
     {
         final Set<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
         Stream.of(
-                p_variable,
-                p_agent.getVariableBuilder() != null ? p_agent.getVariableBuilder().generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
-                Stream.of( new CConstant<>( "Score", p_instance.score( p_agent ) ) ),
-                Stream.of( new CConstant<>( "Cycle", p_agent.getCycle() ) )
+            p_variable,
+            p_agent.getVariableBuilder() != null ? p_agent.getVariableBuilder().generate( p_agent, p_instance ) : Stream.<IVariable<?>>empty(),
+            Stream.of( new CConstant<>( "Score", p_instance.score( p_agent ) ) ),
+            Stream.of( new CConstant<>( "Cycle", p_agent.getCycle() ) )
         ).reduce( Stream::concat )
               .orElseGet( Stream::<IVariable<?>>empty )
               .forEach( i -> {
@@ -108,13 +108,13 @@ public final class CCommon
     public static Map<IVariable<?>, Integer> getVariableFrequency( final ILiteral p_literal )
     {
         return Collections.unmodifiableMap(
-                Stream.concat(
-                        recursiveterm( p_literal.orderedvalues() ),
-                        recursiveliteral( p_literal.annotations() )
-                )
-                      .filter( i -> i instanceof IVariable<?> )
-                      .map( i -> (IVariable<?>) i )
-                      .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
+            Stream.concat(
+                recursiveterm( p_literal.orderedvalues() ),
+                recursiveliteral( p_literal.annotations() )
+            )
+                  .filter( i -> i instanceof IVariable<?> )
+                  .map( i -> (IVariable<?>) i )
+                  .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
         );
     }
 
@@ -134,38 +134,38 @@ public final class CCommon
         return ( ( p_package == null ) || ( p_package.length == 0 )
                  ? Stream.of( "lightjason.agent.action.buildin" )
                  : Arrays.stream( p_package ) )
-                .flatMap( j -> {
-                    try
-                    {
-                        return ClassPath.from( Thread.currentThread().getContextClassLoader() )
-                                        .getTopLevelClassesRecursive( j )
-                                        .parallelStream()
-                                        .map( i -> {
+            .flatMap( j -> {
+                try
+                {
+                    return ClassPath.from( Thread.currentThread().getContextClassLoader() )
+                                    .getTopLevelClassesRecursive( j )
+                                    .parallelStream()
+                                    .map( i -> {
 
-                                            try
-                                            {
-                                                final Class<?> l_class = i.load();
-                                                if ( ( !Modifier.isAbstract( l_class.getModifiers() ) )
-                                                     && ( !Modifier.isInterface( l_class.getModifiers() ) )
-                                                     && ( Modifier.isPublic( l_class.getModifiers() ) )
-                                                     && ( IAction.class.isAssignableFrom( l_class ) ) )
-                                                    return (IAction) l_class.newInstance();
-                                            }
-                                            catch ( final IllegalAccessException | InstantiationException l_exception )
-                                            {
-                                            }
+                                        try
+                                        {
+                                            final Class<?> l_class = i.load();
+                                            if ( ( !Modifier.isAbstract( l_class.getModifiers() ) )
+                                                 && ( !Modifier.isInterface( l_class.getModifiers() ) )
+                                                 && ( Modifier.isPublic( l_class.getModifiers() ) )
+                                                 && ( IAction.class.isAssignableFrom( l_class ) ) )
+                                                return (IAction) l_class.newInstance();
+                                        }
+                                        catch ( final IllegalAccessException | InstantiationException l_exception )
+                                        {
+                                        }
 
-                                            return null;
-                                        } )
-                                        .filter( i -> i != null );
-                    }
-                    catch ( final IOException l_exception )
-                    {
-                    }
+                                        return null;
+                                    } )
+                                    .filter( i -> i != null );
+                }
+                catch ( final IOException l_exception )
+                {
+                }
 
-                    return Stream.of();
-                } )
-                .collect( Collectors.toSet() );
+                return Stream.of();
+            } )
+            .collect( Collectors.toSet() );
     }
 
     /**
@@ -234,7 +234,7 @@ public final class CCommon
             return l_variable;
 
         throw new CIllegalArgumentException(
-                lightjason.common.CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() )
+            lightjason.common.CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() )
         );
     }
 

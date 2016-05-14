@@ -54,9 +54,9 @@ public final class CSize extends IBuildinAction
     {
         // first argument list reference
         p_return.add(
-                CRawTerm.from(
-                        CCommon.<Collection<?>, ITerm>getRawValue( p_argument.get( 0 ) ).size()
-                )
+            CRawTerm.from(
+                CCommon.<Collection<?>, ITerm>getRawValue( p_argument.get( 0 ) ).size()
+            )
         );
 
         return CFuzzyValue.from( true );

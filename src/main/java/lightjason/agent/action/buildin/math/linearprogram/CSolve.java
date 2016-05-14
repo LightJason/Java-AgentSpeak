@@ -78,7 +78,7 @@ public final class CSolve extends IBuildinAction
         final List<OptimizationData> l_settings = new LinkedList<>();
 
         final Pair<LinearObjectiveFunction, Collection<LinearConstraint>> l_default = CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue(
-                p_argument.get( 0 ) );
+            p_argument.get( 0 ) );
         l_settings.add( l_default.getLeft() );
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
@@ -114,7 +114,7 @@ public final class CSolve extends IBuildinAction
         p_return.add( CRawTerm.from( l_result.getValue() ) );
         p_return.add( CRawTerm.from( l_result.getPoint().length ) );
         p_return.addAll(
-                Arrays.stream( l_result.getPoint() ).boxed().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+            Arrays.stream( l_result.getPoint() ).boxed().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
         );
 
         return CFuzzyValue.from( true );

@@ -42,9 +42,9 @@ public final class CFilter implements CReflection.IFilter<Method>
             l_use = p_method.getAnnotation( IActionBind.class ).bind();
 
         return l_use && ( !(
-                Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
-                        p_method.getModifiers()
-                ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
+            Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
+                p_method.getModifiers()
+            ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
     }
 
 }

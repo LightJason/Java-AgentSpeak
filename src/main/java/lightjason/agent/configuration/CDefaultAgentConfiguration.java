@@ -107,9 +107,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public CDefaultAgentConfiguration()
     {
         this(
-                new CBoolFuzzy(), Collections.<ILiteral>emptyList(),
-                null, Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
-                null, new CUnifier(), new CZeroAggregation()
+            new CBoolFuzzy(), Collections.<ILiteral>emptyList(),
+            null, Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
+            null, new CUnifier(), new CZeroAggregation()
         );
     }
 
@@ -225,16 +225,16 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ( unifier: {1} / aggregation {2} / {3} / variable-builder: {4} / initial-goal: {5} / initial beliefs: {6} / plans: {7} / rules: {8} )",
-                super.toString(),
-                m_unifier,
-                m_aggregation,
-                m_fuzzy,
-                m_variablebuilder,
-                m_initialgoal,
-                m_initialbeliefs,
-                m_plans,
-                m_rules
+            "{0} ( unifier: {1} / aggregation {2} / {3} / variable-builder: {4} / initial-goal: {5} / initial beliefs: {6} / plans: {7} / rules: {8} )",
+            super.toString(),
+            m_unifier,
+            m_aggregation,
+            m_fuzzy,
+            m_variablebuilder,
+            m_initialgoal,
+            m_initialbeliefs,
+            m_plans,
+            m_rules
         );
     }
 }

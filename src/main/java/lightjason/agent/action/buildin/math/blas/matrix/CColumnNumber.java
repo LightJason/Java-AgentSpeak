@@ -61,9 +61,9 @@ public final class CColumnNumber extends IBuildinAction
     {
         // first argument must be a term with a matrix object
         p_return.add(
-                CRawTerm.from(
-                        CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ).columns()
-                )
+            CRawTerm.from(
+                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ).columns()
+            )
         );
 
         return CFuzzyValue.from( true );

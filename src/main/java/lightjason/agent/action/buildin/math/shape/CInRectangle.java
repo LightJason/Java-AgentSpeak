@@ -68,8 +68,8 @@ public final class CInRectangle extends IBuildinAction
                                                .collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
-                l_point.get( 2 ) <= l_point.get( 0 ) && l_point.get( 0 ) <= l_point.get( 4 )
-                && l_point.get( 3 ) <= l_point.get( 1 ) && l_point.get( 1 ) <= l_point.get( 5 )
+            l_point.get( 2 ) <= l_point.get( 0 ) && l_point.get( 0 ) <= l_point.get( 4 )
+            && l_point.get( 3 ) <= l_point.get( 1 ) && l_point.get( 1 ) <= l_point.get( 5 )
         ) );
 
         return CFuzzyValue.from( true );

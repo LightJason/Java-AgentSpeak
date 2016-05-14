@@ -195,8 +195,8 @@ public class CAgent implements IAgent
 
         // check if literal does not store any variables
         if ( Stream.concat(
-                p_trigger.getLiteral().orderedvalues(),
-                p_trigger.getLiteral().annotations()
+            p_trigger.getLiteral().orderedvalues(),
+            p_trigger.getLiteral().annotations()
         ).filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "literalvariable", p_trigger ) );
 
@@ -235,15 +235,15 @@ public class CAgent implements IAgent
             return this;
 
         m_trigger.add(
-                CTrigger.from(
-                        ITrigger.EType.ADDGOAL,
-                        CLiteral.from(
-                                "wakeup",
-                                p_value == null
-                                ? Stream.<ITerm>empty()
-                                : Arrays.stream( p_value )
-                        )
+            CTrigger.from(
+                ITrigger.EType.ADDGOAL,
+                CLiteral.from(
+                    "wakeup",
+                    p_value == null
+                    ? Stream.<ITerm>empty()
+                    : Arrays.stream( p_value )
                 )
+            )
         );
 
         m_hibernate = false;
@@ -308,12 +308,12 @@ public class CAgent implements IAgent
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ( Cycle: {1} / Trigger: {2} / Running Plans: {3}  Beliefbase: {4} )",
-                super.toString(),
-                m_cycle,
-                m_trigger,
-                m_runningplans,
-                m_beliefbase
+            "{0} ( Cycle: {1} / Trigger: {2} / Running Plans: {3}  Beliefbase: {4} )",
+            super.toString(),
+            m_cycle,
+            m_trigger,
+            m_runningplans,
+            m_beliefbase
         );
     }
 
@@ -333,8 +333,8 @@ public class CAgent implements IAgent
 
         // create a list of all possible execution elements, that is a local cache for well-defined execution
         final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
-                m_trigger.parallelStream(),
-                m_beliefbase.getTrigger().parallel()
+            m_trigger.parallelStream(),
+            m_beliefbase.getTrigger().parallel()
         ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
 
         // clear running plan- and trigger list and execute elements
@@ -383,22 +383,22 @@ public class CAgent implements IAgent
                           final double l_sum = l_succeed + l_fails;
 
                           return new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
-                                  this,
-                                  (Stream<IVariable<?>>) Stream.of(
-                                          i.getRight().stream(),
+                              this,
+                              (Stream<IVariable<?>>) Stream.of(
+                                  i.getRight().stream(),
 
-                                          // execution count
-                                          Stream.of( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) ),
-                                          Stream.of( new CConstant<>( "PlanFail", i.getLeft().getRight() ) ),
-                                          Stream.of( new CConstant<>( "PlanRuns", l_sum ) ),
+                                  // execution count
+                                  Stream.of( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) ),
+                                  Stream.of( new CConstant<>( "PlanFail", i.getLeft().getRight() ) ),
+                                  Stream.of( new CConstant<>( "PlanRuns", l_sum ) ),
 
-                                          // execution ratio
-                                          Stream.of( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) ),
-                                          Stream.of( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) )
+                                  // execution ratio
+                                  Stream.of( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) ),
+                                  Stream.of( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) )
 
-                                  )
-                                                               .reduce( Stream::concat )
-                                                               .orElseGet( Stream::<IVariable<?>>empty )
+                              )
+                                                           .reduce( Stream::concat )
+                                                           .orElseGet( Stream::<IVariable<?>>empty )
                           ) );
                       } )
 
@@ -419,8 +419,8 @@ public class CAgent implements IAgent
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
-                i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
-                i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
+            i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
+            i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
         ) );
 
         // execute plan and return values and return execution result

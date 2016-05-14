@@ -61,10 +61,10 @@ public final class CRemove extends IBuildinAction
     {
         // first argument map reference, second key-value
         p_return.add(
-                CRawTerm.from(
-                        CCommon.<Map<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) )
-                                .remove( CCommon.getRawValue( p_argument.get( 1 ) ) )
-                )
+            CRawTerm.from(
+                CCommon.<Map<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) )
+                    .remove( CCommon.getRawValue( p_argument.get( 1 ) ) )
+            )
         );
         return CFuzzyValue.from( true );
     }

@@ -65,21 +65,21 @@ public final class CBase64Encode extends IBuildinAction
     )
     {
         p_return.addAll(
-                p_argument.stream()
-                          .map( i -> CCommon.<String, ITerm>getRawValue( i ) )
-                          .map( i -> {
-                              try
-                              {
-                                  return Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) );
-                              }
-                              catch ( final UnsupportedEncodingException l_exception )
-                              {
-                                  return null;
-                              }
-                          } )
-                          .filter( i -> i != null )
-                          .map( i -> CRawTerm.from( i ) )
-                          .collect( Collectors.toList() )
+            p_argument.stream()
+                      .map( i -> CCommon.<String, ITerm>getRawValue( i ) )
+                      .map( i -> {
+                          try
+                          {
+                              return Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) );
+                          }
+                          catch ( final UnsupportedEncodingException l_exception )
+                          {
+                              return null;
+                          }
+                      } )
+                      .filter( i -> i != null )
+                      .map( i -> CRawTerm.from( i ) )
+                      .collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );
     }

@@ -103,10 +103,10 @@ public final class CVariableEvaluate implements IVariableEvaluate
     public Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                Stream.of( m_variable ),
-                m_parameter.parallelStream()
-                           .filter( i -> i instanceof IVariable<?> )
-                           .map( i -> (IVariable<?>) i )
+            Stream.of( m_variable ),
+            m_parameter.parallelStream()
+                       .filter( i -> i instanceof IVariable<?> )
+                       .map( i -> (IVariable<?>) i )
         );
     }
 
@@ -184,11 +184,11 @@ public final class CVariableEvaluate implements IVariableEvaluate
             return p_literal.unify( p_context );
 
         return new CLiteral(
-                p_literal.hasAt(),
-                p_literal.isNegated(),
-                p_literal.getFQNFunctor(),
-                m_parameter,
-                Collections.<ILiteral>emptyList()
+            p_literal.hasAt(),
+            p_literal.isNegated(),
+            p_literal.getFQNFunctor(),
+            m_parameter,
+            Collections.<ILiteral>emptyList()
         ).unify( p_context );
     }
 

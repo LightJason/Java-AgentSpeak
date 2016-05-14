@@ -61,8 +61,8 @@ public final class CAll extends IBaseFilter
     public final Stream<ILiteral> filter( final IAgent p_agent )
     {
         return Stream.concat(
-                p_agent.getRunningPlans().values().stream(),
-                p_agent.getBeliefBase().stream( m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] ) )
+            p_agent.getRunningPlans().values().stream(),
+            p_agent.getBeliefBase().stream( m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] ) )
         );
     }
 }

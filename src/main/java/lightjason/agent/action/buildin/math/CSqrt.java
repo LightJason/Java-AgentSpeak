@@ -53,12 +53,12 @@ public final class CSqrt extends IBuildinAction
     )
     {
         p_return.addAll(
-                CCommon.flatList( p_argument ).stream()
-                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
-                       .boxed()
-                       .map( i -> Math.sqrt( i ) )
-                       .map( i -> CRawTerm.from( i ) )
-                       .collect( Collectors.toList() )
+            CCommon.flatList( p_argument ).stream()
+                   .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                   .boxed()
+                   .map( i -> Math.sqrt( i ) )
+                   .map( i -> CRawTerm.from( i ) )
+                   .collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );
     }

@@ -46,30 +46,30 @@ public final class CHash implements IAlgorithm
     public final <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
         return StreamUtils.zip(
-                p_source,
-                p_target,
-                ( s, t ) -> {
-                    // if s and t are variable create a realocated variable for backtracking
-                    if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) && ( !( (IVariable<?>) s ).isAllocated() ) )
-                    {
-                        p_variables.add(
-                                ( (IVariable<?>) t ).hasMutex()
-                                ? new CRelocateMutexVariable<>( (IVariable<?>) t, (IVariable<?>) s )
-                                : new CRelocateVariable<>( (IVariable<?>) t, (IVariable<?>) s )
-                        );
-                        return true;
-                    }
-
-                    // if target type is a variable set the value
-                    if ( t instanceof IVariable<?> )
-                    {
-                        p_variables.add( ( (IVariable<Object>) t ).set( s ) );
-                        return true;
-                    }
-
-                    // otherwise check equality
-                    return s.equals( t );
+            p_source,
+            p_target,
+            ( s, t ) -> {
+                // if s and t are variable create a realocated variable for backtracking
+                if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) && ( !( (IVariable<?>) s ).isAllocated() ) )
+                {
+                    p_variables.add(
+                        ( (IVariable<?>) t ).hasMutex()
+                        ? new CRelocateMutexVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                        : new CRelocateVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                    );
+                    return true;
                 }
+
+                // if target type is a variable set the value
+                if ( t instanceof IVariable<?> )
+                {
+                    p_variables.add( ( (IVariable<Object>) t ).set( s ) );
+                    return true;
+                }
+
+                // otherwise check equality
+                return s.equals( t );
+            }
         ).allMatch( i -> i );
     }
 }

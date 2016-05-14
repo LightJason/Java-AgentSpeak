@@ -66,18 +66,18 @@ public final class CIntersect extends IBuildinAction
                                         .map( i -> CCommon.getRawValue( i ) )
                                         .distinct()
                                         .filter(
-                                                i -> p_argument.parallelStream()
-                                                               .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j )
-                                                                       .parallelStream()
-                                                                       .map( l -> CCommon.getRawValue( l ) )
-                                                                       .collect( Collectors.toList() )
-                                                                       .contains( i )
-                                                               )
-                                                               .allMatch( j -> j )
+                                            i -> p_argument.parallelStream()
+                                                           .map( j -> CCommon.<Collection<?>, ITerm>getRawValue( j )
+                                                               .parallelStream()
+                                                               .map( l -> CCommon.getRawValue( l ) )
+                                                               .collect( Collectors.toList() )
+                                                               .contains( i )
+                                                           )
+                                                           .allMatch( j -> j )
                                         ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
-                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
         return CFuzzyValue.from( true );

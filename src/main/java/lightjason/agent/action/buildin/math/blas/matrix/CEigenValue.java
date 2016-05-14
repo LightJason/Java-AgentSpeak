@@ -64,15 +64,15 @@ public final class CEigenValue extends IBuildinAction
     {
         // argument must be a term with a matrix object
         p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList(
-                        Arrays.stream(
-                                new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                        ).boxed().sorted().collect( Collectors.toList() )
-                )
-                : Arrays.stream(
-                        new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+            p_parallel
+            ? Collections.synchronizedList(
+                Arrays.stream(
+                    new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
                 ).boxed().sorted().collect( Collectors.toList() )
+            )
+            : Arrays.stream(
+                new EigenvalueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
+            ).boxed().sorted().collect( Collectors.toList() )
         ) );
 
         return CFuzzyValue.from( true );

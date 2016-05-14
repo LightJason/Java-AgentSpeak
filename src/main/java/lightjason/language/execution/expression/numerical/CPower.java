@@ -82,10 +82,10 @@ public final class CPower extends IBaseBinary
         {
             case POWER:
                 p_return.add( CRawTerm.from(
-                        Math.pow(
-                                lightjason.language.CCommon.<Number, ITerm>getRawValue( l_argument.get( 0 ) ).doubleValue(),
-                                lightjason.language.CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).doubleValue()
-                        )
+                    Math.pow(
+                        lightjason.language.CCommon.<Number, ITerm>getRawValue( l_argument.get( 0 ) ).doubleValue(),
+                        lightjason.language.CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).doubleValue()
+                    )
                 ) );
                 return CFuzzyValue.from( true );
 

@@ -59,29 +59,29 @@ public class CElementWise extends IBuildinAction
         {
             case "+":
                 this.plus(
-                        CCommon.getRawValue( p_argument.get( 0 ) ),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.getRawValue( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "-":
                 this.minus(
-                        CCommon.getRawValue( p_argument.get( 0 ) ),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.getRawValue( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "*":
                 this.multiply(
-                        CCommon.getRawValue( p_argument.get( 0 ) ),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.getRawValue( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "/":
                 this.divide(
-                        CCommon.getRawValue( p_argument.get( 0 ) ),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.getRawValue( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 

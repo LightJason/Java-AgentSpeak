@@ -92,11 +92,11 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return new CRelocateVariable<>(
-                ( p_prefix == null ) || ( p_prefix.length == 0 )
-                ? m_functor
-                : m_functor.append( p_prefix[0] ),
-                new Cloner().deepClone( m_value ),
-                m_relocate
+            ( p_prefix == null ) || ( p_prefix.length == 0 )
+            ? m_functor
+            : m_functor.append( p_prefix[0] ),
+            new Cloner().deepClone( m_value ),
+            m_relocate
         );
     }
 

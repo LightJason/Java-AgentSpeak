@@ -233,8 +233,8 @@ public final class CConsistency implements IConsistency
             return 0;
 
         return m_metric.calculate(
-                m_filter.filter( p_first ).collect( Collectors.toList() ),
-                m_filter.filter( p_second ).collect( Collectors.toList() )
+            m_filter.filter( p_first ).collect( Collectors.toList() ),
+            m_filter.filter( p_second ).collect( Collectors.toList() )
         );
     }
 
@@ -318,8 +318,8 @@ public final class CConsistency implements IConsistency
             // gets the position of the largest eigenvalue in parallel and returns the eigenvector
             final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();
             return l_eigen.getV().viewColumn(
-                    IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()
-                             .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).getAsInt()
+                IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()
+                         .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).getAsInt()
             );
         }
 

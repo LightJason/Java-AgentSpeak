@@ -84,7 +84,7 @@ public final class TestCAgent
         try
         {
             l_map = CCommon.getActionsFromPackage().stream().collect(
-                    Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
+                Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
 
             l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );
         }
@@ -104,15 +104,15 @@ public final class TestCAgent
     {
         final Map<String, String> l_testing = StreamUtils.zip(
 
-                Stream.of(
-                        "src/test/resources/agent/complete.asl"
-                ),
+            Stream.of(
+                "src/test/resources/agent/complete.asl"
+            ),
 
-                Stream.of(
-                        "full-test agent"
-                ),
+            Stream.of(
+                "full-test agent"
+            ),
 
-                ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v )
+            ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v )
 
         ).collect( Collectors.toConcurrentMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
@@ -145,11 +145,13 @@ public final class TestCAgent
     {
         final IAgent l_agent;
         try (
-                final InputStream l_stream = new FileInputStream( p_script );
+            final InputStream l_stream = new FileInputStream( p_script );
         )
         {
             l_agent = new CDefaultAgentGenerator(
-                    l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CBeliefBaseUpdate(), new CVariableBuilder() ).generate();
+                l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CBeliefBaseUpdate(),
+                new CVariableBuilder()
+            ).generate();
 
             // run 5 cycles
             IntStream.range( 0, 5 ).forEach( i -> {
@@ -158,18 +160,18 @@ public final class TestCAgent
                     l_agent.call();
                     l_agent.getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
                     l_agent.trigger(
-                            CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
+                        CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
                     );
                 }
                 catch ( final Exception l_exception )
                 {
                     assertTrue(
-                            MessageFormat.format(
-                                    "{0} {1}",
-                                    l_exception.getClass().getName(),
-                                    l_exception.getMessage().isEmpty() ? "" : l_exception.getMessage()
-                            ).trim(),
-                            false
+                        MessageFormat.format(
+                            "{0} {1}",
+                            l_exception.getClass().getName(),
+                            l_exception.getMessage().isEmpty() ? "" : l_exception.getMessage()
+                        ).trim(),
+                        false
                     );
                 }
             } );

@@ -64,7 +64,7 @@ public final class CUnion extends IBuildinAction
         final List<?> l_result = CCommon.flatList( p_argument ).stream().map( i -> CCommon.getRawValue( i ) ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
-                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
         return CFuzzyValue.from( true );

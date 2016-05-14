@@ -66,13 +66,13 @@ public final class CValueConstraint extends IConstraint
     {
         // create linear constraint based on a value
         CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
-                new LinearConstraint(
-                        p_argument.subList( 1, p_argument.size() - 2 ).stream()
-                                  .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
-                                  .toArray(),
-                        this.getRelation( CCommon.getRawValue( p_argument.get( p_argument.size() - 2 ) ) ),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
-                )
+            new LinearConstraint(
+                p_argument.subList( 1, p_argument.size() - 2 ).stream()
+                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                          .toArray(),
+                this.getRelation( CCommon.getRawValue( p_argument.get( p_argument.size() - 2 ) ) ),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+            )
         );
 
         return CFuzzyValue.from( true );

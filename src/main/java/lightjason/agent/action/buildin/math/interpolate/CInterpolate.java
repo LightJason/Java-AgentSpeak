@@ -64,12 +64,12 @@ public final class CInterpolate extends IBuildinAction
         final UnivariateFunction l_function = CCommon.<UnivariateFunction, ITerm>getRawValue( p_argument.get( 0 ) );
 
         p_return.addAll(
-                CCommon.flatList( p_argument.subList( 1, p_argument.size() ) ).stream()
-                       .mapToDouble(
-                               i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue()
-                       )
-                       .mapToObj( i -> CRawTerm.from( l_function.value( i ) ) )
-                       .collect( Collectors.toList() )
+            CCommon.flatList( p_argument.subList( 1, p_argument.size() ) ).stream()
+                   .mapToDouble(
+                       i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue()
+                   )
+                   .mapToObj( i -> CRawTerm.from( l_function.value( i ) ) )
+                   .collect( Collectors.toList() )
         );
 
         return CFuzzyValue.from( true );

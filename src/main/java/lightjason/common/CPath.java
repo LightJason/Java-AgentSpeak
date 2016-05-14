@@ -91,7 +91,7 @@ public final class CPath implements IPath
         else
         {
             m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) ).filter( i -> !i.isEmpty() ).collect(
-                    Collectors.toList() );
+                Collectors.toList() );
             if ( m_path.size() == 0 )
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "pathempty" ) );
         }
@@ -143,9 +143,9 @@ public final class CPath implements IPath
             throw new CIllegalArgumentException( CCommon.getLanguageString( IPath.class, "createpath" ) );
 
         return new CPath(
-                Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
-                      .flatMap( i -> Arrays.stream( StringUtils.split( i, p_varargs[0] ) ) )
-                      .collect( Collectors.toList() )
+            Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
+                  .flatMap( i -> Arrays.stream( StringUtils.split( i, p_varargs[0] ) ) )
+                  .collect( Collectors.toList() )
         );
     }
 

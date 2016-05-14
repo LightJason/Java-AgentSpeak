@@ -67,12 +67,12 @@ public final class CCreate extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-                EType.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).get(
-                        CCommon.flatList( CCommon.getRawValue( p_argument.get( 1 ) ) ).stream()
-                               .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray(),
-                        CCommon.flatList( CCommon.getRawValue( p_argument.get( 2 ) ) ).stream()
-                               .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray()
-                )
+            EType.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).get(
+                CCommon.flatList( CCommon.getRawValue( p_argument.get( 1 ) ) ).stream()
+                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray(),
+                CCommon.flatList( CCommon.getRawValue( p_argument.get( 2 ) ) ).stream()
+                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray()
+            )
         ) );
 
         return CFuzzyValue.from( true );

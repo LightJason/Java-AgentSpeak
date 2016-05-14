@@ -97,15 +97,15 @@ public class CDefaultAgentGenerator implements IAgentGenerator
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
-                new CBoolFuzzy(),
-                l_visitor.getInitialBeliefs(),
-                p_beliefbaseupdate,
-                l_visitor.getPlans(),
-                l_visitor.getRules(),
-                l_visitor.getInitialGoal(),
-                p_unifier,
-                p_aggregation,
-                p_variablebuilder
+            new CBoolFuzzy(),
+            l_visitor.getInitialBeliefs(),
+            p_beliefbaseupdate,
+            l_visitor.getPlans(),
+            l_visitor.getRules(),
+            l_visitor.getInitialGoal(),
+            p_unifier,
+            p_aggregation,
+            p_variablebuilder
         );
     }
 

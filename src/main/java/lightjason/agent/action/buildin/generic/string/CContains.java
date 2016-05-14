@@ -63,10 +63,10 @@ public final class CContains extends IBuildinAction
         final String l_string = CCommon.getRawValue( p_argument.get( 0 ) );
 
         p_return.addAll(
-                p_argument.subList( 1, p_argument.size() ).stream()
-                          .map( i -> l_string.contains( CCommon.<String, ITerm>getRawValue( i ) ) )
-                          .map( i -> CRawTerm.from( i ) )
-                          .collect( Collectors.toList() )
+            p_argument.subList( 1, p_argument.size() ).stream()
+                      .map( i -> l_string.contains( CCommon.<String, ITerm>getRawValue( i ) ) )
+                      .map( i -> CRawTerm.from( i ) )
+                      .collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );
     }

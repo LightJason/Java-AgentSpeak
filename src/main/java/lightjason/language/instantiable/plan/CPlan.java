@@ -96,12 +96,12 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     )
     {
         super(
-                p_body,
-                p_annotation,
-                p_event.hashCode()
-                + ( p_condition == null ? 0 : p_condition.hashCode() )
-                + p_body.stream().mapToInt( i -> i.hashCode() ).sum()
-                + p_annotation.stream().mapToInt( i -> i.hashCode() ).sum()
+            p_body,
+            p_annotation,
+            p_event.hashCode()
+            + ( p_condition == null ? 0 : p_condition.hashCode() )
+            + p_body.stream().mapToInt( i -> i.hashCode() ).sum()
+            + p_annotation.stream().mapToInt( i -> i.hashCode() ).sum()
         );
 
 
@@ -149,10 +149,10 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-                m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue()
-                && ( l_return.size() == 1 )
-                ? CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) )
-                : false
+            m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue()
+            && ( l_return.size() == 1 )
+            ? CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) )
+            : false
         );
     }
 
@@ -160,12 +160,12 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ({1} | {2}{3} ==>> {4})",
-                super.toString(),
-                m_annotation.values(),
-                m_triggerevent,
-                m_condition == null ? "" : MessageFormat.format( " |- {0}", m_condition ),
-                StringUtils.join( m_action, "; " )
+            "{0} ({1} | {2}{3} ==>> {4})",
+            super.toString(),
+            m_annotation.values(),
+            m_triggerevent,
+            m_condition == null ? "" : MessageFormat.format( " |- {0}", m_condition ),
+            StringUtils.join( m_action, "; " )
         );
     }
 
@@ -174,14 +174,14 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final double score( final IAgent p_agent )
     {
         return p_agent.getAggregation().evaluate(
-                Stream.concat(
-                        Stream.of( super.score( p_agent ) ),
-                        Stream.of(
-                                m_annotation.containsKey( IAnnotation.EType.SCORE )
-                                ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()
-                                : 0
-                        )
+            Stream.concat(
+                Stream.of( super.score( p_agent ) ),
+                Stream.of(
+                    m_annotation.containsKey( IAnnotation.EType.SCORE )
+                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()
+                    : 0
                 )
+            )
         );
     }
 
@@ -190,19 +190,19 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final Stream<IVariable<?>> getVariables()
     {
         return (Stream<IVariable<?>>) Stream.of(
-                m_condition != null
-                ? m_condition.getVariables()
-                : Stream.<IVariable<?>>empty(),
+            m_condition != null
+            ? m_condition.getVariables()
+            : Stream.<IVariable<?>>empty(),
 
-                super.getVariables(),
+            super.getVariables(),
 
-                CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
-                       .filter( i -> i instanceof IVariable<?> )
-                       .map( i -> (IVariable<?>) i ),
+            CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
+                   .filter( i -> i instanceof IVariable<?> )
+                   .map( i -> (IVariable<?>) i ),
 
-                CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
-                       .filter( i -> i instanceof IVariable<?> )
-                       .map( i -> (IVariable<?>) i )
+            CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
+                   .filter( i -> i instanceof IVariable<?> )
+                   .map( i -> (IVariable<?>) i )
         )
                                             .reduce( Stream::concat )
                                             .orElseGet( Stream::<IVariable<?>>empty );

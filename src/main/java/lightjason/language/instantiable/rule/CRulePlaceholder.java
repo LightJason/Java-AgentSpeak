@@ -121,9 +121,9 @@ public final class CRulePlaceholder implements IRule
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ({1} ==>> ?)",
-                super.toString(),
-                m_id
+            "{0} ({1} ==>> ?)",
+            super.toString(),
+            m_id
         );
     }
 

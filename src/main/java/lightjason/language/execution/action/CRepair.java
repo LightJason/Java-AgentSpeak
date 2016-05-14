@@ -69,8 +69,8 @@ public class CRepair extends IBaseExecution<IExecution>
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                m_value.getVariables(),
-                m_fallback.getVariables()
+            m_value.getVariables(),
+            m_fallback.getVariables()
         );
     }
 

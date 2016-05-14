@@ -183,11 +183,11 @@ public final class CBeliefBase implements IBeliefBase
 
         // create copy of all trigger and recursive elements
         final Set<ITrigger> l_copy = Collections.unmodifiableSet(
-                Stream.concat(
-                        l_trigger.parallelStream(),
-                        m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger() )
-                )
-                      .collect( Collectors.toSet() )
+            Stream.concat(
+                l_trigger.parallelStream(),
+                m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger() )
+            )
+                  .collect( Collectors.toSet() )
         );
 
         // clear all trigger elements if no trigger exists return an empty set

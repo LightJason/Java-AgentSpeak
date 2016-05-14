@@ -65,22 +65,22 @@ public final class CDecrypt extends IBuildinAction
 
 
         p_return.addAll(
-                p_argument.subList( 1, p_argument.size() ).stream()
-                          .map( i -> Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) ) )
-                          .map( i -> {
-                              try
-                              {
-                                  return l_algorithm.getDecryptCipher( l_key ).doFinal( i );
-                              }
-                              catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                      | BadPaddingException | IllegalBlockSizeException l_exception )
-                              {
-                                  return null;
-                              }
-                          } )
-                          .filter( i -> i != null )
-                          .map( i -> CRawTerm.from( SerializationUtils.deserialize( i ) ) )
-                          .collect( Collectors.toList() )
+            p_argument.subList( 1, p_argument.size() ).stream()
+                      .map( i -> Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) ) )
+                      .map( i -> {
+                          try
+                          {
+                              return l_algorithm.getDecryptCipher( l_key ).doFinal( i );
+                          }
+                          catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                              | BadPaddingException | IllegalBlockSizeException l_exception )
+                          {
+                              return null;
+                          }
+                      } )
+                      .filter( i -> i != null )
+                      .map( i -> CRawTerm.from( SerializationUtils.deserialize( i ) ) )
+                      .collect( Collectors.toList() )
         );
 
         return CFuzzyValue.from( true );

@@ -61,8 +61,8 @@ public final class CDotProduct extends IBuildinAction
     {
         // first and second argument must be a term with a vector object
         p_return.add( CRawTerm.from(
-                CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) )
-                        .zDotProduct( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 1 ) ) )
+            CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) )
+                .zDotProduct( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 1 ) ) )
         ) );
         return CFuzzyValue.from( true );
     }

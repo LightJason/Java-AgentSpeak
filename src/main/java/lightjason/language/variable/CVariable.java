@@ -155,7 +155,8 @@ public class CVariable<T> implements IVariable<T>
     {
         if ( !this.isValueAssignableTo( p_class ) )
             throw new CIllegalArgumentException(
-                    lightjason.common.CCommon.getLanguageString( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
+                lightjason.common.CCommon
+                    .getLanguageString( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
 
         return this;
     }
@@ -215,10 +216,10 @@ public class CVariable<T> implements IVariable<T>
     public ITerm deepcopy( final IPath... p_prefix )
     {
         return new CVariable<T>(
-                ( p_prefix == null ) || ( p_prefix.length == 0 )
-                ? m_functor
-                : m_functor.append( p_prefix[0] ),
-                new Cloner().deepClone( m_value )
+            ( p_prefix == null ) || ( p_prefix.length == 0 )
+            ? m_functor
+            : m_functor.append( p_prefix[0] ),
+            new Cloner().deepClone( m_value )
         );
     }
 

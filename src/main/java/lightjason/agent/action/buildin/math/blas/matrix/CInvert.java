@@ -62,9 +62,9 @@ public final class CInvert extends IAlgebra
     {
         // first argument must be a term with a matrix object
         p_return.add(
-                CRawTerm.from(
-                        ALGEBRA.inverse( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
-                )
+            CRawTerm.from(
+                ALGEBRA.inverse( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
+            )
         );
 
         return CFuzzyValue.from( true );

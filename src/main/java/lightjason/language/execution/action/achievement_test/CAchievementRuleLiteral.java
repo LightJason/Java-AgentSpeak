@@ -80,8 +80,8 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                lightjason.language.CCommon.recursiveterm( m_value.orderedvalues() ),
-                lightjason.language.CCommon.recursiveliteral( m_value.annotations() )
+            lightjason.language.CCommon.recursiveterm( m_value.orderedvalues() ),
+            lightjason.language.CCommon.recursiveliteral( m_value.annotations() )
         )
                      .parallel()
                      .filter( i -> i instanceof IVariable<?> )

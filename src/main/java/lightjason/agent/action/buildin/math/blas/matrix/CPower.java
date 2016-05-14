@@ -62,12 +62,12 @@ public final class CPower extends IAlgebra
     {
         // first argument must be a term with a matrix object, second argument must be the exponent
         p_return.add(
-                CRawTerm.from(
-                        ALGEBRA.pow(
-                                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ),
-                                CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue()
-                        )
+            CRawTerm.from(
+                ALGEBRA.pow(
+                    CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue()
                 )
+            )
         );
 
         return CFuzzyValue.from( true );

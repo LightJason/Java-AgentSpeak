@@ -64,15 +64,15 @@ public final class CSingularValue extends IBuildinAction
     {
         // argument must be a term with a matrix object
         p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList(
-                        Arrays.stream(
-                                new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
-                        ).boxed().sorted().collect( Collectors.toList() )
-                )
-                : Arrays.stream(
-                        new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
+            p_parallel
+            ? Collections.synchronizedList(
+                Arrays.stream(
+                    new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
                 ).boxed().sorted().collect( Collectors.toList() )
+            )
+            : Arrays.stream(
+                new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
+            ).boxed().sorted().collect( Collectors.toList() )
         ) );
 
         return CFuzzyValue.from( true );

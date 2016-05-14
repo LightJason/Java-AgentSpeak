@@ -110,12 +110,12 @@ public final class CPrint extends IBuildinAction
     )
     {
         m_stream.println(
-                MessageFormat.format(
-                        "{0}{1}", this.getString( p_argument ),
-                        p_annotation.isEmpty()
-                        ? ""
-                        : MessageFormat.format( "{0}{1}", m_seperator, this.getString( p_annotation ) )
-                )
+            MessageFormat.format(
+                "{0}{1}", this.getString( p_argument ),
+                p_annotation.isEmpty()
+                ? ""
+                : MessageFormat.format( "{0}{1}", m_seperator, this.getString( p_annotation ) )
+            )
         );
         return CFuzzyValue.from( true );
     }

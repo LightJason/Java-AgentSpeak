@@ -267,9 +267,9 @@ public final class CBind<T>
 
             m_arguments = m_method.getMinimalArgumentNumber();
             m_name = CPath.createSplitPath(
-                    ClassUtils.PACKAGE_SEPARATOR,
-                    ACTIONPACKAGENAME,
-                    p_fqnpackage ? p_object.getClass().getCanonicalName() : p_object.getClass().getSimpleName(), m_method.getMethod().getName()
+                ClassUtils.PACKAGE_SEPARATOR,
+                ACTIONPACKAGENAME,
+                p_fqnpackage ? p_object.getClass().getCanonicalName() : p_object.getClass().getSimpleName(), m_method.getMethod().getName()
             ).toLower();
         }
 
@@ -294,9 +294,9 @@ public final class CBind<T>
             try
             {
                 m_method.getHandle().bindTo( m_bindobject ).invokeWithArguments(
-                        p_argument.stream()
-                                  .map( i -> CCommon.getRawValue( i ) )
-                                  .collect( Collectors.toList() )
+                    p_argument.stream()
+                              .map( i -> CCommon.getRawValue( i ) )
+                              .collect( Collectors.toList() )
                 );
             }
             catch ( final Throwable l_throwable )
@@ -365,9 +365,9 @@ public final class CBind<T>
 
             m_arguments = m_method.getMinimalArgumentNumber() + ( m_storagename == null ? 1 : 0 );
             m_name = CPath.createSplitPath(
-                    ClassUtils.PACKAGE_SEPARATOR,
-                    ACTIONPACKAGENAME,
-                    p_fqnpackage ? p_class.getCanonicalName() : p_class.getSimpleName(), m_method.getMethod().getName()
+                ClassUtils.PACKAGE_SEPARATOR,
+                ACTIONPACKAGENAME,
+                p_fqnpackage ? p_class.getCanonicalName() : p_class.getSimpleName(), m_method.getMethod().getName()
             ).toLower();
         }
 
@@ -390,7 +390,7 @@ public final class CBind<T>
         )
         {
             final Object l_reference = p_context.getAgent().getStorage().get(
-                    m_storagename != null ? m_storagename : CCommon.getRawValue( p_argument.get( 0 ) ) );
+                m_storagename != null ? m_storagename : CCommon.getRawValue( p_argument.get( 0 ) ) );
             if ( l_reference == null )
                 return CFuzzyValue.from( false );
 

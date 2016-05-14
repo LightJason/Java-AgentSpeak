@@ -61,10 +61,10 @@ public final class CRule extends IBaseInstantiable implements IRule
     public CRule( final ILiteral p_id, final List<IExecution> p_action )
     {
         super(
-                p_action,
-                Collections.<IAnnotation<?>>emptySet(),
-                p_id.hashCode()
-                + p_action.stream().mapToInt( i -> i.hashCode() ).sum()
+            p_action,
+            Collections.<IAnnotation<?>>emptySet(),
+            p_id.hashCode()
+            + p_action.stream().mapToInt( i -> i.hashCode() ).sum()
         );
         m_id = p_id;
     }
@@ -80,14 +80,14 @@ public final class CRule extends IBaseInstantiable implements IRule
     public final IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules )
     {
         return new CRule(
-                m_id,
-                m_action.stream().map( i ->
-                                               i instanceof CRulePlaceholder
-                                               // create a full deep-copy of the literal for avoid indeterminisitic
-                                               // behaviour on rule unification
-                                               ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
-                                               : i
-                ).collect( Collectors.toList() )
+            m_id,
+            m_action.stream().map( i ->
+                                       i instanceof CRulePlaceholder
+                                       // create a full deep-copy of the literal for avoid indeterminisitic
+                                       // behaviour on rule unification
+                                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
+                                       : i
+            ).collect( Collectors.toList() )
         );
     }
 
@@ -96,9 +96,9 @@ public final class CRule extends IBaseInstantiable implements IRule
     public final Stream<IVariable<?>> getVariables()
     {
         return (Stream<IVariable<?>>) Stream.of(
-                CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-                CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-                super.getVariables()
+            CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
+            CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
+            super.getVariables()
         )
                                             .reduce( Stream::concat )
                                             .orElseGet( Stream::<IVariable<?>>empty );
@@ -108,10 +108,10 @@ public final class CRule extends IBaseInstantiable implements IRule
     public final String toString()
     {
         return MessageFormat.format(
-                "{0} ({1} ==>> {2})",
-                super.toString(),
-                m_id,
-                m_action
+            "{0} ({1} ==>> {2})",
+            super.toString(),
+            m_id,
+            m_action
         );
     }
 

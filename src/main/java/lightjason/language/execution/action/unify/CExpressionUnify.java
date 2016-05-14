@@ -79,8 +79,8 @@ public final class CExpressionUnify extends CDefaultUnify
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-                m_expression.getVariables(),
-                CExpressionUnify.super.getVariables()
+            m_expression.getVariables(),
+            CExpressionUnify.super.getVariables()
         );
     }
 

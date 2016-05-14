@@ -143,7 +143,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         m_action.stream()
                 .map( i -> {
                     final IFuzzyValue<Boolean> l_return = i.execute(
-                            p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
+                        p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
                     l_result.add( l_return );
                     return p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return );
                 } )
