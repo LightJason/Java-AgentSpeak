@@ -58,7 +58,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return execute( p_context, m_value, m_value.hasAt() );
+        return CAchievementRuleLiteral.execute( p_context, m_value, m_value.hasAt() );
     }
 
     @Override

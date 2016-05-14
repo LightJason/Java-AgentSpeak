@@ -55,7 +55,7 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
                                          final List<ITerm> p_annotation
     )
     {
-        return execute( p_context, m_value.evaluate( p_context ), m_value.hasMutex() );
+        return CAchievementRuleVariable.execute( p_context, m_value.evaluate( p_context ), m_value.hasMutex() );
     }
 
     @Override

@@ -68,23 +68,23 @@ public final class TestCMetric
         final IMetric l_metric = new CSymmetricDifference();
 
         final Set<ILiteral> l_beliefs = Stream.of(
-                CLiteral.from( "toplevel" ),
-                CLiteral.from( "first/sub1" ),
-                CLiteral.from( "first/sub2" ),
-                CLiteral.from( "second/sub1" ),
-                CLiteral.from( "second/sub2" ),
-                CLiteral.from( "second/sub/sub1" )
+            CLiteral.from( "toplevel" ),
+            CLiteral.from( "first/sub1" ),
+            CLiteral.from( "first/sub2" ),
+            CLiteral.from( "second/sub1" ),
+            CLiteral.from( "second/sub2" ),
+            CLiteral.from( "second/sub/sub1" )
         ).collect( Collectors.toSet() );
 
         this.check( "symmetric difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 0, 0 );
         this.check(
-                "symmetric difference inequality",
-                l_filter,
-                l_metric,
-                l_beliefs,
-                Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
-                1,
-                0
+            "symmetric difference inequality",
+            l_filter,
+            l_metric,
+            l_beliefs,
+            Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            1,
+            0
         );
     }
 
@@ -99,23 +99,23 @@ public final class TestCMetric
         final IMetric l_metric = new CWeightedDifference();
 
         final Set<ILiteral> l_beliefs = Stream.of(
-                CLiteral.from( "toplevel" ),
-                CLiteral.from( "first/sub1" ),
-                CLiteral.from( "first/sub2" ),
-                CLiteral.from( "second/sub1" ),
-                CLiteral.from( "second/sub2" ),
-                CLiteral.from( "second/sub/sub1" )
+            CLiteral.from( "toplevel" ),
+            CLiteral.from( "first/sub1" ),
+            CLiteral.from( "first/sub2" ),
+            CLiteral.from( "second/sub1" ),
+            CLiteral.from( "second/sub2" ),
+            CLiteral.from( "second/sub/sub1" )
         ).collect( Collectors.toSet() );
 
         this.check( "weight difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 24, 0 );
         this.check(
-                "weight difference inequality",
-                l_filter,
-                l_metric,
-                l_beliefs,
-                Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
-                28 + 1.0 / 6,
-                0
+            "weight difference inequality",
+            l_filter,
+            l_metric,
+            l_beliefs,
+            Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            28 + 1.0 / 6,
+            0
         );
     }
 
@@ -149,8 +149,8 @@ public final class TestCMetric
     )
     {
         final double l_value = p_metric.calculate(
-                p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
-                p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
+            p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
+            p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
         );
         assertEquals( p_message, l_value, p_excepted, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
