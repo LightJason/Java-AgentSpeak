@@ -93,6 +93,8 @@ public enum EAlgorithm
     }
 
     /**
+     * returns encrypt cipher
+     *
      * @param p_key key object
      * @return cipher
      *
@@ -108,6 +110,8 @@ public enum EAlgorithm
     }
 
     /**
+     * * returns decrypt cipher
+     *
      * @param p_key key object
      * @return cipher
      *
