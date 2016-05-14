@@ -60,11 +60,10 @@ public final class CSet extends IBuildinAction
     {
         // first argument must be a term with a vector object, second index, third the value
         CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) )
-                .setQuick(
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
-                );
-
+            .setQuick(
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
+                CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+            );
 
         return CFuzzyValue.from( true );
     }

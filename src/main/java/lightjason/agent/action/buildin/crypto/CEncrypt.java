@@ -67,17 +67,19 @@ public final class CEncrypt extends IBuildinAction
                 p_argument.subList( 1, p_argument.size() ).stream()
                           .map( i -> SerializationUtils.serialize( CCommon.getRawValue( i ) ) )
                           .map( i -> {
-                                    try
-                                    {
-                                        return l_algorithm.getEncryptCipher( l_key ).doFinal( i );
-                                    }
-                                    catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                            | BadPaddingException | IllegalBlockSizeException l_exception )
-                                    {
-                                        return null;
-                                    }
-                                }
-                          ).filter( i -> i != null ).map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) ).collect( Collectors.toList() )
+                              try
+                              {
+                                  return l_algorithm.getEncryptCipher( l_key ).doFinal( i );
+                              }
+                              catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                                      | BadPaddingException | IllegalBlockSizeException l_exception )
+                              {
+                                  return null;
+                              }
+                          } )
+                          .filter( i -> i != null )
+                          .map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) )
+                          .collect( Collectors.toList() )
         );
 
         return CFuzzyValue.from( true );

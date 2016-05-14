@@ -66,7 +66,6 @@ public final class CSet extends IBuildinAction
                         CCommon.<Number, ITerm>getRawValue( p_argument.get( 3 ) ).doubleValue()
                 );
 
-
         return CFuzzyValue.from( true );
     }
 }
