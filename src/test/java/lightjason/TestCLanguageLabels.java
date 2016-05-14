@@ -175,8 +175,9 @@ public final class TestCLanguageLabels
                                                          .provider()
                                                          .getPath( SEARCHPATH )
                                                          .toAbsolutePath()
-                                                         .toString()
-                                              , "" )
+                                                         .toString(),
+                                              ""
+                                      )
                                       // string starts with path separator
                                       .substring( 1 )
                                       // remove file extension
@@ -225,9 +226,12 @@ public final class TestCLanguageLabels
 
                                // --- check if all parsed labels within the property item and remove ignored labels
                                l_propertyitems.removeAll( l_label );
-                               final Set<String> l_ignoredpropertyitems = l_propertyitems.parallelStream().filter(
-                                       j -> l_ignoredlabel.parallelStream().map( l -> j.startsWith( l ) ).allMatch( l -> false ) ).collect(
-                                       Collectors.toSet() );
+                               final Set<String> l_ignoredpropertyitems = l_propertyitems.parallelStream()
+                                                                                         .filter( j -> l_ignoredlabel.parallelStream()
+                                                                                                                     .map( l -> j.startsWith( l ) )
+                                                                                                                     .allMatch( l -> false )
+                                                                                         )
+                                                                                         .collect( Collectors.toSet() );
                                assertTrue(
                                        MessageFormat.format(
                                                "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the source code:\n{2}",

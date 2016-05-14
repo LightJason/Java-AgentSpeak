@@ -29,7 +29,7 @@
     </module>
 
     <module name = "Header">
-        <property name = "headerFile" value = "src/main/styleguide/header.txt" />
+        <!-- <property name = "headerFile" value = "src/main/styleguide/header.txt" /> -->
         <property name = "fileExtensions" value = "java" />
     </module>
 

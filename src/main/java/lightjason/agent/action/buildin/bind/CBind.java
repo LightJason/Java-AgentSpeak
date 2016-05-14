@@ -104,8 +104,9 @@ public final class CBind<T>
      */
     public static <T> Set<IAction> get( final T p_object, final CReflection.IFilter<Method> p_filter )
     {
-        return CReflection.getClassMethods( p_object.getClass(), p_filter ).values().parallelStream().map(
-                i -> new CObjectAction<T>( true, i, p_object ) ).collect( Collectors.toSet() );
+        return CReflection.getClassMethods( p_object.getClass(), p_filter ).values().parallelStream()
+                          .map( i -> new CObjectAction<T>( true, i, p_object ) )
+                          .collect( Collectors.toSet() );
     }
 
     /**
@@ -120,8 +121,9 @@ public final class CBind<T>
      */
     public static <T> Set<IAction> get( final boolean p_fqnpackage, final T p_object, final CReflection.IFilter<Method> p_filter )
     {
-        return CReflection.getClassMethods( p_object.getClass(), p_filter ).values().parallelStream().map(
-                i -> new CObjectAction<T>( p_fqnpackage, i, p_object ) ).collect( Collectors.toSet() );
+        return CReflection.getClassMethods( p_object.getClass(), p_filter ).values().parallelStream()
+                          .map( i -> new CObjectAction<T>( p_fqnpackage, i, p_object ) )
+                          .collect( Collectors.toSet() );
     }
 
 
@@ -152,8 +154,9 @@ public final class CBind<T>
      */
     public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class, final String p_storagename, final CReflection.IFilter<Method> p_filter )
     {
-        return CReflection.getClassMethods( p_class, p_filter ).values().parallelStream().map(
-                i -> new CStorageElementAction( true, p_class, i, p_storagename ) ).collect( Collectors.toSet() );
+        return CReflection.getClassMethods( p_class, p_filter ).values().parallelStream()
+                          .map( i -> new CStorageElementAction( true, p_class, i, p_storagename ) )
+                          .collect( Collectors.toSet() );
     }
 
 
@@ -216,8 +219,9 @@ public final class CBind<T>
     public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class, final CReflection.IFilter<Method> p_filter )
     throws IllegalAccessException
     {
-        return CReflection.getClassMethods( p_class, p_filter ).values().parallelStream().map(
-                i -> new CStorageElementAction( p_fqnpackage, p_class, i ) ).collect( Collectors.toSet() );
+        return CReflection.getClassMethods( p_class, p_filter ).values().parallelStream()
+                          .map( i -> new CStorageElementAction( p_fqnpackage, p_class, i ) )
+                          .collect( Collectors.toSet() );
     }
 
 

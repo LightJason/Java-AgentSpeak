@@ -23,15 +23,16 @@
 
 package lightjason.common.benchmark;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 
 import java.util.AbstractMap;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -75,7 +76,6 @@ public final class CSummary
      *
      * @return statistic map
      */
-    @SuppressWarnings( {"serial", "unchecked"} )
     public final Map<String, Map<String, Double>> get()
     {
         return Collections.unmodifiableMap(
@@ -83,23 +83,47 @@ public final class CSummary
                         .map( i ->
                                       new AbstractMap.SimpleImmutableEntry<>(
                                               i.getKey(),
-                                              Collections.unmodifiableMap( new HashMap<String, Double>()
-                                              {{
-                                                  put( "max", i.getValue().getMax() );
-                                                  put( "min", i.getValue().getMin() );
-                                                  put( "kurtosis", i.getValue().getKurtosis() );
-                                                  put( "arithmetic mean", i.getValue().getMean() );
-                                                  put( "geometric mean", i.getValue().getGeometricMean() );
-                                                  put( "50-percentile", i.getValue().getPercentile( 50 ) );
-                                                  put( "25-percentile", i.getValue().getPercentile( 25 ) );
-                                                  put( "75-percentile", i.getValue().getPercentile( 75 ) );
-                                                  put( "standard deviation", i.getValue().getStandardDeviation() );
-                                                  put( "skewness", i.getValue().getSkewness() );
-                                                  put( "count", (double) i.getValue().getN() );
-                                                  put( "sum", i.getValue().getSum() );
-                                                  put( "sum square", i.getValue().getSumsq() );
-                                                  put( "variance", i.getValue().getVariance() );
-                                              }} )
+                                              Collections.unmodifiableMap(
+                                                      StreamUtils.zip(
+
+                                                              Stream.of(
+                                                                      "max",
+                                                                      "min",
+                                                                      "kurtosis",
+                                                                      "arithmetic mean",
+                                                                      "geometric mean",
+                                                                      "50-percentile",
+                                                                      "25-percentile",
+                                                                      "75-percentile",
+                                                                      "standard deviation",
+                                                                      "skewness",
+                                                                      "count",
+                                                                      "sum",
+                                                                      "sum square",
+                                                                      "variance"
+                                                              ),
+
+                                                              Stream.of(
+                                                                      i.getValue().getMax(),
+                                                                      i.getValue().getMin(),
+                                                                      i.getValue().getKurtosis(),
+                                                                      i.getValue().getMean(),
+                                                                      i.getValue().getGeometricMean(),
+                                                                      i.getValue().getPercentile( 50 ),
+                                                                      i.getValue().getPercentile( 25 ),
+                                                                      i.getValue().getPercentile( 75 ),
+                                                                      i.getValue().getStandardDeviation(),
+                                                                      i.getValue().getSkewness(),
+                                                                      i.getValue().getN(),
+                                                                      i.getValue().getSum(),
+                                                                      i.getValue().getSumsq(),
+                                                                      i.getValue().getVariance()
+                                                              ),
+
+                                                              ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v.doubleValue() )
+
+                                                      ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) )
+                                              )
                                       )
                         )
                         .collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) )

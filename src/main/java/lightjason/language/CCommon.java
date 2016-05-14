@@ -148,8 +148,7 @@ public final class CCommon
                                                 if ( ( !Modifier.isAbstract( l_class.getModifiers() ) )
                                                      && ( !Modifier.isInterface( l_class.getModifiers() ) )
                                                      && ( Modifier.isPublic( l_class.getModifiers() ) )
-                                                     && ( IAction.class.isAssignableFrom( l_class ) )
-                                                        )
+                                                     && ( IAction.class.isAssignableFrom( l_class ) ) )
                                                     return (IAction) l_class.newInstance();
                                             }
                                             catch ( final IllegalAccessException | InstantiationException l_exception )
@@ -310,13 +309,11 @@ public final class CCommon
     @SuppressWarnings( "unchecked" )
     private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
     {
-        return p_list.stream().flatMap(
-                i -> {
-                    final Object l_value = getRawValue( i );
-                    return l_value instanceof Collection<?>
-                           ? flattenToStream( (List<?>) l_value )
-                           : Stream.of( CRawTerm.from( l_value ) );
-
-                } );
+        return p_list.stream().flatMap( i -> {
+            final Object l_value = getRawValue( i );
+            return l_value instanceof Collection<?>
+                   ? flattenToStream( (List<?>) l_value )
+                   : Stream.of( CRawTerm.from( l_value ) );
+        } );
     }
 }

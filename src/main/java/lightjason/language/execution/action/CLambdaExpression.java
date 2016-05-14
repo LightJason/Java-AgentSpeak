@@ -199,8 +199,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
                     j -> j.execute(
                             l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
                             Collections.<ITerm>emptyList()
-                    )
-            );
+                    ) );
             return l_localcontext.getRight() != null ? CCommon.getRawValue( l_localcontext.getRight() ) : null;
 
         } ).filter( i -> i != null ).collect( Collectors.toList() );
