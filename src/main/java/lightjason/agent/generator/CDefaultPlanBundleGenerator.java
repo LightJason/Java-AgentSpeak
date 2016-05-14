@@ -25,6 +25,7 @@ package lightjason.agent.generator;
 
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
+import lightjason.grammar.CParserPlanBundle;
 import lightjason.grammar.IASTVisitorPlanBundle;
 
 import java.io.InputStream;
@@ -46,7 +47,7 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
      */
     public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
-        final IASTVisitorPlanBundle l_visitor = new CDefaultPlanBundleParser( p_actions ).parse( p_stream );
+        final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions ).parse( p_stream );
     }
 
 

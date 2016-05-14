@@ -164,6 +164,7 @@ public final class CBind<T>
      *
      * @param p_class binding class
      * @return set with actions
+     *
      * @throws IllegalAccessException on illegal class access
      */
     public static Set<IAction> get( final Class<?> p_class ) throws IllegalAccessException
@@ -178,6 +179,7 @@ public final class CBind<T>
      * @param p_fqnpackage use full-qualified package name
      * @param p_class binding class
      * @return set with actions
+     *
      * @throws IllegalAccessException on illegal class access
      */
     public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class ) throws IllegalAccessException
@@ -192,6 +194,7 @@ public final class CBind<T>
      * @param p_class binding class
      * @param p_filter method filter object
      * @return set with actions
+     *
      * @throws IllegalAccessException on illegal class access
      */
     public static Set<IAction> get( final Class<?> p_class, final CReflection.IFilter<Method> p_filter ) throws IllegalAccessException
@@ -207,6 +210,7 @@ public final class CBind<T>
      * @param p_class binding class
      * @param p_filter method filter object
      * @return set with actions
+     *
      * @throws IllegalAccessException on illegal class access
      */
     public static Set<IAction> get( final boolean p_fqnpackage, final Class<?> p_class, final CReflection.IFilter<Method> p_filter )

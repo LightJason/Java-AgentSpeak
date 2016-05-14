@@ -39,7 +39,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * generic default parser
  */
-public abstract class IGenericParser<T extends IASTVisitor, L extends Lexer, P extends Parser> implements IParser<T>
+public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P extends Parser> implements IParser<T>
 {
     /**
      * error listener
@@ -52,7 +52,7 @@ public abstract class IGenericParser<T extends IASTVisitor, L extends Lexer, P e
      *
      * @param p_errorlistener listener instance
      */
-    protected IGenericParser( final ANTLRErrorListener p_errorlistener )
+    protected IParserBase( final ANTLRErrorListener p_errorlistener )
     {
         m_errorlistener = p_errorlistener;
     }

@@ -58,6 +58,7 @@ public final class CReflection
      * @param p_class class
      * @param p_field fieldname
      * @return getter / setter handle object
+     *
      * @throws IllegalArgumentException on wrong argument
      * @throws IllegalAccessException on class error access
      * @throws NoSuchFieldException on field exceptions
@@ -81,6 +82,7 @@ public final class CReflection
      *
      * @param p_class class
      * @return map with field name and getter / setter handle
+     *
      * @throws IllegalAccessException on class error access
      */
     public static Map<String, CGetSet> getClassFields( final Class<?> p_class ) throws IllegalAccessException
@@ -94,6 +96,7 @@ public final class CReflection
      * @param p_class class
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
+     *
      * @throws IllegalAccessException on class error access
      */
     public static Map<String, CGetSet> getClassFields( final Class<?> p_class, final IFilter<Field> p_filter ) throws IllegalAccessException
@@ -123,6 +126,7 @@ public final class CReflection
      * @param p_class class
      * @param p_method methodname
      * @return method
+     *
      * @throws IllegalArgumentException on wrong argument
      * @throws IllegalAccessException on class error access
      * @throws NoSuchMethodException on method exceptions
@@ -142,6 +146,7 @@ public final class CReflection
      * @param p_parameter array with type-classes to define method parameter e.g. new Class[]{Integer.TYPE,
      * Integer.TYPE};
      * @return method
+     *
      * @throws IllegalArgumentException on wrong argument
      * @throws IllegalAccessException on class error access
      * @throws NoSuchMethodException on method exceptions

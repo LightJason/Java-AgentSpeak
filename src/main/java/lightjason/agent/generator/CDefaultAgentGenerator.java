@@ -31,6 +31,7 @@ import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.agent.fuzzy.CBoolFuzzy;
 import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.common.CCommon;
+import lightjason.grammar.CParserAgent;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
@@ -92,7 +93,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     )
     throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CDefaultAgentParser( p_actions ).parse( p_stream );
+        final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(

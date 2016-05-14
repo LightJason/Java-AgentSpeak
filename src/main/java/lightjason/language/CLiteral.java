@@ -36,7 +36,7 @@ import lightjason.common.IPath;
 import lightjason.grammar.CASTVisitorType;
 import lightjason.grammar.CErrorListener;
 import lightjason.grammar.IASTVisitorType;
-import lightjason.grammar.IGenericParser;
+import lightjason.grammar.IParserBase;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
 import lightjason.language.execution.IContext;
@@ -448,7 +448,7 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    protected static final class CParser extends IGenericParser<IASTVisitorType, TypeLexer, TypeParser>
+    protected static final class CParser extends IParserBase<IASTVisitorType, TypeLexer, TypeParser>
     {
 
         /**

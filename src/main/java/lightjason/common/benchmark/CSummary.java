@@ -72,6 +72,7 @@ public final class CSummary
 
     /**
      * returns the current data
+     *
      * @return statistic map
      */
     @SuppressWarnings( {"serial", "unchecked"} )

@@ -21,15 +21,9 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.grammar;
 
 import lightjason.agent.action.IAction;
-import lightjason.grammar.AgentLexer;
-import lightjason.grammar.AgentParser;
-import lightjason.grammar.CASTVisitorAgent;
-import lightjason.grammar.CErrorListener;
-import lightjason.grammar.IASTVisitorAgent;
-import lightjason.grammar.IGenericParser;
 import lightjason.language.instantiable.rule.IRule;
 
 import java.io.InputStream;
@@ -38,9 +32,9 @@ import java.util.Set;
 
 
 /**
- * default agent parser
+ * default planbundle parser
  */
-public final class CDefaultAgentParser extends IGenericParser<IASTVisitorAgent, AgentLexer, AgentParser>
+public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
 {
     /**
      * set with actions
@@ -52,30 +46,29 @@ public final class CDefaultAgentParser extends IGenericParser<IASTVisitorAgent, 
      *
      * @param p_actions agent actions
      */
-    public CDefaultAgentParser( final Set<IAction> p_actions )
+    public CParserPlanBundle( final Set<IAction> p_actions )
     {
         super( new CErrorListener() );
         m_actions = p_actions;
     }
 
     @Override
-    public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
+    public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, Collections.<IRule>emptySet() );
-        l_visitor.visit( this.getParser( p_stream ).agent() );
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, Collections.<IRule>emptySet() );
+        l_visitor.visit( this.getParser( p_stream ).planbundle() );
         return l_visitor;
     }
 
     @Override
-    protected final Class<AgentLexer> getLexerClass()
+    protected final Class<PlanBundleLexer> getLexerClass()
     {
-        return AgentLexer.class;
+        return PlanBundleLexer.class;
     }
 
     @Override
-    protected final Class<AgentParser> getParserClass()
+    protected final Class<PlanBundleParser> getParserClass()
     {
-        return AgentParser.class;
+        return PlanBundleParser.class;
     }
-
 }
