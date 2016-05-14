@@ -110,7 +110,9 @@
 
         <!-- <module name = "CatchParameterName" /> -->
 
-        <!-- <module name="ClassDataAbstractionCoupling" /> -->
+        <module name = "ClassDataAbstractionCoupling">
+            <property name = "max" value = "45" />
+        </module>
 
         <!-- <module name="ClassFanOutComplexity"/> -->
 
@@ -183,7 +185,7 @@
 
         <module name = "HiddenField" />
 
-        <!-- <module name="HideUtilityClassConstructor"/> -->
+        <module name = "HideUtilityClassConstructor" />
 
         <!-- <module name = "IllegalCatch" /> -->
 

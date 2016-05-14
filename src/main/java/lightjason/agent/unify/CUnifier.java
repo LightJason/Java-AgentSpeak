@@ -183,8 +183,7 @@ public final class CUnifier implements IUnifier
                 l_result,
                 p_value.orderedvalues(),
                 p_literal.orderedvalues()
-            )
-        ) )
+            ) ) )
             return Collections.<IVariable<?>>emptySet();
 
         // try to unify exact or if not possible by recursive on the annotation set
@@ -199,8 +198,7 @@ public final class CUnifier implements IUnifier
                 l_result,
                 p_value.annotations(),
                 p_literal.annotations()
-            )
-        ) )
+            ) ) )
             return Collections.<IVariable<?>>emptySet();
 
         return l_result;

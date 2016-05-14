@@ -113,8 +113,7 @@ public final class CBeliefBase implements IBeliefBase
         // create delete-event for all literals
         m_storage.getMultiElements().values().stream()
                  .forEach( j -> m_events.values().stream()
-                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) )
-                 );
+                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) ) );
 
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
         m_storage.clear();
