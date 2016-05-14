@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -305,27 +304,6 @@ public final class CPath implements IPath
     public final boolean isEmpty()
     {
         return m_path.isEmpty();
-    }
-
-    @Override
-    public final Iterator<IPath> iterator()
-    {
-        return new Iterator<IPath>()
-        {
-            private int m_index;
-
-            @Override
-            public boolean hasNext()
-            {
-                return m_index < m_path.size();
-            }
-
-            @Override
-            public IPath next()
-            {
-                return new CPath( CCommon.convertCollectionToArray( String[].class, m_path.subList( 0, ++m_index ) ) );
-            }
-        };
     }
 
     @Override

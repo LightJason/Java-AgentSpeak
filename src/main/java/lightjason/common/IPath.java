@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 /**
  * interface of a path
  */
-public interface IPath extends Iterable<IPath>, Comparable<IPath>
+public interface IPath extends Comparable<IPath>
 {
 
     /**

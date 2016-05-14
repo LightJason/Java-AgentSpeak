@@ -24,18 +24,17 @@
 package lightjason.common;
 
 import lightjason.error.CIllegalArgumentException;
+import lightjason.error.CIllegalStateException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -75,6 +74,7 @@ public final class CCommon
         }
         catch ( final IOException l_exception )
         {
+            throw new CIllegalStateException( MessageFormat.format( "initialization fails because of io error: {0}", l_exception.getMessage() ) );
         }
 
         PACKAGEROOT = l_packageroot;
@@ -169,22 +169,6 @@ public final class CCommon
     }
 
     /**
-     * returns a file from a resource e.g. Jar file
-     *
-     * @param p_file file relative to the CMain
-     * @return URL of file or null
-     *
-     * @throws URISyntaxException is thrown on URI errors
-     * @throws MalformedURLException is thrown on malformat
-     */
-    public static URL getResourceURL( final File p_file ) throws URISyntaxException, MalformedURLException
-    {
-        if ( p_file.exists() )
-            return p_file.toURI().normalize().toURL();
-        return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
-    }
-
-    /**
      * returns the language depend string on any object
      *
      * @param p_source any object
@@ -215,41 +199,9 @@ public final class CCommon
         }
         catch ( final MissingResourceException l_exception )
         {
+            return "";
         }
-
-        return "";
     }
-
-    /**
-     * returns the label of a class and string to get access to the resource
-     *
-     * @param p_class class for static calls
-     * @param p_label label name of the object
-     * @return label name
-     */
-    public static String getLanguageLabel( final Class<?> p_class, final String p_label )
-    {
-        return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
-                PACKAGEROOT + ".", "" );
-    }
-
-
-    /**
-     * converts any collection type into a typed array
-     *
-     * @param p_class class array
-     * @param p_collection collection
-     * @return typed array
-     *
-     * @tparam T collection / array type
-     */
-    public static <T> T[] convertCollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
-    {
-        final T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
-        p_collection.toArray( l_return );
-        return l_return;
-    }
-
 
     /**
      * creates a map from parameters
@@ -275,7 +227,34 @@ public final class CCommon
         return l_return;
     }
 
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file relative to the CMain
+     * @return URL of file or null
+     *
+     * @throws URISyntaxException is thrown on URI errors
+     * @throws MalformedURLException is thrown on malformat
+     */
+    private static URL getResourceURL( final File p_file ) throws URISyntaxException, MalformedURLException
+    {
+        if ( p_file.exists() )
+            return p_file.toURI().normalize().toURL();
+        return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
+    }
 
+    /**
+     * returns the label of a class and string to get access to the resource
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @return label name
+     */
+    private static String getLanguageLabel( final Class<?> p_class, final String p_label )
+    {
+        return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
+                PACKAGEROOT + ".", "" );
+    }
 
     /**
      * class to read UTF-8 encoded property file
