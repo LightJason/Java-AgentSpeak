@@ -110,14 +110,14 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     }
 
     @Override
-    public <T> IAgent generate( final T... p_data ) throws Exception
+    public IAgent generate( final Object... p_data ) throws Exception
     {
-        LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ) );
+        LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ).trim() );
         return new CAgent( m_configuration );
     }
 
     @Override
-    public <T> Set<IAgent> generate( final int p_number, final T... p_data )
+    public Set<IAgent> generate( final int p_number, final Object... p_data )
     {
         return IntStream.range( 0, p_number ).parallel().mapToObj( i -> {
             try

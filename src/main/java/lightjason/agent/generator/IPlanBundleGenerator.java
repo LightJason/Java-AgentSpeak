@@ -38,8 +38,8 @@ public interface IPlanBundleGenerator
      * @param p_data any object data
      * @return plan bundle
      *
-     * @tparam T any object type
+     * @throws Exception on any error
      */
-    <T> IPlanBundle generate( final T... p_data ) throws Exception;
+    IPlanBundle generate( final Object... p_data ) throws Exception;
 
 }

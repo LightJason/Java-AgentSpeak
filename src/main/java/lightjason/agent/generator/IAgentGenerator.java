@@ -40,9 +40,9 @@ public interface IAgentGenerator
      * @param p_data any object data
      * @return agent
      *
-     * @tparam T any object type
+     * @throws Exception on any error
      */
-    <T> IAgent generate( final T... p_data ) throws Exception;
+    IAgent generate( final Object... p_data ) throws Exception;
 
 
     /**
@@ -52,8 +52,8 @@ public interface IAgentGenerator
      * @param p_data any object data
      * @return set of agents
      *
-     * @tparam T any object type
+     * @throws Exception on any error
      */
-    <T> Set<IAgent> generate( final int p_number, final T... p_data ) throws Exception;
+    Set<IAgent> generate( final int p_number, final Object... p_data ) throws Exception;
 
 }

@@ -43,6 +43,6 @@ public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValue
      * @param p_values values
      * @return result value
      */
-    IFuzzyValue<Boolean> result( final IFuzzyValue<Boolean>... p_values );
+    IFuzzyValue<T> result( final IFuzzyValue<T>... p_values );
 
 }

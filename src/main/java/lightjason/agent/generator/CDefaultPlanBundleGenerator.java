@@ -23,13 +23,20 @@
 
 package lightjason.agent.generator;
 
+import lightjason.agent.CPlanBundle;
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
+import lightjason.agent.configuration.CDefaultPlanBundleConfiguration;
+import lightjason.agent.configuration.IPlanBundleConfiguration;
+import lightjason.common.CCommon;
 import lightjason.grammar.CParserPlanBundle;
 import lightjason.grammar.IASTVisitorPlanBundle;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.logging.Logger;
 
 
 /**
@@ -37,6 +44,15 @@ import java.util.Set;
  */
 public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
 {
+    /**
+     * logger
+     */
+    protected static final Logger LOGGER = CCommon.getLogger( CDefaultPlanBundleGenerator.class );
+    /**
+     * configuration
+     */
+    protected final IPlanBundleConfiguration m_configuration;
+
 
     /**
      * ctor
@@ -48,13 +64,20 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions ).parse( p_stream );
+
+        m_configuration = new CDefaultPlanBundleConfiguration(
+            l_visitor.getPlans(),
+            l_visitor.getRules(),
+            l_visitor.getInitialBeliefs()
+        );
     }
 
 
     @Override
-    public <T> IPlanBundle generate( final T... p_data ) throws Exception
+    public IPlanBundle generate( final Object... p_data ) throws Exception
     {
-        return null;
+        LOGGER.info( MessageFormat.format( "generate planbundle: {0}", Arrays.toString( p_data ) ).trim() );
+        return new CPlanBundle( m_configuration );
     }
 
 }
