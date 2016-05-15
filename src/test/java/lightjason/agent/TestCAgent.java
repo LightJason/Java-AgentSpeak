@@ -29,7 +29,6 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.action.buildin.bind.CBind;
 import lightjason.agent.action.buildin.bind.IActionBind;
 import lightjason.agent.generator.CDefaultAgentGenerator;
-import lightjason.agent.unify.CUnifier;
 import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.language.CCommon;
 import lightjason.language.CLiteral;
@@ -149,7 +148,7 @@ public final class TestCAgent
         )
         {
             l_agent = new CDefaultAgentGenerator(
-                l_stream, ACTIONS.keySet(), new CUnifier(), new CAggregation( ACTIONS ), new CBeliefBaseUpdate(),
+                l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ), new CBeliefBaseUpdate(),
                 new CVariableBuilder()
             ).generate();
 

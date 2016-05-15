@@ -29,6 +29,8 @@ import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.agent.fuzzy.CBoolFuzzy;
+import lightjason.agent.fuzzy.IFuzzy;
+import lightjason.agent.unify.CUnifier;
 import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.common.CCommon;
 import lightjason.grammar.CParserAgent;
@@ -56,6 +58,14 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      */
     protected static final Logger LOGGER = CCommon.getLogger( CDefaultAgentGenerator.class );
     /**
+     * fuzzy structure
+     */
+    protected static final IFuzzy<Boolean> FUZZY = new CBoolFuzzy();
+    /**
+     * unification
+     */
+    protected static final IUnifier UNIFIER = new CUnifier();
+    /**
      * configuration of an agent
      */
     protected final IAgentConfiguration m_configuration;
@@ -66,14 +76,13 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with action
-     * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      * @throws Exception thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier, final IAggregation p_aggregation )
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_unifier, p_aggregation, null, null );
+        this( p_stream, p_actions, p_aggregation, null, null );
     }
 
     /**
@@ -81,13 +90,12 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      *
      * @param p_stream input stream
      * @param p_actions set with action
-     * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      * @param p_beliefbaseupdate beliefbase updater
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IUnifier p_unifier,
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
                                    final IAggregation p_aggregation, final IBeliefBaseUpdate p_beliefbaseupdate,
                                    final IVariableBuilder p_variablebuilder
     )
@@ -97,16 +105,26 @@ public class CDefaultAgentGenerator implements IAgentGenerator
 
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
-            new CBoolFuzzy(),
+            FUZZY,
             l_visitor.getInitialBeliefs(),
             p_beliefbaseupdate,
             l_visitor.getPlans(),
             l_visitor.getRules(),
             l_visitor.getInitialGoal(),
-            p_unifier,
+            UNIFIER,
             p_aggregation,
             p_variablebuilder
         );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_configuration any configuration
+     */
+    protected CDefaultAgentGenerator( final IAgentConfiguration p_configuration )
+    {
+        m_configuration = p_configuration;
     }
 
     @Override

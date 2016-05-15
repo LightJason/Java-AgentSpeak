@@ -56,14 +56,14 @@ public final class TestCUnifier
     public final void testLiteralValueTraversing() throws Exception
     {
         final Set<ILiteral> l_test = Stream.of(
-                CLiteral.parse( "first('Hello')" ),
-                CLiteral.parse( "first('Foo')" )
+            CLiteral.parse( "first('Hello')" ),
+            CLiteral.parse( "first('Foo')" )
         ).collect( Collectors.toSet() );
 
         final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
-                CLiteral.parse( "second/sub(1)" ),
-                CLiteral.parse( "second/sub(2)" ),
-                CLiteral.parse( "second/sub(3)" )
+            CLiteral.parse( "second/sub(1)" ),
+            CLiteral.parse( "second/sub(2)" ),
+            CLiteral.parse( "second/sub(3)" )
         ) ).collect( Collectors.toSet() ) );
 
         final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
@@ -81,20 +81,20 @@ public final class TestCUnifier
     public final void testLiteralValueSequentialTraversing() throws Exception
     {
         final Stack<ILiteral> l_test = Stream.of(
-                CLiteral.parse( "first('Hello')" ),
-                CLiteral.parse( "first('Foo')" )
+            CLiteral.parse( "first('Hello')" ),
+            CLiteral.parse( "first('Foo')" )
         ).collect( Collectors.toCollection( Stack::new ) );
 
         final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
-                CLiteral.parse( "second/sub(1)" ),
-                CLiteral.parse( "second/sub(2)" ),
-                CLiteral.parse( "second/sub(3)" )
+            CLiteral.parse( "second/sub(1)" ),
+            CLiteral.parse( "second/sub(2)" ),
+            CLiteral.parse( "second/sub(3)" )
         ) ).collect( Collectors.toSet() ) );
 
         assertTrue(
-                MessageFormat.format( "literal sequential traversing in {0} is wrong for {1}", l_literal, l_test ),
-                l_literal.orderedvalues( CPath.from( "first" ) ).map( i -> i.equals( l_test.pop() ) ).allMatch( i -> i )
-                && l_test.isEmpty()
+            MessageFormat.format( "literal sequential traversing in {0} is wrong for {1}", l_literal, l_test ),
+            l_literal.orderedvalues( CPath.from( "first" ) ).map( i -> i.equals( l_test.pop() ) ).allMatch( i -> i )
+            && l_test.isEmpty()
         );
         System.out.println( MessageFormat.format( "literal [{0}] value sequential traversing: {1}", l_literal, l_test ) );
     }
@@ -127,11 +127,11 @@ public final class TestCUnifier
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
 
         assertEquals(
-                MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.valuehash(),
-                                      l_second.valuehash()
-                ),
-                l_first.valuehash(),
-                l_second.valuehash()
+            MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.valuehash(),
+                                  l_second.valuehash()
+            ),
+            l_first.valuehash(),
+            l_second.valuehash()
         );
         System.out.println( MessageFormat.format( "literal value hash of [{0}] is equal [{1}]", l_first, l_first.valuehash() ) );
 
@@ -139,9 +139,9 @@ public final class TestCUnifier
         final ILiteral l_third = CLiteral.parse( "foo()" );
         final ILiteral l_fourth = CLiteral.parse( "hallo()" );
         assertNotEquals(
-                MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.valuehash() ),
-                l_third.valuehash(),
-                l_fourth.valuehash()
+            MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.valuehash() ),
+            l_third.valuehash(),
+            l_fourth.valuehash()
         );
         System.out.println( MessageFormat.format( "literal value hash of [{0}] is inequal [{1}]", l_third, l_fourth ) );
     }
@@ -159,13 +159,13 @@ public final class TestCUnifier
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
 
         assertNotEquals(
-                MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second, l_first.annotationhash() ),
-                l_first.annotationhash(), l_second.annotationhash()
+            MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second, l_first.annotationhash() ),
+            l_first.annotationhash(), l_second.annotationhash()
         );
         System.out.println( MessageFormat
-                                    .format( "literal annotation hash of [{0}] and [{1}] are inequal [{2} / {3}]", l_first, l_second, l_first.annotationhash(),
-                                             l_second.annotationhash()
-                                    ) );
+                                .format( "literal annotation hash of [{0}] and [{1}] are inequal [{2} / {3}]", l_first, l_second, l_first.annotationhash(),
+                                         l_second.annotationhash()
+                                ) );
     }
 
 

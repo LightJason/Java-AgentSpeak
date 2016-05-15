@@ -72,6 +72,17 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
         );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_configuration configuration
+     */
+    protected CDefaultPlanBundleGenerator( final IPlanBundleConfiguration p_configuration )
+    {
+        m_configuration = p_configuration;
+    }
+
+
 
     @Override
     public IPlanBundle generate( final Object... p_data ) throws Exception
