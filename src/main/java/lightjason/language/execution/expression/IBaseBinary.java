@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 /**
  * binary expression
  */
-@SuppressWarnings( "serial" )
 public abstract class IBaseBinary implements IBinaryExpression
 {
     /**

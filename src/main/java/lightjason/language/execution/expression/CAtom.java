@@ -39,7 +39,6 @@ import java.util.stream.Stream;
 /**
  * atom expression
  */
-@SuppressWarnings( "serial" )
 public class CAtom implements IExpression
 {
     /**

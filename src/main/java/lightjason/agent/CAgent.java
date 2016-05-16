@@ -70,7 +70,6 @@ import java.util.stream.Stream;
 /**
  * agent class
  */
-@SuppressWarnings( "serial" )
 public class CAgent implements IAgent
 {
     /**
