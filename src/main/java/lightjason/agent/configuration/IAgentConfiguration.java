@@ -24,11 +24,15 @@
 package lightjason.agent.configuration;
 
 import lightjason.agent.fuzzy.IFuzzy;
+import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.beliefbase.IView;
+import lightjason.language.ILiteral;
 import lightjason.language.execution.IVariableBuilder;
 import lightjason.language.execution.action.unify.IUnifier;
 import lightjason.language.instantiable.plan.trigger.ITrigger;
 import lightjason.language.score.IAggregation;
+
+import java.util.Collection;
 
 
 /**
@@ -79,5 +83,19 @@ public interface IAgentConfiguration extends IConfiguration
      * @return operator object
      */
     IFuzzy<Boolean> getFuzzy();
+
+    /**
+     * returns the initial beliefs
+     *
+     * @return collection of initial beliefs
+     */
+    Collection<ILiteral> getInitialBeliefs();
+
+    /**
+     * returns beliefbase update
+     *
+     * @return beliefbase update or null
+     */
+    IBeliefBaseUpdate getBeliefbaseUpdate();
 
 }

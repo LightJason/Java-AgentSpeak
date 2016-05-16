@@ -210,6 +210,18 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
+    public final Collection<ILiteral> getInitialBeliefs()
+    {
+        return m_initialbeliefs;
+    }
+
+    @Override
+    public final IBeliefBaseUpdate getBeliefbaseUpdate()
+    {
+        return m_beliefbaseupdate;
+    }
+
+    @Override
     public final Set<IPlan> getPlans()
     {
         return m_plans;

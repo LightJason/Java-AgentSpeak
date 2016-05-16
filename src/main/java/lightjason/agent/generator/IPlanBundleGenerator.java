@@ -29,7 +29,7 @@ import lightjason.agent.IPlanBundle;
 /**
  * generator interface to generate plan bundles
  */
-public interface IPlanBundleGenerator
+public interface IPlanBundleGenerator extends IGenerator
 {
 
     /**

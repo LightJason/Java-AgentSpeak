@@ -25,6 +25,7 @@ package lightjason.agent.generator;
 
 import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
+import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
 import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.agent.configuration.IAgentConfiguration;
@@ -42,10 +43,13 @@ import lightjason.language.score.IAggregation;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -69,6 +73,10 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * configuration of an agent
      */
     protected final IAgentConfiguration m_configuration;
+    /**
+     * plan bundle set
+     */
+    protected final Set<IPlanBundle> m_planbundles = Collections.synchronizedSet( new HashSet<>() );
 
 
     /**
@@ -131,7 +139,40 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     public IAgent generate( final Object... p_data ) throws Exception
     {
         LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ).trim() );
-        return new CAgent( m_configuration );
+
+        // create a new configuration and adds the plan-bundle information
+        return new CAgent(
+            m_planbundles.isEmpty()
+            ? m_configuration
+            : new CDefaultAgentConfiguration(
+                FUZZY,
+
+                Stream.concat(
+                    m_configuration.getInitialBeliefs().stream(),
+                    m_planbundles.parallelStream().flatMap( i -> i.getInitialBeliefs().stream() )
+                ).collect( Collectors.toSet() ),
+
+                m_configuration.getBeliefbaseUpdate(),
+
+                Stream.concat(
+                    m_configuration.getPlans().stream(),
+                    m_planbundles.parallelStream().flatMap( i -> i.getPlans().stream() )
+                ).collect( Collectors.toSet() ),
+
+                Stream.concat(
+                    m_configuration.getRules().stream(),
+                    m_planbundles.parallelStream().flatMap( i -> i.getRules().stream() )
+                ).collect( Collectors.toSet() ),
+
+                m_configuration.getInitialGoal().getLiteral(),
+
+                UNIFIER,
+
+                m_configuration.getAggregate(),
+
+                m_configuration.getVariableBuilder()
+            )
+        );
     }
 
     @Override
@@ -147,6 +188,12 @@ public class CDefaultAgentGenerator implements IAgentGenerator
                 return null;
             }
         } ).filter( i -> i != null ).collect( Collectors.toSet() );
+    }
+
+    @Override
+    public final Set<IPlanBundle> getPlanBundles()
+    {
+        return m_planbundles;
     }
 
 }

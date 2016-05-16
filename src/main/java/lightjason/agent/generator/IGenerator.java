@@ -23,47 +23,9 @@
 
 package lightjason.agent.generator;
 
-import lightjason.agent.IAgent;
-import lightjason.agent.IPlanBundle;
-
-import java.util.Set;
-
-
 /**
- * generator interface to create agents
+ * interface of generators
  */
-public interface IAgentGenerator extends IGenerator
+public interface IGenerator
 {
-
-    /**
-     * generates an agent
-     *
-     * @param p_data any object data
-     * @return agent
-     *
-     * @throws Exception on any error
-     */
-    IAgent generate( final Object... p_data ) throws Exception;
-
-
-    /**
-     * generates a set of agents
-     *
-     * @param p_number number of agents within the set
-     * @param p_data any object data
-     * @return set of agents
-     *
-     * @throws Exception on any error
-     */
-    Set<IAgent> generate( final int p_number, final Object... p_data ) throws Exception;
-
-    /**
-     * returns the planbundle set
-     *
-     * @return planbundle set
-     *
-     * @note defined a thread-safe data structure
-     */
-    Set<IPlanBundle> getPlanBundles();
-
 }
