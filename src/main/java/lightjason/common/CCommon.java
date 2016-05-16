@@ -23,6 +23,8 @@
 
 package lightjason.common;
 
+import com.google.common.reflect.ClassPath;
+import lightjason.action.IAction;
 import lightjason.error.CIllegalArgumentException;
 import lightjason.error.CIllegalStateException;
 
@@ -30,11 +32,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -42,7 +46,10 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -225,6 +232,55 @@ public final class CCommon
 
 
         return l_return;
+    }
+
+    /**
+     * get all classes within an Java package as action
+     *
+     * @param p_package full-qualified package name or empty for default package
+     * @return action set
+     *
+     * @throws IOException on io errors
+     * @todo can be moved to an own class
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Set<IAction> getActionsFromPackage( final String... p_package ) throws IOException
+    {
+        return ( ( p_package == null ) || ( p_package.length == 0 )
+                 ? Stream.of( "lightjason.action.buildin" )
+                 : Arrays.stream( p_package ) )
+            .flatMap( j -> {
+                try
+                {
+                    return ClassPath.from( Thread.currentThread().getContextClassLoader() )
+                                    .getTopLevelClassesRecursive( j )
+                                    .parallelStream()
+                                    .map( i -> {
+
+                                        try
+                                        {
+                                            final Class<?> l_class = i.load();
+                                            if ( ( !Modifier.isAbstract( l_class.getModifiers() ) )
+                                                 && ( !Modifier.isInterface( l_class.getModifiers() ) )
+                                                 && ( Modifier.isPublic( l_class.getModifiers() ) )
+                                                 && ( IAction.class.isAssignableFrom( l_class ) ) )
+                                                return (IAction) l_class.newInstance();
+                                        }
+                                        catch ( final IllegalAccessException | InstantiationException l_exception )
+                                        {
+                                        }
+
+                                        return null;
+                                    } )
+                                    .filter( i -> i != null );
+                }
+                catch ( final IOException l_exception )
+                {
+                }
+
+                return Stream.of();
+            } )
+            .collect( Collectors.toSet() );
     }
 
     /**

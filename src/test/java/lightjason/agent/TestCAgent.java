@@ -25,12 +25,11 @@ package lightjason.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Multiset;
-import lightjason.agent.action.IAction;
-import lightjason.agent.action.buildin.bind.CBind;
-import lightjason.agent.action.buildin.bind.IActionBind;
+import lightjason.action.IAction;
+import lightjason.action.buildin.bind.CBind;
+import lightjason.action.buildin.bind.IActionBind;
 import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.generator.CDefaultAgentGenerator;
-import lightjason.language.CCommon;
 import lightjason.language.CLiteral;
 import lightjason.language.CRawTerm;
 import lightjason.language.execution.IVariableBuilder;
@@ -82,7 +81,7 @@ public final class TestCAgent
         Map<IAction, Double> l_map = new HashMap<>();
         try
         {
-            l_map = CCommon.getActionsFromPackage().stream().collect(
+            l_map = lightjason.common.CCommon.getActionsFromPackage().stream().collect(
                 Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
 
             l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );

@@ -23,7 +23,7 @@
 
 package lightjason.grammar;
 
-import lightjason.agent.action.IAction;
+import lightjason.action.IAction;
 import lightjason.language.instantiable.rule.IRule;
 
 import java.io.InputStream;

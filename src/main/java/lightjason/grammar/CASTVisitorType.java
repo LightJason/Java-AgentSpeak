@@ -25,7 +25,7 @@ package lightjason.grammar;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import lightjason.agent.action.IAction;
+import lightjason.action.IAction;
 import lightjason.common.CPath;
 import lightjason.common.IPath;
 import lightjason.error.CIllegalArgumentException;

@@ -24,8 +24,8 @@
 package lightjason.language.score;
 
 import com.google.common.collect.Multiset;
+import lightjason.action.IAction;
 import lightjason.agent.IAgent;
-import lightjason.agent.action.IAction;
 
 import java.util.stream.Stream;
 

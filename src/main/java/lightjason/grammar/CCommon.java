@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * common parser components
  */
-public final class CCommon
+final class CCommon
 {
 
     /**

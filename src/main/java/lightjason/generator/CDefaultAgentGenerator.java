@@ -23,10 +23,10 @@
 
 package lightjason.generator;
 
+import lightjason.action.IAction;
 import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
 import lightjason.agent.IPlanBundle;
-import lightjason.agent.action.IAction;
 import lightjason.agent.fuzzy.CBoolFuzzy;
 import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.agent.unify.CUnifier;

@@ -23,9 +23,9 @@
 
 package lightjason.generator;
 
+import lightjason.action.IAction;
 import lightjason.agent.CPlanBundle;
 import lightjason.agent.IPlanBundle;
-import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
 import lightjason.configuration.CDefaultPlanBundleConfiguration;
 import lightjason.configuration.IPlanBundleConfiguration;
