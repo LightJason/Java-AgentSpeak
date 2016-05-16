@@ -21,33 +21,64 @@
  * @endcond
  */
 
-package lightjason.generator.configuration;
+package lightjason.configuration;
 
+import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.rule.IRule;
 
+import java.util.Collections;
 import java.util.Set;
 
 
 /**
- * configuration for plan bundle and agent
- *
- * @note all elements should be unmodifyable
+ * default plan bundle configuration
  */
-public interface IConfiguration
+public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
 {
+    /**
+     * instance of plans
+     */
+    private final Set<IPlan> m_plans;
+    /**
+     * rule instance
+     */
+    private final Set<IRule> m_rules;
+    /**
+     * instance of initial beliefs
+     */
+    private final Set<ILiteral> m_initialbeliefs;
 
     /**
-     * get a set with plans
+     * ctor
      *
-     * @return plan set
+     * @param p_plans plans
+     * @param p_rules rules
+     * @param p_initalbeliefs initial beliefs
      */
-    Set<IPlan> getPlans();
+    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )
+    {
+        m_initialbeliefs = Collections.unmodifiableSet( p_initalbeliefs );
+        m_plans = Collections.unmodifiableSet( p_plans );
+        m_rules = Collections.unmodifiableSet( p_rules );
+    }
 
-    /**
-     * get a set with rules
-     *
-     * @return rule set
-     */
-    Set<IRule> getRules();
+    @Override
+    public final Set<ILiteral> getBeliefs()
+    {
+        return m_initialbeliefs;
+    }
+
+    @Override
+    public final Set<IPlan> getPlans()
+    {
+        return m_plans;
+    }
+
+    @Override
+    public final Set<IRule> getRules()
+    {
+        return m_rules;
+    }
+
 }

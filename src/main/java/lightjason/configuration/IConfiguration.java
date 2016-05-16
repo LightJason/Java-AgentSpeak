@@ -21,81 +21,33 @@
  * @endcond
  */
 
-package lightjason.generator.configuration;
+package lightjason.configuration;
 
-import lightjason.agent.fuzzy.IFuzzy;
-import lightjason.beliefbase.IBeliefBaseUpdate;
-import lightjason.beliefbase.IView;
-import lightjason.language.ILiteral;
-import lightjason.language.execution.IVariableBuilder;
-import lightjason.language.execution.action.unify.IUnifier;
-import lightjason.language.instantiable.plan.trigger.ITrigger;
-import lightjason.language.score.IAggregation;
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.rule.IRule;
 
-import java.util.Collection;
+import java.util.Set;
 
 
 /**
- * interface to define the agent configuration
+ * configuration for plan bundle and agent
+ *
+ * @note all elements should be unmodifyable
  */
-public interface IAgentConfiguration extends IConfiguration
+public interface IConfiguration
 {
 
     /**
-     * returns a beliefbase of the agent
+     * get a set with plans
      *
-     * @return root view
+     * @return plan set
      */
-    IView getBeliefbase();
+    Set<IPlan> getPlans();
 
     /**
-     * returns the initial goal
+     * get a set with rules
      *
-     * @return initial goal literal
+     * @return rule set
      */
-    ITrigger getInitialGoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation getAggregate();
-
-    /**
-     * returns the unifier function
-     *
-     * @return unifier
-     */
-    IUnifier getUnifier();
-
-    /**
-     * returns the variable builder
-     *
-     * @return builder
-     */
-    IVariableBuilder getVariableBuilder();
-
-    /**
-     * returns the fuzzy operator
-     *
-     * @return operator object
-     */
-    IFuzzy<Boolean> getFuzzy();
-
-    /**
-     * returns the initial beliefs
-     *
-     * @return collection of initial beliefs
-     */
-    Collection<ILiteral> getInitialBeliefs();
-
-    /**
-     * returns beliefbase update
-     *
-     * @return beliefbase update or null
-     */
-    IBeliefBaseUpdate getBeliefbaseUpdate();
-
+    Set<IRule> getRules();
 }

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.generator.configuration;
+package lightjason.configuration;
 
 import lightjason.agent.fuzzy.CBoolFuzzy;
 import lightjason.agent.fuzzy.IFuzzy;

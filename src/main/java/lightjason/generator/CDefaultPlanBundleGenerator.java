@@ -27,8 +27,8 @@ import lightjason.agent.CPlanBundle;
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
 import lightjason.common.CCommon;
-import lightjason.generator.configuration.CDefaultPlanBundleConfiguration;
-import lightjason.generator.configuration.IPlanBundleConfiguration;
+import lightjason.configuration.CDefaultPlanBundleConfiguration;
+import lightjason.configuration.IPlanBundleConfiguration;
 import lightjason.grammar.CParserPlanBundle;
 import lightjason.grammar.IASTVisitorPlanBundle;
 

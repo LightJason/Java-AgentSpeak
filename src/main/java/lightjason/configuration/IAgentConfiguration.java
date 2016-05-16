@@ -21,24 +21,81 @@
  * @endcond
  */
 
-package lightjason.generator.configuration;
+package lightjason.configuration;
 
+import lightjason.agent.fuzzy.IFuzzy;
+import lightjason.beliefbase.IBeliefBaseUpdate;
+import lightjason.beliefbase.IView;
 import lightjason.language.ILiteral;
+import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.execution.action.unify.IUnifier;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.score.IAggregation;
 
-import java.util.Set;
+import java.util.Collection;
 
 
 /**
- * plan bundle configuration
+ * interface to define the agent configuration
  */
-public interface IPlanBundleConfiguration extends IConfiguration
+public interface IAgentConfiguration extends IConfiguration
 {
 
     /**
-     * get beliefs
+     * returns a beliefbase of the agent
      *
-     * @return set with beliefs
+     * @return root view
      */
-    Set<ILiteral> getBeliefs();
+    IView getBeliefbase();
+
+    /**
+     * returns the initial goal
+     *
+     * @return initial goal literal
+     */
+    ITrigger getInitialGoal();
+
+    /**
+     * returns the aggregate function
+     * of the plan scoring
+     *
+     * @return aggregate function
+     */
+    IAggregation getAggregate();
+
+    /**
+     * returns the unifier function
+     *
+     * @return unifier
+     */
+    IUnifier getUnifier();
+
+    /**
+     * returns the variable builder
+     *
+     * @return builder
+     */
+    IVariableBuilder getVariableBuilder();
+
+    /**
+     * returns the fuzzy operator
+     *
+     * @return operator object
+     */
+    IFuzzy<Boolean> getFuzzy();
+
+    /**
+     * returns the initial beliefs
+     *
+     * @return collection of initial beliefs
+     */
+    Collection<ILiteral> getInitialBeliefs();
+
+    /**
+     * returns beliefbase update
+     *
+     * @return beliefbase update or null
+     */
+    IBeliefBaseUpdate getBeliefbaseUpdate();
 
 }
