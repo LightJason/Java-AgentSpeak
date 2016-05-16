@@ -26,6 +26,7 @@ package lightjason.agent;
 import lightjason.agent.configuration.IPlanBundleConfiguration;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Set;
 
@@ -43,6 +44,10 @@ public class CPlanBundle implements IPlanBundle
      * initial beliefs
      */
     protected final Set<ILiteral> m_initialbeliefs;
+    /**
+     * rule set
+     */
+    protected final Set<IRule> m_rules;
 
 
     /**
@@ -54,6 +59,7 @@ public class CPlanBundle implements IPlanBundle
     {
         m_plans = p_configuration.getPlans();
         m_initialbeliefs = p_configuration.getBeliefs();
+        m_rules = p_configuration.getRules();
     }
 
     @Override
@@ -66,6 +72,12 @@ public class CPlanBundle implements IPlanBundle
     public final Set<IPlan> getPlans()
     {
         return m_plans;
+    }
+
+    @Override
+    public final Set<IRule> getRules()
+    {
+        return m_rules;
     }
 
 }

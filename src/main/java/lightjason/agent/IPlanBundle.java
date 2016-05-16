@@ -25,6 +25,7 @@ package lightjason.agent;
 
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.rule.IRule;
 
 import java.util.Set;
 
@@ -48,5 +49,12 @@ public interface IPlanBundle
      * @return multimap plans
      */
     Set<IPlan> getPlans();
+
+    /**
+     * returns the rules
+     *
+     * @return rules
+     */
+    Set<IRule> getRules();
 
 }
