@@ -25,49 +25,74 @@ package lightjason.action.buildin.generic.datetime;
 
 import lightjason.action.buildin.IBuildinAction;
 import lightjason.language.CCommon;
+import lightjason.language.CRawTerm;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 
 /**
- * action for getting the current time
+ * action to create a date-time structure
  */
-public final class CTime extends IBuildinAction
+public final class CDateTime extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CTime()
+    @Override
+    public int getMinimalArgumentNumber()
     {
-        super( 3 );
+        return 1;
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
-    {
-        return 0;
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
+        final ZonedDateTime l_datetime;
+        if ( p_argument.size() == 1 )
+            l_datetime = ZonedDateTime.parse( CCommon.getRawValue( p_argument.get( 0 ) ) );
+        else
+        {
+            final int[] l_parts = new int[7];
 
-        p_return.add( CCommon.getRawValue( l_time.getHour() ) );
-        p_return.add( CCommon.getRawValue( l_time.getMinute() ) );
-        p_return.add( CCommon.getRawValue( l_time.getSecond() ) );
-        p_return.add( CCommon.getRawValue( l_time.getNano() ) );
-        p_return.add( CCommon.getRawValue( l_time.getZone() ) );
+            // read day-month-year structure
+            l_parts[0] = CCommon.getRawValue( p_argument.get( 0 ) );
+            l_parts[1] = CCommon.getRawValue( p_argument.get( 1 ) );
+            l_parts[2] = CCommon.getRawValue( p_argument.get( 2 ) );
 
+            // if is set read hour-.minutes
+            if ( p_argument.size() >= 4 )
+            {
+                l_parts[3] = CCommon.getRawValue( p_argument.get( 3 ) );
+                l_parts[4] = CCommon.getRawValue( p_argument.get( 4 ) );
+            }
+
+            // if is set read seconds
+            if ( p_argument.size() >= 5 )
+                l_parts[5] = CCommon.getRawValue( p_argument.get( 5 ) );
+
+            // if is set read nanoseconds
+            if ( p_argument.size() >= 6 )
+                l_parts[6] = CCommon.getRawValue( p_argument.get( 6 ) );
+
+            // create date-time and add zone-id
+            l_datetime = ZonedDateTime.of(
+                l_parts[0],
+                l_parts[1],
+                l_parts[2],
+                l_parts[3],
+                l_parts[4],
+                l_parts[5],
+                l_parts[6],
+                p_argument.size() > 6 ? ZoneId.systemDefault() : ZoneId.of( CCommon.getRawValue( p_argument.get( 7 ) ) )
+            );
+        }
+
+        p_return.add( CRawTerm.from( l_datetime ) );
         return CFuzzyValue.from( true );
     }
-
 }
