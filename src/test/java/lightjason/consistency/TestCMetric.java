@@ -25,7 +25,6 @@ package lightjason.consistency;
 
 import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
-import lightjason.agent.configuration.CDefaultAgentConfiguration;
 import lightjason.beliefbase.CBeliefBase;
 import lightjason.beliefbase.CStorage;
 import lightjason.beliefbase.IView;
@@ -34,6 +33,7 @@ import lightjason.consistency.filter.IFilter;
 import lightjason.consistency.metric.CSymmetricDifference;
 import lightjason.consistency.metric.CWeightedDifference;
 import lightjason.consistency.metric.IMetric;
+import lightjason.generator.configuration.CDefaultAgentConfiguration;
 import lightjason.language.CLiteral;
 import lightjason.language.ILiteral;
 import org.junit.Test;

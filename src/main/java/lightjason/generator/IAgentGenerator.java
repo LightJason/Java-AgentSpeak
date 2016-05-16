@@ -21,64 +21,49 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.generator;
 
-import lightjason.language.ILiteral;
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.rule.IRule;
+import lightjason.agent.IAgent;
+import lightjason.agent.IPlanBundle;
 
-import java.util.Collections;
 import java.util.Set;
 
 
 /**
- * default plan bundle configuration
+ * generator interface to create agents
  */
-public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
+public interface IAgentGenerator extends IGenerator
 {
-    /**
-     * instance of plans
-     */
-    private final Set<IPlan> m_plans;
-    /**
-     * rule instance
-     */
-    private final Set<IRule> m_rules;
-    /**
-     * instance of initial beliefs
-     */
-    private final Set<ILiteral> m_initialbeliefs;
 
     /**
-     * ctor
+     * generates an agent
      *
-     * @param p_plans plans
-     * @param p_rules rules
-     * @param p_initalbeliefs initial beliefs
+     * @param p_data any object data
+     * @return agent
+     *
+     * @throws Exception on any error
      */
-    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )
-    {
-        m_initialbeliefs = Collections.unmodifiableSet( p_initalbeliefs );
-        m_plans = Collections.unmodifiableSet( p_plans );
-        m_rules = Collections.unmodifiableSet( p_rules );
-    }
+    IAgent generate( final Object... p_data ) throws Exception;
 
-    @Override
-    public final Set<ILiteral> getBeliefs()
-    {
-        return m_initialbeliefs;
-    }
 
-    @Override
-    public final Set<IPlan> getPlans()
-    {
-        return m_plans;
-    }
+    /**
+     * generates a set of agents
+     *
+     * @param p_number number of agents within the set
+     * @param p_data any object data
+     * @return set of agents
+     *
+     * @throws Exception on any error
+     */
+    Set<IAgent> generate( final int p_number, final Object... p_data ) throws Exception;
 
-    @Override
-    public final Set<IRule> getRules()
-    {
-        return m_rules;
-    }
+    /**
+     * returns the planbundle set
+     *
+     * @return planbundle set
+     *
+     * @note defined a thread-safe data structure
+     */
+    Set<IPlanBundle> getPlanBundles();
 
 }

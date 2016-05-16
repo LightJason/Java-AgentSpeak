@@ -21,19 +21,19 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.generator;
 
 import lightjason.agent.CAgent;
 import lightjason.agent.IAgent;
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
-import lightjason.agent.configuration.CDefaultAgentConfiguration;
-import lightjason.agent.configuration.IAgentConfiguration;
 import lightjason.agent.fuzzy.CBoolFuzzy;
 import lightjason.agent.fuzzy.IFuzzy;
 import lightjason.agent.unify.CUnifier;
 import lightjason.beliefbase.IBeliefBaseUpdate;
 import lightjason.common.CCommon;
+import lightjason.generator.configuration.CDefaultAgentConfiguration;
+import lightjason.generator.configuration.IAgentConfiguration;
 import lightjason.grammar.CParserAgent;
 import lightjason.grammar.IASTVisitorAgent;
 import lightjason.language.execution.IVariableBuilder;

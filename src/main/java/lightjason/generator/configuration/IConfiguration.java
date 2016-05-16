@@ -21,11 +21,33 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.generator.configuration;
+
+import lightjason.language.instantiable.plan.IPlan;
+import lightjason.language.instantiable.rule.IRule;
+
+import java.util.Set;
+
 
 /**
- * interface of generators
+ * configuration for plan bundle and agent
+ *
+ * @note all elements should be unmodifyable
  */
-public interface IGenerator
+public interface IConfiguration
 {
+
+    /**
+     * get a set with plans
+     *
+     * @return plan set
+     */
+    Set<IPlan> getPlans();
+
+    /**
+     * get a set with rules
+     *
+     * @return rule set
+     */
+    Set<IRule> getRules();
 }

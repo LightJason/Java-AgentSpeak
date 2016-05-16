@@ -23,7 +23,7 @@
 
 package lightjason.agent;
 
-import lightjason.agent.configuration.IPlanBundleConfiguration;
+import lightjason.generator.configuration.IPlanBundleConfiguration;
 import lightjason.language.ILiteral;
 import lightjason.language.instantiable.plan.IPlan;
 import lightjason.language.instantiable.rule.IRule;

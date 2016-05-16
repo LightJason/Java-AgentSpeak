@@ -21,14 +21,14 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.generator;
 
 import lightjason.agent.CPlanBundle;
 import lightjason.agent.IPlanBundle;
 import lightjason.agent.action.IAction;
-import lightjason.agent.configuration.CDefaultPlanBundleConfiguration;
-import lightjason.agent.configuration.IPlanBundleConfiguration;
 import lightjason.common.CCommon;
+import lightjason.generator.configuration.CDefaultPlanBundleConfiguration;
+import lightjason.generator.configuration.IPlanBundleConfiguration;
 import lightjason.grammar.CParserPlanBundle;
 import lightjason.grammar.IASTVisitorPlanBundle;
 

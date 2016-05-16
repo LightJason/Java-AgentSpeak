@@ -21,33 +21,81 @@
  * @endcond
  */
 
-package lightjason.agent.configuration;
+package lightjason.generator.configuration;
 
-import lightjason.language.instantiable.plan.IPlan;
-import lightjason.language.instantiable.rule.IRule;
+import lightjason.agent.fuzzy.IFuzzy;
+import lightjason.beliefbase.IBeliefBaseUpdate;
+import lightjason.beliefbase.IView;
+import lightjason.language.ILiteral;
+import lightjason.language.execution.IVariableBuilder;
+import lightjason.language.execution.action.unify.IUnifier;
+import lightjason.language.instantiable.plan.trigger.ITrigger;
+import lightjason.language.score.IAggregation;
 
-import java.util.Set;
+import java.util.Collection;
 
 
 /**
- * configuration for plan bundle and agent
- *
- * @note all elements should be unmodifyable
+ * interface to define the agent configuration
  */
-public interface IConfiguration
+public interface IAgentConfiguration extends IConfiguration
 {
 
     /**
-     * get a set with plans
+     * returns a beliefbase of the agent
      *
-     * @return plan set
+     * @return root view
      */
-    Set<IPlan> getPlans();
+    IView getBeliefbase();
 
     /**
-     * get a set with rules
+     * returns the initial goal
      *
-     * @return rule set
+     * @return initial goal literal
      */
-    Set<IRule> getRules();
+    ITrigger getInitialGoal();
+
+    /**
+     * returns the aggregate function
+     * of the plan scoring
+     *
+     * @return aggregate function
+     */
+    IAggregation getAggregate();
+
+    /**
+     * returns the unifier function
+     *
+     * @return unifier
+     */
+    IUnifier getUnifier();
+
+    /**
+     * returns the variable builder
+     *
+     * @return builder
+     */
+    IVariableBuilder getVariableBuilder();
+
+    /**
+     * returns the fuzzy operator
+     *
+     * @return operator object
+     */
+    IFuzzy<Boolean> getFuzzy();
+
+    /**
+     * returns the initial beliefs
+     *
+     * @return collection of initial beliefs
+     */
+    Collection<ILiteral> getInitialBeliefs();
+
+    /**
+     * returns beliefbase update
+     *
+     * @return beliefbase update or null
+     */
+    IBeliefBaseUpdate getBeliefbaseUpdate();
+
 }

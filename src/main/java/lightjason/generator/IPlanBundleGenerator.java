@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package lightjason.agent.generator;
+package lightjason.generator;
 
 import lightjason.agent.IPlanBundle;
 
