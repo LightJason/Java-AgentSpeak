@@ -44,7 +44,6 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -73,10 +72,6 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * configuration of an agent
      */
     protected final IAgentConfiguration m_configuration;
-    /**
-     * plan bundle set
-     */
-    protected final Set<IPlanBundle> m_planbundles = Collections.synchronizedSet( new HashSet<>() );
 
 
     /**
@@ -90,7 +85,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, null, null );
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), null, null );
     }
 
     /**
@@ -99,13 +94,14 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      * @param p_stream input stream
      * @param p_actions set with action
      * @param p_aggregation aggregation function
+     * @param p_planbundle set with planbundles
      * @param p_beliefbaseupdate beliefbase updater
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                   final IAggregation p_aggregation, final IBeliefBaseUpdate p_beliefbaseupdate,
-                                   final IVariableBuilder p_variablebuilder
+                                   final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
+                                   final IBeliefBaseUpdate p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -114,13 +110,30 @@ public class CDefaultAgentGenerator implements IAgentGenerator
         // build configuration (configuration runs cloning of objects if needed)
         m_configuration = new CDefaultAgentConfiguration(
             FUZZY,
-            l_visitor.getInitialBeliefs(),
+
+            Stream.concat(
+                l_visitor.getInitialBeliefs().stream(),
+                p_planbundle.parallelStream().flatMap( i -> i.getInitialBeliefs().stream() )
+            ).collect( Collectors.toSet() ),
+
             p_beliefbaseupdate,
-            l_visitor.getPlans(),
-            l_visitor.getRules(),
+
+            Stream.concat(
+                l_visitor.getPlans().stream(),
+                p_planbundle.parallelStream().flatMap( i -> i.getPlans().stream() )
+            ).collect( Collectors.toSet() ),
+
+            Stream.concat(
+                l_visitor.getRules().stream(),
+                p_planbundle.parallelStream().flatMap( i -> i.getRules().stream() )
+            ).collect( Collectors.toSet() ),
+
             l_visitor.getInitialGoal(),
+
             UNIFIER,
+
             p_aggregation,
+
             p_variablebuilder
         );
     }
@@ -139,61 +152,26 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     public IAgent generate( final Object... p_data ) throws Exception
     {
         LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ).trim() );
-
-        // create a new configuration and adds the plan-bundle information
-        return new CAgent(
-            m_planbundles.isEmpty()
-            ? m_configuration
-            : new CDefaultAgentConfiguration(
-                FUZZY,
-
-                Stream.concat(
-                    m_configuration.getInitialBeliefs().stream(),
-                    m_planbundles.parallelStream().flatMap( i -> i.getInitialBeliefs().stream() )
-                ).collect( Collectors.toSet() ),
-
-                m_configuration.getBeliefbaseUpdate(),
-
-                Stream.concat(
-                    m_configuration.getPlans().stream(),
-                    m_planbundles.parallelStream().flatMap( i -> i.getPlans().stream() )
-                ).collect( Collectors.toSet() ),
-
-                Stream.concat(
-                    m_configuration.getRules().stream(),
-                    m_planbundles.parallelStream().flatMap( i -> i.getRules().stream() )
-                ).collect( Collectors.toSet() ),
-
-                m_configuration.getInitialGoal().getLiteral(),
-
-                UNIFIER,
-
-                m_configuration.getAggregate(),
-
-                m_configuration.getVariableBuilder()
-            )
-        );
+        return new CAgent( m_configuration );
     }
 
     @Override
-    public Set<IAgent> generate( final int p_number, final Object... p_data )
+    public final Stream<IAgent> generate( final int p_number, final Object... p_data )
     {
-        return IntStream.range( 0, p_number ).parallel().mapToObj( i -> {
-            try
-            {
-                return this.generate( p_data );
-            }
-            catch ( final Exception l_exception )
-            {
-                return null;
-            }
-        } ).filter( i -> i != null ).collect( Collectors.toSet() );
-    }
-
-    @Override
-    public final Set<IPlanBundle> getPlanBundles()
-    {
-        return m_planbundles;
+        return IntStream.range( 0, p_number )
+                    .parallel()
+                    .mapToObj( i -> {
+                        try
+                        {
+                            return this.generate( p_data );
+                        }
+                        catch ( final Exception l_exception )
+                        {
+                            LOGGER.warning( MessageFormat.format( "error with message: {0}", l_exception ) );
+                            return null;
+                        }
+                    } )
+                    .filter( i -> i != null );
     }
 
 }

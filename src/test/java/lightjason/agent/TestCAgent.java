@@ -146,7 +146,11 @@ public final class TestCAgent
         )
         {
             l_agent = new CDefaultAgentGenerator(
-                l_stream, ACTIONS.keySet(), new CAggregation( ACTIONS ), new CBeliefBaseUpdate(),
+                l_stream,
+                ACTIONS.keySet(),
+                new CAggregation( ACTIONS ),
+                Collections.<IPlanBundle>emptySet(),
+                new CBeliefBaseUpdate(),
                 new CVariableBuilder()
             ).generate();
 

@@ -29,17 +29,6 @@ import lightjason.agent.IPlanBundle;
 /**
  * generator interface to generate plan bundles
  */
-public interface IPlanBundleGenerator extends IGenerator
+public interface IPlanBundleGenerator extends IGenerator<IPlanBundle>
 {
-
-    /**
-     * generates a plan bundle
-     *
-     * @param p_data any object data
-     * @return plan bundle
-     *
-     * @throws Exception on any error
-     */
-    IPlanBundle generate( final Object... p_data ) throws Exception;
-
 }

@@ -23,9 +23,34 @@
 
 package lightjason.generator;
 
+import java.util.stream.Stream;
+
+
 /**
  * interface of generators
  */
-public interface IGenerator
+public interface IGenerator<T>
 {
+
+    /**
+     * generates a single object
+     *
+     * @param p_data any object data
+     * @return object
+     *
+     * @throws Exception on any error
+     */
+    T generate( final Object... p_data ) throws Exception;
+
+    /**
+     * generates a stream of objects
+     *
+     * @param p_number number of objects within the stream
+     * @param p_data any object data
+     * @return object stream
+     *
+     * @throws Exception on any error
+     */
+    Stream<T> generate( final int p_number, final Object... p_data ) throws Exception;
+
 }

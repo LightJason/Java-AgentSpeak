@@ -37,6 +37,8 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -82,13 +84,30 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
         m_configuration = p_configuration;
     }
 
-
-
     @Override
     public IPlanBundle generate( final Object... p_data ) throws Exception
     {
         LOGGER.info( MessageFormat.format( "generate planbundle: {0}", Arrays.toString( p_data ) ).trim() );
         return new CPlanBundle( m_configuration );
+    }
+
+    @Override
+    public final Stream<IPlanBundle> generate( final int p_number, final Object... p_data ) throws Exception
+    {
+        return IntStream.range( 0, p_number )
+                    .parallel()
+                    .mapToObj( i -> {
+                        try
+                        {
+                            return this.generate( p_data );
+                        }
+                        catch ( final Exception l_exception )
+                        {
+                            LOGGER.warning( MessageFormat.format( "error with message: {0}", l_exception ) );
+                            return null;
+                        }
+                    } )
+                    .filter( i -> i != null );
     }
 
 }
