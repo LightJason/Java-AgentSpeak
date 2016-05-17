@@ -171,9 +171,9 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- date / time -------------------------------------------------------------------------------------------------------------------------------------
 
-        [Hour | Minute | Second | Nano] = generic/datetime/time();
-        [Day | Month | Year | DayOfWeek | DayOfYear] = generic/datetime/date();
-        generic/print("date & time", Hour, Minute, Second, Nano, "--", Day, Month, Year, DayOfWeek, DayOfYear);
+        [Hour | Minute | Second | Nano | Zone1 ] = generic/datetime/time();
+        [Day | Month | Year | DayOfWeek | DayOfYear | Zone2 ] = generic/datetime/date();
+        generic/print("date & time", Hour, Minute, Second, Nano, Zone1, "--", Day, Month, Year, DayOfWeek, DayOfYear, Zone2);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

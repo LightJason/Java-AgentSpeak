@@ -30,7 +30,7 @@ import lightjason.language.execution.IContext;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
@@ -59,13 +59,14 @@ public final class CDate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final LocalDate l_date = p_argument.size() == 1 ? LocalDate.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) : LocalDate.now();
+        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
 
         p_return.add( CCommon.getRawValue( l_date.getDayOfMonth() ) );
         p_return.add( CCommon.getRawValue( l_date.getMonthValue() ) );
         p_return.add( CCommon.getRawValue( l_date.getYear() ) );
         p_return.add( CCommon.getRawValue( l_date.getDayOfWeek() ) );
         p_return.add( CCommon.getRawValue( l_date.getDayOfYear() ) );
+        p_return.add( CCommon.getRawValue( l_date.getZone() ) );
 
         return CFuzzyValue.from( true );
     }
