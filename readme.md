@@ -19,8 +19,8 @@ to describe an optimizing process.
 * [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/)
 * [Maven 3 or higher](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
-* [Source code documentation](http://flashpixx.github.io/Light-Jason/)
-* [Open Hub Code Statistic](https://www.openhub.net/p/Light-Jason)
+* [Source code documentation](http://light-jason.github.io/AgentSpeak/)
+* [Open Hub Code Statistic](https://www.openhub.net/p/Light-Jason-AgentSpeak)
 
 
 
