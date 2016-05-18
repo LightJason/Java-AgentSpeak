@@ -4,9 +4,9 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Light-Jason"
+PROJECT_NAME           = "Light-Jason AgentSpeak"
 PROJECT_NUMBER         =
-PROJECT_BRIEF          = "AgentSpeak(L) Light Version"
+PROJECT_BRIEF          =
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = target/documentation
 CREATE_SUBDIRS         = YES
