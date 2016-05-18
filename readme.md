@@ -111,8 +111,8 @@ to describe an optimizing process.
 
 #### <a name="testgoal">Test Goals</a>
 
-* A test goal is a literal with the definition ```?literal``` 
-* The test return true iif a plan with an equal literal is within the current execution (current running or supsending)
+* A test goal is an atom with the definition ```?literal``` 
+* The test return true iif a plan with an equal literal is within the current execution (current running)
 
 
 ### <a name="intention">Intentions</a>
