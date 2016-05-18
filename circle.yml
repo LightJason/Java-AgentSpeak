@@ -1,28 +1,28 @@
 general:
-  branches:
-    only:
-      - master
-    ignore:
-      - /dev-.*/
-      - /gh-.*/
-      - /binary-.*/
+    branches:
+        only:
+            - master
+        ignore:
+            - /dev-.*/
+            - /gh-.*/
+            - /binary-.*/
 
 machine:
     timezone:
-      Europe/Berlin
+        Europe/Berlin
 
     environment:
-      GIT_AUTHOR_NAME: CircleCI
-      GIT_AUTHOR_EMAIL: info@flashpixx.de
-      GIT_COMMITTER_NAME: CircleCI
-      GIT_COMMITTER_EMAIL: info@flashpixx.de
+        GIT_AUTHOR_NAME: CircleCI
+        GIT_AUTHOR_EMAIL: info@flashpixx.de
+        GIT_COMMITTER_NAME: CircleCI
+        GIT_COMMITTER_EMAIL: info@flashpixx.de
 
     java:
-      version: oraclejdk8
+        version: oraclejdk8
 
 dependencies:
     pre:
-      - sudo apt-get install doxygen
+        - sudo apt-get install doxygen
 
 test:
     override:
@@ -30,21 +30,23 @@ test:
         - mvn site
 
     post:
-      - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-      - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-      - git checkout master
-      - mv target/documentation/html /tmp
-      - git checkout gh-pages
-      - mv circle.yml /tmp
-      - mv .gitignore /tmp
-      - git checkout master
-      - git push origin :gh-pages
-      - git branch -D gh-pages
-      - git checkout --orphan gh-pages
-      - rm -Rf *
-      - mv /tmp/.gitignore .
-      - mv /tmp/circle.yml .
-      - mv /tmp/html/* .
-      - git add --all .
-      - git commit -m "current documentation"
-      - git push origin gh-pages
+        # Maven site CircleCI build
+        - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+        - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+        # documentation build
+        - git checkout master
+        - mv target/documentation/html /tmp
+        - git checkout gh-pages
+        - mv circle.yml /tmp
+        - mv .gitignore /tmp
+        - git checkout master
+        - git push origin :gh-pages
+        - git branch -D gh-pages
+        - git checkout --orphan gh-pages
+        - rm -Rf *
+        - mv /tmp/.gitignore .
+        - mv /tmp/circle.yml .
+        - mv /tmp/html/* .
+        - git add --all .
+        - git commit -m "current documentation"
+        - git push origin gh-pages
