@@ -390,6 +390,7 @@ myfunction(X) :- generic/print("my logical rule", X).
         generic/print("rule execution (ackermann)", ACK);
         ACK == 61;
 
+        // @bug fails because variable binding
         FIBX = 2;
         $fibonacci(5, FIBX);
         generic/print("rule execution (fibonacci) in-place modification", FIBX );

@@ -108,8 +108,16 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
      * @param p_context current execution context
      * @return new literal instance with unified variables
      *
-     * @note unification is not thread-safe on default
-     * @note un-unifyable variables will be returned
+     * @note un-unifyable variables passwd into the result literal
      */
     ILiteral unify( final IContext p_context );
+
+    /**
+     * relocate all variables within the literal
+     *
+     * @param p_context current execution context
+     * @return literal with replaced variable
+     */
+    ILiteral relocate( final IContext p_context );
+
 }

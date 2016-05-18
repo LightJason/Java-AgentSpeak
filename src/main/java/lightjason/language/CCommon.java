@@ -164,7 +164,7 @@ public final class CCommon
 
     /**
      * replace variable with context variable
-     * other values will be passed
+     * other values will be passed without context access
      *
      * @param p_context execution context
      * @param p_term term

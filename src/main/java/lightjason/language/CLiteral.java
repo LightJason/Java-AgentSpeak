@@ -40,6 +40,8 @@ import lightjason.grammar.IParserBase;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
 import lightjason.language.execution.IContext;
+import lightjason.language.variable.CRelocateMutexVariable;
+import lightjason.language.variable.CRelocateVariable;
 import lightjason.language.variable.IVariable;
 
 import java.io.ByteArrayInputStream;
@@ -342,6 +344,31 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
+    public final ILiteral relocate( final IContext p_context )
+    {
+        return new CLiteral(
+            m_at,
+            m_negated,
+            m_functor,
+            m_orderedvalues.stream()
+                           .map( i -> {
+                               if ( i instanceof IVariable<?> )
+                               {
+                                   final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
+                                   return l_variable.hasMutex()
+                                       ? new CRelocateMutexVariable<>( l_variable )
+                                       : new CRelocateVariable<>( l_variable );
+                               }
+                               if ( i instanceof ILiteral )
+                                   return ( (ILiteral) i ).unify( p_context );
+                               return i;
+                           } )
+                           .collect( Collectors.toList() ),
+            m_annotations.values().stream().map( i -> i.unify( p_context ) ).collect( Collectors.toSet() )
+        );
+    }
+
+    @Override
     public final String getFunctor()
     {
         return m_functor.getSuffix();
@@ -376,15 +403,13 @@ public final class CLiteral implements ILiteral
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 
-               ?
-               new CLiteral(
+               ? new CLiteral(
                    m_at, m_negated, m_functor,
                    m_values.values(),
                    m_annotations.values()
                )
 
-               :
-               new CLiteral(
+               : new CLiteral(
                    m_at, m_negated, p_prefix[0].append( m_functor ),
                    m_values.values(),
                    m_annotations.values()
