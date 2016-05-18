@@ -113,11 +113,11 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     ILiteral unify( final IContext p_context );
 
     /**
-     * relocate all variables within the literal
+     * allocate all variables with the current context
      *
      * @param p_context current execution context
      * @return literal with replaced variable
      */
-    ILiteral relocate( final IContext p_context );
+    ILiteral allocate( final IContext p_context );
 
 }

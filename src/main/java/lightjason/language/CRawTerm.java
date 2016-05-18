@@ -41,6 +41,10 @@ import java.util.Arrays;
 public final class CRawTerm<T> implements IRawTerm<T>
 {
     /**
+     * empty raw term
+     */
+    public static final ITerm EMPTY = new CRawTerm<>( null );
+    /**
      * value data
      */
     private final T m_value;

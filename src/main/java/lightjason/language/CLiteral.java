@@ -40,8 +40,6 @@ import lightjason.grammar.IParserBase;
 import lightjason.grammar.TypeLexer;
 import lightjason.grammar.TypeParser;
 import lightjason.language.execution.IContext;
-import lightjason.language.variable.CRelocateMutexVariable;
-import lightjason.language.variable.CRelocateVariable;
 import lightjason.language.variable.IVariable;
 
 import java.io.ByteArrayInputStream;
@@ -344,7 +342,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral relocate( final IContext p_context )
+    public final ILiteral allocate( final IContext p_context )
     {
         return new CLiteral(
             m_at,
@@ -355,9 +353,9 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
-                                   return l_variable.hasMutex()
-                                       ? new CRelocateMutexVariable<>( l_variable )
-                                       : new CRelocateVariable<>( l_variable );
+                                   return l_variable == null
+                                          ? CRawTerm.EMPTY
+                                          : l_variable;
                                }
                                if ( i instanceof ILiteral )
                                    return ( (ILiteral) i ).unify( p_context );
