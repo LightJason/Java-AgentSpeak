@@ -61,7 +61,10 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
      * @param p_value execution literal
      * @param p_parallel parallel execution
      * @return boolean result
+     * @bug modify variable binding so that variables will bind everytime for allow variable overwriting, the literal unification (line 76)
+     * create variable-free literal so after backtracking the variables are not modified within the current execution context
      */
+    @SuppressWarnings( "unchecked" )
     protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
     {
         // read current rules, if not exists execution fails

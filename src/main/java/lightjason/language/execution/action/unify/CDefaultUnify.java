@@ -88,7 +88,11 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
                                          final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().getUnifier().unify( p_context, m_value, m_variablenumber );
+        return p_context.getAgent().getUnifier().unify(
+            p_context,
+            m_value,
+            m_variablenumber
+        );
     }
 
     @Override
