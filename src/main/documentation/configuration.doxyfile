@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Light-Jason AgentSpeak"
+PROJECT_NAME           = "Light-Jason AgentSpeak(L)"
 PROJECT_NUMBER         =
 PROJECT_BRIEF          =
 PROJECT_LOGO           =
@@ -30,7 +30,7 @@ INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = NO
 STRIP_FROM_PATH        =
 STRIP_FROM_INC_PATH    =
-SHORT_NAMES            = YES
+SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
@@ -136,7 +136,7 @@ USE_MDFILE_AS_MAINPAGE = readme.md
 #---------------------------------------------------------------------------
 SOURCE_BROWSER         = YES
 INLINE_SOURCES         = NO
-STRIP_CODE_COMMENTS    = NO
+STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
 REFERENCES_LINK_SOURCE = YES
