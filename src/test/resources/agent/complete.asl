@@ -72,15 +72,15 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
 +!main
-/*
+
     : >>( hallo(X), generic/typ/isstring(X) ) <-
             generic/print("---", "first plan", "---", "unification variables", X)
 
     : >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <-
         generic/print("---", "second plan", "---", "unification variables", X)
-*/
+
     <-
-/*
+
         // --- manual individual & internal variables ----------------------------------------------------------------------------------------------------------
 
         generic/print("constants", Score, Cycle, "    ", MyConstInt, MyConstString, "    ", PlanFail, PlanFailRatio, PlanSuccessful, PlanSuccessfulRatio);
@@ -389,11 +389,11 @@ myfunction(X) :- generic/print("my logical rule", X).
         $ackermann(3, 3, ACK);
         generic/print("rule execution (ackermann)", ACK);
         ACK == 61;
-*/
-        // @bug fails because variable binding (context reallocation)
-        FIBX = 2;
-        $fibonacci(5, FIBX);
+
+        FIBX = -1;
+        $fibonacci(8, FIBX);
         generic/print("rule execution (fibonacci) in-place modification", FIBX );
+        FIBX == 21;
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 

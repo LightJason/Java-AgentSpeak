@@ -61,8 +61,6 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
      * @param p_value execution literal
      * @param p_parallel parallel execution
      * @return boolean result
-     * @bug modify variable binding so that variables will bind everytime for allow variable overwriting, the literal unification (line 76ff)
-     * create variable-free literal so after backtracking the variables are not modified within the current execution context
      */
     @SuppressWarnings( "unchecked" )
     protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
@@ -84,7 +82,6 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
             // instantiate variables by unification of the rule literal
             final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
-            System.out.println( "##> " + p_value + "    " + l_unified + "   " + l_variables + "    " + p_context.getInstanceVariables() + "\n" );
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
