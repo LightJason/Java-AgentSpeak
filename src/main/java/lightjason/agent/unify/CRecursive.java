@@ -67,8 +67,8 @@ public final class CRecursive implements IAlgorithm
                 {
                     p_variables.add(
                         ( (IVariable<?>) t ).hasMutex()
-                        ? new CRelocateMutexVariable<>( (IVariable<?>) t, (IVariable<?>) s )
-                        : new CRelocateVariable<>( (IVariable<?>) t, (IVariable<?>) s )
+                        ? new CRelocateMutexVariable<>( ( (IVariable<?>) t ).getFQNFunctor(), (IVariable<?>) s )
+                        : new CRelocateVariable<>( ( (IVariable<?>) t ).getFQNFunctor(), (IVariable<?>) s )
                     );
                     return true;
                 }

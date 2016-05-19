@@ -57,24 +57,22 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
 
     /**
      * ctor
-     *
-     * @param p_variable original variable, which should be used
+     *  @param p_functor variable name
      * @param p_relocate variable which should be relocated
      */
-    public CRelocateVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )
+    public CRelocateVariable( final IPath p_functor, final IVariable<?> p_relocate )
     {
-        super( p_variable.getFunctor(), p_relocate.getTyped() );
+        super( p_functor, p_relocate.getTyped() );
         m_relocate = p_relocate;
     }
 
     /**
      * private ctor for creating object-copy
-     *
-     * @param p_functor functor
-     * @param p_value value
+     *  @param p_functor functor
      * @param p_variable referenced variable
+     * @param p_value value
      */
-    private CRelocateVariable( final IPath p_functor, final T p_value, final IVariable<?> p_variable )
+    private CRelocateVariable( final IPath p_functor, final IVariable<?> p_variable, final T p_value )
     {
         super( p_functor, p_value );
         m_relocate = p_variable;
@@ -90,14 +88,14 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CRelocateVariable<T>( m_functor, m_value, m_relocate )
-               : new CRelocateVariable<T>( p_prefix[0].append( m_functor ), m_value, m_relocate );
+               ? new CRelocateVariable<T>( m_functor, m_relocate, m_value )
+               : new CRelocateVariable<T>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
     @Override
     public final IVariable<T> shallowcopySuffix()
     {
-        return new CRelocateVariable<>( this, m_relocate );
+        return new CRelocateVariable<>( m_functor, m_relocate );
     }
 
     @Override
@@ -107,15 +105,14 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
             ( p_prefix == null ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
-            new Cloner().deepClone( m_value ),
-            m_relocate
+            m_relocate, new Cloner().deepClone( m_value )
         );
     }
 
     @Override
     public final ITerm deepcopySuffix()
     {
-        return new CRelocateVariable<>( CPath.from( m_functor.getSuffix() ), new Cloner().deepClone( m_value ), m_relocate );
+        return new CRelocateVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate, new Cloner().deepClone( m_value ) );
     }
 
     @Override
