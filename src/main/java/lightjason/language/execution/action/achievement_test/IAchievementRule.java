@@ -74,7 +74,6 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
         // first step is the unification of the caller literal, so variables will be set from the current execution context
         final ILiteral l_unified = p_value.allocate( p_context );
-        System.out.println( "##> " + p_value + "    " + l_unified + "   " + p_context.getInstanceVariables() );
 
         // second step execute backtracking rules sequential / parallel
         return (
@@ -85,7 +84,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
             // instantiate variables by unification of the rule literal
             final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
-            System.out.println( "##> " + l_variables + "\n" );
+            System.out.println( "##> " + p_value + "    " + l_unified + "   " + l_variables + "    " + p_context.getInstanceVariables() + "\n" );
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
