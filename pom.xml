@@ -9,8 +9,8 @@
 
 
     <!-- project meta information -->
-    <name>Light-Jason</name>
-    <url>https://github.com/flashpixx/Light-Jason</url>
+    <name>Light-Jason AgentSpeak(L)</name>
+    <url>https://github.com/Light-Jason/AgentSpeak</url>
 
     <licenses>
         <license>
@@ -21,13 +21,13 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/flashpixx/Light-Jason/issues</url>
+        <url>https://github.com/Light-Jason/AgentSpeak/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/flashpixx/Light-Jason</url>
-        <connection>scm:git:git://github.com:flashpixx/Light-Jason.git</connection>
-        <developerConnection>scm:git:git@github.com:flashpixx/Light-Jason.git</developerConnection>
+        <url>https://github.com/Light-Jason/AgentSpeak</url>
+        <connection>scm:git:git://github.com:Light-Jason/AgentSpeak.git</connection>
+        <developerConnection>scm:git:git@github.com:Light-Jason/AgentSpeak.git</developerConnection>
     </scm>
 
     <developers>
@@ -353,7 +353,7 @@
                 </configuration>
             </plugin>
 
-            <!-- checkstyle is perform at compile phase -->
+            <!-- checkstyle is perform at compile phase
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -376,7 +376,7 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
             </plugin>
-
+            -->
         </plugins>
     </build>
 </project>

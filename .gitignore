@@ -19,7 +19,7 @@
 !src/main/styleguide/**/*.txt
 !src/main/styleguide/**/*.md
 
-src/main/antlr4/lightjason/grammar/AgentSpeak.g4
-src/main/antlr4/lightjason/grammar/Terminal.g4
-src/main/antlr4/lightjason/grammar/ComplexType.g4
+src/main/antlr4/lightjason/agentspeak/grammar/AgentSpeak.g4
+src/main/antlr4/lightjason/agentspeak/grammar/Terminal.g4
+src/main/antlr4/lightjason/agentspeak/grammar/ComplexType.g4
 target/**

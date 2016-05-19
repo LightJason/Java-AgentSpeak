@@ -159,13 +159,6 @@ to describe an optimizing process.
 
 * signature algorithm
 
-#### External-Access
-
-* HTTP(s) client
-* REST-API client
-* SOAP client
-* SQL with JDBC (and connection-pool)
-
 
 ## <a name="graphic">Graphical Representation</a> 
 
@@ -228,7 +221,6 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 ## <a name="todo">Todos</a>
 
-* parallel / SIMD unification with [type inhertitance](http://stackoverflow.com/questions/1396558/how-can-i-implement-the-unification-algorithm-in-a-language-like-java-or-c) or [Java Unification](https://code.google.com/p/kawala/source/browse/trunk/src/com/kaching/platform/common/types/Unification.java?r=265)
 * publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
 
 ## <a name="workingpackages">Working Packages</a>
