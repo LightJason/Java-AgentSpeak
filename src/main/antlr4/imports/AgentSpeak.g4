@@ -120,7 +120,7 @@ annotation_literal :
  * annotations (with numerical parameter)
  **/
 annotation_numeric_literal :
-    ( FUZZY | SCORE )
+    SCORE
     LEFTROUNDBRACKET
     number
     RIGHTROUNDBRACKET

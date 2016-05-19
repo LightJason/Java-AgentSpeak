@@ -77,10 +77,7 @@ RIGHTSHIFT                 : '>>';
  **/
 PARALLEL                   : 'parallel';
 ATOMIC                     : 'atomic';
-EXCLUSIVE                  : 'exclusive';
-FUZZY                      : 'fuzzy';
 SCORE                      : 'score';
-EXPIRES                    : 'expires';
 
 
 /**

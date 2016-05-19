@@ -42,8 +42,6 @@ import java.util.stream.Stream;
 
 /**
  * rule structure
- *
- * @bug annotation handling is incomplete
  */
 public final class CRule extends IBaseInstantiable implements IRule
 {

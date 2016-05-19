@@ -49,8 +49,6 @@ import java.util.stream.Stream;
 
 /**
  * plan structure
- *
- * @bug annotation handling is incomplete
  */
 public final class CPlan extends IBaseInstantiable implements IPlan
 {

@@ -58,7 +58,6 @@ public interface IAnnotation<T>
      */
     enum EType
     {
-        FUZZY( "@Fuzzy" ),
         SCORE( "@Score" ),
         ATOMIC( "@Atomic" ),
         PARALLEL( "@Parallel" );

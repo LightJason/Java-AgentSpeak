@@ -28,7 +28,6 @@ import lightjason.language.CCommon;
 import lightjason.language.ITerm;
 import lightjason.language.execution.IContext;
 import lightjason.language.execution.IExecution;
-import lightjason.language.execution.annotation.CNumberAnnotation;
 import lightjason.language.execution.annotation.IAnnotation;
 import lightjason.language.execution.fuzzy.CFuzzyValue;
 import lightjason.language.execution.fuzzy.IFuzzyValue;
@@ -74,11 +73,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     {
         m_hash = p_hash;
         m_action = Collections.unmodifiableList( p_action );
-
-        // set default annotations
-        final Map<IAnnotation.EType, IAnnotation<?>> l_map = p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll );
-        l_map.putIfAbsent( IAnnotation.EType.FUZZY, new CNumberAnnotation<>( IAnnotation.EType.FUZZY, 1.0 ) );
-        m_annotation = Collections.unmodifiableMap( l_map );
+        m_annotation = Collections.unmodifiableMap( p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll ) );
     }
 
     @Override
@@ -96,7 +91,16 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public double score( final IAgent p_agent )
     {
-        return p_agent.getAggregation().evaluate( m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed() );
+        return p_agent.getAggregation().evaluate(
+            Stream.concat(
+                m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed(),
+                Stream.of(
+                    m_annotation.containsKey( IAnnotation.EType.SCORE )
+                    ? m_annotation.get( IAnnotation.EType.SCORE ).<Double>getValue()
+                    : new Double( 0 )
+                )
+            )
+        );
     }
 
     @Override

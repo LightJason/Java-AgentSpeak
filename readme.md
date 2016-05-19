@@ -90,7 +90,6 @@ to describe an optimizing process.
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
 * The following annotation can be used
-    * ```@Fuzzy``` sets the [fuzzy value](#fuzzy)
     * ```@Score``` adds an individual score value
     * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the [actions](#action) can fail)
     * ```@Parallel``` all items will be run in parallel
