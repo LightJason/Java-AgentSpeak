@@ -1,6 +1,6 @@
 # Light-Jason - Lightwire version of AgentSpeak(L)
 
-![Circle CI](https://circleci.com/gh/Light-Jason/AgentSpeak.svg?style=shield)
+![Circle CI](https://circleci.com/gh/LightJason/AgentSpeak.svg?style=shield)
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini
 a Java 8 implementation has been build-up with parallel execution calls . The version defines an additional AgentSpeak(L) grammar based on
@@ -19,8 +19,8 @@ to describe an optimizing process.
 * [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/)
 * [Maven 3 or higher](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
-* [Source code documentation](http://light-jason.github.io/AgentSpeak/)
-* [Open Hub Code Statistic](https://www.openhub.net/p/Light-Jason-AgentSpeak)
+* [Source code documentation](http://lightjason.github.io/AgentSpeak/)
+* [Open Hub Code Statistic](https://www.openhub.net/p/LightJason-AgentSpeak)
 
 
 

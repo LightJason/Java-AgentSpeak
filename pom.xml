@@ -2,15 +2,15 @@
          xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.flashpixx</groupId>
-    <artifactId>Light-Jason</artifactId>
+    <groupId>lightjason</groupId>
+    <artifactId>AgentSpeak</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
     <!-- project meta information -->
-    <name>Light-Jason AgentSpeak(L)</name>
-    <url>https://github.com/Light-Jason/AgentSpeak</url>
+    <name>LightJason AgentSpeak(L)</name>
+    <url>https://github.com/LightJason/AgentSpeak</url>
 
     <licenses>
         <license>
@@ -21,13 +21,13 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/Light-Jason/AgentSpeak/issues</url>
+        <url>https://github.com/LightJason/AgentSpeak/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/Light-Jason/AgentSpeak</url>
-        <connection>scm:git:git://github.com:Light-Jason/AgentSpeak.git</connection>
-        <developerConnection>scm:git:git@github.com:Light-Jason/AgentSpeak.git</developerConnection>
+        <url>https://github.com/LightJason/AgentSpeak</url>
+        <connection>scm:git:git://github.com:LightJason/AgentSpeak.git</connection>
+        <developerConnection>scm:git:git@github.com:LightJason/AgentSpeak.git</developerConnection>
     </scm>
 
     <developers>
