@@ -61,7 +61,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
      */
     public CRelocateMutexVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )
     {
-        super( p_variable.getFunctor(), p_variable.getTyped() );
+        super( p_variable.getFunctor(), p_relocate.getTyped() );
         m_relocate = p_relocate;
     }
 

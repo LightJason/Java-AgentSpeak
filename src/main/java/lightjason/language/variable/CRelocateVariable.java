@@ -63,7 +63,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      */
     public CRelocateVariable( final IVariable<?> p_variable, final IVariable<?> p_relocate )
     {
-        super( p_variable.getFunctor(), p_variable.getTyped() );
+        super( p_variable.getFunctor(), p_relocate.getTyped() );
         m_relocate = p_relocate;
     }
 
