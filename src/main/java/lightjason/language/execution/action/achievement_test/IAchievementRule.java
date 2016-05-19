@@ -85,7 +85,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
             // instantiate variables by unification of the rule literal
             final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
-            System.out.println( "##> " + l_variables );
+            System.out.println( "##> " + l_variables + "\n" );
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
