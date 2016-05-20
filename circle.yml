@@ -47,6 +47,6 @@ test:
         - mv /tmp/.gitignore .
         - mv /tmp/circle.yml .
         - mv /tmp/html/* .
-        - git add --all .
+        - git add --all
         - git commit -m "current documentation"
         - git push origin gh-pages
