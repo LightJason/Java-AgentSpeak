@@ -39,7 +39,7 @@ public final class CBelief extends IBaseFilter
     /**
      * ctor
      *
-     * @param p_paths path list
+     * @param p_paths list of path for beliefs filter
      */
     public CBelief( final IPath... p_paths )
     {

@@ -48,7 +48,7 @@ public final class TestCView
     {
         final int l_max = 10;
         final IView<?> l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
-        final IViewGenerator<?> l_gen = new CGenerator<>();
+        final IViewGenerator<?> l_gen = new CGenerator();
 
         IntStream.range( 0, l_max )
                  .boxed()
@@ -67,7 +67,7 @@ public final class TestCView
     public final void testManual()
     {
         final IView<?> l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
-        final IViewGenerator<?> l_gen = new CGenerator();
+        final IViewGenerator l_gen = new CGenerator();
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )
 
@@ -75,11 +75,11 @@ public final class TestCView
             .add( CLiteral.from( "first/sub1" ) )
             .add( CLiteral.from( "first/sub2" ) )
 
-            .generate( CLiteral.from( "second/sub" ), l_gen )
-            .add( CLiteral.from( "second/sub1" ), l_gen )
+            .generate( CPath.from( "second/sub" ), l_gen )
+            .add( CLiteral.from( "second/sub1" ) )
             .add( CLiteral.from( "second/sub2" ) )
 
-            .add( CLiteral.from( "second/sub/sub1" ), l_gen );
+            .add( CLiteral.from( "second/sub/sub1" ) );
 
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
@@ -107,7 +107,7 @@ public final class TestCView
     private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
         @Override
-        public IView<IAgent<?>> generate( final String p_name )
+        public final IView<IAgent<?>> generate( final String p_name )
         {
             return new CBeliefBase<>( new CStorage<>() ).create( p_name );
         }

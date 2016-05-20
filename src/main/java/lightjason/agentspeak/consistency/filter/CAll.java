@@ -40,7 +40,7 @@ public final class CAll extends IBaseFilter
     /**
      * ctor
      *
-     * @param p_paths list of path
+     * @param p_paths list of path for beliefs filter
      */
     public CAll( final IPath... p_paths )
     {
