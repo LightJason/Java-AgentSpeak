@@ -22,7 +22,7 @@ machine:
 
 dependencies:
     pre:
-        - sudo apt-get install doxygen
+        - sudo apt-get install doxygen graphviz
 
 test:
     override:
@@ -47,7 +47,7 @@ test:
         - mv /tmp/.gitignore .
         - mv /tmp/circle.yml .
         - mv /tmp/html/* .
-        - git add --all
+        - git add --all .
         - git status
         - git commit -m "current documentation"
         - git push origin gh-pages
