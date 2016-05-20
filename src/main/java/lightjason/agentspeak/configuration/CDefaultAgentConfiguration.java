@@ -23,6 +23,7 @@
 
 package lightjason.agentspeak.configuration;
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import lightjason.agentspeak.agent.unify.CUnifier;
@@ -51,7 +52,7 @@ import java.util.logging.Logger;
 /**
  * default agent configuration
  */
-public class CDefaultAgentConfiguration implements IAgentConfiguration
+public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfiguration<A>
 {
     /**
      * logger
@@ -98,7 +99,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * beliefbase updater
      */
-    protected final IBeliefBaseUpdate m_beliefbaseupdate;
+    protected final IBeliefBaseUpdate<A> m_beliefbaseupdate;
 
 
     /**
@@ -126,7 +127,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_aggregation aggregation function
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefBaseUpdate p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final IBeliefBaseUpdate<A> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -147,7 +148,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_variablebuilder variable builder
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefBaseUpdate p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final IBeliefBaseUpdate<A> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -216,7 +217,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IBeliefBaseUpdate getBeliefbaseUpdate()
+    public final IBeliefBaseUpdate<A> getBeliefbaseUpdate()
     {
         return m_beliefbaseupdate;
     }

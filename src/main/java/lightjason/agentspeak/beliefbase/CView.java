@@ -183,7 +183,7 @@ public final class CView implements IView
     }
 
     @Override
-    public final boolean containsView( final IPath p_path )
+    public final boolean containsview( final IPath p_path )
     {
         p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
@@ -191,11 +191,11 @@ public final class CView implements IView
 
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
-    public final boolean containsLiteral( final IPath p_path )
+    public final boolean containsliteral( final IPath p_path )
     {
         p_path.normalize();
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
@@ -203,7 +203,7 @@ public final class CView implements IView
 
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override

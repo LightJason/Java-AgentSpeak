@@ -53,12 +53,12 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
-public final class CBeliefBase implements IBeliefBase
+public final class CBeliefBase<T extends IAgent> implements IBeliefBase<T>
 {
     /**
      * storage with data
      */
-    protected final IStorage<Pair<Boolean, ILiteral>, IView> m_storage;
+    protected final IStorage<Pair<Boolean, ILiteral>, IView<T>, T> m_storage;
     /**
      * weak reference queue of all masks to avoid memory-leaks of belief events
      */
@@ -73,7 +73,7 @@ public final class CBeliefBase implements IBeliefBase
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IView> p_storage )
+    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IView<T>, T> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -121,7 +121,7 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <E extends IView> E create( final String p_name )
+    public final <E extends IView<T>> E create( final String p_name )
     {
         // add reference for the mask and the event structure
         final IView l_view = new CView( p_name, this );
@@ -154,7 +154,7 @@ public final class CBeliefBase implements IBeliefBase
     }
 
     @Override
-    public final IAgent update( final IAgent p_agent )
+    public final T update( final T p_agent )
     {
         // check all references of mask and remove unused references
         Reference<? extends IView> l_reference;
@@ -204,7 +204,7 @@ public final class CBeliefBase implements IBeliefBase
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
     {
         return (L) m_storage;
     }

@@ -31,8 +31,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * interface for equal method on views and beliefbases
+ *
+ * @tparam T agent type
  */
-public interface IStructure
+public interface IStructure<T extends IAgent>
 {
 
     /**
@@ -51,7 +53,7 @@ public interface IStructure
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final IView p_view );
+    IView<T> add( final IView<T> p_view );
 
 
     /**
@@ -96,7 +98,7 @@ public interface IStructure
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
-    IAgent update( final IAgent p_agent );
+    T update( final T p_agent );
 
     /**
      * returns a new view of the belief base
@@ -106,7 +108,7 @@ public interface IStructure
      *
      * @tparam E typecast
      */
-    <E extends IView> E create( final String p_name );
+    <E extends IView<T>> E create( final String p_name );
 
     /**
      * returns the storage of the beliefbase
@@ -115,6 +117,6 @@ public interface IStructure
      *
      * @tparam L typecast
      */
-    <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage();
+    <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage();
 
 }

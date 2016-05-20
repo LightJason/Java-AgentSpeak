@@ -39,8 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @tparam N multi-element type
  * @tparam M single-element type
+ * @tparam T agent type
  */
-public final class CStorage<N, M> implements IStorage<N, M>
+public final class CStorage<N, M, T extends IAgent> implements IStorage<N, M, T>
 {
     /**
      * map with elements
@@ -53,7 +54,7 @@ public final class CStorage<N, M> implements IStorage<N, M>
     /**
      * beliefbase update object
      */
-    private final IBeliefBaseUpdate m_update;
+    private final IBeliefBaseUpdate<T> m_update;
 
     /**
      * ctor
@@ -68,7 +69,7 @@ public final class CStorage<N, M> implements IStorage<N, M>
      *
      * @param p_update update object
      */
-    public CStorage( final IBeliefBaseUpdate p_update )
+    public CStorage( final IBeliefBaseUpdate<T> p_update )
     {
         m_update = p_update;
     }
@@ -106,7 +107,7 @@ public final class CStorage<N, M> implements IStorage<N, M>
     }
 
     @Override
-    public final IAgent update( final IAgent p_agent )
+    public final T update( final T p_agent )
     {
         return m_update != null ? m_update.beliefupdate( p_agent ) : p_agent;
     }

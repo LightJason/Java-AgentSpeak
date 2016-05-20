@@ -24,6 +24,7 @@
 package lightjason.agentspeak.beliefbase;
 
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.common.IPath;
 import lightjason.agentspeak.language.ILiteral;
 import lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
 /**
  * view for a beliefbase
  */
-public interface IView extends IStructure
+public interface IView<T extends IAgent> extends IStructure<T>
 {
 
     /**
@@ -53,7 +54,7 @@ public interface IView extends IStructure
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final IPath p_path, final IView p_view );
+    IView<T> add( final IPath p_path, final IView<T> p_view );
 
     /**
      * adds a view in the current structure
@@ -65,7 +66,11 @@ public interface IView extends IStructure
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final IPath p_path, final IView p_view, final IGenerator p_generator );
+    @Deprecated
+    IView<T> add( final IPath p_path, final IView<T> p_view, final IGenerator p_generator );
+
+    Stream<IView<T>> generate( final IPath p_path, final IGenerator<T> p_generator );
+
 
 
     /**
@@ -75,6 +80,7 @@ public interface IView extends IStructure
      * @param p_generator beliefbase generator if beliefbase not exists
      * @return existance boolean
      */
+    @Deprecated
     boolean add( final ILiteral p_literal, final IGenerator p_generator );
 
     /**
@@ -83,7 +89,7 @@ public interface IView extends IStructure
      * @param p_path path to a view
      * @return existance boolean
      */
-    boolean containsView( final IPath p_path );
+    boolean containsview( final IPath p_path );
 
     /**
      * checks if a literal exists
@@ -91,7 +97,7 @@ public interface IView extends IStructure
      * @param p_path path to a literal (suffix is literal name)
      * @return existance boolean
      */
-    boolean containsLiteral( final IPath p_path );
+    boolean containsliteral( final IPath p_path );
 
 
 
@@ -109,7 +115,7 @@ public interface IView extends IStructure
      *
      * @return stream of views
      */
-    Stream<IView> root();
+    Stream<IView<T>> root();
 
     /**
      * clones the current view
@@ -117,7 +123,7 @@ public interface IView extends IStructure
      * @param p_parent new parent
      * @return new view object
      */
-    IView clone( final IView p_parent );
+    IView<T> clone( final IView<T> p_parent );
 
 
 
@@ -197,7 +203,7 @@ public interface IView extends IStructure
     /**
      * interface for generating non-existing beliefbases views
      */
-    interface IGenerator
+    interface IGenerator<S extends IAgent>
     {
 
         /**
@@ -206,6 +212,6 @@ public interface IView extends IStructure
          * @param p_name name of the view
          * @return view object
          */
-        IView generate( final String p_name );
+        IView<S> generate( final String p_name );
     }
 }

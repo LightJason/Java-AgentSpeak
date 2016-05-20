@@ -23,6 +23,7 @@
 
 package lightjason.agentspeak.beliefbase;
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.stream.Stream;
@@ -30,8 +31,9 @@ import java.util.stream.Stream;
 
 /**
  * interface of beliefbase definition
+ * @tparam T agent type
  */
-public interface IBeliefBase extends IStructure
+public interface IBeliefBase<T extends IAgent> extends IStructure<T>
 {
 
     /**
