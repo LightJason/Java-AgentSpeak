@@ -48,6 +48,5 @@ test:
         - mv /tmp/circle.yml .
         - mv /tmp/html/* .
         - git add --all .
-        - git status
         - git commit -m "current documentation"
         - git push origin gh-pages
