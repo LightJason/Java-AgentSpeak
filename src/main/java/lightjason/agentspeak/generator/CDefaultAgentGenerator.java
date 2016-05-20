@@ -54,7 +54,7 @@ import java.util.stream.Stream;
 /**
  * agent generator
  */
-public class CDefaultAgentGenerator implements IAgentGenerator
+public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenerator
 {
     /**
      * logger
@@ -63,7 +63,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     /**
      * fuzzy structure
      */
-    protected static final IFuzzy<Boolean> FUZZY = new CBoolFuzzy();
+    protected final IFuzzy<Boolean,T> m_fuzzy = new CBoolFuzzy<>();
     /**
      * unification
      */
@@ -71,7 +71,7 @@ public class CDefaultAgentGenerator implements IAgentGenerator
     /**
      * configuration of an agent
      */
-    protected final IAgentConfiguration m_configuration;
+    protected final IAgentConfiguration<T> m_configuration;
 
 
     /**
@@ -101,15 +101,15 @@ public class CDefaultAgentGenerator implements IAgentGenerator
      */
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
                                    final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                                   final IBeliefBaseUpdate p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                                   final IBeliefBaseUpdate<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
 
         // build configuration (configuration runs cloning of objects if needed)
-        m_configuration = new CDefaultAgentConfiguration(
-            FUZZY,
+        m_configuration = new CDefaultAgentConfiguration<>(
+            m_fuzzy,
 
             Stream.concat(
                 l_visitor.getInitialBeliefs().stream(),

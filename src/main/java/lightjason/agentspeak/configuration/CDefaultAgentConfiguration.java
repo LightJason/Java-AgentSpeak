@@ -52,7 +52,7 @@ import java.util.logging.Logger;
 /**
  * default agent configuration
  */
-public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfiguration<A>
+public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentConfiguration<T>
 {
     /**
      * logger
@@ -91,7 +91,7 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
     /**
      * fuzzy operator
      */
-    protected final IFuzzy<Boolean> m_fuzzy;
+    protected final IFuzzy<Boolean,T> m_fuzzy;
     /**
      * rules
      */
@@ -99,7 +99,7 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
     /**
      * beliefbase updater
      */
-    protected final IBeliefBaseUpdate<A> m_beliefbaseupdate;
+    protected final IBeliefBaseUpdate<T> m_beliefbaseupdate;
 
 
     /**
@@ -108,7 +108,7 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
     public CDefaultAgentConfiguration()
     {
         this(
-            new CBoolFuzzy(), Collections.<ILiteral>emptyList(),
+            new CBoolFuzzy<>(), Collections.<ILiteral>emptyList(),
             null, Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
             null, new CUnifier(), new CZeroAggregation()
         );
@@ -126,8 +126,8 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefBaseUpdate<A> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean,T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+                                       final IBeliefBaseUpdate<T> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -147,8 +147,8 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefBaseUpdate<A> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean,T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+                                       final IBeliefBaseUpdate<T> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -169,9 +169,9 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
     }
 
     @Override
-    public final IView getBeliefbase()
+    public final IView<T> getBeliefbase()
     {
-        final IView l_beliefbase = new CBeliefBase( new CStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
+        final IView<T> l_beliefbase = new CBeliefBase<>( new CStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs
@@ -205,7 +205,7 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
     }
 
     @Override
-    public final IFuzzy<Boolean> getFuzzy()
+    public final IFuzzy<Boolean,T> getFuzzy()
     {
         return m_fuzzy;
     }
@@ -217,7 +217,7 @@ public class CDefaultAgentConfiguration<A extends IAgent> implements IAgentConfi
     }
 
     @Override
-    public final IBeliefBaseUpdate<A> getBeliefbaseUpdate()
+    public final IBeliefBaseUpdate<T> getBeliefbaseUpdate()
     {
         return m_beliefbaseupdate;
     }

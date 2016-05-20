@@ -42,7 +42,7 @@ public interface IContext
      *
      * @return agent
      */
-    IAgent getAgent();
+    IAgent<?> getAgent();
 
     /**
      * returns the instance object

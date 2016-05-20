@@ -29,7 +29,7 @@ import lightjason.agentspeak.agent.IAgent;
 /**
  * interface to generate beliefbase updates
  */
-public interface IBeliefBaseUpdate<T extends IAgent>
+public interface IBeliefBaseUpdate<T extends IAgent<?>>
 {
 
     /**
@@ -38,6 +38,6 @@ public interface IBeliefBaseUpdate<T extends IAgent>
      * @param p_agent agent
      * @return agent
      */
-    T beliefupdate( final T p_agent );
+    IAgent<T> beliefupdate( final IAgent<T> p_agent );
 
 }

@@ -23,6 +23,7 @@
 
 package lightjason.agentspeak.agent.fuzzy;
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.language.execution.fuzzy.defuzzification.IDefuzzification;
 import lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyOperator;
 
@@ -30,7 +31,7 @@ import lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyOperator;
 /**
  * fuzzy operators
  */
-public interface IFuzzy<T>
+public interface IFuzzy<T,S extends IAgent<?>>
 {
 
     /**
@@ -46,6 +47,6 @@ public interface IFuzzy<T>
      *
      * @return defuzzyification
      */
-    IDefuzzification<T> getDefuzzyfication();
+    IDefuzzification<T,S> getDefuzzyfication();
 
 }

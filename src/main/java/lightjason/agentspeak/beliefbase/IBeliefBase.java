@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * interface of beliefbase definition
  * @tparam T agent type
  */
-public interface IBeliefBase<T extends IAgent> extends IStructure<T>
+public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 {
 
     /**

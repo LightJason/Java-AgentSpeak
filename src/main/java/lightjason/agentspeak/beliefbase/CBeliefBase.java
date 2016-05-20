@@ -53,7 +53,7 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
-public final class CBeliefBase<T extends IAgent> implements IBeliefBase<T>
+public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
 {
     /**
      * storage with data
@@ -154,7 +154,7 @@ public final class CBeliefBase<T extends IAgent> implements IBeliefBase<T>
     }
 
     @Override
-    public final T update( final T p_agent )
+    public final IAgent<T> update( final IAgent<T> p_agent )
     {
         // check all references of mask and remove unused references
         Reference<? extends IView> l_reference;

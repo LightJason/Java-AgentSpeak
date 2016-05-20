@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * view of a beliefbase
  */
-public final class CView<T extends IAgent> implements IView<T>
+public final class CView<T extends IAgent<?>> implements IView<T>
 {
     /**
      * view name
@@ -96,9 +96,10 @@ public final class CView<T extends IAgent> implements IView<T>
     }
 
     @Override
-    public final Stream<IView<T>> generate( final IPath p_path, final IGenerator<T> p_generator )
+    public final IView<T> generate( final IPath p_path, final IGenerator<T> p_generator )
     {
-        return this.walkgenerate( p_path.normalize(), this, p_generator );
+        this.walkgenerate( p_path.normalize(), this, p_generator );
+        return this;
     }
 
     @Override
@@ -161,7 +162,7 @@ public final class CView<T extends IAgent> implements IView<T>
     }
 
     @Override
-    public final T update( final T p_agent )
+    public final IAgent<T> update( final IAgent<T> p_agent )
     {
         return m_beliefbase.update( p_agent );
     }
@@ -342,14 +343,13 @@ public final class CView<T extends IAgent> implements IView<T>
      * @param p_path path (must be normalized)
      * @param p_root start / root node
      * @param p_generator generator object for new views
-     * @return view
      *
      * @note path must be normalized
      */
-    protected final synchronized Stream<IView<T>> walkgenerate( final IPath p_path, final IView<T> p_root, final IGenerator p_generator )
+    private synchronized void walkgenerate( final IPath p_path, final IView<T> p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
-            return Stream.of( p_root );
+            return;
 
         // get the next view and if the view is null, generate a new view
         IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
@@ -360,10 +360,7 @@ public final class CView<T extends IAgent> implements IView<T>
         if ( l_view == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 
-        return Stream.concat(
-            Stream.of( l_view ),
-            this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator )
-        );
+        this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );
     }
 
     /**

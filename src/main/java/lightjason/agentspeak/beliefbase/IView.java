@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 /**
  * view for a beliefbase
  */
-public interface IView<T extends IAgent> extends IStructure<T>
+public interface IView<T extends IAgent<?>> extends IStructure<T>
 {
 
     /**
@@ -61,9 +61,9 @@ public interface IView<T extends IAgent> extends IStructure<T>
      *
      * @param p_path path definition
      * @param p_generator generator function
-     * @return stream of generated view objects
+     * @return self reference
      */
-    Stream<IView<T>> generate( final IPath p_path, final IGenerator<T> p_generator );
+    IView<T> generate( final IPath p_path, final IGenerator<T> p_generator );
 
 
 
@@ -173,7 +173,7 @@ public interface IView<T extends IAgent> extends IStructure<T>
      *
      * @return parent object or null
      */
-    IView getParent();
+    IView<T> getParent();
 
     /**
      * check if the view has got a parent
@@ -187,7 +187,7 @@ public interface IView<T extends IAgent> extends IStructure<T>
     /**
      * interface for generating non-existing beliefbases views
      */
-    interface IGenerator<S extends IAgent>
+    interface IGenerator<S extends IAgent<?>>
     {
 
         /**

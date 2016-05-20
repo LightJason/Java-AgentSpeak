@@ -40,7 +40,7 @@ import java.util.Collection;
  * interface to define the agent configuration
  * @tparam T agent type
  */
-public interface IAgentConfiguration<T extends IAgent> extends IConfiguration
+public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
 {
 
     /**
@@ -48,7 +48,7 @@ public interface IAgentConfiguration<T extends IAgent> extends IConfiguration
      *
      * @return root view
      */
-    IView getBeliefbase();
+    IView<T> getBeliefbase();
 
     /**
      * returns the initial goal
@@ -84,7 +84,7 @@ public interface IAgentConfiguration<T extends IAgent> extends IConfiguration
      *
      * @return operator object
      */
-    IFuzzy<Boolean> getFuzzy();
+    IFuzzy<Boolean,T> getFuzzy();
 
     /**
      * returns the initial beliefs
