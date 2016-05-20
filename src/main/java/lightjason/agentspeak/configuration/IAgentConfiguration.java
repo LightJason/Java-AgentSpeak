@@ -96,6 +96,6 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return beliefbase update or null
      */
-    IBeliefBaseUpdate getBeliefbaseUpdate()
+    IBeliefBaseUpdate getBeliefbaseUpdate();
 
 }
