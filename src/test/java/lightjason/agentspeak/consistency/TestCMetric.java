@@ -28,6 +28,7 @@ import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.beliefbase.CBeliefBase;
 import lightjason.agentspeak.beliefbase.CStorage;
 import lightjason.agentspeak.beliefbase.IView;
+import lightjason.agentspeak.beliefbase.IViewGenerator;
 import lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import lightjason.agentspeak.consistency.filter.CAll;
 import lightjason.agentspeak.consistency.filter.IFilter;
@@ -55,7 +56,7 @@ public final class TestCMetric
     /**
      * literal view generator
      */
-    private final IView.IGenerator m_generator = new CGenerator();
+    private final IViewGenerator m_generator = new CGenerator();
 
 
     /**
@@ -173,7 +174,7 @@ public final class TestCMetric
     /**
      * test belief generator
      */
-    private static final class CGenerator implements IView.IGenerator
+    private static final class CGenerator implements IViewGenerator
     {
         @Override
         public final IView generate( final String p_name )

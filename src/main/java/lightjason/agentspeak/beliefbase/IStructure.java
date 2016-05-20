@@ -105,10 +105,8 @@ public interface IStructure<T extends IAgent<?>>
      *
      * @param p_name name of the view
      * @return view
-     *
-     * @tparam E typecast
      */
-    <E extends IView<T>> E create( final String p_name );
+    IView<T> create( final String p_name );
 
     /**
      * returns the storage of the beliefbase

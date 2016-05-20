@@ -96,12 +96,15 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> generate( final IPath p_path, final IGenerator<T> p_generator )
+    public final IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator )
     {
         this.walkgenerate( p_path.normalize(), this, p_generator );
         return this;
     }
 
+    /**
+     * @bug recursive structure must be fixed
+     */
     @Override
     public final boolean add( final ILiteral p_literal )
     {
@@ -132,7 +135,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final <E extends IView<T>> E create( final String p_name )
+    public final IView<T> create( final String p_name )
     {
         return m_beliefbase.create( p_name );
     }
@@ -346,7 +349,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      *
      * @note path must be normalized
      */
-    private synchronized void walkgenerate( final IPath p_path, final IView<T> p_root, final IGenerator p_generator )
+    private synchronized void walkgenerate( final IPath p_path, final IView<T> p_root, final IViewGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return;

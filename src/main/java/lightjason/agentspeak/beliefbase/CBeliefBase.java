@@ -120,8 +120,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final <E extends IView<T>> E create( final String p_name )
+    public final IView<T> create( final String p_name )
     {
         // add reference for the mask and the event structure
         final IView<T> l_view = new CView<>( p_name, this );
@@ -129,7 +128,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         new PhantomReference<>( l_view, m_maskreference );
         m_events.put( l_view, Sets.newConcurrentHashSet() );
 
-        return (E) l_view;
+        return l_view;
     }
 
     @Override

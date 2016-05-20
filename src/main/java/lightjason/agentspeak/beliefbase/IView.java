@@ -63,7 +63,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @param p_generator generator function
      * @return self reference
      */
-    IView<T> generate( final IPath p_path, final IGenerator<T> p_generator );
+    IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator );
 
 
 
@@ -182,20 +182,4 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     boolean hasParent();
 
-
-
-    /**
-     * interface for generating non-existing beliefbases views
-     */
-    interface IGenerator<S extends IAgent<?>>
-    {
-
-        /**
-         * generates a  new view
-         *
-         * @param p_name name of the view
-         * @return view object
-         */
-        IView<S> generate( final String p_name );
-    }
 }
