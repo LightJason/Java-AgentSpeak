@@ -259,6 +259,7 @@ public final class CConsistency implements IConsistency
         /**
          * calculates the stationary distribution
          *
+         * @param p_iteration number of iteration
          * @param p_matrix transition matrix
          * @return stationary distribution
          */
