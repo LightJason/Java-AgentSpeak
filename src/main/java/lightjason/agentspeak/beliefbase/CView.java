@@ -95,19 +95,16 @@ public final class CView<T extends IAgent> implements IView<T>
         return m_beliefbase.getTrigger( this ).map( i -> i.shallowcopy( l_path ) );
     }
 
-    /**
-     * @bug incomplete
-     */
     @Override
     public final Stream<IView<T>> generate( final IPath p_path, final IGenerator<T> p_generator )
     {
-        return null;
+        return this.walkgenerate( p_path.normalize(), this, p_generator );
     }
 
     @Override
     public final boolean add( final ILiteral p_literal )
     {
-        return this.add( p_literal, null );
+        return this.add( p_literal );
     }
 
     @Override
@@ -130,7 +127,7 @@ public final class CView<T extends IAgent> implements IView<T>
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
-                  .forEach( i -> this.walk( i.normalize(), this, null ).clear() );
+                  .forEach( i -> this.walk( i.normalize(), this ).clear() );
     }
 
     @Override
@@ -172,27 +169,8 @@ public final class CView<T extends IAgent> implements IView<T>
     @Override
     public final IView<T> add( final IPath p_path, final IView<T> p_view )
     {
-        return this.add( p_path.normalize(), p_view, null );
+        return this.add( p_path.normalize(), p_view );
     }
-
-    /*
-    @Override
-    public final IView add( final IPath p_path, final IView p_view, final IGenerator p_generator
-    )
-    {
-        return this.walk( p_path.normalize(), this, p_generator ).add( p_view );
-    }
-
-
-    @Override
-    public final boolean add( final ILiteral p_literal, final IGenerator p_generator
-    )
-    {
-        return p_literal.getFunctorPath().isEmpty()
-               ? m_beliefbase.add( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.shallowcopySuffix() );
-    }
-    */
 
     @Override
     public final boolean containsview( final IPath p_path )
@@ -203,7 +181,7 @@ public final class CView<T extends IAgent> implements IView<T>
 
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -215,7 +193,7 @@ public final class CView<T extends IAgent> implements IView<T>
 
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -269,7 +247,7 @@ public final class CView<T extends IAgent> implements IView<T>
                Arrays.stream( p_path )
                      .parallel()
                      .map( i -> i.normalize() )
-                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
+                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.getRight().shallowcopy( l_path ) ) );
     }
@@ -301,7 +279,7 @@ public final class CView<T extends IAgent> implements IView<T>
                Arrays.stream( p_path )
                      .parallel()
                      .map( i -> i.normalize() )
-                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElements().get( i.getSuffix() )
+                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
                                         .filter( j -> j.getLeft() == p_negated )
                                         .map( j -> j.getRight().shallowcopy( l_path ) ) );
@@ -368,10 +346,10 @@ public final class CView<T extends IAgent> implements IView<T>
      *
      * @note path must be normalized
      */
-    protected final synchronized IView<T> walk( final IPath p_path, final IView<T> p_root, final IGenerator p_generator )
+    protected final synchronized Stream<IView<T>> walkgenerate( final IPath p_path, final IView<T> p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
-            return p_root;
+            return Stream.of( p_root );
 
         // get the next view and if the view is null, generate a new view
         IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
@@ -382,7 +360,10 @@ public final class CView<T extends IAgent> implements IView<T>
         if ( l_view == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 
-        return this.walk( p_path.getSubPath( 1 ), l_view, p_generator );
+        return Stream.concat(
+            Stream.of( l_view ),
+            this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator )
+        );
     }
 
     /**
@@ -394,7 +375,7 @@ public final class CView<T extends IAgent> implements IView<T>
      *
      * @note path must be normalized
      */
-    protected final IView<T> walk( final IPath p_path, final IView<T> p_root )
+    private IView<T> walk( final IPath p_path, final IView<T> p_root )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
