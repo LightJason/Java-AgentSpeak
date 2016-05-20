@@ -47,8 +47,8 @@ public final class TestCView
     public final void testTree()
     {
         final int l_max = 10;
-        final IView<?> l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
-        final IViewGenerator<?> l_gen = new CGenerator();
+        final IView l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
+        final IViewGenerator l_gen = new CGenerator();
 
         IntStream.range( 0, l_max )
                  .boxed()
@@ -66,7 +66,7 @@ public final class TestCView
     @Test
     public final void testManual()
     {
-        final IView<?> l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
         final IViewGenerator l_gen = new CGenerator();
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )

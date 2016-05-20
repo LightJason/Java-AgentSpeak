@@ -167,19 +167,19 @@ public final class TestCMetric
     private IAgent getAgent( final Collection<ILiteral> p_literals )
     {
         final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration() );
-        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
+        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
         return l_agent;
     }
 
     /**
      * test belief generator
      */
-    private static final class CGenerator implements IViewGenerator
+    private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
         @Override
-        public final IView generate( final String p_name )
+        public IView<IAgent<?>> generate( final String p_name )
         {
-            return new CBeliefBase( new CStorage<>() ).create( p_name );
+            return new CBeliefBase<>( new CStorage<>() ).create( p_name );
         }
     }
 
