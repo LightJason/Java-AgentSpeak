@@ -93,63 +93,39 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final boolean add( final ILiteral p_literal )
+    public final void add( final ILiteral p_literal )
     {
         // create add-event for the literal
         m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
-        return m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
+        m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
     @Override
-    public final IView<T> add( final IView<T> p_view )
+    public final void add( final IView<T> p_view )
     {
         m_storage.getSingleElements().put( p_view.getName(), p_view );
-        return p_view;
     }
 
     @Override
-    public final void clear()
-    {
-        // create delete-event for all literals
-        m_storage.getMultiElements().values().stream()
-                 .forEach( j -> m_events.values().stream()
-                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) ) );
-
-        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
-        m_storage.clear();
-    }
-
-    @Override
-    public final IView<T> create( final String p_name )
-    {
-        // add reference for the mask and the event structure
-        final IView<T> l_view = new CView<>( p_name, this );
-
-        new PhantomReference<>( l_view, m_maskreference );
-        m_events.put( l_view, Sets.newConcurrentHashSet() );
-
-        return l_view;
-    }
-
-    @Override
-    public final boolean isEmpty()
-    {
-        return m_storage.isEmpty();
-    }
-
-    @Override
-    public final boolean remove( final IView p_view )
+    public final void remove( final IView p_view )
     {
         m_events.remove( p_view );
-        return m_storage.getSingleElements().remove( p_view.getName() ) != null;
+        m_storage.getSingleElements().remove( p_view.getName() );
     }
 
     @Override
-    public final boolean remove( final ILiteral p_literal )
+    public final void remove( final ILiteral p_literal )
     {
         // create delete-event for the literal
         m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
-        return m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
+        m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
+    }
+
+    @Override
+    public final void remove( final String p_name )
+    {
+        m_storage.getSingleElements().remove( p_name );
+        m_storage.getMultiElements().removeAll( p_name );
     }
 
     @Override
@@ -165,6 +141,36 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
 
         return p_agent;
+    }
+
+    @Override
+    public final IView<T> create( final String p_name )
+    {
+        // add reference for the mask and the event structure
+        final IView<T> l_view = new CView<>( p_name, this );
+
+        new PhantomReference<>( l_view, m_maskreference );
+        m_events.put( l_view, Sets.newConcurrentHashSet() );
+
+        return l_view;
+    }
+
+    @Override
+    public final void clear()
+    {
+        // create delete-event for all literals
+        m_storage.getMultiElements().values().stream()
+                 .forEach( j -> m_events.values().stream()
+                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) ) );
+
+        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
+        m_storage.clear();
+    }
+
+    @Override
+    public final boolean isEmpty()
+    {
+        return m_storage.isEmpty();
     }
 
     @Override
@@ -191,14 +197,6 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         // clear all trigger elements if no trigger exists return an empty set
         l_trigger.clear();
         return l_copy.stream();
-    }
-
-    @Override
-    public final boolean remove( final String p_name )
-    {
-        final boolean l_single = m_storage.getSingleElements().remove( p_name ) != null;
-        final boolean l_multi = m_storage.getMultiElements().removeAll( p_name ) != null;
-        return l_single || l_multi;
     }
 
     @Override

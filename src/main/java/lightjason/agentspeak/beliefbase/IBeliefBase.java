@@ -24,6 +24,7 @@
 package lightjason.agentspeak.beliefbase;
 
 import lightjason.agentspeak.agent.IAgent;
+import lightjason.agentspeak.language.ILiteral;
 import lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.stream.Stream;
@@ -45,16 +46,39 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
     Stream<ITrigger> getTrigger( final IView p_view );
 
     /**
-     * removes single- and multi-elements
-     *
-     * @param p_name name
-     * @return success
-     */
-    boolean remove( final String p_name );
-
-    /**
      * clears all elements
      */
     void clear();
+
+    /**
+     * adds a literal
+     * @param p_literal literal without path
+     */
+    void add( final ILiteral p_literal );
+
+    /**
+     * adds a view
+     * @param p_view view
+     */
+    void add( final IView<T> p_view );
+
+    /**
+     * removes a literal
+     * @param p_literal without path
+     */
+    void remove( final ILiteral p_literal );
+
+    /**
+     * removes a view
+     * @param p_view view
+     */
+    void remove( final IView<T> p_view );
+
+    /**
+     * removes single- and multi-elements
+     *
+     * @param p_name name
+     */
+    void remove( final String p_name );
 
 }

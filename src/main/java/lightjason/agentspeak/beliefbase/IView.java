@@ -45,6 +45,29 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     Stream<ITrigger> getTrigger();
 
+
+
+    /**
+     * generates a path structure
+     *
+     * @param p_path path definition
+     * @param p_generator generator function
+     * @return self reference
+     */
+    IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator );
+
+
+
+    /**
+     * adds view in the current structure
+     *
+     * @param p_view existing view
+     * @return returns cloned view
+     *
+     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
+     */
+    IView<T> add( final IView<T> p_view );
+
     /**
      * adds view in the current structure
      *
@@ -57,13 +80,50 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
     IView<T> add( final IPath p_path, final IView<T> p_view );
 
     /**
-     * generates a path structure
+     * adds a literal in the current structure
      *
-     * @param p_path path definition
-     * @param p_generator generator function
+     * @param p_literal literal
+     * @return boolean flag for correct adding
+     */
+    IView<T> add( final ILiteral p_literal );
+
+
+
+    /**
+     * removes a view in the current structure
+     *
+     * @param p_view view
+     * @return boolean flag for correct removing
+     */
+    IView<T> remove( final IView p_view );
+
+    /**
+     * removes a literal in the current structure
+     *
+     * @param p_literal literal
+     * @return boolean flag for correct removing
+     */
+    IView<T> remove( final ILiteral p_literal );
+
+    /**
+     * removes literal and view
+     *
+     * @param p_path paths
+     * @return is found and removed
+     */
+    IView<T> remove( final IPath... p_path );
+
+
+
+    /**
+     * clears all elements
+     *
+     * @param p_path path values
      * @return self reference
      */
-    IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator );
+    IView<T> clear( final IPath... p_path );
+
+
 
 
 
@@ -85,13 +145,8 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
 
 
 
-    /**
-     * removes literal and view
-     *
-     * @param p_path paths
-     * @return is found and removed
-     */
-    boolean remove( final IPath... p_path );
+
+
 
 
     /**
@@ -146,13 +201,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
     Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path );
 
 
-
-    /**
-     * clears all elements
-     *
-     * @param p_path path values
-     */
-    void clear( final IPath... p_path );
 
     /**
      * returns the full path

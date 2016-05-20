@@ -38,43 +38,6 @@ public interface IStructure<T extends IAgent<?>>
 {
 
     /**
-     * adds a literal in the current structure
-     *
-     * @param p_literal literal
-     * @return boolean flag for correct adding
-     */
-    boolean add( final ILiteral p_literal );
-
-    /**
-     * adds view in the current structure
-     *
-     * @param p_view existing view
-     * @return returns cloned view
-     *
-     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
-     */
-    IView<T> add( final IView<T> p_view );
-
-
-    /**
-     * removes a view in the current structure
-     *
-     * @param p_view view
-     * @return boolean flag for correct removing
-     */
-    boolean remove( final IView p_view );
-
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     * @return boolean flag for correct removing
-     */
-    boolean remove( final ILiteral p_literal );
-
-
-
-    /**
      * checks if the structure empty
      *
      * @return empty boolean

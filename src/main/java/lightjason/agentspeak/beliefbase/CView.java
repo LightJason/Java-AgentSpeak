@@ -106,9 +106,17 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @bug recursive structure must be fixed
      */
     @Override
-    public final boolean add( final ILiteral p_literal )
+    public final IView<T> add( final ILiteral p_literal )
     {
-        return this.add( p_literal );
+        this.walk( p_literal.getFunctorPath().normalize(), this ).add( p_literal.shallowcopySuffix() );
+        return this;
+    }
+
+    @Override
+    public final IView<T> add( final IPath p_path, final IView<T> p_view )
+    {
+        this.walk( p_path.normalize(), p_view ).add( p_view );
+        return this;
     }
 
     @Override
@@ -121,17 +129,53 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getPath(), i.getPath() ) );
             } );
 
-        return m_beliefbase.add( p_view.clone( this ) );
+        m_beliefbase.add( p_view.clone( this ) );
+        return this;
     }
 
     @Override
-    public final void clear( final IPath... p_path )
+    public final IView<T> remove( final IView p_view )
+    {
+        m_beliefbase.remove( p_view );
+        return this;
+    }
+
+    @Override
+    public final IView<T> remove( final ILiteral p_literal )
+    {
+        if (p_literal.getFunctorPath().isEmpty())
+            m_beliefbase.remove( p_literal );
+        else
+            this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.shallowcopySuffix() );
+
+        return this;
+    }
+
+    @Override
+    public final IView<T> remove( final IPath... p_path )
+    {
+        if ( ( p_path != null ) && ( p_path.length > 0 ) )
+            Arrays.stream( p_path ).parallel().forEach( i -> {
+                i.normalize();
+                if (i.size() == 1)
+                    m_beliefbase.remove( i.getSuffix() );
+                else
+                    this.walk( i.getSubPath( 0, -1 ), this ).remove( i );
+            } );
+
+        return this;
+    }
+
+    @Override
+    public final IView<T> clear( final IPath... p_path )
     {
         if ( ( p_path == null ) || ( p_path.length == 0 ) )
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
                   .forEach( i -> this.walk( i.normalize(), this ).clear() );
+
+        return this;
     }
 
     @Override
@@ -141,39 +185,15 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
+    public final IView<T> clone( final IView<T> p_parent )
     {
-        return m_beliefbase.getStorage();
-    }
-
-    @Override
-    public final boolean isEmpty()
-    {
-        return m_beliefbase.isEmpty();
-    }
-
-    @Override
-    public final boolean remove( final IView p_view )
-    {
-        return m_beliefbase.remove( p_view );
-    }
-
-    @Override
-    public final int size()
-    {
-        return m_beliefbase.size();
+        return new CView( m_name, m_beliefbase, p_parent );
     }
 
     @Override
     public final IAgent<T> update( final IAgent<T> p_agent )
     {
         return m_beliefbase.update( p_agent );
-    }
-
-    @Override
-    public final IView<T> add( final IPath p_path, final IView<T> p_view )
-    {
-        return this.add( p_path.normalize(), p_view );
     }
 
     @Override
@@ -198,32 +218,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return p_path.size() == 1
                ? m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) )
                : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
-    }
-
-    @Override
-    public final boolean remove( final ILiteral p_literal )
-    {
-        return p_literal.getFunctorPath().isEmpty()
-               ? m_beliefbase.remove( p_literal )
-               : this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.shallowcopySuffix() );
-    }
-
-    @Override
-    public final boolean remove( final IPath... p_path )
-    {
-        if ( ( p_path == null ) || ( p_path.length == 0 ) )
-            return false;
-
-        return Arrays.stream( p_path ).parallel().map( i -> {
-            i.normalize();
-            return i.size() == 1 ? m_beliefbase.remove( i.getSuffix() ) : this.walk( i.getSubPath( 0, -1 ), this ).remove( i );
-        } ).allMatch( i -> i );
-    }
-
-    @Override
-    public final IView<T> clone( final IView<T> p_parent )
-    {
-        return new CView( m_name, m_beliefbase, p_parent );
     }
 
     @Override
@@ -290,17 +284,48 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IPath getPath()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
     {
-        final IPath l_path = new CPath();
-        this.root().forEach( i -> l_path.pushfront( i.getName() ) );
-        return l_path;
+        return m_beliefbase.getStorage();
+    }
+
+    @Override
+    public final boolean isEmpty()
+    {
+        return m_beliefbase.isEmpty();
+    }
+
+    @Override
+    public final int size()
+    {
+        return m_beliefbase.size();
+    }
+
+    /**
+     * stream to root
+     *
+     * @return stream to root
+     */
+    public final Stream<IView<T>> root()
+    {
+        return Stream.concat(
+            Stream.of( this ),
+            Stream.of( this.getParent() ).filter( i -> i != null )
+        );
     }
 
     @Override
     public final String getName()
     {
         return m_name;
+    }
+
+    @Override
+    public final IPath getPath()
+    {
+        final IPath l_path = new CPath();
+        this.root().forEach( i -> l_path.pushfront( i.getName() ) );
+        return l_path;
     }
 
     @Override
@@ -325,19 +350,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final String toString()
     {
         return MessageFormat.format( "{0} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.getPath(), m_beliefbase.getStorage() );
-    }
-
-    /**
-     * stream to root
-     *
-     * @return stream to root
-     */
-    public final Stream<IView<T>> root()
-    {
-        return Stream.concat(
-            Stream.of( this ),
-            Stream.of( this.getParent() ).filter( i -> i != null )
-        );
     }
 
     /**
