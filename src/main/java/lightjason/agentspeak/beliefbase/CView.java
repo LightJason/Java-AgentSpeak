@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * view of a beliefbase
  */
-public final class CView implements IView
+public final class CView<T extends IAgent> implements IView<T>
 {
     /**
      * view name
@@ -50,11 +50,11 @@ public final class CView implements IView
     /**
      * reference to the beliefbase context
      */
-    protected final IBeliefBase m_beliefbase;
+    protected final IBeliefBase<T> m_beliefbase;
     /**
      * parent name
      */
-    private final IView m_parent;
+    private final IView<T> m_parent;
 
     /**
      * ctor
@@ -62,7 +62,7 @@ public final class CView implements IView
      * @param p_name view name
      * @param p_beliefbase reference to the beliefbase context
      */
-    public CView( final String p_name, final IBeliefBase p_beliefbase )
+    public CView( final String p_name, final IBeliefBase<T> p_beliefbase )
     {
         this( p_name, p_beliefbase, null );
     }
@@ -74,7 +74,7 @@ public final class CView implements IView
      * @param p_beliefbase reference to the beliefbase context
      * @param p_parent reference to the parent view
      */
-    public CView( final String p_name, final IBeliefBase p_beliefbase, final IView p_parent )
+    public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -95,6 +95,15 @@ public final class CView implements IView
         return m_beliefbase.getTrigger( this ).map( i -> i.shallowcopy( l_path ) );
     }
 
+    /**
+     * @bug incomplete
+     */
+    @Override
+    public final Stream<IView<T>> generate( final IPath p_path, final IGenerator<T> p_generator )
+    {
+        return null;
+    }
+
     @Override
     public final boolean add( final ILiteral p_literal )
     {
@@ -102,7 +111,7 @@ public final class CView implements IView
     }
 
     @Override
-    public final IView add( final IView p_view )
+    public final IView<T> add( final IView<T> p_view )
     {
         this.root()
             .filter( i -> p_view.getStorage().equals( i.getStorage() ) )
@@ -125,13 +134,13 @@ public final class CView implements IView
     }
 
     @Override
-    public final <E extends IView> E create( final String p_name )
+    public final <E extends IView<T>> E create( final String p_name )
     {
         return m_beliefbase.create( p_name );
     }
 
     @Override
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage()
+    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
     {
         return m_beliefbase.getStorage();
     }
@@ -155,23 +164,25 @@ public final class CView implements IView
     }
 
     @Override
-    public final IAgent update( final IAgent p_agent )
+    public final T update( final T p_agent )
     {
         return m_beliefbase.update( p_agent );
     }
 
     @Override
-    public final IView add( final IPath p_path, final IView p_view )
+    public final IView<T> add( final IPath p_path, final IView<T> p_view )
     {
         return this.add( p_path.normalize(), p_view, null );
     }
 
+    /*
     @Override
     public final IView add( final IPath p_path, final IView p_view, final IGenerator p_generator
     )
     {
         return this.walk( p_path.normalize(), this, p_generator ).add( p_view );
     }
+
 
     @Override
     public final boolean add( final ILiteral p_literal, final IGenerator p_generator
@@ -181,6 +192,7 @@ public final class CView implements IView
                ? m_beliefbase.add( p_literal )
                : this.walk( p_literal.getFunctorPath(), this, p_generator ).add( p_literal.shallowcopySuffix() );
     }
+    */
 
     @Override
     public final boolean containsview( final IPath p_path )
@@ -227,7 +239,7 @@ public final class CView implements IView
     }
 
     @Override
-    public final IView clone( final IView p_parent )
+    public final IView<T> clone( final IView<T> p_parent )
     {
         return new CView( m_name, m_beliefbase, p_parent );
     }
@@ -310,7 +322,7 @@ public final class CView implements IView
     }
 
     @Override
-    public final IView getParent()
+    public final IView<T> getParent()
     {
         return m_parent;
     }
@@ -338,7 +350,7 @@ public final class CView implements IView
      *
      * @return stream to root
      */
-    public final Stream<IView> root()
+    public final Stream<IView<T>> root()
     {
         return Stream.concat(
             Stream.of( this ),
@@ -356,13 +368,13 @@ public final class CView implements IView
      *
      * @note path must be normalized
      */
-    protected final synchronized IView walk( final IPath p_path, final IView p_root, final IGenerator p_generator )
+    protected final synchronized IView<T> walk( final IPath p_path, final IView<T> p_root, final IGenerator p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
 
         // get the next view and if the view is null, generate a new view
-        IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
+        IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
         if ( l_view == null )
             l_view = p_root.add( p_generator.generate( p_path.get( 0 ) ) );
 
@@ -382,13 +394,13 @@ public final class CView implements IView
      *
      * @note path must be normalized
      */
-    protected final IView walk( final IPath p_path, final IView p_root )
+    protected final IView<T> walk( final IPath p_path, final IView<T> p_root )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return p_root;
 
         // if view is null an exception is thrown
-        final IView l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
+        final IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
         if ( l_view == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 

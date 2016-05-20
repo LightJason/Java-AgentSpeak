@@ -62,11 +62,11 @@ public final class CBeliefBase<T extends IAgent> implements IBeliefBase<T>
     /**
      * weak reference queue of all masks to avoid memory-leaks of belief events
      */
-    protected final ReferenceQueue<IView> m_maskreference = new ReferenceQueue<>();
+    protected final ReferenceQueue<IView<T>> m_maskreference = new ReferenceQueue<>();
     /**
      * map with events for a mask
      */
-    protected final Map<IView, Set<ITrigger>> m_events = new ConcurrentHashMap<>();
+    protected final Map<IView<T>, Set<ITrigger>> m_events = new ConcurrentHashMap<>();
 
     /**
      * ctor
@@ -101,7 +101,7 @@ public final class CBeliefBase<T extends IAgent> implements IBeliefBase<T>
     }
 
     @Override
-    public final IView add( final IView p_view )
+    public final IView<T> add( final IView<T> p_view )
     {
         m_storage.getSingleElements().put( p_view.getName(), p_view );
         return p_view;
@@ -124,7 +124,7 @@ public final class CBeliefBase<T extends IAgent> implements IBeliefBase<T>
     public final <E extends IView<T>> E create( final String p_name )
     {
         // add reference for the mask and the event structure
-        final IView l_view = new CView( p_name, this );
+        final IView<T> l_view = new CView<>( p_name, this );
 
         new PhantomReference<>( l_view, m_maskreference );
         m_events.put( l_view, Sets.newConcurrentHashSet() );

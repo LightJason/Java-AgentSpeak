@@ -57,31 +57,15 @@ public interface IView<T extends IAgent> extends IStructure<T>
     IView<T> add( final IPath p_path, final IView<T> p_view );
 
     /**
-     * adds a view in the current structure
+     * generates a path structure
      *
-     * @param p_path path
-     * @param p_view existing view
-     * @param p_generator beliefbase generator if beliefbase not exists
-     * @return returns cloned view
-     *
-     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
+     * @param p_path path definition
+     * @param p_generator generator function
+     * @return stream of generated view objects
      */
-    @Deprecated
-    IView<T> add( final IPath p_path, final IView<T> p_view, final IGenerator p_generator );
-
     Stream<IView<T>> generate( final IPath p_path, final IGenerator<T> p_generator );
 
 
-
-    /**
-     * adds a literal in the current structure
-     *
-     * @param p_literal literal
-     * @param p_generator beliefbase generator if beliefbase not exists
-     * @return existance boolean
-     */
-    @Deprecated
-    boolean add( final ILiteral p_literal, final IGenerator p_generator );
 
     /**
      * view existing check
