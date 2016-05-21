@@ -95,7 +95,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @param p_view view
      * @return boolean flag for correct removing
      */
-    IView<T> remove( final IView p_view );
+    IView<T> remove( final IView<T> p_view );
 
     /**
      * removes a literal in the current structure

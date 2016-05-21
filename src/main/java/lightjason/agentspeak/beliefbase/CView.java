@@ -370,13 +370,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return;
 
         // get the next view and if the view is null, generate a new view
-        IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
-        if ( l_view == null )
-            l_view = p_root.add( p_generator.generate( p_path.get( 0 ) ) );
-
-        // if view is null an exception is thrown
-        if ( l_view == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
+        final IView<T> l_view = p_root.getStorage().getSingleElements().getOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ) ) );
+        p_root.getStorage().getSingleElements().put( l_view.getName(), l_view.clone( p_root ) );
 
         this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );
     }
@@ -398,7 +393,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         // if view is null an exception is thrown
         final IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
         if ( l_view == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CView.class, "notfound", p_path.get( 0 ), p_root.getPath() ) );
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 
         return this.walk( p_path.getSubPath( 1 ), l_view );
     }
