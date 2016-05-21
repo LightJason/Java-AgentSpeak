@@ -107,7 +107,7 @@ public final class TestCAgent
                 "full-test agent"
             ),
 
-            ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v )
+            AbstractMap.SimpleImmutableEntry::new
 
         ).collect( Collectors.toConcurrentMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
@@ -138,12 +138,12 @@ public final class TestCAgent
      */
     private Pair<Boolean, String> testAgent( final String p_script, final String p_name )
     {
-        final IAgent l_agent;
+        final IAgent<?> l_agent;
         try (
             final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator(
+            l_agent = new CDefaultAgentGenerator<>(
                 l_stream,
                 ACTIONS.keySet(),
                 new CAggregation( ACTIONS ),
@@ -190,11 +190,10 @@ public final class TestCAgent
     /**
      * beliefbase update e.g. environment updates
      */
-    private static final class CBeliefBaseUpdate implements IBeliefBaseUpdate
+    private static final class CBeliefBaseUpdate implements IBeliefBaseUpdate<IAgent<?>>
     {
-
         @Override
-        public final IAgent beliefupdate( final IAgent p_agent )
+        public IAgent<IAgent<?>> beliefupdate( final IAgent<IAgent<?>> p_agent )
         {
             return p_agent;
         }
@@ -203,7 +202,7 @@ public final class TestCAgent
     /**
      * aggregation function
      */
-    private static final class CAggregation implements IAggregation
+    private static final class CAggregation implements IAggregation<IAgent<?>>
     {
         /**
          * action & score value
@@ -221,9 +220,9 @@ public final class TestCAgent
         }
 
         @Override
-        public final double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+        public final double evaluate( final IAgent<IAgent<?>> p_agent, final Multiset<IAction> p_score )
         {
-            return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( i -> m_actions.get( i ) ).sum();
+            return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( m_actions::get ).sum();
         }
 
         @Override
@@ -285,7 +284,7 @@ public final class TestCAgent
         /**
          * any public method
          */
-        private final void first()
+        private void first()
         {
         }
 
@@ -294,7 +293,7 @@ public final class TestCAgent
          *
          * @param p_value string value
          */
-        private final void first( final String p_value )
+        private void first( final String p_value )
         {
 
         }
