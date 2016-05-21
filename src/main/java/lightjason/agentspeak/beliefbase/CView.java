@@ -31,6 +31,7 @@ import lightjason.agentspeak.common.IPath;
 import lightjason.agentspeak.error.CIllegalArgumentException;
 import lightjason.agentspeak.language.ILiteral;
 import lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
@@ -108,14 +109,21 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final IView<T> add( final ILiteral p_literal )
     {
-        this.walk( p_literal.getFunctorPath().normalize(), this ).add( p_literal.shallowcopySuffix() );
+        this.walk( p_literal.getFunctorPath().normalize(), this )
+            .getStorage()
+            .getMultiElements()
+            .put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
         return this;
     }
 
     @Override
     public final IView<T> add( final IPath p_path, final IView<T> p_view )
     {
-        this.walk( p_path.normalize(), p_view ).add( p_view );
+       final IView<T> l_view = this.walk( p_path.normalize(), p_view );
+       l_view
+            .getStorage()
+            .getSingleElements()
+            .put( p_view.getName(), p_view.clone( l_view ) );
         return this;
     }
 
