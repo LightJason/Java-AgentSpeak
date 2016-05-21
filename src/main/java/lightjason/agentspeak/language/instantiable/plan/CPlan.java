@@ -169,7 +169,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return p_agent.getAggregation().evaluate(
             Stream.concat(

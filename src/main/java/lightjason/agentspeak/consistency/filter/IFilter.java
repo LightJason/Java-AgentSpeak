@@ -41,6 +41,6 @@ public interface IFilter
      * @param p_agent agent
      * @return literal stream for metric calculation
      */
-    Stream<ILiteral> filter( final IAgent p_agent );
+    Stream<ILiteral> filter( final IAgent<?> p_agent );
 
 }

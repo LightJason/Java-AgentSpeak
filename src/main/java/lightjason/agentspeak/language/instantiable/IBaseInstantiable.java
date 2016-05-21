@@ -89,7 +89,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     }
 
     @Override
-    public double score( final IAgent p_agent )
+    public double score( final IAgent<?> p_agent )
     {
         return p_agent.getAggregation().evaluate(
             Stream.concat(
@@ -104,7 +104,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     }
 
     @Override
-    public final IContext instantiate( final IAgent p_agent, final Stream<IVariable<?>> p_variable )
+    public final IContext instantiate( final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
     {
         return CCommon.instantiate( this, p_agent, p_variable );
     }

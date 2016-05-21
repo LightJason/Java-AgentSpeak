@@ -65,7 +65,7 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return 0;
     }

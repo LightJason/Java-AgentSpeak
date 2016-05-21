@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 /**
  * aggregation interface of score values
  */
-public interface IAggregation<T extends IAgent<?>>
+public interface IAggregation
 {
 
     /**
@@ -44,7 +44,7 @@ public interface IAggregation<T extends IAgent<?>>
      * @param p_score set with actions
      * @return aggregated score of a body item
      */
-    double evaluate( final IAgent<T> p_agent, final Multiset<IAction> p_score );
+    double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score );
 
     /**
      * calculates the full aggregated score value depends

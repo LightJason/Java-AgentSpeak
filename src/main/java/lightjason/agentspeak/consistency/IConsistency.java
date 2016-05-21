@@ -43,7 +43,7 @@ public interface IConsistency extends Callable<IConsistency>
      * @param p_object object
      * @return value or default value
      */
-    double get( final IAgent p_object );
+    double get( final IAgent<?> p_object );
 
     /**
      * returns statistic data of the consistency values
@@ -57,14 +57,14 @@ public interface IConsistency extends Callable<IConsistency>
      *
      * @param p_object new object
      */
-    boolean add( final IAgent p_object );
+    boolean add( final IAgent<?> p_object );
 
     /**
      * removes an object
      *
      * @param p_object removing object
      */
-    boolean remove( final IAgent p_object );
+    boolean remove( final IAgent<?> p_object );
 
     /**
      * returns the used metric

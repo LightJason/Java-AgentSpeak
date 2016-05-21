@@ -107,7 +107,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final void remove( final IView p_view )
+    public final void remove( final IView<T> p_view )
     {
         m_events.remove( p_view );
         m_storage.getSingleElements().remove( p_view.getName() );
@@ -132,7 +132,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final IAgent<T> update( final IAgent<T> p_agent )
     {
         // check all references of mask and remove unused references
-        Reference<? extends IView> l_reference;
+        Reference<? extends IView<T>> l_reference;
         while ( ( l_reference = m_maskreference.poll() ) != null )
             m_events.remove( l_reference.get() );
 
@@ -180,7 +180,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final Stream<ITrigger> getTrigger( final IView p_view )
+    public final Stream<ITrigger> getTrigger( final IView<T> p_view )
     {
         // get data or return an empty set
         final Set<ITrigger> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger>emptySet() );

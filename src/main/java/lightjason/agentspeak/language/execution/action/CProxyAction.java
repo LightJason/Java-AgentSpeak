@@ -93,7 +93,7 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return p_agent.getAggregation().evaluate( p_agent, m_scoringcache );
     }
@@ -160,7 +160,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final double score( final IAgent p_agent )
+        public final double score( final IAgent<?> p_agent )
         {
             return 0;
         }
@@ -285,7 +285,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final double score( final IAgent p_agent )
+        public final double score( final IAgent<?> p_agent )
         {
             return 0;
         }

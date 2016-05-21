@@ -83,7 +83,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }

@@ -77,7 +77,7 @@ public final class CConsistency implements IConsistency
     /**
      * map with object and consistency value
      **/
-    private final Map<IAgent, Double> m_data = new ConcurrentHashMap<>();
+    private final Map<IAgent<?>, Double> m_data = new ConcurrentHashMap<>();
     /**
      * descriptive statistic
      */
@@ -133,7 +133,7 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final double get( final IAgent p_object )
+    public final double get( final IAgent<?> p_object )
     {
         return m_data.getOrDefault( p_object, 0.0 );
     }
@@ -145,7 +145,7 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final boolean add( final IAgent p_object )
+    public final boolean add( final IAgent<?> p_object )
     {
         return m_data.putIfAbsent( p_object, new Double( 0 ) ) == null;
     }
@@ -157,13 +157,13 @@ public final class CConsistency implements IConsistency
             return this;
 
         // get key list of map for addressing elements in the correct order
-        final ArrayList<IAgent> l_keys = new ArrayList<>( m_data.keySet() );
+        final ArrayList<IAgent<?>> l_keys = new ArrayList<>( m_data.keySet() );
 
         // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
         IntStream.range( 0, l_keys.size() ).parallel().boxed().forEach( i -> {
 
-            final IAgent l_item = l_keys.get( i );
+            final IAgent<?> l_item = l_keys.get( i );
             IntStream.range( i + 1, l_keys.size() ).boxed().forEach( j -> {
 
                 final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
@@ -203,7 +203,7 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final boolean remove( final IAgent p_object )
+    public final boolean remove( final IAgent<?> p_object )
     {
         return m_data.remove( p_object ) != null;
     }
@@ -227,7 +227,7 @@ public final class CConsistency implements IConsistency
      * @param p_second secend element
      * @return metric value
      */
-    private double getMetricValue( final IAgent p_first, final IAgent p_second )
+    private double getMetricValue( final IAgent<?> p_first, final IAgent<?> p_second )
     {
         if ( p_first.equals( p_second ) )
             return 0;

@@ -65,7 +65,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         // rules can create a cyclic reference so on calculate the score value
         // a cyclic reference must be ignored

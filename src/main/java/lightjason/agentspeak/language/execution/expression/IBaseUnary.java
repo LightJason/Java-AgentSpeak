@@ -75,7 +75,7 @@ public abstract class IBaseUnary implements IUnaryExpression
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return 0;
     }

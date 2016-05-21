@@ -49,6 +49,6 @@ public interface IVariableBuilder
      *
      * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
      */
-    Stream<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext );
+    Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext );
 
 }

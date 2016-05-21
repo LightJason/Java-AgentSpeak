@@ -43,7 +43,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_view mask for events
      * @return set with trigger events
      */
-    Stream<ITrigger> getTrigger( final IView p_view );
+    Stream<ITrigger> getTrigger( final IView<T> p_view );
 
     /**
      * clears all elements

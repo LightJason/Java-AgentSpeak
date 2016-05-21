@@ -47,7 +47,7 @@ public final class CContext implements IContext
     /**
      * agent of the running context
      */
-    private final IAgent m_agent;
+    private final IAgent<?> m_agent;
     /**
      * current instance object
      */
@@ -65,7 +65,7 @@ public final class CContext implements IContext
      * @param p_instance instance object
      * @param p_variables instance variables
      */
-    public CContext( final IAgent p_agent, final IInstantiable p_instance, final Collection<IVariable<?>> p_variables )
+    public CContext( final IAgent<?> p_agent, final IInstantiable p_instance, final Collection<IVariable<?>> p_variables )
     {
         if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
@@ -82,7 +82,7 @@ public final class CContext implements IContext
     }
 
     @Override
-    public final IAgent getAgent()
+    public final IAgent<?> getAgent()
     {
         return m_agent;
     }

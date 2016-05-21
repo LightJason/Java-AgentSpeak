@@ -56,7 +56,7 @@ public final class TestCMetric
     /**
      * literal view generator
      */
-    private final IViewGenerator m_generator = new CGenerator();
+    private final IViewGenerator<IAgent<?>> m_generator = new CGenerator();
 
 
     /**
@@ -164,9 +164,9 @@ public final class TestCMetric
      * @param p_literals literal collection
      * @return agent
      */
-    private IAgent getAgent( final Collection<ILiteral> p_literals )
+    private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
     {
-        final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration() );
+        final IAgent<IAgent<?>> l_agent = new CAgent<>( new CDefaultAgentConfiguration<>() );
         p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
         return l_agent;
     }

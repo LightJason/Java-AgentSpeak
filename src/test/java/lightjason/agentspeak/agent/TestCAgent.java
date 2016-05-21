@@ -202,7 +202,7 @@ public final class TestCAgent
     /**
      * aggregation function
      */
-    private static final class CAggregation implements IAggregation<IAgent<?>>
+    private static final class CAggregation implements IAggregation
     {
         /**
          * action & score value
@@ -220,7 +220,7 @@ public final class TestCAgent
         }
 
         @Override
-        public final double evaluate( final IAgent<IAgent<?>> p_agent, final Multiset<IAction> p_score )
+        public final double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score )
         {
             return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( m_actions::get ).sum();
         }
@@ -246,7 +246,7 @@ public final class TestCAgent
     {
 
         @Override
-        public final Stream<IVariable<?>> generate( final IAgent p_agent, final IInstantiable p_runningcontext )
+        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
         {
             return Stream.of( new CConstant<>( "MyConstInt", 123 ), new CConstant<>( "MyConstString", "here is a test string" ) );
         }

@@ -140,7 +140,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @param p_configuration agent configuration
      */
-    public CAgent( final IAgentConfiguration p_configuration )
+    public CAgent( final IAgentConfiguration<T> p_configuration )
     {
         // initialize agent
         m_unifier = p_configuration.getUnifier();

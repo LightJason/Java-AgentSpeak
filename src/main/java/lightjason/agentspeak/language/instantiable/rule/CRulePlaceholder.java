@@ -78,7 +78,7 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final IContext instantiate( final IAgent p_agent,
+    public final IContext instantiate( final IAgent<?> p_agent,
                                        final Stream<IVariable<?>> p_variable
     )
     {
@@ -94,7 +94,7 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return 0;
     }

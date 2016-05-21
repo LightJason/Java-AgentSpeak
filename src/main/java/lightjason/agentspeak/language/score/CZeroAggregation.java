@@ -33,10 +33,10 @@ import java.util.stream.Stream;
 /**
  * zero aggreation
  */
-public final class CZeroAggregation<T extends IAgent<?>> implements IAggregation<T>
+public final class CZeroAggregation implements IAggregation
 {
     @Override
-    public final double evaluate( final IAgent<T> p_agent, final Multiset<IAction> p_score )
+    public final double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score )
     {
         return 0;
     }

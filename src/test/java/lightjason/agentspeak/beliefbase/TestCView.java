@@ -96,7 +96,7 @@ public final class TestCView
     {
         final TestCView l_test = new TestCView();
 
-        //l_test.testTree();
+        l_test.testTree();
         l_test.testManual();
     }
 

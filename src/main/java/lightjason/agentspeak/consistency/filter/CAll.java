@@ -58,7 +58,7 @@ public final class CAll extends IBaseFilter
     }
 
     @Override
-    public final Stream<ILiteral> filter( final IAgent p_agent )
+    public final Stream<ILiteral> filter( final IAgent<?> p_agent )
     {
         return Stream.concat(
             p_agent.getRunningPlans().values().stream(),

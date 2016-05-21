@@ -57,7 +57,7 @@ public interface IExecution
      * @param p_agent agent for which calculates the score value
      * @return score value
      */
-    double score( final IAgent p_agent );
+    double score( final IAgent<?> p_agent );
 
     /**
      * returns a stream with all used variables

@@ -54,7 +54,7 @@ import java.util.stream.Stream;
 /**
  * agent generator
  */
-public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenerator
+public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
     /**
      * logger
@@ -143,20 +143,20 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      *
      * @param p_configuration any configuration
      */
-    protected CDefaultAgentGenerator( final IAgentConfiguration p_configuration )
+    protected CDefaultAgentGenerator( final IAgentConfiguration<T> p_configuration )
     {
         m_configuration = p_configuration;
     }
 
     @Override
-    public IAgent generate( final Object... p_data ) throws Exception
+    public IAgent<T> generate( final Object... p_data ) throws Exception
     {
         LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ).trim() );
-        return new CAgent( m_configuration );
+        return new CAgent<>( m_configuration );
     }
 
     @Override
-    public final Stream<IAgent> generate( final int p_number, final Object... p_data )
+    public final Stream<IAgent<T>> generate( final int p_number, final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()
