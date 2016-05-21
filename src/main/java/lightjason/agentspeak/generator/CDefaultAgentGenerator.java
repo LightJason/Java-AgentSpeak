@@ -61,13 +61,13 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      */
     protected static final Logger LOGGER = CCommon.getLogger( CDefaultAgentGenerator.class );
     /**
-     * fuzzy structure
-     */
-    protected final IFuzzy<Boolean,T> m_fuzzy = new CBoolFuzzy<>();
-    /**
      * unification
      */
     protected static final IUnifier UNIFIER = new CUnifier();
+    /**
+     * fuzzy structure
+     */
+    protected final IFuzzy<Boolean, T> m_fuzzy = new CBoolFuzzy<>();
     /**
      * configuration of an agent
      */

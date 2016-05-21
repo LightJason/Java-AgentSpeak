@@ -49,7 +49,7 @@ public interface IDefuzzification<T, S extends IAgent<?>>
      * update of the internal defuzzification
      * structure on the agent-cycle
      *
-     * @param p_agent
+     * @param p_agent agent object
      * @return agent reference
      */
     IAgent<S> update( final IAgent<S> p_agent );

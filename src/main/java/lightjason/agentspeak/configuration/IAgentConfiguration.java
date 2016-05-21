@@ -84,7 +84,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return operator object
      */
-    IFuzzy<Boolean,T> getFuzzy();
+    IFuzzy<Boolean, T> getFuzzy();
 
     /**
      * returns the initial beliefs

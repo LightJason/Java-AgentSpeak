@@ -24,6 +24,7 @@
 package lightjason.agentspeak.language.execution.action.achievement_test;
 
 import lightjason.agentspeak.agent.IAgent;
+import lightjason.agentspeak.language.CCommon;
 import lightjason.agentspeak.language.ILiteral;
 import lightjason.agentspeak.language.ITerm;
 import lightjason.agentspeak.language.execution.IContext;
@@ -35,9 +36,6 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static lightjason.agentspeak.language.CCommon.recursiveliteral;
-import static lightjason.agentspeak.language.CCommon.recursiveterm;
 
 
 /**
@@ -83,8 +81,8 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     public final Stream<IVariable<?>> getVariables()
     {
         return Stream.concat(
-            recursiveterm( m_value.orderedvalues() ),
-            recursiveliteral( m_value.annotations() )
+            CCommon.recursiveterm( m_value.orderedvalues() ),
+            CCommon.recursiveliteral( m_value.annotations() )
         )
                      .parallel()
                      .filter( i -> i instanceof IVariable<?> )

@@ -128,7 +128,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * fuzzy result collector
      */
-    private final IFuzzy<Boolean,T> m_fuzzy;
+    private final IFuzzy<Boolean, T> m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -280,7 +280,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final IFuzzy<Boolean,T> getFuzzy()
+    public final IFuzzy<Boolean, T> getFuzzy()
     {
         return m_fuzzy;
     }

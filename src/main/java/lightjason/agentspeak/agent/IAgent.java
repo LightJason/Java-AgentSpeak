@@ -144,7 +144,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<IAgent<T>>
      *
      * @return operator
      */
-    IFuzzy<Boolean,T> getFuzzy();
+    IFuzzy<Boolean, T> getFuzzy();
 
     /**
      * returns the aggregation function

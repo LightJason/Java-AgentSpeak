@@ -38,7 +38,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static lightjason.agentspeak.language.CCommon.getRawValue;
 
 /**
  * additve binary expression
@@ -83,15 +82,15 @@ public final class CAdditive extends IBaseBinary
         {
             case PLUS:
                 p_return.add( CRawTerm.from( this.add(
-                    getRawValue( l_argument.get( 0 ) ),
-                    getRawValue( l_argument.get( 1 ) )
+                    lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                    lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case MINUS:
                 p_return.add( CRawTerm.from( this.subtract(
-                    getRawValue( l_argument.get( 0 ) ),
-                    getRawValue( l_argument.get( 1 ) )
+                    lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                    lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
                 ) ) );
                 return CFuzzyValue.from( true );
 

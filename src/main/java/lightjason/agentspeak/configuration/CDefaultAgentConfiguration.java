@@ -91,7 +91,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * fuzzy operator
      */
-    protected final IFuzzy<Boolean,T> m_fuzzy;
+    protected final IFuzzy<Boolean, T> m_fuzzy;
     /**
      * rules
      */
@@ -126,7 +126,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean,T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final IBeliefBaseUpdate<T> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
@@ -147,7 +147,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean,T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final IBeliefBaseUpdate<T> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
@@ -205,7 +205,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public final IFuzzy<Boolean,T> getFuzzy()
+    public final IFuzzy<Boolean, T> getFuzzy()
     {
         return m_fuzzy;
     }

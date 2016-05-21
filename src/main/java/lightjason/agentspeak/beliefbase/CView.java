@@ -160,7 +160,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             Arrays.stream( p_path ).parallel()
                   .map( IPath::normalize )
                   .forEach( i -> {
-                      if (i.size() == 1)
+                      if ( i.size() == 1 )
                         m_beliefbase.remove( i.getSuffix() );
                       else
                         this.walk( i.getSubPath( 0, -1 ), this ).remove( i );

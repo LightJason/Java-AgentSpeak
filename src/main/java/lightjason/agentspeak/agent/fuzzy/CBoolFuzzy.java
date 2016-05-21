@@ -36,7 +36,7 @@ import java.text.MessageFormat;
 /**
  * boolean fuzzy element
  */
-public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean,T>
+public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean, T>
 {
     /**
      * fuzzy operator
@@ -45,7 +45,7 @@ public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean,T>
     /**
      * defuzzyfication
      */
-    private final IDefuzzification<Boolean,T> m_defuzzyfication;
+    private final IDefuzzification<Boolean, T> m_defuzzyfication;
 
     /**
      * ctor
@@ -61,7 +61,7 @@ public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean,T>
      * @param p_operator fuzzy operator
      * @param p_defuzzyfication defuzzyfication
      */
-    public CBoolFuzzy( final IFuzzyOperator<Boolean> p_operator, final IDefuzzification<Boolean,T> p_defuzzyfication )
+    public CBoolFuzzy( final IFuzzyOperator<Boolean> p_operator, final IDefuzzification<Boolean, T> p_defuzzyfication )
     {
         m_operator = p_operator;
         m_defuzzyfication = p_defuzzyfication;
@@ -74,7 +74,7 @@ public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean,T>
     }
 
     @Override
-    public final IDefuzzification<Boolean,T> getDefuzzyfication()
+    public final IDefuzzification<Boolean, T> getDefuzzyfication()
     {
         return m_defuzzyfication;
     }
