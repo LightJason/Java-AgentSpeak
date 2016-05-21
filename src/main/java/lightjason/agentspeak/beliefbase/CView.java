@@ -75,7 +75,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_beliefbase reference to the beliefbase context
      * @param p_parent reference to the parent view
      */
-    public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView p_parent )
+    public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -103,27 +103,20 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this;
     }
 
-    /**
-     * @bug recursive structure must be fixed
-     */
     @Override
     public final IView<T> add( final ILiteral p_literal )
     {
         this.walk( p_literal.getFunctorPath().normalize(), this )
             .getStorage()
             .getMultiElements()
-            .put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
+            .put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
         return this;
     }
 
     @Override
     public final IView<T> add( final IPath p_path, final IView<T> p_view )
     {
-       final IView<T> l_view = this.walk( p_path.normalize(), p_view );
-       l_view
-            .getStorage()
-            .getSingleElements()
-            .put( p_view.getName(), p_view.clone( l_view ) );
+        this.walk( p_path.normalize(), this ).add( p_view );
         return this;
     }
 
@@ -142,7 +135,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> remove( final IView p_view )
+    public final IView<T> remove( final IView<T> p_view )
     {
         m_beliefbase.remove( p_view );
         return this;
@@ -151,10 +144,11 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final IView<T> remove( final ILiteral p_literal )
     {
-        if (p_literal.getFunctorPath().isEmpty())
-            m_beliefbase.remove( p_literal );
-        else
-            this.walk( p_literal.getFunctorPath(), this ).remove( p_literal.shallowcopySuffix() );
+        this.walk( p_literal.getFunctorPath().normalize(), this )
+            .getStorage()
+            .getMultiElements()
+            .asMap()
+            .remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
 
         return this;
     }
@@ -163,13 +157,14 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final IView<T> remove( final IPath... p_path )
     {
         if ( ( p_path != null ) && ( p_path.length > 0 ) )
-            Arrays.stream( p_path ).parallel().forEach( i -> {
-                i.normalize();
-                if (i.size() == 1)
-                    m_beliefbase.remove( i.getSuffix() );
-                else
-                    this.walk( i.getSubPath( 0, -1 ), this ).remove( i );
-            } );
+            Arrays.stream( p_path ).parallel()
+                  .map( IPath::normalize )
+                  .forEach( i -> {
+                      if (i.size() == 1)
+                        m_beliefbase.remove( i.getSuffix() );
+                      else
+                        this.walk( i.getSubPath( 0, -1 ), this ).remove( i );
+                  } );
 
         return this;
     }
@@ -195,7 +190,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final IView<T> clone( final IView<T> p_parent )
     {
-        return new CView( m_name, m_beliefbase, p_parent );
+        return new CView<>( m_name, m_beliefbase, p_parent );
     }
 
     @Override
@@ -208,7 +203,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final boolean containsview( final IPath p_path )
     {
         p_path.normalize();
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+        if ( p_path.isEmpty() )
             return true;
 
         return p_path.size() == 1
@@ -220,7 +215,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final boolean containsliteral( final IPath p_path )
     {
         p_path.normalize();
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+        if ( p_path.isEmpty() )
             return true;
 
         return p_path.size() == 1
@@ -252,7 +247,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                :
                Arrays.stream( p_path )
                      .parallel()
-                     .map( i -> i.normalize() )
+                     .map( IPath::normalize )
                      .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.getRight().shallowcopy( l_path ) ) );
@@ -284,7 +279,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                :
                Arrays.stream( p_path )
                      .parallel()
-                     .map( i -> i.normalize() )
+                     .map( IPath::normalize )
                      .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
                                         .filter( j -> j.getLeft() == p_negated )
@@ -369,7 +364,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      *
      * @note path must be normalized
      */
-    private synchronized void walkgenerate( final IPath p_path, final IView<T> p_root, final IViewGenerator p_generator )
+    private synchronized void walkgenerate( final IPath p_path, final IView<T> p_root, final IViewGenerator<T> p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
             return;
