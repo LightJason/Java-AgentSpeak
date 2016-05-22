@@ -61,7 +61,7 @@ public interface IStructure<T extends IAgent<?>>
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
-    IAgent<T> update( final IAgent<T> p_agent );
+    T update( final T p_agent );
 
     /**
      * returns a new view of the belief base

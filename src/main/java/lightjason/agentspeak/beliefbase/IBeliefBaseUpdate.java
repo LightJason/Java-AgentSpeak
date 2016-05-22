@@ -38,6 +38,6 @@ public interface IBeliefBaseUpdate<T extends IAgent<?>>
      * @param p_agent agent
      * @return agent
      */
-    IAgent<T> beliefupdate( final IAgent<T> p_agent );
+    T beliefupdate( final T p_agent );
 
 }

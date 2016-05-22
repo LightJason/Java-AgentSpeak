@@ -194,7 +194,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IAgent<T> update( final IAgent<T> p_agent )
+    public final T update( final T p_agent )
     {
         return m_beliefbase.update( p_agent );
     }

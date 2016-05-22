@@ -52,6 +52,6 @@ public interface IDefuzzification<T, S extends IAgent<?>>
      * @param p_agent agent object
      * @return agent reference
      */
-    IAgent<S> update( final IAgent<S> p_agent );
+    S update( final S p_agent );
 
 }

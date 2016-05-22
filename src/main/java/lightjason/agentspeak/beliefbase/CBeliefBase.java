@@ -129,7 +129,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final IAgent<T> update( final IAgent<T> p_agent )
+    public final T update( final T p_agent )
     {
         // check all references of mask and remove unused references
         Reference<? extends IView<T>> l_reference;

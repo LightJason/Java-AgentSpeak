@@ -317,18 +317,19 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public IAgent<T> call() throws Exception
     {
         LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
 
         // run beliefbase update, because environment can be changed
-        m_beliefbase.update( this );
+        m_beliefbase.update( (T) this );
         if ( m_hibernate )
             // check wakup-event otherwise suspend
             return this;
 
         // update defuzzification
-        m_fuzzy.getDefuzzyfication().update( this );
+        m_fuzzy.getDefuzzyfication().update( (T) this );
 
         // create a list of all possible execution elements, that is a local cache for well-defined execution
         final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(

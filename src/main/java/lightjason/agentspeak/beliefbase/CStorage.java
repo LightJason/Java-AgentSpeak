@@ -107,7 +107,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
-    public final IAgent<T> update( final IAgent<T> p_agent )
+    public final T update( final T p_agent )
     {
         return m_update != null ? m_update.beliefupdate( p_agent ) : p_agent;
     }

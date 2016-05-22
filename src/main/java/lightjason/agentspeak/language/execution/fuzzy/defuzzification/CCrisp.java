@@ -60,7 +60,7 @@ public class CCrisp<T, S extends IAgent<?>> implements IDefuzzification<T, S>
     }
 
     @Override
-    public IAgent<S> update( final IAgent<S> p_agent )
+    public S update( final S p_agent )
     {
         return p_agent;
     }

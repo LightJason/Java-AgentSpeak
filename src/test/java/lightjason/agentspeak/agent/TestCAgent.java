@@ -193,7 +193,7 @@ public final class TestCAgent
     private static final class CBeliefBaseUpdate implements IBeliefBaseUpdate<IAgent<?>>
     {
         @Override
-        public IAgent<IAgent<?>> beliefupdate( final IAgent<IAgent<?>> p_agent )
+        public final IAgent<?> beliefupdate( final IAgent<?> p_agent )
         {
             return p_agent;
         }
