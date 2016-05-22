@@ -23,6 +23,7 @@
 
 package lightjason.agentspeak.agent.fuzzy;
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.language.execution.fuzzy.defuzzification.CCrisp;
 import lightjason.agentspeak.language.execution.fuzzy.defuzzification.IDefuzzification;
 import lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyOperator;
@@ -34,8 +35,10 @@ import java.text.MessageFormat;
 
 /**
  * boolean fuzzy element
+ *
+ * @tparam T agent type
  */
-public final class CBoolFuzzy implements IFuzzy<Boolean>
+public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean, T>
 {
     /**
      * fuzzy operator
@@ -44,7 +47,7 @@ public final class CBoolFuzzy implements IFuzzy<Boolean>
     /**
      * defuzzyfication
      */
-    private final IDefuzzification<Boolean> m_defuzzyfication;
+    private final IDefuzzification<Boolean, T> m_defuzzyfication;
 
     /**
      * ctor
@@ -60,7 +63,7 @@ public final class CBoolFuzzy implements IFuzzy<Boolean>
      * @param p_operator fuzzy operator
      * @param p_defuzzyfication defuzzyfication
      */
-    public CBoolFuzzy( final IFuzzyOperator<Boolean> p_operator, final IDefuzzification<Boolean> p_defuzzyfication )
+    public CBoolFuzzy( final IFuzzyOperator<Boolean> p_operator, final IDefuzzification<Boolean, T> p_defuzzyfication )
     {
         m_operator = p_operator;
         m_defuzzyfication = p_defuzzyfication;
@@ -73,7 +76,7 @@ public final class CBoolFuzzy implements IFuzzy<Boolean>
     }
 
     @Override
-    public final IDefuzzification<Boolean> getDefuzzyfication()
+    public final IDefuzzification<Boolean, T> getDefuzzyfication()
     {
         return m_defuzzyfication;
     }

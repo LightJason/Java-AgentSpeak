@@ -28,6 +28,7 @@ import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.beliefbase.CBeliefBase;
 import lightjason.agentspeak.beliefbase.CStorage;
 import lightjason.agentspeak.beliefbase.IView;
+import lightjason.agentspeak.beliefbase.IViewGenerator;
 import lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import lightjason.agentspeak.consistency.filter.CAll;
 import lightjason.agentspeak.consistency.filter.IFilter;
@@ -55,7 +56,7 @@ public final class TestCMetric
     /**
      * literal view generator
      */
-    private final IView.IGenerator m_generator = new CGenerator();
+    private final IViewGenerator<IAgent<?>> m_generator = new CGenerator();
 
 
     /**
@@ -163,22 +164,22 @@ public final class TestCMetric
      * @param p_literals literal collection
      * @return agent
      */
-    private IAgent getAgent( final Collection<ILiteral> p_literals )
+    private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
     {
-        final IAgent l_agent = new CAgent( new CDefaultAgentConfiguration() );
-        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().add( i, m_generator ) );
+        final IAgent<IAgent<?>> l_agent = new CAgent<>( new CDefaultAgentConfiguration<>() );
+        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
         return l_agent;
     }
 
     /**
      * test belief generator
      */
-    private static final class CGenerator implements IView.IGenerator
+    private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
         @Override
-        public final IView generate( final String p_name )
+        public IView<IAgent<?>> generate( final String p_name )
         {
-            return new CBeliefBase( new CStorage<>() ).create( p_name );
+            return new CBeliefBase<>( new CStorage<>() ).create( p_name );
         }
     }
 

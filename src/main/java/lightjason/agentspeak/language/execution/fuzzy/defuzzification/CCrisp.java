@@ -30,8 +30,11 @@ import lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyComplement;
 
 /**
  * defuzzification to a crisp value
+ *
+ * @tparam T fuzzy type
+ * @tparam S agent type
  */
-public class CCrisp<T> implements IDefuzzification<T>
+public class CCrisp<T, S extends IAgent<?>> implements IDefuzzification<T, S>
 {
 
     /**
@@ -57,8 +60,8 @@ public class CCrisp<T> implements IDefuzzification<T>
     }
 
     @Override
-    public void update( final IAgent p_agent )
+    public S update( final S p_agent )
     {
-
+        return p_agent;
     }
 }

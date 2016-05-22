@@ -39,7 +39,7 @@ public final class CBelief extends IBaseFilter
     /**
      * ctor
      *
-     * @param p_paths path list
+     * @param p_paths list of path for beliefs filter
      */
     public CBelief( final IPath... p_paths )
     {
@@ -57,7 +57,7 @@ public final class CBelief extends IBaseFilter
     }
 
     @Override
-    public final Stream<ILiteral> filter( final IAgent p_agent )
+    public final Stream<ILiteral> filter( final IAgent<?> p_agent )
     {
         return p_agent.getBeliefBase().stream( m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] ) );
     }

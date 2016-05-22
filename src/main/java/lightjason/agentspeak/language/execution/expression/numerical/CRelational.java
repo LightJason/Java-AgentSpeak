@@ -38,8 +38,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static lightjason.agentspeak.language.CCommon.getRawValue;
-
 
 /**
  * numerical relation expression
@@ -85,8 +83,8 @@ public final class CRelational extends IBaseBinary
             case GREATER:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        getRawValue( l_argument.get( 0 ) ),
-                        getRawValue( l_argument.get( 1 ) )
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
                     ) > 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -94,8 +92,8 @@ public final class CRelational extends IBaseBinary
             case GREATEREQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        getRawValue( l_argument.get( 0 ) ),
-                        getRawValue( l_argument.get( 1 ) )
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
                     ) >= 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -103,8 +101,8 @@ public final class CRelational extends IBaseBinary
             case LESS:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        getRawValue( l_argument.get( 0 ) ),
-                        getRawValue( l_argument.get( 1 ) )
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
                     ) < 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -112,8 +110,8 @@ public final class CRelational extends IBaseBinary
             case LESSEQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        getRawValue( l_argument.get( 0 ) ),
-                        getRawValue( l_argument.get( 1 ) )
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
+                        lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
                     ) <= 0 )
                 );
                 return CFuzzyValue.from( true );

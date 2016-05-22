@@ -87,7 +87,7 @@ public abstract class IBaseBinary implements IBinaryExpression
     }
 
     @Override
-    public final double score( final IAgent p_agent )
+    public final double score( final IAgent<?> p_agent )
     {
         return 0;
     }

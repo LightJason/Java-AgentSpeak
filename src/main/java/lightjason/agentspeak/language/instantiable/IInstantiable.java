@@ -45,6 +45,6 @@ public interface IInstantiable extends IExecution
      * @param p_variable variable stream
      * @return individual context
      */
-    IContext instantiate( final IAgent p_agent, final Stream<IVariable<?>> p_variable );
+    IContext instantiate( final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable );
 
 }

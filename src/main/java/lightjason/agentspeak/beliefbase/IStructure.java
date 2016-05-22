@@ -31,46 +31,11 @@ import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * interface for equal method on views and beliefbases
+ *
+ * @tparam T agent type
  */
-public interface IStructure
+public interface IStructure<T extends IAgent<?>>
 {
-
-    /**
-     * adds a literal in the current structure
-     *
-     * @param p_literal literal
-     * @return boolean flag for correct adding
-     */
-    boolean add( final ILiteral p_literal );
-
-    /**
-     * adds view in the current structure
-     *
-     * @param p_view existing view
-     * @return returns cloned view
-     *
-     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
-     */
-    IView add( final IView p_view );
-
-
-    /**
-     * removes a view in the current structure
-     *
-     * @param p_view view
-     * @return boolean flag for correct removing
-     */
-    boolean remove( final IView p_view );
-
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     * @return boolean flag for correct removing
-     */
-    boolean remove( final ILiteral p_literal );
-
-
 
     /**
      * checks if the structure empty
@@ -96,17 +61,15 @@ public interface IStructure
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
-    IAgent update( final IAgent p_agent );
+    T update( final T p_agent );
 
     /**
      * returns a new view of the belief base
      *
      * @param p_name name of the view
      * @return view
-     *
-     * @tparam E typecast
      */
-    <E extends IView> E create( final String p_name );
+    IView<T> create( final String p_name );
 
     /**
      * returns the storage of the beliefbase
@@ -115,6 +78,6 @@ public interface IStructure
      *
      * @tparam L typecast
      */
-    <L extends IStorage<Pair<Boolean, ILiteral>, IView>> L getStorage();
+    <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage();
 
 }

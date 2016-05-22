@@ -69,8 +69,10 @@ import java.util.stream.Stream;
 
 /**
  * agent class
+ *
+ * @tparam T agent type
  */
-public class CAgent implements IAgent
+public class CAgent<T extends IAgent<?>> implements IAgent<T>
 {
     /**
      * logger
@@ -80,7 +82,7 @@ public class CAgent implements IAgent
     /**
      * beliefbase
      */
-    protected final IView m_beliefbase;
+    protected final IView<T> m_beliefbase;
     /**
      * storage map
      *
@@ -128,7 +130,7 @@ public class CAgent implements IAgent
     /**
      * fuzzy result collector
      */
-    private final IFuzzy<Boolean> m_fuzzy;
+    private final IFuzzy<Boolean, T> m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -140,7 +142,7 @@ public class CAgent implements IAgent
      *
      * @param p_configuration agent configuration
      */
-    public CAgent( final IAgentConfiguration p_configuration )
+    public CAgent( final IAgentConfiguration<T> p_configuration )
     {
         // initialize agent
         m_unifier = p_configuration.getUnifier();
@@ -162,7 +164,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IView getBeliefBase()
+    public final IView<T> getBeliefBase()
     {
         return m_beliefbase;
     }
@@ -221,14 +223,14 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IAgent sleep()
+    public final IAgent<T> sleep()
     {
         m_hibernate = true;
         return this;
     }
 
     @Override
-    public final IAgent wakeup( final ITerm... p_value )
+    public final IAgent<T> wakeup( final ITerm... p_value )
     {
         if ( !m_hibernate )
             return this;
@@ -280,7 +282,7 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public final IFuzzy<Boolean> getFuzzy()
+    public final IFuzzy<Boolean, T> getFuzzy()
     {
         return m_fuzzy;
     }
@@ -317,18 +319,19 @@ public class CAgent implements IAgent
     }
 
     @Override
-    public IAgent call() throws Exception
+    @SuppressWarnings( "unchecked" )
+    public IAgent<T> call() throws Exception
     {
         LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
 
         // run beliefbase update, because environment can be changed
-        m_beliefbase.update( this );
+        m_beliefbase.update( (T) this );
         if ( m_hibernate )
             // check wakup-event otherwise suspend
             return this;
 
         // update defuzzification
-        m_fuzzy.getDefuzzyfication().update( this );
+        m_fuzzy.getDefuzzyfication().update( (T) this );
 
         // create a list of all possible execution elements, that is a local cache for well-defined execution
         final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(

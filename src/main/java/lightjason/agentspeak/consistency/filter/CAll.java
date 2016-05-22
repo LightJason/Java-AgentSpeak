@@ -40,7 +40,7 @@ public final class CAll extends IBaseFilter
     /**
      * ctor
      *
-     * @param p_paths list of path
+     * @param p_paths list of path for beliefs filter
      */
     public CAll( final IPath... p_paths )
     {
@@ -58,7 +58,7 @@ public final class CAll extends IBaseFilter
     }
 
     @Override
-    public final Stream<ILiteral> filter( final IAgent p_agent )
+    public final Stream<ILiteral> filter( final IAgent<?> p_agent )
     {
         return Stream.concat(
             p_agent.getRunningPlans().values().stream(),

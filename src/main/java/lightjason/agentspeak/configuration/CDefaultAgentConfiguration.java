@@ -23,6 +23,7 @@
 
 package lightjason.agentspeak.configuration;
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import lightjason.agentspeak.agent.unify.CUnifier;
@@ -51,7 +52,7 @@ import java.util.logging.Logger;
 /**
  * default agent configuration
  */
-public class CDefaultAgentConfiguration implements IAgentConfiguration
+public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentConfiguration<T>
 {
     /**
      * logger
@@ -90,7 +91,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * fuzzy operator
      */
-    protected final IFuzzy<Boolean> m_fuzzy;
+    protected final IFuzzy<Boolean, T> m_fuzzy;
     /**
      * rules
      */
@@ -98,7 +99,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     /**
      * beliefbase updater
      */
-    protected final IBeliefBaseUpdate m_beliefbaseupdate;
+    protected final IBeliefBaseUpdate<T> m_beliefbaseupdate;
 
 
     /**
@@ -107,7 +108,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     public CDefaultAgentConfiguration()
     {
         this(
-            new CBoolFuzzy(), Collections.<ILiteral>emptyList(),
+            new CBoolFuzzy<>(), Collections.<ILiteral>emptyList(),
             null, Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
             null, new CUnifier(), new CZeroAggregation()
         );
@@ -125,8 +126,8 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefBaseUpdate p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+                                       final IBeliefBaseUpdate<T> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -146,8 +147,8 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefBaseUpdate p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+                                       final IBeliefBaseUpdate<T> p_beliefbaseupdate, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -168,9 +169,9 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IView getBeliefbase()
+    public final IView<T> getBeliefbase()
     {
-        final IView l_beliefbase = new CBeliefBase( new CStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
+        final IView<T> l_beliefbase = new CBeliefBase<>( new CStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs
@@ -204,7 +205,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IFuzzy<Boolean> getFuzzy()
+    public final IFuzzy<Boolean, T> getFuzzy()
     {
         return m_fuzzy;
     }
@@ -216,7 +217,7 @@ public class CDefaultAgentConfiguration implements IAgentConfiguration
     }
 
     @Override
-    public final IBeliefBaseUpdate getBeliefbaseUpdate()
+    public final IBeliefBaseUpdate<T> getBeliefbaseUpdate()
     {
         return m_beliefbaseupdate;
     }

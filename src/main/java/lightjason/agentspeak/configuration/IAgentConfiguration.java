@@ -23,6 +23,7 @@
 
 package lightjason.agentspeak.configuration;
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import lightjason.agentspeak.beliefbase.IBeliefBaseUpdate;
 import lightjason.agentspeak.beliefbase.IView;
@@ -37,8 +38,9 @@ import java.util.Collection;
 
 /**
  * interface to define the agent configuration
+ * @tparam T agent type
  */
-public interface IAgentConfiguration extends IConfiguration
+public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
 {
 
     /**
@@ -46,7 +48,7 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return root view
      */
-    IView getBeliefbase();
+    IView<T> getBeliefbase();
 
     /**
      * returns the initial goal
@@ -82,7 +84,7 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return operator object
      */
-    IFuzzy<Boolean> getFuzzy();
+    IFuzzy<Boolean, T> getFuzzy();
 
     /**
      * returns the initial beliefs
@@ -96,6 +98,6 @@ public interface IAgentConfiguration extends IConfiguration
      *
      * @return beliefbase update or null
      */
-    IBeliefBaseUpdate getBeliefbaseUpdate();
+    IBeliefBaseUpdate<T> getBeliefbaseUpdate();
 
 }

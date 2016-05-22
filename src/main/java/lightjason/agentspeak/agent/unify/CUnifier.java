@@ -238,7 +238,7 @@ public final class CUnifier implements IUnifier
      * @return list of literal sets
      **/
     @SuppressWarnings( "unchecked" )
-    private List<Set<IVariable<?>>> unify( final IAgent p_agent, final ILiteral p_literal, final long p_variablenumber )
+    private List<Set<IVariable<?>>> unify( final IAgent<?> p_agent, final ILiteral p_literal, final long p_variablenumber )
     {
         return p_agent.getBeliefBase()
                       .parallelStream( p_literal.isNegated(), p_literal.getFQNFunctor() )

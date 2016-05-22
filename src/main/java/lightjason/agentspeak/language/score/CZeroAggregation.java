@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 public final class CZeroAggregation implements IAggregation
 {
     @Override
-    public final double evaluate( final IAgent p_agent, final Multiset<IAction> p_score )
+    public final double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score )
     {
         return 0;
     }

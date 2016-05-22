@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 public final class CPlan implements IFilter
 {
     @Override
-    public final Stream<ILiteral> filter( final IAgent p_agent )
+    public final Stream<ILiteral> filter( final IAgent<?> p_agent )
     {
         return p_agent.getRunningPlans().values().stream();
     }

@@ -77,7 +77,7 @@ public final class CCommon
      * @param p_variable variable stream
      * @return context object
      */
-    public static IContext instantiate( final IInstantiable p_instance, final IAgent p_agent, final Stream<IVariable<?>> p_variable )
+    public static IContext instantiate( final IInstantiable p_instance, final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
     {
         final Set<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
         Stream.of(

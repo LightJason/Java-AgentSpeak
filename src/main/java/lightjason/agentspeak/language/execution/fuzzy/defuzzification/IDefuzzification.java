@@ -31,9 +31,10 @@ import lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
  * defuzzification interface
  *
  * @tparam T fuzzy type
+ * @tparam S agent type
  * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IDefuzzification<T>
+public interface IDefuzzification<T, S extends IAgent<?>>
 {
 
     /**
@@ -47,7 +48,10 @@ public interface IDefuzzification<T>
     /**
      * update of the internal defuzzification
      * structure on the agent-cycle
+     *
+     * @param p_agent agent object
+     * @return agent reference
      */
-    void update( final IAgent p_agent );
+    S update( final S p_agent );
 
 }

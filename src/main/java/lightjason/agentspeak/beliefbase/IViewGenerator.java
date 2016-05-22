@@ -21,14 +21,24 @@
  * @endcond
  */
 
-package lightjason.agentspeak.generator;
+package lightjason.agentspeak.beliefbase;
 
 import lightjason.agentspeak.agent.IAgent;
 
 
 /**
- * generator interface to create agents
+ * interface for generating non-existing beliefbases views
+ *
+ * @tparam T agent type
  */
-public interface IAgentGenerator<T extends IAgent<?>> extends IGenerator<IAgent<T>>
+public interface IViewGenerator<T extends IAgent<?>>
 {
+
+    /**
+     * generates a  new view
+     *
+     * @param p_name name of the view
+     * @return view object
+     */
+    IView<T> generate( final String p_name );
 }

@@ -24,6 +24,7 @@
 package lightjason.agentspeak.beliefbase;
 
 
+import lightjason.agentspeak.agent.IAgent;
 import lightjason.agentspeak.common.IPath;
 import lightjason.agentspeak.language.ILiteral;
 import lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
@@ -33,8 +34,10 @@ import java.util.stream.Stream;
 
 /**
  * view for a beliefbase
+ *
+ * @tparam T agent type
  */
-public interface IView extends IStructure
+public interface IView<T extends IAgent<?>> extends IStructure<T>
 {
 
     /**
@@ -43,6 +46,29 @@ public interface IView extends IStructure
      * @return set with trigger events
      */
     Stream<ITrigger> getTrigger();
+
+
+
+    /**
+     * generates a path structure
+     *
+     * @param p_path path definition
+     * @param p_generator generator function
+     * @return self reference
+     */
+    IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator );
+
+
+
+    /**
+     * adds view in the current structure
+     *
+     * @param p_view existing view
+     * @return returns cloned view
+     *
+     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
+     */
+    IView<T> add( final IView<T> p_view );
 
     /**
      * adds view in the current structure
@@ -53,47 +79,33 @@ public interface IView extends IStructure
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView add( final IPath p_path, final IView p_view );
-
-    /**
-     * adds a view in the current structure
-     *
-     * @param p_path path
-     * @param p_view existing view
-     * @param p_generator beliefbase generator if beliefbase not exists
-     * @return returns cloned view
-     *
-     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
-     */
-    IView add( final IPath p_path, final IView p_view, final IGenerator p_generator );
-
+    IView<T> add( final IPath p_path, final IView<T> p_view );
 
     /**
      * adds a literal in the current structure
      *
      * @param p_literal literal
-     * @param p_generator beliefbase generator if beliefbase not exists
-     * @return existance boolean
+     * @return boolean flag for correct adding
      */
-    boolean add( final ILiteral p_literal, final IGenerator p_generator );
+    IView<T> add( final ILiteral p_literal );
+
+
 
     /**
-     * view existing check
+     * removes a view in the current structure
      *
-     * @param p_path path to a view
-     * @return existance boolean
+     * @param p_view view
+     * @return boolean flag for correct removing
      */
-    boolean containsView( final IPath p_path );
+    IView<T> remove( final IView<T> p_view );
 
     /**
-     * checks if a literal exists
+     * removes a literal in the current structure
      *
-     * @param p_path path to a literal (suffix is literal name)
-     * @return existance boolean
+     * @param p_literal literal
+     * @return boolean flag for correct removing
      */
-    boolean containsLiteral( final IPath p_path );
-
-
+    IView<T> remove( final ILiteral p_literal );
 
     /**
      * removes literal and view
@@ -101,7 +113,42 @@ public interface IView extends IStructure
      * @param p_path paths
      * @return is found and removed
      */
-    boolean remove( final IPath... p_path );
+    IView<T> remove( final IPath... p_path );
+
+
+
+    /**
+     * clears all elements
+     *
+     * @param p_path path values
+     * @return self reference
+     */
+    IView<T> clear( final IPath... p_path );
+
+
+
+
+
+    /**
+     * view existing check
+     *
+     * @param p_path path to a view
+     * @return existance boolean
+     */
+    boolean containsview( final IPath p_path );
+
+    /**
+     * checks if a literal exists
+     *
+     * @param p_path path to a literal (suffix is literal name)
+     * @return existance boolean
+     */
+    boolean containsliteral( final IPath p_path );
+
+
+
+
+
 
 
     /**
@@ -109,7 +156,7 @@ public interface IView extends IStructure
      *
      * @return stream of views
      */
-    Stream<IView> root();
+    Stream<IView<T>> root();
 
     /**
      * clones the current view
@@ -117,7 +164,7 @@ public interface IView extends IStructure
      * @param p_parent new parent
      * @return new view object
      */
-    IView clone( final IView p_parent );
+    IView<T> clone( final IView<T> p_parent );
 
 
 
@@ -158,13 +205,6 @@ public interface IView extends IStructure
 
 
     /**
-     * clears all elements
-     *
-     * @param p_path path values
-     */
-    void clear( final IPath... p_path );
-
-    /**
      * returns the full path
      *
      * @return path
@@ -183,7 +223,7 @@ public interface IView extends IStructure
      *
      * @return parent object or null
      */
-    IView getParent();
+    IView<T> getParent();
 
     /**
      * check if the view has got a parent
@@ -192,20 +232,4 @@ public interface IView extends IStructure
      */
     boolean hasParent();
 
-
-
-    /**
-     * interface for generating non-existing beliefbases views
-     */
-    interface IGenerator
-    {
-
-        /**
-         * generates a  new view
-         *
-         * @param p_name name of the view
-         * @return view object
-         */
-        IView generate( final String p_name );
-    }
 }

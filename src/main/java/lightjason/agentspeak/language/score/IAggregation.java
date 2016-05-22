@@ -44,7 +44,7 @@ public interface IAggregation
      * @param p_score set with actions
      * @return aggregated score of a body item
      */
-    double evaluate( final IAgent p_agent, final Multiset<IAction> p_score );
+    double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score );
 
     /**
      * calculates the full aggregated score value depends

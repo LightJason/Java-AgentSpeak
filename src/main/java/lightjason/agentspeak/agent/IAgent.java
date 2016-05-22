@@ -45,8 +45,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * agent interface
+ *
+ * @tparam T agent type
  */
-public interface IAgent extends Callable<IAgent>
+public interface IAgent<T extends IAgent<?>> extends Callable<IAgent<T>>
 {
 
     /**
@@ -72,7 +74,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return beliefbase
      */
-    IView getBeliefBase();
+    IView<T> getBeliefBase();
 
     /**
      * returns a map of the current running plans
@@ -93,7 +95,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return agent reference
      */
-    IAgent sleep();
+    IAgent<T> sleep();
 
     /**
      * wake-up the agent by generating wakeup-goal
@@ -101,7 +103,7 @@ public interface IAgent extends Callable<IAgent>
      * @param p_value any term value which will push into the wake-up plan
      * @return agent reference
      */
-    IAgent wakeup( final ITerm... p_value );
+    IAgent<T> wakeup( final ITerm... p_value );
 
     /**
      * storage access
@@ -144,7 +146,7 @@ public interface IAgent extends Callable<IAgent>
      *
      * @return operator
      */
-    IFuzzy<Boolean> getFuzzy();
+    IFuzzy<Boolean, T> getFuzzy();
 
     /**
      * returns the aggregation function

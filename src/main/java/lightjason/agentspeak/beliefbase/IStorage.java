@@ -35,9 +35,10 @@ import java.util.Map;
  *
  * @tparam N multiple elements
  * @tparam M single elements
+ * @tparam T agent type
  * @warning internal data structure must be thread-safe
  */
-public interface IStorage<N, M>
+public interface IStorage<N, M, T extends IAgent<?>>
 {
 
     /**
@@ -80,7 +81,7 @@ public interface IStorage<N, M>
      * @param p_agent agent which calls the update
      * @return agent
      */
-    IAgent update( final IAgent p_agent );
+    T update( final T p_agent );
 
     /**
      * number of multi elements
