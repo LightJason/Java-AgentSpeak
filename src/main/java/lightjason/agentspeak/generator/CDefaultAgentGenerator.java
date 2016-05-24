@@ -149,20 +149,20 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public T generate( final Object... p_data ) throws Exception
+    public T generatesingle( final Object... p_data ) throws Exception
     {
         return (T) new CAgent<>( m_configuration );
     }
 
     @Override
-    public final Stream<T> generate( final int p_number, final Object... p_data )
+    public final Stream<T> generatemultiple( final int p_number, final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()
                     .mapToObj( i -> {
                         try
                         {
-                            return this.generate( p_data );
+                            return this.generatesingle( p_data );
                         }
                         catch ( final Exception l_exception )
                         {

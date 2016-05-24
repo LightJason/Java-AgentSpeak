@@ -40,7 +40,7 @@ public interface IGenerator<T>
      *
      * @throws Exception on any error
      */
-    T generate( final Object... p_data ) throws Exception;
+    T generatesingle( final Object... p_data ) throws Exception;
 
     /**
      * generates a stream of objects
@@ -51,6 +51,6 @@ public interface IGenerator<T>
      *
      * @throws Exception on any error
      */
-    Stream<T> generate( final int p_number, final Object... p_data ) throws Exception;
+    Stream<T> generatemultiple( final int p_number, final Object... p_data ) throws Exception;
 
 }

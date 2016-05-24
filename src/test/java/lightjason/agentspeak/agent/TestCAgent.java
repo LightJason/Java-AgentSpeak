@@ -147,7 +147,7 @@ public final class TestCAgent
                 Collections.<IPlanBundle>emptySet(),
                 new CBeliefBaseUpdate(),
                 new CVariableBuilder()
-            ).generate();
+            ).generatesingle();
 
             // run 5 cycles
             IntStream.range( 0, 5 ).forEach( i -> {

@@ -84,20 +84,20 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     }
 
     @Override
-    public IPlanBundle generate( final Object... p_data ) throws Exception
+    public IPlanBundle generatesingle( final Object... p_data ) throws Exception
     {
         return new CPlanBundle( m_configuration );
     }
 
     @Override
-    public final Stream<IPlanBundle> generate( final int p_number, final Object... p_data ) throws Exception
+    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data ) throws Exception
     {
         return IntStream.range( 0, p_number )
                     .parallel()
                     .mapToObj( i -> {
                         try
                         {
-                            return this.generate( p_data );
+                            return this.generatesingle( p_data );
                         }
                         catch ( final Exception l_exception )
                         {
