@@ -26,8 +26,6 @@ package lightjason.agentspeak.agent;
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Multiset;
 import lightjason.agentspeak.action.IAction;
-import lightjason.agentspeak.action.buildin.bind.CBind;
-import lightjason.agentspeak.action.buildin.bind.IActionBind;
 import lightjason.agentspeak.beliefbase.IBeliefBaseUpdate;
 import lightjason.agentspeak.generator.CDefaultAgentGenerator;
 import lightjason.agentspeak.language.CLiteral;
@@ -81,7 +79,6 @@ public final class TestCAgent
         try
         {
             l_map = lightjason.agentspeak.common.CCommon.getActionsFromPackage().stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
-            l_map.putAll( CBind.get( false, new CBinding() ).stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) ) );
         }
         catch ( final IOException l_exception )
         {
@@ -249,69 +246,6 @@ public final class TestCAgent
         public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
         {
             return Stream.of( new CConstant<>( "MyConstInt", 123 ), new CConstant<>( "MyConstString", "here is a test string" ) );
-        }
-
-    }
-
-
-    /**
-     * super-class for testing binding action
-     */
-    private static class CBindingSuper
-    {
-
-        private void runsuper()
-        {
-
-        }
-    }
-
-
-    /**
-     * class for testing binding actions
-     */
-    private static final class CBinding extends CBindingSuper
-    {
-
-        /**
-         * protected method with parameter
-         */
-        protected final int calculate( final int p_left, final int p_right )
-        {
-            return p_left + p_right;
-        }
-
-        /**
-         * any public method
-         */
-        private void first()
-        {
-        }
-
-        /**
-         * overloaded
-         *
-         * @param p_value string value
-         */
-        private void first( final String p_value )
-        {
-
-        }
-
-        /**
-         * any private method
-         */
-        private void second()
-        {
-
-        }
-
-        /**
-         * annotation test
-         */
-        @IActionBind( bind = false )
-        private void notuse()
-        {
         }
 
     }
