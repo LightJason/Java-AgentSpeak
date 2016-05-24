@@ -34,7 +34,6 @@ import lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -87,7 +86,6 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     @Override
     public IPlanBundle generate( final Object... p_data ) throws Exception
     {
-        LOGGER.info( MessageFormat.format( "generate planbundle: {0}", Arrays.toString( p_data ) ).trim() );
         return new CPlanBundle( m_configuration );
     }
 

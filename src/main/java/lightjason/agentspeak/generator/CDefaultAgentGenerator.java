@@ -42,7 +42,6 @@ import lightjason.agentspeak.language.score.IAggregation;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -149,14 +148,14 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
     }
 
     @Override
-    public IAgent<T> generate( final Object... p_data ) throws Exception
+    @SuppressWarnings( "unchecked" )
+    public T generate( final Object... p_data ) throws Exception
     {
-        LOGGER.info( MessageFormat.format( "generate agent: {0}", Arrays.toString( p_data ) ).trim() );
-        return new CAgent<>( m_configuration );
+        return (T) new CAgent<>( m_configuration );
     }
 
     @Override
-    public final Stream<IAgent<T>> generate( final int p_number, final Object... p_data )
+    public final Stream<T> generate( final int p_number, final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()

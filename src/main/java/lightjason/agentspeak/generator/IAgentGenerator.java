@@ -29,6 +29,6 @@ import lightjason.agentspeak.agent.IAgent;
 /**
  * generator interface to create agents
  */
-public interface IAgentGenerator<T extends IAgent<?>> extends IGenerator<IAgent<T>>
+public interface IAgentGenerator<T extends IAgent<?>> extends IGenerator<T>
 {
 }
