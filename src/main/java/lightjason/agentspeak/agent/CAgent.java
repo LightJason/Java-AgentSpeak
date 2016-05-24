@@ -320,7 +320,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public IAgent<T> call() throws Exception
+    public T call() throws Exception
     {
         LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
 
@@ -328,7 +328,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
         m_beliefbase.update( (T) this );
         if ( m_hibernate )
             // check wakup-event otherwise suspend
-            return this;
+            return (T) this;
 
         // update defuzzification
         m_fuzzy.getDefuzzyfication().update( (T) this );
@@ -348,7 +348,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
         m_cycle++;
         m_cycletime = System.nanoTime();
 
-        return this;
+        return (T) this;
     }
 
 

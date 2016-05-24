@@ -48,7 +48,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @tparam T agent type
  */
-public interface IAgent<T extends IAgent<?>> extends Callable<IAgent<T>>
+public interface IAgent<T extends IAgent<?>> extends Callable<T>
 {
 
     /**
