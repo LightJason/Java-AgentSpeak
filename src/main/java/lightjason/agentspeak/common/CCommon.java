@@ -241,7 +241,7 @@ public final class CCommon
      * @return action set
      *
      * @throws IOException on io errors
-     * @todo can be moved to an own class
+     * @bug package access not working correctly
      */
     @SuppressWarnings( "unchecked" )
     public static Set<IAction> getActionsFromPackage( final String... p_package ) throws IOException
