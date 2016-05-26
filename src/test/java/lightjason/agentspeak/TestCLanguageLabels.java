@@ -88,7 +88,7 @@ public final class TestCLanguageLabels
                 "en",
                 CCommon.concatURL(
                     CCommon.getResourceURL(),
-                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.getPackageRoot().replace( CLASSSEPARATOR, "/" ),
+                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
                     "language.properties" )
                 ).toURI()
             );
@@ -97,7 +97,7 @@ public final class TestCLanguageLabels
                 "de",
                 CCommon.concatURL(
                     CCommon.getResourceURL(),
-                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.getPackageRoot().replace( CLASSSEPARATOR, "/" ),
+                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
                     "language_de.properties" )
                 ).toURI()
             );
@@ -204,7 +204,7 @@ public final class TestCLanguageLabels
                               // convert to lower-case
                               .toLowerCase()
                               // remove package-root name
-                              .replace( CCommon.getPackageRoot() + CLASSSEPARATOR, "" )
+                              .replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" )
                          );
 
                          System.err.println( MessageFormat.format( "parsing error on file [{0}]:\n{1}", i, l_exception.getMessage() ) );
@@ -424,7 +424,7 @@ public final class TestCLanguageLabels
                 "this".equals( l_return[0] )
                 ? buildlabel( m_package, m_outerclass, m_innerclass, l_return[1] )
                 : buildlabel( m_package, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
-            ).trim().toLowerCase().replace( CCommon.getPackageRoot() + CLASSSEPARATOR, "" );
+            ).trim().toLowerCase().replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" );
 
         }
 

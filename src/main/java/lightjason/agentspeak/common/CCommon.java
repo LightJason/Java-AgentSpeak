@@ -55,7 +55,7 @@ public final class CCommon
     /**
      * package name
      **/
-    private static final String PACKAGEROOT = "lightjason.agentspeak";
+    public static final String PACKAGEROOT = "lightjason.agentspeak";
     /**
      * language resource bundle
      **/
@@ -111,16 +111,6 @@ public final class CCommon
     public static ResourceBundle getConfiguration()
     {
         return PROPERTIES;
-    }
-
-    /**
-     * returns the root package path
-     *
-     * @return string package path
-     */
-    public static String getPackageRoot()
-    {
-        return PACKAGEROOT;
     }
 
     /**
