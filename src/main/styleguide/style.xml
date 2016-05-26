@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE module PUBLIC
-        "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
-        "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 
 <!--
 
@@ -20,7 +18,6 @@
     <property name = "charset" value = "UTF-8" />
 
     <property name = "fileExtensions" value = "java, properties" />
-
 
     <!-- <modul name="FileLength"/> -->
 
@@ -49,6 +46,10 @@
     </module>
 
     <!-- <module name="RegexpSinglelineJava"/> -->
+
+    <module name="SuppressionFilter">
+        <property name="file" value="src/main/styleguide/suppressions.xml"/>
+    </module>
 
     <module name = "Translation" />
 
