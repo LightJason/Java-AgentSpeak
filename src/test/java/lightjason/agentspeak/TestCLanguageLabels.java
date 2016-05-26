@@ -103,7 +103,7 @@ public final class TestCLanguageLabels
 
         // --- read language definitions from the configuration
         final Set<String> l_translation = Collections.unmodifiableSet(
-            Arrays.stream( CCommon.getConfiguration().getProperty( "translation" ).split( "," ) )
+            Arrays.stream( CCommon.getConfiguration().getObject( "translation" ).toString().split( "," ) )
                   .map( i -> i.trim().toLowerCase() )
                   .collect( Collectors.toSet() )
         );

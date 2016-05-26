@@ -25,8 +25,6 @@ package lightjason.agentspeak.common;
 
 import com.google.common.reflect.ClassPath;
 import lightjason.agentspeak.action.IAction;
-import lightjason.agentspeak.error.CIllegalArgumentException;
-import lightjason.agentspeak.error.CIllegalStateException;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,11 +37,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -60,32 +55,16 @@ public final class CCommon
     /**
      * properties of the package
      */
-    private static final Properties PROPERTIES;
+    private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle( "configuration", Locale.getDefault(), new CUTF8Control() );
     /**
      * package name
      **/
-    private static final String PACKAGEROOT;
+    private static final String PACKAGEROOT = PROPERTIES.getObject( "rootpackage" ).toString();
     /**
      * language resource bundle
      **/
     private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle( "language", Locale.getDefault(), new CUTF8Control() );
 
-    static
-    {
-        String l_packageroot = "";
-        PROPERTIES = new Properties();
-        try
-        {
-            PROPERTIES.load( CCommon.class.getClassLoader().getResourceAsStream( "configuration.properties" ) );
-            l_packageroot = PROPERTIES.getProperty( "rootpackage" );
-        }
-        catch ( final IOException l_exception )
-        {
-            throw new CIllegalStateException( MessageFormat.format( "initialization fails because of io error: {0}", l_exception.getMessage() ) );
-        }
-
-        PACKAGEROOT = l_packageroot;
-    }
 
     /**
      * private ctor - avoid instantiation
@@ -119,9 +98,9 @@ public final class CCommon
     /**
      * returns the property data of the package
      *
-     * @return property object
+     * @return bundle object
      */
-    public static Properties getConfiguration()
+    public static ResourceBundle getConfiguration()
     {
         return PROPERTIES;
     }
@@ -211,30 +190,6 @@ public final class CCommon
     }
 
     /**
-     * creates a map from parameters
-     *
-     * @param p_objects list with pairs of string and object
-     * @return map with data
-     */
-    public static Map<String, Object> getMap( final Object... p_objects )
-    {
-        if ( p_objects.length % 2 != 0 )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( CCommon.class, "argumentsnoteven" ) );
-
-        String l_name = null;
-        final Map<String, Object> l_return = new HashMap<>();
-
-        for ( int i = 0; i < p_objects.length; ++i )
-            if ( i % 2 == 0 )
-                l_name = (String) p_objects[i];
-            else
-                l_return.put( l_name, p_objects[i] );
-
-
-        return l_return;
-    }
-
-    /**
      * get all classes within an Java package as action
      *
      * @param p_package full-qualified package name or empty for default package
@@ -247,7 +202,7 @@ public final class CCommon
     public static Set<IAction> getActionsFromPackage( final String... p_package ) throws IOException
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
-                 ? Stream.of( MessageFormat.format( "{0}.{1}", CCommon.getPackageRoot(), "action.buildin" ) )
+                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.buildin" ) )
                  : Arrays.stream( p_package ) )
             .flatMap( j -> {
                 try
