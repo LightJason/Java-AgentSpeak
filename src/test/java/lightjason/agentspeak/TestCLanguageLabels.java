@@ -66,6 +66,7 @@ import static org.junit.Assume.assumeTrue;
  */
 public final class TestCLanguageLabels
 {
+    private static final String CLASSSEPARATOR = ".";
     /**
      * search path
      **/
@@ -77,13 +78,29 @@ public final class TestCLanguageLabels
 
     static
     {
+        final String l_resource = "../../src/main/resources";
         URI l_uri = null;
         try
         {
             l_uri = CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI();
 
-            LANGUAGEPROPERY.put( "en", CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/resources/language.properties" ).toURI() );
-            LANGUAGEPROPERY.put( "de", CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/resources/language_de.properties" ).toURI() );
+            LANGUAGEPROPERY.put(
+                "en",
+                CCommon.concatURL(
+                    CCommon.getResourceURL(),
+                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.getPackageRoot().replace( CLASSSEPARATOR, "/" ),
+                    "language.properties" )
+                ).toURI()
+            );
+
+            LANGUAGEPROPERY.put(
+                "de",
+                CCommon.concatURL(
+                    CCommon.getResourceURL(),
+                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.getPackageRoot().replace( CLASSSEPARATOR, "/" ),
+                    "language_de.properties" )
+                ).toURI()
+            );
         }
         catch ( final Exception l_exception )
         {
@@ -183,11 +200,11 @@ public final class TestCLanguageLabels
                               // remove file extension
                               .replace( ".java", "" )
                               // replace separators with dots
-                              .replace( "/", "." )
+                              .replace( "/", CLASSSEPARATOR )
                               // convert to lower-case
                               .toLowerCase()
                               // remove package-root name
-                              .replace( CCommon.getPackageRoot() + ".", "" )
+                              .replace( CCommon.getPackageRoot() + CLASSSEPARATOR, "" )
                          );
 
                          System.err.println( MessageFormat.format( "parsing error on file [{0}]:\n{1}", i, l_exception.getMessage() ) );
@@ -379,7 +396,7 @@ public final class TestCLanguageLabels
 
                 p_label.isEmpty()
                 ? ""
-                : "." + p_label
+                : CLASSSEPARATOR + p_label
             );
         }
 
@@ -406,8 +423,8 @@ public final class TestCLanguageLabels
             return (
                 "this".equals( l_return[0] )
                 ? buildlabel( m_package, m_outerclass, m_innerclass, l_return[1] )
-                : buildlabel( m_package, l_return[0].replace( ".class", "" ).replace( m_package + ".", "" ), "", l_return[1] )
-            ).trim().toLowerCase().replace( CCommon.getPackageRoot() + ".", "" );
+                : buildlabel( m_package, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
+            ).trim().toLowerCase().replace( CCommon.getPackageRoot() + CLASSSEPARATOR, "" );
 
         }
 

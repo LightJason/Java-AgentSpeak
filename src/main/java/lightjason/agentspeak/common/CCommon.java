@@ -53,17 +53,25 @@ import java.util.stream.Stream;
 public final class CCommon
 {
     /**
-     * properties of the package
-     */
-    private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle( "configuration", Locale.getDefault(), new CUTF8Control() );
-    /**
      * package name
      **/
-    private static final String PACKAGEROOT = PROPERTIES.getObject( "rootpackage" ).toString();
+    private static final String PACKAGEROOT = "lightjason.agentspeak";
     /**
      * language resource bundle
      **/
-    private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle( "language", Locale.getDefault(), new CUTF8Control() );
+    private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(
+                                                        MessageFormat.format( "{0}.{1}", PACKAGEROOT, "language" ),
+                                                        Locale.getDefault(),
+                                                        new CUTF8Control()
+    );
+    /**
+     * properties of the package
+     */
+    private static final ResourceBundle PROPERTIES = ResourceBundle.getBundle(
+                                                        MessageFormat.format( "{0}.{1}", PACKAGEROOT, "configuration" ),
+                                                        Locale.getDefault(),
+                                                        new CUTF8Control()
+    );
 
 
     /**
