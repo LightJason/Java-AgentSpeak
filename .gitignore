@@ -14,6 +14,7 @@
 !src/main/documentation/*.doxyfile
 !src/main/documentation/*.htm
 !src/main/documentation/*.css
+!src/main/documentation/*.graffle
 
 !src/main/styleguide/**/*.xml
 !src/main/styleguide/**/*.txt
