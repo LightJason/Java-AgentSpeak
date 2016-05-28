@@ -10,7 +10,7 @@
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L)</name>
-    <description>AgentSpeak(L) for simulating a multi-agent system with a fuzzy-based logical calculus and grammar features like lambda expressions and paralleization</description>
+    <description>AgentSpeak(L) is an AntLR based logical programming language for simulating a multi-agent system with a fuzzy-based logical calculus and grammar features like lambda expressions and paralleization</description>
     <url>https://github.com/LightJason/AgentSpeak</url>
 
     <organization>
