@@ -10,7 +10,13 @@
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L)</name>
+    <description>AgentSpeak(L) for simulating a multi-agent system with a fuzzy-based logical calculus and grammar features like lambda expressions and paralleization</description>
     <url>https://github.com/LightJason/AgentSpeak</url>
+
+    <organization>
+        <name>LightJason</name>
+        <url>http://github.com/LightJason</url>
+    </organization>
 
     <licenses>
         <license>
@@ -154,7 +160,7 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.3</version>
                 <configuration>
-                    <includeFilterFile>src/main/styleguide/findbugs_include.xml</includeFilterFile>
+                    <includeFilterFile>src/styleguide/findbugs_include.xml</includeFilterFile>
                 </configuration>
             </plugin>
 
@@ -166,19 +172,8 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
-                <configuration>
-                    <configLocation>src/main/styleguide/style.xml</configLocation>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>checkstyle</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.6</version>
             </plugin>
 
         </plugins>
@@ -226,9 +221,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.5.1</version>
-                    <configuration>
-                        <
-                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -300,7 +292,7 @@
                         <configuration>
                             <executable>doxygen</executable>
                             <arguments>
-                                <argument>src/main/documentation/configuration.doxyfile</argument>
+                                <argument>src/site/configuration.doxyfile</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -370,7 +362,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configLocation>src/main/styleguide/style.xml</configLocation>
+                    <configLocation>src/styleguide/style.xml</configLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>

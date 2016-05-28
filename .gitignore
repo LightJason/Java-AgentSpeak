@@ -11,14 +11,15 @@
 !*.png
 !*.properties
 
-!src/main/documentation/*.doxyfile
-!src/main/documentation/*.htm
-!src/main/documentation/*.css
-!src/main/documentation/*.graffle
+!src/site/*.doxyfile
+!src/site/*.htm*
+!src/site/*.css
+!src/site/*.xml
+!src/site/*.graffle
 
-!src/main/styleguide/**/*.xml
-!src/main/styleguide/**/*.txt
-!src/main/styleguide/**/*.md
+!src/styleguide/**/*.xml
+!src/styleguide/**/*.txt
+!src/styleguide/**/*.md
 
 src/main/antlr4/org/lightjason/agentspeak/grammar/AgentSpeak.g4
 src/main/antlr4/org/lightjason/agentspeak/grammar/Terminal.g4

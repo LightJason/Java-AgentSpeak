@@ -112,13 +112,11 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = src/main/java \
                          src/test/java \
-                         src/main/documentation
                          readme.md \
                          license.md
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.java \
-                         *.md \
-                         *.dox
+                         *.md
 RECURSIVE              = YES
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = YES
@@ -158,9 +156,9 @@ GENERATE_HTML          = YES
 HTML_OUTPUT            = sources
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =
-HTML_FOOTER            = src/main/documentation/footer.htm
+HTML_FOOTER            = src/site/footer.htm
 HTML_STYLESHEET        =
-HTML_EXTRA_STYLESHEET  = src/main/documentation/layout.css
+HTML_EXTRA_STYLESHEET  = src/site/layout.css
 HTML_EXTRA_FILES       =
 HTML_COLORSTYLE_HUE    = 220
 HTML_COLORSTYLE_SAT    = 94
