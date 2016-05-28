@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,8 +34,6 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -129,7 +129,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     @Override
     public final boolean equals( final Object p_object )
     {
-        return this.hashCode() == p_object.hashCode();
+        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

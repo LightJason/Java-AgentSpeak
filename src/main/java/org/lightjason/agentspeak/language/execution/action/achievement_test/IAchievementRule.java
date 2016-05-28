@@ -23,16 +23,17 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -114,6 +115,18 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
          // otherwise rule fails (default behaviour)
          .orElse( CFuzzyValue.from( false ) );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_value.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
 }

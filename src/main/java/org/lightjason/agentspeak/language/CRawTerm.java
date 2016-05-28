@@ -24,11 +24,11 @@
 package org.lightjason.agentspeak.language;
 
 import com.rits.cloning.Cloner;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.Arrays;
@@ -115,9 +115,15 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressWarnings( "unchecked" )
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof IVariable<?> )
-            return m_hashcode == ( (IVariable<?>) p_object ).get().hashCode();
-        return m_hashcode == p_object.hashCode();
+        return ( p_object != null )
+               && (
+                   (
+                        ( p_object instanceof IVariable<?> )
+                        && ( ( (IVariable<?>) p_object ).isAllocated() )
+                        && ( this.hashCode() == ( (IVariable<?>) p_object ).get().hashCode() )
+                   )
+                   || ( ( p_object instanceof ITerm ) && ( this.hashCode() == p_object.hashCode() ) )
+               );
     }
 
     @Override

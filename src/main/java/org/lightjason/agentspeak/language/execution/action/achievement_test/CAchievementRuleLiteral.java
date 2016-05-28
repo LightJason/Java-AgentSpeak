@@ -90,18 +90,6 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     }
 
     @Override
-    public final boolean equals( final Object p_object )
-    {
-        return this.hashCode() == p_object.hashCode();
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_value.hashCode();
-    }
-
-    @Override
     public final String toString()
     {
         return MessageFormat.format( "$", m_value );

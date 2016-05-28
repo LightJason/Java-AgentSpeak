@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.execution.action;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
+import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
@@ -38,7 +39,6 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -146,7 +146,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final boolean equals( final Object p_object )
         {
-            return this.hashCode() == p_object.hashCode();
+            return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
         }
 
         @Override
@@ -269,7 +269,7 @@ public final class CProxyAction implements IExecution
         @Override
         public final boolean equals( final Object p_object )
         {
-            return this.hashCode() == p_object.hashCode();
+            return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
         }
 
         @Override

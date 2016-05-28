@@ -64,7 +64,7 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     @Override
     public final boolean equals( final Object p_object )
     {
-        return this.hashCode() == p_object.hashCode();
+        return ( p_object != null ) && ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

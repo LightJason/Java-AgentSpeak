@@ -329,7 +329,7 @@ public final class CLiteral implements ILiteral
                            .map( i -> {
                                if ( i instanceof IVariable<?> )
                                {
-                                   final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
+                                   final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
                                    return ( l_variable == null ) || ( l_variable.isAllocated() ) ? CRawTerm.from( l_variable ) : l_variable;
                                }
                                if ( i instanceof ILiteral )
@@ -393,7 +393,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final boolean equals( final Object p_object )
     {
-        return this.hashCode() == p_object.hashCode();
+        return ( p_object != null ) && ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

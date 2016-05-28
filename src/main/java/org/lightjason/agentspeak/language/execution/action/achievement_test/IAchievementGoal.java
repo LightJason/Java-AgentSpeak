@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.execution.action.achievement_test;
 import com.google.common.collect.ImmutableMultiset;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 
 
@@ -55,6 +56,18 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     public double score( final IAgent<?> p_agent )
     {
         return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_value.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
 }

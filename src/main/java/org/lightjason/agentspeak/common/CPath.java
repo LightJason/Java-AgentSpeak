@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.common;
 
 
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.apache.commons.lang3.StringUtils;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -240,7 +240,7 @@ public final class CPath implements IPath
     @Override
     public final IPath toLower()
     {
-        final List<String> l_path = m_path.stream().map( i -> i.toLowerCase() ).collect( Collectors.toList() );
+        final List<String> l_path = m_path.stream().map( String::toLowerCase ).collect( Collectors.toList() );
         m_path.clear();
         m_path.addAll( l_path );
         return this;
@@ -249,7 +249,7 @@ public final class CPath implements IPath
     @Override
     public final IPath toUpper()
     {
-        final List<String> l_path = m_path.stream().map( i -> i.toUpperCase() ).collect( Collectors.toList() );
+        final List<String> l_path = m_path.stream().map( String::toUpperCase ).collect( Collectors.toList() );
         m_path.clear();
         m_path.addAll( l_path );
         return this;
@@ -276,18 +276,17 @@ public final class CPath implements IPath
     @Override
     public final int hashCode()
     {
-        return m_path.stream().mapToInt( i -> i.hashCode() ).sum();
+        return m_path.stream().mapToInt( String::hashCode ).sum();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof IPath )
-            return this.hashCode() == p_object.hashCode();
-        if ( p_object instanceof String )
-            return p_object.hashCode() == this.getPath().hashCode();
-
-        return false;
+        return ( p_object != null )
+               && (
+                    ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
+                    || ( ( p_object instanceof String ) && ( this.getPath().hashCode() == p_object.hashCode() ) )
+               );
     }
 
     @Override
@@ -404,7 +403,7 @@ public final class CPath implements IPath
 
         // create path-copy and nomalize (remove dot, double-dot and empty values)
         final List<String> l_dotremove = m_path.stream()
-                                               .filter( i -> ( i != null ) && ( !i.isEmpty() ) && ( !i.equals( "." ) ) )
+                                               .filter( i -> ( i != null ) && ( !i.isEmpty() ) && ( !".".equals( i ) ) )
                                                .collect( Collectors.toList() );
         if ( l_dotremove.isEmpty() )
             return this;
@@ -413,7 +412,7 @@ public final class CPath implements IPath
         final List<String> l_backremove = IntStream.range( 0, l_dotremove.size() - 1 )
                                                    .boxed()
                                                    .filter( i -> !l_dotremove.get( i + 1 ).equals( ".." ) )
-                                                   .map( i -> l_dotremove.get( i ) )
+                                                   .map( l_dotremove::get )
                                                    .collect( Collectors.toList() );
         if ( !"..".equals( l_last ) )
             l_backremove.add( l_last );
