@@ -153,6 +153,9 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.3</version>
+                <configuration>
+                    <includeFilterFile>src/main/styleguide/findbugs_include.xml</includeFilterFile>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -223,6 +226,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.5.1</version>
+                    <configuration>
+                        <
+                    </configuration>
                 </plugin>
 
                 <plugin>

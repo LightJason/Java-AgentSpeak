@@ -162,15 +162,15 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return m_functor.hashCode();
     }
 
     @Override
-    public boolean equals( final Object p_object )
+    public final boolean equals( final Object p_object )
     {
-        return this.hashCode() == p_object.hashCode();
+        return ( p_object != null ) && ( p_object instanceof IVariable<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

@@ -119,18 +119,6 @@ public class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized int hashCode()
-    {
-        return super.hashCode();
-    }
-
-    @Override
-    public final synchronized boolean equals( final Object p_object )
-    {
-        return super.equals( p_object );
-    }
-
-    @Override
     public final synchronized String toString()
     {
         return super.toString();

@@ -44,6 +44,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -242,7 +243,7 @@ public final class CLiteral implements ILiteral
      */
     public static ILiteral parse( final String p_literal ) throws Exception
     {
-        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes() ) ).getLiteral();
+        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).getLiteral();
     }
 
     @Override

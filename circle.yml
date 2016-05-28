@@ -35,7 +35,7 @@ test:
         - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
         # documentation build
         - git checkout master
-        - mv target/documentation/html /tmp
+        - mv target/site /tmp
         - git checkout gh-pages
         - mv circle.yml /tmp
         - mv .gitignore /tmp

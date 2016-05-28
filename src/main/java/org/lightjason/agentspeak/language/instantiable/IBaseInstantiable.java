@@ -85,7 +85,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public final boolean equals( final Object p_object )
     {
-        return this.hashCode() == p_object.hashCode();
+        return ( p_object != null ) && ( p_object instanceof IInstantiable ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
@@ -112,7 +112,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public Stream<IVariable<?>> getVariables()
     {
-        return m_action.stream().flatMap( i -> i.getVariables() );
+        return m_action.stream().flatMap( IExecution::getVariables );
     }
 
     @Override
