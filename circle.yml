@@ -2,8 +2,8 @@ general:
     branches:
         only:
             - master
-            - developing
         ignore:
+            - developing
             - /dev-.*/
             - /gh-.*/
             - /binary-.*/
