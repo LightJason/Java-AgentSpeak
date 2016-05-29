@@ -36,6 +36,18 @@ import java.util.stream.Stream;
  */
 public interface IVariableBuilder
 {
+    /**
+     * empty variable builder
+     */
+    IVariableBuilder EMPTY = new IVariableBuilder()
+    {
+        @Override
+        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
+        {
+            return Stream.<IVariable<?>>empty();
+        }
+
+    };
 
     /**
      * returns a set of variables / constants

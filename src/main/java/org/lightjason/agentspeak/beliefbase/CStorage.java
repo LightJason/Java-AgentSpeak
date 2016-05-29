@@ -74,7 +74,6 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
         m_update = p_update;
     }
 
-
     @Override
     public final SetMultimap<String, N> getMultiElements()
     {

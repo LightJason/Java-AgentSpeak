@@ -84,7 +84,7 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), null, null );
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), null, IVariableBuilder.EMPTY );
     }
 
     /**

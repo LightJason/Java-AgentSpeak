@@ -29,6 +29,10 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.beliefbase.IView;
 import org.lightjason.agentspeak.common.IPath;
@@ -50,10 +54,6 @@ import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.score.IAggregation;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.MutableTriple;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -123,8 +123,6 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     private final IAggregation m_aggregation;
     /**
      * variable builder
-     *
-     * @warning can be set to null
      */
     private final IVariableBuilder m_variablebuilder;
     /**

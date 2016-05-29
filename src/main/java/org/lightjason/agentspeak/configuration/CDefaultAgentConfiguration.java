@@ -131,7 +131,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
-        this( p_fuzzy, p_initalbeliefs, p_beliefbaseupdate, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, null );
+        this( p_fuzzy, p_initalbeliefs, p_beliefbaseupdate, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, IVariableBuilder.EMPTY );
     }
 
     /**
