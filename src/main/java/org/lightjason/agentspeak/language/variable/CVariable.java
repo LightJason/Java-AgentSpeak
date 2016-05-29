@@ -24,12 +24,13 @@
 package org.lightjason.agentspeak.language.variable;
 
 import com.rits.cloning.Cloner;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ public class CVariable<T> implements IVariable<T>
      * @param p_functor name
      * @param p_value value
      */
+    @SuppressFBWarnings( "EC_UNRELATED_CLASS_AND_INTERFACE" )
     public CVariable( final IPath p_functor, final T p_value )
     {
         m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );

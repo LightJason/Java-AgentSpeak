@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan;
 
+import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,7 +37,6 @@ import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.apache.commons.lang3.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -56,14 +56,6 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * trigger event
      */
     protected final ITrigger m_triggerevent;
-    /**
-     * number of runs
-     */
-    protected long m_runs;
-    /**
-     * number of fail runs
-     */
-    protected long m_failruns;
     /**
      * execution condition / expression
      */

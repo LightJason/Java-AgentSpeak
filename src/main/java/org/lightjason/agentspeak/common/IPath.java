@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 
 /**
  * interface of a path
+ *
+ * @note implement equals with String object, so a path object can be checked to a String
  */
 public interface IPath extends Comparable<IPath>
 {

@@ -17,9 +17,9 @@
 !src/site/*.xml
 !src/site/*.graffle
 
-!src/styleguide/**/*.xml
-!src/styleguide/**/*.txt
-!src/styleguide/**/*.md
+!src/analysis/**/*.xml
+!src/analysis/**/*.txt
+!src/analysis/**/*.md
 
 src/main/antlr4/org/lightjason/agentspeak/grammar/AgentSpeak.g4
 src/main/antlr4/org/lightjason/agentspeak/grammar/Terminal.g4
