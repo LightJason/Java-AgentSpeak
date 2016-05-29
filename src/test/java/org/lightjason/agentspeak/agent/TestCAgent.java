@@ -25,6 +25,9 @@ package org.lightjason.agentspeak.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Multiset;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.beliefbase.IBeliefBaseUpdate;
 import org.lightjason.agentspeak.common.CCommon;
@@ -38,9 +41,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -68,6 +69,23 @@ public final class TestCAgent
      * list with default (non-working) actions
      */
     private static final Map<IAction, Double> ACTIONS;
+    /**
+     * map with all testing asl
+     */
+    private static final Map<String, String> ASL = StreamUtils.zip(
+
+        Stream.of(
+            "src/test/resources/agent/complete.asl",
+            "src/test/resources/agent/default.asl"
+        ),
+
+        Stream.of(
+            "full-test agent", "default agent"
+        ),
+
+        AbstractMap.SimpleImmutableEntry::new
+
+    ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
     static
     {
@@ -93,27 +111,51 @@ public final class TestCAgent
      * asl parsing test
      */
     @Test
-    public final void testASL()
+    public final void testASLManual()
     {
-        final Map<String, String> l_testing = StreamUtils.zip(
+        ASL.entrySet()
+            .stream()
+            .forEach( i ->
+            {
+                final Pair<Boolean, String> l_result = testAgentManual( i.getKey(), i.getValue() );
+                assertTrue( l_result.getRight(), l_result.getLeft() );
+                System.out.println( l_result.getValue() );
+            } );
+    }
 
-            Stream.of(
-                "src/test/resources/agent/complete.asl"
-            ),
+    /**
+     * test for default generators and configuration
+     */
+    @Test
+    public final void testASLDefault()
+    {
+        final Set<String> l_result = ASL.entrySet()
+                                        .stream()
+                                        .map( i ->
+                                        {
+                                            try
+                                            (
+                                                final InputStream l_stream = new FileInputStream( i.getKey() );
+                                            )
+                                            {
+                                                new CDefaultAgentGenerator<>(
+                                                    l_stream,
+                                                    ACTIONS.keySet(),
+                                                    IAggregation.EMPTY,
+                                                    IBeliefBaseUpdate.EMPTY,
+                                                    new CVariableBuilder()
+                                                ).generatesingle().call();
+                                                return null;
+                                            }
+                                            catch ( final Exception l_exception )
+                                            {
+                                                return MessageFormat.format( "{0}: {1}", i.getValue(), l_exception );
+                                            }
+                                        } )
+                                        .filter( i -> i != null )
+                                        .collect( Collectors.toSet() );
 
-            Stream.of(
-                "full-test agent"
-            ),
-
-            AbstractMap.SimpleImmutableEntry::new
-
-        ).collect( Collectors.toConcurrentMap( Map.Entry::getKey, Map.Entry::getValue ) );
-
-        l_testing.entrySet().stream().forEach( i -> {
-            final Pair<Boolean, String> l_result = this.testAgent( i.getKey(), i.getValue() );
-            assertTrue( l_result.getRight(), l_result.getLeft() );
-            System.out.println( l_result.getValue() );
-        } );
+        assertTrue( l_result.toString(), l_result.isEmpty() );
     }
 
     /**
@@ -124,8 +166,13 @@ public final class TestCAgent
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        new TestCAgent().testASL();
+        final TestCAgent l_test = new TestCAgent();
+
+        l_test.testASLDefault();
+        //l_test.testASLManual();
     }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * static function to run an agent
@@ -134,7 +181,7 @@ public final class TestCAgent
      * @param p_name agent name
      * @return tupel & string
      */
-    private Pair<Boolean, String> testAgent( final String p_script, final String p_name )
+    private static Pair<Boolean, String> testAgentManual( final String p_script, final String p_name )
     {
         final IAgent<?> l_agent;
         try (
@@ -151,28 +198,29 @@ public final class TestCAgent
             ).generatesingle();
 
             // run 5 cycles
-            IntStream.range( 0, 5 ).forEach( i -> {
-                try
-                {
-                    l_agent.call();
-                    l_agent.getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
-                    l_agent.trigger(
-                        CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
-                    );
-                }
-                catch ( final Exception l_exception )
-                {
-                    assertTrue(
-                        MessageFormat.format(
-                            "{0} {1}",
-                            l_exception.getClass().getName(),
-                            l_exception.getMessage().isEmpty() ? "" : l_exception.getMessage()
-                        ).trim(),
-                        false
-                    );
-                }
-            } );
-
+            IntStream.range( 0, 5 )
+                     .forEach( i ->
+                     {
+                         try
+                         {
+                             l_agent.call();
+                             l_agent.getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
+                             l_agent.trigger(
+                                 CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
+                             );
+                         }
+                         catch ( final Exception l_exception )
+                         {
+                             assertTrue(
+                                 MessageFormat.format(
+                                     "{0} {1}",
+                                     l_exception.getClass().getName(),
+                                     l_exception.getMessage().isEmpty() ? "" : l_exception.getMessage()
+                                 ).trim(),
+                                 false
+                             );
+                         }
+                     } );
         }
         catch ( final Exception l_exception )
         {
@@ -181,9 +229,6 @@ public final class TestCAgent
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
     }
-
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * beliefbase update e.g. environment updates

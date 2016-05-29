@@ -39,7 +39,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.CZeroAggregation;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.text.MessageFormat;
@@ -80,8 +79,6 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     protected final Set<IPlan> m_plans;
     /**
      * instance of variable builder
-     *
-     * @warning can be set to null
      */
     protected final IVariableBuilder m_variablebuilder;
     /**
@@ -105,12 +102,14 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * ctor
      */
+    @SuppressWarnings( "unchecked" )
     public CDefaultAgentConfiguration()
     {
         this(
             new CBoolFuzzy<>(), Collections.<ILiteral>emptyList(),
-            null, Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
-            null, new CUnifier(), new CZeroAggregation()
+            (IBeliefBaseUpdate<T>) IBeliefBaseUpdate.EMPTY,
+            Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
+            null, new CUnifier(), IAggregation.EMPTY
         );
     }
 

@@ -37,6 +37,31 @@ public interface IAggregation
 {
 
     /**
+     * empty aggreation class
+     */
+    IAggregation EMPTY = new IAggregation()
+    {
+        @Override
+        public final double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score )
+        {
+            return 0;
+        }
+
+        @Override
+        public final double evaluate( final Stream<Double> p_values )
+        {
+            return 0;
+        }
+
+        @Override
+        public final double error()
+        {
+            return 0;
+        }
+    };
+
+
+    /**
      * calculates the aggregated score value
      * of an agent and a set of actions
      *

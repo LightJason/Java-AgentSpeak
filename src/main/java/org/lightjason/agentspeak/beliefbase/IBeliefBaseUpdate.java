@@ -33,6 +33,18 @@ import org.lightjason.agentspeak.agent.IAgent;
  */
 public interface IBeliefBaseUpdate<T extends IAgent<?>>
 {
+    /**
+     * empty beliefbase update
+     */
+    IBeliefBaseUpdate<IAgent<?>> EMPTY = new IBeliefBaseUpdate<IAgent<?>>()
+    {
+
+        @Override
+        public final IAgent<?> beliefupdate( final IAgent<?> p_agent )
+        {
+            return p_agent;
+        }
+    };
 
     /**
      * runs the update process of an agent

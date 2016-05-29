@@ -81,10 +81,29 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      * @param p_aggregation aggregation function
      * @throws Exception thrown on error
      */
+    @SuppressWarnings( "unchecked" )
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), null, IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), (IBeliefBaseUpdate<T>) IBeliefBaseUpdate.EMPTY, IVariableBuilder.EMPTY );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_stream input stream
+     * @param p_actions set with action
+     * @param p_aggregation aggregation function
+     * @param p_beliefbaseupdate beliefbase updater
+     * @param p_variablebuilder variable builder (can be set to null)
+     * @throws Exception thrown on error
+     */
+    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
+                                   final IAggregation p_aggregation, final IBeliefBaseUpdate<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+    )
+    throws Exception
+    {
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), p_beliefbaseupdate, p_variablebuilder );
     }
 
     /**

@@ -30,6 +30,7 @@ import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,9 +60,10 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     /**
      * ctor
      */
+    @SuppressWarnings( "unchecked" )
     public CStorage()
     {
-        this( null );
+        this( (IBeliefBaseUpdate<T>) IBeliefBaseUpdate.EMPTY );
     }
 
     /**
@@ -108,13 +110,13 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @Override
     public final T update( final T p_agent )
     {
-        return m_update != null ? m_update.beliefupdate( p_agent ) : p_agent;
+        return m_update.beliefupdate( p_agent );
     }
 
     @Override
     public final int size()
     {
-        return m_multielements.asMap().values().stream().mapToInt( i -> i.size() ).sum() + m_singleelements.size();
+        return m_multielements.asMap().values().stream().mapToInt( Collection::size ).sum() + m_singleelements.size();
     }
 
     @Override
