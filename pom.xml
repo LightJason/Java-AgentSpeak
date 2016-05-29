@@ -161,6 +161,9 @@
                 <version>3.0.3</version>
                 <configuration>
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
+                    <effort>Max</effort>
+                    <threshold>High</threshold>
+                    <maxRank>15</maxRank>
                 </configuration>
             </plugin>
 
