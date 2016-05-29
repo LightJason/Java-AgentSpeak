@@ -136,13 +136,15 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         // check all references of mask and remove unused references
         Reference<? extends IView<T>> l_reference;
         while ( ( l_reference = m_maskreference.poll() ) != null )
-            m_events.remove( l_reference.get() );
+        {
+            final IView<T> l_view = l_reference.get();
+            if ( l_view != null )
+                m_events.remove( l_view );
+        }
 
         // run storage update
-        m_storage.update( p_agent );
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
-
-        return p_agent;
+        return m_storage.update( p_agent );
     }
 
     @Override
