@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language;
 
 import com.rits.cloning.Cloner;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -113,6 +114,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
+    @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
         return ( p_object != null )

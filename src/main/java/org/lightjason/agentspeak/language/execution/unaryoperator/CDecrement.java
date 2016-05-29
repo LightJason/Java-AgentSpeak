@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.language.execution.unaryoperator;
 
 import com.google.common.collect.ImmutableMultiset;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
@@ -72,13 +72,13 @@ public final class CDecrement<T extends Number> implements IOperator<T>
         final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).throwNotAllocated();
 
         if ( l_variable.isValueAssignableTo( Double.class ) )
-            l_variable.set( (T) new Double( l_variable.get().doubleValue() - 1 ) );
+            l_variable.set( (T) Double.valueOf( l_variable.get().doubleValue() - 1 ) );
         if ( l_variable.isValueAssignableTo( Long.class ) )
-            l_variable.set( (T) new Long( l_variable.get().longValue() - 1 ) );
+            l_variable.set( (T) Long.valueOf( l_variable.get().longValue() - 1 ) );
         if ( l_variable.isValueAssignableTo( Float.class ) )
-            l_variable.set( (T) new Float( l_variable.get().floatValue() - 1 ) );
+            l_variable.set( (T) Float.valueOf( l_variable.get().floatValue() - 1 ) );
         if ( l_variable.isValueAssignableTo( Integer.class ) )
-            l_variable.set( (T) new Integer( l_variable.get().intValue() - 1 ) );
+            l_variable.set( (T) Integer.valueOf( l_variable.get().intValue() - 1 ) );
 
         return CFuzzyValue.from( true );
     }

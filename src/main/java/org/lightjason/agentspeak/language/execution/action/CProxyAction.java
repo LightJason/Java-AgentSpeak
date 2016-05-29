@@ -126,7 +126,7 @@ public final class CProxyAction implements IExecution
          *
          * @param p_value any static term
          */
-        public CTermWrapper( final T p_value )
+        CTermWrapper( final T p_value )
         {
             m_value = p_value;
         }
@@ -169,17 +169,6 @@ public final class CProxyAction implements IExecution
         public final Stream<IVariable<?>> getVariables()
         {
             return this.getVariableSet( m_value );
-        }
-
-        /**
-         * returns a variable set based on the generic type
-         *
-         * @param p_value variable type
-         * @return variable set (empty)
-         */
-        private Stream<IVariable<?>> getVariableSet( final IVariable<?> p_value )
-        {
-            return Stream.of( p_value );
         }
 
         /**
@@ -228,7 +217,7 @@ public final class CProxyAction implements IExecution
          * @param p_actions actions
          * @param p_scorecache score cache
          */
-        public CActionWrapper( final ILiteral p_literal, final Map<IPath, IAction> p_actions, final Multiset<IAction> p_scorecache )
+        CActionWrapper( final ILiteral p_literal, final Map<IPath, IAction> p_actions, final Multiset<IAction> p_scorecache )
         {
             // check parallel and inner execution
             m_parallel = p_literal.hasAt();

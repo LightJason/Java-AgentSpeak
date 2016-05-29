@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.common;
 
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
@@ -280,6 +281,7 @@ public final class CPath implements IPath
     }
 
     @Override
+    @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
         return ( p_object != null )
