@@ -45,15 +45,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -201,12 +198,10 @@ public final class CCommon
      * get all classes within an Java package as action
      *
      * @param p_package full-qualified package name or empty for default package
-     * @return action set
-     *
-     * @throws IOException on io errors
+     * @return action stream
      */
     @SuppressWarnings( "unchecked" )
-    public static Set<IAction> getActionsFromPackage( final String... p_package )
+    public static Stream<IAction> getActionsFromPackage( final String... p_package )
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.buildin" ) )
@@ -238,8 +233,7 @@ public final class CCommon
                 {
                     throw new UncheckedIOException( l_exception );
                 }
-            } )
-            .collect( Collectors.toSet() );
+            } );
     }
 
 
@@ -248,18 +242,17 @@ public final class CCommon
      * @note class must be an inheritance of the IAgent interface
      *
      * @param p_class class list
-     * @return action set
+     * @return action stream
      */
-    public static Set<IAction> getActionsFromClass( final Class<?>... p_class )
+    public static Stream<IAction> getActionsFromAgentClass( final Class<?>... p_class )
     {
         return p_class == null || p_class.length == 0
-               ? Collections.<IAction>emptySet()
+               ? Stream.of()
                : Arrays.stream( p_class )
                  .parallel()
                  .filter( IAgent.class::isAssignableFrom )
                  .flatMap( CCommon::methods )
-                 .map( CMethodAction::new )
-                 .collect( Collectors.toSet() );
+                 .map( CMethodAction::new );
     }
 
 

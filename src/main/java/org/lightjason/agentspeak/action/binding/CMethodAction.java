@@ -58,7 +58,7 @@ public final class CMethodAction extends IBaseAction
      */
     public CMethodAction( final Method p_method )
     {
-        m_name = CPath.from( p_method.getName() );
+        m_name = CPath.from( p_method.getName().toLowerCase() );
         m_arguments = p_method.getParameterCount();
     }
 
