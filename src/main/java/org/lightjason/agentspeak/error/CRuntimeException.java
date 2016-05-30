@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * runtime exception
  */
 @SuppressWarnings( "serial" )
-public final class CRuntimeException extends RuntimeException
+public final class CRuntimeException extends RuntimeException implements IContextException
 {
     /**
      * logger
@@ -116,11 +116,7 @@ public final class CRuntimeException extends RuntimeException
         LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }
 
-    /**
-     * returns the execution context
-     *
-     * @return context
-     */
+    @Override
     public final IContext getContext()
     {
         return m_context;

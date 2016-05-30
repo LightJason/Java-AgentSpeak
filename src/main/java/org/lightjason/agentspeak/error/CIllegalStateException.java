@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * illegal state exception
  */
 @SuppressWarnings( "serial" )
-public final class CIllegalStateException extends IllegalStateException
+public final class CIllegalStateException extends IllegalStateException implements IException
 {
     /**
      * logger

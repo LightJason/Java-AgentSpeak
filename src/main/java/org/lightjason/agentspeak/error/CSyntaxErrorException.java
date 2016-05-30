@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * lister cannot throw any other exception
  */
 @SuppressWarnings( "serial" )
-public final class CSyntaxErrorException extends IllegalStateException
+public final class CSyntaxErrorException extends IllegalStateException implements IException
 {
     /**
      * logger

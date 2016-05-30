@@ -163,7 +163,7 @@
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
                     <threshold>High</threshold>
-                    <maxRank>15</maxRank>
+                    <maxRank>1</maxRank>
                 </configuration>
             </plugin>
 

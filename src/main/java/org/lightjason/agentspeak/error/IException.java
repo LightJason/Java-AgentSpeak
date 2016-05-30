@@ -23,62 +23,9 @@
 
 package org.lightjason.agentspeak.error;
 
-import org.lightjason.agentspeak.common.CCommon;
-
-import java.util.logging.Logger;
-
-
 /**
- * illegal argument exception
+ * interface of exceptions
  */
-@SuppressWarnings( "serial" )
-public final class CIllegalArgumentException extends IllegalArgumentException implements IException
+public interface IException
 {
-    /**
-     * logger
-     */
-    protected static final Logger LOGGER = CCommon.getLogger( CIllegalArgumentException.class );
-
-    /**
-     * ctor
-     */
-    public CIllegalArgumentException()
-    {
-        super();
-        LOGGER.warning( "exception is thrown" );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_message message
-     */
-    public CIllegalArgumentException( final String p_message )
-    {
-        super( p_message );
-        LOGGER.warning( p_message );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_message message
-     * @param p_cause throwable
-     */
-    public CIllegalArgumentException( final String p_message, final Throwable p_cause )
-    {
-        super( p_message, p_cause );
-        LOGGER.warning( p_message );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_cause throwable
-     */
-    public CIllegalArgumentException( final Throwable p_cause )
-    {
-        super( p_cause );
-        LOGGER.warning( p_cause.getMessage() );
-    }
 }
