@@ -30,11 +30,11 @@ import java.lang.annotation.Target;
 
 
 /**
- * method annotation to allow the binding of
- * a method for an action
+ * class annotation to set default behaviour
+ * of method-action-binding to a blacklist
  */
-@Target( ElementType.METHOD )
+@Target( ElementType.TYPE )
 @Retention( RetentionPolicy.RUNTIME )
-public @interface IActionAllow
+public @interface IAgentActionBlacklist
 {
 }

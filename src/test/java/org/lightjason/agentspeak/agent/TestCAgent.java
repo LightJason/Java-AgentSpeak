@@ -43,12 +43,10 @@ import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.AbstractMap;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -94,17 +92,7 @@ public final class TestCAgent
 
         // create actions
         final Random l_random = new Random();
-        Map<IAction, Double> l_map = new HashMap<>();
-        try
-        {
-            l_map = CCommon.getActionsFromPackage().stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
-        }
-        catch ( final IOException l_exception )
-        {
-            l_map = Collections.emptyMap();
-        }
-
-        ACTIONS = l_map;
+        ACTIONS = CCommon.getActionsFromPackage().stream().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
     }
 
     /**

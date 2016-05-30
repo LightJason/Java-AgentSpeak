@@ -25,11 +25,17 @@ package org.lightjason.agentspeak.common;
 
 import com.google.common.reflect.ClassPath;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.action.annotation.IAgentActionAllow;
+import org.lightjason.agentspeak.action.annotation.IAgentActionBlacklist;
+import org.lightjason.agentspeak.action.annotation.IAgentActionDeny;
+import org.lightjason.agentspeak.action.annotation.IAgentActionWhitelist;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -42,6 +48,7 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -196,7 +203,7 @@ public final class CCommon
      * @throws IOException on io errors
      */
     @SuppressWarnings( "unchecked" )
-    public static Set<IAction> getActionsFromPackage( final String... p_package ) throws IOException
+    public static Set<IAction> getActionsFromPackage( final String... p_package )
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.buildin" ) )
@@ -207,32 +214,84 @@ public final class CCommon
                     return ClassPath.from( Thread.currentThread().getContextClassLoader() )
                                     .getTopLevelClassesRecursive( j )
                                     .parallelStream()
+                                    .map( ClassPath.ClassInfo::load )
+                                    .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
+                                    .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
+                                    .filter( i -> Modifier.isPublic( i.getModifiers() ) )
+                                    .filter( IAction.class::isAssignableFrom )
                                     .map( i -> {
-
                                         try
                                         {
-                                            final Class<?> l_class = i.load();
-                                            if ( ( !Modifier.isAbstract( l_class.getModifiers() ) )
-                                                 && ( !Modifier.isInterface( l_class.getModifiers() ) )
-                                                 && ( Modifier.isPublic( l_class.getModifiers() ) )
-                                                 && ( IAction.class.isAssignableFrom( l_class ) ) )
-                                                return (IAction) l_class.newInstance();
+                                            return (IAction) i.newInstance();
                                         }
                                         catch ( final IllegalAccessException | InstantiationException l_exception )
                                         {
+                                            return null;
                                         }
-
-                                        return null;
                                     } )
                                     .filter( i -> i != null );
                 }
                 catch ( final IOException l_exception )
                 {
+                    throw new UncheckedIOException( l_exception );
                 }
-
-                return Stream.of();
             } )
             .collect( Collectors.toSet() );
+    }
+
+
+    /**
+     * returns actions by a class
+     * @note class must be an inheritance of the IAgent interface
+     *
+     * @param p_class class list
+     * @return action set
+     */
+    public Set<IAction> getActionsFromClass( final Class<?>... p_class )
+    {
+        /*
+        return p_class == null || p_class.length == 0
+               ? Collections.<IAction>emptySet()
+               : Arrays.stream( p_class )
+                 .parallel()
+                 .filter( i -> i )
+                 */
+        return null;
+    }
+
+
+    /**
+     * reads all methods by the action-annotations
+     * for building agent-actions
+     *
+     * @param p_class class
+     * @return stream of all methods with inheritance
+     */
+    private static Stream<Method> methods( final Class<?> p_class )
+    {
+        if ( ( !p_class.isAnnotationPresent( IAgentActionWhitelist.class ) ) && ( !p_class.isAnnotationPresent( IAgentActionBlacklist.class ) ) )
+            return p_class.getSuperclass() == null
+                   ? Stream.of()
+                   : methods( p_class.getSuperclass() );
+
+        final Predicate<Method> l_filter = p_class.isAnnotationPresent( IAgentActionWhitelist.class )
+                                           ? i -> !i.isAnnotationPresent( IAgentActionDeny.class )
+                                           : i -> i.isAnnotationPresent( IAgentActionAllow.class );
+
+        return Stream.concat(
+            Arrays.stream( p_class.getDeclaredMethods() )
+                  .parallel()
+                  .map( i -> {
+                      i.setAccessible( true );
+                      return i;
+                  } )
+                  .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
+                  .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
+                  .filter( i -> !Modifier.isNative( i.getModifiers() ) )
+                  .filter( i -> !Modifier.isStatic( i.getModifiers() ) )
+                  .filter( l_filter ),
+            methods( p_class.getSuperclass() )
+        );
     }
 
     /**
