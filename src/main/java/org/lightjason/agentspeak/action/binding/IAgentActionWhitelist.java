@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.annotation;
+package org.lightjason.agentspeak.action.binding;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

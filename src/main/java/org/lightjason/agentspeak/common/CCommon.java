@@ -25,10 +25,12 @@ package org.lightjason.agentspeak.common;
 
 import com.google.common.reflect.ClassPath;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.action.annotation.IAgentActionAllow;
-import org.lightjason.agentspeak.action.annotation.IAgentActionBlacklist;
-import org.lightjason.agentspeak.action.annotation.IAgentActionDeny;
-import org.lightjason.agentspeak.action.annotation.IAgentActionWhitelist;
+import org.lightjason.agentspeak.action.binding.CMethodAction;
+import org.lightjason.agentspeak.action.binding.IAgentActionAllow;
+import org.lightjason.agentspeak.action.binding.IAgentActionBlacklist;
+import org.lightjason.agentspeak.action.binding.IAgentActionDeny;
+import org.lightjason.agentspeak.action.binding.IAgentActionWhitelist;
+import org.lightjason.agentspeak.agent.IAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +45,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
@@ -249,14 +252,14 @@ public final class CCommon
      */
     public Set<IAction> getActionsFromClass( final Class<?>... p_class )
     {
-        /*
         return p_class == null || p_class.length == 0
                ? Collections.<IAction>emptySet()
                : Arrays.stream( p_class )
                  .parallel()
-                 .filter( i -> i )
-                 */
-        return null;
+                 .filter( IAgent.class::isAssignableFrom )
+                 .flatMap( CCommon::methods )
+                 .map( CMethodAction::new )
+                 .collect( Collectors.toSet() );
     }
 
 

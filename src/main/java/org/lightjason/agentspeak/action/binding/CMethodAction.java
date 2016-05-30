@@ -21,20 +21,65 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.annotation;
+package org.lightjason.agentspeak.action.binding;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.lightjason.agentspeak.action.IBaseAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 
 /**
- * method annotation to allow the binding of
- * a method for an action
+ * action for binding a method
+ * @note action uses agent for object binding
  */
-@Target( ElementType.METHOD )
-@Retention( RetentionPolicy.RUNTIME )
-public @interface IAgentActionAllow
+public final class CMethodAction extends IBaseAction
 {
+    /**
+     * name of the action
+     */
+    private final IPath m_name;
+    /**
+     * number of arguments
+     */
+    private final int m_arguments;
+
+
+    /**
+     * ctor
+     *
+     * @param p_method method reference
+     */
+    public CMethodAction( final Method p_method )
+    {
+        m_name = CPath.from( p_method.getName() );
+        m_arguments = p_method.getParameterCount();
+    }
+
+
+    @Override
+    public final IPath getName()
+    {
+        return m_name;
+    }
+
+    @Override
+    public final int getMinimalArgumentNumber()
+    {
+        return m_arguments;
+    }
+
+    @Override
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
+    )
+    {
+        return CFuzzyValue.from( false );
+    }
 }
