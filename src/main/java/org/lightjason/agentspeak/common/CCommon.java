@@ -250,7 +250,7 @@ public final class CCommon
      * @param p_class class list
      * @return action set
      */
-    public Set<IAction> getActionsFromClass( final Class<?>... p_class )
+    public static Set<IAction> getActionsFromClass( final Class<?>... p_class )
     {
         return p_class == null || p_class.length == 0
                ? Collections.<IAction>emptySet()
