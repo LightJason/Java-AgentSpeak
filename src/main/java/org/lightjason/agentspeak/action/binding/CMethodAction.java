@@ -118,8 +118,6 @@ public final class CMethodAction extends IBaseAction
         }
         catch ( final Throwable l_throwable )
         {
-            System.out.println( "###> " + l_throwable + "   " + m_method );
-
             throw new CRuntimeException( l_throwable, p_context );
         }
     }
@@ -134,10 +132,8 @@ public final class CMethodAction extends IBaseAction
     private static IFuzzyValue<Boolean> returnvalues( final Object p_result, final List<ITerm> p_return )
     {
         // void result of the execution
-        if ( void.class.equals( p_result.getClass() ) )
+        if ( ( p_result == null ) || ( void.class.equals( p_result.getClass() ) ) )
             return CFuzzyValue.from( true );
-
-        System.out.println( "###> " + p_result );
 
         // otherwise object is returned
         p_return.add( CRawTerm.from( p_result ) );
