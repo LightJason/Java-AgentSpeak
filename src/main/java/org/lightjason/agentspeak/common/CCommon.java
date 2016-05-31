@@ -309,6 +309,27 @@ public final class CCommon
     }
 
     /**
+     * filter of classes
+     *
+     * @param p_class class for checking
+     * @return boolean flag of check result
+     */
+    private static boolean isActionWhitelist( final Class<?> p_class )
+    {
+        return p_class.isAnnotationPresent( IAgentActionWhitelist.class )
+               && (
+                    ( p_class.getAnnotation( IAgentActionWhitelist.class ).classes().length == 0 )
+                    || ( Arrays.stream( p_class.getAnnotation( IAgentActionWhitelist.class ).classes() )
+                               .parallel()
+                               .filter( p_class::equals )
+                               .findFirst()
+                               .isPresent()
+                    )
+               );
+    }
+
+
+    /**
      * returns a file from a resource e.g. Jar file
      *
      * @param p_file file relative to the CMain

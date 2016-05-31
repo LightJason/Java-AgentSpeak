@@ -39,7 +39,8 @@ public @interface IAgentActionDeny
 {
 
     /**
-     * list of classes
+     * list of classes for which
+     * the annotation is defined
      *
      * @return class array
      */
