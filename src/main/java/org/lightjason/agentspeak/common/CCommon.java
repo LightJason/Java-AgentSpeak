@@ -64,6 +64,10 @@ public final class CCommon
      **/
     public static final String PACKAGEROOT = "org.lightjason.agentspeak";
     /**
+     * logger
+     */
+    protected static final Logger LOGGER = CCommon.getLogger( CCommon.class );
+    /**
      * language resource bundle
      **/
     private static final ResourceBundle LANGUAGE = ResourceBundle.getBundle(
@@ -224,6 +228,7 @@ public final class CCommon
                                         }
                                         catch ( final IllegalAccessException | InstantiationException l_exception )
                                         {
+                                            LOGGER.warning( CCommon.getLanguageString( CCommon.class, "actioninstantiate", i, l_exception ) );
                                             return null;
                                         }
                                     } )
@@ -244,6 +249,7 @@ public final class CCommon
      * @param p_class class list
      * @return action stream
      */
+    @SuppressWarnings( "unchecked" )
     public static Stream<IAction> getActionsFromAgentClass( final Class<?>... p_class )
     {
         return p_class == null || p_class.length == 0
@@ -252,7 +258,19 @@ public final class CCommon
                  .parallel()
                  .filter( IAgent.class::isAssignableFrom )
                  .flatMap( CCommon::methods )
-                 .map( CMethodAction::new );
+                 .map( i ->
+                 {
+                     try
+                     {
+                         return (IAction) new CMethodAction( i );
+                     }
+                     catch ( final IllegalAccessException l_exception )
+                     {
+                         LOGGER.warning( CCommon.getLanguageString( CCommon.class, "actioninstantiate", i, l_exception ) );
+                         return null;
+                     }
+                 } )
+                 .filter( i -> i != null );
     }
 
 

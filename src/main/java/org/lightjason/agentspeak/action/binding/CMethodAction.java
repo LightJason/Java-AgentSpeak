@@ -26,13 +26,20 @@ package org.lightjason.agentspeak.action.binding;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -49,17 +56,23 @@ public final class CMethodAction extends IBaseAction
      * number of arguments
      */
     private final int m_arguments;
+    /**
+     * method handle
+     */
+    private final MethodHandle m_method;
 
 
     /**
      * ctor
      *
      * @param p_method method reference
+     * @throws IllegalAccessException on method access error
      */
-    public CMethodAction( final Method p_method )
+    public CMethodAction( final Method p_method ) throws IllegalAccessException
     {
-        m_name = CPath.from( p_method.getName().toLowerCase() );
         m_arguments = p_method.getParameterCount();
+        m_name = CPath.from( p_method.getName().toLowerCase() );
+        m_method = MethodHandles.lookup().unreflect( p_method );
     }
 
 
@@ -80,6 +93,46 @@ public final class CMethodAction extends IBaseAction
                                          final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( false );
+        try
+        {
+            return m_arguments == 0
+
+                ? CMethodAction.returnvalues(
+                    m_method.invoke( p_context.getAgent() ),
+                    p_return
+                )
+
+                : CMethodAction.returnvalues(
+                    m_method.invokeWithArguments(
+                        Stream.concat(
+                            Stream.of( p_context.getAgent() ),
+                            p_argument.stream().map( i -> CCommon.getRawValue( i ) )
+                        ).collect( Collectors.toList() )
+                    ),
+                    p_return
+                );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            throw new CRuntimeException( l_throwable, p_context );
+        }
+    }
+
+    /**
+     * creates the returns values of the execution
+     *
+     * @param p_result return object of the invoke call
+     * @param p_return return argument list
+     * @return execution return
+     */
+    private static IFuzzyValue<Boolean> returnvalues( final Object p_result, final List<ITerm> p_return )
+    {
+        // void result of the execution
+        if ( void.class.equals( p_result.getClass() ) )
+            return CFuzzyValue.from( true );
+
+        // otherwise object is returned
+        p_return.add( CRawTerm.from( p_result ) );
+        return CFuzzyValue.from( true );
     }
 }
