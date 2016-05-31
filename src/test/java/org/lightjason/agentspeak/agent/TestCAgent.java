@@ -29,7 +29,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.beliefbase.IBeliefBaseUpdate;
+import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.generator.CDefaultAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -130,7 +130,7 @@ public final class TestCAgent
                                                     l_stream,
                                                     ACTIONS.keySet(),
                                                     IAggregation.EMPTY,
-                                                    IBeliefBaseUpdate.EMPTY,
+                                                    IBeliefPerceive.EMPTY,
                                                     new CVariableBuilder()
                                                 ).generatesingle().call();
                                                 return null;
@@ -181,7 +181,7 @@ public final class TestCAgent
                 ACTIONS.keySet(),
                 new CAggregation( ACTIONS ),
                 Collections.<IPlanBundle>emptySet(),
-                new CBeliefBaseUpdate(),
+                new CBeliefPerceive(),
                 new CVariableBuilder()
             ).generatesingle();
 
@@ -221,10 +221,10 @@ public final class TestCAgent
     /**
      * beliefbase update e.g. environment updates
      */
-    private static final class CBeliefBaseUpdate implements IBeliefBaseUpdate<IAgent<?>>
+    private static final class CBeliefPerceive implements IBeliefPerceive<IAgent<?>>
     {
         @Override
-        public final IAgent<?> beliefupdate( final IAgent<?> p_agent )
+        public final IAgent<?> perceive( final IAgent<?> p_agent )
         {
             return p_agent;
         }

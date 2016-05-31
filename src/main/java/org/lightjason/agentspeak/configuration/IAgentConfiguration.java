@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
-import org.lightjason.agentspeak.beliefbase.IBeliefBaseUpdate;
+import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import org.lightjason.agentspeak.beliefbase.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
@@ -94,10 +94,10 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
     Collection<ILiteral> getInitialBeliefs();
 
     /**
-     * returns beliefbase update
+     * returns belief perceiver
      *
-     * @return beliefbase update or null
+     * @return belief perceiver
      */
-    IBeliefBaseUpdate<T> getBeliefbaseUpdate();
+    IBeliefPerceive<T> getBeliefbaseUpdate();
 
 }

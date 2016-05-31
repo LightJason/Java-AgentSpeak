@@ -30,7 +30,7 @@ import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
-import org.lightjason.agentspeak.beliefbase.IBeliefBaseUpdate;
+import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -85,7 +85,7 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), (IBeliefBaseUpdate<T>) IBeliefBaseUpdate.EMPTY, IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), (IBeliefPerceive<T>) IBeliefPerceive.EMPTY, IVariableBuilder.EMPTY );
     }
 
     /**
@@ -99,7 +99,7 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      * @throws Exception thrown on error
      */
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                   final IAggregation p_aggregation, final IBeliefBaseUpdate<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                                   final IAggregation p_aggregation, final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -119,7 +119,7 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      */
     public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
                                    final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                                   final IBeliefBaseUpdate<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                                   final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {

@@ -53,9 +53,9 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
      **/
     private final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
     /**
-     * beliefbase update object
+     * belief perceiver object
      */
-    private final IBeliefBaseUpdate<T> m_update;
+    private final IBeliefPerceive<T> m_update;
 
     /**
      * ctor
@@ -63,7 +63,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @SuppressWarnings( "unchecked" )
     public CStorage()
     {
-        this( (IBeliefBaseUpdate<T>) IBeliefBaseUpdate.EMPTY );
+        this( (IBeliefPerceive<T>) IBeliefPerceive.EMPTY );
     }
 
     /**
@@ -71,7 +71,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
      *
      * @param p_update update object
      */
-    public CStorage( final IBeliefBaseUpdate<T> p_update )
+    public CStorage( final IBeliefPerceive<T> p_update )
     {
         m_update = p_update;
     }
@@ -110,7 +110,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @Override
     public final T update( final T p_agent )
     {
-        return m_update.beliefupdate( p_agent );
+        return m_update.perceive( p_agent );
     }
 
     @Override

@@ -27,20 +27,20 @@ import org.lightjason.agentspeak.agent.IAgent;
 
 
 /**
- * interface to generate beliefbase updates
+ * interface to generate beliefbase updates (perceiving)
  *
  * @tparam T agent type
  */
-public interface IBeliefBaseUpdate<T extends IAgent<?>>
+public interface IBeliefPerceive<T extends IAgent<?>>
 {
     /**
      * empty beliefbase update
      */
-    IBeliefBaseUpdate<IAgent<?>> EMPTY = new IBeliefBaseUpdate<IAgent<?>>()
+    IBeliefPerceive<IAgent<?>> EMPTY = new IBeliefPerceive<IAgent<?>>()
     {
 
         @Override
-        public final IAgent<?> beliefupdate( final IAgent<?> p_agent )
+        public final IAgent<?> perceive( final IAgent<?> p_agent )
         {
             return p_agent;
         }
@@ -52,6 +52,6 @@ public interface IBeliefBaseUpdate<T extends IAgent<?>>
      * @param p_agent agent
      * @return agent
      */
-    T beliefupdate( final T p_agent );
+    T perceive( final T p_agent );
 
 }
