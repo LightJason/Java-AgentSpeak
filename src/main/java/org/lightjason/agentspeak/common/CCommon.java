@@ -184,7 +184,7 @@ public final class CCommon
                : Arrays.stream( p_class )
                        .parallel()
                        .filter( IAgent.class::isAssignableFrom )
-                       .flatMap( CCommon::methods )
+                       .flatMap( i -> CCommon.methods( i, i ) )
                        .map( i -> {
                            try
                            {
@@ -204,19 +204,20 @@ public final class CCommon
      * for building agent-actions
      *
      * @param p_class class
+     * @param p_root root class
      * @return stream of all methods with inheritance
      */
-    private static Stream<Method> methods( final Class<?> p_class )
+    private static Stream<Method> methods( final Class<?> p_class, final Class<?> p_root )
     {
-        final boolean l_iswhitelisted = CCommon.isActionWhitelist( p_class );
-        if ( l_iswhitelisted == CCommon.isActionBlacklist( p_class ) )
+        final boolean l_iswhitelisted = CCommon.isActionWhitelist( p_class, p_root );
+        if ( l_iswhitelisted == CCommon.isActionBlacklist( p_class, p_root ) )
             return p_class.getSuperclass() == null
                    ? Stream.of()
-                   : methods( p_class.getSuperclass() );
+                   : methods( p_class.getSuperclass(), p_root );
 
         final Predicate<Method> l_filter = l_iswhitelisted
-                                           ? i -> !CCommon.isActionDeny( i )
-                                           : CCommon::isActionAllow;
+                                           ? i -> !CCommon.isActionDeny( i, p_root )
+                                           : i -> CCommon.isActionAllow( i, p_root );
 
         return Stream.concat(
             Arrays.stream( p_class.getDeclaredMethods() )
@@ -230,7 +231,7 @@ public final class CCommon
                   .filter( i -> !Modifier.isNative( i.getModifiers() ) )
                   .filter( i -> !Modifier.isStatic( i.getModifiers() ) )
                   .filter( l_filter ),
-            methods( p_class.getSuperclass() )
+            methods( p_class.getSuperclass(), p_root )
         );
     }
 
@@ -238,9 +239,10 @@ public final class CCommon
      * whitelist filter for a class
      *
      * @param p_class class for checking
+     * @param p_root root class
      * @return boolean flag of check result
      */
-    private static boolean isActionWhitelist( final Class<?> p_class )
+    private static boolean isActionWhitelist( final Class<?> p_class, final Class<?> p_root )
     {
         return p_class.isAnnotationPresent( IAgentActionWhitelist.class )
                && (
@@ -258,9 +260,10 @@ public final class CCommon
      * blacklist filter of a class
      *
      * @param p_class class for checking
+     * @param p_root root class
      * @return boolean flag of check result
      */
-    private static boolean isActionBlacklist( final Class<?> p_class )
+    private static boolean isActionBlacklist( final Class<?> p_class, final Class<?> p_root )
     {
         return p_class.isAnnotationPresent( IAgentActionBlacklist.class )
                && (
@@ -278,16 +281,17 @@ public final class CCommon
      * allow filter of a method
      *
      * @param p_method method for checking
+     * @param p_root root class
      * @return boolean flag of check result
      */
-    private static boolean isActionAllow( final Method p_method )
+    private static boolean isActionAllow( final Method p_method, final Class<?> p_root )
     {
         return p_method.isAnnotationPresent( IAgentActionAllow.class )
                && (
                    ( p_method.getAnnotation( IAgentActionAllow.class ).classes().length == 0 )
                    || ( Arrays.stream( p_method.getAnnotation( IAgentActionAllow.class ).classes() )
                               .parallel()
-                              .filter( p_method::equals )
+                              .filter( p_root::equals )
                               .findFirst()
                               .isPresent()
                    )
@@ -298,16 +302,17 @@ public final class CCommon
      * deny filter of a method
      *
      * @param p_method method for checking
+     * @param p_root root class
      * @return boolean flag of check result
      */
-    private static boolean isActionDeny( final Method p_method )
+    private static boolean isActionDeny( final Method p_method, final Class<?> p_root )
     {
         return p_method.isAnnotationPresent( IAgentActionDeny.class )
                && (
                    ( p_method.getAnnotation( IAgentActionDeny.class ).classes().length == 0 )
                    || ( Arrays.stream( p_method.getAnnotation( IAgentActionDeny.class ).classes() )
                               .parallel()
-                              .filter( p_method::equals )
+                              .filter( p_root::equals )
                               .findFirst()
                               .isPresent()
                    )
