@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.binding;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -118,7 +117,7 @@ public final class CMethodAction extends IBaseAction
         }
         catch ( final Throwable l_throwable )
         {
-            throw new CRuntimeException( l_throwable, p_context );
+            return CFuzzyValue.from( false );
         }
     }
 
