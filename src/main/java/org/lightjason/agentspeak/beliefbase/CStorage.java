@@ -55,7 +55,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     /**
      * belief perceiver object
      */
-    private final IBeliefPerceive<T> m_update;
+    private final IBeliefPerceive<T> m_perceive;
 
     /**
      * ctor
@@ -69,11 +69,11 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     /**
      * ctor
      *
-     * @param p_update update object
+     * @param p_perceive perceive object
      */
-    public CStorage( final IBeliefPerceive<T> p_update )
+    public CStorage( final IBeliefPerceive<T> p_perceive )
     {
-        m_update = p_update;
+        m_perceive = p_perceive;
     }
 
     @Override
@@ -110,7 +110,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @Override
     public final T update( final T p_agent )
     {
-        return m_update.perceive( p_agent );
+        return m_perceive.perceive( p_agent );
     }
 
     @Override
