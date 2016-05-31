@@ -71,7 +71,11 @@ public final class CMethodAction extends IBaseAction
     public CMethodAction( final Method p_method ) throws IllegalAccessException
     {
         m_arguments = p_method.getParameterCount();
-        m_name = CPath.from( p_method.getName().toLowerCase() );
+        m_name = CPath.from(
+            p_method.isAnnotationPresent( IAgentActionName.class ) && !p_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
+            ? p_method.getAnnotation( IAgentActionName.class ).name().toLowerCase()
+            : p_method.getName().toLowerCase()
+        );
         m_method = MethodHandles.lookup().unreflect( p_method );
     }
 
@@ -106,7 +110,7 @@ public final class CMethodAction extends IBaseAction
                     m_method.invokeWithArguments(
                         Stream.concat(
                             Stream.of( p_context.getAgent() ),
-                            p_argument.stream().map( i -> CCommon.getRawValue( i ) )
+                            p_argument.stream().map( CCommon::getRawValue )
                         ).collect( Collectors.toList() )
                     ),
                     p_return
@@ -114,6 +118,8 @@ public final class CMethodAction extends IBaseAction
         }
         catch ( final Throwable l_throwable )
         {
+            System.out.println( "###> " + l_throwable + "   " + m_method );
+
             throw new CRuntimeException( l_throwable, p_context );
         }
     }
@@ -130,6 +136,8 @@ public final class CMethodAction extends IBaseAction
         // void result of the execution
         if ( void.class.equals( p_result.getClass() ) )
             return CFuzzyValue.from( true );
+
+        System.out.println( "###> " + p_result );
 
         // otherwise object is returned
         p_return.add( CRawTerm.from( p_result ) );

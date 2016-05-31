@@ -103,7 +103,6 @@ public final class CCommon
         return Logger.getLogger( p_class.getName() );
     }
 
-
     /**
      * returns the language bundle
      *
@@ -124,79 +123,7 @@ public final class CCommon
         return PROPERTIES;
     }
 
-    /**
-     * concats an URL with a path
-     *
-     * @param p_base base URL
-     * @param p_string additional path
-     * @return new URL
-     *
-     * @throws URISyntaxException thrown on syntax error
-     * @throws MalformedURLException thrown on malformat
-     */
-    public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
-    {
-        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
-    }
-
-    /**
-     * returns root path of the resource
-     *
-     * @return URL of file or null
-     */
-    public static URL getResourceURL()
-    {
-        return CCommon.class.getClassLoader().getResource( "" );
-    }
-
-    /**
-     * returns a file from a resource e.g. Jar file
-     *
-     * @param p_file file
-     * @return URL of file or null
-     *
-     * @throws URISyntaxException thrown on syntax error
-     * @throws MalformedURLException thrown on malformat
-     */
-    public static URL getResourceURL( final String p_file ) throws URISyntaxException, MalformedURLException
-    {
-        return getResourceURL( new File( p_file ) );
-    }
-
-    /**
-     * returns the language depend string on any object
-     *
-     * @param p_source any object
-     * @param p_label label name
-     * @param p_parameter parameter
-     * @return translated string
-     *
-     * @tparam T object type
-     */
-    public static <T> String getLanguageString( final T p_source, final String p_label, final Object... p_parameter )
-    {
-        return getLanguageString( p_source.getClass(), p_label, p_parameter );
-    }
-
-    /**
-     * returns a string of the resource file
-     *
-     * @param p_class class for static calls
-     * @param p_label label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
-     */
-    public static String getLanguageString( final Class<?> p_class, final String p_label, final Object... p_parameter )
-    {
-        try
-        {
-            return MessageFormat.format( LANGUAGE.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
-        }
-        catch ( final MissingResourceException l_exception )
-        {
-            return "";
-        }
-    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * get all classes within an Java package as action
@@ -255,24 +182,22 @@ public final class CCommon
         return p_class == null || p_class.length == 0
                ? Stream.of()
                : Arrays.stream( p_class )
-                 .parallel()
-                 .filter( IAgent.class::isAssignableFrom )
-                 .flatMap( CCommon::methods )
-                 .map( i ->
-                 {
-                     try
-                     {
-                         return (IAction) new CMethodAction( i );
-                     }
-                     catch ( final IllegalAccessException l_exception )
-                     {
-                         LOGGER.warning( CCommon.getLanguageString( CCommon.class, "actioninstantiate", i, l_exception ) );
-                         return null;
-                     }
-                 } )
-                 .filter( i -> i != null );
+                       .parallel()
+                       .filter( IAgent.class::isAssignableFrom )
+                       .flatMap( CCommon::methods )
+                       .map( i -> {
+                           try
+                           {
+                               return (IAction) new CMethodAction( i );
+                           }
+                           catch ( final IllegalAccessException l_exception )
+                           {
+                               LOGGER.warning( CCommon.getLanguageString( CCommon.class, "actioninstantiate", i, l_exception ) );
+                               return null;
+                           }
+                       } )
+                       .filter( i -> i != null );
     }
-
 
     /**
      * reads all methods by the action-annotations
@@ -283,14 +208,15 @@ public final class CCommon
      */
     private static Stream<Method> methods( final Class<?> p_class )
     {
-        if ( ( !p_class.isAnnotationPresent( IAgentActionWhitelist.class ) ) && ( !p_class.isAnnotationPresent( IAgentActionBlacklist.class ) ) )
+        final boolean l_iswhitelisted = CCommon.isActionWhitelist( p_class );
+        if ( l_iswhitelisted == CCommon.isActionBlacklist( p_class ) )
             return p_class.getSuperclass() == null
                    ? Stream.of()
                    : methods( p_class.getSuperclass() );
 
-        final Predicate<Method> l_filter = p_class.isAnnotationPresent( IAgentActionWhitelist.class )
-                                           ? i -> !i.isAnnotationPresent( IAgentActionDeny.class )
-                                           : i -> i.isAnnotationPresent( IAgentActionAllow.class );
+        final Predicate<Method> l_filter = l_iswhitelisted
+                                           ? i -> !CCommon.isActionDeny( i )
+                                           : CCommon::isActionAllow;
 
         return Stream.concat(
             Arrays.stream( p_class.getDeclaredMethods() )
@@ -309,7 +235,7 @@ public final class CCommon
     }
 
     /**
-     * filter of classes
+     * whitelist filter for a class
      *
      * @param p_class class for checking
      * @return boolean flag of check result
@@ -318,16 +244,116 @@ public final class CCommon
     {
         return p_class.isAnnotationPresent( IAgentActionWhitelist.class )
                && (
-                    ( p_class.getAnnotation( IAgentActionWhitelist.class ).classes().length == 0 )
-                    || ( Arrays.stream( p_class.getAnnotation( IAgentActionWhitelist.class ).classes() )
-                               .parallel()
-                               .filter( p_class::equals )
-                               .findFirst()
-                               .isPresent()
-                    )
+                   ( p_class.getAnnotation( IAgentActionWhitelist.class ).classes().length == 0 )
+                   || ( Arrays.stream( p_class.getAnnotation( IAgentActionWhitelist.class ).classes() )
+                              .parallel()
+                              .filter( p_class::equals )
+                              .findFirst()
+                              .isPresent()
+                   )
                );
     }
 
+    /**
+     * blacklist filter of a class
+     *
+     * @param p_class class for checking
+     * @return boolean flag of check result
+     */
+    private static boolean isActionBlacklist( final Class<?> p_class )
+    {
+        return p_class.isAnnotationPresent( IAgentActionBlacklist.class )
+               && (
+                   ( p_class.getAnnotation( IAgentActionBlacklist.class ).classes().length == 0 )
+                   || ( Arrays.stream( p_class.getAnnotation( IAgentActionBlacklist.class ).classes() )
+                              .parallel()
+                              .filter( p_class::equals )
+                              .findFirst()
+                              .isPresent()
+                   )
+               );
+    }
+
+    /**
+     * allow filter of a method
+     *
+     * @param p_method method for checking
+     * @return boolean flag of check result
+     */
+    private static boolean isActionAllow( final Method p_method )
+    {
+        return p_method.isAnnotationPresent( IAgentActionAllow.class )
+               && (
+                   ( p_method.getAnnotation( IAgentActionAllow.class ).classes().length == 0 )
+                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionAllow.class ).classes() )
+                              .parallel()
+                              .filter( p_method::equals )
+                              .findFirst()
+                              .isPresent()
+                   )
+               );
+    }
+
+    /**
+     * deny filter of a method
+     *
+     * @param p_method method for checking
+     * @return boolean flag of check result
+     */
+    private static boolean isActionDeny( final Method p_method )
+    {
+        return p_method.isAnnotationPresent( IAgentActionDeny.class )
+               && (
+                   ( p_method.getAnnotation( IAgentActionDeny.class ).classes().length == 0 )
+                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionDeny.class ).classes() )
+                              .parallel()
+                              .filter( p_method::equals )
+                              .findFirst()
+                              .isPresent()
+                   )
+               );
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * concats an URL with a path
+     *
+     * @param p_base base URL
+     * @param p_string additional path
+     * @return new URL
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    {
+        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
+    }
+
+    /**
+     * returns root path of the resource
+     *
+     * @return URL of file or null
+     */
+    public static URL getResourceURL()
+    {
+        return CCommon.class.getClassLoader().getResource( "" );
+    }
+
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file
+     * @return URL of file or null
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    public static URL getResourceURL( final String p_file ) throws URISyntaxException, MalformedURLException
+    {
+        return getResourceURL( new File( p_file ) );
+    }
 
     /**
      * returns a file from a resource e.g. Jar file
@@ -345,6 +371,43 @@ public final class CCommon
         return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
     }
 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * returns the language depend string on any object
+     *
+     * @param p_source any object
+     * @param p_label label name
+     * @param p_parameter parameter
+     * @return translated string
+     *
+     * @tparam T object type
+     */
+    public static <T> String getLanguageString( final T p_source, final String p_label, final Object... p_parameter )
+    {
+        return getLanguageString( p_source.getClass(), p_label, p_parameter );
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getLanguageString( final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
+        try
+        {
+            return MessageFormat.format( LANGUAGE.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
+        }
+        catch ( final MissingResourceException l_exception )
+        {
+            return "";
+        }
+    }
+
     /**
      * returns the label of a class and string to get access to the resource
      *
@@ -357,6 +420,8 @@ public final class CCommon
         return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
             PACKAGEROOT + ".", "" );
     }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * class to read UTF-8 encoded property file
