@@ -37,4 +37,12 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface IAgentActionAllow
 {
+
+    /**
+     * list of classes
+     *
+     * @return class array
+     */
+    Class<?>[] classes() default {};
+
 }
