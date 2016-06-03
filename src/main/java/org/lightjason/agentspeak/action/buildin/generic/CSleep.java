@@ -34,7 +34,8 @@ import java.util.List;
 
 
 /**
- * sets the agent to the sleep state
+ * sets the agent to the sleep state for an
+ * infinity or fixed time
  */
 public final class CSleep extends IBuildinAction
 {
