@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -49,7 +50,13 @@ public final class CSleep extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( p_context.getAgent().sleep().isSleeping() );
+        return CFuzzyValue.from(
+            p_context.getAgent().sleep(
+                p_argument.size() > 0
+                ? Integer.MAX_VALUE
+                : CCommon.getRawValue( p_argument.get( 0 ) )
+            ).isSleeping()
+        );
     }
 
 }

@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -39,11 +39,11 @@ public interface IInspector
 {
 
     /**
-     * inspect hibernate value
+     * inspect sleeping value
      *
      * @param p_value value
      */
-    void inspecthibernate( final boolean p_value );
+    void inspectsleeping( final long p_value );
 
     /**
      * inspect cycle value

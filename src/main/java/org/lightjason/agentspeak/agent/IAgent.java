@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.agent;
 
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang3.tuple.MutableTriple;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.beliefbase.IView;
 import org.lightjason.agentspeak.common.IPath;
@@ -36,7 +37,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.score.IAggregation;
-import org.apache.commons.lang3.tuple.MutableTriple;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -65,7 +65,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_immediately run element immediately
      * @return execution finished correctly
      *
-     * @note the trigger is ignored iif the agent is sleeping / hibernating
+     * @note the trigger is ignored iif the agent is sleeping
      */
     IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately );
 
@@ -84,18 +84,19 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
     Multimap<IPath, ILiteral> getRunningPlans();
 
     /**
-     * returns hibernate / sleeping state
+     * returns sleeping state
      *
      * @return sleeping flag
      */
     boolean isSleeping();
 
     /**
-     * pushs the agent into hibernating / sleeping state
+     * pushs the agent into sleeping state
      *
+     * @param p_cycles number of cycles for sleeping - if is set to maximum the sleeping time is infinity
      * @return agent reference
      */
-    IAgent<T> sleep();
+    IAgent<T> sleep( final long p_cycles );
 
     /**
      * wake-up the agent by generating wakeup-goal

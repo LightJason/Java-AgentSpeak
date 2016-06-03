@@ -110,9 +110,9 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
      */
     private long m_cycletime;
     /**
-     * hibernate state
+     * number of sleeping cycles
      */
-    private volatile boolean m_hibernate;
+    private volatile long m_sleepingcycles;
     /**
      * unifier
      */
@@ -175,7 +175,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
 
         Arrays.stream( p_inspector ).parallel().forEach( i -> {
             i.inspectcycle( m_cycle );
-            i.inspecthibernate( m_hibernate );
+            i.inspectsleeping( m_sleepingcycles );
             i.inspectbelief( m_beliefbase.parallelStream() );
             i.inspectplans( m_plans.entries().parallelStream().map( j -> new ImmutableTriple<>( j.getValue().getLeft(), j.getValue().getMiddle().get(),
                                                                                                 j.getValue().getRight().get()
@@ -189,7 +189,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {
-        if ( m_hibernate )
+        if ( m_sleepingcycles > 0 )
             return CFuzzyValue.from( false );
 
         // check if literal does not store any variables
@@ -217,35 +217,20 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     public final boolean isSleeping()
     {
-        return m_hibernate;
+        return m_sleepingcycles > 0;
     }
 
     @Override
-    public final IAgent<T> sleep()
+    public final IAgent<T> sleep( final long p_cycles )
     {
-        m_hibernate = true;
+        m_sleepingcycles = p_cycles;
         return this;
     }
 
     @Override
     public final IAgent<T> wakeup( final ITerm... p_value )
     {
-        if ( !m_hibernate )
-            return this;
-
-        m_trigger.add(
-            CTrigger.from(
-                ITrigger.EType.ADDGOAL,
-                CLiteral.from(
-                    "wakeup",
-                    p_value == null
-                    ? Stream.<ITerm>empty()
-                    : Arrays.stream( p_value )
-                )
-            )
-        );
-
-        m_hibernate = false;
+        this.executewakeup( m_cycletime == Long.MAX_VALUE, p_value );
         return this;
     }
 
@@ -322,9 +307,10 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     {
         LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
 
-        // run beliefbase update, because environment can be changed
+        // run beliefbase update, because environment can be changed and decrement sleeping value
         m_beliefbase.update( (T) this );
-        if ( m_hibernate )
+        this.executewakeup( false );
+        if ( m_sleepingcycles > 0 )
             // check wakup-event otherwise suspend
             return (T) this;
 
@@ -437,6 +423,38 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
 
             return l_result;
         } ).collect( m_fuzzy.getResultOperator() );
+    }
+
+    /**
+     * runs the wakeup goal
+     *
+     * @param p_ignorecycle ignore the cycle value
+     * @param p_value wakeup term
+     */
+    private void executewakeup( final boolean p_ignorecycle, final ITerm... p_value )
+    {
+        if ( ( m_sleepingcycles < 1 ) && ( !p_ignorecycle ) )
+            return;
+
+        if ( ( m_sleepingcycles == 0 ) || p_ignorecycle )
+        {
+            m_trigger.add(
+                CTrigger.from(
+                    ITrigger.EType.ADDGOAL,
+                    CLiteral.from(
+                        "wakeup",
+                        p_value == null
+                        ? Stream.<ITerm>empty()
+                        : Arrays.stream( p_value )
+                    )
+                )
+            );
+
+            m_sleepingcycles = 0;
+            return;
+        }
+
+        m_sleepingcycles--;
     }
 
 }
