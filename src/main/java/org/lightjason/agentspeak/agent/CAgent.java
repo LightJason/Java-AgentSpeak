@@ -111,8 +111,11 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     private long m_cycletime;
     /**
      * number of sleeping cycles
+     *
+     * @note values >= 0 defines the sleeping time, Long.MAX_VALUE is infinity sleeping
+     * negative values defines the activity
      */
-    private volatile long m_sleepingcycles;
+    private volatile long m_sleepingcycles = Long.MIN_VALUE;
     /**
      * unifier
      */
@@ -230,7 +233,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     public final IAgent<T> wakeup( final ITerm... p_value )
     {
-        this.executewakeup( m_cycletime == Long.MAX_VALUE, p_value );
+        this.active( true, p_value );
         return this;
     }
 
@@ -309,8 +312,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
 
         // run beliefbase update, because environment can be changed and decrement sleeping value
         m_beliefbase.update( (T) this );
-        this.executewakeup( false );
-        if ( m_sleepingcycles > 0 )
+        if ( !this.active( false ) )
             // check wakup-event otherwise suspend
             return (T) this;
 
@@ -428,15 +430,15 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * runs the wakeup goal
      *
-     * @param p_ignorecycle ignore the cycle value
+     * @param p_immediatly runs the wake always
      * @param p_value wakeup term
+     * @return returns true if the agent is active
      */
-    private void executewakeup( final boolean p_ignorecycle, final ITerm... p_value )
+    private boolean active( final boolean p_immediatly, final ITerm... p_value )
     {
-        if ( ( m_sleepingcycles < 1 ) && ( !p_ignorecycle ) )
-            return;
-
-        if ( ( m_sleepingcycles == 0 ) || p_ignorecycle )
+        // if the sleeping time ends or the agent will wakedup by a hard call,
+        // create the trigger and reset the time value
+        if ( ( m_sleepingcycles == 0 ) || p_immediatly )
         {
             m_trigger.add(
                 CTrigger.from(
@@ -450,11 +452,14 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
                 )
             );
 
-            m_sleepingcycles = 0;
-            return;
+            m_sleepingcycles = Long.MIN_VALUE;
         }
 
-        m_sleepingcycles--;
+        // if the sleeping time is not infinity decrese the counter
+        if ( ( m_sleepingcycles > 0 ) && ( m_sleepingcycles != Long.MAX_VALUE ) )
+            m_sleepingcycles--;
+
+        return m_sleepingcycles <= 0;
     }
 
 }
