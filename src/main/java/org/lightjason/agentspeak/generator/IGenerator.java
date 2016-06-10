@@ -37,10 +37,8 @@ public interface IGenerator<T>
      *
      * @param p_data any object data
      * @return object
-     *
-     * @throws RuntimeException on any error
      */
-    T generatesingle( final Object... p_data ) throws RuntimeException;
+    T generatesingle( final Object... p_data );
 
     /**
      * generates a stream of objects
@@ -48,9 +46,7 @@ public interface IGenerator<T>
      * @param p_number number of objects within the stream
      * @param p_data any object data
      * @return object stream
-     *
-     * @throws RuntimeException on any error
      */
-    Stream<T> generatemultiple( final int p_number, final Object... p_data ) throws RuntimeException;
+    Stream<T> generatemultiple( final int p_number, final Object... p_data );
 
 }

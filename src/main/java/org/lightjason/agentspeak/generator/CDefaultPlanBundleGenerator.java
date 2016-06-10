@@ -77,13 +77,13 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     }
 
     @Override
-    public IPlanBundle generatesingle( final Object... p_data ) throws RuntimeException
+    public IPlanBundle generatesingle( final Object... p_data )
     {
         return new CPlanBundle( m_configuration );
     }
 
     @Override
-    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data ) throws RuntimeException
+    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()

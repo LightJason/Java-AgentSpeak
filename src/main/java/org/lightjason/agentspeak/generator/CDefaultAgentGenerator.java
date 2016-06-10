@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
 import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.grammar.CParserAgent;
@@ -43,7 +42,6 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -54,10 +52,6 @@ import java.util.stream.Stream;
  */
 public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
-    /**
-     * logger
-     */
-    protected static final Logger LOGGER = CCommon.getLogger( CDefaultAgentGenerator.class );
     /**
      * unification
      */
@@ -167,13 +161,13 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public T generatesingle( final Object... p_data ) throws RuntimeException
+    public T generatesingle( final Object... p_data )
     {
         return (T) new CAgent<>( m_configuration );
     }
 
     @Override
-    public final Stream<T> generatemultiple( final int p_number, final Object... p_data ) throws RuntimeException
+    public final Stream<T> generatemultiple( final int p_number, final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()
