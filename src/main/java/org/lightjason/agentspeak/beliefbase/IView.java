@@ -202,6 +202,13 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path );
 
+    /**
+     * returns the beliefbase
+     *
+     * @return beliefbase
+     */
+    IBeliefBase<T> getBeliefbase();
+
 
 
     /**

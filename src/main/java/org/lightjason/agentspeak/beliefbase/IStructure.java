@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.beliefbase;
 
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
@@ -77,7 +77,9 @@ public interface IStructure<T extends IAgent<?>>
      * @return storage
      *
      * @tparam L typecast
+     * @deprecated should replaced
      */
+    @Deprecated
     <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage();
 
 }

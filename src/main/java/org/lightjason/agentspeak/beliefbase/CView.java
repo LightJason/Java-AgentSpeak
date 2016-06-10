@@ -283,6 +283,12 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
+    public final IBeliefBase<T> getBeliefbase()
+    {
+        return m_beliefbase;
+    }
+
+    @Override
     public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
     {
         return m_beliefbase.getStorage();
