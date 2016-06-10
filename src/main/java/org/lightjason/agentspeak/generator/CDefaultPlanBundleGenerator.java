@@ -26,16 +26,13 @@ package org.lightjason.agentspeak.generator;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.CPlanBundle;
 import org.lightjason.agentspeak.agent.IPlanBundle;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
 import org.lightjason.agentspeak.grammar.CParserPlanBundle;
 import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -45,10 +42,6 @@ import java.util.stream.Stream;
  */
 public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
 {
-    /**
-     * logger
-     */
-    protected static final Logger LOGGER = CCommon.getLogger( CDefaultPlanBundleGenerator.class );
     /**
      * configuration
      */
@@ -84,28 +77,17 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
     }
 
     @Override
-    public IPlanBundle generatesingle( final Object... p_data ) throws Exception
+    public IPlanBundle generatesingle( final Object... p_data ) throws RuntimeException
     {
         return new CPlanBundle( m_configuration );
     }
 
     @Override
-    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data ) throws Exception
+    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data ) throws RuntimeException
     {
         return IntStream.range( 0, p_number )
                     .parallel()
-                    .mapToObj( i -> {
-                        try
-                        {
-                            return this.generatesingle( p_data );
-                        }
-                        catch ( final Exception l_exception )
-                        {
-                            LOGGER.warning( MessageFormat.format( "error with message: {0}", l_exception ) );
-                            return null;
-                        }
-                    } )
-                    .filter( i -> i != null );
+                    .mapToObj( i -> this.generatesingle( p_data ) );
     }
 
 }

@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -168,28 +167,17 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public T generatesingle( final Object... p_data ) throws Exception
+    public T generatesingle( final Object... p_data ) throws RuntimeException
     {
         return (T) new CAgent<>( m_configuration );
     }
 
     @Override
-    public final Stream<T> generatemultiple( final int p_number, final Object... p_data )
+    public final Stream<T> generatemultiple( final int p_number, final Object... p_data ) throws RuntimeException
     {
         return IntStream.range( 0, p_number )
                     .parallel()
-                    .mapToObj( i -> {
-                        try
-                        {
-                            return this.generatesingle( p_data );
-                        }
-                        catch ( final Exception l_exception )
-                        {
-                            LOGGER.warning( MessageFormat.format( "error with message: {0}", l_exception ) );
-                            return null;
-                        }
-                    } )
-                    .filter( i -> i != null );
+                    .mapToObj( i -> this.generatesingle( p_data ) );
     }
 
 }
