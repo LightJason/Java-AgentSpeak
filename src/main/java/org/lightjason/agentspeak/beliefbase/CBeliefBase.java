@@ -98,7 +98,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final void add( final ILiteral p_literal )
     {
         // create add-event for the literal
-        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
+        m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
         m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
@@ -119,7 +119,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final void remove( final ILiteral p_literal )
     {
         // create delete-event for the literal
-        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
+        m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
         m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
     }
 
@@ -163,9 +163,14 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final void clear()
     {
         // create delete-event for all literals
-        m_storage.getMultiElements().values().stream()
-                 .forEach( j -> m_events.values().stream()
-                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) ) );
+        m_storage
+            .getMultiElements()
+            .values()
+            .forEach(
+                j -> m_events
+                    .values()
+                    .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) )
+            );
 
         m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
         m_storage.clear();
@@ -180,7 +185,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final int size()
     {
-        return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
+        return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( IStructure::size ).sum();
     }
 
     @Override
@@ -193,7 +198,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         final Set<ITrigger> l_copy = Collections.unmodifiableSet(
             Stream.concat(
                 l_trigger.parallelStream(),
-                m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger() )
+                m_storage.getSingleElements().values().parallelStream().flatMap( IView::getTrigger )
             )
                   .collect( Collectors.toSet() )
         );
