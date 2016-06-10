@@ -89,6 +89,42 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
+    public final boolean containsMultiElementKey( final String p_key )
+    {
+        return m_multielements.containsKey( p_key );
+    }
+
+    @Override
+    public final boolean containsSingleElementKey( final String p_key )
+    {
+        return m_singleelements.containsKey( p_key );
+    }
+
+    @Override
+    public final boolean putMultiElements( final String p_key, final N p_value )
+    {
+        return m_multielements.put( p_key, p_value );
+    }
+
+    @Override
+    public final boolean putSingleElements( final String p_key, final M p_value )
+    {
+        return m_singleelements.put( p_key, p_value ) == null;
+    }
+
+    @Override
+    public final boolean removeMultiElements( final String p_key, final N p_value )
+    {
+        return m_multielements.remove( p_key, p_value );
+    }
+
+    @Override
+    public final boolean removeSingleElements( final String p_key )
+    {
+        return m_singleelements.remove( p_key ) != null;
+    }
+
+    @Override
     public final void clear()
     {
         m_multielements.clear();

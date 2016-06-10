@@ -24,6 +24,8 @@
 package org.lightjason.agentspeak.beliefbase;
 
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -31,8 +33,6 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -110,8 +110,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         this.walk( p_literal.getFunctorPath().normalize(), this )
             .getStorage()
-            .getMultiElements()
-            .put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
+            .putMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
         return this;
     }
 
@@ -148,9 +147,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         this.walk( p_literal.getFunctorPath().normalize(), this )
             .getStorage()
-            .getMultiElements()
-            .asMap()
-            .remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
+            .removeMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
 
         return this;
     }
@@ -205,12 +202,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final boolean containsview( final IPath p_path )
     {
         p_path.normalize();
-        if ( p_path.isEmpty() )
-            return true;
-
-        return p_path.size() == 1
-               ? m_beliefbase.getStorage().getSingleElements().containsKey( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+        return p_path.isEmpty() || ( p_path.size() == 1
+               ? m_beliefbase.getStorage().containsSingleElementKey( p_path.get( 0 ) )
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
     }
 
     @Override
@@ -221,7 +215,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return true;
 
         return p_path.size() == 1
-               ? m_beliefbase.getStorage().getMultiElements().containsKey( p_path.get( 0 ) )
+               ? m_beliefbase.getStorage().containsMultiElementKey( p_path.get( 0 ) )
                : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 

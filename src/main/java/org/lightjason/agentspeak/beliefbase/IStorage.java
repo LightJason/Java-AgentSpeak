@@ -45,15 +45,70 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * returns the map with multiple elements
      *
      * @return multimap
+     * @deprecated replaced by individual calls
      */
+    @Deprecated
     SetMultimap<String, N> getMultiElements();
 
     /**
      * returns the map with single elements
      *
      * @return map
+     * @deprecated replaced by individual calls
      */
+    @Deprecated
     Map<String, M> getSingleElements();
+
+    /**
+     * contains a multi-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsMultiElementKey( final String p_key );
+
+    /**
+     * contains a single-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsSingleElementKey( final String p_key );
+
+    /**
+     * puts a multi-element into the storage
+     *
+     * @param p_key key
+     * @param p_value multi-element
+     * @return boolean if the element can be stored
+     */
+    boolean putMultiElements( final String p_key, final N p_value );
+
+    /**
+     * puts a single-element into the storage
+     *
+     * @param p_key key
+     * @param p_value single-element
+     * @return boolean if the element can be stored
+     */
+    boolean putSingleElements( final String p_key, final M p_value );
+
+    /**
+     * removes a multi-element from the storage
+     *
+     * @param p_key key
+     * @param p_value multi-element
+     * @return boolean if the element can removed
+     */
+    boolean removeMultiElements( final String p_key, final N p_value );
+
+    /**
+     * removes a single-element from the storage
+     *
+     * @param p_key key
+     * @return boolean if the element can be removed
+     */
+    boolean removeSingleElements( final String p_key );
 
     /**
      * clears all elements
