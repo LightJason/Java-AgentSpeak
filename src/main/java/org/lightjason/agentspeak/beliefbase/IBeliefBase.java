@@ -47,6 +47,20 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
     Stream<ITrigger> getTrigger( final IView<T> p_view );
 
     /**
+     * returns a stream over all literals
+     *
+     * @return literal stream
+     */
+    Stream<ILiteral> streamLiteral();
+
+    /**
+     * returns a stream over all views
+     *
+     * @return view stream
+     */
+    Stream<IView<T>> streamView();
+
+    /**
      * clears all elements
      */
     void clear();

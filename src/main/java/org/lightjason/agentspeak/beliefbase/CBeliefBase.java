@@ -209,6 +209,18 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
+    public final Stream<ILiteral> streamLiteral()
+    {
+        return m_storage.streamMultiElements().map( Pair::getRight );
+    }
+
+    @Override
+    public final Stream<IView<T>> streamView()
+    {
+        return m_storage.streamSingleElements();
+    }
+
+    @Override
     @SuppressWarnings( "unchecked" )
     public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
     {
