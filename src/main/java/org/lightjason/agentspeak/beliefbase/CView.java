@@ -243,7 +243,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                Arrays.stream( p_path )
                      .parallel()
                      .map( IPath::normalize )
-                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getStorage().getMultiElements().get( i.getSuffix() )
+                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getBeliefbase().getStorage().getMultiElements().get( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.getRight().shallowcopy( l_path ) ) );
     }
