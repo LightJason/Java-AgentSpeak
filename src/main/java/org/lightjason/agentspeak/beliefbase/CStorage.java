@@ -33,6 +33,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 
 /**
@@ -86,6 +87,18 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     public final Map<String, M> getSingleElements()
     {
         return m_singleelements;
+    }
+
+    @Override
+    public final Stream<N> streamMultiElements()
+    {
+        return m_multielements.values().stream();
+    }
+
+    @Override
+    public final Stream<M> streamSingleElements()
+    {
+        return m_singleelements.values().stream();
     }
 
     @Override
@@ -152,7 +165,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @Override
     public final int size()
     {
-        return m_multielements.asMap().values().stream().mapToInt( Collection::size ).sum() + m_singleelements.size();
+        return m_multielements.asMap().values().stream().mapToInt( Collection::size ).sum();
     }
 
     @Override

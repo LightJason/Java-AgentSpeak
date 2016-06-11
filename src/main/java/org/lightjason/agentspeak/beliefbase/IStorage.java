@@ -28,6 +28,7 @@ import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
 
 /**
@@ -58,6 +59,21 @@ public interface IStorage<N, M, T extends IAgent<?>>
      */
     @Deprecated
     Map<String, M> getSingleElements();
+
+    /**
+     * returns a stream over all multi-elements
+     *
+     * @return multi-element stream
+     */
+    Stream<N> streamMultiElements();
+
+    /**
+     * returns a stream over all single-elements
+     *
+     * @return single-element stream
+     */
+    Stream<M> streamSingleElements();
+
 
     /**
      * contains a multi-element
