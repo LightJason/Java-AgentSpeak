@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.beliefbase;
 
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
@@ -109,8 +108,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final IView<T> add( final ILiteral p_literal )
     {
         this.walk( p_literal.getFunctorPath().normalize(), this )
-            .getStorage()
-            .putMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
+            .getBeliefbase()
+            .add( p_literal.shallowcopySuffix() );
         return this;
     }
 
@@ -146,9 +145,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final IView<T> remove( final ILiteral p_literal )
     {
         this.walk( p_literal.getFunctorPath().normalize(), this )
-            .getStorage()
-            .removeMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal.shallowcopySuffix() ) );
-
+            .getBeliefbase()
+            .remove( p_literal.shallowcopySuffix() );
         return this;
     }
 

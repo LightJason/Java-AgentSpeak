@@ -53,6 +53,9 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 +counter(X) <- generic/print("belief 'counter' added with variable value [", X, "] in Cycle [", Cycle, "]").
 
++beliefadd(X) <- generic/print("adds the 'beliefadd' with value [", X, "] in Cycle [", Cycle, "]"); -beliefadd(X).
+-beliefadd(X) <- generic/print("removes the 'beliefadd' with value [", X, "] in Cycle [", Cycle, "]").
+
 +!mytest <- generic/print("my test plan without variable in cycle [", Cycle, "]").
 
 +!mytest(X)
@@ -368,7 +371,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- test belief calls -------------------------------------------------------------------------------------------------------------------------------
 
-        +counter(UN8);
+        +beliefadd(UN8);
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
