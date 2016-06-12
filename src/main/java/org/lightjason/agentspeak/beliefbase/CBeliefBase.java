@@ -131,6 +131,18 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
+    public final boolean containsMultiElement( final String p_key )
+    {
+        return m_storage.containsMultiElement( p_key );
+    }
+
+    @Override
+    public final boolean containsSingleElement( final String p_key )
+    {
+        return m_storage.containsSingleElement( p_key );
+    }
+
+    @Override
     public final T update( final T p_agent )
     {
         // check all references of mask and remove unused references
@@ -218,6 +230,12 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final Stream<IView<T>> streamView()
     {
         return m_storage.streamSingleElements();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_storage.toString();
     }
 
     @Override

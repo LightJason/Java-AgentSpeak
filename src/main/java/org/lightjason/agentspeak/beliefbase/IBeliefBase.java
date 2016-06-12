@@ -96,4 +96,20 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     void remove( final String p_name );
 
+    /**
+     * contains a multi-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsMultiElement( final String p_key );
+
+    /**
+     * contains a single-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsSingleElement( final String p_key );
+
 }

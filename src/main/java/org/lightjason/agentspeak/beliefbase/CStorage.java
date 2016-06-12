@@ -102,13 +102,13 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
-    public final boolean containsMultiElementKey( final String p_key )
+    public final boolean containsMultiElement( final String p_key )
     {
         return m_multielements.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsSingleElementKey( final String p_key )
+    public final boolean containsSingleElement( final String p_key )
     {
         return m_singleelements.containsKey( p_key );
     }

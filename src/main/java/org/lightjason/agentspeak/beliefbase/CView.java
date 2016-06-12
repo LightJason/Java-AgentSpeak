@@ -201,7 +201,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         p_path.normalize();
         return p_path.isEmpty() || ( p_path.size() == 1
-               ? m_beliefbase.getStorage().containsSingleElementKey( p_path.get( 0 ) )
+               ? m_beliefbase.containsSingleElement( p_path.get( 0 ) )
                : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
     }
 
@@ -213,7 +213,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return true;
 
         return p_path.size() == 1
-               ? m_beliefbase.getStorage().containsMultiElementKey( p_path.get( 0 ) )
+               ? m_beliefbase.containsMultiElement( p_path.get( 0 ) )
                : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
@@ -347,7 +347,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.getPath(), m_beliefbase.getStorage() );
+        return MessageFormat.format( "{0} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.getPath(), m_beliefbase );
     }
 
     /**

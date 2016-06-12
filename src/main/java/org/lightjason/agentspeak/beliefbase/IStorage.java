@@ -81,7 +81,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsMultiElementKey( final String p_key );
+    boolean containsMultiElement( final String p_key );
 
     /**
      * contains a single-element
@@ -89,7 +89,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsSingleElementKey( final String p_key );
+    boolean containsSingleElement( final String p_key );
 
     /**
      * puts a multi-element into the storage
