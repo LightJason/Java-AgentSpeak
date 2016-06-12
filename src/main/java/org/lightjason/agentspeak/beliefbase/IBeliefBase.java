@@ -112,4 +112,20 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     boolean containsSingleElement( final String p_key );
 
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @return view or null
+     */
+    IView<T> getSingleElement( final String p_key );
+
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @return view or default element
+     */
+    IView<T> getSingleElementOrDefault( final String p_key, final IView<T> p_default );
+
 }

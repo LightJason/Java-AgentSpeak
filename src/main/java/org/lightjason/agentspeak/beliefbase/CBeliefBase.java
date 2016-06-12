@@ -143,6 +143,18 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
+    public final IView<T> getSingleElement( final String p_key )
+    {
+        return m_storage.getSingleElement( p_key );
+    }
+
+    @Override
+    public final IView<T> getSingleElementOrDefault( final String p_key, final IView<T> p_default )
+    {
+        return m_storage.getSingleElementOrDefault( p_key, p_default );
+    }
+
+    @Override
     public final T update( final T p_agent )
     {
         // check all references of mask and remove unused references

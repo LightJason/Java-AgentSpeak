@@ -365,7 +365,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return;
 
         // get the next view and if the view is null, generate a new view
-        final IView<T> l_view = p_root.getStorage().getSingleElements().getOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ) ) );
+        final IView<T> l_view = p_root.getBeliefbase().getSingleElementOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ) ) );
         p_root.getStorage().getSingleElements().put( l_view.getName(), l_view.clone( p_root ) );
 
         this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );

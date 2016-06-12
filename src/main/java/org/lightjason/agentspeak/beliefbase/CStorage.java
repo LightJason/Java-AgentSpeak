@@ -138,6 +138,18 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
+    public final M getSingleElement( final String p_key )
+    {
+        return m_singleelements.get( p_key );
+    }
+
+    @Override
+    public final M getSingleElementOrDefault( final String p_key, final M p_default )
+    {
+        return m_singleelements.getOrDefault( p_key, p_default );
+    }
+
+    @Override
     public final void clear()
     {
         m_multielements.clear();

@@ -127,6 +127,22 @@ public interface IStorage<N, M, T extends IAgent<?>>
     boolean removeSingleElements( final String p_key );
 
     /**
+     * returns a single-element by the name
+     *
+     * @param p_key key
+     * @return single-element or null
+     */
+    M getSingleElement( final String p_key );
+
+    /**
+     * returns a single-element by the name
+     *
+     * @param p_key key
+     * @return single-element or the default element
+     */
+    M getSingleElementOrDefault( final String p_key, final M p_default );
+
+    /**
      * clears all elements
      */
     void clear();
