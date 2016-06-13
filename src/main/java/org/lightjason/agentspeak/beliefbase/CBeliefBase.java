@@ -106,7 +106,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final void add( final IView<T> p_view )
     {
-        m_storage.getSingleElements().put( p_view.getName(), p_view );
+        m_storage.putSingleElements( p_view.getName(), p_view );
     }
 
     @Override

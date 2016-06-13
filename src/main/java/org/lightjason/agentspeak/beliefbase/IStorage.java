@@ -28,7 +28,6 @@ import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -51,15 +50,6 @@ public interface IStorage<N, M, T extends IAgent<?>>
      */
     @Deprecated
     SetMultimap<String, N> getMultiElements();
-
-    /**
-     * returns the map with single elements
-     *
-     * @return map
-     * @deprecated replaced by individual calls
-     */
-    @Deprecated
-    Map<String, M> getSingleElements();
 
     /**
      * returns a stream over all multi-elements

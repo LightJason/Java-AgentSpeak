@@ -84,12 +84,6 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
-    public final Map<String, M> getSingleElements()
-    {
-        return m_singleelements;
-    }
-
-    @Override
     public final Stream<N> streamMultiElements()
     {
         return m_multielements.values().stream();
