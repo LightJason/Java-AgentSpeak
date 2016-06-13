@@ -27,6 +27,7 @@ package org.lightjason.agentspeak.beliefbase;
 import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -73,7 +74,6 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @return single-element stream
      */
     Stream<M> streamSingleElements();
-
 
     /**
      * contains a multi-element
@@ -141,6 +141,9 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @return single-element or the default element
      */
     M getSingleElementOrDefault( final String p_key, final M p_default );
+
+
+    Collection<N> getMultiElement( final String p_key );
 
     /**
      * clears all elements

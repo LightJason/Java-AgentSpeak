@@ -150,6 +150,12 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
+    public final Collection<N> getMultiElement( final String p_key )
+    {
+        return m_multielements.get( p_key );
+    }
+
+    @Override
     public final void clear()
     {
         m_multielements.clear();

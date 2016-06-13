@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -131,27 +132,33 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final boolean containsMultiElement( final String p_key )
+    public final boolean containsLiteral( final String p_key )
     {
         return m_storage.containsMultiElement( p_key );
     }
 
     @Override
-    public final boolean containsSingleElement( final String p_key )
+    public final boolean containsView( final String p_key )
     {
         return m_storage.containsSingleElement( p_key );
     }
 
     @Override
-    public final IView<T> getSingleElement( final String p_key )
+    public final IView<T> getView( final String p_key )
     {
         return m_storage.getSingleElement( p_key );
     }
 
     @Override
-    public final IView<T> getSingleElementOrDefault( final String p_key, final IView<T> p_default )
+    public final IView<T> getViewOrDefault( final String p_key, final IView<T> p_default )
     {
         return m_storage.getSingleElementOrDefault( p_key, p_default );
+    }
+
+    @Override
+    public final Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key )
+    {
+        return m_storage.getMultiElement( p_key );
     }
 
     @Override
@@ -248,13 +255,6 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final String toString()
     {
         return m_storage.toString();
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
-    {
-        return (L) m_storage;
     }
 
 }

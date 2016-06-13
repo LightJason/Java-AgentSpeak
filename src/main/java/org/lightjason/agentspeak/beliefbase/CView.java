@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.beliefbase;
 
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -124,7 +123,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final IView<T> add( final IView<T> p_view )
     {
         this.root()
-            .filter( i -> p_view.getStorage().equals( i.getStorage() ) )
+            .filter( i -> p_view.getBeliefbase().equals( i.getBeliefbase() ) )
             .findAny()
             .ifPresent( i -> {
                 throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getPath(), i.getPath() ) );
@@ -201,7 +200,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         p_path.normalize();
         return p_path.isEmpty() || ( p_path.size() == 1
-               ? m_beliefbase.containsSingleElement( p_path.get( 0 ) )
+               ? m_beliefbase.containsView( p_path.get( 0 ) )
                : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
     }
 
@@ -213,7 +212,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return true;
 
         return p_path.size() == 1
-               ? m_beliefbase.containsMultiElement( p_path.get( 0 ) )
+               ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
                : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
@@ -241,7 +240,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                Arrays.stream( p_path )
                      .parallel()
                      .map( IPath::normalize )
-                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getBeliefbase().getStorage().getMultiElements().get( i.getSuffix() )
+                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getBeliefbase().getLiteral( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.getRight().shallowcopy( l_path ) ) );
     }
@@ -269,7 +268,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                : Arrays.stream( p_path )
                     .parallel()
                     .map( IPath::normalize )
-                    .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getStorage().getMultiElements().get( i.getSuffix() )
+                    .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).getBeliefbase().getLiteral( i.getSuffix() )
                                         .parallelStream()
                                         .filter( j -> j.getLeft() == p_negated )
                                         .map( j -> j.getRight().shallowcopy( l_path ) ) );
@@ -279,12 +278,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final IBeliefBase<T> getBeliefbase()
     {
         return m_beliefbase;
-    }
-
-    @Override
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
-    {
-        return m_beliefbase.getStorage();
     }
 
     @Override
@@ -365,8 +358,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return;
 
         // get the next view and if the view is null, generate a new view
-        final IView<T> l_view = p_root.getBeliefbase().getSingleElementOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ) ) );
-        p_root.getStorage().getSingleElements().put( l_view.getName(), l_view.clone( p_root ) );
+        final IView<T> l_view = p_root.getBeliefbase().getViewOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ) ) );
+        p_root.getBeliefbase().add( l_view.clone( p_root ) );
 
         this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );
     }
@@ -386,7 +379,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return p_root;
 
         // if view is null an exception is thrown
-        final IView<T> l_view = p_root.getStorage().getSingleElements().get( p_path.get( 0 ) );
+        final IView<T> l_view = p_root.getBeliefbase().getView( p_path.get( 0 ) );
         if ( l_view == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notfound", p_path.get( 0 ), p_root.getPath() ) );
 

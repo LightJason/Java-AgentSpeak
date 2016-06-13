@@ -23,10 +23,12 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 
@@ -102,7 +104,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsMultiElement( final String p_key );
+    boolean containsLiteral( final String p_key );
 
     /**
      * contains a single-element
@@ -110,7 +112,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsSingleElement( final String p_key );
+    boolean containsView( final String p_key );
 
     /**
      * returns a view element
@@ -118,7 +120,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the view
      * @return view or null
      */
-    IView<T> getSingleElement( final String p_key );
+    IView<T> getView( final String p_key );
 
     /**
      * returns a view element
@@ -126,6 +128,14 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the view
      * @return view or default element
      */
-    IView<T> getSingleElementOrDefault( final String p_key, final IView<T> p_default );
+    IView<T> getViewOrDefault( final String p_key, final IView<T> p_default );
+
+    /**
+     * returns a literal by the name
+     *
+     * @param p_key name of the literal
+     * @return collection of pairs with negated and literal
+     */
+    Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key );
 
 }
