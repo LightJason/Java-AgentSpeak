@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.beliefbase;
 
 
-import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
 import java.util.Collection;
@@ -41,15 +40,6 @@ import java.util.stream.Stream;
  */
 public interface IStorage<N, M, T extends IAgent<?>>
 {
-
-    /**
-     * returns the map with multiple elements
-     *
-     * @return multimap
-     * @deprecated replaced by individual calls
-     */
-    @Deprecated
-    SetMultimap<String, N> getMultiElements();
 
     /**
      * returns a stream over all multi-elements
@@ -132,21 +122,18 @@ public interface IStorage<N, M, T extends IAgent<?>>
      */
     M getSingleElementOrDefault( final String p_key, final M p_default );
 
-
+    /**
+     * returns a collection of multi-elementy by name
+     *
+     * @param p_key name
+     * @return collection of multi-elements
+     */
     Collection<N> getMultiElement( final String p_key );
 
     /**
      * clears all elements
      */
     void clear();
-
-    /**
-     * checks any element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    boolean contains( final String p_key );
 
     /**
      * checks if a storage is empty
@@ -165,6 +152,8 @@ public interface IStorage<N, M, T extends IAgent<?>>
 
     /**
      * number of multi elements
+     *
+     * @return element number
      */
     int size();
 

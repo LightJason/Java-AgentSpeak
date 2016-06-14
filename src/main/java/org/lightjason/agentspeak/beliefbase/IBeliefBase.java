@@ -48,6 +48,8 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     Stream<ITrigger> getTrigger( final IView<T> p_view );
 
+
+
     /**
      * returns a stream over all literals
      *
@@ -62,10 +64,14 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     Stream<IView<T>> streamView();
 
+
+
     /**
      * clears all elements
      */
     void clear();
+
+
 
     /**
      * adds a literal
@@ -79,6 +85,8 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     void add( final IView<T> p_view );
 
+
+
     /**
      * removes a literal
      * @param p_literal without path
@@ -90,6 +98,8 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_view view
      */
     void remove( final IView<T> p_view );
+
+
 
     /**
      * contains a multi-element
@@ -107,6 +117,8 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     boolean containsView( final String p_key );
 
+
+
     /**
      * returns a view element
      *
@@ -122,6 +134,8 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @return view or default element
      */
     IView<T> getViewOrDefault( final String p_key, final IView<T> p_default );
+
+
 
     /**
      * returns a literal by the name

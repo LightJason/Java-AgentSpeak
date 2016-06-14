@@ -78,12 +78,6 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
-    public final SetMultimap<String, N> getMultiElements()
-    {
-        return m_multielements;
-    }
-
-    @Override
     public final Stream<N> streamMultiElements()
     {
         return m_multielements.values().stream();
@@ -154,12 +148,6 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     {
         m_multielements.clear();
         m_singleelements.clear();
-    }
-
-    @Override
-    public final boolean contains( final String p_key )
-    {
-        return m_multielements.containsKey( p_key ) || m_singleelements.containsKey( p_key );
     }
 
     @Override

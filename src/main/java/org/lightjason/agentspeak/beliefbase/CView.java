@@ -180,16 +180,16 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final boolean containsview( final IPath p_path )
+    public final boolean containsView( final IPath p_path )
     {
         p_path.normalize();
         return p_path.isEmpty() || ( p_path.size() == 1
                ? m_beliefbase.containsView( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsview( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
     }
 
     @Override
-    public final boolean containsliteral( final IPath p_path )
+    public final boolean containsLiteral( final IPath p_path )
     {
         p_path.normalize();
         if ( p_path.isEmpty() )
@@ -197,13 +197,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
         return p_path.size() == 1
                ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsliteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
-    }
-
-    @Override
-    public final Stream<ILiteral> parallelStream( final IPath... p_path )
-    {
-        return this.stream( p_path ).parallel();
+               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
     }
 
     @Override
@@ -216,7 +210,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                ?
                Stream.concat(
                    m_beliefbase.streamLiteral().parallel().map( i -> i.shallowcopy( l_path ) ),
-                   m_beliefbase.streamView().parallel().flatMap( i -> i.parallelStream().map( j -> j.shallowcopy( l_path ) )
+                   m_beliefbase.streamView().parallel().flatMap( i -> i.stream().parallel().map( j -> j.shallowcopy( l_path ) )
                    )
                )
 
@@ -230,12 +224,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final Stream<ILiteral> parallelStream( final boolean p_negated, final IPath... p_path )
-    {
-        return this.stream( p_negated, p_path ).parallel();
-    }
-
-    @Override
     public final Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path )
     {
         // build path relative to this view
@@ -246,7 +234,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                     m_beliefbase.streamLiteral().parallel()
                         .filter( i -> i.isNegated() == p_negated )
                         .map( i -> i.shallowcopy( l_path ) ),
-                    m_beliefbase.streamView().parallel().flatMap( i -> i.parallelStream( p_negated ).map( j -> j.shallowcopy( l_path ) ) )
+                    m_beliefbase.streamView().parallel().flatMap( i -> i.stream( p_negated ).parallel().map( j -> j.shallowcopy( l_path ) ) )
                )
 
                : Arrays.stream( p_path )
