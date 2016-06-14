@@ -21,50 +21,46 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.beliefbase;
+package org.lightjason.agentspeak.beliefbase.storage;
 
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * thread-safe storage of the data
+ * thread-safe storage of the data of
+ * single- and multi-elements, a multi-element
+ * can be stored once and will be replaced iif
+ * a new one is added
  *
  * @tparam N multi-element type
  * @tparam M single-element type
  * @tparam T agent type
  */
-public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M, T>
+public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorage<N, M, T>
 {
     /**
      * map with elements
      **/
-    private final SetMultimap<String, N> m_multielements = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
+    private final Map<String, N> m_multielements = new ConcurrentHashMap<>();
     /**
      * map with single elements
      **/
     private final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
-    /**
-     * belief perceiver object
-     */
-    private final IBeliefPerceive<T> m_perceive;
 
     /**
      * ctor
      */
-    @SuppressWarnings( "unchecked" )
-    public CStorage()
+    public CSingleStorage()
     {
-        this( (IBeliefPerceive<T>) IBeliefPerceive.EMPTY );
+        super();
     }
 
     /**
@@ -72,9 +68,9 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
      *
      * @param p_perceive perceive object
      */
-    public CStorage( final IBeliefPerceive<T> p_perceive )
+    public CSingleStorage( final IBeliefPerceive<T> p_perceive )
     {
-        m_perceive = p_perceive;
+        super( p_perceive );
     }
 
     @Override
@@ -104,19 +100,19 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @Override
     public final boolean putMultiElements( final String p_key, final N p_value )
     {
-        return m_multielements.put( p_key, p_value );
+        return !p_value.equals( m_multielements.put( p_key, p_value ) );
     }
 
     @Override
     public final boolean putSingleElements( final String p_key, final M p_value )
     {
-        return m_singleelements.put( p_key, p_value ) == null;
+        return !p_value.equals( m_singleelements.put( p_key, p_value ) );
     }
 
     @Override
     public final boolean removeMultiElements( final String p_key, final N p_value )
     {
-        return m_multielements.remove( p_key, p_value );
+        return p_value.equals( m_multielements.remove( p_key ) );
     }
 
     @Override
@@ -140,7 +136,7 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     @Override
     public final Collection<N> getMultiElement( final String p_key )
     {
-        return m_multielements.get( p_key );
+        return Stream.of( m_multielements.get( p_key ) ).collect( Collectors.toSet() );
     }
 
     @Override
@@ -157,20 +153,16 @@ public final class CStorage<N, M, T extends IAgent<?>> implements IStorage<N, M,
     }
 
     @Override
-    public final T update( final T p_agent )
-    {
-        return m_perceive.perceive( p_agent );
-    }
-
-    @Override
     public final int size()
     {
-        return m_multielements.asMap().values().stream().mapToInt( Collection::size ).sum();
+        return m_multielements.size();
     }
+
 
     @Override
     public final String toString()
     {
         return MessageFormat.format( "[multi elements: {0}, single elements: {1}]", m_multielements, m_singleelements );
     }
+
 }

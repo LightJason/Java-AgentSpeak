@@ -23,12 +23,13 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.junit.Test;
 import org.lightjason.agentspeak.agent.CAgent;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefBase;
-import org.lightjason.agentspeak.beliefbase.CStorage;
 import org.lightjason.agentspeak.beliefbase.IView;
 import org.lightjason.agentspeak.beliefbase.IViewGenerator;
+import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.consistency.filter.CAll;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
@@ -37,7 +38,6 @@ import org.lightjason.agentspeak.consistency.metric.CWeightedDifference;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -179,7 +179,7 @@ public final class TestCMetric
         @Override
         public IView<IAgent<?>> generate( final String p_name )
         {
-            return new CBeliefBase<>( new CStorage<>() ).create( p_name );
+            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name );
         }
     }
 

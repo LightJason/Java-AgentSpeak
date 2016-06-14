@@ -28,9 +28,9 @@ import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
 import org.lightjason.agentspeak.beliefbase.CBeliefBase;
-import org.lightjason.agentspeak.beliefbase.CStorage;
 import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import org.lightjason.agentspeak.beliefbase.IView;
+import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
@@ -170,7 +170,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     @Override
     public final IView<T> getBeliefbase()
     {
-        final IView<T> l_beliefbase = new CBeliefBase<>( new CStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
+        final IView<T> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs

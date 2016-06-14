@@ -23,11 +23,12 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CPath;
-import org.lightjason.agentspeak.language.CLiteral;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.language.CLiteral;
 
 import java.util.stream.IntStream;
 
@@ -47,7 +48,7 @@ public final class TestCView
     public final void testTree()
     {
         final int l_max = 10;
-        final IView<IAgent<?>> l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
+        final IView<IAgent<?>> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator<IAgent<?>> l_gen = new CGenerator();
 
         IntStream.range( 0, l_max )
@@ -66,7 +67,7 @@ public final class TestCView
     @Test
     public final void testManual()
     {
-        final IView<IAgent<?>> l_beliefbase = new CBeliefBase<>( new CStorage<>() ).create( "root" );
+        final IView<IAgent<?>> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator<IAgent<?>> l_gen = new CGenerator();
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )
@@ -109,7 +110,7 @@ public final class TestCView
         @Override
         public final IView<IAgent<?>> generate( final String p_name )
         {
-            return new CBeliefBase<>( new CStorage<>() ).create( p_name );
+            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name );
         }
     }
 
