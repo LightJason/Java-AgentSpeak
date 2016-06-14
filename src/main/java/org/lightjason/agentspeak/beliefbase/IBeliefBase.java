@@ -23,10 +23,12 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 
@@ -46,10 +48,30 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     Stream<ITrigger> getTrigger( final IView<T> p_view );
 
+
+
+    /**
+     * returns a stream over all literals
+     *
+     * @return literal stream
+     */
+    Stream<ILiteral> streamLiteral();
+
+    /**
+     * returns a stream over all views
+     *
+     * @return view stream
+     */
+    Stream<IView<T>> streamView();
+
+
+
     /**
      * clears all elements
      */
     void clear();
+
+
 
     /**
      * adds a literal
@@ -63,6 +85,8 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     void add( final IView<T> p_view );
 
+
+
     /**
      * removes a literal
      * @param p_literal without path
@@ -75,11 +99,50 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     void remove( final IView<T> p_view );
 
+
+
     /**
-     * removes single- and multi-elements
+     * contains a multi-element
      *
-     * @param p_name name
+     * @param p_key key
+     * @return boolean existing flag
      */
-    void remove( final String p_name );
+    boolean containsLiteral( final String p_key );
+
+    /**
+     * contains a single-element
+     *
+     * @param p_key key
+     * @return boolean existing flag
+     */
+    boolean containsView( final String p_key );
+
+
+
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @return view or null
+     */
+    IView<T> getView( final String p_key );
+
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @return view or default element
+     */
+    IView<T> getViewOrDefault( final String p_key, final IView<T> p_default );
+
+
+
+    /**
+     * returns a literal by the name
+     *
+     * @param p_key name of the literal
+     * @return collection of pairs with negated and literal
+     */
+    Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key );
 
 }

@@ -25,8 +25,6 @@ package org.lightjason.agentspeak.beliefbase;
 
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.ILiteral;
-import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
@@ -70,14 +68,5 @@ public interface IStructure<T extends IAgent<?>>
      * @return view
      */
     IView<T> create( final String p_name );
-
-    /**
-     * returns the storage of the beliefbase
-     *
-     * @return storage
-     *
-     * @tparam L typecast
-     */
-    <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage();
 
 }

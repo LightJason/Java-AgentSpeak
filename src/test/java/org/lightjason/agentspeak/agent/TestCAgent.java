@@ -73,12 +73,11 @@ public final class TestCAgent
     private static final Map<String, String> ASL = StreamUtils.zip(
 
         Stream.of(
-            "src/test/resources/agent/complete.asl",
-            "src/test/resources/agent/default.asl"
+            "src/test/resources/agent/complete.asl"
         ),
 
         Stream.of(
-            "full-test agent", "default agent"
+            "full-test agent"
         ),
 
         AbstractMap.SimpleImmutableEntry::new
@@ -92,7 +91,7 @@ public final class TestCAgent
 
         // create actions
         final Random l_random = new Random();
-        ACTIONS = CCommon.getActionsFromPackage().collect( Collectors.toMap( i -> i, j -> new Double( l_random.nextInt( 15 ) ) ) );
+        ACTIONS = CCommon.getActionsFromPackage().collect( Collectors.toMap( i -> i, j -> (double) l_random.nextInt( 15 ) ) );
     }
 
     /**
@@ -102,13 +101,12 @@ public final class TestCAgent
     public final void testASLManual()
     {
         ASL.entrySet()
-            .stream()
-            .forEach( i ->
-            {
-                final Pair<Boolean, String> l_result = testAgentManual( i.getKey(), i.getValue() );
-                assertTrue( l_result.getRight(), l_result.getLeft() );
-                System.out.println( l_result.getValue() );
-            } );
+             .forEach( i ->
+             {
+                 final Pair<Boolean, String> l_result = testAgentManual( i.getKey(), i.getValue() );
+                 assertTrue( l_result.getRight(), l_result.getLeft() );
+                 System.out.println( l_result.getValue() );
+             } );
     }
 
     /**

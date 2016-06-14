@@ -21,71 +21,47 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.beliefbase;
+package org.lightjason.agentspeak.beliefbase.storage;
 
 
-import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
-
-import java.util.Map;
+import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 
 
 /**
- * interface of a beliefbase storage
- *
- * @tparam N multiple elements
- * @tparam M single elements
- * @tparam T agent type
- * @warning internal data structure must be thread-safe
+ * default structure of a storage
  */
-public interface IStorage<N, M, T extends IAgent<?>>
+public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorage<N, M, T>
 {
+    /**
+     * belief perceiver object
+     */
+    private final IBeliefPerceive<T> m_perceive;
 
     /**
-     * returns the map with multiple elements
+     * ctor
+     */
+    @SuppressWarnings( "unchecked" )
+    protected IBaseStorage()
+    {
+        this( (IBeliefPerceive<T>) IBeliefPerceive.EMPTY );
+    }
+
+    /**
+     * ctor
      *
-     * @return multimap
+     * @param p_perceive perceive object
      */
-    SetMultimap<String, N> getMultiElements();
+    protected IBaseStorage( final IBeliefPerceive<T> p_perceive )
+    {
+        m_perceive = p_perceive;
+    }
 
-    /**
-     * returns the map with single elements
-     *
-     * @return map
-     */
-    Map<String, M> getSingleElements();
 
-    /**
-     * clears all elements
-     */
-    void clear();
-
-    /**
-     * checks any element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    boolean contains( final String p_key );
-
-    /**
-     * checks if a storage is empty
-     *
-     * @return empty boolean
-     */
-    boolean isEmpty();
-
-    /**
-     * updates all items
-     *
-     * @param p_agent agent which calls the update
-     * @return agent
-     */
-    T update( final T p_agent );
-
-    /**
-     * number of multi elements
-     */
-    int size();
+    @Override
+    public final T update( final T p_agent )
+    {
+        return m_perceive.perceive( p_agent );
+    }
 
 }

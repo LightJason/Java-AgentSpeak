@@ -179,7 +179,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
         Arrays.stream( p_inspector ).parallel().forEach( i -> {
             i.inspectcycle( m_cycle );
             i.inspectsleeping( m_sleepingcycles );
-            i.inspectbelief( m_beliefbase.parallelStream() );
+            i.inspectbelief( m_beliefbase.stream().parallel() );
             i.inspectplans( m_plans.entries().parallelStream().map( j -> new ImmutableTriple<>( j.getValue().getLeft(), j.getValue().getMiddle().get(),
                                                                                                 j.getValue().getRight().get()
             ) ) );

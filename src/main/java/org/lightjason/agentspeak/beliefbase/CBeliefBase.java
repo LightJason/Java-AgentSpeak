@@ -28,6 +28,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.storage.IStorage;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -37,6 +38,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -98,36 +100,59 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final void add( final ILiteral p_literal )
     {
         // create add-event for the literal
-        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
-        m_storage.getMultiElements().put( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
+        if ( m_storage.putMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
+            m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
     }
 
     @Override
     public final void add( final IView<T> p_view )
     {
-        m_storage.getSingleElements().put( p_view.getName(), p_view );
+        m_storage.putSingleElements( p_view.getName(), p_view );
     }
 
     @Override
     public final void remove( final IView<T> p_view )
     {
         m_events.remove( p_view );
-        m_storage.getSingleElements().remove( p_view.getName() );
+        m_storage.removeSingleElements( p_view.getName() );
     }
 
     @Override
     public final void remove( final ILiteral p_literal )
     {
         // create delete-event for the literal
-        m_events.values().stream().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
-        m_storage.getMultiElements().remove( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) );
+        if ( m_storage.removeMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
+            m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
     }
 
     @Override
-    public final void remove( final String p_name )
+    public final boolean containsLiteral( final String p_key )
     {
-        m_storage.getSingleElements().remove( p_name );
-        m_storage.getMultiElements().removeAll( p_name );
+        return m_storage.containsMultiElement( p_key );
+    }
+
+    @Override
+    public final boolean containsView( final String p_key )
+    {
+        return m_storage.containsSingleElement( p_key );
+    }
+
+    @Override
+    public final IView<T> getView( final String p_key )
+    {
+        return m_storage.getSingleElement( p_key );
+    }
+
+    @Override
+    public final IView<T> getViewOrDefault( final String p_key, final IView<T> p_default )
+    {
+        return m_storage.getSingleElementOrDefault( p_key, p_default );
+    }
+
+    @Override
+    public final Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key )
+    {
+        return m_storage.getMultiElement( p_key );
     }
 
     @Override
@@ -143,7 +168,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         }
 
         // run storage update
-        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.update( p_agent ) );
+        m_storage.streamSingleElements().parallel().forEach( i -> i.update( p_agent ) );
         return m_storage.update( p_agent );
     }
 
@@ -163,11 +188,16 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final void clear()
     {
         // create delete-event for all literals
-        m_storage.getMultiElements().values().stream()
-                 .forEach( j -> m_events.values().stream()
-                                        .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) ) );
+        m_storage
+            .streamMultiElements()
+            .parallel()
+            .forEach(
+                j -> m_events
+                    .values()
+                    .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) )
+            );
 
-        m_storage.getSingleElements().values().parallelStream().forEach( i -> i.clear() );
+        m_storage.streamSingleElements().parallel().forEach( i -> i.clear() );
         m_storage.clear();
     }
 
@@ -180,7 +210,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final int size()
     {
-        return m_storage.getMultiElements().size() + m_storage.getSingleElements().values().parallelStream().mapToInt( i -> i.size() ).sum();
+        return m_storage.size() + m_storage.streamSingleElements().parallel().mapToInt( IStructure::size ).sum();
     }
 
     @Override
@@ -193,7 +223,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         final Set<ITrigger> l_copy = Collections.unmodifiableSet(
             Stream.concat(
                 l_trigger.parallelStream(),
-                m_storage.getSingleElements().values().parallelStream().flatMap( i -> i.getTrigger() )
+                m_storage.streamSingleElements().parallel().flatMap( IView::getTrigger )
             )
                   .collect( Collectors.toSet() )
         );
@@ -204,10 +234,21 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final <L extends IStorage<Pair<Boolean, ILiteral>, IView<T>, T>> L getStorage()
+    public final Stream<ILiteral> streamLiteral()
     {
-        return (L) m_storage;
+        return m_storage.streamMultiElements().map( Pair::getRight );
+    }
+
+    @Override
+    public final Stream<IView<T>> streamView()
+    {
+        return m_storage.streamSingleElements();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_storage.toString();
     }
 
 }
