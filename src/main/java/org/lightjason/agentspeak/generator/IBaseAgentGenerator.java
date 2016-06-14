@@ -34,11 +34,15 @@ import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.grammar.CParserAgent;
 import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,10 +59,6 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * unification
      */
     protected static final IUnifier UNIFIER = new CUnifier();
-    /**
-     * fuzzy structure
-     */
-    protected final IFuzzy<Boolean, T> m_fuzzy = new CBoolFuzzy<>();
     /**
      * configuration of an agent
      */
@@ -91,7 +91,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation, final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                                final IAggregation p_aggregation, final IBeliefPerceive<T> p_beliefbaseupdate,
+                                final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -116,10 +117,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     throws Exception
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
-
-        // build configuration (configuration runs cloning of objects if needed)
-        m_configuration = new CDefaultAgentConfiguration<>(
-            m_fuzzy,
+        m_configuration = this.configuration(
+            new CBoolFuzzy<>(),
 
             Stream.concat(
                 l_visitor.getInitialBeliefs().stream(),
@@ -149,13 +148,26 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     }
 
     /**
-     * ctor
+     * builds the configuraion, configuration runs cloning of objects if needed
      *
-     * @param p_configuration any configuration
+     * @return configuration object
      */
-    protected IBaseAgentGenerator( final IAgentConfiguration<T> p_configuration )
+    protected IAgentConfiguration<T> configuration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+                                                    final IBeliefPerceive<T> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                                    final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
+                                                    final IVariableBuilder p_variablebuilder )
     {
-        m_configuration = p_configuration;
+        return new CDefaultAgentConfiguration<>(
+            p_fuzzy,
+            p_initalbeliefs,
+            p_beliefperceive,
+            p_plans,
+            p_rules,
+            p_initialgoal,
+            p_unifier,
+            p_aggregation,
+            p_variablebuilder
+        );
     }
 
     @Override
