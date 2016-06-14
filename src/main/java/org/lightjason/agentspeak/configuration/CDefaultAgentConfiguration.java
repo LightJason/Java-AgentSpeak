@@ -168,7 +168,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public final IView<T> getBeliefbase()
+    public IView<T> getBeliefbase()
     {
         final IView<T> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
