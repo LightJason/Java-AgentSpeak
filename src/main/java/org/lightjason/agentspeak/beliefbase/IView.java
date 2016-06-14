@@ -146,7 +146,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @param p_literal literal
      * @return boolean flag for correct adding
      */
-    IView<T> add( final ILiteral p_literal );
+    IView<T> add( final ILiteral... p_literal );
 
     /**
      * adds view in the current structure
@@ -156,7 +156,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView<T> add( final IView<T> p_view );
+    IView<T> add( final IView<T>... p_view );
 
     /**
      * adds view in the current structure
@@ -167,7 +167,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      *
      * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
      */
-    IView<T> add( final IPath p_path, final IView<T> p_view );
+    IView<T> add( final IPath p_path, final IView<T>... p_view );
 
 
 

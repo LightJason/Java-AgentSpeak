@@ -104,32 +104,43 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> add( final ILiteral p_literal )
+    public final IView<T> add( final ILiteral... p_literal )
     {
-        this.walk( p_literal.getFunctorPath().normalize(), this )
-            .getBeliefbase()
-            .add( p_literal.shallowcopySuffix() );
+        Arrays.stream( p_literal )
+            .parallel()
+            .forEach( i -> this.walk( i.getFunctorPath().normalize(), this )
+                                .getBeliefbase()
+                                .add( i.shallowcopySuffix() )
+            );
         return this;
     }
 
     @Override
-    public final IView<T> add( final IPath p_path, final IView<T> p_view )
+    @SuppressWarnings( "unchecked" )
+    public final IView<T> add( final IPath p_path, final IView<T>... p_view )
     {
-        this.walk( p_path.normalize(), this ).add( p_view );
+        Arrays.stream( p_view )
+              .parallel()
+              .forEach( i -> this.walk( p_path.normalize(), this ).add( i ) );
         return this;
     }
 
     @Override
-    public final IView<T> add( final IView<T> p_view )
+    @SafeVarargs
+    public final IView<T> add( final IView<T>... p_view )
     {
-        this.root()
-            .filter( i -> p_view.getBeliefbase().equals( i.getBeliefbase() ) )
-            .findAny()
-            .ifPresent( i -> {
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", p_view.getPath(), i.getPath() ) );
-            } );
-
-        m_beliefbase.add( p_view.clone( this ) );
+        Arrays.stream( p_view )
+              .parallel()
+              .forEach( i ->
+              {
+                  this.root()
+                      .filter( j -> i.getBeliefbase().equals( i.getBeliefbase() ) )
+                      .findAny()
+                      .ifPresent( j -> {
+                          throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", i.getPath(), j.getPath() ) );
+                      } );
+                  m_beliefbase.add( i.clone( this ) );
+              } );
         return this;
     }
 
