@@ -150,22 +150,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> remove( final IPath... p_path )
-    {
-        if ( ( p_path != null ) && ( p_path.length > 0 ) )
-            Arrays.stream( p_path ).parallel()
-                  .map( IPath::normalize )
-                  .forEach( i -> {
-                      if ( i.size() == 1 )
-                        m_beliefbase.remove( i.getSuffix() );
-                      else
-                        this.walk( i.getSubPath( 0, -1 ), this ).remove( i );
-                  } );
-
-        return this;
-    }
-
-    @Override
     public final IView<T> clear( final IPath... p_path )
     {
         if ( ( p_path == null ) || ( p_path.length == 0 ) )

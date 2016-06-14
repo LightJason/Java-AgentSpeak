@@ -107,14 +107,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     IView<T> remove( final ILiteral p_literal );
 
-    /**
-     * removes literal and view
-     *
-     * @param p_path paths
-     * @return is found and removed
-     */
-    IView<T> remove( final IPath... p_path );
-
 
 
     /**

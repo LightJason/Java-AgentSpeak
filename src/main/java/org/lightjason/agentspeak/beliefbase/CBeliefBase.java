@@ -125,13 +125,6 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final void remove( final String p_name )
-    {
-        m_storage.removeSingleElements( p_name );
-        m_storage.getMultiElements().removeAll( p_name );
-    }
-
-    @Override
     public final boolean containsLiteral( final String p_key )
     {
         return m_storage.containsMultiElement( p_key );

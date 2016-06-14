@@ -92,13 +92,6 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
     void remove( final IView<T> p_view );
 
     /**
-     * removes single- and multi-elements
-     *
-     * @param p_name name
-     */
-    void remove( final String p_name );
-
-    /**
      * contains a multi-element
      *
      * @param p_key key
