@@ -134,7 +134,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
               .forEach( i ->
               {
                   this.root()
-                      .filter( j -> i.getBeliefbase().equals( i.getBeliefbase() ) )
+                      .filter( j -> i.getBeliefbase().equals( this.getBeliefbase() ) )
                       .findAny()
                       .ifPresent( j -> {
                           throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", i.getPath(), j.getPath() ) );
