@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.generator;
 
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.agent.CPlanBundle;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.configuration.CDefaultPlanBundleConfiguration;
 import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
@@ -40,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * plan bundle generator
  */
-public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
+public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
 {
     /**
      * configuration
@@ -55,7 +54,7 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
      * @param p_actions set with actions
      * @throws Exception thrown on error
      */
-    public CDefaultPlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public IBasePlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
     {
         final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions ).parse( p_stream );
 
@@ -71,15 +70,9 @@ public class CDefaultPlanBundleGenerator implements IPlanBundleGenerator
      *
      * @param p_configuration configuration
      */
-    protected CDefaultPlanBundleGenerator( final IPlanBundleConfiguration p_configuration )
+    protected IBasePlanBundleGenerator( final IPlanBundleConfiguration p_configuration )
     {
         m_configuration = p_configuration;
-    }
-
-    @Override
-    public IPlanBundle generatesingle( final Object... p_data )
-    {
-        return new CPlanBundle( m_configuration );
     }
 
     @Override

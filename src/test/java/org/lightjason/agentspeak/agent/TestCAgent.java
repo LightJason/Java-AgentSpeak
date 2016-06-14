@@ -31,7 +31,8 @@ import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.generator.CDefaultAgentGenerator;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
@@ -124,7 +125,7 @@ public final class TestCAgent
                                                 final InputStream l_stream = new FileInputStream( i.getKey() );
                                             )
                                             {
-                                                new CDefaultAgentGenerator<>(
+                                                new CAgentGenerator(
                                                     l_stream,
                                                     ACTIONS.keySet(),
                                                     IAggregation.EMPTY,
@@ -174,7 +175,7 @@ public final class TestCAgent
             final InputStream l_stream = new FileInputStream( p_script );
         )
         {
-            l_agent = new CDefaultAgentGenerator<>(
+            l_agent = new CAgentGenerator(
                 l_stream,
                 ACTIONS.keySet(),
                 new CAggregation( ACTIONS ),
@@ -215,6 +216,74 @@ public final class TestCAgent
 
         return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
     }
+
+
+    /**
+     * agent class
+     */
+    private static final class CAgent extends IBaseAgent<IAgent<?>>
+    {
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         */
+        CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
+        {
+            super( p_configuration );
+        }
+    }
+
+    /**
+     * agent generator class
+     */
+    private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
+    {
+
+        /**
+         * ctor
+         *
+         * @param p_stream input stream
+         * @param p_actions set with action
+         * @param p_aggregation aggregation function
+         * @param p_planbundle set with planbundles
+         * @param p_beliefbaseupdate beliefbase updater
+         * @param p_variablebuilder variable builder (can be set to null)
+         * @throws Exception thrown on error
+         */
+        CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
+                         final IBeliefPerceive<IAgent<?>> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+        ) throws Exception
+        {
+            super( p_stream, p_actions, p_aggregation, p_planbundle, p_beliefbaseupdate, p_variablebuilder );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_stream input stream
+         * @param p_actions set with action
+         * @param p_aggregation aggregation function
+         * @param p_beliefbaseupdate beliefbase updater
+         * @param p_variablebuilder variable builder (can be set to null)
+         * @throws Exception thrown on error
+         */
+        public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
+                                final IBeliefPerceive<IAgent<?>> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+        ) throws Exception
+        {
+            super( p_stream, p_actions, p_aggregation, p_beliefbaseupdate, p_variablebuilder );
+        }
+
+        @Override
+        public IAgent<?> generatesingle( final Object... p_data )
+        {
+            return new CAgent( m_configuration );
+        }
+    }
+
+
+
 
     /**
      * beliefbase update e.g. environment updates

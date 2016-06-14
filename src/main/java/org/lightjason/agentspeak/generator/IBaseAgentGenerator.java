@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.generator;
 
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.agent.CAgent;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
@@ -50,7 +49,7 @@ import java.util.stream.Stream;
 /**
  * agent generator
  */
-public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
+public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
     /**
      * unification
@@ -75,7 +74,7 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
+    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
         this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), (IBeliefPerceive<T>) IBeliefPerceive.EMPTY, IVariableBuilder.EMPTY );
@@ -91,8 +90,8 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                   final IAggregation p_aggregation, final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
+                                final IAggregation p_aggregation, final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -110,9 +109,9 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public CDefaultAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                   final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                                   final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
+                                final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
+                                final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -154,16 +153,9 @@ public class CDefaultAgentGenerator<T extends IAgent<?>> implements IAgentGenera
      *
      * @param p_configuration any configuration
      */
-    protected CDefaultAgentGenerator( final IAgentConfiguration<T> p_configuration )
+    protected IBaseAgentGenerator( final IAgentConfiguration<T> p_configuration )
     {
         m_configuration = p_configuration;
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public T generatesingle( final Object... p_data )
-    {
-        return (T) new CAgent<>( m_configuration );
     }
 
     @Override

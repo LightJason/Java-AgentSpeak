@@ -68,16 +68,16 @@ import java.util.stream.Stream;
 
 
 /**
- * agent class
+ * agent base structure
  *
  * @tparam T agent type
  */
-public class CAgent<T extends IAgent<?>> implements IAgent<T>
+public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 {
     /**
      * logger
      */
-    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.getLogger( CAgent.class );
+    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.getLogger( IBaseAgent.class );
 
     /**
      * beliefbase
@@ -143,7 +143,7 @@ public class CAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @param p_configuration agent configuration
      */
-    public CAgent( final IAgentConfiguration<T> p_configuration )
+    public IBaseAgent( final IAgentConfiguration<T> p_configuration )
     {
         // initialize agent
         m_unifier = p_configuration.getUnifier();

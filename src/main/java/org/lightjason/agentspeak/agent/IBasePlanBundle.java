@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * plan bundle class
  */
-public class CPlanBundle implements IPlanBundle
+public abstract class IBasePlanBundle implements IPlanBundle
 {
     /**
      * map with all existing plans
@@ -55,7 +55,7 @@ public class CPlanBundle implements IPlanBundle
      *
      * @param p_configuration configuration
      */
-    public CPlanBundle( final IPlanBundleConfiguration p_configuration )
+    public IBasePlanBundle( final IPlanBundleConfiguration p_configuration )
     {
         m_plans = p_configuration.getPlans();
         m_initialbeliefs = p_configuration.getBeliefs();
