@@ -43,6 +43,7 @@ public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValue
      * @param p_values values
      * @return result value
      */
+    @SuppressWarnings( "unchecked" )
     IFuzzyValue<T> result( final IFuzzyValue<T>... p_values );
 
 }

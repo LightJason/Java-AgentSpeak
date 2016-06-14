@@ -64,7 +64,7 @@ public final class CIntersection implements IFuzzyOperator<Boolean>
     @Override
     public final Function<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> finisher()
     {
-        return i -> i.immutable();
+        return IFuzzyValueMutable::immutable;
     }
 
     @Override
@@ -74,6 +74,7 @@ public final class CIntersection implements IFuzzyOperator<Boolean>
     }
 
     @Override
+    @SafeVarargs
     public final IFuzzyValue<Boolean> result( final IFuzzyValue<Boolean>... p_values )
     {
         return Arrays.stream( p_values ).collect( this );
