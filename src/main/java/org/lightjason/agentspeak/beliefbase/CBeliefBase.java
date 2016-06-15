@@ -175,13 +175,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final IView<T> create( final String p_name )
     {
-        // add reference for the mask and the event structure
-        final IView<T> l_view = new CView<>( p_name, this );
-
-        new PhantomReference<>( l_view, m_maskreference );
-        m_events.put( l_view, Sets.newConcurrentHashSet() );
-
-        return l_view;
+        return this.addEventReference( new CView<>( p_name, this ) );
     }
 
     @Override
@@ -249,6 +243,19 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final String toString()
     {
         return m_storage.toString();
+    }
+
+    /**
+     * adds a view to the event referencing structure
+     *
+     * @param p_view view
+     * @return input view
+     */
+    private IView<T> addEventReference( final IView<T> p_view )
+    {
+        new PhantomReference<>( p_view, m_maskreference );
+        m_events.putIfAbsent( p_view, Sets.newConcurrentHashSet() );
+        return p_view;
     }
 
 }
