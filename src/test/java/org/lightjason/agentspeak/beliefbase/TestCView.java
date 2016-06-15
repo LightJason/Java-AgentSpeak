@@ -107,8 +107,9 @@ public final class TestCView
      */
     private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
+
         @Override
-        public final IView<IAgent<?>> generate( final String p_name )
+        public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
             return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name );
         }
