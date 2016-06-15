@@ -84,12 +84,12 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
 
 
     /**
-     * clones the current view
+     * copy the current view
      *
      * @param p_parent new parent
-     * @return new view object
+     * @return new view instance
      */
-    IView<T> clone( final IView<T> p_parent );
+    IView<T> copy( final IView<T> p_parent );
 
     /**
      * generates a path structure
@@ -152,9 +152,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * adds view in the current structure
      *
      * @param p_view existing view
-     * @return returns cloned view
-     *
-     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
+     * @return current view
      */
     @SuppressWarnings( "unchecked" )
     IView<T> add( final IView<T>... p_view );
@@ -164,9 +162,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      *
      * @param p_path path
      * @param p_view existing view
-     * @return returns cloned view
-     *
-     * @note view that is put in the method will be cloned, so the returned view are not equal, the parameter is a template object only
+     * @return current view
      */
     @SuppressWarnings( "unchecked" )
     IView<T> add( final IPath p_path, final IView<T>... p_view );

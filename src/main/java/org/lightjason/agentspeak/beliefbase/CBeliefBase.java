@@ -51,11 +51,10 @@ import java.util.stream.Stream;
  * beliefbase, reference counting is used to collect the events for each beliefbase view
  *
  * @todo check reference counting on delete views
+ * @tparam T agent type
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
- *
- * @tparam T agent type
  */
 public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
 {
@@ -175,13 +174,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final IView<T> create( final String p_name )
     {
-        // add reference for the mask and the event structure
-        final IView<T> l_view = new CView<>( p_name, this );
-
-        new PhantomReference<>( l_view, m_maskreference );
-        m_events.put( l_view, Sets.newConcurrentHashSet() );
-
-        return l_view;
+        return this.addEventReference( new CView<>( p_name, this ) );
     }
 
     @Override
@@ -249,6 +242,19 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final String toString()
     {
         return m_storage.toString();
+    }
+
+    /**
+     * adds a view to the event referencing structure
+     *
+     * @param p_view view
+     * @return input view
+     */
+    private IView<T> addEventReference( final IView<T> p_view )
+    {
+        new PhantomReference<>( p_view, m_maskreference );
+        m_events.putIfAbsent( p_view, Sets.newConcurrentHashSet() );
+        return p_view;
     }
 
 }

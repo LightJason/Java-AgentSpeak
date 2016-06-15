@@ -94,9 +94,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     protected final Set<IRule> m_rules;
     /**
-     * beliefbase updater
+     * perceiveable
      */
-    protected final IBeliefPerceive<T> m_beliefbaseupdate;
+    protected final Set<IBeliefPerceive<T>> m_perceivable;
 
 
     /**
@@ -107,7 +107,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     {
         this(
             new CBoolFuzzy<>(), Collections.<ILiteral>emptyList(),
-            (IBeliefPerceive<T>) IBeliefPerceive.EMPTY,
+            Collections.<IBeliefPerceive<T>>emptySet(),
             Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
             null, new CUnifier(), IAggregation.EMPTY
         );
@@ -126,7 +126,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_aggregation aggregation function
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefPerceive<T> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final Set<IBeliefPerceive<T>> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -147,7 +147,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_variablebuilder variable builder
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final IBeliefPerceive<T> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final Set<IBeliefPerceive<T>> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -158,7 +158,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         m_variablebuilder = p_variablebuilder;
 
         m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
-        m_beliefbaseupdate = p_beliefperceive;
+        m_perceivable = p_beliefperceive;
 
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
@@ -170,7 +170,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     @Override
     public IView<T> getBeliefbase()
     {
-        final IView<T> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>( m_beliefbaseupdate ) ).create( BELIEFBASEROOTNAME );
+        final IView<T> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>( m_perceivable ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs
@@ -216,9 +216,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public final IBeliefPerceive<T> getBeliefbaseUpdate()
+    public final Set<IBeliefPerceive<T>> getPerceivable()
     {
-        return m_beliefbaseupdate;
+        return m_perceivable;
     }
 
     @Override

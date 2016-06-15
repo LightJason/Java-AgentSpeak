@@ -77,7 +77,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), (IBeliefPerceive<T>) IBeliefPerceive.EMPTY, IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), Collections.<IBeliefPerceive<T>>emptySet(), IVariableBuilder.EMPTY );
     }
 
     /**
@@ -86,17 +86,17 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_stream input stream
      * @param p_actions set with action
      * @param p_aggregation aggregation function
-     * @param p_beliefbaseupdate beliefbase updater
+     * @param p_beliefperceiver beliefbase updater
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation, final IBeliefPerceive<T> p_beliefbaseupdate,
+                                final IAggregation p_aggregation, final Set<IBeliefPerceive<T>> p_beliefperceiver,
                                 final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), p_beliefbaseupdate, p_variablebuilder );
+        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), p_beliefperceiver, p_variablebuilder );
     }
 
     /**
@@ -106,13 +106,13 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_actions set with action
      * @param p_aggregation aggregation function
      * @param p_planbundle set with planbundles
-     * @param p_beliefbaseupdate beliefbase updater
+     * @param p_beliefperceiver beliefbase updater
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
                                 final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                                final IBeliefPerceive<T> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                                final Set<IBeliefPerceive<T>> p_beliefperceiver, final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -125,7 +125,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
                 p_planbundle.parallelStream().flatMap( i -> i.getInitialBeliefs().stream() )
             ).collect( Collectors.toSet() ),
 
-            p_beliefbaseupdate,
+            p_beliefperceiver,
 
             Stream.concat(
                 l_visitor.getPlans().stream(),
@@ -153,14 +153,14 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @return configuration object
      */
     protected IAgentConfiguration<T> configuration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                                    final IBeliefPerceive<T> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                                    final Set<IBeliefPerceive<T>> p_beliefperceiver, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                                     final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                                     final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(
             p_fuzzy,
             p_initalbeliefs,
-            p_beliefperceive,
+            p_beliefperceiver,
             p_plans,
             p_rules,
             p_initialgoal,

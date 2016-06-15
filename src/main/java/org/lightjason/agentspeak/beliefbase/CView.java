@@ -139,7 +139,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                       .ifPresent( j -> {
                           throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", i.getPath(), j.getPath() ) );
                       } );
-                  m_beliefbase.add( i.clone( this ) );
+                  m_beliefbase.add( i.copy( this ) );
               } );
         return this;
     }
@@ -179,7 +179,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> clone( final IView<T> p_parent )
+    public final IView<T> copy( final IView<T> p_parent )
     {
         return new CView<>( m_name, m_beliefbase, p_parent );
     }
@@ -342,7 +342,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
         // get the next view and if the view is null, generate a new view
         final IView<T> l_view = p_root.getBeliefbase().getViewOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ) ) );
-        p_root.getBeliefbase().add( l_view.clone( p_root ) );
+        p_root.getBeliefbase().add( l_view.copy( p_root ) );
 
         this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );
     }
