@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -68,9 +69,9 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
     /**
      * ctor
      *
-     * @param p_perceive perceive object
+     * @param p_perceive perceive objects
      */
-    public CMultiStorage( final IBeliefPerceive<T> p_perceive )
+    public CMultiStorage( final Set<IBeliefPerceive<T>> p_perceive )
     {
         super( p_perceive );
     }

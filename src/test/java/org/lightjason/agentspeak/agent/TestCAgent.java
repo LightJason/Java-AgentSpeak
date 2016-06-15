@@ -129,7 +129,7 @@ public final class TestCAgent
                                                     l_stream,
                                                     ACTIONS.keySet(),
                                                     IAggregation.EMPTY,
-                                                    IBeliefPerceive.EMPTY,
+                                                    Collections.emptySet(),
                                                     new CVariableBuilder()
                                                 ).generatesingle().call();
                                                 return null;
@@ -156,7 +156,7 @@ public final class TestCAgent
         final TestCAgent l_test = new TestCAgent();
 
         l_test.testASLDefault();
-        //l_test.testASLManual();
+        l_test.testASLManual();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ public final class TestCAgent
                 ACTIONS.keySet(),
                 new CAggregation( ACTIONS ),
                 Collections.<IPlanBundle>emptySet(),
-                new CBeliefPerceive(),
+                Stream.of( new CBeliefPerceive() ).collect( Collectors.toSet() ),
                 new CVariableBuilder()
             ).generatesingle();
 
@@ -247,15 +247,15 @@ public final class TestCAgent
          * @param p_actions set with action
          * @param p_aggregation aggregation function
          * @param p_planbundle set with planbundles
-         * @param p_beliefbaseupdate beliefbase updater
+         * @param p_beliefperceiver beliefbase updater
          * @param p_variablebuilder variable builder (can be set to null)
          * @throws Exception thrown on error
          */
         CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                         final IBeliefPerceive<IAgent<?>> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                         final Set<IBeliefPerceive<IAgent<?>>> p_beliefperceiver, final IVariableBuilder p_variablebuilder
         ) throws Exception
         {
-            super( p_stream, p_actions, p_aggregation, p_planbundle, p_beliefbaseupdate, p_variablebuilder );
+            super( p_stream, p_actions, p_aggregation, p_planbundle, p_beliefperceiver, p_variablebuilder );
         }
 
         /**
@@ -264,15 +264,15 @@ public final class TestCAgent
          * @param p_stream input stream
          * @param p_actions set with action
          * @param p_aggregation aggregation function
-         * @param p_beliefbaseupdate beliefbase updater
+         * @param p_beliefperceiver beliefbase updater
          * @param p_variablebuilder variable builder (can be set to null)
          * @throws Exception thrown on error
          */
         public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
-                                final IBeliefPerceive<IAgent<?>> p_beliefbaseupdate, final IVariableBuilder p_variablebuilder
+                                final Set<IBeliefPerceive<IAgent<?>>> p_beliefperceiver, final IVariableBuilder p_variablebuilder
         ) throws Exception
         {
-            super( p_stream, p_actions, p_aggregation, p_beliefbaseupdate, p_variablebuilder );
+            super( p_stream, p_actions, p_aggregation, p_beliefperceiver, p_variablebuilder );
         }
 
         @Override
@@ -291,9 +291,8 @@ public final class TestCAgent
     private static final class CBeliefPerceive implements IBeliefPerceive<IAgent<?>>
     {
         @Override
-        public final IAgent<?> perceive( final IAgent<?> p_agent )
+        public final void perceive( final IAgent<?> p_agent )
         {
-            return p_agent;
         }
     }
 
