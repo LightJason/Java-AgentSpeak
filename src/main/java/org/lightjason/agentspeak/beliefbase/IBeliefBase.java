@@ -75,12 +75,14 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * adds a literal
+     *
      * @param p_literal literal without path
      */
     void add( final ILiteral p_literal );
 
     /**
      * adds a view
+     *
      * @param p_view view
      */
     void add( final IView<T> p_view );
@@ -89,12 +91,14 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * removes a literal
+     *
      * @param p_literal without path
      */
     void remove( final ILiteral p_literal );
 
     /**
      * removes a view
+     *
      * @param p_view view
      */
     void remove( final IView<T> p_view );

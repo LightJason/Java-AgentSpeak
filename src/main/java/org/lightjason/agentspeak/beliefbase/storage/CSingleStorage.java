@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,7 +69,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
      *
      * @param p_perceive perceive object
      */
-    public CSingleStorage( final IBeliefPerceive<T> p_perceive )
+    public CSingleStorage( final Set<IBeliefPerceive<T>> p_perceive )
     {
         super( p_perceive );
     }
