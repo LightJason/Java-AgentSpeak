@@ -38,7 +38,8 @@ public interface IViewGenerator<T extends IAgent<?>>
      * generates a  new view
      *
      * @param p_name name of the view
+     * @param p_parent parent
      * @return view object
      */
-    IView<T> generate( final String p_name );
+    IView<T> generate( final String p_name, final IView<T> p_parent );
 }

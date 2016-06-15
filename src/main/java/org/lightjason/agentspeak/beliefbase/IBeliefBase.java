@@ -68,36 +68,42 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * clears all elements
+     *
+     * @return beliefbase reference
      */
-    void clear();
+    IBeliefBase<T> clear();
 
 
 
     /**
      * adds a literal
      * @param p_literal literal without path
+     * @return beliefbase reference
      */
-    void add( final ILiteral p_literal );
+    ILiteral add( final ILiteral p_literal );
 
     /**
      * adds a view
      * @param p_view view
+     * @return beliefbase reference
      */
-    void add( final IView<T> p_view );
+    IView<T> add( final IView<T> p_view );
 
 
 
     /**
      * removes a literal
      * @param p_literal without path
+     * @return beliefbase reference
      */
-    void remove( final ILiteral p_literal );
+    ILiteral remove( final ILiteral p_literal );
 
     /**
      * removes a view
      * @param p_view view
+     * @return beliefbase reference
      */
-    void remove( final IView<T> p_view );
+    IView<T> remove( final IView<T> p_view );
 
 
 

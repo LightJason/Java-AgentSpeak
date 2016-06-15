@@ -84,14 +84,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
 
 
     /**
-     * copy the current view
-     *
-     * @param p_parent new parent
-     * @return new view instance
-     */
-    IView<T> copy( final IView<T> p_parent );
-
-    /**
      * generates a path structure
      *
      * @param p_path path definition

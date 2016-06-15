@@ -78,7 +78,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value multi-element
      * @return boolean if the element can be stored
      */
-    boolean putMultiElements( final String p_key, final N p_value );
+    boolean putMultiElement( final String p_key, final N p_value );
 
     /**
      * puts a single-element into the storage
@@ -87,7 +87,16 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value single-element
      * @return boolean if the element can be stored
      */
-    boolean putSingleElements( final String p_key, final M p_value );
+    boolean putSingleElement( final String p_key, final M p_value );
+
+    /**
+     * puts a single-element if it is absent
+     *
+     * @param p_key key
+     * @param p_value single-element
+     * @return boolean if the element can be stored
+     */
+    boolean putSingleElementIfAbsent( final String p_key, final M p_value );
 
     /**
      * removes a multi-element from the storage
@@ -96,7 +105,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value multi-element
      * @return boolean if the element can removed
      */
-    boolean removeMultiElements( final String p_key, final N p_value );
+    boolean removeMultiElement( final String p_key, final N p_value );
 
     /**
      * removes a single-element from the storage
@@ -104,7 +113,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return boolean if the element can be removed
      */
-    boolean removeSingleElements( final String p_key );
+    boolean removeSingleElement( final String p_key );
 
     /**
      * returns a single-element by the name

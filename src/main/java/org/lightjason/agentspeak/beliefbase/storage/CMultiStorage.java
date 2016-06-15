@@ -100,25 +100,31 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
     }
 
     @Override
-    public final boolean putMultiElements( final String p_key, final N p_value )
+    public final boolean putMultiElement( final String p_key, final N p_value )
     {
         return !p_value.equals( m_multielements.put( p_key, p_value ) );
     }
 
     @Override
-    public final boolean putSingleElements( final String p_key, final M p_value )
+    public final boolean putSingleElement( final String p_key, final M p_value )
     {
         return !p_value.equals( m_singleelements.put( p_key, p_value ) );
     }
 
     @Override
-    public final boolean removeMultiElements( final String p_key, final N p_value )
+    public final boolean putSingleElementIfAbsent( final String p_key, final M p_value )
+    {
+        return !p_value.equals( m_singleelements.putIfAbsent( p_key, p_value ) );
+    }
+
+    @Override
+    public final boolean removeMultiElement( final String p_key, final N p_value )
     {
         return m_multielements.remove( p_key, p_value );
     }
 
     @Override
-    public final boolean removeSingleElements( final String p_key )
+    public final boolean removeSingleElement( final String p_key )
     {
         return m_singleelements.remove( p_key ) != null;
     }

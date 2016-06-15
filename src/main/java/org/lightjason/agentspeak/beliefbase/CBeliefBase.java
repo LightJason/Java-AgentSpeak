@@ -97,32 +97,38 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final void add( final ILiteral p_literal )
+    public final ILiteral add( final ILiteral p_literal )
     {
         // create add-event for the literal
-        if ( m_storage.putMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
+        if ( m_storage.putMultiElement( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
             m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
+
+        return p_literal;
     }
 
     @Override
-    public final void add( final IView<T> p_view )
+    public final IView<T> add( final IView<T> p_view )
     {
-        m_storage.putSingleElements( p_view.getName(), p_view );
+        m_storage.putSingleElement( p_view.getName(), p_view );
+        return p_view;
     }
 
     @Override
-    public final void remove( final IView<T> p_view )
+    public final IView<T> remove( final IView<T> p_view )
     {
         m_events.remove( p_view );
-        m_storage.removeSingleElements( p_view.getName() );
+        m_storage.removeSingleElement( p_view.getName() );
+        return p_view;
     }
 
     @Override
-    public final void remove( final ILiteral p_literal )
+    public final ILiteral remove( final ILiteral p_literal )
     {
         // create delete-event for the literal
-        if ( m_storage.removeMultiElements( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
+        if ( m_storage.removeMultiElement( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
             m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
+
+        return p_literal;
     }
 
     @Override
@@ -179,7 +185,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final void clear()
+    public final IBeliefBase<T> clear()
     {
         // create delete-event for all literals
         m_storage
@@ -193,6 +199,8 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
 
         m_storage.streamSingleElements().parallel().forEach( i -> i.clear() );
         m_storage.clear();
+
+        return this;
     }
 
     @Override
