@@ -179,6 +179,12 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
+    public final IView<T> create( final String p_name, final IView<T> p_parent )
+    {
+        return m_beliefbase.create( p_name, p_parent );
+    }
+
+    @Override
     public final T update( final T p_agent )
     {
         return m_beliefbase.update( p_agent );

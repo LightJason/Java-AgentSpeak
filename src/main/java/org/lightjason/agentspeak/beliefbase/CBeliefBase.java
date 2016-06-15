@@ -184,6 +184,12 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
+    public final IView<T> create( final String p_name, final IView<T> p_parent )
+    {
+        return this.addEventReference( new CView<>( p_name, this, p_parent ) );
+    }
+
+    @Override
     public final IBeliefBase<T> clear()
     {
         // create delete-event for all literals
