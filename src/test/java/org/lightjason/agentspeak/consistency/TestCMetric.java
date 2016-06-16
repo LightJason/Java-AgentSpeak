@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.consistency;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
@@ -64,7 +63,6 @@ public final class TestCMetric
     /**
      * test symmetric weight metric
      */
-    @Ignore
     @Test
     public final void testSymmetricWeight()
     {
@@ -96,7 +94,6 @@ public final class TestCMetric
     /**
      * test symmetric metric
      */
-    @Ignore
     @Test
     public final void testWeight()
     {
@@ -154,7 +151,7 @@ public final class TestCMetric
     )
     {
         final IAgent<?> l_agent1 = this.getAgent( p_belief1 );
-        final IAgent<?> l_agent2 =  this.getAgent( p_belief2 );
+        final IAgent<?> l_agent2 = this.getAgent( p_belief2 );
 
         System.out.println( l_agent1 );
         System.out.println( l_agent2 );
@@ -178,9 +175,6 @@ public final class TestCMetric
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
         p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
-
-
-
         return l_agent;
     }
 
@@ -208,9 +202,8 @@ public final class TestCMetric
         @Override
         public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
-            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name );
+            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
-
 
 }

@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
@@ -45,7 +44,6 @@ public final class TestCView
     /**
      * random test tree structure
      */
-    @Ignore
     @Test
     public final void testTree()
     {
@@ -66,7 +64,6 @@ public final class TestCView
     /**
      * manual test of tree structure
      */
-    @Ignore
     @Test
     public final void testManual()
     {
@@ -75,15 +72,15 @@ public final class TestCView
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )
 
-            .generate( CPath.from( "first" ), l_gen )
-            .add( CLiteral.from( "first/sub1" ) )
-            .add( CLiteral.from( "first/sub2" ) )
+                    .generate( CPath.from( "first" ), l_gen )
+                    .add( CLiteral.from( "first/sub1" ) )
+                    .add( CLiteral.from( "first/sub2" ) )
 
-            .generate( CPath.from( "second/sub" ), l_gen )
-            .add( CLiteral.from( "second/sub1" ) )
-            .add( CLiteral.from( "second/sub2" ) )
+                    .generate( CPath.from( "second/sub" ), l_gen )
+                    .add( CLiteral.from( "second/sub1" ) )
+                    .add( CLiteral.from( "second/sub2" ) )
 
-            .add( CLiteral.from( "second/sub/sub1" ) );
+                    .add( CLiteral.from( "second/sub/sub1" ) );
 
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );

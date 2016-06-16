@@ -268,8 +268,8 @@ public final class TestCAgent
          * @param p_variablebuilder variable builder (can be set to null)
          * @throws Exception thrown on error
          */
-        public CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
-                                final Set<IBeliefPerceive<IAgent<?>>> p_beliefperceiver, final IVariableBuilder p_variablebuilder
+        CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
+                         final Set<IBeliefPerceive<IAgent<?>>> p_beliefperceiver, final IVariableBuilder p_variablebuilder
         ) throws Exception
         {
             super( p_stream, p_actions, p_aggregation, p_beliefperceiver, p_variablebuilder );
@@ -311,7 +311,7 @@ public final class TestCAgent
          *
          * @param p_actions action score map
          */
-        public CAggregation( final Map<IAction, Double> p_actions )
+        CAggregation( final Map<IAction, Double> p_actions )
         {
             m_actions = p_actions;
         }

@@ -323,7 +323,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} - {4} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.path(), m_beliefbase, this.parent() );
+        return MessageFormat.format( "{0} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.path(), m_beliefbase );
     }
 
     /**
