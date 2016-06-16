@@ -26,9 +26,6 @@ package org.lightjason.agentspeak.consistency.metric;
 import org.lightjason.agentspeak.language.ILiteral;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -41,14 +38,6 @@ public final class CSymmetricDifference implements IMetric
     @Override
     public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
     {
-        System.out.println();
-        System.out.println( p_first );
-        System.out.println();
-        System.out.println( p_second );
-        System.out.println();
-        System.out.println( Stream.concat( p_first.stream(), p_second.stream() ).sorted().distinct().collect( Collectors.toSet() ) );
-
-
         // element aggregation and return distance
         return 2.0 * Stream.concat( p_first.stream(), p_second.stream() ).sorted().distinct().count()
                - p_first.stream().count()

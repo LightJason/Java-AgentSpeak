@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
@@ -44,6 +45,7 @@ public final class TestCView
     /**
      * random test tree structure
      */
+    @Ignore
     @Test
     public final void testTree()
     {
@@ -64,6 +66,7 @@ public final class TestCView
     /**
      * manual test of tree structure
      */
+    @Ignore
     @Test
     public final void testManual()
     {
@@ -107,6 +110,7 @@ public final class TestCView
      */
     private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
+
         @Override
         public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {

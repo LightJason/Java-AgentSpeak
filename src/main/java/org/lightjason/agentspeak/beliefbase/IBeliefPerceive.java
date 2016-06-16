@@ -33,25 +33,12 @@ import org.lightjason.agentspeak.agent.IAgent;
  */
 public interface IBeliefPerceive<T extends IAgent<?>>
 {
-    /**
-     * empty beliefbase update
-     */
-    IBeliefPerceive<IAgent<?>> EMPTY = new IBeliefPerceive<IAgent<?>>()
-    {
-
-        @Override
-        public final IAgent<?> perceive( final IAgent<?> p_agent )
-        {
-            return p_agent;
-        }
-    };
 
     /**
      * runs the update process of an agent
      *
      * @param p_agent agent
-     * @return agent
      */
-    T perceive( final T p_agent );
+    void perceive( final T p_agent );
 
 }

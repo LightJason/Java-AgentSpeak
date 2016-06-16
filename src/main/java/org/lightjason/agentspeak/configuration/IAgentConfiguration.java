@@ -34,10 +34,12 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.util.Collection;
+import java.util.Set;
 
 
 /**
  * interface to define the agent configuration
+ *
  * @tparam T agent type
  */
 public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
@@ -94,10 +96,10 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
     Collection<ILiteral> getInitialBeliefs();
 
     /**
-     * returns belief perceiver
+     * returns perceivable
      *
-     * @return belief perceiver
+     * @return belief perceiver stream
      */
-    IBeliefPerceive<T> getBeliefbaseUpdate();
+    Set<IBeliefPerceive<T>> getPerceivable();
 
 }

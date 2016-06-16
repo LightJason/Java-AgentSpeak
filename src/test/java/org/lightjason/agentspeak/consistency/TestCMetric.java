@@ -23,9 +23,10 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.junit.Ignore;
 import org.junit.Test;
-import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefBase;
 import org.lightjason.agentspeak.beliefbase.IView;
 import org.lightjason.agentspeak.beliefbase.IViewGenerator;
@@ -43,7 +44,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +64,7 @@ public final class TestCMetric
     /**
      * test symmetric weight metric
      */
+    @Ignore
     @Test
     public final void testSymmetricWeight()
     {
@@ -95,6 +96,7 @@ public final class TestCMetric
     /**
      * test symmetric metric
      */
+    @Ignore
     @Test
     public final void testWeight()
     {

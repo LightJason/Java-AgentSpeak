@@ -51,28 +51,28 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      *
      * @return beliefbase
      */
-    IBeliefBase<T> getBeliefbase();
+    IBeliefBase<T> beliefbase();
 
     /**
      * returns the full path
      *
      * @return path
      */
-    IPath getPath();
+    IPath path();
 
     /**
      * returns only the element name
      *
      * @return name
      */
-    String getName();
+    String name();
 
     /**
      * returns the parent of the view
      *
      * @return parent object or null
      */
-    IView<T> getParent();
+    IView<T> parent();
 
     /**
      * check if the view has got a parent
@@ -99,7 +99,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      *
      * @return set with trigger events
      */
-    Stream<ITrigger> getTrigger();
+    Stream<ITrigger> trigger();
 
 
 

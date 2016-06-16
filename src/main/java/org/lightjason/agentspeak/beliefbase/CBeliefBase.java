@@ -51,11 +51,10 @@ import java.util.stream.Stream;
  * beliefbase, reference counting is used to collect the events for each beliefbase view
  *
  * @todo check reference counting on delete views
+ * @tparam T agent type
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
- *
- * @tparam T agent type
  */
 public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
 {
@@ -109,7 +108,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final IView<T> add( final IView<T> p_view )
     {
-        m_storage.putSingleElement( p_view.getName(), p_view );
+        m_storage.putSingleElement( p_view.name(), p_view );
         return p_view;
     }
 
@@ -117,7 +116,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final IView<T> remove( final IView<T> p_view )
     {
         m_events.remove( p_view );
-        m_storage.removeSingleElement( p_view.getName() );
+        m_storage.removeSingleElement( p_view.name() );
         return p_view;
     }
 
@@ -231,7 +230,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         final Set<ITrigger> l_copy = Collections.unmodifiableSet(
             Stream.concat(
                 l_trigger.parallelStream(),
-                m_storage.streamSingleElements().parallel().flatMap( IView::getTrigger )
+                m_storage.streamSingleElements().parallel().flatMap( IView::trigger )
             )
                   .collect( Collectors.toSet() )
         );

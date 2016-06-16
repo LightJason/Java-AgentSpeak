@@ -77,6 +77,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * adds a literal
+     *
      * @param p_literal literal without path
      * @return beliefbase reference
      */
@@ -84,6 +85,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * adds a view
+     *
      * @param p_view view
      * @return beliefbase reference
      */
@@ -93,6 +95,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * removes a literal
+     *
      * @param p_literal without path
      * @return beliefbase reference
      */
@@ -100,6 +103,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
     /**
      * removes a view
+     *
      * @param p_view view
      * @return beliefbase reference
      */
