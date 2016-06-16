@@ -43,6 +43,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -131,7 +132,7 @@ public final class TestCMetric
         final TestCMetric l_test = new TestCMetric();
 
         l_test.testSymmetricWeight();
-        l_test.testWeight();
+        //l_test.testWeight();
     }
 
     /**
@@ -150,11 +151,17 @@ public final class TestCMetric
                         final double p_excepted, final double p_delta
     )
     {
+        final IAgent<?> l_agent1 = this.getAgent( p_belief1 );
+        final IAgent<?> l_agent2 =  this.getAgent( p_belief2 );
+
+        System.out.println( l_agent1 );
+        System.out.println( l_agent2 );
+
         final double l_value = p_metric.calculate(
-            p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
-            p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
+            p_filter.filter( l_agent1 ).collect( Collectors.toList() ),
+            p_filter.filter( l_agent2 ).collect( Collectors.toList() )
         );
-        assertEquals( p_message, l_value, p_excepted, p_delta );
+        assertEquals( p_message, p_excepted, l_value, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
     }
 
@@ -169,6 +176,9 @@ public final class TestCMetric
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
         p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
+
+
+
         return l_agent;
     }
 
@@ -194,7 +204,7 @@ public final class TestCMetric
     private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
         @Override
-        public IView<IAgent<?>> generate( final String p_name )
+        public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
             return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name );
         }

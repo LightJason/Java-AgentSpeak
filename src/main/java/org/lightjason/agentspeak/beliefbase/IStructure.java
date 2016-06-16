@@ -65,8 +65,18 @@ public interface IStructure<T extends IAgent<?>>
      * returns a new view of the belief base
      *
      * @param p_name name of the view
-     * @return view
+     * @return created view
      */
     IView<T> create( final String p_name );
+
+    /**
+     * returns a new view of the belief base
+     * with parent concatination
+     *
+     * @param p_name name of the view
+     * @param p_parent parent view
+     * @return created view
+     */
+    IView<T> create( final String p_name, final IView<T> p_parent );
 
 }
