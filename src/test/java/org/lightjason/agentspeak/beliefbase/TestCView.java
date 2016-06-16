@@ -72,15 +72,15 @@ public final class TestCView
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )
 
-            .generate( CPath.from( "first" ), l_gen )
-            .add( CLiteral.from( "first/sub1" ) )
-            .add( CLiteral.from( "first/sub2" ) )
+                    .generate( CPath.from( "first" ), l_gen )
+                    .add( CLiteral.from( "first/sub1" ) )
+                    .add( CLiteral.from( "first/sub2" ) )
 
-            .generate( CPath.from( "second/sub" ), l_gen )
-            .add( CLiteral.from( "second/sub1" ) )
-            .add( CLiteral.from( "second/sub2" ) )
+                    .generate( CPath.from( "second/sub" ), l_gen )
+                    .add( CLiteral.from( "second/sub1" ) )
+                    .add( CLiteral.from( "second/sub2" ) )
 
-            .add( CLiteral.from( "second/sub/sub1" ) );
+                    .add( CLiteral.from( "second/sub/sub1" ) );
 
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
@@ -107,10 +107,11 @@ public final class TestCView
      */
     private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
+
         @Override
-        public final IView<IAgent<?>> generate( final String p_name )
+        public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
-            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name );
+            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 

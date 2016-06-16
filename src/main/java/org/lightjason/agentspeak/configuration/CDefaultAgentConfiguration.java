@@ -174,7 +174,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs
-        l_beliefbase.getTrigger();
+        l_beliefbase.trigger();
 
         return l_beliefbase;
     }

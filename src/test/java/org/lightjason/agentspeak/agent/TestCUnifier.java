@@ -23,11 +23,11 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.junit.Test;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
-import org.junit.Test;
 
 import java.text.MessageFormat;
 import java.util.List;
