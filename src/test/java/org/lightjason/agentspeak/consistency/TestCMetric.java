@@ -91,11 +91,13 @@ public final class TestCMetric
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
-
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CSymmetricDifference();
-
-        this.check( "symmetric difference equality", l_filter, l_metric, m_literals, m_literals, 0, 0 );
+        this.check(
+            "symmetric difference equality",
+            new CAll(), new CSymmetricDifference(),
+            m_literals,
+            m_literals,
+            0, 0
+        );
     }
 
 
@@ -107,18 +109,12 @@ public final class TestCMetric
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
-
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CSymmetricDifference();
-
         this.check(
             "symmetric difference inequality",
-            l_filter,
-            l_metric,
+            new CAll(), new CSymmetricDifference(),
             m_literals,
             Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
-            1,
-            0
+            1, 0
         );
     }
 
@@ -132,10 +128,13 @@ public final class TestCMetric
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
 
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CWeightedDifference();
-
-        this.check( "weight difference equality", l_filter, l_metric, m_literals, m_literals, 24, 0 );
+        this.check(
+            "weight difference equality",
+            new CAll(), new CWeightedDifference(),
+            m_literals,
+            m_literals,
+            24, 0
+        );
     }
 
 
@@ -148,17 +147,13 @@ public final class TestCMetric
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
 
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CWeightedDifference();
-
         this.check(
             "weight difference inequality",
-            l_filter,
-            l_metric,
+            new CAll(),
+            new CWeightedDifference(),
             m_literals,
             Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
-            28 + 1.0 / 6,
-            0
+            28 + 1.0 / 6, 0
         );
     }
 
@@ -175,9 +170,11 @@ public final class TestCMetric
         l_test.initialize();
 
         l_test.testSymmetricWeightEquality();
+        /*
         l_test.testSymmetricWeightInequality();
         l_test.testWeightEquality();
         l_test.testWeightInequality();
+        */
     }
 
     /**
@@ -199,8 +196,8 @@ public final class TestCMetric
         final IAgent<?> l_agent1 = this.getAgent( p_belief1 );
         final IAgent<?> l_agent2 = this.getAgent( p_belief2 );
 
-        System.out.println( l_agent1 );
-        System.out.println( l_agent2 );
+        //System.out.println( l_agent1 );
+        //System.out.println( l_agent2 );
 
         final double l_value = p_metric.calculate(
             p_filter.filter( l_agent1 ).collect( Collectors.toList() ),
@@ -248,6 +245,8 @@ public final class TestCMetric
         @Override
         public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
+            System.out.println( p_name + " --> " + p_parent.path() );
+
             return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
