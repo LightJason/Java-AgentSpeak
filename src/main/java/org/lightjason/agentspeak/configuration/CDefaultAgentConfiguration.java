@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.configuration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
@@ -46,6 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 
 /**
@@ -236,17 +238,24 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     @Override
     public final String toString()
     {
+        final String l_elements = StringUtils.join(
+            Stream.of(
+                m_variablebuilder == null ? "" : m_variablebuilder,
+                m_initialbeliefs.isEmpty() ? "" : m_initialbeliefs,
+                m_initialgoal == null ? "" : m_initialgoal,
+                m_plans.isEmpty() ? "" : m_plans,
+                m_rules.isEmpty() ? "" : m_rules
+            ).filter( i -> !i.toString().trim().isEmpty() ).toArray(),
+            " / "
+        ).trim();
+
         return MessageFormat.format(
-            "{0} ( unifier: {1} / aggregation {2} / {3} / variable-builder: {4} / initial-goal: {5} / initial beliefs: {6} / plans: {7} / rules: {8} )",
+            "{0} ( unifier: {1} / aggregation {2} / {3} {4} )",
             super.toString(),
             m_unifier,
             m_aggregation,
             m_fuzzy,
-            m_variablebuilder,
-            m_initialgoal,
-            m_initialbeliefs,
-            m_plans,
-            m_rules
-        );
+            l_elements.isEmpty() ? "" : l_elements
+        ).trim();
     }
 }

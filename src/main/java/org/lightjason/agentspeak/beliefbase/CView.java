@@ -346,6 +346,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             return;
 
         // get the next view and if the view is null, generate a new view
+        System.out.println( p_path );
         this.walkgenerate(
             p_path.getSubPath( 1 ),
 
