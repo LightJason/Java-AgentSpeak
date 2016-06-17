@@ -75,7 +75,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_beliefbase reference to the beliefbase context
      * @param p_parent reference to the parent view
      */
-    public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
+    @SuppressWarnings( "unchecked" )
+    CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -87,7 +88,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         m_parent = p_parent;
 
 
-        if ( m_parent != null)
+        if ( m_parent != null )
             m_parent.add( this );
     }
 

@@ -78,6 +78,7 @@ public final class TestCMetric
             CLiteral.from( "second/sub/sub1" )
         ).collect( Collectors.toSet() );
 
+        // http://mathworld.wolfram.com/SymmetricDifference.html
         this.check( "symmetric difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 0, 0 );
         this.check(
             "symmetric difference inequality",
