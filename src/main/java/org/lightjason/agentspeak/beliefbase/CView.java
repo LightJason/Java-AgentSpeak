@@ -85,6 +85,10 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         m_name = p_name;
         m_beliefbase = p_beliefbase;
         m_parent = p_parent;
+
+
+        if ( m_parent != null)
+            m_parent.add( this );
     }
 
     @Override
