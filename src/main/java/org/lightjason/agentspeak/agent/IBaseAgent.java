@@ -300,7 +300,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             "{0} ( Cycle: {1} / {2} )",
             super.toString(),
             m_cycle,
-
             StringUtils.join(
                 StreamUtils.zip(
                     Stream.of( "Trigger", "Running Plans", "Beliefbase" ),

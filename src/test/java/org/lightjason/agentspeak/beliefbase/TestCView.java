@@ -47,7 +47,7 @@ public final class TestCView
     @Test
     public final void testTree()
     {
-        final int l_max = 10;
+        final int l_max = 1000;
         final IView<IAgent<?>> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator<IAgent<?>> l_gen = new CGenerator();
 
