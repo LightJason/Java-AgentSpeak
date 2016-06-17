@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
@@ -153,6 +152,6 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the literal
      * @return collection of pairs with negated and literal
      */
-    Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key );
+    Collection<ILiteral> getLiteral( final String p_key );
 
 }

@@ -76,7 +76,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_parent reference to the parent view
      */
     @SuppressWarnings( "unchecked" )
-    CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
+    public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -236,7 +236,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                      .map( IPath::normalize )
                      .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).beliefbase().getLiteral( i.getSuffix() )
                                         .parallelStream()
-                                        .map( j -> j.getRight().shallowcopy( l_path ) ) );
+                                        .map( j -> j.shallowcopy( l_path ) ) );
     }
 
     @Override
@@ -258,8 +258,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                     .map( IPath::normalize )
                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).beliefbase().getLiteral( i.getSuffix() )
                                        .parallelStream()
-                                       .filter( j -> j.getLeft() == p_negated )
-                                       .map( j -> j.getRight().shallowcopy( l_path ) ) );
+                                       .filter( j -> j.isNegated() == p_negated )
+                                       .map( j -> j.shallowcopy( l_path ) ) );
     }
 
     @Override
@@ -328,7 +328,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [name : {1}, fqn : {2}, storage : {3}]", super.toString(), m_name, this.path(), m_beliefbase );
+        return MessageFormat.format( "{0} ({1}): [{2}]", this.path(), super.toString(), m_beliefbase );
     }
 
     /**

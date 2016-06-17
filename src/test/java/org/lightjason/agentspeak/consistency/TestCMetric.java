@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
@@ -58,18 +60,18 @@ public final class TestCMetric
      * literal view generator
      */
     private final IViewGenerator<IAgent<?>> m_generator = new CGenerator();
-
+    /**
+     * set with testing literals
+     */
+    private Set<ILiteral> m_literals;
 
     /**
-     * test symmetric weight metric
+     * test initialize
      */
-    @Test
-    public final void testSymmetricWeight()
+    @Before
+    private void initialize()
     {
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CSymmetricDifference();
-
-        final Set<ILiteral> l_beliefs = Stream.of(
+        m_literals = Stream.of(
             CLiteral.from( "toplevel" ),
             CLiteral.from( "first/sub1" ),
             CLiteral.from( "first/sub2" ),
@@ -77,15 +79,44 @@ public final class TestCMetric
             CLiteral.from( "second/sub2" ),
             CLiteral.from( "second/sub/sub1" )
         ).collect( Collectors.toSet() );
+    }
 
-        // http://mathworld.wolfram.com/SymmetricDifference.html
-        this.check( "symmetric difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 0, 0 );
+
+
+    /**
+     * test symmetric weight metric equality
+     */
+    @Test
+    public final void testSymmetricWeightEquality()
+    {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
+
+        final IFilter l_filter = new CAll();
+        final IMetric l_metric = new CSymmetricDifference();
+
+        this.check( "symmetric difference equality", l_filter, l_metric, m_literals, m_literals, 0, 0 );
+    }
+
+
+    /**
+     * test symmetric weight metric inequality
+     */
+    @Test
+    public final void testSymmetricWeightInequality()
+    {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
+
+        final IFilter l_filter = new CAll();
+        final IMetric l_metric = new CSymmetricDifference();
+
         this.check(
             "symmetric difference inequality",
             l_filter,
             l_metric,
-            l_beliefs,
-            Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            m_literals,
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
             1,
             0
         );
@@ -93,34 +124,44 @@ public final class TestCMetric
 
 
     /**
-     * test symmetric metric
+     * test symmetric metric equality
      */
     @Test
-    public final void testWeight()
+    public final void testWeightEquality()
     {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
+
         final IFilter l_filter = new CAll();
         final IMetric l_metric = new CWeightedDifference();
 
-        final Set<ILiteral> l_beliefs = Stream.of(
-            CLiteral.from( "toplevel" ),
-            CLiteral.from( "first/sub1" ),
-            CLiteral.from( "first/sub2" ),
-            CLiteral.from( "second/sub1" ),
-            CLiteral.from( "second/sub2" ),
-            CLiteral.from( "second/sub/sub1" )
-        ).collect( Collectors.toSet() );
+        this.check( "weight difference equality", l_filter, l_metric, m_literals, m_literals, 24, 0 );
+    }
 
-        this.check( "weight difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 24, 0 );
+
+    /**
+     * test symmetric metric equality
+     */
+    @Test
+    public final void testWeightInequality()
+    {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
+
+        final IFilter l_filter = new CAll();
+        final IMetric l_metric = new CWeightedDifference();
+
         this.check(
             "weight difference inequality",
             l_filter,
             l_metric,
-            l_beliefs,
-            Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            m_literals,
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
             28 + 1.0 / 6,
             0
         );
     }
+
 
     /**
      * manuell running test
@@ -131,8 +172,12 @@ public final class TestCMetric
     {
         final TestCMetric l_test = new TestCMetric();
 
-        l_test.testSymmetricWeight();
-        //l_test.testWeight();
+        l_test.initialize();
+
+        l_test.testSymmetricWeightEquality();
+        l_test.testSymmetricWeightInequality();
+        l_test.testWeightEquality();
+        l_test.testWeightInequality();
     }
 
     /**

@@ -170,6 +170,10 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "[multi elements: {0}, single elements: {1}]", m_multielements, m_singleelements );
+        return MessageFormat.format(
+            "{0} {1}",
+            m_multielements.isEmpty() ? "" : m_multielements.values(),
+            m_singleelements.isEmpty() ? "" : m_singleelements.values()
+        ).trim();
     }
 }

@@ -25,8 +25,6 @@ package org.lightjason.agentspeak.beliefbase;
 
 
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.storage.IStorage;
 import org.lightjason.agentspeak.common.CCommon;
@@ -61,7 +59,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     /**
      * storage with data
      */
-    protected final IStorage<Pair<Boolean, ILiteral>, IView<T>, T> m_storage;
+    protected final IStorage<ILiteral, IView<T>, T> m_storage;
     /**
      * weak reference queue of all masks to avoid memory-leaks of belief events
      */
@@ -76,7 +74,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<Pair<Boolean, ILiteral>, IView<T>, T> p_storage )
+    public CBeliefBase( final IStorage<ILiteral, IView<T>, T> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
@@ -99,7 +97,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final ILiteral add( final ILiteral p_literal )
     {
         // create add-event for the literal
-        if ( m_storage.putMultiElement( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
+        if ( m_storage.putMultiElement( p_literal.getFunctor(), p_literal ) )
             m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
 
         return p_literal;
@@ -124,7 +122,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final ILiteral remove( final ILiteral p_literal )
     {
         // create delete-event for the literal
-        if ( m_storage.removeMultiElement( p_literal.getFunctor(), new ImmutablePair<>( p_literal.isNegated(), p_literal ) ) )
+        if ( m_storage.removeMultiElement( p_literal.getFunctor(), p_literal ) )
             m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
 
         return p_literal;
@@ -155,7 +153,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     }
 
     @Override
-    public final Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key )
+    public final Collection<ILiteral> getLiteral( final String p_key )
     {
         return m_storage.getMultiElement( p_key );
     }
@@ -199,7 +197,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
             .forEach(
                 j -> m_events
                     .values()
-                    .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j.getRight() ) ) )
+                    .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j ) ) )
             );
 
         m_storage.streamSingleElements().parallel().forEach( i -> i.clear() );
@@ -243,7 +241,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final Stream<ILiteral> streamLiteral()
     {
-        return m_storage.streamMultiElements().map( Pair::getRight );
+        return m_storage.streamMultiElements();
     }
 
     @Override
