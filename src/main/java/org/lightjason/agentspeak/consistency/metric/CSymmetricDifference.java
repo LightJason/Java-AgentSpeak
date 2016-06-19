@@ -47,7 +47,6 @@ public final class CSymmetricDifference implements IMetric
                     .sorted()
                     .distinct()
                     .parallel()
-                    .map( i -> { System.out.println( i + " --> " + !( p_first.contains( i ) && ( p_second.contains( i ) ) ) ); return i; } )
                     .filter( i -> !( p_first.contains( i ) && ( p_second.contains( i ) ) ) )
                     .count();
     }

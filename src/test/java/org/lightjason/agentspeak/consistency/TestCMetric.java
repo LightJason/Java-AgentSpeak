@@ -42,13 +42,10 @@ import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -72,12 +69,12 @@ public final class TestCMetric
     private void initialize()
     {
         m_literals = Stream.of(
-            CLiteral.from( "toplevel" ),
+            //CLiteral.from( "toplevel" ),
             CLiteral.from( "first/sub1" ),
             CLiteral.from( "first/sub2" )
-           // CLiteral.from( "second/sub1" ),
-           // CLiteral.from( "second/sub2" ),
-           // CLiteral.from( "second/sub/sub1" )
+            //CLiteral.from( "second/sub3" ),
+            //CLiteral.from( "second/sub4" )
+            //CLiteral.from( "second/sub/sub5" )
         ).collect( Collectors.toSet() );
     }
 

@@ -113,10 +113,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         Arrays.stream( p_literal )
             .parallel()
-            .forEach( i -> this.walk( i.getFunctorPath().normalize(), this )
-                                .beliefbase()
-                                .add( i.shallowcopySuffix() )
-            );
+            .forEach( i -> this.walk( i.getFunctorPath().normalize(), this ).beliefbase().add( i.shallowcopySuffix() ) );
         return this;
     }
 
@@ -340,26 +337,16 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      *
      * @note path must be normalized
      */
-    private synchronized void walkgenerate( final IPath p_path, final IView<T> p_root, final IViewGenerator<T> p_generator )
+    private synchronized IView<T> walkgenerate( final IPath p_path, final IView<T> p_root, final IViewGenerator<T> p_generator )
     {
+        System.out.println( p_root  );
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )
-            return;
+            return p_root;
 
         // get the next view and if the view is null, generate a new view
-        this.walkgenerate(
-            p_path.getSubPath( 1 ),
-
-            p_root.beliefbase()
-                .add(
-                    p_root.beliefbase()
-                        .getViewOrDefault(
-                            p_path.get( 0 ),
-                            p_generator.generate( p_path.get( 0 ), p_root )
-                        )
-                ),
-
-            p_generator
-        );
+        final IView<T> l_view = p_root.beliefbase().getViewOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ), p_root ) );
+        p_root.beliefbase().add( l_view );
+        return this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );
     }
 
     /**
