@@ -115,25 +115,25 @@ public class CVariable<T> implements IVariable<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <N> N getTyped()
+    public <N> N typed()
     {
         return (N) m_value;
     }
 
     @Override
-    public boolean isAllocated()
+    public boolean allocated()
     {
         return m_value != null;
     }
 
     @Override
-    public final boolean isAny()
+    public final boolean any()
     {
         return m_any;
     }
 
     @Override
-    public boolean hasMutex()
+    public boolean mutex()
     {
         return false;
     }
@@ -141,22 +141,22 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public IVariable<T> throwNotAllocated() throws IllegalStateException
     {
-        if ( !this.isAllocated() )
+        if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.getLanguageString( CVariable.class, "notallocated", this ) );
 
         return this;
     }
 
     @Override
-    public boolean isValueAssignableTo( final Class<?>... p_class )
+    public boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
     @Override
     public IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
-        if ( !this.isValueAssignableTo( p_class ) )
+        if ( !this.valueAssignableTo( p_class ) )
             throw new CIllegalArgumentException(
                 org.lightjason.agentspeak.common.CCommon.getLanguageString( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
 
@@ -182,19 +182,19 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public final String getFunctor()
+    public final String functor()
     {
         return m_functor.getSuffix();
     }
 
     @Override
-    public final IPath getFunctorPath()
+    public final IPath functorpath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public final IPath getFQNFunctor()
+    public final IPath fqnfunctor()
     {
         return m_functor;
     }
@@ -209,7 +209,7 @@ public class CVariable<T> implements IVariable<T>
 
 
     @Override
-    public IVariable<T> shallowcopySuffix()
+    public IVariable<T> shallowcopysuffix()
     {
         return new CVariable<T>( m_functor.getSuffix(), m_value );
     }
@@ -226,7 +226,7 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public ITerm deepcopySuffix()
+    public ITerm deepcopysuffix()
     {
         return new CVariable<T>( m_functor.getSuffix(), new Cloner().deepClone( m_value ) );
     }
@@ -237,7 +237,7 @@ public class CVariable<T> implements IVariable<T>
      * @param p_value value
      * @return self reference
      */
-    protected final IVariable<T> internalset( final T p_value )
+    private final IVariable<T> internalset( final T p_value )
     {
         // value must be set manually to avoid exception throwing (see CVariable.set)
         if ( !m_any )

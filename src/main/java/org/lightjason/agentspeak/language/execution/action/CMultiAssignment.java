@@ -67,7 +67,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     )
     {
         final List<ITerm> l_result = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result, Collections.<ITerm>emptyList() ).getValue() )
+        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result, Collections.<ITerm>emptyList() ).value() )
              || ( l_result.isEmpty() ) )
             return CFuzzyValue.from( false );
 
@@ -109,10 +109,10 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
-            m_righthand.getVariables(),
+            m_righthand.variables(),
             m_value.stream()
         );
     }

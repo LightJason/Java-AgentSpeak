@@ -64,19 +64,19 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
     }
 
     @Override
-    public final Set<ILiteral> getBeliefs()
+    public final Set<ILiteral> beliefs()
     {
         return m_initialbeliefs;
     }
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Set<IRule> rules()
     {
         return m_rules;
     }

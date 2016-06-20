@@ -59,9 +59,9 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
         final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions ).parse( p_stream );
 
         m_configuration = new CDefaultPlanBundleConfiguration(
-            l_visitor.getPlans(),
-            l_visitor.getRules(),
-            l_visitor.getInitialBeliefs()
+            l_visitor.plans(),
+            l_visitor.rules(),
+            l_visitor.initialbeliefs()
         );
     }
 

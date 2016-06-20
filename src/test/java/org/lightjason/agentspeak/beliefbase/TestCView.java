@@ -54,7 +54,7 @@ public final class TestCView
         IntStream.range( 0, l_max )
                  .boxed()
                  .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
-                 .forEach( i -> l_beliefbase.generate( l_gen, i.getFunctorPath() ).add( i ) );
+                 .forEach( i -> l_beliefbase.generate( l_gen, i.functorpath() ).add( i ) );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
         System.out.println( l_beliefbase );

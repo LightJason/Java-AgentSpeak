@@ -39,6 +39,6 @@ public interface IPlanBundleConfiguration extends IConfiguration
      *
      * @return set with beliefs
      */
-    Set<ILiteral> getBeliefs();
+    Set<ILiteral> beliefs();
 
 }

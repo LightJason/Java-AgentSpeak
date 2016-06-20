@@ -78,9 +78,9 @@ public final class CClear extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        p_context.getAgent().getStorage().keySet().parallelStream()
+        p_context.agent().storage().keySet().parallelStream()
                  .filter( i -> !m_forbidden.contains( i ) )
-                 .forEach( i -> p_context.getAgent().getStorage().remove( i ) );
+                 .forEach( i -> p_context.agent().storage().remove( i ) );
         return CFuzzyValue.from( true );
     }
 

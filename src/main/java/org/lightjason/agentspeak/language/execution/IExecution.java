@@ -64,5 +64,5 @@ public interface IExecution
      *
      * @return variable stream (variables will be cloned on instantiation)
      */
-    Stream<IVariable<?>> getVariables();
+    Stream<IVariable<?>> variables();
 }

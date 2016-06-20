@@ -117,7 +117,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
     }
 
     @Override
-    public final IContext getContext()
+    public final IContext context()
     {
         return m_context;
     }

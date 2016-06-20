@@ -72,7 +72,7 @@ public final class CVariableUnify extends CDefaultUnify
                                                final List<ITerm> p_annotation
     )
     {
-        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal(
+        final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal(
             m_value,
             CCommon.getRawValue(
             CCommon.replaceFromContext( p_context, m_constraint ) )
@@ -85,11 +85,11 @@ public final class CVariableUnify extends CDefaultUnify
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_constraint ),
-            CVariableUnify.super.getVariables()
+            CVariableUnify.super.variables()
         );
     }
 }

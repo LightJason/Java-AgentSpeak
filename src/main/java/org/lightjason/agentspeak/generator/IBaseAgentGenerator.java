@@ -121,23 +121,23 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
             new CBoolFuzzy<>(),
 
             Stream.concat(
-                l_visitor.getInitialBeliefs().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.getInitialBeliefs().stream() )
+                l_visitor.initialbeliefs().stream(),
+                p_planbundle.parallelStream().flatMap( i -> i.initialbeliefs().stream() )
             ).collect( Collectors.toSet() ),
 
             p_beliefperceiver,
 
             Stream.concat(
-                l_visitor.getPlans().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.getPlans().stream() )
+                l_visitor.plans().stream(),
+                p_planbundle.parallelStream().flatMap( i -> i.plans().stream() )
             ).collect( Collectors.toSet() ),
 
             Stream.concat(
-                l_visitor.getRules().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.getRules().stream() )
+                l_visitor.rules().stream(),
+                p_planbundle.parallelStream().flatMap( i -> i.rules().stream() )
             ).collect( Collectors.toSet() ),
 
-            l_visitor.getInitialGoal(),
+            l_visitor.initialgoal(),
 
             UNIFIER,
 

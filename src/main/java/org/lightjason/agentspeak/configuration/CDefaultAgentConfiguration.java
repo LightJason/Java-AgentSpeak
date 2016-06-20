@@ -170,7 +170,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public IView<T> getBeliefbase()
+    public IView<T> beliefbase()
     {
         final IView<T> l_beliefbase = new CBeliefBase<>( new CMultiStorage<>( m_perceivable ) ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
@@ -182,55 +182,55 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public final ITrigger getInitialGoal()
+    public final ITrigger initialgoal()
     {
         return m_initialgoal;
     }
 
     @Override
-    public final IAggregation getAggregate()
+    public final IAggregation aggregation()
     {
         return m_aggregation;
     }
 
     @Override
-    public final IUnifier getUnifier()
+    public final IUnifier unifier()
     {
         return m_unifier;
     }
 
     @Override
-    public final IVariableBuilder getVariableBuilder()
+    public final IVariableBuilder variablebuilder()
     {
         return m_variablebuilder;
     }
 
     @Override
-    public final IFuzzy<Boolean, T> getFuzzy()
+    public final IFuzzy<Boolean, T> fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final Collection<ILiteral> getInitialBeliefs()
+    public final Collection<ILiteral> initialbeliefs()
     {
         return m_initialbeliefs;
     }
 
     @Override
-    public final Set<IBeliefPerceive<T>> getPerceivable()
+    public final Set<IBeliefPerceive<T>> perceivable()
     {
         return m_perceivable;
     }
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Set<IRule> rules()
     {
         return m_rules;
     }

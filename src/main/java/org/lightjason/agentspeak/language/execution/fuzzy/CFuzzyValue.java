@@ -51,7 +51,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      */
     public CFuzzyValue( final IFuzzyValue<T> p_value )
     {
-        this( p_value.getValue(), p_value.getFuzzy() );
+        this( p_value.value(), p_value.fuzzy() );
     }
 
     /**
@@ -81,19 +81,19 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
 
 
     @Override
-    public final T getValue()
+    public final T value()
     {
         return m_value;
     }
 
     @Override
-    public final double getFuzzy()
+    public final double fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    public final boolean valueAssignableTo( final Class<?>... p_class )
     {
         return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }

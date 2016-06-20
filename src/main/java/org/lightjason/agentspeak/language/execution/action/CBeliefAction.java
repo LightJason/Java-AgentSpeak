@@ -70,11 +70,11 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
         switch ( m_action )
         {
             case ADD:
-                p_context.getAgent().getBeliefBase().add( m_value.unify( p_context ) );
+                p_context.agent().beliefbase().add( m_value.unify( p_context ) );
                 break;
 
             case DELETE:
-                p_context.getAgent().getBeliefBase().remove( m_value.unify( p_context ) );
+                p_context.agent().beliefbase().remove( m_value.unify( p_context ) );
                 break;
 
             default:

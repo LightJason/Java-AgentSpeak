@@ -49,6 +49,6 @@ public interface IShallowCopy<T> extends ICopy
      *
      * @return new instance of the object
      */
-    T shallowcopySuffix();
+    T shallowcopysuffix();
 
 }

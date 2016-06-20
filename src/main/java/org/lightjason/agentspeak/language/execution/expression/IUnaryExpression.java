@@ -34,13 +34,13 @@ public interface IUnaryExpression extends IExpression
      *
      * @return expression
      */
-    IExpression getExpression();
+    IExpression expression();
 
     /**
      * return expression operator
      *
      * @return operator
      */
-    EOperator getOperator();
+    EOperator operator();
 
 }

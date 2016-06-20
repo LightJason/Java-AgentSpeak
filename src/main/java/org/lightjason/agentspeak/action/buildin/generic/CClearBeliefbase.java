@@ -52,7 +52,7 @@ public final class CClearBeliefbase extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_context.getAgent().getBeliefBase().clear(
+        p_context.agent().beliefbase().clear(
             p_argument.size() == 0
             ? null
             : p_argument.parallelStream()

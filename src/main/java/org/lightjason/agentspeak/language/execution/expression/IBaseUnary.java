@@ -63,13 +63,13 @@ public abstract class IBaseUnary implements IUnaryExpression
     }
 
     @Override
-    public final IExpression getExpression()
+    public final IExpression expression()
     {
         return m_expression;
     }
 
     @Override
-    public final EOperator getOperator()
+    public final EOperator operator()
     {
         return m_operator;
     }
@@ -99,9 +99,9 @@ public abstract class IBaseUnary implements IUnaryExpression
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return m_expression.getVariables();
+        return m_expression.variables();
     }
 
 }

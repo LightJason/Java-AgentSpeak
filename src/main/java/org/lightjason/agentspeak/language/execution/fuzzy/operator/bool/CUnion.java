@@ -52,13 +52,13 @@ public final class CUnion implements IFuzzyOperator<Boolean>
     @Override
     public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
     {
-        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
+        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
     }
 
     @Override
     public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
-        return ( i, j ) -> i.setFuzzy( Math.max( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() || j.getValue() );
+        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
     }
 
     @Override

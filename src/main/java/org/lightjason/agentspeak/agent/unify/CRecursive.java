@@ -65,9 +65,9 @@ public final class CRecursive implements IAlgorithm
                 if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )
                 {
                     p_variables.add(
-                        ( (IVariable<?>) t ).hasMutex()
-                        ? new CRelocateMutexVariable<>( ( (IVariable<?>) t ).getFQNFunctor(), (IVariable<?>) s )
-                        : new CRelocateVariable<>( ( (IVariable<?>) t ).getFQNFunctor(), (IVariable<?>) s )
+                        ( (IVariable<?>) t ).mutex()
+                        ? new CRelocateMutexVariable<>( ( (IVariable<?>) t ).fqnfunctor(), (IVariable<?>) s )
+                        : new CRelocateVariable<>( ( (IVariable<?>) t ).fqnfunctor(), (IVariable<?>) s )
                     );
                     return true;
                 }
@@ -89,7 +89,7 @@ public final class CRecursive implements IAlgorithm
                     final ILiteral l_sourceliteral = (ILiteral) s;
                     final ILiteral l_targetliteral = (ILiteral) t;
 
-                    if ( !l_sourceliteral.getFQNFunctor().equals( l_targetliteral.getFQNFunctor() ) )
+                    if ( !l_sourceliteral.fqnfunctor().equals( l_targetliteral.fqnfunctor() ) )
                         return false;
 
                     return this.unify( p_variables, l_sourceliteral.orderedvalues(), l_targetliteral.orderedvalues() );

@@ -69,10 +69,10 @@ public final class CPower extends IBaseBinary
     {
         // run left-hand- and right-hand-side argument
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+        if ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
             return CFuzzyValue.from( false );
 
-        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
             return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )

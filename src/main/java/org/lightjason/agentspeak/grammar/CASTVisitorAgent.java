@@ -140,7 +140,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public CASTVisitorAgent( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.getName(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions, m_rules ) );
     }
@@ -208,18 +208,18 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         // create placeholder objects first and run parsing again to build full-qualified rule objects
         p_context.logicrule().stream()
                  .map( i -> (IRule) this.visitLogicrulePlaceHolder( i ) )
-                 .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+                 .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         final Multimap<IPath, IRule> l_rules = LinkedHashMultimap.create();
         p_context.logicrule().stream()
                  .flatMap( i -> ( (List<IRule>) this.visitLogicrule( i ) ).stream() )
-                 .forEach( i -> l_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+                 .forEach( i -> l_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         // clear rule list and replace placeholder objects
         m_rules.clear();
         l_rules.values().stream()
                .map( i -> i.replaceplaceholder( l_rules ) )
-               .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+               .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         LOGGER.info( MessageFormat.format( "parsed rules: {0}", m_rules.values() ) );
         return null;
@@ -1033,7 +1033,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Set<ILiteral> getInitialBeliefs()
+    public final Set<ILiteral> initialbeliefs()
     {
         return m_InitialBeliefs;
     }
@@ -1044,19 +1044,19 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Set<IRule> rules()
     {
         return new HashSet<>( m_rules.values() );
     }
 
     @Override
-    public final ILiteral getInitialGoal()
+    public final ILiteral initialgoal()
     {
         return m_InitialGoal;
     }

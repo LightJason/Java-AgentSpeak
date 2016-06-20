@@ -95,14 +95,14 @@ public final class CProxyAction implements IExecution
     @Override
     public final double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate( p_agent, m_scoringcache );
+        return p_agent.aggregation().evaluate( p_agent, m_scoringcache );
     }
 
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return m_execution.getVariables();
+        return m_execution.variables();
     }
 
     @Override
@@ -166,7 +166,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Stream<IVariable<?>> getVariables()
+        public final Stream<IVariable<?>> variables()
         {
             return this.getVariableSet( m_value );
         }
@@ -224,7 +224,7 @@ public final class CProxyAction implements IExecution
 
 
             // resolve action
-            m_action = p_actions.get( p_literal.getFQNFunctor() );
+            m_action = p_actions.get( p_literal.fqnfunctor() );
             if ( m_action == null )
                 throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 
@@ -280,9 +280,9 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Stream<IVariable<?>> getVariables()
+        public final Stream<IVariable<?>> variables()
         {
-            return m_action.getVariables();
+            return m_action.variables();
         }
 
         /**

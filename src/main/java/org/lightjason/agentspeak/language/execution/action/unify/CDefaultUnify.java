@@ -70,7 +70,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "novariable" ) );
 
-        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().isAny() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
+        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "uniquevariable" ) );
 
         // count variables
@@ -88,7 +88,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
                                          final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().getUnifier().unify(
+        return p_context.agent().unifier().unify(
             p_context,
             m_value,
             m_variablenumber
@@ -97,7 +97,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),

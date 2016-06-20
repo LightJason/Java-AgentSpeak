@@ -66,35 +66,35 @@ public final class CLiteral implements ILiteral
     /**
      * negation symbol
      */
-    protected static final String NEGATION = "~";
+    private static final String NEGATION = "~";
     /**
      * at symbol
      */
-    protected static final String AT = "@";
+    private static final String AT = "@";
     /**
      * literal annotations
      */
-    protected final ImmutableMultimap<IPath, ILiteral> m_annotations;
+    private final ImmutableMultimap<IPath, ILiteral> m_annotations;
     /**
      * literal values
      */
-    protected final ImmutableMultimap<IPath, ITerm> m_values;
+    private final ImmutableMultimap<IPath, ITerm> m_values;
     /**
      * literal values as list
      */
-    protected final List<ITerm> m_orderedvalues;
+    private final List<ITerm> m_orderedvalues;
     /**
      * literals functor
      */
-    protected final IPath m_functor;
+    private final IPath m_functor;
     /**
      * negated option
      */
-    protected final boolean m_negated;
+    private final boolean m_negated;
     /**
      * @ prefix is set
      */
-    protected final boolean m_at;
+    private final boolean m_at;
     /**
      * hash code
      */
@@ -129,11 +129,11 @@ public final class CLiteral implements ILiteral
 
         // create immutable structures
         final Multimap<IPath, ILiteral> l_annotations = HashMultimap.create();
-        p_annotations.stream().forEach( i -> l_annotations.put( i.getFQNFunctor(), i ) );
+        p_annotations.forEach( i -> l_annotations.put( i.fqnfunctor(), i ) );
         m_annotations = ImmutableSetMultimap.copyOf( l_annotations );
 
         final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
-        p_values.stream().forEachOrdered( i -> l_values.put( i.getFQNFunctor(), i ) );
+        p_values.stream().forEachOrdered( i -> l_values.put( i.fqnfunctor(), i ) );
         m_values = ImmutableListMultimap.copyOf( l_values );
 
         m_orderedvalues = Collections.unmodifiableList( new LinkedList<>( p_values ) );
@@ -141,7 +141,7 @@ public final class CLiteral implements ILiteral
         // calculates hash value
         m_hash = m_functor.hashCode()
                  + IntStream.range( 0, m_orderedvalues.size() ).boxed().mapToInt( i -> ( i + 1 ) * m_orderedvalues.get( i ).hashCode() ).sum()
-                 + m_annotations.values().stream().mapToInt( i -> i.hashCode() ).sum()
+                 + m_annotations.values().stream().mapToInt( Object::hashCode ).sum()
                  + ( m_negated ? 17737 : 55529 )
                  + ( m_at ? 2741 : 8081 );
 
@@ -243,7 +243,7 @@ public final class CLiteral implements ILiteral
      */
     public static ILiteral parse( final String p_literal ) throws Exception
     {
-        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).getLiteral();
+        return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).literal();
     }
 
     @Override
@@ -265,9 +265,9 @@ public final class CLiteral implements ILiteral
                ? m_orderedvalues.stream().sequential()
                : p_path.length == 1
                  ? m_orderedvalues.stream()
-                                  .filter( i -> i.getFQNFunctor().equals( p_path[0] ) ).sequential()
+                                  .filter( i -> i.fqnfunctor().equals( p_path[0] ) ).sequential()
                  : m_orderedvalues.stream()
-                                  .filter( i -> i.getFQNFunctor().equals( p_path[0] ) )
+                                  .filter( i -> i.fqnfunctor().equals( p_path[0] ) )
                                   .filter( i -> i instanceof ILiteral )
                                   .flatMap( i -> ( (ILiteral) i ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
@@ -307,7 +307,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final boolean isNegated()
+    public final boolean negated()
     {
         return m_negated;
     }
@@ -330,8 +330,8 @@ public final class CLiteral implements ILiteral
                            .map( i -> {
                                if ( i instanceof IVariable<?> )
                                {
-                                   final IVariable<?> l_variable = p_context.getInstanceVariables().get( i.getFQNFunctor() );
-                                   return ( l_variable == null ) || ( l_variable.isAllocated() ) ? CRawTerm.from( l_variable ) : l_variable;
+                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
+                                   return ( l_variable == null ) || ( l_variable.allocated() ) ? CRawTerm.from( l_variable ) : l_variable;
                                }
                                if ( i instanceof ILiteral )
                                    return ( (ILiteral) i ).unify( p_context );
@@ -353,7 +353,7 @@ public final class CLiteral implements ILiteral
                            .map( i -> {
                                if ( i instanceof IVariable<?> )
                                {
-                                   final IVariable<?> l_variable = p_context.getInstanceVariables().get( ( (IVariable<?>) i ).getFQNFunctor() );
+                                   final IVariable<?> l_variable = p_context.instancevariables().get( ( (IVariable<?>) i ).fqnfunctor() );
                                    return l_variable == null
                                           ? CRawTerm.EMPTY
                                           : l_variable;
@@ -368,19 +368,19 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final String getFunctor()
+    public final String functor()
     {
         return m_functor.getSuffix();
     }
 
     @Override
-    public final IPath getFunctorPath()
+    public final IPath functorpath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public final IPath getFQNFunctor()
+    public final IPath fqnfunctor()
     {
         return m_functor;
     }
@@ -416,7 +416,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral shallowcopySuffix()
+    public final ILiteral shallowcopysuffix()
     {
         return new CLiteral(
             m_at, m_negated, CPath.from( m_functor.getSuffix() ),
@@ -460,7 +460,7 @@ public final class CLiteral implements ILiteral
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final synchronized ITerm deepcopySuffix()
+    public final synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(
             m_at, m_negated, CPath.from( m_functor.getSuffix() ),
@@ -473,13 +473,13 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    protected static final class CParser extends IParserBase<IASTVisitorType, TypeLexer, TypeParser>
+    private static final class CParser extends IParserBase<IASTVisitorType, TypeLexer, TypeParser>
     {
 
         /**
          * ctor
          */
-        public CParser()
+        CParser()
         {
             super( new CErrorListener() );
         }

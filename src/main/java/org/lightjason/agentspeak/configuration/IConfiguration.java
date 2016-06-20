@@ -42,12 +42,12 @@ public interface IConfiguration
      *
      * @return plan set
      */
-    Set<IPlan> getPlans();
+    Set<IPlan> plans();
 
     /**
      * get a set with rules
      *
      * @return rule set
      */
-    Set<IRule> getRules();
+    Set<IRule> rules();
 }

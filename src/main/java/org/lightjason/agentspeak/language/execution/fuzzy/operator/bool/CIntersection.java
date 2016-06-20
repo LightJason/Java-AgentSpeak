@@ -52,13 +52,13 @@ public final class CIntersection implements IFuzzyOperator<Boolean>
     @Override
     public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
     {
-        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
+        return ( i, j ) -> i.fuzzy( Math.min( i.fuzzy(), j.fuzzy() ) ).value( i.value() && j.value() );
     }
 
     @Override
     public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
-        return ( i, j ) -> i.setFuzzy( Math.min( i.getFuzzy(), j.getFuzzy() ) ).setValue( i.getValue() && j.getValue() );
+        return ( i, j ) -> i.fuzzy( Math.min( i.fuzzy(), j.fuzzy() ) ).value( i.value() && j.value() );
     }
 
     @Override

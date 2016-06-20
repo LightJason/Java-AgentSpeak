@@ -76,7 +76,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+        if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 
@@ -104,8 +104,8 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat( m_true.getVariables(), m_false.getVariables() );
+        return Stream.concat( m_true.variables(), m_false.variables() );
     }
 }

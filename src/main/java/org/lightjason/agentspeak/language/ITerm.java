@@ -37,14 +37,14 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return functor
      */
-    String getFunctor();
+    String functor();
 
     /**
      * returns the path of the functor
      *
      * @return path
      */
-    IPath getFunctorPath();
+    IPath functorpath();
 
     /**
      * returns the full-qualified functor
@@ -52,6 +52,6 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return fqn functor
      */
-    IPath getFQNFunctor();
+    IPath fqnfunctor();
 
 }

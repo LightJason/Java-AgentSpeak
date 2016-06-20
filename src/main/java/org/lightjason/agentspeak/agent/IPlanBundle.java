@@ -41,20 +41,20 @@ public interface IPlanBundle
      *
      * @return set with initial beliefs
      */
-    Set<ILiteral> getInitialBeliefs();
+    Set<ILiteral> initialbeliefs();
 
     /**
      * get a multimap with event-plan matching
      *
      * @return multimap plans
      */
-    Set<IPlan> getPlans();
+    Set<IPlan> plans();
 
     /**
      * returns the rules
      *
      * @return rules
      */
-    Set<IRule> getRules();
+    Set<IRule> rules();
 
 }

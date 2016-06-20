@@ -42,21 +42,21 @@ public interface IContext
      *
      * @return agent
      */
-    IAgent<?> getAgent();
+    IAgent<?> agent();
 
     /**
      * returns the instance object
      *
      * @return instance object plan or rule
      */
-    IInstantiable getInstance();
+    IInstantiable instance();
 
     /**
      * returns the variables names and their current value
      *
      * @return variable names and their current value
      */
-    Map<IPath, IVariable<?>> getInstanceVariables();
+    Map<IPath, IVariable<?>> instancevariables();
 
     /**
      * duplicates the context with a shallow-copy

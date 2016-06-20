@@ -109,7 +109,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     {
         // run initialization
         final List<ITerm> l_initialization = new LinkedList<>();
-        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).getValue() )
+        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).value() )
             return CFuzzyValue.from( false );
 
         // run lambda expression
@@ -139,13 +139,13 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return m_return == null
-               ? m_initialize.getVariables()
+               ? m_initialize.variables()
                : Stream.concat(
                    Stream.of( m_return ),
-                   m_initialize.getVariables()
+                   m_initialize.variables()
                );
     }
 
@@ -169,7 +169,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return CCommon.flatList( p_input ).stream().map( i -> {
 
             l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
-            m_body.stream().forEach(
+            m_body.forEach(
                 j -> j.execute(
                     l_localcontext.getLeft(),
                     m_parallel,
@@ -195,7 +195,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
             final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
             l_localcontext.getMiddle().set( CCommon.getRawValue( i ) );
-            m_body.stream().forEach(
+            m_body.forEach(
                 j -> j.execute(
                     l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
                     Collections.<ITerm>emptyList()
@@ -217,9 +217,9 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         final IVariable<?> l_iterator = m_value.shallowcopy();
         final IVariable<?> l_return = m_return != null ? m_return.shallowcopy() : null;
 
-        final Set<IVariable<?>> l_variables = new HashSet<>( p_context.getInstanceVariables().values() );
+        final Set<IVariable<?>> l_variables = new HashSet<>( p_context.instancevariables().values() );
 
-        l_variables.addAll( m_body.stream().flatMap( i -> i.getVariables() ).collect( Collectors.toList() ) );
+        l_variables.addAll( m_body.stream().flatMap( IExecution::variables ).collect( Collectors.toList() ) );
         l_variables.remove( l_iterator );
         l_variables.add( l_iterator );
 
@@ -229,6 +229,6 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
             l_variables.add( l_return );
         }
 
-        return new ImmutableTriple<>( new CContext( p_context.getAgent(), p_context.getInstance(), l_variables ), l_iterator, l_return );
+        return new ImmutableTriple<>( new CContext( p_context.agent(), p_context.instance(), l_variables ), l_iterator, l_return );
     }
 }

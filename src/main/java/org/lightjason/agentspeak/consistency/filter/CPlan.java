@@ -37,6 +37,6 @@ public final class CPlan implements IFilter
     @Override
     public final Stream<ILiteral> filter( final IAgent<?> p_agent )
     {
-        return p_agent.getRunningPlans().values().stream();
+        return p_agent.runningplans().values().stream();
     }
 }

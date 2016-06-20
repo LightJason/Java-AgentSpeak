@@ -67,7 +67,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
     {
         // read current rules, if not exists execution fails
-        final Collection<IRule> l_rules = p_context.getAgent().getRules().get( p_value.getFQNFunctor() );
+        final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );
         if ( l_rules == null )
             return CFuzzyValue.from( false );
 
@@ -82,11 +82,11 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
         ).map( i -> {
 
             // instantiate variables by unification of the rule literal
-            final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal( i.getIdentifier(), l_unified );
+            final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal( i.getIdentifier(), l_unified );
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
-                i.instantiate( p_context.getAgent(), l_variables.stream() ),
+                i.instantiate( p_context.agent(), l_variables.stream() ),
                 false,
                 Collections.<ITerm>emptyList(),
                 Collections.<ITerm>emptyList(),
@@ -94,7 +94,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
             );
 
             // create rule result with fuzzy- and defuzzificated value and instantiate variable set
-            return new ImmutableTriple<>( p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
+            return new ImmutableTriple<>( p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
 
         } )
 

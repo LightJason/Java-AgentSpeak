@@ -64,7 +64,7 @@ public class CAtom implements IExpression
     )
     {
         final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
-        p_return.add( CRawTerm.from( CCommon.getRawValue( l_term ) ).throwNotAllocated( l_term.getFQNFunctor().toString() ) );
+        p_return.add( CRawTerm.from( CCommon.getRawValue( l_term ) ).throwNotAllocated( l_term.fqnfunctor().toString() ) );
         return CFuzzyValue.from( true );
     }
 
@@ -75,7 +75,7 @@ public class CAtom implements IExpression
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return m_value instanceof IVariable<?>
                ? Stream.of( (IVariable<?>) m_value )

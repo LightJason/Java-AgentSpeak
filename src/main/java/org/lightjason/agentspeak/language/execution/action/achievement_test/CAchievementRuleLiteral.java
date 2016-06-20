@@ -67,18 +67,18 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     {
         // rules can create a cyclic reference so on calculate the score value
         // a cyclic reference must be ignored
-        final Collection<IRule> l_rules = p_agent.getRules().get( m_value.getFQNFunctor() );
+        final Collection<IRule> l_rules = p_agent.rules().get( m_value.fqnfunctor() );
         return l_rules == null
-               ? p_agent.getAggregation().error()
+               ? p_agent.aggregation().error()
                : l_rules.parallelStream()
-                        .filter( i -> this.equals( i ) )
+                        .filter( this::equals )
                         .mapToDouble( i -> i.score( p_agent ) )
                         .sum();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             CCommon.recursiveterm( m_value.orderedvalues() ),

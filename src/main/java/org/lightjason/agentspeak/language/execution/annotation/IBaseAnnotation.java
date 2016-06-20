@@ -68,21 +68,21 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     }
 
     @Override
-    public final EType getID()
+    public final EType id()
     {
         return m_type;
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <N> N getValue()
+    public final <N> N value()
     {
         return (N) m_value;
     }
 
     @Override
-    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    public final boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 }

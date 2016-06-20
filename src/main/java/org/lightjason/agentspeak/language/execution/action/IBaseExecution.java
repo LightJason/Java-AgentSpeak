@@ -81,11 +81,11 @@ public abstract class IBaseExecution<T> implements IExecution
     @Override
     public double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
+        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
     @Override
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.<IVariable<?>>empty();
     }

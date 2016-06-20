@@ -55,7 +55,7 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     @Override
     public double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of() );
+        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
     @Override

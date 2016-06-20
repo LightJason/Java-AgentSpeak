@@ -93,7 +93,7 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     /**
      * getter of the literal for the negation
      */
-    boolean isNegated();
+    boolean negated();
 
     /**
      * returns if the literal has an @ prefix

@@ -84,7 +84,7 @@ public final class CAdd extends IStorage
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 
-        p_context.getAgent().getStorage().put( CCommon.getRawValue( l_key ), CCommon.getRawValue( p_argument.get( 1 ) ) );
+        p_context.agent().storage().put( CCommon.getRawValue( l_key ), CCommon.getRawValue( p_argument.get( 1 ) ) );
         return CFuzzyValue.from( true );
     }
 

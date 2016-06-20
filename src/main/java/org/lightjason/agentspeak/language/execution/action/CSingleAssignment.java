@@ -68,7 +68,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
         final List<ITerm> l_return = new LinkedList<>();
         final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute(
             p_context, p_parallel, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() );
-        if ( ( !l_rightreturn.getValue() ) || ( l_return.isEmpty() ) )
+        if ( ( !l_rightreturn.value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
         ( (IVariable<?>) CCommon.replaceFromContext( p_context, m_value ) ).set( CCommon.getRawValue( l_return.get( 0 ) ) );
@@ -94,11 +94,11 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_value ),
-            m_righthand.getVariables()
+            m_righthand.variables()
         );
     }
 }

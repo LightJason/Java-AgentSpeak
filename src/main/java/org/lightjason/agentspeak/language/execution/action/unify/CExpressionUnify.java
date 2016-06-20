@@ -71,16 +71,16 @@ public final class CExpressionUnify extends CDefaultUnify
     )
     {
         return m_parallel
-               ? p_context.getAgent().getUnifier().parallel( p_context, m_value, m_variablenumber, m_expression )
-               : p_context.getAgent().getUnifier().sequential( p_context, m_value, m_variablenumber, m_expression );
+               ? p_context.agent().unifier().parallel( p_context, m_value, m_variablenumber, m_expression )
+               : p_context.agent().unifier().sequential( p_context, m_value, m_variablenumber, m_expression );
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
-            m_expression.getVariables(),
-            CExpressionUnify.super.getVariables()
+            m_expression.variables(),
+            CExpressionUnify.super.variables()
         );
     }
 

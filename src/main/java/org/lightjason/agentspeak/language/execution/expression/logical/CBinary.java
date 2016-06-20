@@ -65,7 +65,7 @@ public final class CBinary extends IBaseBinary
     {
         // get left-hand-side argument and run fastcheck
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
              || ( l_argument.isEmpty() ) )
             return CFuzzyValue.from( false );
 
@@ -74,7 +74,7 @@ public final class CBinary extends IBaseBinary
 
 
         // get right-hand-side argument
-        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
             return CFuzzyValue.from( false );
         if ( l_argument.size() != 2 )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "argumentnumber" ) );

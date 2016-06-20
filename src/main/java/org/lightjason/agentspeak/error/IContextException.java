@@ -37,6 +37,6 @@ public interface IContextException extends IException
      *
      * @return context
      */
-    IContext getContext();
+    IContext context();
 
 }

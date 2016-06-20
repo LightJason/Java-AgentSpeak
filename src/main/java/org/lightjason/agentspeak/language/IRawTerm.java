@@ -42,14 +42,14 @@ public interface IRawTerm<T> extends ITerm
      *
      * @tparam N casted type
      */
-    <N> N getTyped();
+    <N> N typed();
 
     /**
      * returns allocated state
      *
      * @return boolean flag
      */
-    boolean isAllocated();
+    boolean allocated();
 
     /**
      * throws an illegal state exception
@@ -68,7 +68,7 @@ public interface IRawTerm<T> extends ITerm
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean isValueAssignableTo( final Class<?>... p_class );
+    boolean valueAssignableTo( final Class<?>... p_class );
 
     /**
      * throws an illegal argument exception

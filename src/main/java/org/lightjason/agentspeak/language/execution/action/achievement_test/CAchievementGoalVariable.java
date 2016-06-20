@@ -64,7 +64,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
                                                final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().trigger(
+        return p_context.agent().trigger(
             CTrigger.from(
                 ITrigger.EType.ADDGOAL,
                 m_value.evaluate( p_context )
@@ -74,8 +74,8 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return m_value.getVariables();
+        return m_value.variables();
     }
 }

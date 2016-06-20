@@ -90,8 +90,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             p_annotation,
             p_event.hashCode()
             + ( p_condition == null ? 0 : p_condition.hashCode() )
-            + p_body.stream().mapToInt( i -> i.hashCode() ).sum()
-            + p_annotation.stream().mapToInt( i -> i.hashCode() ).sum()
+            + p_body.stream().mapToInt( Object::hashCode ).sum()
+            + p_annotation.stream().mapToInt( Object::hashCode ).sum()
         );
 
 
@@ -125,8 +125,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
 
         // create delete-goal trigger
-        if ( !p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_result ) )
-            p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
+        if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
+            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
 
         return l_result;
     }
@@ -139,7 +139,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-            m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue()
+            m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).value()
             && ( l_return.size() == 1 )
             ? CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) )
             : false
@@ -163,12 +163,12 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @SuppressWarnings( "unchecked" )
     public final double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate(
+        return p_agent.aggregation().evaluate(
             Stream.concat(
                 Stream.of( super.score( p_agent ) ),
                 Stream.of(
                     m_annotation.containsKey( IAnnotation.EType.SCORE )
-                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()
+                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).value() ).doubleValue()
                     : 0
                 )
             )
@@ -177,14 +177,14 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return (Stream<IVariable<?>>) Stream.of(
             m_condition != null
-            ? m_condition.getVariables()
+            ? m_condition.variables()
             : Stream.<IVariable<?>>empty(),
 
-            super.getVariables(),
+            super.variables(),
 
             CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
                    .filter( i -> i instanceof IVariable<?> )

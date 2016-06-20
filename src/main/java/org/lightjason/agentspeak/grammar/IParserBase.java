@@ -44,7 +44,7 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
     /**
      * error listener
      */
-    protected final ANTLRErrorListener m_errorlistener;
+    private final ANTLRErrorListener m_errorlistener;
 
 
     /**

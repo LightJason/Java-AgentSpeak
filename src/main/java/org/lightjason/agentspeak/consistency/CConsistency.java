@@ -133,13 +133,13 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final double get( final IAgent<?> p_object )
+    public final double value( final IAgent<?> p_object )
     {
         return m_data.getOrDefault( p_object, 0.0 );
     }
 
     @Override
-    public final DescriptiveStatistics getStatistic()
+    public final DescriptiveStatistics statistic()
     {
         return m_statistic;
     }
@@ -209,13 +209,13 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final IMetric getMetric()
+    public final IMetric metric()
     {
         return m_metric;
     }
 
     @Override
-    public final IFilter getFilter()
+    public final IFilter filter()
     {
         return m_filter;
     }
