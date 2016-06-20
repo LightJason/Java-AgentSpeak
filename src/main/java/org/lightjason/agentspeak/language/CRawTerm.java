@@ -72,14 +72,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
         if ( p_value instanceof IRawTerm<?> )
         {
             final IRawTerm<?> l_term = (IRawTerm<?>) p_value;
-            m_value = l_term.getTyped();
-            m_functor = l_term.getFQNFunctor();
+            m_value = l_term.typed();
+            m_functor = l_term.fqnfunctor();
         }
         else if ( p_value instanceof IVariable<?> )
         {
             final IVariable<?> l_variable = (IVariable<?>) p_value;
             m_value = (T) l_variable.get();
-            m_functor = l_variable.getFQNFunctor();
+            m_functor = l_variable.fqnfunctor();
         }
         else
         {
@@ -121,7 +121,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
                && (
                    (
                         ( p_object instanceof IVariable<?> )
-                        && ( ( (IVariable<?>) p_object ).isAllocated() )
+                        && ( ( (IVariable<?>) p_object ).allocated() )
                         && ( this.hashCode() == ( (IVariable<?>) p_object ).get().hashCode() )
                    )
                    || ( ( p_object instanceof ITerm ) && ( this.hashCode() == p_object.hashCode() ) )
@@ -135,19 +135,19 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final String getFunctor()
+    public final String functor()
     {
         return m_functor.getSuffix();
     }
 
     @Override
-    public final IPath getFunctorPath()
+    public final IPath functorpath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
     @Override
-    public final IPath getFQNFunctor()
+    public final IPath fqnfunctor()
     {
         return m_functor;
     }
@@ -160,13 +160,13 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <N> N getTyped()
+    public final <N> N typed()
     {
         return (N) m_value;
     }
 
     @Override
-    public final boolean isAllocated()
+    public final boolean allocated()
     {
         return m_value != null;
     }
@@ -174,7 +174,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final IRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException
     {
-        if ( !this.isAllocated() )
+        if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon
                                                   .getLanguageString( this, "notallocated", p_name != null ? p_name[0] : this ) );
 
@@ -182,15 +182,15 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    public final boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
     @Override
     public final IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
-        if ( !this.isValueAssignableTo( p_class ) )
+        if ( !this.valueAssignableTo( p_class ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notassignable", this, p_class ) );
 
         return this;
@@ -203,7 +203,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final ITerm deepcopySuffix()
+    public final ITerm deepcopysuffix()
     {
         return CRawTerm.from( m_value );
     }

@@ -57,27 +57,27 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      *
      * @tparam N casted type
      */
-    <N> N getTyped();
+    <N> N typed();
 
     /**
      * returns allocated state
      *
      * @return boolean flag
      */
-    boolean isAllocated();
+    boolean allocated();
 
     /**
      * flag to define a "any variable"
      *
      * @return flag for any variable
      */
-    boolean isAny();
+    boolean any();
 
     /**
      * flag to check if variable has is
      * concurrency- / thread-safe
      */
-    boolean hasMutex();
+    boolean mutex();
 
     /**
      * throws an illegal state exception
@@ -95,7 +95,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean isValueAssignableTo( final Class<?>... p_class );
+    boolean valueAssignableTo( final Class<?>... p_class );
 
     /**
      * throws an illegal argument exception

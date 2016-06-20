@@ -62,7 +62,7 @@ public class CRepair extends IBaseExecution<IExecution>
     )
     {
         final IFuzzyValue<Boolean> l_return = m_value.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
-        return l_return.getValue() ? l_return : m_fallback.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+        return l_return.value() ? l_return : m_fallback.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
     }
 
     @Override

@@ -60,8 +60,8 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      */
     public CFuzzyValueMutable( final IFuzzyValue<T> p_value )
     {
-        m_value = p_value.getValue();
-        m_fuzzy = p_value.getFuzzy();
+        m_value = p_value.value();
+        m_fuzzy = p_value.fuzzy();
     }
 
     /**
@@ -80,14 +80,14 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     }
 
     @Override
-    public final IFuzzyValueMutable<T> setValue( final T p_value )
+    public final IFuzzyValueMutable<T> value( final T p_value )
     {
         m_value = p_value;
         return this;
     }
 
     @Override
-    public final IFuzzyValueMutable<T> setFuzzy( final double p_value )
+    public final IFuzzyValueMutable<T> fuzzy( final double p_value )
     {
         if ( !( ( p_value >= 0 ) && ( p_value <= 1 ) ) )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_value ) );
@@ -102,19 +102,19 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     }
 
     @Override
-    public final T getValue()
+    public final T value()
     {
         return m_value;
     }
 
     @Override
-    public final double getFuzzy()
+    public final double fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final boolean isValueAssignableTo( final Class<?>... p_class )
+    public final boolean valueAssignableTo( final Class<?>... p_class )
     {
         return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }

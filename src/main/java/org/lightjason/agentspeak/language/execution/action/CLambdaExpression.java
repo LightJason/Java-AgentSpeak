@@ -109,7 +109,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     {
         // run initialization
         final List<ITerm> l_initialization = new LinkedList<>();
-        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).getValue() )
+        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).value() )
             return CFuzzyValue.from( false );
 
         // run lambda expression

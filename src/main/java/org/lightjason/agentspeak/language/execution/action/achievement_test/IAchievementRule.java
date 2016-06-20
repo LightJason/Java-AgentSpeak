@@ -67,7 +67,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
     {
         // read current rules, if not exists execution fails
-        final Collection<IRule> l_rules = p_context.getAgent().rules().get( p_value.getFQNFunctor() );
+        final Collection<IRule> l_rules = p_context.getAgent().rules().get( p_value.fqnfunctor() );
         if ( l_rules == null )
             return CFuzzyValue.from( false );
 

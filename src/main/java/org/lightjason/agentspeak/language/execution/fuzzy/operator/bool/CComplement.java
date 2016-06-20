@@ -36,6 +36,6 @@ public final class CComplement implements IFuzzyComplement<Boolean>
     @Override
     public final IFuzzyValue<Boolean> complement( final IFuzzyValue<Boolean> p_value )
     {
-        return CFuzzyValue.from( !p_value.getValue(), 1 - p_value.getFuzzy() );
+        return CFuzzyValue.from( !p_value.value(), 1 - p_value.fuzzy() );
     }
 }

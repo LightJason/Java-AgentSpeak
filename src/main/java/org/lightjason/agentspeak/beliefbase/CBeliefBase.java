@@ -97,7 +97,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final ILiteral add( final ILiteral p_literal )
     {
         // create add-event for the literal
-        if ( m_storage.putMultiElement( p_literal.getFunctor(), p_literal ) )
+        if ( m_storage.putMultiElement( p_literal.functor(), p_literal ) )
             m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
 
         return p_literal;
@@ -122,7 +122,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public final ILiteral remove( final ILiteral p_literal )
     {
         // create delete-event for the literal
-        if ( m_storage.removeMultiElement( p_literal.getFunctor(), p_literal ) )
+        if ( m_storage.removeMultiElement( p_literal.functor(), p_literal ) )
             m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
 
         return p_literal;

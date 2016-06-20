@@ -75,9 +75,9 @@ public final class CVariableEvaluate implements IVariableEvaluate
 
 
     @Override
-    public final boolean hasMutex()
+    public final boolean mutex()
     {
-        return m_variable.hasMutex();
+        return m_variable.mutex();
     }
 
     @Override
@@ -85,22 +85,22 @@ public final class CVariableEvaluate implements IVariableEvaluate
     public final ILiteral evaluate( final IContext p_context )
     {
         final IVariable<?> l_variable = (IVariable<?>) CCommon.replaceFromContext( p_context, m_variable );
-        if ( !l_variable.isAllocated() )
+        if ( !l_variable.allocated() )
             throw new CIllegalStateException();
 
         // if variable is a string
-        if ( l_variable.isValueAssignableTo( String.class ) )
-            return this.fromString( l_variable.getTyped(), p_context );
+        if ( l_variable.valueAssignableTo( String.class ) )
+            return this.fromString( l_variable.typed(), p_context );
 
-        if ( m_variable.isValueAssignableTo( ILiteral.class ) )
-            return this.fromLiteral( l_variable.getTyped(), p_context );
+        if ( m_variable.valueAssignableTo( ILiteral.class ) )
+            return this.fromLiteral( l_variable.typed(), p_context );
 
         throw new CIllegalStateException();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_variable ),
@@ -130,21 +130,21 @@ public final class CVariableEvaluate implements IVariableEvaluate
     }
 
     @Override
-    public final String getFunctor()
+    public final String functor()
     {
-        return m_variable.getFunctor();
+        return m_variable.functor();
     }
 
     @Override
-    public final IPath getFunctorPath()
+    public final IPath functorpath()
     {
-        return m_variable.getFunctorPath();
+        return m_variable.functorpath();
     }
 
     @Override
-    public final IPath getFQNFunctor()
+    public final IPath fqnfunctor()
     {
-        return m_variable.getFQNFunctor();
+        return m_variable.fqnfunctor();
     }
 
     @Override
@@ -154,9 +154,9 @@ public final class CVariableEvaluate implements IVariableEvaluate
     }
 
     @Override
-    public final ITerm deepcopySuffix()
+    public final ITerm deepcopysuffix()
     {
-        return m_variable.deepcopySuffix();
+        return m_variable.deepcopysuffix();
     }
 
     /**
@@ -185,8 +185,8 @@ public final class CVariableEvaluate implements IVariableEvaluate
 
         return new CLiteral(
             p_literal.hasAt(),
-            p_literal.isNegated(),
-            p_literal.getFQNFunctor(),
+            p_literal.negated(),
+            p_literal.fqnfunctor(),
             m_parameter,
             Collections.<ILiteral>emptyList()
         ).unify( p_context );

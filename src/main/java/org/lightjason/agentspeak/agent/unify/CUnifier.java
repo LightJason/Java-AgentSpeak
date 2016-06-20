@@ -241,7 +241,7 @@ public final class CUnifier implements IUnifier
     private List<Set<IVariable<?>>> unify( final IAgent<?> p_agent, final ILiteral p_literal, final long p_variablenumber )
     {
         return p_agent.beliefbase()
-                      .stream( p_literal.isNegated(), p_literal.getFQNFunctor() )
+                      .stream( p_literal.negated(), p_literal.fqnfunctor() )
                       .parallel()
                       .filter( i -> ( i.emptyValues() == p_literal.emptyValues() ) && ( i.emptyAnnotations() == p_literal.emptyAnnotations() ) )
                       .map( i -> this.literal( (ILiteral) p_literal.deepcopy(), i ) )

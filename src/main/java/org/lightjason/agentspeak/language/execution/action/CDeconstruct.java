@@ -105,7 +105,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     private void set( final List<ITerm> p_assignment, final ILiteral p_term )
     {
         if ( p_assignment.size() >= 1 )
-            ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.getFQNFunctor().toString() );
+            ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.fqnfunctor().toString() );
         if ( p_assignment.size() >= 2 )
             ( (IVariable<Object>) p_assignment.get( 1 ) ).set( Collections.synchronizedList( p_term.values().collect( Collectors.toList() ) ) );
         if ( p_assignment.size() >= 3 )

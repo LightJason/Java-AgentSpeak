@@ -94,7 +94,7 @@ public final class CConstant<T> extends CVariable<T>
 
 
     @Override
-    public final IVariable<T> shallowcopySuffix()
+    public final IVariable<T> shallowcopysuffix()
     {
         return new CConstant<T>( m_functor.getSuffix(), m_value );
     }

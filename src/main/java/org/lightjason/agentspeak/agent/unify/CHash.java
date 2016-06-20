@@ -51,9 +51,9 @@ public final class CHash implements IAlgorithm
                 if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )
                 {
                     p_variables.add(
-                        ( (IVariable<?>) t ).hasMutex()
-                        ? new CRelocateMutexVariable<>( ( (IVariable<?>) t ).getFQNFunctor(), (IVariable<?>) s )
-                        : new CRelocateVariable<>( ( (IVariable<?>) t ).getFQNFunctor(), (IVariable<?>) s )
+                        ( (IVariable<?>) t ).mutex()
+                        ? new CRelocateMutexVariable<>( ( (IVariable<?>) t ).fqnfunctor(), (IVariable<?>) s )
+                        : new CRelocateVariable<>( ( (IVariable<?>) t ).fqnfunctor(), (IVariable<?>) s )
                     );
                     return true;
                 }

@@ -120,7 +120,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         Arrays.stream( p_literal )
             .parallel()
-            .forEach( i -> this.leafview( this.walk( i.getFunctorPath() ) ).beliefbase().add( i.shallowcopySuffix() ) );
+            .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );
         return this;
     }
 
@@ -163,9 +163,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final IView<T> remove( final ILiteral p_literal )
     {
-        this.leafview( this.walk( p_literal.getFunctorPath() ) )
+        this.leafview( this.walk( p_literal.functorpath() ) )
             .beliefbase()
-            .remove( p_literal.shallowcopySuffix() );
+            .remove( p_literal.shallowcopysuffix() );
         return this;
     }
 
@@ -244,7 +244,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
                ? Stream.concat(
                     m_beliefbase.streamLiteral().parallel()
-                        .filter( i -> i.isNegated() == p_negated )
+                        .filter( i -> i.negated() == p_negated )
                         .map( i -> i.shallowcopy( l_path ) ),
                     m_beliefbase.streamView().parallel().flatMap( i -> i.stream( p_negated ).parallel().map( j -> j.shallowcopy( l_path ) ) )
                )
@@ -254,7 +254,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                     .map( IPath::normalize )
                     .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().getLiteral( i.getSuffix() )
                                        .parallelStream()
-                                       .filter( j -> j.isNegated() == p_negated )
+                                       .filter( j -> j.negated() == p_negated )
                                        .map( j -> j.shallowcopy( l_path ) ) );
     }
 

@@ -121,11 +121,11 @@ public final class CRawAction<T> extends IBaseExecution<T>
     {
         final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_execution );
 
-        if ( !l_value.isAllocated() )
+        if ( !l_value.allocated() )
             return CFuzzyValue.from( false );
 
-        if ( l_value.isValueAssignableTo( Boolean.class ) )
-            return CFuzzyValue.from( l_value.getTyped() );
+        if ( l_value.valueAssignableTo( Boolean.class ) )
+            return CFuzzyValue.from( l_value.typed() );
 
         p_return.add( CRawTerm.from( l_value.get() ) );
         return CFuzzyValue.from( true );
@@ -149,7 +149,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
     )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return, p_annotation ).getValue() ) || ( l_return.isEmpty() ) )
+        if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return, p_annotation ).value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
         return CFuzzyValue.from( CCommon.getRawValue( l_return.get( 0 ) ) );

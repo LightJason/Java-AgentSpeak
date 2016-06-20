@@ -37,7 +37,7 @@ public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
      * @param p_value new value
      * @return self reference
      */
-    IFuzzyValueMutable<T> setValue( final T p_value );
+    IFuzzyValueMutable<T> value( final T p_value );
 
     /**
      * sets the weight
@@ -45,7 +45,7 @@ public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
      * @param p_value weight
      * @return self reference
      */
-    IFuzzyValueMutable<T> setFuzzy( final double p_value );
+    IFuzzyValueMutable<T> fuzzy( final double p_value );
 
     /**
      * returns an immutable instance of the object

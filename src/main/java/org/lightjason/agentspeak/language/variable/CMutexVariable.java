@@ -89,9 +89,9 @@ public class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized <N> N getTyped()
+    public final synchronized <N> N typed()
     {
-        return super.getTyped();
+        return super.typed();
     }
 
     @Override
@@ -107,15 +107,15 @@ public class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized boolean isAllocated()
+    public final synchronized boolean allocated()
     {
-        return super.isAllocated();
+        return super.allocated();
     }
 
     @Override
-    public final synchronized boolean isValueAssignableTo( final Class<?>... p_class )
+    public final synchronized boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return super.isValueAssignableTo( p_class );
+        return super.valueAssignableTo( p_class );
     }
 
     @Override
@@ -134,13 +134,13 @@ public class CMutexVariable<T> extends CVariable<T>
 
 
     @Override
-    public IVariable<T> shallowcopySuffix()
+    public IVariable<T> shallowcopysuffix()
     {
         return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
     }
 
     @Override
-    public final boolean hasMutex()
+    public final boolean mutex()
     {
         return true;
     }

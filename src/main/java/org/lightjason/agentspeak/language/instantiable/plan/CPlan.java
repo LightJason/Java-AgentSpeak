@@ -90,8 +90,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             p_annotation,
             p_event.hashCode()
             + ( p_condition == null ? 0 : p_condition.hashCode() )
-            + p_body.stream().mapToInt( i -> i.hashCode() ).sum()
-            + p_annotation.stream().mapToInt( i -> i.hashCode() ).sum()
+            + p_body.stream().mapToInt( Object::hashCode ).sum()
+            + p_annotation.stream().mapToInt( Object::hashCode ).sum()
         );
 
 
@@ -139,7 +139,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-            m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).getValue()
+            m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).value()
             && ( l_return.size() == 1 )
             ? CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) )
             : false

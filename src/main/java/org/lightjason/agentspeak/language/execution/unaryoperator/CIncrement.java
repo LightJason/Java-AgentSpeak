@@ -71,13 +71,13 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     {
         final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).throwNotAllocated();
 
-        if ( l_variable.isValueAssignableTo( Double.class ) )
+        if ( l_variable.valueAssignableTo( Double.class ) )
             l_variable.set( (T) Double.valueOf( l_variable.get().doubleValue() + 1 ) );
-        if ( l_variable.isValueAssignableTo( Long.class ) )
+        if ( l_variable.valueAssignableTo( Long.class ) )
             l_variable.set( (T) Long.valueOf( l_variable.get().longValue() + 1 ) );
-        if ( l_variable.isValueAssignableTo( Float.class ) )
+        if ( l_variable.valueAssignableTo( Float.class ) )
             l_variable.set( (T) Float.valueOf( l_variable.get().floatValue() + 1 ) );
-        if ( l_variable.isValueAssignableTo( Integer.class ) )
+        if ( l_variable.valueAssignableTo( Integer.class ) )
             l_variable.set( (T) Integer.valueOf( l_variable.get().intValue() + 1 ) );
 
         return CFuzzyValue.from( true );

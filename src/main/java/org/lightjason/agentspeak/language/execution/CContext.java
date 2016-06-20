@@ -72,7 +72,7 @@ public final class CContext implements IContext
 
         m_agent = p_agent;
         m_instance = p_instance;
-        m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::getFQNFunctor, i -> i ) ) );
+        m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i ) ) );
     }
 
     @Override

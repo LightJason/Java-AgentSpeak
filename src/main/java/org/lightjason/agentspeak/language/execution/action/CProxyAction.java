@@ -224,7 +224,7 @@ public final class CProxyAction implements IExecution
 
 
             // resolve action
-            m_action = p_actions.get( p_literal.getFQNFunctor() );
+            m_action = p_actions.get( p_literal.fqnfunctor() );
             if ( m_action == null )
                 throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "actionunknown", p_literal ) );
 

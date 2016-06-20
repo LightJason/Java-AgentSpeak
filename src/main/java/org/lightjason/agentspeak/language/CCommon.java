@@ -65,7 +65,7 @@ public final class CCommon
      */
     public static IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.getFQNFunctor() ).set( i.getTyped() ) );
+        p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.fqnfunctor() ).set( i.typed() ) );
         return p_context;
     }
 
@@ -124,9 +124,9 @@ public final class CCommon
     public static <T, N> T getRawValue( final N p_value )
     {
         if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).getTyped();
+            return ( (IVariable<?>) p_value ).typed();
         if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).getTyped();
+            return ( (IRawTerm<?>) p_value ).typed();
 
         return (T) p_value;
     }
@@ -142,9 +142,9 @@ public final class CCommon
     public static <T> boolean isRawValueAssignableTo( final T p_value, final Class<?>... p_class )
     {
         if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).isValueAssignableTo( p_class );
+            return ( (IVariable<?>) p_value ).valueAssignableTo( p_class );
         if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).isValueAssignableTo( p_class );
+            return ( (IRawTerm<?>) p_value ).valueAssignableTo( p_class );
 
         return Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( p_value.getClass() ) ).anyMatch( i -> i );
     }
@@ -175,12 +175,12 @@ public final class CCommon
         if ( !( p_term instanceof IVariable<?> ) )
             return p_term;
 
-        final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.getFQNFunctor() );
+        final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.fqnfunctor() );
         if ( l_variable != null )
             return l_variable;
 
         throw new CIllegalArgumentException(
-            org.lightjason.agentspeak.common.CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.getFQNFunctor() )
+            org.lightjason.agentspeak.common.CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
         );
     }
 

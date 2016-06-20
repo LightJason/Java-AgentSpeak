@@ -64,7 +64,7 @@ public final class CUnary extends IBaseUnary
     )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).getValue() )
+        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 

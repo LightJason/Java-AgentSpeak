@@ -41,7 +41,7 @@ public interface IVariableEvaluate extends ITerm
      *
      * @return mutex flag
      */
-    boolean hasMutex();
+    boolean mutex();
 
     /**
      * evaluates the content of the variable
@@ -57,6 +57,6 @@ public interface IVariableEvaluate extends ITerm
      *
      * @return variable stream (variables will be cloned on instantiation)
      */
-    Stream<IVariable<?>> getVariables();
+    Stream<IVariable<?>> variables();
 
 }

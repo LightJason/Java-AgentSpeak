@@ -70,7 +70,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "novariable" ) );
 
-        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().isAny() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
+        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "uniquevariable" ) );
 
         // count variables

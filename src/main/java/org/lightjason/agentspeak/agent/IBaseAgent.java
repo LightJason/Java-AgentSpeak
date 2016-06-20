@@ -158,7 +158,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         p_configuration.plans().parallelStream()
                        .forEach( i -> m_plans.put( i.getTrigger(), new MutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
         p_configuration.rules().parallelStream()
-                       .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
+                       .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         if ( p_configuration.initialgoal() != null )
             m_trigger.add( p_configuration.initialgoal() );
@@ -415,7 +415,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
-            i.getLeft().getLeft().getTrigger().getLiteral().getFQNFunctor(),
+            i.getLeft().getLeft().getTrigger().getLiteral().fqnfunctor(),
             i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
         ) );
 

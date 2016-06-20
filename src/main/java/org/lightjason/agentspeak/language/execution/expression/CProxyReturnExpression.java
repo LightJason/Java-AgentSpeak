@@ -65,7 +65,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
     )
     {
         final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, new LinkedList<>(), p_annotation );
-        p_return.add( CRawTerm.from( l_return.getValue() ) );
+        p_return.add( CRawTerm.from( l_return.value() ) );
         return l_return;
     }
 

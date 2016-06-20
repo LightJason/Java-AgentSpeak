@@ -49,6 +49,6 @@ public interface IDeepCopy<T> extends ICopy
      *
      * @return new instance of the object
      */
-    T deepcopySuffix();
+    T deepcopysuffix();
 
 }

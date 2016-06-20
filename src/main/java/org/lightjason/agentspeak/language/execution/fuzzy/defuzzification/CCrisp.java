@@ -56,7 +56,7 @@ public class CCrisp<T, S extends IAgent<?>> implements IDefuzzification<T, S>
     @Override
     public final T defuzzify( final IFuzzyValue<T> p_value )
     {
-        return p_value.getFuzzy() <= 0.5 ? m_complement.complement( p_value ).getValue() : p_value.getValue();
+        return p_value.fuzzy() <= 0.5 ? m_complement.complement( p_value ).value() : p_value.value();
     }
 
     @Override

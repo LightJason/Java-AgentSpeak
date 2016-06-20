@@ -76,6 +76,6 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
     @Override
     public final Stream<IVariable<?>> getVariables()
     {
-        return m_value.getVariables();
+        return m_value.variables();
     }
 }

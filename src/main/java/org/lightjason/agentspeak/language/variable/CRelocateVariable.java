@@ -51,7 +51,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      */
     public CRelocateVariable( final IVariable<?> p_variable )
     {
-        super( p_variable.getFunctor(), p_variable.getTyped() );
+        super( p_variable.functor(), p_variable.typed() );
         m_relocate = p_variable;
     }
 
@@ -62,7 +62,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      */
     public CRelocateVariable( final IPath p_functor, final IVariable<?> p_relocate )
     {
-        super( p_functor, p_relocate.getTyped() );
+        super( p_functor, p_relocate.typed() );
         m_relocate = p_relocate;
     }
 
@@ -81,7 +81,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final IVariable<?> relocate()
     {
-        return m_relocate.set( this.getTyped() );
+        return m_relocate.set( this.typed() );
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     }
 
     @Override
-    public final IVariable<T> shallowcopySuffix()
+    public final IVariable<T> shallowcopysuffix()
     {
         return new CRelocateVariable<>( m_functor, m_relocate );
     }
@@ -110,7 +110,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     }
 
     @Override
-    public final ITerm deepcopySuffix()
+    public final ITerm deepcopysuffix()
     {
         return new CRelocateVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate, new Cloner().deepClone( m_value ) );
     }

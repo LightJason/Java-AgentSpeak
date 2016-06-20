@@ -35,14 +35,14 @@ public interface IFuzzyValue<T>
      *
      * @return value
      */
-    T getValue();
+    T value();
 
     /**
      * returns the fuzziness
      *
      * @return fuzzy value in [0,1]
      */
-    double getFuzzy();
+    double fuzzy();
 
     /**
      * checkes assignable of the value
@@ -50,6 +50,6 @@ public interface IFuzzyValue<T>
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean isValueAssignableTo( final Class<?>... p_class );
+    boolean valueAssignableTo( final Class<?>... p_class );
 
 }

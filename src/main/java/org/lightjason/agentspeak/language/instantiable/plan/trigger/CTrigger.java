@@ -68,7 +68,7 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = CCommon.getVariableFrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() + m_literal.getFQNFunctor().hashCode() + (int) p_literal.values().count() + (int) p_literal.annotations().count();
+        m_hashcode = m_event.hashCode() + m_literal.fqnfunctor().hashCode() + (int) p_literal.values().count() + (int) p_literal.annotations().count();
     }
 
     /**
@@ -126,8 +126,8 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final ITrigger shallowcopySuffix()
+    public final ITrigger shallowcopysuffix()
     {
-        return new CTrigger( m_event, m_literal.shallowcopySuffix() );
+        return new CTrigger( m_event, m_literal.shallowcopysuffix() );
     }
 }
