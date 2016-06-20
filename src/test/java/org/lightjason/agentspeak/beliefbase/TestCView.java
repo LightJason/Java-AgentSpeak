@@ -54,7 +54,7 @@ public final class TestCView
         IntStream.range( 0, l_max )
                  .boxed()
                  .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
-                 .forEach( i -> l_beliefbase.generate( i.getFunctorPath(), l_gen ).add( i ) );
+                 .forEach( i -> l_beliefbase.generate( l_gen, i.getFunctorPath() ).add( i ) );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
         System.out.println( l_beliefbase );
@@ -72,15 +72,15 @@ public final class TestCView
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )
 
-                    .generate( CPath.from( "first" ), l_gen )
+                    .generate( l_gen, CPath.from( "first" ) )
                     .add( CLiteral.from( "first/sub1" ) )
                     .add( CLiteral.from( "first/sub2" ) )
 
-                    .generate( CPath.from( "second/sub" ), l_gen )
-                    .add( CLiteral.from( "second/sub1" ) )
-                    .add( CLiteral.from( "second/sub2" ) )
+                    .generate( l_gen, CPath.from( "second/sub" ) )
+                    .add( CLiteral.from( "second/sub3" ) )
+                    .add( CLiteral.from( "second/sub4" ) )
 
-                    .add( CLiteral.from( "second/sub/sub1" ) );
+                    .add( CLiteral.from( "second/sub/sub5" ) );
 
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );

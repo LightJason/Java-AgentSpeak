@@ -40,9 +40,6 @@ public final class CSymmetricDifference implements IMetric
     @Override
     public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
     {
-        System.out.println( p_first );
-        System.out.println( p_second );
-
         return Stream.concat( p_first.stream(), p_second.stream() )
                     .sorted()
                     .distinct()

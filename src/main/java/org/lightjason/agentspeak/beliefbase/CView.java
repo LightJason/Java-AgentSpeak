@@ -88,10 +88,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         m_name = p_name;
         m_beliefbase = p_beliefbase;
         m_parent = p_parent;
-
-        // if parent is set, update parent reference
-        if ( m_parent != null )
-            m_parent.add( this );
     }
 
 
@@ -189,26 +185,24 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final boolean containsView( final IPath p_path )
     {
         p_path.normalize();
-        return p_path.isEmpty() || ( p_path.size() == 1
-                                     ? m_beliefbase.containsView( p_path.get( 0 ) )
-                                     : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
+        return p_path.isEmpty()
+               || ( p_path.size() == 1
+                    ? m_beliefbase.containsView( p_path.get( 0 ) )
+                    : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) )
+                        .containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
+               );
     }
 
     @Override
     public final boolean containsLiteral( final IPath p_path )
     {
         p_path.normalize();
-        return p_path.isEmpty() || ( p_path.size() == 1
-                                     ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
-                                     : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
-        );
-    }
-
-    @Override
-    public final IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator )
-    {
-        this.walk( p_path, p_generator );
-        return this;
+        return p_path.isEmpty()
+               || ( p_path.size() == 1
+                    ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                    : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) )
+                        .containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
+               );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -271,6 +265,15 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this.walkdown( p_path.normalize(), p_generator );
     }
 
+    @Override
+    public final IView<T> generate( final IViewGenerator<T> p_generator, final IPath... p_paths )
+    {
+        Arrays.stream( p_paths )
+            .parallel()
+            .forEach( i -> this.walk( i, p_generator ) );
+        return this;
+    }
+
     /**
      * inner walking structure of views
      *
@@ -288,18 +291,19 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         final String l_root = p_path.get( 0 );
         synchronized ( this )
         {
-            l_view = m_beliefbase.getViewOrDefault(
-                l_root,
+            // add is run here for avoid overwriting view with a new object reference
+            l_view = m_beliefbase.add(
+                        m_beliefbase.getViewOrDefault(
+                            l_root,
 
-                p_generator == null || p_generator.length == 0
-                ? null
-                : p_generator[0].generate( l_root, this )
+                            p_generator == null || p_generator.length == 0
+                            ? null
+                            : p_generator[0].generate( l_root, this )
+                        )
             );
         }
         if ( l_view == null )
             throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notfound", l_root, this.path() ) );
-
-        System.out.println( this + "         " + l_view );
 
         return Stream.concat(
             Stream.of( this ),

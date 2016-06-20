@@ -42,10 +42,13 @@ import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -56,7 +59,7 @@ public final class TestCMetric
     /**
      * literal view generator
      */
-    private final IViewGenerator<IAgent<?>> m_generator = new CGenerator();
+    private IViewGenerator<IAgent<?>> m_generator;
     /**
      * set with testing literals
      */
@@ -66,15 +69,17 @@ public final class TestCMetric
      * test initialize
      */
     @Before
-    private void initialize()
+    public void initialize()
     {
+        m_generator = new CGenerator();
+
         m_literals = Stream.of(
-            //CLiteral.from( "toplevel" ),
+            CLiteral.from( "toplevel" ),
             CLiteral.from( "first/sub1" ),
-            CLiteral.from( "first/sub2" )
-            //CLiteral.from( "second/sub3" ),
-            //CLiteral.from( "second/sub4" )
-            //CLiteral.from( "second/sub/sub5" )
+            CLiteral.from( "first/sub2" ),
+            CLiteral.from( "second/sub3" ),
+            CLiteral.from( "second/sub4" ),
+            CLiteral.from( "second/sub/sub5" )
         ).collect( Collectors.toSet() );
     }
 
@@ -167,11 +172,9 @@ public final class TestCMetric
         l_test.initialize();
 
         l_test.testSymmetricWeightEquality();
-        /*
         l_test.testSymmetricWeightInequality();
         l_test.testWeightEquality();
         l_test.testWeightInequality();
-        */
     }
 
     /**
@@ -190,19 +193,12 @@ public final class TestCMetric
                         final double p_excepted, final double p_delta
     )
     {
-        final IAgent<?> l_agent1 = this.getAgent( p_belief1 );
-        //final IAgent<?> l_agent2 = this.getAgent( p_belief2 );
-
-        System.out.println( l_agent1 );
-        //System.out.println( l_agent2 );
-/*
         final double l_value = p_metric.calculate(
-            p_filter.filter( l_agent1 ).collect( Collectors.toList() ),
-            p_filter.filter( l_agent2 ).collect( Collectors.toList() )
+            p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
+            p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
         );
         assertEquals( p_message, p_excepted, l_value, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
-        */
     }
 
 
@@ -215,14 +211,7 @@ public final class TestCMetric
     private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
-
-        ILiteral a = CLiteral.from( "first/sub1" );
-        l_agent.getBeliefBase().generate( a.getFunctorPath(), m_generator ).add( a );
-
-        a = CLiteral.from( "first/sub2" );
-        l_agent.getBeliefBase().generate( a.getFunctorPath(), m_generator ).add( a );
-
-        //p_literals.forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
+        p_literals.forEach( i -> l_agent.getBeliefBase().generate( m_generator, i.getFunctorPath() ).add( i ) );
         return l_agent;
     }
 

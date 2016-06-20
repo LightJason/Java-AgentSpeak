@@ -44,10 +44,20 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * streams path walking
      *
      * @param p_path path
-     * @param p_generator generator (first argument is used, orther elements will be ignored)
+     * @param p_generator generator for view creating (first argument is used, orther elements will be ignored)
      * @return stream of views
      */
+    @SuppressWarnings( "unchecked" )
     Stream<IView<T>> walk( final IPath p_path, final IViewGenerator<T>... p_generator );
+
+    /**
+     * generates path structure
+     *
+     * @param p_generator generator for views
+     * @param p_paths paths items
+     * @return self reference
+     */
+    IView<T> generate( final IViewGenerator<T> p_generator, final IPath... p_paths );
 
     /**
      * returns a stream to the root node
@@ -90,17 +100,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return boolean flag of the parent
      */
     boolean hasParent();
-
-
-
-    /**
-     * generates a path structure
-     *
-     * @param p_path path definition
-     * @param p_generator generator function
-     * @return self reference
-     */
-    IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator );
 
 
 
