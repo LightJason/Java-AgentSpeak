@@ -52,6 +52,6 @@ public final class CTestRule extends ITest
                                          final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( p_context.getAgent().getRules().asMap().containsKey( m_value ) );
+        return CFuzzyValue.from( p_context.getAgent().rules().asMap().containsKey( m_value ) );
     }
 }

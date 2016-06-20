@@ -125,7 +125,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
 
         // create delete-goal trigger
-        if ( !p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_result ) )
+        if ( !p_context.getAgent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
             p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
 
         return l_result;
@@ -163,7 +163,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     @SuppressWarnings( "unchecked" )
     public final double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate(
+        return p_agent.aggregation().evaluate(
             Stream.concat(
                 Stream.of( super.score( p_agent ) ),
                 Stream.of(

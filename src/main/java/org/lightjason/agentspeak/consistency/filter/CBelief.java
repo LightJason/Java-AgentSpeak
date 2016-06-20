@@ -59,6 +59,6 @@ public final class CBelief extends IBaseFilter
     @Override
     public final Stream<ILiteral> filter( final IAgent<?> p_agent )
     {
-        return p_agent.getBeliefBase().stream( m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] ) );
+        return p_agent.beliefbase().stream( m_paths.isEmpty() ? null : m_paths.toArray( new IPath[m_paths.size()] ) );
     }
 }

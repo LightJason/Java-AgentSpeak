@@ -51,7 +51,7 @@ public abstract class IBaseAction implements IAction
     @Override
     public final double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate( p_agent, ImmutableMultiset.of( this ) );
+        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of( this ) );
     }
 
     @Override

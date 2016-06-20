@@ -122,19 +122,19 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
 
             Stream.concat(
                 l_visitor.getInitialBeliefs().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.getInitialBeliefs().stream() )
+                p_planbundle.parallelStream().flatMap( i -> i.initialbeliefs().stream() )
             ).collect( Collectors.toSet() ),
 
             p_beliefperceiver,
 
             Stream.concat(
                 l_visitor.getPlans().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.getPlans().stream() )
+                p_planbundle.parallelStream().flatMap( i -> i.plans().stream() )
             ).collect( Collectors.toSet() ),
 
             Stream.concat(
                 l_visitor.getRules().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.getRules().stream() )
+                p_planbundle.parallelStream().flatMap( i -> i.rules().stream() )
             ).collect( Collectors.toSet() ),
 
             l_visitor.getInitialGoal(),

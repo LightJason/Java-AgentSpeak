@@ -57,25 +57,25 @@ public abstract class IBasePlanBundle implements IPlanBundle
      */
     public IBasePlanBundle( final IPlanBundleConfiguration p_configuration )
     {
-        m_plans = p_configuration.getPlans();
-        m_initialbeliefs = p_configuration.getBeliefs();
-        m_rules = p_configuration.getRules();
+        m_plans = p_configuration.plans();
+        m_initialbeliefs = p_configuration.beliefs();
+        m_rules = p_configuration.rules();
     }
 
     @Override
-    public final Set<ILiteral> getInitialBeliefs()
+    public final Set<ILiteral> initialbeliefs()
     {
         return m_initialbeliefs;
     }
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Set<IRule> rules()
     {
         return m_rules;
     }

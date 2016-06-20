@@ -72,7 +72,7 @@ public final class CVariableUnify extends CDefaultUnify
                                                final List<ITerm> p_annotation
     )
     {
-        final Set<IVariable<?>> l_variables = p_context.getAgent().getUnifier().literal(
+        final Set<IVariable<?>> l_variables = p_context.getAgent().unifier().literal(
             m_value,
             CCommon.getRawValue(
             CCommon.replaceFromContext( p_context, m_constraint ) )

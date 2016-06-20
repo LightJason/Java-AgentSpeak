@@ -191,7 +191,7 @@ public final class TestCAgent
                          try
                          {
                              l_agent.call();
-                             l_agent.getBeliefBase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
+                             l_agent.beliefbase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
                              l_agent.trigger(
                                  CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
                              );

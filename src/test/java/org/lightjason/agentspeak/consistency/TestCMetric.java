@@ -211,7 +211,7 @@ public final class TestCMetric
     private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
-        p_literals.forEach( i -> l_agent.getBeliefBase().generate( m_generator, i.getFunctorPath() ).add( i ) );
+        p_literals.forEach( i -> l_agent.beliefbase().generate( m_generator, i.getFunctorPath() ).add( i ) );
         return l_agent;
     }
 

@@ -43,14 +43,14 @@ public interface IConsistency extends Callable<IConsistency>
      * @param p_object object
      * @return value or default value
      */
-    double get( final IAgent<?> p_object );
+    double value( final IAgent<?> p_object );
 
     /**
      * returns statistic data of the consistency values
      *
      * @return statistic
      */
-    DescriptiveStatistics getStatistic();
+    DescriptiveStatistics statistic();
 
     /**
      * adds a new object
@@ -71,13 +71,13 @@ public interface IConsistency extends Callable<IConsistency>
      *
      * @return metric
      */
-    IMetric getMetric();
+    IMetric metric();
 
     /**
      * returns the used metric filter
      *
      * @return filter
      */
-    IFilter getFilter();
+    IFilter filter();
 
 }

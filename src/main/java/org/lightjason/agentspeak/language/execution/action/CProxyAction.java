@@ -95,7 +95,7 @@ public final class CProxyAction implements IExecution
     @Override
     public final double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate( p_agent, m_scoringcache );
+        return p_agent.aggregation().evaluate( p_agent, m_scoringcache );
     }
 
 

@@ -148,26 +148,26 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public IBaseAgent( final IAgentConfiguration<T> p_configuration )
     {
         // initialize agent
-        m_unifier = p_configuration.getUnifier();
-        m_beliefbase = p_configuration.getBeliefbase();
-        m_aggregation = p_configuration.getAggregate();
-        m_variablebuilder = p_configuration.getVariableBuilder();
-        m_fuzzy = p_configuration.getFuzzy();
+        m_unifier = p_configuration.unifier();
+        m_beliefbase = p_configuration.beliefbase();
+        m_aggregation = p_configuration.aggregation();
+        m_variablebuilder = p_configuration.variablebuilder();
+        m_fuzzy = p_configuration.fuzzy();
 
         // initial plans and rules
-        p_configuration.getPlans().parallelStream()
+        p_configuration.plans().parallelStream()
                        .forEach( i -> m_plans.put( i.getTrigger(), new MutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
-        p_configuration.getRules().parallelStream()
+        p_configuration.rules().parallelStream()
                        .forEach( i -> m_rules.put( i.getIdentifier().getFQNFunctor(), i ) );
 
-        if ( p_configuration.getInitialGoal() != null )
-            m_trigger.add( p_configuration.getInitialGoal() );
+        if ( p_configuration.initialgoal() != null )
+            m_trigger.add( p_configuration.initialgoal() );
 
         LOGGER.info( MessageFormat.format( "create agent: {0}", this ) );
     }
 
     @Override
-    public final IView<T> getBeliefBase()
+    public final IView<T> beliefbase()
     {
         return m_beliefbase;
     }
@@ -214,13 +214,13 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final Multimap<IPath, ILiteral> getRunningPlans()
+    public final Multimap<IPath, ILiteral> runningplans()
     {
         return ImmutableMultimap.copyOf( m_runningplans );
     }
 
     @Override
-    public final boolean isSleeping()
+    public final boolean sleeping()
     {
         return m_sleepingcycles > 0;
     }
@@ -240,55 +240,55 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final Map<String, ?> getStorage()
+    public final Map<String, ?> storage()
     {
         return m_storage;
     }
 
     @Override
-    public final IUnifier getUnifier()
+    public final IUnifier unifier()
     {
         return m_unifier;
     }
 
     @Override
-    public final long getLastCycleTime()
+    public final long cycletime()
     {
         return m_cycletime;
     }
 
     @Override
-    public final long getCycle()
+    public final long cycle()
     {
         return m_cycle;
     }
 
     @Override
-    public final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> getPlans()
+    public final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final IFuzzy<Boolean, T> getFuzzy()
+    public final IFuzzy<Boolean, T> fuzzy()
     {
         return m_fuzzy;
     }
 
     @Override
-    public final IAggregation getAggregation()
+    public final IAggregation aggregation()
     {
         return m_aggregation;
     }
 
     @Override
-    public final IVariableBuilder getVariableBuilder()
+    public final IVariableBuilder variablebuilder()
     {
         return m_variablebuilder;
     }
 
     @Override
-    public final Multimap<IPath, IRule> getRules()
+    public final Multimap<IPath, IRule> rules()
     {
         return m_rules;
     }

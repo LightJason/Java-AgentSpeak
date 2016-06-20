@@ -74,21 +74,21 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return beliefbase
      */
-    IView<T> getBeliefBase();
+    IView<T> beliefbase();
 
     /**
      * returns a map of the current running plans
      *
      * @return map with running plans and the instance literal
      */
-    Multimap<IPath, ILiteral> getRunningPlans();
+    Multimap<IPath, ILiteral> runningplans();
 
     /**
      * returns sleeping state
      *
      * @return sleeping flag
      */
-    boolean isSleeping();
+    boolean sleeping();
 
     /**
      * pushs the agent into sleeping state
@@ -111,14 +111,14 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return storage map
      */
-    Map<String, ?> getStorage();
+    Map<String, ?> storage();
 
     /**
      * returns an unifier
      *
      * @return unification algorithm
      */
-    IUnifier getUnifier();
+    IUnifier unifier();
 
     /**
      * returns the time in nano seconds
@@ -126,42 +126,42 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return nano seconds
      */
-    long getLastCycleTime();
+    long cycletime();
 
     /**
      * returns the current cycle
      *
      * @return cycle
      */
-    long getCycle();
+    long cycle();
 
     /**
      * returns the internal map of plans
      *
      * @return plan map
      */
-    Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> getPlans();
+    Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> plans();
 
     /**
      * return fuzzy operator
      *
      * @return operator
      */
-    IFuzzy<Boolean, T> getFuzzy();
+    IFuzzy<Boolean, T> fuzzy();
 
     /**
      * returns the aggregation function
      *
      * @return aggregation function
      */
-    IAggregation getAggregation();
+    IAggregation aggregation();
 
     /**
      * returns the variable builder function
      *
      * @return variable builder function
      */
-    IVariableBuilder getVariableBuilder();
+    IVariableBuilder variablebuilder();
 
     /**
      * returns amultimap with literal-rule functor
@@ -169,6 +169,6 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return multimap
      */
-    Multimap<IPath, IRule> getRules();
+    Multimap<IPath, IRule> rules();
 
 }

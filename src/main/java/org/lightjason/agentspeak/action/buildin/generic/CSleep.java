@@ -56,7 +56,7 @@ public final class CSleep extends IBuildinAction
                 p_argument.size() > 0
                 ? CCommon.getRawValue( p_argument.get( 0 ) )
                 : Long.MAX_VALUE
-            ).isSleeping()
+            ).sleeping()
         );
     }
 

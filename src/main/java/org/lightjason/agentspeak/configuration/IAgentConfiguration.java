@@ -50,14 +50,14 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return root view
      */
-    IView<T> getBeliefbase();
+    IView<T> beliefbase();
 
     /**
      * returns the initial goal
      *
      * @return initial goal literal
      */
-    ITrigger getInitialGoal();
+    ITrigger initialgoal();
 
     /**
      * returns the aggregate function
@@ -65,41 +65,41 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return aggregate function
      */
-    IAggregation getAggregate();
+    IAggregation aggregation();
 
     /**
      * returns the unifier function
      *
      * @return unifier
      */
-    IUnifier getUnifier();
+    IUnifier unifier();
 
     /**
      * returns the variable builder
      *
      * @return builder
      */
-    IVariableBuilder getVariableBuilder();
+    IVariableBuilder variablebuilder();
 
     /**
      * returns the fuzzy operator
      *
      * @return operator object
      */
-    IFuzzy<Boolean, T> getFuzzy();
+    IFuzzy<Boolean, T> fuzzy();
 
     /**
      * returns the initial beliefs
      *
      * @return collection of initial beliefs
      */
-    Collection<ILiteral> getInitialBeliefs();
+    Collection<ILiteral> initialbeliefs();
 
     /**
      * returns perceivable
      *
      * @return belief perceiver stream
      */
-    Set<IBeliefPerceive<T>> getPerceivable();
+    Set<IBeliefPerceive<T>> perceivable();
 
 }

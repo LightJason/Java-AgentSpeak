@@ -91,7 +91,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     @Override
     public double score( final IAgent<?> p_agent )
     {
-        return p_agent.getAggregation().evaluate(
+        return p_agent.aggregation().evaluate(
             Stream.concat(
                 m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed(),
                 Stream.of(
@@ -129,7 +129,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         // if atomic flag if exists use this for return value
         return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
                ? CFuzzyValue.from( true )
-               : l_result.stream().collect( p_context.getAgent().getFuzzy().getResultOperator() );
+               : l_result.stream().collect( p_context.getAgent().fuzzy().getResultOperator() );
     }
 
     /**
@@ -149,7 +149,7 @@ public abstract class IBaseInstantiable implements IInstantiable
                     final IFuzzyValue<Boolean> l_return = i.execute(
                         p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
                     l_result.add( l_return );
-                    return p_context.getAgent().getFuzzy().getDefuzzyfication().defuzzify( l_return );
+                    return p_context.getAgent().fuzzy().getDefuzzyfication().defuzzify( l_return );
                 } )
                 .filter( i -> !i )
                 .findFirst();

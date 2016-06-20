@@ -240,7 +240,7 @@ public final class CUnifier implements IUnifier
     @SuppressWarnings( "unchecked" )
     private List<Set<IVariable<?>>> unify( final IAgent<?> p_agent, final ILiteral p_literal, final long p_variablenumber )
     {
-        return p_agent.getBeliefBase()
+        return p_agent.beliefbase()
                       .stream( p_literal.isNegated(), p_literal.getFQNFunctor() )
                       .parallel()
                       .filter( i -> ( i.emptyValues() == p_literal.emptyValues() ) && ( i.emptyAnnotations() == p_literal.emptyAnnotations() ) )
