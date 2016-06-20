@@ -215,7 +215,14 @@ public final class TestCMetric
     private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
-        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
+
+        ILiteral a = CLiteral.from( "first/sub1" );
+        l_agent.getBeliefBase().generate( a.getFunctorPath(), m_generator ).add( a );
+
+        a = CLiteral.from( "first/sub2" );
+        l_agent.getBeliefBase().generate( a.getFunctorPath(), m_generator ).add( a );
+
+        //p_literals.forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
         return l_agent;
     }
 
@@ -243,8 +250,6 @@ public final class TestCMetric
         @Override
         public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
-            //System.out.println( p_name + " --> " + p_parent.path() );
-
             return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }

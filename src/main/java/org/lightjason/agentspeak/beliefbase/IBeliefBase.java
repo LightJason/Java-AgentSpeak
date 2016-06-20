@@ -154,4 +154,23 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      */
     Collection<ILiteral> getLiteral( final String p_key );
 
+
+
+    /**
+     * returns a new view of the belief base
+     *
+     * @param p_name name of the view
+     * @return created view
+     */
+    IView<T> create( final String p_name );
+
+    /**
+     * returns a new view of the belief base
+     *
+     * @param p_name name of the view
+     * @param p_parent parent view
+     * @return view
+     */
+    IView<T> create( final String p_name, final IView<T> p_parent );
+
 }

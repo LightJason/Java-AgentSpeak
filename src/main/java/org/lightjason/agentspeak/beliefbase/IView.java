@@ -39,6 +39,16 @@ import java.util.stream.Stream;
  */
 public interface IView<T extends IAgent<?>> extends IStructure<T>
 {
+
+    /**
+     * streams path walking
+     *
+     * @param p_path path
+     * @param p_generator generator (first argument is used, orther elements will be ignored)
+     * @return stream of views
+     */
+    Stream<IView<T>> walk( final IPath p_path, final IViewGenerator<T>... p_generator );
+
     /**
      * returns a stream to the root node
      *

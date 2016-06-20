@@ -57,6 +57,8 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      */
     private final IView<T> m_parent;
 
+
+
     /**
      * ctor
      *
@@ -87,10 +89,14 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         m_beliefbase = p_beliefbase;
         m_parent = p_parent;
 
-
+        // if parent is set, update parent reference
         if ( m_parent != null )
             m_parent.add( this );
     }
+
+
+
+    // --- agent operations ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final Stream<ITrigger> trigger()
@@ -102,18 +108,23 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator )
+    public final T update( final T p_agent )
     {
-        this.walkgenerate( p_path.normalize(), this, p_generator );
-        return this;
+        return m_beliefbase.update( p_agent );
     }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --- operations ------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final IView<T> add( final ILiteral... p_literal )
     {
         Arrays.stream( p_literal )
             .parallel()
-            .forEach( i -> this.walk( i.getFunctorPath().normalize(), this ).beliefbase().add( i.shallowcopySuffix() ) );
+            .forEach( i -> this.leafview( this.walk( i.getFunctorPath() ) ).beliefbase().add( i.shallowcopySuffix() ) );
         return this;
     }
 
@@ -123,7 +134,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         Arrays.stream( p_view )
               .parallel()
-              .forEach( i -> this.walk( p_path.normalize(), this ).add( i ) );
+              .forEach( i -> this.leafview( this.walk( p_path ) ).add( i ) );
         return this;
     }
 
@@ -156,7 +167,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final IView<T> remove( final ILiteral p_literal )
     {
-        this.walk( p_literal.getFunctorPath().normalize(), this )
+        this.leafview( this.walk( p_literal.getFunctorPath() ) )
             .beliefbase()
             .remove( p_literal.shallowcopySuffix() );
         return this;
@@ -169,27 +180,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
-                  .forEach( i -> this.walk( i.normalize(), this ).clear() );
+                  .forEach( i -> this.leafview( this.walk( i.normalize() ) ).clear() );
 
         return this;
-    }
-
-    @Override
-    public final IView<T> create( final String p_name )
-    {
-        return m_beliefbase.create( p_name );
-    }
-
-    @Override
-    public final IView<T> create( final String p_name, final IView<T> p_parent )
-    {
-        return m_beliefbase.create( p_name, p_parent );
-    }
-
-    @Override
-    public final T update( final T p_agent )
-    {
-        return m_beliefbase.update( p_agent );
     }
 
     @Override
@@ -197,21 +190,33 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         p_path.normalize();
         return p_path.isEmpty() || ( p_path.size() == 1
-               ? m_beliefbase.containsView( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
+                                     ? m_beliefbase.containsView( p_path.get( 0 ) )
+                                     : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) ).containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) ) );
     }
 
     @Override
     public final boolean containsLiteral( final IPath p_path )
     {
         p_path.normalize();
-        if ( p_path.isEmpty() )
-            return true;
-
-        return p_path.size() == 1
-               ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
-               : this.walk( p_path.getSubPath( 0, p_path.size() - 1 ), this ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+        return p_path.isEmpty() || ( p_path.size() == 1
+                                     ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                                     : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
+        );
     }
+
+    @Override
+    public final IView<T> generate( final IPath p_path, final IViewGenerator<T> p_generator )
+    {
+        this.walk( p_path, p_generator );
+        return this;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+    // --- streaming access ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final Stream<ILiteral> stream( final IPath... p_path )
@@ -231,7 +236,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                Arrays.stream( p_path )
                      .parallel()
                      .map( IPath::normalize )
-                     .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).beliefbase().getLiteral( i.getSuffix() )
+                     .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().getLiteral( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.shallowcopy( l_path ) ) );
     }
@@ -253,11 +258,73 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                : Arrays.stream( p_path )
                     .parallel()
                     .map( IPath::normalize )
-                    .flatMap( i -> this.walk( i.getSubPath( 0, -1 ), this ).beliefbase().getLiteral( i.getSuffix() )
+                    .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().getLiteral( i.getSuffix() )
                                        .parallelStream()
                                        .filter( j -> j.isNegated() == p_negated )
                                        .map( j -> j.shallowcopy( l_path ) ) );
     }
+
+    @Override
+    @SafeVarargs
+    public final Stream<IView<T>> walk( final IPath p_path, final IViewGenerator<T>... p_generator )
+    {
+        return this.walkdown( p_path.normalize(), p_generator );
+    }
+
+    /**
+     * inner walking structure of views
+     *
+     * @param p_path normalized path
+     * @param p_generator generator (first argument is used, other elements will be ignored)
+     * @return view stream
+     */
+    @SafeVarargs
+    private final Stream<IView<T>> walkdown( final IPath p_path, final IViewGenerator<T>... p_generator )
+    {
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+            return Stream.of( this );
+
+        final IView<T> l_view;
+        final String l_root = p_path.get( 0 );
+        synchronized ( this )
+        {
+            l_view = m_beliefbase.getViewOrDefault(
+                l_root,
+
+                p_generator == null || p_generator.length == 0
+                ? null
+                : p_generator[0].generate( l_root, this )
+            );
+        }
+        if ( l_view == null )
+            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notfound", l_root, this.path() ) );
+
+        System.out.println( this + "         " + l_view );
+
+        return Stream.concat(
+            Stream.of( this ),
+            l_view.walk( p_path.getSubPath( 1 ), p_generator )
+        );
+    }
+
+    /**
+     * returns the leaf of a view path
+     *
+     * @param p_stream stream of views
+     * @return last / leaf view
+     */
+    private IView<T> leafview( final Stream<IView<T>> p_stream )
+    {
+        return p_stream
+            .reduce( ( i, j ) -> j )
+            .orElse( this );
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --- basic access ----------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public final IBeliefBase<T> beliefbase()
@@ -277,11 +344,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return m_beliefbase.size();
     }
 
-    /**
-     * stream to root
-     *
-     * @return stream to root
-     */
+    @Override
     public final Stream<IView<T>> root()
     {
         return Stream.concat(
@@ -325,49 +388,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} ({1}): [{2}]", this.path(), super.toString(), m_beliefbase );
+        return MessageFormat.format( "{0} ({1}): [{2}]", this.name(), super.toString(), m_beliefbase );
     }
 
-    /**
-     * returns a view on the recursive descend
-     *
-     * @param p_path path (must be normalized)
-     * @param p_root start / root node
-     * @param p_generator generator object for new views
-     *
-     * @note path must be normalized
-     */
-    private synchronized IView<T> walkgenerate( final IPath p_path, final IView<T> p_root, final IViewGenerator<T> p_generator )
-    {
-        System.out.println( p_root  );
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
-            return p_root;
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        // get the next view and if the view is null, generate a new view
-        final IView<T> l_view = p_root.beliefbase().getViewOrDefault( p_path.get( 0 ), p_generator.generate( p_path.get( 0 ), p_root ) );
-        p_root.beliefbase().add( l_view );
-        return this.walkgenerate( p_path.getSubPath( 1 ), l_view, p_generator );
-    }
-
-    /**
-     * returns a view on the recursive descend
-     *
-     * @param p_path path (must be normalized)
-     * @param p_root start / root node
-     * @return view
-     *
-     * @note path must be normalized
-     */
-    private IView<T> walk( final IPath p_path, final IView<T> p_root )
-    {
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
-            return p_root;
-
-        // if view is null an exception is thrown
-        final IView<T> l_view = p_root.beliefbase().getView( p_path.get( 0 ) );
-        if ( l_view == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notfound", p_path.get( 0 ), p_root.path() ) );
-
-        return this.walk( p_path.getSubPath( 1 ), l_view );
-    }
 }
