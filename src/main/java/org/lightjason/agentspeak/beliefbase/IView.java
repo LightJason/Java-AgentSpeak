@@ -33,7 +33,8 @@ import java.util.stream.Stream;
 
 
 /**
- * view for a beliefbase
+ * view for a beliefbase that creates any access to the underlying
+ * data structures
  *
  * @tparam T agent type
  */

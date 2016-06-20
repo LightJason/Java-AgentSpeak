@@ -32,7 +32,8 @@ import java.util.stream.Stream;
 
 
 /**
- * interface of beliefbase definition
+ * interface of beliefbase definition,
+ * that create the trigger events for the agent
  *
  * @tparam T agent type
  */
@@ -137,22 +138,20 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
     IView<T> getView( final String p_key );
 
     /**
-     * returns a view element
-     *
-     * @param p_key name of the view
-     * @return view or default element
-     */
-    IView<T> getViewOrDefault( final String p_key, final IView<T> p_default );
-
-
-
-    /**
      * returns a literal by the name
      *
      * @param p_key name of the literal
      * @return collection of pairs with negated and literal
      */
     Collection<ILiteral> getLiteral( final String p_key );
+
+    /**
+     * returns a view element
+     *
+     * @param p_key name of the view
+     * @return view or default element
+     */
+    IView<T> getViewOrDefault( final String p_key, final IView<T> p_default );
 
 
 
