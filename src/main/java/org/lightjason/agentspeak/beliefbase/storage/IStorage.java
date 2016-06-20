@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 
 
 /**
- * interface of a beliefbase storage
+ * interface of a physical beliefbase storage
  *
  * @tparam N multiple elements
  * @tparam M single elements

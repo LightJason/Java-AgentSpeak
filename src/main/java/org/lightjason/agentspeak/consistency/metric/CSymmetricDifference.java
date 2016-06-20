@@ -31,6 +31,8 @@ import java.util.stream.Stream;
 
 /**
  * metric on collections returns the size of symmetric difference
+ *
+ * @see http://mathworld.wolfram.com/SymmetricDifference.html
  */
 public final class CSymmetricDifference implements IMetric
 {
@@ -38,10 +40,12 @@ public final class CSymmetricDifference implements IMetric
     @Override
     public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
     {
-        // element aggregation and return distance
-        return 2.0 * Stream.concat( p_first.stream(), p_second.stream() ).sorted().distinct().count()
-               - p_first.stream().count()
-               - p_second.stream().count();
+        return Stream.concat( p_first.stream(), p_second.stream() )
+                    .sorted()
+                    .distinct()
+                    .parallel()
+                    .filter( i -> !( p_first.contains( i ) && ( p_second.contains( i ) ) ) )
+                    .count();
     }
 
 }

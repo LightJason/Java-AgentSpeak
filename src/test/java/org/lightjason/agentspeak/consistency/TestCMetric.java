@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
@@ -57,69 +59,106 @@ public final class TestCMetric
     /**
      * literal view generator
      */
-    private final IViewGenerator<IAgent<?>> m_generator = new CGenerator();
-
+    private IViewGenerator<IAgent<?>> m_generator;
+    /**
+     * set with testing literals
+     */
+    private Set<ILiteral> m_literals;
 
     /**
-     * test symmetric weight metric
+     * test initialize
      */
-    @Test
-    public final void testSymmetricWeight()
+    @Before
+    public void initialize()
     {
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CSymmetricDifference();
+        m_generator = new CGenerator();
 
-        final Set<ILiteral> l_beliefs = Stream.of(
+        m_literals = Stream.of(
             CLiteral.from( "toplevel" ),
             CLiteral.from( "first/sub1" ),
             CLiteral.from( "first/sub2" ),
-            CLiteral.from( "second/sub1" ),
-            CLiteral.from( "second/sub2" ),
-            CLiteral.from( "second/sub/sub1" )
+            CLiteral.from( "second/sub3" ),
+            CLiteral.from( "second/sub4" ),
+            CLiteral.from( "second/sub/sub5" )
         ).collect( Collectors.toSet() );
+    }
 
-        this.check( "symmetric difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 0, 0 );
+
+
+    /**
+     * test symmetric weight metric equality
+     */
+    @Test
+    public final void testSymmetricWeightEquality()
+    {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
+        this.check(
+            "symmetric difference equality",
+            new CAll(), new CSymmetricDifference(),
+            m_literals,
+            m_literals,
+            0, 0
+        );
+    }
+
+
+    /**
+     * test symmetric weight metric inequality
+     */
+    @Test
+    public final void testSymmetricWeightInequality()
+    {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
         this.check(
             "symmetric difference inequality",
-            l_filter,
-            l_metric,
-            l_beliefs,
-            Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
-            1,
-            0
+            new CAll(), new CSymmetricDifference(),
+            m_literals,
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            1, 0
         );
     }
 
 
     /**
-     * test symmetric metric
+     * test symmetric metric equality
      */
     @Test
-    public final void testWeight()
+    public final void testWeightEquality()
     {
-        final IFilter l_filter = new CAll();
-        final IMetric l_metric = new CWeightedDifference();
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
 
-        final Set<ILiteral> l_beliefs = Stream.of(
-            CLiteral.from( "toplevel" ),
-            CLiteral.from( "first/sub1" ),
-            CLiteral.from( "first/sub2" ),
-            CLiteral.from( "second/sub1" ),
-            CLiteral.from( "second/sub2" ),
-            CLiteral.from( "second/sub/sub1" )
-        ).collect( Collectors.toSet() );
-
-        this.check( "weight difference equality", l_filter, l_metric, l_beliefs, l_beliefs, 24, 0 );
         this.check(
-            "weight difference inequality",
-            l_filter,
-            l_metric,
-            l_beliefs,
-            Stream.concat( l_beliefs.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
-            28 + 1.0 / 6,
-            0
+            "weight difference equality",
+            new CAll(), new CWeightedDifference(),
+            m_literals,
+            m_literals,
+            24, 0
         );
     }
+
+
+    /**
+     * test symmetric metric equality
+     */
+    @Test
+    public final void testWeightInequality()
+    {
+        Assume.assumeNotNull( m_literals );
+        Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
+
+        this.check(
+            "weight difference inequality",
+            new CAll(),
+            new CWeightedDifference(),
+            m_literals,
+            Stream.concat( m_literals.stream(), Stream.of( CLiteral.from( "diff" ) ) ).collect( Collectors.toSet() ),
+            28 + 1.0 / 6, 0
+        );
+    }
+
 
     /**
      * manuell running test
@@ -130,8 +169,12 @@ public final class TestCMetric
     {
         final TestCMetric l_test = new TestCMetric();
 
-        l_test.testSymmetricWeight();
-        //l_test.testWeight();
+        l_test.initialize();
+
+        l_test.testSymmetricWeightEquality();
+        l_test.testSymmetricWeightInequality();
+        l_test.testWeightEquality();
+        l_test.testWeightInequality();
     }
 
     /**
@@ -150,15 +193,9 @@ public final class TestCMetric
                         final double p_excepted, final double p_delta
     )
     {
-        final IAgent<?> l_agent1 = this.getAgent( p_belief1 );
-        final IAgent<?> l_agent2 = this.getAgent( p_belief2 );
-
-        System.out.println( l_agent1 );
-        System.out.println( l_agent2 );
-
         final double l_value = p_metric.calculate(
-            p_filter.filter( l_agent1 ).collect( Collectors.toList() ),
-            p_filter.filter( l_agent2 ).collect( Collectors.toList() )
+            p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
+            p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
         );
         assertEquals( p_message, p_excepted, l_value, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
@@ -174,7 +211,7 @@ public final class TestCMetric
     private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
-        p_literals.parallelStream().forEach( i -> l_agent.getBeliefBase().generate( i.getFunctorPath(), m_generator ).add( i ) );
+        p_literals.forEach( i -> l_agent.getBeliefBase().generate( m_generator, i.getFunctorPath() ).add( i ) );
         return l_agent;
     }
 

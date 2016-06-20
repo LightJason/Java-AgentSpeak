@@ -23,12 +23,14 @@
 
 package org.lightjason.agentspeak.agent;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.MutableTriple;
@@ -295,12 +297,17 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final String toString()
     {
         return MessageFormat.format(
-            "{0} ( Cycle: {1} / Trigger: {2} / Running Plans: {3}  Beliefbase: {4} )",
+            "{0} ( Cycle: {1} / {2} )",
             super.toString(),
             m_cycle,
-            m_trigger,
-            m_runningplans,
-            m_beliefbase
+            StringUtils.join(
+                StreamUtils.zip(
+                    Stream.of( "Trigger", "Running Plans", "Beliefbase" ),
+                    Stream.of( m_trigger, m_runningplans.keySet(), m_beliefbase ),
+                    ( l, c ) -> MessageFormat.format( "{0}: {1}", l, c )
+                ).toArray(),
+                " / "
+            )
         );
     }
 

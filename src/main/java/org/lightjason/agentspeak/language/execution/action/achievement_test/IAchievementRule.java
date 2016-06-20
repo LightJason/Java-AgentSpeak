@@ -99,7 +99,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
         } )
 
          // find successfully ended rule
-         .filter( i -> i.getLeft() )
+         .filter( ImmutableTriple::getLeft )
          .findFirst()
 
          // realocate rule instantiated variables back to execution context

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
@@ -33,7 +32,8 @@ import java.util.stream.Stream;
 
 
 /**
- * interface of beliefbase definition
+ * interface of beliefbase definition,
+ * that create the trigger events for the agent
  *
  * @tparam T agent type
  */
@@ -138,6 +138,14 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
     IView<T> getView( final String p_key );
 
     /**
+     * returns a literal by the name
+     *
+     * @param p_key name of the literal
+     * @return collection of pairs with negated and literal
+     */
+    Collection<ILiteral> getLiteral( final String p_key );
+
+    /**
      * returns a view element
      *
      * @param p_key name of the view
@@ -148,11 +156,20 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
 
 
     /**
-     * returns a literal by the name
+     * returns a new view of the belief base
      *
-     * @param p_key name of the literal
-     * @return collection of pairs with negated and literal
+     * @param p_name name of the view
+     * @return created view
      */
-    Collection<Pair<Boolean, ILiteral>> getLiteral( final String p_key );
+    IView<T> create( final String p_name );
+
+    /**
+     * returns a new view of the belief base
+     *
+     * @param p_name name of the view
+     * @param p_parent parent view
+     * @return view
+     */
+    IView<T> create( final String p_name, final IView<T> p_parent );
 
 }
