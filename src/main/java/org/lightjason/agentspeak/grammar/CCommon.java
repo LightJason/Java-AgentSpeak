@@ -98,7 +98,7 @@ public final class CCommon
     )
     {
         if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )
-            throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( CCommon.class, "notbinarylogicoperator", p_operator ) );
+            throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "notbinarylogicoperator", p_operator ) );
 
         final List<IExpression> l_expression = new LinkedList<>();
         l_expression.add( p_lefthandside );

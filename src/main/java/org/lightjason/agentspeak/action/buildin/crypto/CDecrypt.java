@@ -60,13 +60,13 @@ public final class CDecrypt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Key l_key = CCommon.<Key, ITerm>getRawValue( p_argument.get( 0 ) );
+        final Key l_key = CCommon.<Key, ITerm>raw( p_argument.get( 0 ) );
         final EAlgorithm l_algorithm = EAlgorithm.valueOf( l_key.getAlgorithm() );
 
 
         p_return.addAll(
             p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> Base64.getDecoder().decode( CCommon.<String, ITerm>getRawValue( i ) ) )
+                      .map( i -> Base64.getDecoder().decode( CCommon.<String, ITerm>raw( i ) ) )
                       .map( i -> {
                           try
                           {

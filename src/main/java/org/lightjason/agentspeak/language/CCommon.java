@@ -101,7 +101,7 @@ public final class CCommon
      * @param p_literal literal
      * @return map with frequency
      */
-    public static Map<IVariable<?>, Integer> getVariableFrequency( final ILiteral p_literal )
+    public static Map<IVariable<?>, Integer> variablefrequency( final ILiteral p_literal )
     {
         return Collections.unmodifiableMap(
             Stream.concat(
@@ -121,7 +121,7 @@ public final class CCommon
      * @return term value or raw value
      */
     @SuppressWarnings( "unchecked" )
-    public static <T, N> T getRawValue( final N p_value )
+    public static <T, N> T raw( final N p_value )
     {
         if ( p_value instanceof IVariable<?> )
             return ( (IVariable<?>) p_value ).typed();
@@ -139,14 +139,14 @@ public final class CCommon
      * @return term value or raw value
      */
     @SuppressWarnings( "unchecked" )
-    public static <T> boolean isRawValueAssignableTo( final T p_value, final Class<?>... p_class )
+    public static <T> boolean rawvalueAssignableTo( final T p_value, final Class<?>... p_class )
     {
         if ( p_value instanceof IVariable<?> )
             return ( (IVariable<?>) p_value ).valueAssignableTo( p_class );
         if ( p_value instanceof IRawTerm<?> )
             return ( (IRawTerm<?>) p_value ).valueAssignableTo( p_class );
 
-        return Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( p_value.getClass() ) ).anyMatch( i -> i );
+        return Arrays.stream( p_class ).map( i -> i.isAssignableFrom( p_value.getClass() ) ).anyMatch( i -> i );
     }
 
 
@@ -180,7 +180,7 @@ public final class CCommon
             return l_variable;
 
         throw new CIllegalArgumentException(
-            org.lightjason.agentspeak.common.CCommon.getLanguageString( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
+            org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "variablenotfoundincontext", p_term.fqnfunctor() )
         );
     }
 
@@ -207,7 +207,7 @@ public final class CCommon
     public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException
     {
         final StringBuilder l_result = new StringBuilder();
-        ( flatList( p_input ) ).stream().forEach( i -> l_result.append( getRawValue( i ).toString() ) );
+        ( flatList( p_input ) ).forEach( i -> l_result.append( raw( i ).toString() ) );
         return l_result.toString().getBytes( "UTF-8" );
     }
 
@@ -256,7 +256,7 @@ public final class CCommon
     private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
     {
         return p_list.stream().flatMap( i -> {
-            final Object l_value = getRawValue( i );
+            final Object l_value = raw( i );
             return l_value instanceof Collection<?>
                    ? flattenToStream( (List<?>) l_value )
                    : Stream.of( CRawTerm.from( l_value ) );

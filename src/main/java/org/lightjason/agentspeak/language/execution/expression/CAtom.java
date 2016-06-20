@@ -64,7 +64,7 @@ public class CAtom implements IExpression
     )
     {
         final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
-        p_return.add( CRawTerm.from( CCommon.getRawValue( l_term ) ).throwNotAllocated( l_term.fqnfunctor().toString() ) );
+        p_return.add( CRawTerm.from( CCommon.raw( l_term ) ).throwNotAllocated( l_term.fqnfunctor().toString() ) );
         return CFuzzyValue.from( true );
     }
 

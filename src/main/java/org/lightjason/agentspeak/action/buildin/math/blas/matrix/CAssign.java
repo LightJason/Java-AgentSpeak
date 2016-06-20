@@ -62,8 +62,8 @@ public final class CAssign extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second assign value
-        final DoubleMatrix2D l_matrix = CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) );
-        final Object l_value = CCommon.getRawValue( p_argument.get( 1 ) );
+        final DoubleMatrix2D l_matrix = CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) );
+        final Object l_value = CCommon.raw( p_argument.get( 1 ) );
 
         if ( l_value instanceof Double )
         {

@@ -61,7 +61,7 @@ public final class CParseLiteral extends IBuildinAction
     {
         try
         {
-            p_return.add( CLiteral.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) );
+            p_return.add( CLiteral.parse( CCommon.raw( p_argument.get( 0 ) ) ) );
             return CFuzzyValue.from( true );
         }
         catch ( final Exception l_exception )

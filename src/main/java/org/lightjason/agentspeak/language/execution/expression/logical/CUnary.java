@@ -55,7 +55,7 @@ public final class CUnary extends IBaseUnary
     {
         super( p_operator, p_expression );
         if ( !m_operator.isLogical() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "operator", m_operator ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Override
@@ -73,7 +73,7 @@ public final class CUnary extends IBaseUnary
         {
             case NEGATION:
                 p_return.add( CRawTerm.from(
-                    !CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
+                    !CCommon.<Boolean, ITerm>raw( l_argument.get( 0 ) )
                 ) );
                 return CFuzzyValue.from( true );
 

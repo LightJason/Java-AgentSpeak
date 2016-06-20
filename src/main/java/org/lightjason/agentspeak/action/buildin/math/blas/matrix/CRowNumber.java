@@ -62,7 +62,7 @@ public final class CRowNumber extends IBuildinAction
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ).rows()
+                CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ).rows()
             )
         );
 

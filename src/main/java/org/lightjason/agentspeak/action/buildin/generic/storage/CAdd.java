@@ -80,11 +80,11 @@ public final class CAdd extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = CCommon.getRawValue( p_argument.get( 0 ) );
+        final String l_key = CCommon.raw( p_argument.get( 0 ) );
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 
-        p_context.agent().storage().put( CCommon.getRawValue( l_key ), CCommon.getRawValue( p_argument.get( 1 ) ) );
+        p_context.agent().storage().put( CCommon.raw( l_key ), CCommon.raw( p_argument.get( 1 ) ) );
         return CFuzzyValue.from( true );
     }
 

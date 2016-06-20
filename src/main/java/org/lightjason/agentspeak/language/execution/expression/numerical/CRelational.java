@@ -58,7 +58,7 @@ public final class CRelational extends IBaseBinary
         super( p_operator, p_lefthandside, p_righthandside );
 
         if ( !m_operator.isRelational() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "operator", m_operator ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Override
@@ -75,7 +75,7 @@ public final class CRelational extends IBaseBinary
             return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "argumentnumber" ) );
 
 
         switch ( m_operator )
@@ -83,8 +83,8 @@ public final class CRelational extends IBaseBinary
             case GREATER:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
                     ) > 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -92,8 +92,8 @@ public final class CRelational extends IBaseBinary
             case GREATEREQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
                     ) >= 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -101,8 +101,8 @@ public final class CRelational extends IBaseBinary
             case LESS:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
                     ) < 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -110,8 +110,8 @@ public final class CRelational extends IBaseBinary
             case LESSEQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                        org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
+                        org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
                     ) <= 0 )
                 );
                 return CFuzzyValue.from( true );

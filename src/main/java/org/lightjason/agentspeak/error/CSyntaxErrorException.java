@@ -40,7 +40,7 @@ public final class CSyntaxErrorException extends IllegalStateException implement
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.getLogger( CSyntaxErrorException.class );
+    protected static final Logger LOGGER = CCommon.logger( CSyntaxErrorException.class );
 
     /**
      * ctor

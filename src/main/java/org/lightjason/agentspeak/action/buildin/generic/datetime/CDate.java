@@ -59,14 +59,14 @@ public final class CDate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
+        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.raw( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
 
-        p_return.add( CCommon.getRawValue( l_date.getDayOfMonth() ) );
-        p_return.add( CCommon.getRawValue( l_date.getMonthValue() ) );
-        p_return.add( CCommon.getRawValue( l_date.getYear() ) );
-        p_return.add( CCommon.getRawValue( l_date.getDayOfWeek() ) );
-        p_return.add( CCommon.getRawValue( l_date.getDayOfYear() ) );
-        p_return.add( CCommon.getRawValue( l_date.getZone() ) );
+        p_return.add( CCommon.raw( l_date.getDayOfMonth() ) );
+        p_return.add( CCommon.raw( l_date.getMonthValue() ) );
+        p_return.add( CCommon.raw( l_date.getYear() ) );
+        p_return.add( CCommon.raw( l_date.getDayOfWeek() ) );
+        p_return.add( CCommon.raw( l_date.getDayOfYear() ) );
+        p_return.add( CCommon.raw( l_date.getZone() ) );
 
         return CFuzzyValue.from( true );
     }

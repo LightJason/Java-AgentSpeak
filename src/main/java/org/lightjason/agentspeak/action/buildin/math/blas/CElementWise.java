@@ -55,33 +55,33 @@ public class CElementWise extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( CCommon.<String, ITerm>getRawValue( p_argument.get( 1 ) ).trim() )
+        switch ( CCommon.<String, ITerm>raw( p_argument.get( 1 ) ).trim() )
         {
             case "+":
                 this.plus(
-                    CCommon.getRawValue( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.raw( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "-":
                 this.minus(
-                    CCommon.getRawValue( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.raw( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "*":
                 this.multiply(
-                    CCommon.getRawValue( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.raw( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "/":
                 this.divide(
-                    CCommon.getRawValue( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).doubleValue()
+                    CCommon.raw( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
                 );
                 return CFuzzyValue.from( true );
 

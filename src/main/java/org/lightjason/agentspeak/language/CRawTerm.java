@@ -176,7 +176,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     {
         if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon
-                                                  .getLanguageString( this, "notallocated", p_name != null ? p_name[0] : this ) );
+                                                  .languagestring( this, "notallocated", p_name != null ? p_name[0] : this ) );
 
         return this;
     }
@@ -191,7 +191,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     public final IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueAssignableTo( p_class ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notassignable", this, p_class ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", this, p_class ) );
 
         return this;
     }

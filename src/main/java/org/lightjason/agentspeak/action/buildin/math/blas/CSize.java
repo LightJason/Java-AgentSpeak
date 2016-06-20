@@ -63,7 +63,7 @@ public final class CSize extends IBuildinAction
     {
         // first argument must be a term with a matrix object
         p_return.add(
-            CRawTerm.from( CCommon.<AbstractMatrix, ITerm>getRawValue( p_argument.get( 0 ) ) )
+            CRawTerm.from( CCommon.<AbstractMatrix, ITerm>raw( p_argument.get( 0 ) ) )
         );
 
         return CFuzzyValue.from( true );

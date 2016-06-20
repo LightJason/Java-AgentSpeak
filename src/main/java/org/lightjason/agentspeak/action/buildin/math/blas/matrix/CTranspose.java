@@ -63,7 +63,7 @@ public final class CTranspose extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.transpose( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
+                ALGEBRA.transpose( CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ) )
             )
         );
 

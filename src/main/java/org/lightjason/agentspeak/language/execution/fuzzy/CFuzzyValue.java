@@ -73,7 +73,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
     public CFuzzyValue( final T p_value, final double p_fuzzy )
     {
         if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_fuzzy ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
 
         m_fuzzy = p_fuzzy;
         m_value = p_value;

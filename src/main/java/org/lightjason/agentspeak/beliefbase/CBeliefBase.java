@@ -77,7 +77,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     public CBeliefBase( final IStorage<ILiteral, IView<T>, T> p_storage )
     {
         if ( p_storage == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
         m_storage = p_storage;
     }
 

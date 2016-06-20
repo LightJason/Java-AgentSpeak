@@ -74,7 +74,7 @@ public abstract class IConstraint extends IBuildinAction
                 return Relationship.EQ;
 
             default:
-                throw new CIllegalArgumentException( CCommon.getLanguageString( IConstraint.class, "relation", p_symbol ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( IConstraint.class, "relation", p_symbol ) );
         }
     }
 

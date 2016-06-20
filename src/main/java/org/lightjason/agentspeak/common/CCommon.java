@@ -66,7 +66,7 @@ public final class CCommon
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.getLogger( CCommon.class );
+    protected static final Logger LOGGER = CCommon.logger( CCommon.class );
     /**
      * language resource bundle
      **/
@@ -98,7 +98,7 @@ public final class CCommon
      * @param p_class class type
      * @return logger
      */
-    public static Logger getLogger( final Class<?> p_class )
+    public static Logger logger( final Class<?> p_class )
     {
         return Logger.getLogger( p_class.getName() );
     }
@@ -108,7 +108,7 @@ public final class CCommon
      *
      * @return bundle
      */
-    public static ResourceBundle getLanguageBundle()
+    public static ResourceBundle languagebundle()
     {
         return LANGUAGE;
     }
@@ -118,7 +118,7 @@ public final class CCommon
      *
      * @return bundle object
      */
-    public static ResourceBundle getConfiguration()
+    public static ResourceBundle configuration()
     {
         return PROPERTIES;
     }
@@ -132,7 +132,7 @@ public final class CCommon
      * @return action stream
      */
     @SuppressWarnings( "unchecked" )
-    public static Stream<IAction> getActionsFromPackage( final String... p_package )
+    public static Stream<IAction> actionsFromPackage( final String... p_package )
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.buildin" ) )
@@ -155,7 +155,7 @@ public final class CCommon
                                         }
                                         catch ( final IllegalAccessException | InstantiationException l_exception )
                                         {
-                                            LOGGER.warning( CCommon.getLanguageString( CCommon.class, "actioninstantiate", i, l_exception ) );
+                                            LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
                                             return null;
                                         }
                                     } )
@@ -177,7 +177,7 @@ public final class CCommon
      * @return action stream
      */
     @SuppressWarnings( "unchecked" )
-    public static Stream<IAction> getActionsFromAgentClass( final Class<?>... p_class )
+    public static Stream<IAction> actionsFromAgentClass( final Class<?>... p_class )
     {
         return p_class == null || p_class.length == 0
                ? Stream.of()
@@ -192,7 +192,7 @@ public final class CCommon
                            }
                            catch ( final IllegalAccessException l_exception )
                            {
-                               LOGGER.warning( CCommon.getLanguageString( CCommon.class, "actioninstantiate", i, l_exception ) );
+                               LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
                                return null;
                            }
                        } )
@@ -331,7 +331,7 @@ public final class CCommon
      * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
-    public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    public static URL concaturl( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
     {
         return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
     }
@@ -341,7 +341,7 @@ public final class CCommon
      *
      * @return URL of file or null
      */
-    public static URL getResourceURL()
+    public static URL resourceurl()
     {
         return CCommon.class.getClassLoader().getResource( "" );
     }
@@ -355,9 +355,9 @@ public final class CCommon
      * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
-    public static URL getResourceURL( final String p_file ) throws URISyntaxException, MalformedURLException
+    public static URL resourceurl( final String p_file ) throws URISyntaxException, MalformedURLException
     {
-        return getResourceURL( new File( p_file ) );
+        return resourceurl( new File( p_file ) );
     }
 
     /**
@@ -369,7 +369,7 @@ public final class CCommon
      * @throws URISyntaxException is thrown on URI errors
      * @throws MalformedURLException is thrown on malformat
      */
-    private static URL getResourceURL( final File p_file ) throws URISyntaxException, MalformedURLException
+    private static URL resourceurl( final File p_file ) throws URISyntaxException, MalformedURLException
     {
         if ( p_file.exists() )
             return p_file.toURI().normalize().toURL();
@@ -388,9 +388,9 @@ public final class CCommon
      *
      * @tparam T object type
      */
-    public static <T> String getLanguageString( final T p_source, final String p_label, final Object... p_parameter )
+    public static <T> String languagestring( final T p_source, final String p_label, final Object... p_parameter )
     {
-        return getLanguageString( p_source.getClass(), p_label, p_parameter );
+        return languagestring( p_source.getClass(), p_label, p_parameter );
     }
 
     /**
@@ -401,11 +401,11 @@ public final class CCommon
      * @param p_parameter object array with substitutions
      * @return resource string
      */
-    public static String getLanguageString( final Class<?> p_class, final String p_label, final Object... p_parameter )
+    public static String languagestring( final Class<?> p_class, final String p_label, final Object... p_parameter )
     {
         try
         {
-            return MessageFormat.format( LANGUAGE.getString( getLanguageLabel( p_class, p_label ) ), p_parameter );
+            return MessageFormat.format( LANGUAGE.getString( languagelabel( p_class, p_label ) ), p_parameter );
         }
         catch ( final MissingResourceException l_exception )
         {
@@ -420,7 +420,7 @@ public final class CCommon
      * @param p_label label name of the object
      * @return label name
      */
-    private static String getLanguageLabel( final Class<?> p_class, final String p_label )
+    private static String languagelabel( final Class<?> p_class, final String p_label )
     {
         return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
             PACKAGEROOT + ".", "" );

@@ -42,7 +42,7 @@ public abstract class IBuildinAction extends IBaseAction
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.getLogger( IBuildinAction.class );
+    protected static final Logger LOGGER = CCommon.logger( IBuildinAction.class );
 
     /**
      * action name

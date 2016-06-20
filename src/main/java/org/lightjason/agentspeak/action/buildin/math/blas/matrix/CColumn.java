@@ -68,14 +68,14 @@ public final class CColumn extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
-                        .viewColumn( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
+                    CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) )
+                        .viewColumn( CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue() ).toArray()
                 )
                       .boxed().collect( Collectors.toList() )
             )
             : Arrays.stream(
-                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
-                    .viewColumn( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() ).toArray()
+                CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) )
+                    .viewColumn( CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue() ).toArray()
             )
                     .boxed().collect( Collectors.toList() )
         ) );

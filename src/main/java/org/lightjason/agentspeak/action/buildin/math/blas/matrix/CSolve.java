@@ -54,8 +54,8 @@ public final class CSolve extends IAlgebra
         // first argument matrix, second argument result matrix
         p_return.add( CRawTerm.from(
             ALGEBRA.solve(
-                CCommon.getRawValue( p_return.get( 0 ) ),
-                CCommon.getRawValue( p_return.get( 1 ) )
+                CCommon.raw( p_return.get( 0 ) ),
+                CCommon.raw( p_return.get( 1 ) )
             )
         ) );
         return CFuzzyValue.from( true );

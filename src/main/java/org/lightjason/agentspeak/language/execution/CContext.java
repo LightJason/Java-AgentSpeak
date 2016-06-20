@@ -68,7 +68,7 @@ public final class CContext implements IContext
     public CContext( final IAgent<?> p_agent, final IInstantiable p_instance, final Collection<IVariable<?>> p_variables )
     {
         if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notnull" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notnull" ) );
 
         m_agent = p_agent;
         m_instance = p_instance;

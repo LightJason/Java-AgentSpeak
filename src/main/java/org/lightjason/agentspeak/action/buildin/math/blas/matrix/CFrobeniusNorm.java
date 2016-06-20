@@ -63,7 +63,7 @@ public final class CFrobeniusNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.normF( CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ) )
+                ALGEBRA.normF( CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ) )
             )
         );
 

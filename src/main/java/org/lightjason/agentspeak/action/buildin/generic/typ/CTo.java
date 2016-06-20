@@ -63,8 +63,8 @@ public final class CTo extends IBuildinAction
         // first reference of Java object, second string with Java class name
         try
         {
-            p_return.add( CRawTerm.from( CCommon.getRawValue(
-                Class.forName( CCommon.getRawValue( p_argument.get( 1 ) ) ).cast( CCommon.getRawValue( p_argument.get( 0 ) ) ) )
+            p_return.add( CRawTerm.from( CCommon.raw(
+                Class.forName( CCommon.raw( p_argument.get( 1 ) ) ).cast( CCommon.raw( p_argument.get( 0 ) ) ) )
             ) );
 
             return CFuzzyValue.from( true );

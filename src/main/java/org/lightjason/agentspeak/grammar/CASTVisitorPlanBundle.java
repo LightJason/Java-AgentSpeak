@@ -109,7 +109,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.getLogger( CASTVisitorAgent.class );
+    protected static final Logger LOGGER = CCommon.logger( CASTVisitorAgent.class );
     /**
      * set with initial beliefs
      */
@@ -275,7 +275,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.PARALLEL() != null )
             return new CAtomAnnotation<>( IAnnotation.EType.PARALLEL );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "atomannotation", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "atomannotation", p_context.getText() ) );
     }
 
 
@@ -294,7 +294,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.SCORE() != null )
             return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).doubleValue() );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "numberannotation", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "numberannotation", p_context.getText() ) );
     }
 
 
@@ -318,7 +318,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 return ITrigger.EType.DELETEGOAL;
 
             default:
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "goaltrigger", p_context.getText() ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "goaltrigger", p_context.getText() ) );
         }
     }
 
@@ -335,7 +335,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 return ITrigger.EType.DELETEBELIEF;
 
             default:
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "belieftrigger", p_context.getText() ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "belieftrigger", p_context.getText() ) );
         }
     }
 
@@ -392,7 +392,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "repairelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "repairelement", p_context.getText() ) );
     }
 
 
@@ -482,7 +482,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.literal() != null )
             return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "lambdainitialization", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "lambdainitialization", p_context.getText() ) );
     }
 
 
@@ -513,7 +513,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.ternary_operation() != null )
             return this.visitTernary_operation( p_context.ternary_operation() );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
 
 
@@ -561,7 +561,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 return new CDecrement<>( (IVariable) this.visitVariable( p_context.variable() ) );
 
             default:
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "unaryoperator", p_context.getText() ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "unaryoperator", p_context.getText() ) );
         }
     }
 
@@ -578,7 +578,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 p_context.DOUBLEEXCLAMATIONMARK() != null
             );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "achievmentgoal", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
     }
 
 
@@ -626,7 +626,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.MINUS() != null )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefaction", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "beliefaction", p_context.getText() ) );
     }
 
 
@@ -691,7 +691,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.ternary_operation() != null )
             return this.visitTernary_operation( p_context.ternary_operation() );
 
-        throw new CIllegalArgumentException( CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
 
 
@@ -870,7 +870,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.expression_numeric() != null )
             return this.visitExpression_numeric( p_context.expression_numeric() );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicallefthandside", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "logicallefthandside", p_context.getText() ) );
     }
 
 
@@ -901,7 +901,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.executable_rule() != null )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "logicalelement", p_context.getText() ) );
     }
 
 
@@ -926,7 +926,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "compareoperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "compareoperator", p_context.getText() ) );
     }
 
 
@@ -965,7 +965,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "relationaloperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "relationaloperator", p_context.getText() ) );
     }
 
 
@@ -990,7 +990,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "additiveoperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "additiveoperator", p_context.getText() ) );
     }
 
 
@@ -1022,7 +1022,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "multiplicativeoperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "multiplicativeoperator", p_context.getText() ) );
     }
 
 
@@ -1057,7 +1057,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.executable_rule() != null )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "numericelement", p_context.getText() ) );
     }
 
     @Override
@@ -1075,7 +1075,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.variable_evaluate() != null )
             return new CAchievementRuleVariable( (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ) );
 
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "executablerule", p_context.getText() ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "executablerule", p_context.getText() ) );
     }
 
     @Override

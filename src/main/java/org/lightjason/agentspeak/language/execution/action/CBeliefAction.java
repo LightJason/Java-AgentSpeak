@@ -78,7 +78,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
                 break;
 
             default:
-                throw new IllegalArgumentException( CCommon.getLanguageString( this, "unknownaction", m_action ) );
+                throw new IllegalArgumentException( CCommon.languagestring( this, "unknownaction", m_action ) );
         }
 
         return CFuzzyValue.from( true );

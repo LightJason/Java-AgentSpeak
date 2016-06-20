@@ -62,10 +62,10 @@ public final class CGet extends IBuildinAction
         // first argument must be a term with a matrix object, second row index, third column index
         p_return.add(
             CRawTerm.from(
-                CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) )
+                CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) )
                     .getQuick(
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue(),
-                        CCommon.<Number, ITerm>getRawValue( p_argument.get( 2 ) ).intValue()
+                        CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue(),
+                        CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).intValue()
                     )
             )
         );

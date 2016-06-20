@@ -78,13 +78,13 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
         IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )
                  .boxed()
-                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( CCommon.getRawValue( l_flatresult.get( i ) ) ) );
+                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( CCommon.raw( l_flatresult.get( i ) ) ) );
 
 
         // tail matching
         if ( l_assign.size() < l_flatresult.size() )
             ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
-                CCommon.getRawValue( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
+                CCommon.raw( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
             );
 
         return CFuzzyValue.from( true );

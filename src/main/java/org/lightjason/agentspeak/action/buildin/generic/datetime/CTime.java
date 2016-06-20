@@ -59,13 +59,13 @@ public final class CTime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.getRawValue( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
+        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.raw( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
 
-        p_return.add( CCommon.getRawValue( l_time.getHour() ) );
-        p_return.add( CCommon.getRawValue( l_time.getMinute() ) );
-        p_return.add( CCommon.getRawValue( l_time.getSecond() ) );
-        p_return.add( CCommon.getRawValue( l_time.getNano() ) );
-        p_return.add( CCommon.getRawValue( l_time.getZone() ) );
+        p_return.add( CCommon.raw( l_time.getHour() ) );
+        p_return.add( CCommon.raw( l_time.getMinute() ) );
+        p_return.add( CCommon.raw( l_time.getSecond() ) );
+        p_return.add( CCommon.raw( l_time.getNano() ) );
+        p_return.add( CCommon.raw( l_time.getZone() ) );
 
         return CFuzzyValue.from( true );
     }

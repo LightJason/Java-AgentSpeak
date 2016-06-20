@@ -58,7 +58,7 @@ public final class CComparable extends IBaseBinary
     {
         super( p_operator, p_lefthandside, p_righthandside );
         if ( !m_operator.isComparable() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "operator", m_operator ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Override
@@ -75,7 +75,7 @@ public final class CComparable extends IBaseBinary
             return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "argumentnumber" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber" ) );
 
         switch ( m_operator )
         {
@@ -102,8 +102,8 @@ public final class CComparable extends IBaseBinary
     @SuppressWarnings( "unchecked" )
     private static boolean checkequal( final ITerm p_value1, final ITerm p_value2 )
     {
-        final Object l_value1 = CCommon.getRawValue( p_value1 );
-        final Object l_value2 = CCommon.getRawValue( p_value2 );
+        final Object l_value1 = CCommon.raw( p_value1 );
+        final Object l_value2 = CCommon.raw( p_value2 );
 
         return ( l_value1 instanceof Number ) && ( l_value2 instanceof Number )
                ? ( (Number) l_value1 ).doubleValue() == ( (Number) l_value2 ).doubleValue()

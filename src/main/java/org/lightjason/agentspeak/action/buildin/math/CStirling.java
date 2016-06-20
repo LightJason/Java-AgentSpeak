@@ -54,8 +54,8 @@ public final class CStirling extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
             CombinatoricsUtils.stirlingS2(
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue(),
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue()
+                CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue(),
+                CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue()
             )
         ) );
         return CFuzzyValue.from( true );

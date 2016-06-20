@@ -54,7 +54,7 @@ public final class CSleep extends IBuildinAction
         return CFuzzyValue.from(
             p_context.agent().sleep(
                 p_argument.size() > 0
-                ? CCommon.getRawValue( p_argument.get( 0 ) )
+                ? CCommon.raw( p_argument.get( 0 ) )
                 : Long.MAX_VALUE
             ).sleeping()
         );

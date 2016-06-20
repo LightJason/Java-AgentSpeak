@@ -141,7 +141,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         return CFuzzyValue.from(
             m_condition.execute( p_context, false, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() ).value()
             && ( l_return.size() == 1 )
-            ? CCommon.<Boolean, ITerm>getRawValue( l_return.get( 0 ) )
+            ? CCommon.<Boolean, ITerm>raw( l_return.get( 0 ) )
             : false
         );
     }

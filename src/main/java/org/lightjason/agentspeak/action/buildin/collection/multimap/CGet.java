@@ -62,9 +62,9 @@ public final class CGet extends IBuildinAction
     {
         // first argument map reference, second key name
         p_return.addAll(
-            CCommon.<HashMultimap<?, ?>, ITerm>getRawValue( p_argument.get( 0 ) )
+            CCommon.<HashMultimap<?, ?>, ITerm>raw( p_argument.get( 0 ) )
                 .asMap().get(
-                CCommon.getRawValue( p_argument.get( 1 ) )
+                CCommon.raw( p_argument.get( 1 ) )
             ).stream().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );

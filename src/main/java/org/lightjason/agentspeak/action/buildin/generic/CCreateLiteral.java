@@ -54,7 +54,7 @@ public final class CCreateLiteral extends IBuildinAction
     {
         p_return.add(
             CLiteral.from(
-                CCommon.getRawValue( p_argument.get( 0 ) ),
+                CCommon.raw( p_argument.get( 0 ) ),
                 p_argument.size() > 1
                 ? p_argument.subList( 1, p_argument.size() )
                 : Collections.<ITerm>emptyList()

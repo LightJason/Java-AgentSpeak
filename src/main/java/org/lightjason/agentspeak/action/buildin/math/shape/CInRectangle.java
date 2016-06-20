@@ -62,7 +62,7 @@ public final class CInRectangle extends IBuildinAction
     {
         // arguments are: x-value, y-value, left-top x-value, left-top y-value, left-bottom x-value, left-bottom y-value
         final List<Double> l_point = p_argument.stream()
-                                               .map( i -> CCommon.<Number, ITerm>getRawValue( i ) )
+                                               .map( i -> CCommon.<Number, ITerm>raw( i ) )
                                                .mapToDouble( i -> i.doubleValue() )
                                                .boxed()
                                                .collect( Collectors.toList() );

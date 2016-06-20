@@ -67,11 +67,11 @@ public final class CToList extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray()
+                    CCommon.<DoubleMatrix1D, ITerm>raw( p_argument.get( 0 ) ).toArray()
                 )
                       .boxed()
                       .collect( Collectors.toList() ) )
-            : Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).toArray() )
+            : Arrays.stream( CCommon.<DoubleMatrix1D, ITerm>raw( p_argument.get( 0 ) ).toArray() )
                     .boxed()
                     .collect( Collectors.toList() )
         ) );

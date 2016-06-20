@@ -62,7 +62,7 @@ public final class CHash extends IBuildinAction
         try
         {
             p_return.add( CRawTerm.from(
-                this.hash( CCommon.getRawValue( p_argument.get( 0 ) ), CCommon.getBytes( p_argument.subList( 1, p_argument.size() ) ) )
+                this.hash( CCommon.raw( p_argument.get( 0 ) ), CCommon.getBytes( p_argument.subList( 1, p_argument.size() ) ) )
             ) );
 
             return CFuzzyValue.from( true );

@@ -66,12 +66,12 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         m_parallel = p_parallel;
 
         // check unique variables - get variable frequency especially any variable "_"
-        final Map<IVariable<?>, Integer> l_frequency = CCommon.getVariableFrequency( p_literal );
+        final Map<IVariable<?>, Integer> l_frequency = CCommon.variablefrequency( p_literal );
         if ( l_frequency.isEmpty() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "novariable" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable" ) );
 
         if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "uniquevariable" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "uniquevariable" ) );
 
         // count variables
         m_variablenumber = l_frequency.size();

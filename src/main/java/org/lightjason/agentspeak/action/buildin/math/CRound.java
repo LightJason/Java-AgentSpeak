@@ -54,7 +54,7 @@ public final class CRound extends IBuildinAction
     {
         p_return.addAll(
             CCommon.flatList( p_argument ).stream()
-                   .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                   .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
                    .boxed()
                    .map( i -> Math.round( i ) )
                    .map( i -> CRawTerm.from( i ) )

@@ -92,7 +92,7 @@ public final class TestCAgent
 
         // create actions
         final Random l_random = new Random();
-        ACTIONS = CCommon.getActionsFromPackage().collect( Collectors.toMap( i -> i, j -> (double) l_random.nextInt( 15 ) ) );
+        ACTIONS = CCommon.actionsFromPackage().collect( Collectors.toMap( i -> i, j -> (double) l_random.nextInt( 15 ) ) );
     }
 
     /**

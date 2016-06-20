@@ -80,7 +80,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 
-        return CCommon.getRawValue( l_argument.get( 0 ) )
+        return CCommon.raw( l_argument.get( 0 ) )
                ? m_true.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_return, Collections.<ITerm>emptyList() )
                : m_false.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_return, Collections.<ITerm>emptyList() );
     }

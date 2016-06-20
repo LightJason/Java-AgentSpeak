@@ -61,8 +61,8 @@ public final class CGet extends IBuildinAction
         // first argument list reference, second key-value
         p_return.add(
             CRawTerm.from(
-                CCommon.<List<?>, ITerm>getRawValue( p_argument.get( 0 ) )
-                    .get( CCommon.<Number, ITerm>getRawValue( p_argument.get( 1 ) ).intValue() )
+                CCommon.<List<?>, ITerm>raw( p_argument.get( 0 ) )
+                    .get( CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue() )
             )
         );
 

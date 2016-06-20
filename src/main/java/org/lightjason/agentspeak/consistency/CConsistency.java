@@ -277,7 +277,7 @@ public final class CConsistency implements IConsistency
                     break;
 
                 default:
-                    throw new CIllegalStateException( CCommon.getLanguageString( this, "algorithm" ) );
+                    throw new CIllegalStateException( CCommon.languagestring( this, "algorithm" ) );
             }
 
             // normalize eigenvector and create positiv oriantation

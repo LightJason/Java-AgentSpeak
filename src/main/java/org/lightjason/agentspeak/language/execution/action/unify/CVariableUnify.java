@@ -74,7 +74,7 @@ public final class CVariableUnify extends CDefaultUnify
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal(
             m_value,
-            CCommon.getRawValue(
+            CCommon.raw(
             CCommon.replaceFromContext( p_context, m_constraint ) )
         );
         if ( l_variables.size() != m_variablenumber )

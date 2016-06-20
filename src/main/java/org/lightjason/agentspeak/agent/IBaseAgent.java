@@ -79,7 +79,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * logger
      */
-    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.getLogger( IBaseAgent.class );
+    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.logger( IBaseAgent.class );
 
     /**
      * beliefbase
@@ -202,7 +202,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             p_trigger.getLiteral().orderedvalues(),
             p_trigger.getLiteral().annotations()
         ).filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "literalvariable", p_trigger ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
@@ -369,7 +369,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
                       // avoid uninstantiated variables
                       .filter( i -> i.getRight().size()
-                                    == CCommon.getVariableFrequency( i.getLeft().getLeft().getTrigger().getLiteral() ).size()
+                                    == CCommon.variablefrequency( i.getLeft().getLeft().getTrigger().getLiteral() ).size()
                       )
 
                       // initialize context

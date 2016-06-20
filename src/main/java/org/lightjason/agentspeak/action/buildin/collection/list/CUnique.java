@@ -63,7 +63,7 @@ public final class CUnique extends IBuildinAction
     )
     {
         // first argument list reference
-        final List<?> l_result = new LinkedList<>( new HashSet<>( CCommon.<Collection<?>, ITerm>getRawValue( p_argument.get( 0 ) ) ) );
+        final List<?> l_result = new LinkedList<>( new HashSet<>( CCommon.<Collection<?>, ITerm>raw( p_argument.get( 0 ) ) ) );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result

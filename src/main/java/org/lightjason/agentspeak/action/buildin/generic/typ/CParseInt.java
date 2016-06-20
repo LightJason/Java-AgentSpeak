@@ -62,7 +62,7 @@ public final class CParseInt extends IBuildinAction
     {
         try
         {
-            p_return.add( CRawTerm.from( Long.parseLong( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
+            p_return.add( CRawTerm.from( Long.parseLong( CCommon.raw( p_argument.get( 0 ) ) ) ) );
             return CFuzzyValue.from( true );
         }
         catch ( final Exception l_exception )

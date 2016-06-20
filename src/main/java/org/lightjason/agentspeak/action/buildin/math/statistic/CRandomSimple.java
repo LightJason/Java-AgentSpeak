@@ -21,9 +21,8 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
+package org.lightjason.agentspeak.action.buildin.math.statistic;
 
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,29 +31,33 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * create a (set) of simple random values
  */
-public final class CEigenValue extends IBuildinAction
+public final class CRandomSimple extends IBuildinAction
 {
+    /**
+     * random instance
+     */
+    private final Random m_random = new Random();
+
     /**
      * ctor
      */
-    public CEigenValue()
+    public CRandomSimple()
     {
-        super( 4 );
+        super( 3 );
     }
 
     @Override
     public final int getMinimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -62,19 +65,14 @@ public final class CEigenValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // argument must be a term with a matrix object
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedList(
-                Arrays.stream(
-                    new EigenvalueDecomposition( CCommon.raw( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-                ).boxed().sorted().collect( Collectors.toList() )
-            )
-            : Arrays.stream(
-                new EigenvalueDecomposition( CCommon.raw( p_argument.get( 0 ) ) ).getRealEigenvalues().toArray()
-            ).boxed().sorted().collect( Collectors.toList() )
-        ) );
+        IntStream.range(
+            0,
+            p_argument.size() > 0
+            ? CCommon.raw( p_argument.get( 0 ) )
+            : 1
+        ).forEach( i -> p_return.add( CRawTerm.from( m_random.nextDouble() ) ) );
 
         return CFuzzyValue.from( true );
     }
+
 }

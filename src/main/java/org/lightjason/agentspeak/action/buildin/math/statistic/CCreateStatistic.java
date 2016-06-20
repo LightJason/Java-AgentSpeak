@@ -68,7 +68,7 @@ public final class CCreateStatistic extends IBuildinAction
         p_return.add( CRawTerm.from(
             ( p_argument.size() == 0
               ? EType.SUMMARY
-              : EType.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() )
+              : EType.valueOf( CCommon.<String, ITerm>raw( p_argument.get( 0 ) ).trim().toUpperCase() )
             ).generate( p_parallel )
         ) );
 
@@ -105,7 +105,7 @@ public final class CCreateStatistic extends IBuildinAction
                            : new DescriptiveStatistics();
 
                 default:
-                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "unknown", this ) );
+                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
             }
         }
     }

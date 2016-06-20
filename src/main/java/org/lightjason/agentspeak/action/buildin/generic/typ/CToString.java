@@ -60,7 +60,7 @@ public final class CToString extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll( p_argument.stream().map( i -> CRawTerm.from( CCommon.getRawValue( i ).toString() ) ).collect( Collectors.toList() ) );
+        p_return.addAll( p_argument.stream().map( i -> CRawTerm.from( CCommon.raw( i ).toString() ) ).collect( Collectors.toList() ) );
         return CFuzzyValue.from( true );
     }
 

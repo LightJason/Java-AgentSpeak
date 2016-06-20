@@ -51,7 +51,7 @@ public final class CMin extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).min()
+        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() ).min()
                                             .getAsDouble() ) );
         return CFuzzyValue.from( true );
     }

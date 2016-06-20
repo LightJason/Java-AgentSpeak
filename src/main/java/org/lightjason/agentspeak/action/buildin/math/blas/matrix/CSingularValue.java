@@ -67,11 +67,11 @@ public final class CSingularValue extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
+                    new SingularValueDecomposition( CCommon.raw( p_argument.get( 0 ) ) ).getSingularValues()
                 ).boxed().sorted().collect( Collectors.toList() )
             )
             : Arrays.stream(
-                new SingularValueDecomposition( CCommon.getRawValue( p_argument.get( 0 ) ) ).getSingularValues()
+                new SingularValueDecomposition( CCommon.raw( p_argument.get( 0 ) ) ).getSingularValues()
             ).boxed().sorted().collect( Collectors.toList() )
         ) );
 

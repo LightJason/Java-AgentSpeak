@@ -81,9 +81,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "empty" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
         if ( p_beliefbase == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "beliefbaseempty" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "beliefbaseempty" ) );
 
         m_name = p_name;
         m_beliefbase = p_beliefbase;
@@ -146,7 +146,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                       .filter( j -> i.beliefbase().equals( this.beliefbase() ) )
                       .findAny()
                       .ifPresent( j -> {
-                          throw new CIllegalArgumentException( CCommon.getLanguageString( this, "equal", i.path(), j.path() ) );
+                          throw new CIllegalArgumentException( CCommon.languagestring( this, "equal", i.path(), j.path() ) );
                       } );
                   m_beliefbase.add( i );
               } );
@@ -303,7 +303,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             );
         }
         if ( l_view == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "notfound", l_root, this.path() ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notfound", l_root, this.path() ) );
 
         return Stream.concat(
             Stream.of( this ),

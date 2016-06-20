@@ -47,7 +47,7 @@ public final class CErrorListener implements ANTLRErrorListener
                              final RecognitionException p_exception
     )
     {
-        throw new CSyntaxErrorException( CCommon.getLanguageString( this, "syntax", p_line, p_charposition ) );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "syntax", p_line, p_charposition ) );
     }
 
     @Override

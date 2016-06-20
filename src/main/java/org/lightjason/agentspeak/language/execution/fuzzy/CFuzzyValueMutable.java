@@ -73,7 +73,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     public CFuzzyValueMutable( final T p_value, final double p_fuzzy )
     {
         if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_value ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_value ) );
 
         m_value = p_value;
         m_fuzzy = p_fuzzy;
@@ -90,7 +90,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     public final IFuzzyValueMutable<T> fuzzy( final double p_value )
     {
         if ( !( ( p_value >= 0 ) && ( p_value <= 1 ) ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "fuzzyvalue", p_value ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_value ) );
         m_fuzzy = p_value;
         return this;
     }

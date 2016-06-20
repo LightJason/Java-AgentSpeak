@@ -88,7 +88,7 @@ public enum EAlgorithm
                 return new ImmutablePair<>( l_key.getPublic(), l_key.getPrivate() );
 
             default:
-                throw new CIllegalStateException( CCommon.getLanguageString( this, "unknown", this ) );
+                throw new CIllegalStateException( CCommon.languagestring( this, "unknown", this ) );
         }
     }
 

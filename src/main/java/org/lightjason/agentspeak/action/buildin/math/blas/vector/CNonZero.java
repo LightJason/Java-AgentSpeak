@@ -60,7 +60,7 @@ public final class CNonZero extends IBuildinAction
     )
     {
         // first argument must be a term with a vector object
-        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix1D, ITerm>getRawValue( p_argument.get( 0 ) ).cardinality() ) );
+        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix1D, ITerm>raw( p_argument.get( 0 ) ).cardinality() ) );
         return CFuzzyValue.from( true );
     }
 }

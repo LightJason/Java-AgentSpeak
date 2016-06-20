@@ -67,11 +67,11 @@ public final class CCreate extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            EType.valueOf( CCommon.<String, ITerm>getRawValue( p_argument.get( 0 ) ).trim().toUpperCase() ).get(
-                CCommon.flatList( CCommon.getRawValue( p_argument.get( 1 ) ) ).stream()
-                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray(),
-                CCommon.flatList( CCommon.getRawValue( p_argument.get( 2 ) ) ).stream()
-                       .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() ).toArray()
+            EType.valueOf( CCommon.<String, ITerm>raw( p_argument.get( 0 ) ).trim().toUpperCase() ).get(
+                CCommon.flatList( CCommon.raw( p_argument.get( 1 ) ) ).stream()
+                       .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() ).toArray(),
+                CCommon.flatList( CCommon.raw( p_argument.get( 2 ) ) ).stream()
+                       .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() ).toArray()
             )
         ) );
 
@@ -118,7 +118,7 @@ public final class CCreate extends IBuildinAction
                     return new NevilleInterpolator().interpolate( p_xvalues, p_yvalues );
 
                 default:
-                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "unknown", this ) );
+                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
             }
         }
     }

@@ -94,7 +94,7 @@ public final class CPath implements IPath
             m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) ).filter( i -> !i.isEmpty() ).collect(
                 Collectors.toList() );
             if ( m_path.size() == 0 )
-                throw new CIllegalArgumentException( CCommon.getLanguageString( this, "pathempty" ) );
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "pathempty" ) );
         }
     }
 
@@ -127,7 +127,7 @@ public final class CPath implements IPath
     public static IPath createPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( IPath.class, "createpath" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( IPath.class, "createpath" ) );
 
         return new CPath( p_varargs );
     }
@@ -141,7 +141,7 @@ public final class CPath implements IPath
     public static IPath createSplitPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( IPath.class, "createpath" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( IPath.class, "createpath" ) );
 
         return new CPath(
             Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
@@ -232,7 +232,7 @@ public final class CPath implements IPath
     public final IPath setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "separatornotempty" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "separatornotempty" ) );
 
         m_separator = p_separator;
         return this;

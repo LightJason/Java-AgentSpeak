@@ -63,11 +63,11 @@ public final class CTrigger implements ITrigger
     public CTrigger( final EType p_event, final ILiteral p_literal )
     {
         if ( ( p_event == null ) || ( p_literal == null ) )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "empty" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "empty" ) );
 
         m_event = p_event;
         m_literal = p_literal;
-        m_variables = CCommon.getVariableFrequency( p_literal ).size();
+        m_variables = CCommon.variablefrequency( p_literal ).size();
         m_hashcode = m_event.hashCode() + m_literal.fqnfunctor().hashCode() + (int) p_literal.values().count() + (int) p_literal.annotations().count();
     }
 

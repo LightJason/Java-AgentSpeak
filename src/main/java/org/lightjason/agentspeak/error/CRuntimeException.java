@@ -39,7 +39,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.getLogger( CIllegalStateException.class );
+    protected static final Logger LOGGER = CCommon.logger( CIllegalStateException.class );
     /**
      * execution context
      */

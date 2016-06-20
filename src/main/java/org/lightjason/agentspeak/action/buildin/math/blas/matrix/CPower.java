@@ -64,8 +64,8 @@ public final class CPower extends IAlgebra
         p_return.add(
             CRawTerm.from(
                 ALGEBRA.pow(
-                    CCommon.<DoubleMatrix2D, ITerm>getRawValue( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>getRawValue( p_argument.get( 0 ) ).intValue()
+                    CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ),
+                    CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue()
                 )
             )
         );

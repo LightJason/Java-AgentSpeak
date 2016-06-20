@@ -55,7 +55,7 @@ public final class CBinary extends IBaseBinary
     {
         super( p_operator, p_lefthandside, p_righthandside );
         if ( !m_operator.isLogical() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "operator", m_operator ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Override
@@ -77,7 +77,7 @@ public final class CBinary extends IBaseBinary
         if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
             return CFuzzyValue.from( false );
         if ( l_argument.size() != 2 )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "argumentnumber" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber" ) );
 
 
         // calculate return of both expression results
@@ -85,18 +85,18 @@ public final class CBinary extends IBaseBinary
         {
 
             case AND:
-                p_return.add( CRawTerm.from( CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
-                                             && CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( CCommon.<Boolean, ITerm>raw( l_argument.get( 0 ) )
+                                             && CCommon.<Boolean, ITerm>raw( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case OR:
-                p_return.add( CRawTerm.from( CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
-                                             || CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( CCommon.<Boolean, ITerm>raw( l_argument.get( 0 ) )
+                                             || CCommon.<Boolean, ITerm>raw( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             case XOR:
-                p_return.add( CRawTerm.from( CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 0 ) )
-                                             ^ CCommon.<Boolean, ITerm>getRawValue( l_argument.get( 1 ) ) ) );
+                p_return.add( CRawTerm.from( CCommon.<Boolean, ITerm>raw( l_argument.get( 0 ) )
+                                             ^ CCommon.<Boolean, ITerm>raw( l_argument.get( 1 ) ) ) );
                 return CFuzzyValue.from( true );
 
             default:
@@ -117,11 +117,11 @@ public final class CBinary extends IBaseBinary
         switch ( m_operator )
         {
             case AND:
-                l_result = !CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) );
+                l_result = !CCommon.<Boolean, ITerm>raw( p_argument.get( 0 ) );
                 break;
 
             case OR:
-                l_result = CCommon.<Boolean, ITerm>getRawValue( p_argument.get( 0 ) );
+                l_result = CCommon.<Boolean, ITerm>raw( p_argument.get( 0 ) );
                 break;
 
             default:

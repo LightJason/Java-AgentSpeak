@@ -60,12 +60,12 @@ public final class CEncrypt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Key l_key = CCommon.<Key, ITerm>getRawValue( p_argument.get( 0 ) );
+        final Key l_key = CCommon.<Key, ITerm>raw( p_argument.get( 0 ) );
         final EAlgorithm l_algorithm = EAlgorithm.valueOf( l_key.getAlgorithm() );
 
         p_return.addAll(
             p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> SerializationUtils.serialize( CCommon.getRawValue( i ) ) )
+                      .map( i -> SerializationUtils.serialize( CCommon.raw( i ) ) )
                       .map( i -> {
                           try
                           {

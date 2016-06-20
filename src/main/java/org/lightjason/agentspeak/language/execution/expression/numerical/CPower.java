@@ -59,7 +59,7 @@ public final class CPower extends IBaseBinary
     {
         super( p_operator, p_lefthandside, p_righthandside );
         if ( !m_operator.isPower() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "operator", m_operator ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Override
@@ -76,7 +76,7 @@ public final class CPower extends IBaseBinary
             return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "argumentnumber" ) );
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber" ) );
 
 
         switch ( m_operator )
@@ -84,8 +84,8 @@ public final class CPower extends IBaseBinary
             case POWER:
                 p_return.add( CRawTerm.from(
                     Math.pow(
-                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 0 ) ).doubleValue(),
-                        CCommon.<Number, ITerm>getRawValue( l_argument.get( 1 ) ).doubleValue()
+                        CCommon.<Number, ITerm>raw( l_argument.get( 0 ) ).doubleValue(),
+                        CCommon.<Number, ITerm>raw( l_argument.get( 1 ) ).doubleValue()
                     )
                 ) );
                 return CFuzzyValue.from( true );

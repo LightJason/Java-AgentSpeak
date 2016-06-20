@@ -60,11 +60,11 @@ public final class CStartsWith extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_string = CCommon.getRawValue( p_argument.get( 0 ) );
+        final String l_string = CCommon.raw( p_argument.get( 0 ) );
 
         p_return.addAll(
             p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> l_string.startsWith( CCommon.<String, ITerm>getRawValue( i ) ) )
+                      .map( i -> l_string.startsWith( CCommon.<String, ITerm>raw( i ) ) )
                       .map( i -> CRawTerm.from( i ) )
                       .collect( Collectors.toList() )
         );

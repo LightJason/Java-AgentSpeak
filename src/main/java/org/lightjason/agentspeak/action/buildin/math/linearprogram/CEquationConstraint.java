@@ -69,27 +69,27 @@ public final class CEquationConstraint extends IConstraint
         // first search the relation symbol and create spliting lists
         final int l_index = IntStream.range( 1, p_argument.size() )
                                      .boxed()
-                                     .mapToInt( i -> CCommon.isRawValueAssignableTo( p_argument.get( i ), String.class ) ? i : -1 )
+                                     .mapToInt( i -> CCommon.rawvalueAssignableTo( p_argument.get( i ), String.class ) ? i : -1 )
                                      .filter( i -> i > -1 )
                                      .findFirst()
                                      .orElseThrow( () -> new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon
-                                                                                            .getLanguageString( this, "relation" ) ) );
+                                                                                            .languagestring( this, "relation" ) ) );
 
 
         // create linear constraint based on an equation
-        CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>getRawValue( p_argument.get( 0 ) ).getRight().add(
+        CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>raw( p_argument.get( 0 ) ).getRight().add(
             new LinearConstraint(
                 p_argument.subList( 1, l_index - 2 ).stream()
-                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                          .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
                           .toArray(),
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( l_index - 1 ) ).doubleValue(),
+                CCommon.<Number, ITerm>raw( p_argument.get( l_index - 1 ) ).doubleValue(),
 
-                this.getRelation( CCommon.getRawValue( p_argument.get( l_index ) ) ),
+                this.getRelation( CCommon.raw( p_argument.get( l_index ) ) ),
 
                 p_argument.subList( l_index + 1, p_argument.size() ).stream()
-                          .mapToDouble( i -> CCommon.<Number, ITerm>getRawValue( i ).doubleValue() )
+                          .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
                           .toArray(),
-                CCommon.<Number, ITerm>getRawValue( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+                CCommon.<Number, ITerm>raw( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
             )
         );
 

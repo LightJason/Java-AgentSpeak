@@ -82,12 +82,12 @@ public final class TestCLanguageLabels
         URI l_uri = null;
         try
         {
-            l_uri = CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI();
+            l_uri = CCommon.concaturl( CCommon.resourceurl(), "../../src/main/java/" ).toURI();
 
             LANGUAGEPROPERY.put(
                 "en",
-                CCommon.concatURL(
-                    CCommon.getResourceURL(),
+                CCommon.concaturl(
+                    CCommon.resourceurl(),
                     MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
                     "language.properties" )
                 ).toURI()
@@ -95,8 +95,8 @@ public final class TestCLanguageLabels
 
             LANGUAGEPROPERY.put(
                 "de",
-                CCommon.concatURL(
-                    CCommon.getResourceURL(),
+                CCommon.concaturl(
+                    CCommon.resourceurl(),
                     MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
                     "language_de.properties" )
                 ).toURI()
@@ -120,7 +120,7 @@ public final class TestCLanguageLabels
 
         // --- read language definitions from the configuration
         final Set<String> l_translation = Collections.unmodifiableSet(
-            Arrays.stream( CCommon.getConfiguration().getObject( "translation" ).toString().split( "," ) )
+            Arrays.stream( CCommon.configuration().getObject( "translation" ).toString().split( "," ) )
                   .map( i -> i.trim().toLowerCase() )
                   .collect( Collectors.toSet() )
         );

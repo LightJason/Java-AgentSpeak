@@ -157,7 +157,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.ternary_operation() != null )
             return this.visitTernary_operation( p_context.ternary_operation() );
 
-        throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
+        throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -282,7 +282,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.ternary_operation() != null )
             return this.visitTernary_operation( p_context.ternary_operation() );
 
-        throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "termunknown", p_context.getText() ) );
+        throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "termunknown", p_context.getText() ) );
     }
 
 
@@ -465,7 +465,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.expression_numeric() != null )
             return this.visitExpression_numeric( p_context.expression_numeric() );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "logicallefthandside", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "logicallefthandside", p_context.getText() ) );
     }
 
 
@@ -496,7 +496,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.executable_rule() != null )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "logicalelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "logicalelement", p_context.getText() ) );
     }
 
 
@@ -521,7 +521,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "compareoperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "compareoperator", p_context.getText() ) );
     }
 
 
@@ -560,7 +560,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "relationaloperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "relationaloperator", p_context.getText() ) );
     }
 
 
@@ -585,7 +585,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "additiveoperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "additiveoperator", p_context.getText() ) );
     }
 
 
@@ -617,7 +617,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "multiplicativeoperator", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "multiplicativeoperator", p_context.getText() ) );
     }
 
 
@@ -652,7 +652,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
         if ( p_context.executable_rule() != null )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.getLanguageString( this, "numericelement", p_context.getText() ) );
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "numericelement", p_context.getText() ) );
     }
 
     @Override

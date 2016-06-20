@@ -142,7 +142,7 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> throwNotAllocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.getLanguageString( CVariable.class, "notallocated", this ) );
+            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( CVariable.class, "notallocated", this ) );
 
         return this;
     }
@@ -158,7 +158,7 @@ public class CVariable<T> implements IVariable<T>
     {
         if ( !this.valueAssignableTo( p_class ) )
             throw new CIllegalArgumentException(
-                org.lightjason.agentspeak.common.CCommon.getLanguageString( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
+                org.lightjason.agentspeak.common.CCommon.languagestring( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
 
         return this;
     }
@@ -241,7 +241,7 @@ public class CVariable<T> implements IVariable<T>
     {
         // value must be set manually to avoid exception throwing (see CVariable.set)
         if ( !m_any )
-            m_value = CCommon.getRawValue( p_value );
+            m_value = CCommon.raw( p_value );
         return this;
     }
 }

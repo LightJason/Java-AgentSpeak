@@ -58,7 +58,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.getLogger( CDefaultAgentConfiguration.class );
+    protected static final Logger LOGGER = CCommon.logger( CDefaultAgentConfiguration.class );
     /**
      * name of the root beliefbase
      */

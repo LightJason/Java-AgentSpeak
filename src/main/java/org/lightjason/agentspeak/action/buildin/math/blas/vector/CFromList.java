@@ -65,8 +65,8 @@ public final class CFromList extends IBuildinAction
     {
         // first argument is the list type
         // optional second argument is matrix type (default dense-matrix)
-        final List<Double> l_data = CCommon.getRawValue( p_argument.get( 0 ) );
-        switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.getRawValue( p_argument.get( 1 ) ) ) : EType.DENSE )
+        final List<Double> l_data = CCommon.raw( p_argument.get( 0 ) );
+        switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.raw( p_argument.get( 1 ) ) ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add( assign( l_data, new DenseDoubleMatrix1D( l_data.size() ) ) );

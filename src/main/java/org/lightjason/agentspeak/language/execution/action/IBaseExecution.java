@@ -53,7 +53,7 @@ public abstract class IBaseExecution<T> implements IExecution
     protected IBaseExecution( final T p_value )
     {
         if ( p_value == null )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( IBaseExecution.class, "notnull" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( IBaseExecution.class, "notnull" ) );
         m_value = p_value;
     }
 

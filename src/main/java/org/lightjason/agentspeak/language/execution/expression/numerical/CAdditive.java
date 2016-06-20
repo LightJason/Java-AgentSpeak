@@ -58,7 +58,7 @@ public final class CAdditive extends IBaseBinary
     {
         super( p_operator, p_lefthandside, p_righthandside );
         if ( !m_operator.isAdditive() )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "operator", m_operator ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", m_operator ) );
     }
 
     @Override
@@ -75,22 +75,22 @@ public final class CAdditive extends IBaseBinary
             return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )
-            throw new CIllegalArgumentException( CCommon.getLanguageString( this, "argumentnumber" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "argumentnumber" ) );
 
 
         switch ( m_operator )
         {
             case PLUS:
                 p_return.add( CRawTerm.from( this.add(
-                    org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
+                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case MINUS:
                 p_return.add( CRawTerm.from( this.subtract(
-                    org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.getRawValue( l_argument.get( 1 ) )
+                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
+                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
                 ) ) );
                 return CFuzzyValue.from( true );
 
