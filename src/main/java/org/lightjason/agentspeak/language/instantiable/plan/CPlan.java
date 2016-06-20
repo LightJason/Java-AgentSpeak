@@ -125,8 +125,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
 
         // create delete-goal trigger
-        if ( !p_context.getAgent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
-            p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
+        if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
+            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
 
         return l_result;
     }
@@ -168,7 +168,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
                 Stream.of( super.score( p_agent ) ),
                 Stream.of(
                     m_annotation.containsKey( IAnnotation.EType.SCORE )
-                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).getValue() ).doubleValue()
+                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).value() ).doubleValue()
                     : 0
                 )
             )
@@ -177,14 +177,14 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return (Stream<IVariable<?>>) Stream.of(
             m_condition != null
-            ? m_condition.getVariables()
+            ? m_condition.variables()
             : Stream.<IVariable<?>>empty(),
 
-            super.getVariables(),
+            super.variables(),
 
             CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
                    .filter( i -> i instanceof IVariable<?> )

@@ -84,7 +84,7 @@ public final class CUnifier implements IUnifier
     public final IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
+        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 
@@ -98,7 +98,7 @@ public final class CUnifier implements IUnifier
     )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
+        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 
@@ -135,7 +135,7 @@ public final class CUnifier implements IUnifier
     )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.getAgent(), p_literal, p_variablenumber );
+        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variablenumber );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 

@@ -84,7 +84,7 @@ public final class CRemove extends IStorage
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 
-        p_return.add( CRawTerm.from( p_context.getAgent().storage().remove( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
+        p_return.add( CRawTerm.from( p_context.agent().storage().remove( CCommon.getRawValue( p_argument.get( 0 ) ) ) ) );
         return CFuzzyValue.from( true );
     }
 

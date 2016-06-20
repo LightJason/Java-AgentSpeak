@@ -60,7 +60,7 @@ public final class CTestGoal extends ITest
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from( p_context.getAgent().runningplans().keySet().contains( m_value ) );
+        return CFuzzyValue.from( p_context.agent().runningplans().keySet().contains( m_value ) );
     }
 
 }

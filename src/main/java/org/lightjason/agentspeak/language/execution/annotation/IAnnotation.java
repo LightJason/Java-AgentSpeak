@@ -35,14 +35,14 @@ public interface IAnnotation<T>
      *
      * @return type
      */
-    EType getID();
+    EType id();
 
     /**
      * returns the data of the annotation if exists
      *
      * @return data or null
      */
-    <N> N getValue();
+    <N> N value();
 
     /**
      * checkes assignable of the value
@@ -50,7 +50,7 @@ public interface IAnnotation<T>
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean isValueAssignableTo( final Class<?>... p_class );
+    boolean valueAssignableTo( final Class<?>... p_class );
 
 
     /**

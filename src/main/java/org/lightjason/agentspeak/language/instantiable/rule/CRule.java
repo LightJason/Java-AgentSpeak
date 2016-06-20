@@ -91,12 +91,12 @@ public final class CRule extends IBaseInstantiable implements IRule
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return (Stream<IVariable<?>>) Stream.of(
             CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
             CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-            super.getVariables()
+            super.variables()
         )
                                             .reduce( Stream::concat )
                                             .orElseGet( Stream::<IVariable<?>>empty );

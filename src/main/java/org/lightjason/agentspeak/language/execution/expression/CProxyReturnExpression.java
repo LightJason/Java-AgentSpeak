@@ -76,9 +76,9 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return m_execution.getVariables();
+        return m_execution.variables();
     }
 
     @Override

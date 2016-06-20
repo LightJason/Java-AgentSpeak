@@ -74,7 +74,7 @@ public final class CCommon
                 1.6726219e-27
             ),
 
-            ( k, v ) -> new AbstractMap.SimpleImmutableEntry<>( k, v )
+            AbstractMap.SimpleImmutableEntry::new
         ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) ) );
 
 

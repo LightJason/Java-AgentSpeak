@@ -39,20 +39,20 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return literal
      */
-    ILiteral getLiteral();
+    ILiteral literal();
 
     /**
      * get the parsed expression
      *
      * @return expression
      */
-    IExpression getExpression();
+    IExpression expression();
 
     /**
      * get the parsed term
      *
      * @return any term
      */
-    ITerm getTerm();
+    ITerm term();
 
 }

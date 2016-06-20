@@ -71,7 +71,7 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     }
 
     @Override
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
         return m_value.variables();
     }

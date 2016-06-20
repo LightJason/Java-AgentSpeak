@@ -100,9 +100,9 @@ public final class CProxyAction implements IExecution
 
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return m_execution.getVariables();
+        return m_execution.variables();
     }
 
     @Override
@@ -166,7 +166,7 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Stream<IVariable<?>> getVariables()
+        public final Stream<IVariable<?>> variables()
         {
             return this.getVariableSet( m_value );
         }
@@ -280,9 +280,9 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final Stream<IVariable<?>> getVariables()
+        public final Stream<IVariable<?>> variables()
         {
-            return m_action.getVariables();
+            return m_action.variables();
         }
 
         /**

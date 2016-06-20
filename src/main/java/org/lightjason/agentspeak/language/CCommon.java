@@ -65,7 +65,7 @@ public final class CCommon
      */
     public static IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.forEach( i -> p_context.getInstanceVariables().get( i.fqnfunctor() ).set( i.typed() ) );
+        p_unifiedvariables.forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.typed() ) );
         return p_context;
     }
 
@@ -79,7 +79,7 @@ public final class CCommon
      */
     public static IContext instantiate( final IInstantiable p_instance, final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
     {
-        final Set<IVariable<?>> l_variables = p_instance.getVariables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
+        final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
         Stream.of(
             p_variable,
             p_agent.variablebuilder().generate( p_agent, p_instance ),
@@ -175,7 +175,7 @@ public final class CCommon
         if ( !( p_term instanceof IVariable<?> ) )
             return p_term;
 
-        final IVariable<?> l_variable = p_context.getInstanceVariables().get( p_term.fqnfunctor() );
+        final IVariable<?> l_variable = p_context.instancevariables().get( p_term.fqnfunctor() );
         if ( l_variable != null )
             return l_variable;
 

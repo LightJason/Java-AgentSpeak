@@ -71,14 +71,14 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
         return l_rules == null
                ? p_agent.aggregation().error()
                : l_rules.parallelStream()
-                        .filter( i -> this.equals( i ) )
+                        .filter( this::equals )
                         .mapToDouble( i -> i.score( p_agent ) )
                         .sum();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             CCommon.recursiveterm( m_value.orderedvalues() ),

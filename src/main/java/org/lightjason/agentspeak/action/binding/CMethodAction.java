@@ -101,14 +101,14 @@ public final class CMethodAction extends IBaseAction
             return m_arguments == 0
 
                 ? CMethodAction.returnvalues(
-                    m_method.invoke( p_context.getAgent() ),
+                    m_method.invoke( p_context.agent() ),
                     p_return
                 )
 
                 : CMethodAction.returnvalues(
                     m_method.invokeWithArguments(
                         Stream.concat(
-                            Stream.of( p_context.getAgent() ),
+                            Stream.of( p_context.agent() ),
                             p_argument.stream().map( CCommon::getRawValue )
                         ).collect( Collectors.toList() )
                     ),

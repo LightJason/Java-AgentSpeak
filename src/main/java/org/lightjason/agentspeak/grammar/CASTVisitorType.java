@@ -698,19 +698,19 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final ILiteral getLiteral()
+    public final ILiteral literal()
     {
         return m_literal;
     }
 
     @Override
-    public final IExpression getExpression()
+    public final IExpression expression()
     {
         return m_expression;
     }
 
     @Override
-    public final ITerm getTerm()
+    public final ITerm term()
     {
         return m_term;
     }

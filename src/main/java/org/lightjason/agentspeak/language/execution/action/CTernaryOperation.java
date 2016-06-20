@@ -104,8 +104,8 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat( m_true.getVariables(), m_false.getVariables() );
+        return Stream.concat( m_true.variables(), m_false.variables() );
     }
 }

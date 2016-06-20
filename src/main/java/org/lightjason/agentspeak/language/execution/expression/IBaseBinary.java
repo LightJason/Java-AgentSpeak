@@ -69,19 +69,19 @@ public abstract class IBaseBinary implements IBinaryExpression
     }
 
     @Override
-    public final IExpression getLeftHandSide()
+    public final IExpression leftHandSide()
     {
         return m_lefthandside;
     }
 
     @Override
-    public final IExpression getRightHandSide()
+    public final IExpression rightHandSide()
     {
         return m_righthandside;
     }
 
     @Override
-    public final EOperator getOperator()
+    public final EOperator operator()
     {
         return m_operator;
     }
@@ -111,8 +111,8 @@ public abstract class IBaseBinary implements IBinaryExpression
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat( m_lefthandside.getVariables(), m_righthandside.getVariables() );
+        return Stream.concat( m_lefthandside.variables(), m_righthandside.variables() );
     }
 }

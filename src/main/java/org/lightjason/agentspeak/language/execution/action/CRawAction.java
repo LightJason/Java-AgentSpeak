@@ -55,15 +55,15 @@ public final class CRawAction<T> extends IBaseExecution<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         if ( m_value instanceof IVariable<?> )
             return Stream.of( (IVariable<?>) m_value );
 
         if ( m_value instanceof IExpression )
-            return ( (IExpression) m_value ).getVariables();
+            return ( (IExpression) m_value ).variables();
 
-        return super.getVariables();
+        return super.variables();
     }
 
     @Override

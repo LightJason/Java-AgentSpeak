@@ -85,7 +85,7 @@ public abstract class IBaseExecution<T> implements IExecution
     }
 
     @Override
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.<IVariable<?>>empty();
     }

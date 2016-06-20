@@ -82,19 +82,19 @@ public final class CContext implements IContext
     }
 
     @Override
-    public final IAgent<?> getAgent()
+    public final IAgent<?> agent()
     {
         return m_agent;
     }
 
     @Override
-    public IInstantiable getInstance()
+    public IInstantiable instance()
     {
         return m_instance;
     }
 
     @Override
-    public final Map<IPath, IVariable<?>> getInstanceVariables()
+    public final Map<IPath, IVariable<?>> instancevariables()
     {
         return m_variables;
     }

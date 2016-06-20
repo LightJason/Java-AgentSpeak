@@ -90,7 +90,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.of( m_variable );
     }

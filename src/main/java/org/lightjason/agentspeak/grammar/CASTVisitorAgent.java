@@ -1033,7 +1033,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Set<ILiteral> getInitialBeliefs()
+    public final Set<ILiteral> initialbeliefs()
     {
         return m_InitialBeliefs;
     }
@@ -1044,19 +1044,19 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Set<IRule> rules()
     {
         return new HashSet<>( m_rules.values() );
     }
 
     @Override
-    public final ILiteral getInitialGoal()
+    public final ILiteral initialgoal()
     {
         return m_InitialGoal;
     }

@@ -37,6 +37,6 @@ public interface IASTVisitorAgent extends IASTVisitorAgentSpeak, AgentVisitor<Ob
      *
      * @returns literal or null
      */
-    ILiteral getInitialGoal();
+    ILiteral initialgoal();
 
 }

@@ -73,7 +73,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     {
         m_hash = p_hash;
         m_action = Collections.unmodifiableList( p_action );
-        m_annotation = Collections.unmodifiableMap( p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.getID(), s ), Map::putAll ) );
+        m_annotation = Collections.unmodifiableMap( p_annotation.stream().collect( HashMap::new, ( m, s ) -> m.put( s.id(), s ), Map::putAll ) );
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class IBaseInstantiable implements IInstantiable
                 m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed(),
                 Stream.of(
                     m_annotation.containsKey( IAnnotation.EType.SCORE )
-                    ? m_annotation.get( IAnnotation.EType.SCORE ).<Double>getValue()
+                    ? m_annotation.get( IAnnotation.EType.SCORE ).<Double>value()
                     : new Double( 0 )
                 )
             )
@@ -110,9 +110,9 @@ public abstract class IBaseInstantiable implements IInstantiable
     }
 
     @Override
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
-        return m_action.stream().flatMap( IExecution::getVariables );
+        return m_action.stream().flatMap( IExecution::variables );
     }
 
     @Override
@@ -129,7 +129,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         // if atomic flag if exists use this for return value
         return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
                ? CFuzzyValue.from( true )
-               : l_result.stream().collect( p_context.getAgent().fuzzy().getResultOperator() );
+               : l_result.stream().collect( p_context.agent().fuzzy().getResultOperator() );
     }
 
     /**
@@ -149,7 +149,7 @@ public abstract class IBaseInstantiable implements IInstantiable
                     final IFuzzyValue<Boolean> l_return = i.execute(
                         p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
                     l_result.add( l_return );
-                    return p_context.getAgent().fuzzy().getDefuzzyfication().defuzzify( l_return );
+                    return p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return );
                 } )
                 .filter( i -> !i )
                 .findFirst();

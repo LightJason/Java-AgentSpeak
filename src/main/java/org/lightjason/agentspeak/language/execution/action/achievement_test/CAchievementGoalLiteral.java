@@ -62,7 +62,7 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
                                                final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
+        return p_context.agent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
     }
 
 }

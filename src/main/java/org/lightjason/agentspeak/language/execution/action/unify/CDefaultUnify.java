@@ -88,7 +88,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
                                          final List<ITerm> p_annotation
     )
     {
-        return p_context.getAgent().unifier().unify(
+        return p_context.agent().unifier().unify(
             p_context,
             m_value,
             m_variablenumber
@@ -97,7 +97,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Stream<IVariable<?>> getVariables()
+    public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),

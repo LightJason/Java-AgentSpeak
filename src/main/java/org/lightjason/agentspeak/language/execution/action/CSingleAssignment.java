@@ -94,11 +94,11 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_value ),
-            m_righthand.getVariables()
+            m_righthand.variables()
         );
     }
 }

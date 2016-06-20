@@ -75,7 +75,7 @@ public class CAtom implements IExpression
     }
 
     @Override
-    public final Stream<IVariable<?>> getVariables()
+    public final Stream<IVariable<?>> variables()
     {
         return m_value instanceof IVariable<?>
                ? Stream.of( (IVariable<?>) m_value )

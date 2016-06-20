@@ -41,20 +41,20 @@ public interface IASTVisitorAgentSpeak extends IASTVisitor
      *
      * @return set with initial beliefs
      */
-    Set<ILiteral> getInitialBeliefs();
+    Set<ILiteral> initialbeliefs();
 
     /**
      * get a multimap with event-plan matching
      *
      * @return plan set
      */
-    Set<IPlan> getPlans();
+    Set<IPlan> plans();
 
     /**
      * returns the rules / principles
      *
      * @return rule set
      */
-    Set<IRule> getRules();
+    Set<IRule> rules();
 
 }

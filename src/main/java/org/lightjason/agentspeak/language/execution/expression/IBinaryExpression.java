@@ -34,20 +34,20 @@ public interface IBinaryExpression extends IExpression
      *
      * @return left-hand-side
      */
-    IExpression getLeftHandSide();
+    IExpression leftHandSide();
 
     /**
      * returns the right-hand expression side
      *
      * @return right-hand-side
      */
-    IExpression getRightHandSide();
+    IExpression rightHandSide();
 
     /**
      * return expression operator
      *
      * @return operator
      */
-    EOperator getOperator();
+    EOperator operator();
 
 }

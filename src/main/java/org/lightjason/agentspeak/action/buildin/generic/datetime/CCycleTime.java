@@ -58,7 +58,7 @@ public class CCycleTime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( System.nanoTime() - p_context.getAgent().cycletime() ) );
+        p_return.add( CRawTerm.from( System.nanoTime() - p_context.agent().cycletime() ) );
         return CFuzzyValue.from( true );
     }
 

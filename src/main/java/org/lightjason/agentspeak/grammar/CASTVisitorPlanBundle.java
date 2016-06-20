@@ -1108,19 +1108,19 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Set<ILiteral> getInitialBeliefs()
+    public final Set<ILiteral> initialbeliefs()
     {
         return m_InitialBeliefs;
     }
 
     @Override
-    public final Set<IPlan> getPlans()
+    public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
     @Override
-    public final Set<IRule> getRules()
+    public final Set<IRule> rules()
     {
         return new HashSet<>( m_rules.values() );
     }
