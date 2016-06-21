@@ -25,9 +25,9 @@ package org.lightjason.agentspeak.beliefbase;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
 {
 
     @Override
-    public boolean isEmpty()
+    public boolean empty()
     {
         return true;
     }
@@ -54,48 +54,10 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     }
 
     @Override
-    public final IView<T> getView( final String p_key )
-    {
-        throw new CIllegalStateException(  );
-    }
-
-    @Override
-    public final Collection<ILiteral> getLiteral( final String p_key )
-    {
-        return Collections.<ILiteral>emptySet();
-    }
-
-    @Override
-    public final IView<T> getViewOrDefault( final String p_key, final IView<T> p_default )
-    {
-        throw new CIllegalStateException(  );
-    }
-
-    @Override
-    public final Stream<ITrigger> getTrigger( final IView<T> p_view )
-    {
-        return null;
-    }
-
-    @Override
     public Stream<ILiteral> streamLiteral()
     {
         return Stream.of();
     }
-
-    @Override
-    public final Stream<IView<T>> streamView()
-    {
-        return Stream.of();
-    }
-
-    @Override
-    public final IBeliefBase<T> clear()
-    {
-        return this;
-    }
-
-
 
     @Override
     public ILiteral add( final ILiteral p_literal )
@@ -115,18 +77,47 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
         return false;
     }
 
+    @Override
+    public Collection<ILiteral> literal( final String p_key )
+    {
+        return Collections.<ILiteral>emptySet();
+    }
 
+
+    @Override
+    public final IView<T> view( final String p_key )
+    {
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", p_key, this ) );
+    }
+
+    @Override
+    public final IView<T> viewOrDefault( final String p_key, final IView<T> p_default )
+    {
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", p_key, this ) );
+    }
+
+    @Override
+    public final Stream<IView<T>> streamView()
+    {
+        return Stream.of();
+    }
+
+    @Override
+    public final IBeliefBase<T> clear()
+    {
+        return this;
+    }
 
     @Override
     public final IView<T> add( final IView<T> p_view )
     {
-        throw new CIllegalStateException(  );
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", p_view.name(), this ) );
     }
 
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
-        throw new CIllegalStateException(  );
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", p_view.name(), this ) );
     }
 
     @Override
@@ -134,4 +125,5 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     {
         return false;
     }
+
 }

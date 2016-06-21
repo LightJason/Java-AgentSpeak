@@ -153,7 +153,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
     }
 
     @Override
-    public final boolean isEmpty()
+    public final boolean empty()
     {
         return m_multielements.isEmpty() && m_singleelements.isEmpty();
     }

@@ -115,19 +115,19 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     }
 
     @Override
-    public final IView<T> getView( final String p_key )
+    public final IView<T> view( final String p_key )
     {
         return m_storage.getSingleElement( p_key );
     }
 
     @Override
-    public final IView<T> getViewOrDefault( final String p_key, final IView<T> p_default )
+    public final IView<T> viewOrDefault( final String p_key, final IView<T> p_default )
     {
         return m_storage.getSingleElementOrDefault( p_key, p_default );
     }
 
     @Override
-    public final Collection<ILiteral> getLiteral( final String p_key )
+    public final Collection<ILiteral> literal( final String p_key )
     {
         return m_storage.getMultiElement( p_key );
     }
@@ -160,9 +160,9 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     }
 
     @Override
-    public final boolean isEmpty()
+    public final boolean empty()
     {
-        return m_storage.isEmpty();
+        return m_storage.empty();
     }
 
     @Override
@@ -172,7 +172,7 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     }
 
     @Override
-    public final Stream<ITrigger> getTrigger( final IView<T> p_view )
+    public final Stream<ITrigger> trigger( final IView<T> p_view )
     {
         return Stream.concat(
             this.getAndClearTrigger( p_view ).parallel(),
