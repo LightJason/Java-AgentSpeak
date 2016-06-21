@@ -48,7 +48,7 @@ public class CCycleTime extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 0;
     }

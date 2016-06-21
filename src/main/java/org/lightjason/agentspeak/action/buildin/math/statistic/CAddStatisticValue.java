@@ -51,7 +51,7 @@ public final class CAddStatisticValue extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 2;
     }

@@ -37,13 +37,13 @@ public interface IAction extends IExecution
      *
      * @return path (literal functor)
      */
-    IPath getName();
+    IPath name();
 
     /**
      * minimum number of arguments
      *
      * @return number of minimal arguments
      */
-    int getMinimalArgumentNumber();
+    int minimalArgumentNumber();
 
 }

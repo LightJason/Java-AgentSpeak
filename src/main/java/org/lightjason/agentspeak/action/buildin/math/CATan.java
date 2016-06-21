@@ -42,7 +42,7 @@ public final class CATan extends IBuildinAction
 {
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }

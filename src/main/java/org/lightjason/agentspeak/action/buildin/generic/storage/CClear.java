@@ -68,7 +68,7 @@ public final class CClear extends IStorage
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 0;
     }

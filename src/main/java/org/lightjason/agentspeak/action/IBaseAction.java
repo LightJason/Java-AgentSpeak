@@ -39,13 +39,13 @@ public abstract class IBaseAction implements IAction
     @Override
     public final int hashCode()
     {
-        return this.getName().hashCode();
+        return this.name().hashCode();
     }
 
     @Override
     public final String toString()
     {
-        return this.getName().toString();
+        return this.name().toString();
     }
 
     @Override

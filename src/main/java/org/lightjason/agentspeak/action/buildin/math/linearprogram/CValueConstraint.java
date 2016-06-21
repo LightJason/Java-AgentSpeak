@@ -54,7 +54,7 @@ public final class CValueConstraint extends IConstraint
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 4;
     }

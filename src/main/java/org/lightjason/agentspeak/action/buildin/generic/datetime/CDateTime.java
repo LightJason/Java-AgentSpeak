@@ -42,7 +42,7 @@ import java.util.List;
 public final class CDateTime extends IBuildinAction
 {
     @Override
-    public int getMinimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }

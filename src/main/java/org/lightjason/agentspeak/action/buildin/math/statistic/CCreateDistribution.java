@@ -83,7 +83,7 @@ public final class CCreateDistribution extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }
@@ -94,7 +94,7 @@ public final class CCreateDistribution extends IBuildinAction
     )
     {
         final EDistribution l_distribution = EDistribution.valueOf( CCommon.<String, ITerm>raw( p_argument.get( 0 ) ).trim().toUpperCase() );
-        final int l_requiredarguments = this.getMinimalArgumentNumber() + l_distribution.getArgumentNumber();
+        final int l_requiredarguments = this.minimalArgumentNumber() + l_distribution.getArgumentNumber();
 
         if ( p_argument.size() < l_requiredarguments )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "distributionarguments" ) );

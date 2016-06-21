@@ -229,9 +229,9 @@ public final class CProxyAction implements IExecution
                 throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "actionunknown", p_literal ) );
 
             // check number of arguments and add action to the score cache
-            if ( p_literal.orderedvalues().count() < m_action.getMinimalArgumentNumber() )
+            if ( p_literal.orderedvalues().count() < m_action.minimalArgumentNumber() )
                 throw new CIllegalArgumentException(
-                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber", p_literal, m_action.getMinimalArgumentNumber() ) );
+                    org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber", p_literal, m_action.minimalArgumentNumber() ) );
 
             p_scorecache.add( m_action );
 
