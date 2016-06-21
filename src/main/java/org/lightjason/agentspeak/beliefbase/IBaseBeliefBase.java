@@ -105,6 +105,12 @@ public abstract class IBaseBeliefBase<T extends IAgent<?>> implements IBeliefBas
         return p_agent;
     }
 
+    @Override
+    public final Stream<ITrigger> trigger( final IView<T> p_view )
+    {
+        return this.getAndClearTrigger( p_view ).parallel();
+    }
+
     /**
      * adds a view to the event referencing structure
      *
