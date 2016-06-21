@@ -28,9 +28,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.beliefbase.CBeliefBase;
-import org.lightjason.agentspeak.beliefbase.IView;
-import org.lightjason.agentspeak.beliefbase.IViewGenerator;
+import org.lightjason.agentspeak.beliefbase.CBeliefBasePersistent;
+import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -239,7 +239,7 @@ public final class TestCMetric
         @Override
         public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
         {
-            return new CBeliefBase<>( new CMultiStorage<>() ).create( p_name, p_parent );
+            return new CBeliefBasePersistent<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 

@@ -21,10 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.beliefbase;
+package org.lightjason.agentspeak.beliefbase.view;
 
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.IBeliefBase;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;

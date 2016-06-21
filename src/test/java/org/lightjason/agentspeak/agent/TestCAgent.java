@@ -29,7 +29,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
+import org.lightjason.agentspeak.beliefbase.storage.IBeliefPerceive;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;

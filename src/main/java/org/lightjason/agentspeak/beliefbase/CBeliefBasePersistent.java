@@ -24,57 +24,35 @@
 package org.lightjason.agentspeak.beliefbase;
 
 
-import com.google.common.collect.Sets;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.storage.IStorage;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
-import java.lang.ref.PhantomReference;
-import java.lang.ref.Reference;
-import java.lang.ref.ReferenceQueue;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
  * beliefbase, reference counting is used to collect the events for each beliefbase view
- *
- * @todo check reference counting on delete views
- * @tparam T agent type
- * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
- * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
- * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
-public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
+public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBeliefBase<T>
 {
     /**
      * storage with data
      */
-    protected final IStorage<ILiteral, IView<T>, T> m_storage;
-    /**
-     * weak reference queue of all masks to avoid memory-leaks of belief events
-     */
-    protected final ReferenceQueue<IView<T>> m_maskreference = new ReferenceQueue<>();
-    /**
-     * map with events for a mask
-     */
-    protected final Map<IView<T>, Set<ITrigger>> m_events = new ConcurrentHashMap<>();
+    private final IStorage<ILiteral, IView<T>, T> m_storage;
 
     /**
      * ctor
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IStorage<ILiteral, IView<T>, T> p_storage )
+    public CBeliefBasePersistent( final IStorage<ILiteral, IView<T>, T> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
@@ -96,10 +74,8 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final ILiteral add( final ILiteral p_literal )
     {
-        // create add-event for the literal
         if ( m_storage.putMultiElement( p_literal.functor(), p_literal ) )
-            m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
-
+            super.add( p_literal );
         return p_literal;
     }
 
@@ -113,7 +89,7 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
-        m_events.remove( p_view );
+        m_events.asMap().remove( p_view );
         m_storage.removeSingleElement( p_view.name() );
         return p_view;
     }
@@ -121,10 +97,8 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final ILiteral remove( final ILiteral p_literal )
     {
-        // create delete-event for the literal
         if ( m_storage.removeMultiElement( p_literal.functor(), p_literal ) )
-            m_events.values().forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
-
+            super.remove( p_literal );
         return p_literal;
     }
 
@@ -161,30 +135,9 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final T update( final T p_agent )
     {
-        // check all references of mask and remove unused references
-        Reference<? extends IView<T>> l_reference;
-        while ( ( l_reference = m_maskreference.poll() ) != null )
-        {
-            final IView<T> l_view = l_reference.get();
-            if ( l_view != null )
-                m_events.remove( l_view );
-        }
-
-        // run storage update
+        super.update( p_agent );
         m_storage.streamSingleElements().parallel().forEach( i -> i.update( p_agent ) );
         return m_storage.update( p_agent );
-    }
-
-    @Override
-    public final IView<T> create( final String p_name )
-    {
-        return this.addEventReference( new CView<>( p_name, this ) );
-    }
-
-    @Override
-    public final IView<T> create( final String p_name, final IView<T> p_parent )
-    {
-        return this.addEventReference( new CView<>( p_name, this, p_parent ) );
     }
 
     @Override
@@ -195,9 +148,9 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
             .streamMultiElements()
             .parallel()
             .forEach(
-                j -> m_events
-                    .values()
-                    .forEach( i -> i.add( CTrigger.from( ITrigger.EType.DELETEBELIEF, j ) ) )
+                i -> m_events
+                    .keySet()
+                    .forEach( j -> m_events.put( j, CTrigger.from( ITrigger.EType.DELETEBELIEF, i ) ) )
             );
 
         m_storage.streamSingleElements().parallel().forEach( i -> i.clear() );
@@ -221,21 +174,10 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
     @Override
     public final Stream<ITrigger> getTrigger( final IView<T> p_view )
     {
-        // get data or return an empty set
-        final Set<ITrigger> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger>emptySet() );
-
-        // create copy of all trigger and recursive elements
-        final Set<ITrigger> l_copy = Collections.unmodifiableSet(
-            Stream.concat(
-                l_trigger.parallelStream(),
-                m_storage.streamSingleElements().parallel().flatMap( IView::trigger )
-            )
-                  .collect( Collectors.toSet() )
+        return Stream.concat(
+            this.getAndClearTrigger( p_view ).parallel(),
+            m_storage.streamSingleElements().parallel().flatMap( IView::trigger )
         );
-
-        // clear all trigger elements if no trigger exists return an empty set
-        l_trigger.clear();
-        return l_copy.stream();
     }
 
     @Override
@@ -256,17 +198,6 @@ public final class CBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
         return m_storage.toString();
     }
 
-    /**
-     * adds a view to the event referencing structure
-     *
-     * @param p_view view
-     * @return input view
-     */
-    private IView<T> addEventReference( final IView<T> p_view )
-    {
-        new PhantomReference<>( p_view, m_maskreference );
-        m_events.putIfAbsent( p_view, Sets.newConcurrentHashSet() );
-        return p_view;
-    }
+
 
 }

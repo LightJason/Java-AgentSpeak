@@ -21,10 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.beliefbase;
+package org.lightjason.agentspeak.beliefbase.view;
 
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.IBeliefBase;
+import org.lightjason.agentspeak.beliefbase.IStructure;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
