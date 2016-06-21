@@ -169,13 +169,14 @@ public final class TestCLanguageLabels
             Files.walk( Paths.get( SEARCHPATH ) )
                  .filter( Files::isRegularFile )
                  .filter( i -> i.toString().endsWith( ".java" ) )
-                 .flatMap( i -> {
+                 .flatMap( i ->
+                 {
                      try
                      {
                          final CJavaVistor l_parser = new CJavaVistor();
                          l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
                          return l_parser.labels().stream();
-                 }
+                     }
                      catch ( final IOException l_excpetion )
                      {
                          assertTrue( MessageFormat.format( "io error on file [{0}]: {1}", i, l_excpetion.getMessage() ), false );
