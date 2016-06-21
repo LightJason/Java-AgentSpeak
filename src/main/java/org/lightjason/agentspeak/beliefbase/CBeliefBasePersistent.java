@@ -175,7 +175,7 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     public final Stream<ITrigger> trigger( final IView<T> p_view )
     {
         return Stream.concat(
-            this.getAndClearTrigger( p_view ).parallel(),
+            super.trigger( p_view ).parallel(),
             m_storage.streamSingleElements().parallel().flatMap( IView::trigger )
         );
     }
