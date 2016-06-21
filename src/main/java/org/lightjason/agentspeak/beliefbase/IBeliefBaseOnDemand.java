@@ -62,13 +62,13 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     @Override
     public ILiteral add( final ILiteral p_literal )
     {
-        return p_literal;
+        return super.add( p_literal );
     }
 
     @Override
     public ILiteral remove( final ILiteral p_literal )
     {
-        return null;
+        return super.remove( p_literal );
     }
 
     @Override
