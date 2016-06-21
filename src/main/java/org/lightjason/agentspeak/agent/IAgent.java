@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.agent;
 import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
-import org.lightjason.agentspeak.beliefbase.IView;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;

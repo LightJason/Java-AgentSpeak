@@ -78,7 +78,7 @@ public final class TestCLanguageLabels
 
     static
     {
-        final String l_resource = "../../src/main/resources";
+        final String l_resource = "../../src/main/resources/";
         URI l_uri = null;
         try
         {
@@ -169,12 +169,13 @@ public final class TestCLanguageLabels
             Files.walk( Paths.get( SEARCHPATH ) )
                  .filter( Files::isRegularFile )
                  .filter( i -> i.toString().endsWith( ".java" ) )
-                 .flatMap( i -> {
+                 .flatMap( i ->
+                 {
                      try
                      {
                          final CJavaVistor l_parser = new CJavaVistor();
                          l_parser.visit( JavaParser.parse( new FileInputStream( i.toFile() ) ), null );
-                         return l_parser.getLabel().stream();
+                         return l_parser.labels().stream();
                      }
                      catch ( final IOException l_excpetion )
                      {
@@ -214,6 +215,9 @@ public final class TestCLanguageLabels
                  .collect( Collectors.toSet() )
         );
 
+        // --- check of any label is found
+        assertFalse( "translation labels are empty, check naming of translation method", l_label.isEmpty() );
+
         // --- check label towards the property definition
         if ( l_ignoredlabel.size() > 0 )
             System.err.println( MessageFormat.format( "labels that starts with {0} are ignored, because parsing errors are occurred", l_ignoredlabel ) );
@@ -226,7 +230,7 @@ public final class TestCLanguageLabels
                                l_property.load( new FileInputStream( new File( i.getValue() ) ) );
 
                                final Set<String> l_parseditems = new HashSet<>( l_label );
-                               final Set<String> l_propertyitems = l_property.keySet().parallelStream().map( j -> j.toString() ).collect( Collectors.toSet() );
+                               final Set<String> l_propertyitems = l_property.keySet().parallelStream().map( Object::toString ).collect( Collectors.toSet() );
 
                                // --- check if all property items are within the parsed labels
                                l_parseditems.removeAll( l_propertyitems );
@@ -245,7 +249,7 @@ public final class TestCLanguageLabels
                                l_propertyitems.removeAll( l_label );
                                final Set<String> l_ignoredpropertyitems = l_propertyitems.parallelStream()
                                                                                          .filter( j -> l_ignoredlabel.parallelStream()
-                                                                                                                     .map( l -> j.startsWith( l ) )
+                                                                                                                     .map( j::startsWith )
                                                                                                                      .allMatch( l -> false )
                                                                                          )
                                                                                          .collect( Collectors.toSet() );
@@ -285,7 +289,7 @@ public final class TestCLanguageLabels
      * @param p_names list of package parts
      * @return full-qualified string
      */
-    private static String getPackagePath( final String... p_names )
+    private static String packagepath( final String... p_names )
     {
         return StringUtils.join( p_names, ClassUtils.PACKAGE_SEPARATOR );
     }
@@ -301,11 +305,11 @@ public final class TestCLanguageLabels
         /**
          * method to translate strings
          */
-        private static final String TRANSLATEMETHOD = "CCommon.getLanguageString";
+        private static final String TRANSLATEMETHODNAME = "CCommon.languagestring";
         /**
          * reg expression to extract label data
          */
-        private static final Pattern LANGUAGE = Pattern.compile( TRANSLATEMETHOD + ".+\\)" );
+        private static final Pattern LANGUAGEMETHODPATTERN = Pattern.compile( TRANSLATEMETHODNAME + ".+\\)" );
         /**
          * inner class name *
          */
@@ -328,7 +332,7 @@ public final class TestCLanguageLabels
          *
          * @return set with labels
          */
-        public final Set<String> getLabel()
+        final Set<String> labels()
         {
             return m_label;
         }
@@ -369,11 +373,39 @@ public final class TestCLanguageLabels
         @Override
         public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
         {
-            final String l_label = this.getLabel( p_methodcall.toStringWithoutComments() );
+            final String l_label = this.label( p_methodcall.toStringWithoutComments() );
             if ( !l_label.isEmpty() )
                 m_label.add( l_label );
 
             super.visit( p_methodcall, p_arg );
+        }
+
+        /**
+         * gets the class name and label name
+         *
+         * @param p_line input trimmed line
+         * @return label or empty string
+         */
+        private String label( final String p_line )
+        {
+            final Matcher l_matcher = LANGUAGEMETHODPATTERN.matcher( p_line );
+            if ( !l_matcher.find() )
+                return "";
+
+            final String[] l_split = l_matcher.group( 0 ).split( "," );
+            final String[] l_return = new String[2];
+
+            // class name
+            l_return[0] = l_split[0].replace( TRANSLATEMETHODNAME, "" ).replace( "(", "" ).trim();
+            // label name
+            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
+
+            return (
+                "this".equals( l_return[0] )
+                ? buildlabel( m_package, m_outerclass, m_innerclass, l_return[1] )
+                : buildlabel( m_package, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
+            ).trim().toLowerCase().replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" );
+
         }
 
         /**
@@ -398,34 +430,6 @@ public final class TestCLanguageLabels
                 ? ""
                 : CLASSSEPARATOR + p_label
             );
-        }
-
-        /**
-         * gets the class name and label name
-         *
-         * @param p_line input timmed line
-         * @return label or empty string
-         */
-        private String getLabel( final String p_line )
-        {
-            final Matcher l_matcher = LANGUAGE.matcher( p_line );
-            if ( !l_matcher.find() )
-                return "";
-
-            final String[] l_split = l_matcher.group( 0 ).split( "," );
-            final String[] l_return = new String[2];
-
-            // class name
-            l_return[0] = l_split[0].replace( TRANSLATEMETHOD, "" ).replace( "(", "" ).trim();
-            // label name
-            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
-
-            return (
-                "this".equals( l_return[0] )
-                ? buildlabel( m_package, m_outerclass, m_innerclass, l_return[1] )
-                : buildlabel( m_package, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
-            ).trim().toLowerCase().replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" );
-
         }
 
     }

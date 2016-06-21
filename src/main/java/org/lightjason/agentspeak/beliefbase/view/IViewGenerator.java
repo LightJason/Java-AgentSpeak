@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.beliefbase;
+package org.lightjason.agentspeak.beliefbase.view;
 
 import org.lightjason.agentspeak.agent.IAgent;
 

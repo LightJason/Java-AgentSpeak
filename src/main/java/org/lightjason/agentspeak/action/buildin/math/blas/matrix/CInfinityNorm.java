@@ -50,7 +50,7 @@ public final class CInfinityNorm extends IAlgebra
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }

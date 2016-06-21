@@ -80,13 +80,13 @@ public final class CMethodAction extends IBaseAction
 
 
     @Override
-    public final IPath getName()
+    public final IPath name()
     {
         return m_name;
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return m_arguments;
     }

@@ -47,7 +47,7 @@ public final class CSet extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 3;
     }

@@ -40,7 +40,7 @@ import java.util.List;
 public final class CSolve extends IAlgebra
 {
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 2;
     }

@@ -29,7 +29,7 @@ import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
-import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
+import org.lightjason.agentspeak.beliefbase.storage.IBeliefPerceive;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.grammar.CParserAgent;

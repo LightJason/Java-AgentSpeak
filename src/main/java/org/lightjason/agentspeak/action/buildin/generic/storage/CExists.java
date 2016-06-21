@@ -70,7 +70,7 @@ public final class CExists extends IStorage
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }

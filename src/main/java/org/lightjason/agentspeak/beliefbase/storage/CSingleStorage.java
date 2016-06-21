@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.beliefbase.storage;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -154,7 +153,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
     }
 
     @Override
-    public final boolean isEmpty()
+    public final boolean empty()
     {
         return m_multielements.isEmpty() && m_singleelements.isEmpty();
     }

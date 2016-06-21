@@ -50,7 +50,7 @@ public final class CInCircle extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 5;
     }

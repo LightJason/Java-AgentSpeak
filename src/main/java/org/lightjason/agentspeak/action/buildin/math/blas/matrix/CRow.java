@@ -52,7 +52,7 @@ public final class CRow extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 2;
     }

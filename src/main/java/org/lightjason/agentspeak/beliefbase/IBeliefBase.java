@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
@@ -46,7 +47,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_view mask for events
      * @return set with trigger events
      */
-    Stream<ITrigger> getTrigger( final IView<T> p_view );
+    Stream<ITrigger> trigger( final IView<T> p_view );
 
 
 
@@ -135,7 +136,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the view
      * @return view or null
      */
-    IView<T> getView( final String p_key );
+    IView<T> view( final String p_key );
 
     /**
      * returns a literal by the name
@@ -143,7 +144,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the literal
      * @return collection of pairs with negated and literal
      */
-    Collection<ILiteral> getLiteral( final String p_key );
+    Collection<ILiteral> literal( final String p_key );
 
     /**
      * returns a view element
@@ -151,7 +152,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the view
      * @return view or default element
      */
-    IView<T> getViewOrDefault( final String p_key, final IView<T> p_default );
+    IView<T> viewOrDefault( final String p_key, final IView<T> p_default );
 
 
 

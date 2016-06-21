@@ -72,7 +72,7 @@ public abstract class IBuildinAction extends IBaseAction
 
 
     @Override
-    public final IPath getName()
+    public final IPath name()
     {
         return m_name;
     }

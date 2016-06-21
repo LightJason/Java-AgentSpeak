@@ -56,7 +56,7 @@ public final class CEquationConstraint extends IConstraint
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 6;
     }

@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
-import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
-import org.lightjason.agentspeak.beliefbase.IView;
+import org.lightjason.agentspeak.beliefbase.storage.IBeliefPerceive;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;

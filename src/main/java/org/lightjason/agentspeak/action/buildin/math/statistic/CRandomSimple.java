@@ -55,7 +55,7 @@ public final class CRandomSimple extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 0;
     }

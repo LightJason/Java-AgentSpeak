@@ -49,7 +49,7 @@ public final class CSubList extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 3;
     }

@@ -51,7 +51,7 @@ public final class CClearStatistic extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }

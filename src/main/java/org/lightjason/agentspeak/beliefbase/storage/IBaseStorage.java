@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.beliefbase.storage;
 
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 
 import java.util.Collections;
 import java.util.Set;

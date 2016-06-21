@@ -50,7 +50,7 @@ public final class CMultiply extends IAlgebra
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 2;
     }

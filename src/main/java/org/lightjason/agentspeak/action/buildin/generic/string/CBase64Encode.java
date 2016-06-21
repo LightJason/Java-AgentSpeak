@@ -54,7 +54,7 @@ public final class CBase64Encode extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }

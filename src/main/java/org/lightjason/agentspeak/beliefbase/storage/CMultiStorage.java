@@ -28,7 +28,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.beliefbase.IBeliefPerceive;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -156,7 +155,7 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
     }
 
     @Override
-    public final boolean isEmpty()
+    public final boolean empty()
     {
         return m_multielements.isEmpty() && m_singleelements.isEmpty();
     }

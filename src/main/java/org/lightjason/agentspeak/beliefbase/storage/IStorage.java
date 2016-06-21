@@ -149,7 +149,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      *
      * @return empty boolean
      */
-    boolean isEmpty();
+    boolean empty();
 
     /**
      * updates all items

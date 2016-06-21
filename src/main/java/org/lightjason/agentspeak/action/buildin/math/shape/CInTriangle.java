@@ -53,7 +53,7 @@ public final class CInTriangle extends IBuildinAction
     }
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 8;
     }

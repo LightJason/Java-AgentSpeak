@@ -159,7 +159,12 @@ public final class CCommon
                                             return null;
                                         }
                                     } )
-                                    .filter( i -> i != null );
+
+                                    // action can be instantiate
+                                    .filter( i -> i != null )
+
+                                    // check usable action name
+                                    .filter( CCommon::actionusable );
                 }
                 catch ( final IOException l_exception )
                 {
@@ -196,8 +201,49 @@ public final class CCommon
                                return null;
                            }
                        } )
-                       .filter( i -> i != null );
+
+                       // action can be instantiate
+                       .filter( i -> i != null )
+
+                       // check usable action name
+                       .filter( CCommon::actionusable );
     }
+
+    /**
+     * checks if an action is usable
+     *
+     * @param p_action action object
+     * @return boolean usable flag
+     */
+    private static boolean actionusable( final IAction p_action )
+    {
+        if ( ( p_action.name() == null ) || ( p_action.name().isEmpty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
+        {
+            LOGGER.warning( CCommon.languagestring( CCommon.class, "actionnameempty" ) );
+            return false;
+        }
+
+        if ( !Character.isLetter( p_action.name().get( 0 ).charAt( 0 ) ) )
+        {
+            LOGGER.warning( CCommon.languagestring( CCommon.class, "actionletter", p_action ) );
+            return false;
+        }
+
+        if ( !Character.isLowerCase( p_action.name().get( 0 ).charAt( 0 ) ) )
+        {
+            LOGGER.warning( CCommon.languagestring( CCommon.class, "actionlowercase", p_action ) );
+            return false;
+        }
+
+        if ( p_action.minimalArgumentNumber() < 0 )
+        {
+            LOGGER.warning( CCommon.languagestring( CCommon.class, "actionargumentsnumber", p_action ) );
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * reads all methods by the action-annotations

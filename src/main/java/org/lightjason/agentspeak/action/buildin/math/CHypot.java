@@ -41,7 +41,7 @@ public final class CHypot extends IBuildinAction
 {
 
     @Override
-    public final int getMinimalArgumentNumber()
+    public final int minimalArgumentNumber()
     {
         return 2;
     }

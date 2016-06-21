@@ -40,7 +40,7 @@ public interface IStructure<T extends IAgent<?>>
      *
      * @return empty boolean
      */
-    boolean isEmpty();
+    boolean empty();
 
     /**
      * returns the size of literals

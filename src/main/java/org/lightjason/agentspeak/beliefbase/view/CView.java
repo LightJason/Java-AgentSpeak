@@ -21,10 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.beliefbase;
+package org.lightjason.agentspeak.beliefbase.view;
 
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.beliefbase.IBeliefBase;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -100,7 +101,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         // remove the root element (position 0), because the root element
         // is not used on the agent (asl) side
         final IPath l_path = this.path().remove( 0 );
-        return m_beliefbase.getTrigger( this ).map( i -> i.shallowcopy( l_path ) );
+        return m_beliefbase.trigger( this ).map( i -> i.shallowcopy( l_path ) );
     }
 
     @Override
@@ -230,7 +231,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                Arrays.stream( p_path )
                      .parallel()
                      .map( IPath::normalize )
-                     .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().getLiteral( i.getSuffix() )
+                     .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.shallowcopy( l_path ) ) );
     }
@@ -252,7 +253,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                : Arrays.stream( p_path )
                     .parallel()
                     .map( IPath::normalize )
-                    .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().getLiteral( i.getSuffix() )
+                    .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() )
                                        .parallelStream()
                                        .filter( j -> j.negated() == p_negated )
                                        .map( j -> j.shallowcopy( l_path ) ) );
@@ -293,7 +294,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         {
             // add is run here for avoid overwriting view with a new object reference
             l_view = m_beliefbase.add(
-                        m_beliefbase.getViewOrDefault(
+                        m_beliefbase.viewOrDefault(
                             l_root,
 
                             p_generator == null || p_generator.length == 0
@@ -337,9 +338,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final boolean isEmpty()
+    public final boolean empty()
     {
-        return m_beliefbase.isEmpty();
+        return m_beliefbase.empty();
     }
 
     @Override
