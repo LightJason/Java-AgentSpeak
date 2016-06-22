@@ -169,8 +169,7 @@ public abstract class IBaseBeliefBase<T extends IAgent<?>> implements IBeliefBas
         {
             final Set<ITrigger> l_set = m_events.getOrDefault( p_key, Sets.newConcurrentHashSet() );
             l_set.add( p_value );
-            this.putIfAbsent( p_key, l_set );
-            return l_set;
+            return this.putIfAbsent( p_key, l_set );
         }
     }
 
