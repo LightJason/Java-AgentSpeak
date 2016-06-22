@@ -89,7 +89,7 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
-        m_events.asMap().remove( p_view );
+        m_events.remove( p_view );
         m_storage.removeSingleElement( p_view.name() );
         return p_view;
     }
