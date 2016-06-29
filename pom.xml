@@ -1,3 +1,25 @@
+<!--
+
+    ######################################################################################
+    # LGPL License                                                                       #
+    #                                                                                    #
+    # This file is part of the LightJason AgentSpeak(L)                                  #
+    # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+    # This program is free software: you can redistribute it and/or modify               #
+    # it under the terms of the GNU Lesser General Public License as                     #
+    # published by the Free Software Foundation, either version 3 of the                 #
+    # License, or (at your option) any later version.                                    #
+    #                                                                                    #
+    # This program is distributed in the hope that it will be useful,                    #
+    # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+    # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+    # GNU Lesser General Public License for more details.                                #
+    #                                                                                    #
+    # You should have received a copy of the GNU Lesser General Public License           #
+    # along with this program. If not, see http://www.gnu.org/licenses/                  #
+    ######################################################################################
+
+-->
 <project xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -108,7 +130,7 @@
         <dependency>
             <groupId>com.codepoetics</groupId>
             <artifactId>protonpack</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
             <scope>compile</scope>
         </dependency>
 
@@ -301,19 +323,24 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>3.0.rc1</version>
                 <configuration>
-                    <header>src/analysis/checkstyle/header.txt</header>
+                    <header>src/analysis/license/licensetemplate.txt</header>
                     <useDefaultExcludes>true</useDefaultExcludes>
+                    <headerDefinitions>
+                        <headerDefinition>src/analysis/license/style.xml</headerDefinition>
+                    </headerDefinitions>
                     <excludes>
-                        <exclude>**/*.asl</exclude>
-                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.tokens</exclude>
+                        <exclude>**/*.txt</exclude>
                         <exclude>**/*.yml</exclude>
                         <exclude>**/*.md</exclude>
                         <exclude>**/*.htm</exclude>
-                        <exclude>**/*.css</exclude>
                         <exclude>**/*.doxyfile</exclude>
-                        <exclude>**/*.properties</exclude>
                         <exclude>target/**</exclude>
                     </excludes>
+                    <mapping>
+                        <g4>javadoc_style</g4>
+                        <asl>javadoc_style</asl>
+                    </mapping>
                 </configuration>
             </plugin>
 

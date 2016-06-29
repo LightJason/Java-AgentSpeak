@@ -1,4 +1,4 @@
-/**
+/*
  * @cond LICENSE
  * ######################################################################################
  * # LGPL License                                                                       #
@@ -22,7 +22,6 @@
  */
 
 package org.lightjason.agentspeak;
-
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;

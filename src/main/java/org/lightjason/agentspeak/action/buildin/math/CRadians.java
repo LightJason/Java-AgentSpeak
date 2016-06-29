@@ -1,10 +1,10 @@
-/**
+/*
  * @cond LICENSE
  * ######################################################################################
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L)                                  #
- * # Copyright (c) 2015-16, Philipp Kraus (philipp@lightjason.org)                      #
+ * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for exponential value
+ * action for radiant value
  */
 public final class CRadians extends IBuildinAction
 {
@@ -56,8 +56,8 @@ public final class CRadians extends IBuildinAction
             CCommon.flatList( p_argument ).stream()
                    .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
                    .boxed()
-                   .map( i -> Math.exp( i ) )
-                   .map( i -> CRawTerm.from( i ) )
+                   .map( Math::toRadians )
+                   .map( CRawTerm::from )
                    .collect( Collectors.toList() )
         );
         return CFuzzyValue.from( true );

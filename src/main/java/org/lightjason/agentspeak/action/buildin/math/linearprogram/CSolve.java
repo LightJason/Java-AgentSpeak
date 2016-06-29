@@ -1,10 +1,10 @@
-/**
+/*
  * @cond LICENSE
  * ######################################################################################
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L)                                  #
- * # Copyright (c) 2015-16, Philipp Kraus (philipp@lightjason.org)                      #
+ * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -114,7 +114,7 @@ public final class CSolve extends IBuildinAction
         p_return.add( CRawTerm.from( l_result.getValue() ) );
         p_return.add( CRawTerm.from( l_result.getPoint().length ) );
         p_return.addAll(
-            Arrays.stream( l_result.getPoint() ).boxed().map( i -> CRawTerm.from( i ) ).collect( Collectors.toList() )
+            Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::from ).collect( Collectors.toList() )
         );
 
         return CFuzzyValue.from( true );

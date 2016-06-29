@@ -1,10 +1,10 @@
-/**
+/*
  * @cond LICENSE
  * ######################################################################################
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L)                                  #
- * # Copyright (c) 2015-16, Philipp Kraus (philipp@lightjason.org)                      #
+ * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -100,9 +100,9 @@ public final class CParse extends IBuildinAction
         final double[][] l_return = new double[l_rows.length][
             Arrays.stream( l_rows )
                   .map( i -> Arrays.stream( i.trim().split( ",|\\s" ) )
-                                   .map( j -> j.trim() )
+                                   .map( String::trim )
                                    .filter( j -> !j.isEmpty() )
-                                   .mapToDouble( j -> Double.parseDouble( j ) )
+                                   .mapToDouble( Double::parseDouble )
                                    .boxed()
                                    .collect( Collectors.toList() )
                   )

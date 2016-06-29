@@ -1,10 +1,10 @@
-/**
+/*
  * @cond LICENSE
  * ######################################################################################
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L)                                  #
- * # Copyright (c) 2015-16, Philipp Kraus (philipp@lightjason.org)                      #
+ * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -62,8 +62,8 @@ public final class CInCircle extends IBuildinAction
     {
         // arguments are: x-value, y-value, circle center x-value, circle center y-value, circle radius
         final List<Double> l_point = p_argument.stream()
-                                               .map( i -> CCommon.<Number, ITerm>raw( i ) )
-                                               .mapToDouble( i -> i.doubleValue() )
+                                               .map( CCommon::<Number, ITerm>raw )
+                                               .mapToDouble( Number::doubleValue )
                                                .boxed()
                                                .collect( Collectors.toList() );
 
