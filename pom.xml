@@ -295,6 +295,29 @@
                 </executions>
             </plugin>
 
+            <!-- License -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0.rc1</version>
+                <configuration>
+                    <header>src/analysis/checkstyle/header.txt</header>
+                    <useDefaultExcludes>true</useDefaultExcludes>
+                    <excludes>
+                        <exclude>**/*.asl</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.yml</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>**/*.htm</exclude>
+                        <exclude>**/*.css</exclude>
+                        <exclude>**/*.doxyfile</exclude>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>target/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+
             <!-- AntLR grammar build -->
             <plugin>
                 <groupId>org.antlr</groupId>
