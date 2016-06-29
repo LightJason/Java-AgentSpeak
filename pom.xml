@@ -15,7 +15,7 @@
 
     <organization>
         <name>LightJason</name>
-        <url>http://github.com/LightJason</url>
+        <url>http://lightjason.org</url>
     </organization>
 
     <licenses>
@@ -38,16 +38,27 @@
 
     <developers>
         <developer>
-            <id>pkr</id>
+            <id>flashpixx</id>
             <name>Philipp Kraus</name>
-            <email>philipp.kraus@tu-clausthal.de</email>
+            <email>philipp@lightjason.org</email>
+            <timezone>Europe/Berlin</timezone>
             <roles>
                 <role>architect</role>
                 <role>developer</role>
             </roles>
-            <timezone>Europe/Berlin</timezone>
         </developer>
     </developers>
+
+    <contributors>
+        <contributor>
+            <name>Malte Aschermann</name>
+            <email>malte@lightjason.org</email>
+            <timezone>Europe/Berlin</timezone>
+            <roles>
+                <role>tester</role>
+            </roles>
+        </contributor>
+    </contributors>
 
 
     <!-- project build configuration -->
@@ -154,7 +165,13 @@
     <reporting>
 
         <plugins>
-
+            <!--
+            <plugin>
+                <groupId>de.flashpixx</groupId>
+                <artifactId>rrd-antlr4</artifactId>
+                <version>0.1.0</version>
+            </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
