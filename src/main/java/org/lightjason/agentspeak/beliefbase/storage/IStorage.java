@@ -126,6 +126,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * returns a single-element by the name
      *
      * @param p_key key
+     * @param p_default default element
      * @return single-element or the default element
      */
     M getSingleElementOrDefault( final String p_key, final M p_default );

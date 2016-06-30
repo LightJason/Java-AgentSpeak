@@ -150,6 +150,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      * returns a view element
      *
      * @param p_key name of the view
+     * @param p_default view
      * @return view or default element
      */
     IView<T> viewOrDefault( final String p_key, final IView<T> p_default );
