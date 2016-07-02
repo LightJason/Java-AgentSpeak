@@ -24,7 +24,7 @@
     <body>
         <links>
             <item name="OpenHub" href="https://www.openhub.net/p/LightJason-AgentSpeak"/>
-            <item name="Source" href="https://github.com/LightJason/AgentSpeak" />
+            <item name="Source Repository" href="https://github.com/LightJason/AgentSpeak" />
             <item name="Source Documentation" href="sources/index.html"/>
         </links>
         <menu ref="modules" />
