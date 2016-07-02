@@ -26,6 +26,7 @@
             <item name="Source Documentation" href="sources/index.html"/>
             <item name="Repository" href="http://github.com/LightJason/AgentSpeak" />
             <item name="OpenHub" href="http://www.openhub.net/p/LightJason-AgentSpeak"/>
+            <item name="LightJason" href="http://lightjason.org"/>
         </links>
         <menu ref="modules" />
         <menu ref="reports"/>
