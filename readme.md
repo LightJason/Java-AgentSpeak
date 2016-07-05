@@ -153,18 +153,14 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 ![Structure](bdi.png)
 
 
-
-## Coding
-
-### Agent
+## Coding - Agent
 
 * Agent (ASL) can be defined as a logic program with [beliefs](#belief), [rules](#rule) and [plans](#plan)
 * Agents must be run (triggered) by an external runtime e.g. from an outside system component
 * [Plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
-## Running Semantics
 
-### <a name="cycle">Agent-Cycle</a>
+## <a name="cycle">Running Semantics - Agent-Cycle</a>
 
 Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
@@ -194,6 +190,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
     5. if a plan is finished check plan result, if it is false / fail create a ```-!goal``` event 
 
 4. increment cycle value
+
 
 ## <a name="devaction">Developing Buildin Actions & Components</a>
 
