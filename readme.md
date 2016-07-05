@@ -69,7 +69,6 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 #### <a name="fuzzy">Fuzziness</a>
 
 * Fuzzy value must be in [0,1]
-* Each plan can use the annotation _fuzzy_ to create a fuzzy-plan, if not value is given, the value is set to 1 (exact)
 * Each [action](#action) in a fuzzy-plan returns also a fuzzy value to define the fuzziness
 * The [plan](#plan) or [rule](#rule) result returns true / false and the aggregated fuzzy value
 
@@ -83,7 +82,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 * Rules run sequentially on default
 * Rules returns a boolean value which defines fail (false) and success (true)
 * All items results will be concatinate with a logical _and_ to calculate the plan result value
-* [Variables](#variable) will be unified
+* [Variables](#variable) will be passed, so if a rules succeed the value of the variable will be passed back to the calling plan
 
 
 ### <a name="annotation">Rule / Plan Annotation</a>
@@ -97,9 +96,9 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 ### <a name="goal">Goals</a>
 
 * Semantically a goal marks a certain state of the world an agent _wishes to bring about_ [AgentSpeak, p.40]
-* New/Removed goals, i.e. _achievement goals_ trigger an _achievement goal addition_ which leads to the execution of a corresponding [plan](#plan)
+* _Achievement goals_ triggers an _achievement goal addition_ which leads to the execution of a corresponding [plan](#plan)
 * On agent start, there can exists one _initial goal_ only (like the ```main``` function in Java, C/C++)
-* Each agent can track _more than one goal_ otherwise the agent idles (the suspending state is not used)
+* Each agent can track _more than one goal_ at the same time otherwise the agent idles (the suspending state is not used)
 * Goals are triggered by external events which will match by the goal name
 * Goals will be resolved into [plans](#plan) with equal name (and allowed context), the [plan](#plan) is the intantiiation of the goal
 * Goals are run in parallel independed from other goals
@@ -111,7 +110,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 #### <a name="testgoal">Test Goals</a>
 
 * A test goal is an atom with the definition ```?literal``` 
-* The test return true iif a plan with an equal literal is within the current execution (current running)
+* The test return true iif a plan with an equal literal is within the current execution context (current running)
 
 
 ### <a name="intention">Intentions</a>
@@ -133,11 +132,11 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 
 * Variables are written with an upper-case letter at begin
 * Thread-safe variables for parallel runtime start with ```@``` (at-sign) followed by an upper-case letter
-* Variables can store a literal or string to call a [rule](#rule) or [plan](#plan) e.g. !X(3,2) calls a pan or !$X(2,1) calls a rule
+* Variables can store a literal or string to call a [rule](#rule) or [plan](#plan) e.g. ```!X(3,2)``` calls a plan or ```$X(2,1)``` calls a rule
 
 ### <a name="at-annotation">Action / Term Annotation</a>
 
-* In LightJason one can specify HOW actions and terms will be executed/unified.
+* In LightJason one can specify HOW actions and terms will be executed / unified.
 * Concept of ```action-term-annotation```s allows to annotate ```actions```, and ```terms``` to perform
     * unification (```>>```)
     * parallel execution (```@```), see [Variables](#variable) and _lambda expressions_.
@@ -147,17 +146,6 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 * Examples
     * ```@>>( foo(X), X > 1 ) && Score > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Score > 0.5```)
     * ```>>foo(X) && X > 1 && Score > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
-
-
-### <a name="buldinaction">Build-in Actions</a>
-
-#### Date / Time
-
-* datedifference / timedifference
-
-#### Cryptographic
-
-* signature algorithm
 
 
 ## <a name="graphic">Graphical Representation</a> 
@@ -174,26 +162,16 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 * Agents must be run (triggered) by an external runtime e.g. from an outside system component
 * [Plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
 
-### Coding Constructs Different from Jason
-
-* Head-Tail-Recursion supports arbitrary amount of heads, e.g. 
-    * ```[A|B|C|_|D|T] = [1,2,3,4,5,6,7];``` results in ```A=1, B=2, C=3, D=5, T=[6,7]```
-* Loops are denoted by _lambda expressions_, ```(L) -> Y | R : Statements;```, with ```R``` being an optional return parameter
-    * Examples:
-        * sequential lambda expression: ```(L) -> Y : generic/print(Y);```
-        * parallel lambda expression: ```@(L) -> Y | R : R = Y+1;```
-        
-
 ## Running Semantics
 
 ### <a name="cycle">Agent-Cycle</a>
 
 Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
-1. run beliefbase update
-    * run update on the beliefbase updater
-    * add new beliefs into the beliefbase
-    * generate beliefbase events
+1. execute perceiving on each beliefbase
+    * run _perceive_ on each beliefbase perceiving object
+    * add / delete beliefs in the beliefbase
+    * beliefbase events will generate
 
 2. if agent is in suspend state stop execution
     
@@ -217,22 +195,7 @@ Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
 
 4. increment cycle value
 
-
-
-## <a name="todo">Todos</a>
-
-* publish to [Maven central](http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github)
-
-## <a name="workingpackages">Working Packages</a>
-
-* visualization with [data mining toolbox](http://ifs.tuwien.ac.at/dm/)
-* Meta-language for data/plan exchange with [Jaxb](https://jaxb.java.net) or [Jaxb JSON](https://docs.oracle.com/javaee/6/tutorial/doc/gkknj.html#gmfnu). 
-  Structural problem incompatibilites between Jason, Light-Jas, GOAL, ... -> generic exchange format
-* Communication (e.g. Contract Net Protocol) -> Threadpool/Semaphore/Cycle synchronisation and execution ordering problem
-* Joined Plans (concept & programming)
-    * Distribution of joint plans and plan data, i.e. sub-plans/-actions/-beliefs via [MPI](https://de.wikipedia.org/wiki/Message_Passing_Interface) concepts like [gather](https://de.wikipedia.org/wiki/Message_Passing_Interface#Gather_.28sammeln.29)/[scatter](https://de.wikipedia.org/wiki/Message_Passing_Interface#Scatter_.28streuen.29)
-
-### <a name="devaction">Developing Buildin Actions & Components</a>
+## <a name="devaction">Developing Buildin Actions & Components</a>
 
 * [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html) see [example](http://commons.apache.org/proper/commons-math/userguide/ode.html)
 * [Curve Fitting](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/package-summary.html)
