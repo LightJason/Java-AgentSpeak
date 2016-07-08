@@ -23,6 +23,8 @@
 <project xmlns="http://maven.apache.org/DECORATION/1.6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd">
     <body>
         <links>
+            <item name="Agent Grammar Diagram" href="rrd-output/html/org/lightjason/agentspeak/grammar/Agent.g4/index.htm"/>
+            <item name="PlanBundle Grammar Diagram" href="rrd-output/html/org/lightjason/agentspeak/grammar/PlanBundle.g4/index.htm"/>
             <item name="Source Documentation" href="sources/index.html"/>
             <item name="Repository" href="http://github.com/LightJason/AgentSpeak" />
             <item name="OpenHub" href="http://www.openhub.net/p/LightJason-AgentSpeak"/>
