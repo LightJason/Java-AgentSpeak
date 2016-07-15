@@ -26,13 +26,13 @@
 
     <groupId>org.lightjason</groupId>
     <artifactId>AgentSpeak</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L)</name>
-    <description>AgentSpeak(L) is a logical programming language for simulating a multi-agent system with a fuzzy-based logical calculus with lambda expressions and parallelization</description>
+    <description>AgentSpeak(L) is a logical programming language for simulating a multi-agent BDI system with a fuzzy-based logical calculus with lambda expressions and parallelization</description>
     <url>https://github.com/LightJason/AgentSpeak</url>
 
     <organization>
@@ -57,6 +57,17 @@
         <connection>scm:git:git://github.com:LightJason/AgentSpeak.git</connection>
         <developerConnection>scm:git:git@github.com:LightJason/AgentSpeak.git</developerConnection>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -191,7 +202,7 @@
             <plugin>
                 <groupId>de.flashpixx</groupId>
                 <artifactId>rrd-antlr4</artifactId>
-                <version>0.1.0</version>
+                <version>0.0.1</version>
                 <configuration>
                     <excludes>Type.g4</excludes>
                 </configuration>
@@ -251,6 +262,38 @@
     </reporting>
 
 
+    <!-- profile for signing arifacts on release -->
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
     <!-- main build -->
     <build>
         <!-- default goal is set to package and checking dependency updates -->
@@ -305,20 +348,25 @@
 
         <plugins>
 
-            <!-- GPG Sign plugin -->
+            <!-- Maven plugin generating -->
             <plugin>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
+
 
             <!-- License -->
             <plugin>
