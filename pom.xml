@@ -32,7 +32,7 @@
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L)</name>
-    <description>AgentSpeak(L) is a logical programming language for simulating a multi-agent BDI system with a fuzzy-based logical calculus with lambda expressions and parallelization</description>
+    <description>AgentSpeak(L) is a logical programming language of a multi-agent BDI system with a fuzzy-based logical calculus, lambda expressions and parallelization</description>
     <url>https://github.com/LightJason/AgentSpeak</url>
 
     <organization>
