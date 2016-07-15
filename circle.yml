@@ -41,18 +41,18 @@ test:
 
         # Documentation Build with Update to GH-Pages Branch
         - git checkout master
-        - mv target/site /tmp
+        - mv -f target/site /tmp
         - git checkout gh-pages
-        - mv circle.yml /tmp
-        - mv .gitignore /tmp
+        - mv -f circle.yml /tmp
+        - mv -f .gitignore /tmp
         - git checkout master
         - git push origin :gh-pages
         - git branch -D gh-pages
         - git checkout --orphan gh-pages
         - rm -Rf *
-        - mv /tmp/.gitignore .
-        - mv /tmp/circle.yml .
-        - mv /tmp/site/* .
+        - mv -f /tmp/.gitignore .
+        - mv -f /tmp/circle.yml .
+        - mv -f /tmp/site/* .
         - git add --all .
         - git commit -m "current documentation"
         - git push origin gh-pages
