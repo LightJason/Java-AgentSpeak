@@ -200,18 +200,20 @@
         <plugins>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.9</version>
+            </plugin>
+
+            <plugin>
                 <groupId>de.flashpixx</groupId>
                 <artifactId>rrd-antlr4</artifactId>
                 <version>0.0.1</version>
                 <configuration>
-                    <excludes>Type.g4</excludes>
+                    <excludes>
+                        <exclude>Type.g4</exclude>
+                    </excludes>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.9</version>
             </plugin>
 
             <plugin>
