@@ -56,10 +56,6 @@ import java.util.stream.IntStream;
 public final class CConsistency implements IConsistency
 {
     /**
-     * algebra object
-     */
-    private static final Algebra ALGEBRA = new Algebra();
-    /**
      * function for inverting probability
      */
     private static final DoubleFunction PROBABILITYINVERT = new DoubleFunction()
@@ -147,7 +143,7 @@ public final class CConsistency implements IConsistency
     @Override
     public final boolean add( final IAgent<?> p_object )
     {
-        return m_data.putIfAbsent( p_object, new Double( 0 ) ) == null;
+        return m_data.putIfAbsent( p_object, Double.valueOf( 0 ) ) == null;
     }
 
     @Override
@@ -173,7 +169,7 @@ public final class CConsistency implements IConsistency
             } );
 
             // row-wise normalization for getting probabilities
-            final double l_norm = ALGEBRA.norm1( l_matrix.viewRow( i ) );
+            final double l_norm = Algebra.DEFAULT.norm1( l_matrix.viewRow( i ) );
             if ( l_norm != 0 )
                 l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 
@@ -188,7 +184,7 @@ public final class CConsistency implements IConsistency
 
         // calculate the inverted probability and normalize with 1-norm
         l_eigenvector.assign( PROBABILITYINVERT );
-        l_eigenvector.assign( Functions.div( ALGEBRA.norm1( l_eigenvector ) ) );
+        l_eigenvector.assign( Functions.div( Algebra.DEFAULT.norm1( l_eigenvector ) ) );
 
         // set consistency value for each entry and update statistic
         m_statistic.clear();
@@ -281,7 +277,7 @@ public final class CConsistency implements IConsistency
             }
 
             // normalize eigenvector and create positiv oriantation
-            l_eigenvector.assign( Mult.div( ALGEBRA.norm1( l_eigenvector ) ) );
+            l_eigenvector.assign( Mult.div( Algebra.DEFAULT.norm1( l_eigenvector ) ) );
             l_eigenvector.assign( Functions.abs );
 
             return l_eigenvector;
@@ -300,8 +296,8 @@ public final class CConsistency implements IConsistency
         {
             final DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
             IntStream.range( 0, p_iteration ).forEach( i -> {
-                l_probability.assign( ALGEBRA.mult( p_matrix, l_probability ) );
-                l_probability.assign( Mult.div( ALGEBRA.norm2( l_probability ) ) );
+                l_probability.assign( Algebra.DEFAULT.mult( p_matrix, l_probability ) );
+                l_probability.assign( Mult.div( Algebra.DEFAULT.norm2( l_probability ) ) );
             } );
             return l_probability;
         }
