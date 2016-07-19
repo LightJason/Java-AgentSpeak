@@ -294,7 +294,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return MessageFormat.format(
             "{0} ( Cycle: {1} / {2} )",
