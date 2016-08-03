@@ -43,6 +43,12 @@ public abstract class IBaseAction implements IAction
     }
 
     @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IAction ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
+    @Override
     public final String toString()
     {
         return this.name().toString();
