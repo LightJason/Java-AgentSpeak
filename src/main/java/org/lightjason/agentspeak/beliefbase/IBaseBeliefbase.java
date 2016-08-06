@@ -52,7 +52,7 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
-public abstract class IBaseBeliefBase<T extends IAgent<?>> implements IBeliefBase<T>
+public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbase<T>
 {
     /**
      * map with events for a mask
@@ -79,15 +79,13 @@ public abstract class IBaseBeliefBase<T extends IAgent<?>> implements IBeliefBas
     @Override
     public ILiteral add( final ILiteral p_literal )
     {
-        m_events.keySet().forEach( i -> m_events.put( i, CTrigger.from( ITrigger.EType.ADDBELIEF, p_literal ) ) );
-        return p_literal;
+        return this.event( ITrigger.EType.ADDBELIEF, p_literal );
     }
 
     @Override
     public ILiteral remove( final ILiteral p_literal )
     {
-        m_events.keySet().forEach( i -> m_events.put( i, CTrigger.from( ITrigger.EType.DELETEBELIEF, p_literal ) ) );
-        return p_literal;
+        return this.event( ITrigger.EType.DELETEBELIEF, p_literal );
     }
 
     @Override
@@ -109,6 +107,18 @@ public abstract class IBaseBeliefBase<T extends IAgent<?>> implements IBeliefBas
     public Stream<ITrigger> trigger( final IView<T> p_view )
     {
         return this.getAndClearTrigger( p_view ).parallel();
+    }
+
+    /**
+     * push an event and literal to the event map
+     *
+     * @param p_event event
+     * @param p_literal literal
+     */
+    protected ILiteral event( final ITrigger.EType p_event, final ILiteral p_literal )
+    {
+        m_events.keySet().forEach( i -> m_events.put( i, CTrigger.from( p_event, p_literal ) ) );
+        return p_literal;
     }
 
     /**

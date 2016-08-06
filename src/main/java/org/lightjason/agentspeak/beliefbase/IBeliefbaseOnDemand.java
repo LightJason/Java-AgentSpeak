@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * on-demand beliefbase for creating trigger-events
  * without any percistency
  */
-public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeliefBase<T>
+public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeliefbase<T>
 {
 
     @Override
@@ -87,13 +87,13 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     @Override
     public final IView<T> view( final String p_key )
     {
-        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", this, p_key ) );
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
     @Override
     public final IView<T> viewOrDefault( final String p_key, final IView<T> p_default )
     {
-        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", this, p_key ) );
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
     @Override
@@ -103,7 +103,7 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     }
 
     @Override
-    public final IBeliefBase<T> clear()
+    public final IBeliefbase<T> clear()
     {
         return this;
     }
@@ -111,13 +111,13 @@ public abstract class IBeliefBaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     @Override
     public final IView<T> add( final IView<T> p_view )
     {
-        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", this, p_view.name() ) );
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
     }
 
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
-        throw new CIllegalStateException( CCommon.languagestring( IBeliefBaseOnDemand.class, "nostorage", this, p_view.name() ) );
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
     }
 
     @Override

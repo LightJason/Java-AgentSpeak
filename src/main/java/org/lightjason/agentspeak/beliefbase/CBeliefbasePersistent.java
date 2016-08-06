@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * beliefbase, reference counting is used to collect the events for each beliefbase view
  */
-public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBeliefBase<T>
+public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBeliefbase<T>
 {
     /**
      * storage with data
@@ -51,7 +51,7 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
      *
      * @param p_storage storage
      */
-    public CBeliefBasePersistent( final IStorage<ILiteral, IView<T>, T> p_storage )
+    public CBeliefbasePersistent( final IStorage<ILiteral, IView<T>, T> p_storage )
     {
         if ( p_storage == null )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
@@ -67,7 +67,7 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IBeliefBase<?> ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object != null ) && ( p_object instanceof IBeliefbase<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override
@@ -140,7 +140,7 @@ public final class CBeliefBasePersistent<T extends IAgent<?>> extends IBaseBelie
     }
 
     @Override
-    public final IBeliefBase<T> clear()
+    public final IBeliefbase<T> clear()
     {
         // create delete-event for all literals
         m_storage

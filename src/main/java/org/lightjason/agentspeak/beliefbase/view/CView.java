@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.beliefbase.view;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.beliefbase.IBeliefBase;
+import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -51,7 +51,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     /**
      * reference to the beliefbase context
      */
-    protected final IBeliefBase<T> m_beliefbase;
+    protected final IBeliefbase<T> m_beliefbase;
     /**
      * parent name
      */
@@ -65,7 +65,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_name view name
      * @param p_beliefbase reference to the beliefbase context
      */
-    public CView( final String p_name, final IBeliefBase<T> p_beliefbase )
+    public CView( final String p_name, final IBeliefbase<T> p_beliefbase )
     {
         this( p_name, p_beliefbase, null );
     }
@@ -78,7 +78,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_parent reference to the parent view
      */
     @SuppressWarnings( "unchecked" )
-    public CView( final String p_name, final IBeliefBase<T> p_beliefbase, final IView<T> p_parent )
+    public CView( final String p_name, final IBeliefbase<T> p_beliefbase, final IView<T> p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
@@ -331,7 +331,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     // --- basic access ----------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final IBeliefBase<T> beliefbase()
+    public final IBeliefbase<T> beliefbase()
     {
         return m_beliefbase;
     }

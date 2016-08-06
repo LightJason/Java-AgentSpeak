@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  *
  * @tparam T agent type
  */
-public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
+public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 {
 
     /**
@@ -72,7 +72,7 @@ public interface IBeliefBase<T extends IAgent<?>> extends IStructure<T>
      *
      * @return beliefbase reference
      */
-    IBeliefBase<T> clear();
+    IBeliefbase<T> clear();
 
 
 
