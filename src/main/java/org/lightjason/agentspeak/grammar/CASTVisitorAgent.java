@@ -142,7 +142,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
         p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
-        LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions, m_rules ) );
+        LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions.keySet(), m_rules.keySet() ) );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

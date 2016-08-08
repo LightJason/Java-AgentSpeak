@@ -52,6 +52,7 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
+@SuppressWarnings( "serial" )
 public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbase<T>
 {
     /**
