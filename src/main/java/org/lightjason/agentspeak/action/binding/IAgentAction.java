@@ -31,11 +31,11 @@ import java.lang.annotation.Target;
 
 /**
  * class annotation to set default behaviour
- * of method-action-binding to a whitelist
+ * of method-action-binding to a blacklist
  */
 @Target( ElementType.TYPE )
 @Retention( RetentionPolicy.RUNTIME )
-public @interface IAgentActionWhitelist
+public @interface IAgentAction
 {
 
     /**
@@ -45,5 +45,21 @@ public @interface IAgentActionWhitelist
      * @return class array
      */
     Class<?>[] classes() default {};
+
+    /**
+     * access of the action filter
+     *
+     * @return access
+     */
+    EAccess access() default EAccess.BLACKLIST;
+
+    /**
+     * enum with access values
+     */
+    enum EAccess
+    {
+        BLACKLIST,
+        WHITELIST;
+    }
 
 }

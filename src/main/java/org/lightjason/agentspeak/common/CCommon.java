@@ -24,12 +24,12 @@
 package org.lightjason.agentspeak.common;
 
 import com.google.common.reflect.ClassPath;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.binding.CMethodAction;
-import org.lightjason.agentspeak.action.binding.IAgentActionAllow;
-import org.lightjason.agentspeak.action.binding.IAgentActionBlacklist;
-import org.lightjason.agentspeak.action.binding.IAgentActionDeny;
-import org.lightjason.agentspeak.action.binding.IAgentActionWhitelist;
+import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
+import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.agent.IAgent;
 
 import java.io.File;
@@ -255,15 +255,15 @@ public final class CCommon
      */
     private static Stream<Method> methods( final Class<?> p_class, final Class<?> p_root )
     {
-        final boolean l_iswhitelisted = CCommon.isActionWhitelist( p_class, p_root );
-        if ( l_iswhitelisted == CCommon.isActionBlacklist( p_class, p_root ) )
+        final Pair<Boolean, IAgentAction.EAccess> l_classannotation = CCommon.isActionClass( p_class );
+        if ( !l_classannotation.getLeft() )
             return p_class.getSuperclass() == null
                    ? Stream.of()
                    : methods( p_class.getSuperclass(), p_root );
 
-        final Predicate<Method> l_filter = l_iswhitelisted
-                                           ? i -> !CCommon.isActionDeny( i, p_root )
-                                           : i -> CCommon.isActionAllow( i, p_root );
+        final Predicate<Method> l_filter = IAgentAction.EAccess.WHITELIST.equals( l_classannotation.getRight() )
+                                           ? i -> !CCommon.isActionFiltered( i, p_root )
+                                           : i -> CCommon.isActionFiltered( i, p_root );
 
         return Stream.concat(
             Arrays.stream( p_class.getDeclaredMethods() )
@@ -282,81 +282,42 @@ public final class CCommon
     }
 
     /**
-     * whitelist filter for a class
+     * filter of a class to use it as action
      *
      * @param p_class class for checking
-     * @param p_root root class
      * @return boolean flag of check result
      */
-    private static boolean isActionWhitelist( final Class<?> p_class, final Class<?> p_root )
+    private static Pair<Boolean, IAgentAction.EAccess> isActionClass( final Class<?> p_class )
     {
-        return p_class.isAnnotationPresent( IAgentActionWhitelist.class )
-               && (
-                   ( p_class.getAnnotation( IAgentActionWhitelist.class ).classes().length == 0 )
-                   || ( Arrays.stream( p_class.getAnnotation( IAgentActionWhitelist.class ).classes() )
+        if ( p_class.isAnnotationPresent( IAgentAction.class ) )
+            return new ImmutablePair<>( false, IAgentAction.EAccess.BLACKLIST );
+
+        final IAgentAction l_annotation = p_class.getAnnotation( IAgentAction.class );
+        return new ImmutablePair<>(
+                   ( l_annotation.classes().length == 0 )
+                   || ( Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
                               .parallel()
                               .filter( p_class::equals )
                               .findFirst()
                               .isPresent()
-                   )
+                   ),
+                   l_annotation.access()
                );
     }
 
     /**
-     * blacklist filter of a class
-     *
-     * @param p_class class for checking
-     * @param p_root root class
-     * @return boolean flag of check result
-     */
-    private static boolean isActionBlacklist( final Class<?> p_class, final Class<?> p_root )
-    {
-        return p_class.isAnnotationPresent( IAgentActionBlacklist.class )
-               && (
-                   ( p_class.getAnnotation( IAgentActionBlacklist.class ).classes().length == 0 )
-                   || ( Arrays.stream( p_class.getAnnotation( IAgentActionBlacklist.class ).classes() )
-                              .parallel()
-                              .filter( p_class::equals )
-                              .findFirst()
-                              .isPresent()
-                   )
-               );
-    }
-
-    /**
-     * allow filter of a method
+     * class filter of an action to use it
      *
      * @param p_method method for checking
      * @param p_root root class
      * @return boolean flag of check result
      */
-    private static boolean isActionAllow( final Method p_method, final Class<?> p_root )
+    private static boolean isActionFiltered( final Method p_method, final Class<?> p_root )
     {
-        return p_method.isAnnotationPresent( IAgentActionAllow.class )
+        return p_method.isAnnotationPresent( IAgentActionFilter.class )
                && (
-                   ( p_method.getAnnotation( IAgentActionAllow.class ).classes().length == 0 )
-                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionAllow.class ).classes() )
-                              .parallel()
-                              .filter( p_root::equals )
-                              .findFirst()
-                              .isPresent()
-                   )
-               );
-    }
-
-    /**
-     * deny filter of a method
-     *
-     * @param p_method method for checking
-     * @param p_root root class
-     * @return boolean flag of check result
-     */
-    private static boolean isActionDeny( final Method p_method, final Class<?> p_root )
-    {
-        return p_method.isAnnotationPresent( IAgentActionDeny.class )
-               && (
-                   ( p_method.getAnnotation( IAgentActionDeny.class ).classes().length == 0 )
-                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionDeny.class ).classes() )
+                   ( p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0 )
+                   || ( Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
                               .parallel()
                               .filter( p_root::equals )
                               .findFirst()
