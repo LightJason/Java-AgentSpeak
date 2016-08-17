@@ -289,7 +289,7 @@ public final class CCommon
      */
     private static Pair<Boolean, IAgentAction.EAccess> isActionClass( final Class<?> p_class )
     {
-        if ( p_class.isAnnotationPresent( IAgentAction.class ) )
+        if ( !p_class.isAnnotationPresent( IAgentAction.class ) )
             return new ImmutablePair<>( false, IAgentAction.EAccess.BLACKLIST );
 
         final IAgentAction l_annotation = p_class.getAnnotation( IAgentAction.class );
