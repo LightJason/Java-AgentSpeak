@@ -58,7 +58,7 @@ public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorag
     }
 
     @Override
-    public final T update( final T p_agent )
+    public T update( final T p_agent )
     {
         m_perceive.parallelStream().forEach( i -> i.perceive( p_agent ) );
         return p_agent;
