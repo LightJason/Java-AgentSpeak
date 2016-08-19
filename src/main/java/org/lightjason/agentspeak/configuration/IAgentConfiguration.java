@@ -100,6 +100,6 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return belief perceiver stream
      */
-    Set<IBeliefPerceive<T>> perceivable();
+    Set<IBeliefPerceive<ILiteral, IView<T>, T>> perceivable();
 
 }

@@ -31,14 +31,15 @@ import org.lightjason.agentspeak.agent.IAgent;
  *
  * @tparam T agent type
  */
-public interface IBeliefPerceive<T extends IAgent<?>>
+public interface IBeliefPerceive<N, M, T extends IAgent<?>>
 {
 
     /**
      * runs the update process of an agent
      *
      * @param p_agent agent
+     * @param p_storage storage which calls the perceive
      */
-    void perceive( final T p_agent );
+    void perceive( final T p_agent, final IStorage<N, M, T> p_storage );
 
 }

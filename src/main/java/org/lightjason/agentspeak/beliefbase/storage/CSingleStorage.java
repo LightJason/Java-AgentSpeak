@@ -67,7 +67,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
      * @param p_perceive perceive objects
      */
     @SafeVarargs
-    public CSingleStorage( final IBeliefPerceive<T>... p_perceive )
+    public CSingleStorage( final IBeliefPerceive<N, M, T>... p_perceive )
     {
         this( Collections.unmodifiableSet( Arrays.stream( p_perceive ).collect( Collectors.toSet() ) ) );
     }
@@ -77,7 +77,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
      *
      * @param p_perceive perceive object
      */
-    public CSingleStorage( final Set<IBeliefPerceive<T>> p_perceive )
+    public CSingleStorage( final Set<IBeliefPerceive<N, M, T>> p_perceive )
     {
         super( p_perceive );
     }

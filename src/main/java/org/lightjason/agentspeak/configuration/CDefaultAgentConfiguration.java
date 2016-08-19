@@ -98,7 +98,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * perceiveable
      */
-    protected final Set<IBeliefPerceive<T>> m_perceivable;
+    protected final Set<IBeliefPerceive<ILiteral, IView<T>, T>> m_perceivable;
 
 
     /**
@@ -108,9 +108,8 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     public CDefaultAgentConfiguration()
     {
         this(
-            new CBoolFuzzy<>(), Collections.<ILiteral>emptyList(),
-            Collections.<IBeliefPerceive<T>>emptySet(),
-            Collections.<IPlan>emptySet(), Collections.<IRule>emptySet(),
+            new CBoolFuzzy<>(), Collections.emptyList(),
+            Collections.emptySet(), Collections.emptySet(), Collections.emptySet(),
             null, new CUnifier(), IAggregation.EMPTY
         );
     }
@@ -128,7 +127,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_aggregation aggregation function
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final Set<IBeliefPerceive<T>> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final Set<IBeliefPerceive<ILiteral, IView<T>, T>> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
     )
     {
@@ -149,7 +148,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_variablebuilder variable builder
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final Set<IBeliefPerceive<T>> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                       final Set<IBeliefPerceive<ILiteral, IView<T>, T>> p_beliefperceive, final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
@@ -218,7 +217,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public final Set<IBeliefPerceive<T>> perceivable()
+    public final Set<IBeliefPerceive<ILiteral, IView<T>, T>> perceivable()
     {
         return m_perceivable;
     }

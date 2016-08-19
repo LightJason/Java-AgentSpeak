@@ -69,7 +69,7 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
      * @param p_perceive perceive objects
      */
     @SafeVarargs
-    public CMultiStorage( final IBeliefPerceive<T>... p_perceive )
+    public CMultiStorage( final IBeliefPerceive<N, M, T>... p_perceive )
     {
         this( Collections.unmodifiableSet( Arrays.stream( p_perceive ).collect( Collectors.toSet() ) ) );
     }
@@ -79,7 +79,7 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
      *
      * @param p_perceive perceive objects
      */
-    public CMultiStorage( final Set<IBeliefPerceive<T>> p_perceive )
+    public CMultiStorage( final Set<IBeliefPerceive<N, M, T>> p_perceive )
     {
         super( p_perceive );
     }

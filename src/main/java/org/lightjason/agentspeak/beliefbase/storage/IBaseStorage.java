@@ -37,14 +37,14 @@ public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorag
     /**
      * belief perceiver object
      */
-    private final Set<IBeliefPerceive<T>> m_perceive;
+    private final Set<IBeliefPerceive<N, M, T>> m_perceive;
 
     /**
      * ctor
      */
     protected IBaseStorage()
     {
-        this( Collections.<IBeliefPerceive<T>>emptySet() );
+        this( Collections.emptySet() );
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorag
      *
      * @param p_perceive perceive objects
      */
-    protected IBaseStorage( final Set<IBeliefPerceive<T>> p_perceive )
+    protected IBaseStorage( final Set<IBeliefPerceive<N, M, T>> p_perceive )
     {
         m_perceive = p_perceive;
     }
@@ -60,7 +60,7 @@ public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorag
     @Override
     public final T update( final T p_agent )
     {
-        m_perceive.parallelStream().forEach( i -> i.perceive( p_agent ) );
+        m_perceive.parallelStream().forEach( i -> i.perceive( p_agent, this ) );
         return p_agent;
     }
 

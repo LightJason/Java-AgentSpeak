@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
 import org.lightjason.agentspeak.beliefbase.storage.IBeliefPerceive;
+import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.grammar.CParserAgent;
@@ -77,7 +78,11 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
     throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), Collections.<IBeliefPerceive<T>>emptySet(), IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, p_aggregation,
+              Collections.<IPlanBundle>emptySet(),
+              Collections.<IBeliefPerceive<ILiteral, IView<T>, T>>emptySet(),
+              IVariableBuilder.EMPTY
+        );
     }
 
     /**
@@ -91,7 +96,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation, final Set<IBeliefPerceive<T>> p_beliefperceiver,
+                                final IAggregation p_aggregation,
+                                final Set<IBeliefPerceive<ILiteral, IView<T>, T>> p_beliefperceiver,
                                 final IVariableBuilder p_variablebuilder
     )
     throws Exception
@@ -112,7 +118,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
                                 final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                                final Set<IBeliefPerceive<T>> p_beliefperceiver, final IVariableBuilder p_variablebuilder
+                                final Set<IBeliefPerceive<ILiteral, IView<T>, T>> p_beliefperceiver,
+                                final IVariableBuilder p_variablebuilder
     )
     throws Exception
     {
@@ -153,8 +160,10 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @return configuration object
      */
     protected IAgentConfiguration<T> configuration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                                    final Set<IBeliefPerceive<T>> p_beliefperceiver, final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                                    final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
+                                                    final Set<IBeliefPerceive<ILiteral, IView<T>, T>> p_beliefperceiver,
+                                                    final Set<IPlan> p_plans, final Set<IRule> p_rules,
+                                                    final ILiteral p_initialgoal, final IUnifier p_unifier,
+                                                    final IAggregation p_aggregation,
                                                     final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(
