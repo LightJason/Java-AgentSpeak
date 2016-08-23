@@ -335,9 +335,13 @@ myfunction(X) :- generic/print("my logical rule", X).
         // ---- sequencial & parallel lambda expression --------------------------------------------------------------------------------------------------------
 
         (L) -> Y : generic/print(Y);
-        @(L) -> Y | R : R = Y+1;
 
+        BL = generic/belieflist( "hallo" );
+        (BL) -> Y : generic/print(Y);
+
+        @(L) -> Y | R : R = Y+1;
         generic/print("lambda return", R);
+
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
