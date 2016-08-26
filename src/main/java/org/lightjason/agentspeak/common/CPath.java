@@ -27,11 +27,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -75,7 +75,7 @@ public final class CPath implements IPath
      */
     public CPath( final IPath p_path )
     {
-        m_path = p_path.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
+        m_path = p_path.stream().collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
         m_separator = p_path.getSeparator();
     }
 
@@ -87,7 +87,7 @@ public final class CPath implements IPath
     public CPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            m_path = new ArrayList<>();
+            m_path = new CopyOnWriteArrayList<>();
         else
         {
             m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) ).filter( i -> !i.isEmpty() ).collect(
@@ -105,8 +105,8 @@ public final class CPath implements IPath
     public CPath( final Collection<String> p_collection )
     {
         m_path = p_collection == null
-                 ? new ArrayList<>()
-                 : p_collection.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
+                 ? new CopyOnWriteArrayList<>()
+                 : p_collection.stream().collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
     }
 
     /**
@@ -330,8 +330,7 @@ public final class CPath implements IPath
     @Override
     public final IPath pushfront( final IPath p_path )
     {
-        final ArrayList<String> l_path = p_path.stream().collect( Collectors.toCollection( ArrayList<String>::new ) );
-        l_path.addAll( m_path );
+        final List<String> l_path = Stream.concat( p_path.stream(), m_path.stream() ).collect( Collectors.toList() );
         m_path.clear();
         m_path.addAll( l_path );
         return this;
