@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.common.IPath;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 
 /**
@@ -67,7 +68,10 @@ public abstract class IBuildinAction extends IBaseAction
         final List<String> l_names = Arrays.asList( this.getClass().getCanonicalName().split( "\\." ) );
         l_names.set( l_names.size() - 1, l_names.get( l_names.size() - 1 ).substring( 1 ) );
 
-        m_name = new CPath( l_names.subList( Math.max( 0, l_names.size() - p_length ), l_names.size() ) ).toLower();
+        m_name = new CPath(
+            IntStream.range( Math.max( 0, l_names.size() - p_length ), l_names.size() )
+                .mapToObj( l_names::get )
+        ).toLower();
     }
 
 

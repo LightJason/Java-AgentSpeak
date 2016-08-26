@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -100,13 +99,11 @@ public final class CPath implements IPath
     /**
      * ctor
      *
-     * @param p_collection string collection
+     * @param p_stream string collection
      */
-    public CPath( final Collection<String> p_collection )
+    public CPath( final Stream<String> p_stream )
     {
-        m_path = p_collection == null
-                 ? new CopyOnWriteArrayList<>()
-                 : p_collection.stream().collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
+        m_path = p_stream.collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
     }
 
     /**
@@ -114,7 +111,7 @@ public final class CPath implements IPath
      */
     private CPath()
     {
-        m_path = Collections.<String>emptyList();
+        m_path = Collections.emptyList();
     }
 
     /**
@@ -145,7 +142,6 @@ public final class CPath implements IPath
         return new CPath(
             Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
                   .flatMap( i -> Arrays.stream( StringUtils.split( i, p_varargs[0] ) ) )
-                  .collect( Collectors.toList() )
         );
     }
 
@@ -264,13 +260,23 @@ public final class CPath implements IPath
     @Override
     public final IPath getSubPath( final int p_fromIndex, final int p_toIndex )
     {
-        return new CPath( m_path.subList( p_fromIndex, p_toIndex >= 0 ? p_toIndex : this.size() + p_toIndex ) ).setSeparator( m_separator );
+        return new CPath(
+            p_toIndex == 0
+            ? Stream.of()
+            : IntStream.range(
+                p_fromIndex,
+                p_toIndex > 0 ? p_toIndex : this.size() + p_toIndex
+            )
+            .mapToObj( m_path::get )
+        ).setSeparator( m_separator );
     }
 
     @Override
     public final String getSuffix()
     {
-        return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
+        return m_path.isEmpty()
+               ? ""
+               : m_path.get( m_path.size() - 1 );
     }
 
     @Override
