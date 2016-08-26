@@ -315,8 +315,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @SuppressWarnings( "unchecked" )
     public T call() throws Exception
     {
-        LOGGER.info( MessageFormat.format( "agent cycle: {0}", this ) );
-
         // run beliefbase update, because environment can be changed and decrement sleeping value
         m_beliefbase.update( (T) this );
         if ( !this.active( false ) )
