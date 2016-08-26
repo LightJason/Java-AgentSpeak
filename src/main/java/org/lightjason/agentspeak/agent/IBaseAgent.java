@@ -64,7 +64,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,11 +75,6 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 {
-    /**
-     * logger
-     */
-    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.logger( IBaseAgent.class );
-
     /**
      * beliefbase
      */
@@ -162,8 +156,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         if ( p_configuration.initialgoal() != null )
             m_trigger.add( p_configuration.initialgoal() );
-
-        LOGGER.info( MessageFormat.format( "create agent: {0}", this ) );
     }
 
     @Override
