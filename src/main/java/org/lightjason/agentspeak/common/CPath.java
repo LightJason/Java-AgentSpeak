@@ -89,8 +89,10 @@ public final class CPath implements IPath
             m_path = new CopyOnWriteArrayList<>();
         else
         {
-            m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) ).filter( i -> !i.isEmpty() ).collect(
-                Collectors.toList() );
+            m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) )
+                           .map( String::trim )
+                           .filter( i -> !i.isEmpty() )
+                           .collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
             if ( m_path.size() == 0 )
                 throw new CIllegalArgumentException( CCommon.languagestring( this, "pathempty" ) );
         }
@@ -315,7 +317,7 @@ public final class CPath implements IPath
     @Override
     public final IPath pushback( final IPath p_path )
     {
-        m_path.addAll( p_path.stream().collect( Collectors.toList() ) );
+        p_path.stream().forEach( m_path::add );
         return this;
     }
 
