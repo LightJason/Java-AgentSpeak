@@ -97,33 +97,19 @@ public final class CConsistency implements IConsistency
 
 
     /**
-     * ctor - use numeric algorithm
+     * ctor
      *
-     * @param p_filter metric filter
-     * @param p_metric object metric
-     */
-    public CConsistency( final IFilter p_filter, final IMetric p_metric )
-    {
-        m_filter = p_filter;
-        m_metric = p_metric;
-        m_algorithm = EAlgorithm.NUMERICAL;
-        m_iteration = 0;
-        m_epsilon = 0.001;
-    }
-
-    /**
-     * ctor - use stochastic algorithm
-     *
+     * @param p_algorithm algorithm
      * @param p_filter metric filter
      * @param p_metric object metric
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CConsistency( final IFilter p_filter, final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    private CConsistency( final EAlgorithm p_algorithm, final IFilter p_filter, final IMetric p_metric, final int p_iteration, final double p_epsilon )
     {
         m_filter = p_filter;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.FIXPOINT;
+        m_algorithm = p_algorithm;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
     }
@@ -232,6 +218,57 @@ public final class CConsistency implements IConsistency
             m_filter.filter( p_first ).collect( Collectors.toList() ),
             m_filter.filter( p_second ).collect( Collectors.toList() )
         );
+    }
+
+    /**
+     * factory numerical algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @return consistency
+     */
+    public static IConsistency numeric( final IFilter p_filter, final IMetric p_metric )
+    {
+        return new CConsistency( EAlgorithm.NUMERICAL, p_filter, p_metric, 0, 0.001 );
+    }
+
+    /**
+     * factory heuristic algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @return consistency
+     */
+    public static IConsistency heuristic( final IFilter p_filter, final IMetric p_metric )
+    {
+        return new CConsistency( EAlgorithm.FIXPOINT, p_filter, p_metric, 8, 0.001 );
+    }
+
+    /**
+     * factory heuristic algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @param p_iteration number of iterations
+     * @return consistency
+     */
+    public static IConsistency heuristic( final IFilter p_filter, final IMetric p_metric, final int p_iteration )
+    {
+        return new CConsistency( EAlgorithm.FIXPOINT, p_filter, p_metric, p_iteration, 0.001 );
+    }
+
+    /**
+     * factory numerical algorithm
+     *
+     * @param p_filter metric filter
+     * @param p_metric object metric
+     * @param p_iteration number of iterations
+     * @param p_epsilon epsilon
+     * @return consistency
+     */
+    public static IConsistency heuristic( final IFilter p_filter, final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    {
+        return new CConsistency( EAlgorithm.FIXPOINT, p_filter, p_metric, p_iteration, p_epsilon );
     }
 
 
