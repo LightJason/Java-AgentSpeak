@@ -274,7 +274,7 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final String getSuffix()
+    public final synchronized String getSuffix()
     {
         return m_path.isEmpty()
                ? ""
