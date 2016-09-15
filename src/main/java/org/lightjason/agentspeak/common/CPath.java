@@ -30,7 +30,13 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -74,7 +80,7 @@ public final class CPath implements IPath
      */
     public CPath( final IPath p_path )
     {
-        m_path = p_path.stream().collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
+        m_path = p_path.stream().collect( CPath.collectorfactory() );
         m_separator = p_path.getSeparator();
     }
 
@@ -86,13 +92,13 @@ public final class CPath implements IPath
     public CPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            m_path = new CopyOnWriteArrayList<>();
+            m_path = CPath.listfactory();
         else
         {
             m_path = Arrays.stream( StringUtils.join( p_varargs, m_separator ).split( m_separator ) )
                            .map( String::trim )
                            .filter( i -> !i.isEmpty() )
-                           .collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
+                           .collect( CPath.collectorfactory() );
             if ( m_path.size() == 0 )
                 throw new CIllegalArgumentException( CCommon.languagestring( this, "pathempty" ) );
         }
@@ -105,7 +111,7 @@ public final class CPath implements IPath
      */
     public CPath( final Stream<String> p_stream )
     {
-        m_path = p_stream.collect( Collectors.toCollection( CopyOnWriteArrayList<String>::new ) );
+        m_path = p_stream.collect( CPath.collectorfactory() );
     }
 
     /**
@@ -236,20 +242,16 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final IPath toLower()
+    public final synchronized IPath toLower()
     {
-        final List<String> l_path = m_path.stream().map( String::toLowerCase ).collect( Collectors.toList() );
-        m_path.clear();
-        m_path.addAll( l_path );
+        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toLowerCase() ) );
         return this;
     }
 
     @Override
-    public final IPath toUpper()
+    public final synchronized IPath toUpper()
     {
-        final List<String> l_path = m_path.stream().map( String::toUpperCase ).collect( Collectors.toList() );
-        m_path.clear();
-        m_path.addAll( l_path );
+        IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toUpperCase() ) );
         return this;
     }
 
@@ -436,6 +438,61 @@ public final class CPath implements IPath
     public final int compareTo( final IPath p_path )
     {
         return Integer.compare( this.hashCode(), p_path.hashCode() );
+    }
+
+
+    /**
+     * collector factory
+     *
+     * @return collector
+     */
+    private static Collector<String, List<String>, List<String>> collectorfactory()
+    {
+        return new Collector<String, List<String>, List<String>>()
+        {
+            @Override
+            public final Supplier<List<String>> supplier()
+            {
+                return CopyOnWriteArrayList<String>::new;
+            }
+
+            @Override
+            public final BiConsumer<List<String>, String> accumulator()
+            {
+                return List::add;
+            }
+
+            @Override
+            public final BinaryOperator<List<String>> combiner()
+            {
+                return (i, j) -> {
+                    i.addAll( j );
+                    return i;
+                };
+            }
+
+            @Override
+            public final Function<List<String>, List<String>> finisher()
+            {
+                return i -> i;
+            }
+
+            @Override
+            public final Set<Characteristics> characteristics()
+            {
+                return Collections.emptySet();
+            }
+        };
+    }
+
+    /**
+     * list factory
+     *
+     * @return list
+     */
+    private static List<String> listfactory()
+    {
+        return new CopyOnWriteArrayList<>();
     }
 
 }

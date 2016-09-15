@@ -93,7 +93,7 @@
         </module>
 
         <module name = "AnonInnerLengthCheck">
-            <property name = "max" value = "25" />
+            <property name = "max" value = "35" />
         </module>
 
         <module name = "AnnotationUseStyle" />

@@ -116,7 +116,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     @Override
     public final boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null ? true : Arrays.asList( p_class ).stream().map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
     }
 
     /**

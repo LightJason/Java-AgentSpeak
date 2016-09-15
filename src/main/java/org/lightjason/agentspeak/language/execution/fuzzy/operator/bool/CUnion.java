@@ -70,7 +70,7 @@ public final class CUnion implements IFuzzyOperator<Boolean>
     @Override
     public final Set<Characteristics> characteristics()
     {
-        return Collections.<Characteristics>emptySet();
+        return Collections.emptySet();
     }
 
     @Override
