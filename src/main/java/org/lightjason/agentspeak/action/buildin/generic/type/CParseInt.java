@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,20 +31,20 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * action to convert any data to its string representation
+ * action for parsing a float from string
  */
-public final class CToString extends IBuildinAction
+public final class CParseInt extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CToString()
+    public CParseInt()
     {
         super( 3 );
     }
@@ -60,8 +60,17 @@ public final class CToString extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll( p_argument.stream().map( i -> CRawTerm.from( CCommon.raw( i ).toString() ) ).collect( Collectors.toList() ) );
-        return CFuzzyValue.from( true );
+        try
+        {
+            p_return.add( CRawTerm.from( Long.parseLong( CCommon.raw( p_argument.get( 0 ) ) ) ) );
+            return CFuzzyValue.from( true );
+        }
+        catch ( final Exception l_exception )
+        {
+            LOGGER.warning( MessageFormat.format( "parsing integer [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
+            return CFuzzyValue.from( false );
+        }
+
     }
 
 }

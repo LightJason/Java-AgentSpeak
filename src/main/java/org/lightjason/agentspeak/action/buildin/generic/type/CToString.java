@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,20 +31,20 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to cast any java object type
+ * action to convert any data to its string representation
  */
-public final class CTo extends IBuildinAction
+public final class CToString extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CTo()
+    public CToString()
     {
         super( 3 );
     }
@@ -52,7 +52,7 @@ public final class CTo extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -60,20 +60,8 @@ public final class CTo extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first reference of Java object, second string with Java class name
-        try
-        {
-            p_return.add( CRawTerm.from( CCommon.raw(
-                Class.forName( CCommon.raw( p_argument.get( 1 ) ) ).cast( CCommon.raw( p_argument.get( 0 ) ) ) )
-            ) );
-
-            return CFuzzyValue.from( true );
-        }
-        catch ( final ClassNotFoundException l_exception )
-        {
-            LOGGER.warning( MessageFormat.format( "casting [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
-            return CFuzzyValue.from( false );
-        }
+        p_return.addAll( p_argument.stream().map( i -> CRawTerm.from( CCommon.raw( i ).toString() ) ).collect( Collectors.toList() ) );
+        return CFuzzyValue.from( true );
     }
 
 }

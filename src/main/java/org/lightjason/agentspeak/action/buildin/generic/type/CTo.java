@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,19 +31,20 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * action to cast a vale to an integral value
+ * action to cast any java object type
  */
-public final class CToInt extends IBuildinAction
+public final class CTo extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CToInt()
+    public CTo()
     {
         super( 3 );
     }
@@ -51,7 +52,7 @@ public final class CToInt extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -59,10 +60,20 @@ public final class CToInt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CRawTerm.from( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).longValue() )
-        );
-        return CFuzzyValue.from( true );
+        // first reference of Java object, second string with Java class name
+        try
+        {
+            p_return.add( CRawTerm.from( CCommon.raw(
+                Class.forName( CCommon.raw( p_argument.get( 1 ) ) ).cast( CCommon.raw( p_argument.get( 0 ) ) ) )
+            ) );
+
+            return CFuzzyValue.from( true );
+        }
+        catch ( final ClassNotFoundException l_exception )
+        {
+            LOGGER.warning( MessageFormat.format( "casting [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
+            return CFuzzyValue.from( false );
+        }
     }
 
 }

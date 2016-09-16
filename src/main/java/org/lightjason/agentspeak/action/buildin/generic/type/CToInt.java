@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,20 +31,19 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * action for parsing a float from string
+ * action to cast a vale to an integral value
  */
-public final class CParseInt extends IBuildinAction
+public final class CToInt extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CParseInt()
+    public CToInt()
     {
         super( 3 );
     }
@@ -60,17 +59,10 @@ public final class CParseInt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        try
-        {
-            p_return.add( CRawTerm.from( Long.parseLong( CCommon.raw( p_argument.get( 0 ) ) ) ) );
-            return CFuzzyValue.from( true );
-        }
-        catch ( final Exception l_exception )
-        {
-            LOGGER.warning( MessageFormat.format( "parsing integer [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
-            return CFuzzyValue.from( false );
-        }
-
+        p_return.add(
+            CRawTerm.from( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).longValue() )
+        );
+        return CFuzzyValue.from( true );
     }
 
 }

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,15 +35,15 @@ import java.util.List;
 
 
 /**
- * action to cast a vale to an floating-point value
+ * action to check if a type is a number
  */
-public final class CToFloat extends IBuildinAction
+public final class CIsNumeric extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CToFloat()
+    public CIsNumeric()
     {
         super( 3 );
     }
@@ -59,10 +59,10 @@ public final class CToFloat extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CRawTerm.from( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).doubleValue() )
-        );
-        return CFuzzyValue.from( true );
+        final boolean l_return = CCommon.raw( p_argument.get( 0 ) ) instanceof Number;
+
+        p_return.add( CRawTerm.from( l_return ) );
+        return CFuzzyValue.from( l_return );
     }
 
 }

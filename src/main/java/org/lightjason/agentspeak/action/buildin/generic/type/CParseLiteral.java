@@ -21,29 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * action to check if a type is a string
+ * action for parsing a literal from string
  */
-public final class CIsString extends IBuildinAction
+public final class CParseLiteral extends IBuildinAction
 {
-
     /**
      * ctor
      */
-    public CIsString()
+    public CParseLiteral()
     {
         super( 3 );
     }
@@ -59,11 +59,17 @@ public final class CIsString extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Object l_value = CCommon.raw( p_argument.get( 0 ) );
-        final boolean l_return = ( l_value instanceof String ) || ( l_value instanceof Character );
+        try
+        {
+            p_return.add( CLiteral.parse( CCommon.raw( p_argument.get( 0 ) ) ) );
+            return CFuzzyValue.from( true );
+        }
+        catch ( final Exception l_exception )
+        {
+            LOGGER.warning( MessageFormat.format( "parsing literal [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
+            return CFuzzyValue.from( false );
+        }
 
-        p_return.add( CRawTerm.from( l_return ) );
-        return CFuzzyValue.from( l_return );
     }
 
 }

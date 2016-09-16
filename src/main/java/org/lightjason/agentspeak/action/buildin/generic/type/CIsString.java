@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,15 +35,15 @@ import java.util.List;
 
 
 /**
- * action to check if a type is a class
+ * action to check if a type is a string
  */
-public final class CIs extends IBuildinAction
+public final class CIsString extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CIs()
+    public CIsString()
     {
         super( 3 );
     }
@@ -51,7 +51,7 @@ public final class CIs extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -59,20 +59,11 @@ public final class CIs extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first reference of Java object, second string with Java class name
-        try
-        {
-            final boolean l_return = Class.forName( CCommon.raw( p_argument.get( 1 ) ) )
-                                          .isAssignableFrom( CCommon.raw( p_argument.get( 0 ) ).getClass() );
+        final Object l_value = CCommon.raw( p_argument.get( 0 ) );
+        final boolean l_return = ( l_value instanceof String ) || ( l_value instanceof Character );
 
-            p_return.add( CRawTerm.from( l_return ) );
-            return CFuzzyValue.from( l_return );
-        }
-        catch ( final ClassNotFoundException l_exception )
-        {
-            return CFuzzyValue.from( false );
-        }
-
+        p_return.add( CRawTerm.from( l_return ) );
+        return CFuzzyValue.from( l_return );
     }
 
 }

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.typ;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,15 +35,15 @@ import java.util.List;
 
 
 /**
- * action to check if a type is a number
+ * action to check if a type is a class
  */
-public final class CIsNumeric extends IBuildinAction
+public final class CIs extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CIsNumeric()
+    public CIs()
     {
         super( 3 );
     }
@@ -51,7 +51,7 @@ public final class CIsNumeric extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -59,10 +59,20 @@ public final class CIsNumeric extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final boolean l_return = CCommon.raw( p_argument.get( 0 ) ) instanceof Number;
+        // first reference of Java object, second string with Java class name
+        try
+        {
+            final boolean l_return = Class.forName( CCommon.raw( p_argument.get( 1 ) ) )
+                                          .isAssignableFrom( CCommon.raw( p_argument.get( 0 ) ).getClass() );
 
-        p_return.add( CRawTerm.from( l_return ) );
-        return CFuzzyValue.from( l_return );
+            p_return.add( CRawTerm.from( l_return ) );
+            return CFuzzyValue.from( l_return );
+        }
+        catch ( final ClassNotFoundException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
+
     }
 
 }

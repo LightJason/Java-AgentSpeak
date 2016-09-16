@@ -99,10 +99,10 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 +!main
 
-    : >>( hallo(X), generic/typ/isstring(X) ) <-
+    : >>( hallo(X), generic/type/isstring(X) ) <-
             generic/print("---", "first plan", "---", "unification variables", X)
 
-    : >>( hallo(X), generic/typ/isnumeric(X) && X > 1000 )  <-
+    : >>( hallo(X), generic/type/isnumeric(X) && X > 1000 )  <-
         generic/print("---", "second plan", "---", "unification variables", X)
 
     <-
@@ -357,14 +357,14 @@ myfunction(X) :- generic/print("my logical rule", X).
         >>foo( blub(1), hallo( UN8 ) ) << true;
 
         // unify with expression
-        >>( hallo( UN2 ), generic/typ/isstring(UN2) ) << true;
-        @>>( hallo( UN3 ), generic/typ/isnumeric(UN3) && (UN3 > 200) ) << true;
+        >>( hallo( UN2 ), generic/type/isstring(UN2) ) << true;
+        @>>( hallo( UN3 ), generic/type/isnumeric(UN3) && (UN3 > 200) ) << true;
 
         // unfiy variable (I is defined on the deconstruct call on top)
         >>( blah(UN9), I ) << true;
 
         // manual literal parsing & unification
-        UN10 = generic/typ/parseliteral("foo(12345)");
+        UN10 = generic/type/parseliteral("foo(12345)");
         >>( foo(UN11), UN10 ) << true;
 
         generic/print("unifcation", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
