@@ -1,9 +1,9 @@
-# Light-Jason - Lightwire version of AgentSpeak(L)
+# Light-Jason - Lightwire version of AgentSpeak(L++)
 
 ![Circle CI](https://circleci.com/gh/LightJason/AgentSpeak.svg?style=shield)
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini
-a Java 8 implementation has been build-up with parallel execution calls . The version defines an additional AgentSpeak(L) grammar based on
+a Java 8 implementation has been build-up with parallel execution calls . The version defines an additional [AgentSpeak(L)](https://en.wikipedia.org/wiki/AgentSpeak) grammar based on
 [AntLR](http://www.antlr.org/) for simulating a [multi-agent system](https://en.wikipedia.org/wiki/Multi-agent_system)
 with a fuzzy-based logical calculus and grammar features like lambda expressions. Agent execution based on a mathematical structure
 to describe an optimizing process by a [finite-state-machine](https://en.wikipedia.org/wiki/Finite-state_machine)
