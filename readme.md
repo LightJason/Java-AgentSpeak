@@ -1,4 +1,4 @@
-# Light-Jason - Lightwire version of AgentSpeak(L++)
+# LightJason - AgentSpeak(L++)
 
 ![Circle CI](https://circleci.com/gh/LightJason/AgentSpeak.svg?style=shield)
 
