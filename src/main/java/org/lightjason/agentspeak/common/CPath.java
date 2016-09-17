@@ -71,6 +71,7 @@ public final class CPath implements IPath
     {
         this( p_path );
         m_path.addAll( Arrays.asList( p_varargs ) );
+        this.normalize();
     }
 
     /**
@@ -102,6 +103,7 @@ public final class CPath implements IPath
             if ( m_path.size() == 0 )
                 throw new CIllegalArgumentException( CCommon.languagestring( this, "pathempty" ) );
         }
+        this.normalize();
     }
 
     /**
@@ -112,6 +114,7 @@ public final class CPath implements IPath
     public CPath( final Stream<String> p_stream )
     {
         m_path = p_stream.collect( CPath.collectorfactory() );
+        this.normalize();
     }
 
     /**
@@ -406,7 +409,7 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final IPath normalize()
+    public final synchronized IPath normalize()
     {
         if ( m_path.isEmpty() )
             return this;

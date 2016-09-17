@@ -176,7 +176,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
             m_beliefbase.clear();
         else
             Arrays.stream( p_path ).parallel()
-                  .forEach( i -> this.leafview( this.walk( i.normalize() ) ).clear() );
+                  .forEach( i -> this.leafview( this.walk( i ) ).clear() );
 
         return this;
     }
@@ -184,7 +184,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final boolean containsView( final IPath p_path )
     {
-        p_path.normalize();
         return p_path.isEmpty()
                || ( p_path.size() == 1
                     ? m_beliefbase.containsView( p_path.get( 0 ) )
@@ -196,7 +195,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final boolean containsLiteral( final IPath p_path )
     {
-        p_path.normalize();
         return p_path.isEmpty()
                || ( p_path.size() == 1
                     ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
@@ -229,7 +227,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                :
                Arrays.stream( p_path )
                      .parallel()
-                     .map( IPath::normalize )
                      .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() )
                                         .parallelStream()
                                         .map( j -> j.shallowcopy( l_path ) ) );
@@ -251,7 +248,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
                : Arrays.stream( p_path )
                     .parallel()
-                    .map( IPath::normalize )
                     .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() )
                                        .parallelStream()
                                        .filter( j -> j.negated() == p_negated )
@@ -262,7 +258,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @SafeVarargs
     public final Stream<IView<T>> walk( final IPath p_path, final IViewGenerator<T>... p_generator )
     {
-        return this.walkdown( p_path.normalize(), p_generator );
+        return this.walkdown( p_path, p_generator );
     }
 
     @Override
@@ -277,7 +273,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     /**
      * inner walking structure of views
      *
-     * @param p_path normalized path
+     * @param p_path path
      * @param p_generator generator (first argument is used, other elements will be ignored)
      * @return view stream
      */
@@ -387,6 +383,12 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final int hashCode()
     {
         return m_name.hashCode() + m_beliefbase.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IView<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

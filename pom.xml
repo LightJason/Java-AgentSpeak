@@ -138,7 +138,7 @@
         <dependency>
             <groupId>com.codepoetics</groupId>
             <artifactId>protonpack</artifactId>
-            <version>1.9</version>
+            <version>1.10</version>
         </dependency>
 
         <dependency>
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
-            <version>3.0.0-alpha.1</version>
+            <version>3.0.0-alpha.2</version>
             <scope>test</scope>
         </dependency>
 

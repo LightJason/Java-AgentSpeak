@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -179,9 +179,9 @@ public final class TestCLanguageLabels
                      catch ( final IOException l_excpetion )
                      {
                          assertTrue( MessageFormat.format( "io error on file [{0}]: {1}", i, l_excpetion.getMessage() ), false );
-                         return Stream.<String>empty();
+                         return Stream.empty();
                      }
-                     catch ( final ParseException l_exception )
+                     catch ( final ParseProblemException l_exception )
                      {
                          // add label build by class path to the ignore list
                          l_ignoredlabel.add(
@@ -208,7 +208,7 @@ public final class TestCLanguageLabels
                          );
 
                          System.err.println( MessageFormat.format( "parsing error on file [{0}]:\n{1}", i, l_exception.getMessage() ) );
-                         return Stream.<String>empty();
+                         return Stream.empty();
                      }
                  } )
                  .collect( Collectors.toSet() )

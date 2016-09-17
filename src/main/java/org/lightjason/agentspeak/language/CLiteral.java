@@ -125,7 +125,7 @@ public final class CLiteral implements ILiteral
         m_at = p_at;
         m_negated = p_negated;
         // create a full copy of the functor, because concurrency modification
-        m_functor = new CPath( p_functor ).normalize();
+        m_functor = new CPath( p_functor );
 
         // create immutable structures
         final Multimap<IPath, ILiteral> l_annotations = HashMultimap.create();
@@ -133,7 +133,7 @@ public final class CLiteral implements ILiteral
         m_annotations = ImmutableSetMultimap.copyOf( l_annotations );
 
         final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
-        p_values.stream().forEachOrdered( i -> l_values.put( i.fqnfunctor(), i ) );
+        p_values.forEach( i -> l_values.put( i.fqnfunctor(), i ) );
         m_values = ImmutableListMultimap.copyOf( l_values );
 
         m_orderedvalues = Collections.unmodifiableList( new LinkedList<>( p_values ) );
