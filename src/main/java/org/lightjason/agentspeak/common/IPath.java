@@ -241,11 +241,4 @@ public interface IPath extends Comparable<IPath>
      */
     Stream<String> parallelStream();
 
-    /**
-     * normalizes the path (remove dot and dot-dot elements)
-     *
-     * @return self reference
-     */
-    IPath normalize();
-
 }

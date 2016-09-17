@@ -145,7 +145,7 @@ public final class CPath implements IPath
      * @param p_varargs list of string (first element is the seperator)
      * @return path object
      */
-    public static IPath createSplitPath( final String... p_varargs )
+    public static IPath createPathWithSeperator( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
             throw new CIllegalArgumentException( CCommon.languagestring( IPath.class, "createpath" ) );
@@ -164,23 +164,19 @@ public final class CPath implements IPath
      */
     public static IPath from( final String p_string )
     {
-        return ( p_string == null ) || ( p_string.isEmpty() ) ? EMPTY : createSplitPath( DEFAULTSEPERATOR, p_string );
+        return ( p_string == null ) || ( p_string.isEmpty() ) ? EMPTY : createPathWithSeperator( DEFAULTSEPERATOR, p_string );
     }
 
     @Override
     public final IPath append( final IPath p_path )
     {
-        final IPath l_path = new CPath( this );
-        l_path.pushback( p_path );
-        return l_path;
+        return new CPath( this ).pushback( p_path );
     }
 
     @Override
     public final IPath append( final String p_path )
     {
-        final IPath l_path = new CPath( this );
-        l_path.pushback( p_path );
-        return l_path;
+        return new CPath( this ).pushback( p_path );
     }
 
     @Override
@@ -198,16 +194,18 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final boolean endsWith( final IPath p_path )
+    public final synchronized boolean endsWith( final IPath p_path )
     {
-        if ( p_path.size() > this.size() )
-            return false;
+        return p_path.size() <= this.size()
+               && IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -> this.get( i - p_path.size() ).equals( p_path.get( i ) ) );
+    }
 
-        for ( int i = 0; i < p_path.size(); ++i )
-            if ( !this.get( i - p_path.size() ).equals( p_path.get( i ) ) )
-                return false;
+    @Override
+    public final boolean startsWith( final IPath p_path )
+    {
+        return p_path.size() <= this.size()
+               && IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -> this.get( i ).equals( p_path.get( i ) ) );
 
-        return true;
     }
 
     @Override
@@ -341,7 +339,7 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final IPath pushfront( final IPath p_path )
+    public final synchronized IPath pushfront( final IPath p_path )
     {
         final List<String> l_path = Stream.concat( p_path.stream(), m_path.stream() ).collect( Collectors.toList() );
         m_path.clear();
@@ -374,22 +372,6 @@ public final class CPath implements IPath
         return m_path.size();
     }
 
-    /**
-     * remove for-loop
-     */
-    @Override
-    public final boolean startsWith( final IPath p_path )
-    {
-        if ( p_path.size() > this.size() )
-            return false;
-
-        for ( int i = 0; i < p_path.size(); ++i )
-            if ( !this.get( i ).equals( p_path.get( i ) ) )
-                return false;
-
-        return true;
-    }
-
     @Override
     public final boolean startsWith( final String p_path )
     {
@@ -409,17 +391,25 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final synchronized IPath normalize()
+    public final int compareTo( final IPath p_path )
+    {
+        return Integer.compare( this.hashCode(), p_path.hashCode() );
+    }
+
+    /**
+     * normalize the internal path
+     */
+    private synchronized void normalize()
     {
         if ( m_path.isEmpty() )
-            return this;
+            return;
 
         // create path-copy and nomalize (remove dot, double-dot and empty values)
         final List<String> l_dotremove = m_path.stream()
                                                .filter( i -> ( i != null ) && ( !i.isEmpty() ) && ( !".".equals( i ) ) )
                                                .collect( Collectors.toList() );
         if ( l_dotremove.isEmpty() )
-            return this;
+            return;
 
         final String l_last = l_dotremove.get( l_dotremove.size() - 1 );
         final List<String> l_backremove = IntStream.range( 0, l_dotremove.size() - 1 )
@@ -433,16 +423,7 @@ public final class CPath implements IPath
         // clear internal path and add optimized path
         m_path.clear();
         m_path.addAll( l_backremove );
-
-        return this;
     }
-
-    @Override
-    public final int compareTo( final IPath p_path )
-    {
-        return Integer.compare( this.hashCode(), p_path.hashCode() );
-    }
-
 
     /**
      * collector factory
