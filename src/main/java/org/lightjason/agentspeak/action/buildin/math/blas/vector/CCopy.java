@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;

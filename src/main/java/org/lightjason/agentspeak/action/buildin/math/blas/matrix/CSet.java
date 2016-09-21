@@ -63,7 +63,7 @@ public final class CSet extends IBuildinAction
                 p_argument.get( 1 ).<Number>toAny().intValue(),
                 p_argument.get( 2 ).<Number>toAny().intValue(),
                 p_argument.get( 3 ).<Number>toAny().doubleValue()
-            );
+        );
 
         return CFuzzyValue.from( true );
     }

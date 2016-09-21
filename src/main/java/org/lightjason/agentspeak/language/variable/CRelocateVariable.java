@@ -51,7 +51,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      */
     public CRelocateVariable( final IVariable<?> p_variable )
     {
-        super( p_variable.functor(), p_variable.typed() );
+        super( p_variable.functor(), p_variable.toAny() );
         m_relocate = p_variable;
     }
 
@@ -62,7 +62,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      */
     public CRelocateVariable( final IPath p_functor, final IVariable<?> p_relocate )
     {
-        super( p_functor, p_relocate.typed() );
+        super( p_functor, p_relocate.toAny() );
         m_relocate = p_relocate;
     }
 
@@ -81,7 +81,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final IVariable<?> relocate()
     {
-        return m_relocate.set( this.typed() );
+        return m_relocate.set( this.toAny() );
     }
 
     @Override

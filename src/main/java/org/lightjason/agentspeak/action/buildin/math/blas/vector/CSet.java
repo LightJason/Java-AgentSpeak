@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -63,7 +62,7 @@ public final class CSet extends IBuildinAction
             .setQuick(
                 p_argument.get( 1 ).<Number>toAny().intValue(),
                 p_argument.get( 2 ).<Number>toAny().doubleValue()
-            );
+        );
 
         return CFuzzyValue.from( true );
     }

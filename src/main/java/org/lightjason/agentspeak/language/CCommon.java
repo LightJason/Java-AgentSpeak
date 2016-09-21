@@ -256,7 +256,7 @@ public final class CCommon
     private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
     {
         return p_list.stream().flatMap( i -> {
-            final Object l_value = i instanceof ITerm ? ( (ITerm) i).toAny() : i;
+            final Object l_value = i instanceof ITerm ? ( (ITerm) i ).toAny() : i;
             return l_value instanceof Collection<?>
                    ? flattenToStream( (List<?>) l_value )
                    : Stream.of( CRawTerm.from( l_value ) );

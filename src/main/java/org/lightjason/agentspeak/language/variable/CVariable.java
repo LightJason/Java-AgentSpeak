@@ -28,10 +28,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CClassCastException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.text.MessageFormat;
@@ -193,12 +191,6 @@ public class CVariable<T> implements IVariable<T>
     public <N> N toAny()
     {
         return (N) m_value;
-    }
-
-    @Override
-    public final ILiteral toLiteral() throws ClassCastException
-    {
-        throw new CClassCastException( MessageFormat.format( "variable [{0}] cannot be cast into literal", m_functor ) );
     }
 
     @Override

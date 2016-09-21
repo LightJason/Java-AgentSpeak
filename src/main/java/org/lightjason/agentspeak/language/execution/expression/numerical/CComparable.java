@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.execution.expression.numerical;
 
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
