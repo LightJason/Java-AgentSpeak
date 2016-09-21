@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.math;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -51,8 +52,9 @@ public final class CAverage extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() ).average()
-                                            .getAsDouble() ) );
+        p_return.add( CRawTerm.from(
+            CCommon.flatList( p_argument ).stream().mapToDouble( i -> i.<Number>toAny().doubleValue() ).average().orElseThrow( () -> new CRuntimeException( p_context ) )
+        ) );
         return CFuzzyValue.from( true );
     }
 

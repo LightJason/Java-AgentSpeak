@@ -64,7 +64,7 @@ public final class CSymmetricDifference extends IBuildinAction
     {
         // create a multiset and counts the occurence of element -> on an odd number the element will be returned
         final Multiset<?> l_count = ConcurrentHashMultiset.create();
-        CCommon.flatList( p_argument ).parallelStream().forEach( i -> l_count.add( CCommon.raw( i ) ) );
+        CCommon.flatList( p_argument ).parallelStream().forEach( i -> l_count.add( i.toAny() ) );
         final List<?> l_result = l_count.entrySet().parallelStream().filter( i -> i.getCount() % 2 == 1 ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(

@@ -56,7 +56,7 @@ public final class CClearBeliefbase extends IBuildinAction
             p_argument.size() == 0
             ? null
             : p_argument.parallelStream()
-                        .map( i -> CPath.from( CCommon.raw( i ) ) )
+                        .map( i -> CPath.from( i.toAny() ) )
                         .toArray( IPath[]::new )
         );
         return CFuzzyValue.from( true );

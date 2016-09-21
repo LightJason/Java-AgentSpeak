@@ -62,8 +62,8 @@ public final class CRange extends IBuildinAction
     )
     {
         final List<?> l_result = IntStream.range(
-            CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue(),
-            CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue()
+            p_argument.get( 0 ).<Number>toAny().intValue(),
+            p_argument.get( 1 ).<Number>toAny().intValue()
         ).boxed().collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(

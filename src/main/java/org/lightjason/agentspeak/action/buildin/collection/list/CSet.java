@@ -58,9 +58,9 @@ public final class CSet extends IBuildinAction
     )
     {
         // first argument list reference, second index, third value
-        CCommon.<List<?>, ITerm>raw( p_argument.get( 0 ) ).set(
-            CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue(),
-            CCommon.raw( p_argument.get( 2 ) )
+        p_argument.get( 0 ).<List<?>>toAny().set(
+            p_argument.get( 1 ).<Number>toAny().intValue(),
+            p_argument.get( 2 ).toAny()
         );
         return CFuzzyValue.from( true );
     }

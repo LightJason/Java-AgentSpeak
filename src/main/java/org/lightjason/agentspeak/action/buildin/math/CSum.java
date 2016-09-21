@@ -51,8 +51,7 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
-                                            .sum() ) );
+        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).stream().mapToDouble( i -> i.<Number>toAny().doubleValue() ).sum() ) );
         return CFuzzyValue.from( true );
     }
 }

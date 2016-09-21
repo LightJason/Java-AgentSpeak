@@ -59,10 +59,10 @@ public final class CFlat extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            CCommon.<AbstractMap.Entry<?, ?>, ITerm>raw( p_argument.get( 0 ) ).getKey()
+            p_argument.get( 0 ).<AbstractMap.Entry<?, ?>>toAny().getKey()
         ) );
         p_return.add( CRawTerm.from(
-                CCommon.<AbstractMap.Entry<?, ?>, ITerm>raw( p_argument.get( 0 ) ).getValue()
+                p_argument.get( 0 ).<AbstractMap.Entry<?, ?>>toAny().getValue()
         ) );
 
         return CFuzzyValue.from( true );

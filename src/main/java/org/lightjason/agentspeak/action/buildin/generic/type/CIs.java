@@ -62,8 +62,8 @@ public final class CIs extends IBuildinAction
         // first reference of Java object, second string with Java class name
         try
         {
-            final boolean l_return = Class.forName( CCommon.raw( p_argument.get( 1 ) ) )
-                                          .isAssignableFrom( CCommon.raw( p_argument.get( 0 ) ).getClass() );
+            final boolean l_return = Class.forName( p_argument.get( 1 ).toAny() )
+                                          .isAssignableFrom( p_argument.get( 0 ).toAny().getClass() );
 
             p_return.add( CRawTerm.from( l_return ) );
             return CFuzzyValue.from( l_return );

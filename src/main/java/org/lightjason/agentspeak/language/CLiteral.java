@@ -386,14 +386,8 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral toLiteral() throws ClassCastException
-    {
-        return this;
-    }
-
-    @Override
     @SuppressWarnings( "unchecked" )
-    public <T> T toAny() throws ClassCastException
+    public final <T> T toAny()
     {
         return (T) this;
     }

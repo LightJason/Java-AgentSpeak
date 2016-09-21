@@ -54,10 +54,10 @@ public final class CCreateLiteral extends IBuildinAction
     {
         p_return.add(
             CLiteral.from(
-                CCommon.raw( p_argument.get( 0 ) ),
+                p_argument.get( 0 ).toAny(),
                 p_argument.size() > 1
                 ? p_argument.subList( 1, p_argument.size() )
-                : Collections.<ITerm>emptyList()
+                : Collections.emptyList()
             )
         );
         return CFuzzyValue.from( true );

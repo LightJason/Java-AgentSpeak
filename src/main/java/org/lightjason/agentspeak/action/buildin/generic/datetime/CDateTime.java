@@ -54,30 +54,30 @@ public final class CDateTime extends IBuildinAction
     {
         final ZonedDateTime l_datetime;
         if ( p_argument.size() == 1 )
-            l_datetime = ZonedDateTime.parse( CCommon.raw( p_argument.get( 0 ) ) );
+            l_datetime = ZonedDateTime.parse( p_argument.get( 0 ).toAny() );
         else
         {
             final int[] l_parts = new int[7];
 
             // read day-month-year structure
-            l_parts[0] = CCommon.raw( p_argument.get( 0 ) );
-            l_parts[1] = CCommon.raw( p_argument.get( 1 ) );
-            l_parts[2] = CCommon.raw( p_argument.get( 2 ) );
+            l_parts[0] = p_argument.get( 0 ).toAny();
+            l_parts[1] = p_argument.get( 1 ).toAny();
+            l_parts[2] = p_argument.get( 2 ).toAny();
 
             // if is set read hour-.minutes
             if ( p_argument.size() >= 4 )
             {
-                l_parts[3] = CCommon.raw( p_argument.get( 3 ) );
-                l_parts[4] = CCommon.raw( p_argument.get( 4 ) );
+                l_parts[3] = p_argument.get( 3 ).toAny();
+                l_parts[4] = p_argument.get( 4 ).toAny();
             }
 
             // if is set read seconds
             if ( p_argument.size() >= 5 )
-                l_parts[5] = CCommon.raw( p_argument.get( 5 ) );
+                l_parts[5] = p_argument.get( 5 ).toAny();
 
             // if is set read nanoseconds
             if ( p_argument.size() >= 6 )
-                l_parts[6] = CCommon.raw( p_argument.get( 6 ) );
+                l_parts[6] = p_argument.get( 6 ).toAny();
 
             // create date-time and add zone-id
             l_datetime = ZonedDateTime.of(
@@ -88,7 +88,7 @@ public final class CDateTime extends IBuildinAction
                 l_parts[4],
                 l_parts[5],
                 l_parts[6],
-                p_argument.size() > 6 ? ZoneId.systemDefault() : ZoneId.of( CCommon.raw( p_argument.get( 7 ) ) )
+                p_argument.size() > 6 ? ZoneId.systemDefault() : ZoneId.of( p_argument.get( 7 ).toAny() )
             );
         }
 

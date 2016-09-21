@@ -54,8 +54,7 @@ public final class CNextPrime extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            CCommon.flatList( p_argument ).stream().map( i -> Primes.nextPrime( CCommon.<Number, ITerm>raw( i ).intValue() ) )
-                   .collect( Collectors.toList() )
+            CCommon.flatList( p_argument ).stream().map( i -> Primes.nextPrime( i.<Number>toAny().intValue() ) ).collect( Collectors.toList() )
         ) );
         return CFuzzyValue.from( true );
     }

@@ -62,7 +62,7 @@ public final class CLower extends IBuildinAction
     {
         p_return.addAll(
             p_argument.stream()
-                      .map( CCommon::<String, ITerm>raw )
+                      .map( ITerm::<String>toAny )
                       .map( String::toLowerCase )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() )

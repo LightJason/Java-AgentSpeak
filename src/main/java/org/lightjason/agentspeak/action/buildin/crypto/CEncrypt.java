@@ -40,6 +40,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -60,12 +61,12 @@ public final class CEncrypt extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Key l_key = CCommon.<Key, ITerm>raw( p_argument.get( 0 ) );
+        final Key l_key = p_argument.get( 0 ).toAny();
         final EAlgorithm l_algorithm = EAlgorithm.valueOf( l_key.getAlgorithm() );
 
         p_return.addAll(
             p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> SerializationUtils.serialize( CCommon.raw( i ) ) )
+                      .map( i -> SerializationUtils.serialize( i.toAny() ) )
                       .map( i -> {
                           try
                           {
@@ -77,7 +78,7 @@ public final class CEncrypt extends IBuildinAction
                               return null;
                           }
                       } )
-                      .filter( i -> i != null )
+                      .filter( Objects::nonNull )
                       .map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) )
                       .collect( Collectors.toList() )
         );

@@ -65,7 +65,7 @@ public final class CBase64Decode extends IBuildinAction
     {
         p_return.addAll(
             p_argument.stream()
-                      .map( CCommon::<String, ITerm>raw )
+                      .map( ITerm::<String>toAny )
                       .map( i -> new String( Base64.getDecoder().decode( i.getBytes() ) ) )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() )

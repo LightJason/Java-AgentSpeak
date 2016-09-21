@@ -61,9 +61,9 @@ public final class CReplace extends IBuildinAction
     {
         // input are three strings
         p_return.add( CRawTerm.from(
-            CCommon.<String, ITerm>raw( p_argument.get( 0 ) ).replaceAll(
-                CCommon.<String, ITerm>raw( p_argument.get( 1 ) ),
-                CCommon.<String, ITerm>raw( p_argument.get( 2 ) )
+            p_argument.get( 0 ).<String>toAny().replaceAll(
+                p_argument.get( 1 ).toAny(),
+                p_argument.get( 2 ).toAny()
             )
         ) );
         return CFuzzyValue.from( true );

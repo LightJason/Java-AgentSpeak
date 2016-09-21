@@ -52,7 +52,7 @@ public final class CPrimeFactors extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( Primes.nextPrime( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue() ) ) );
+        p_return.add( CRawTerm.from( Primes.nextPrime( p_argument.get( 0 ).<Number>toAny().intValue() ) ) );
         return CFuzzyValue.from( true );
     }
 

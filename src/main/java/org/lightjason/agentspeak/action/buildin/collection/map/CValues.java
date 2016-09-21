@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.collection.map;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -59,7 +60,7 @@ public final class CValues extends IBuildinAction
     )
     {
         // first argument map reference
-        p_return.add( CCommon.raw( CCommon.<Map<?, ?>, ITerm>raw( p_argument.get( 0 ) ).values() ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<Map<?, ?>>toAny().values() ) );
         return CFuzzyValue.from( true );
     }
 

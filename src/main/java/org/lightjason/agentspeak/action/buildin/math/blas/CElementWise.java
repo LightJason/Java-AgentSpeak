@@ -55,33 +55,33 @@ public class CElementWise extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( CCommon.<String, ITerm>raw( p_argument.get( 1 ) ).trim() )
+        switch ( p_argument.get( 1 ).<String>toAny().trim() )
         {
             case "+":
                 this.plus(
-                    CCommon.raw( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
+                    p_argument.get( 0 ).toAny(),
+                    p_argument.get( 2 ).<Number>toAny().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "-":
                 this.minus(
-                    CCommon.raw( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
+                    p_argument.get( 0 ).toAny(),
+                    p_argument.get( 2 ).<Number>toAny().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "*":
                 this.multiply(
-                    CCommon.raw( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
+                    p_argument.get( 0 ).toAny(),
+                    p_argument.get( 2 ).<Number>toAny().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "/":
                 this.divide(
-                    CCommon.raw( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).doubleValue()
+                    p_argument.get( 0 ).toAny(),
+                    p_argument.get( 2 ).<Number>toAny().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 

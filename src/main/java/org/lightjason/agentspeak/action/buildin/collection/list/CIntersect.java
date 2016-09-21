@@ -63,13 +63,13 @@ public final class CIntersect extends IBuildinAction
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
         final List<?> l_result = CCommon.flatList( p_argument ).parallelStream()
-                                        .map( i -> CCommon.raw( i ) )
+                                        .map( ITerm::toAny )
                                         .distinct()
                                         .filter(
                                             i -> p_argument.parallelStream()
-                                                           .map( j -> CCommon.<Collection<?>, ITerm>raw( j )
+                                                           .map( j -> j.<Collection<ITerm>>toAny()
                                                                .parallelStream()
-                                                               .map( l -> CCommon.raw( l ) )
+                                                               .map( ITerm::toAny )
                                                                .collect( Collectors.toList() )
                                                                .contains( i )
                                                            )

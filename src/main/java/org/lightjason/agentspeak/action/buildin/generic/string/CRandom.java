@@ -63,10 +63,10 @@ public final class CRandom extends IBuildinAction
         p_return.add( CRawTerm.from(
             p_argument.size() > 1
             ? RandomStringUtils.random(
-                CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue(),
-                CCommon.<String, ITerm>raw( p_argument.get( 1 ) ).toCharArray()
+                p_argument.get( 0 ).<Number>toAny().intValue(),
+                p_argument.get( 1 ).<String>toAny().toCharArray()
             )
-            : RandomStringUtils.random( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue() )
+            : RandomStringUtils.random( p_argument.get( 0 ).<Number>toAny().intValue() )
         ) );
 
         return CFuzzyValue.from( true );

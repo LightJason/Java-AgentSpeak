@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -66,7 +67,7 @@ public final class CBase64Encode extends IBuildinAction
     {
         p_return.addAll(
             p_argument.stream()
-                      .map( CCommon::<String, ITerm>raw )
+                      .map( ITerm::<String>toAny )
                       .map( i -> {
                           try
                           {
@@ -77,7 +78,7 @@ public final class CBase64Encode extends IBuildinAction
                               return null;
                           }
                       } )
-                      .filter( i -> i != null )
+                      .filter( Objects::nonNull )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() )
         );

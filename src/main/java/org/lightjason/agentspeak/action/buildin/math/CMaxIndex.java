@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.math;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -57,10 +58,9 @@ public final class CMaxIndex extends IBuildinAction
         p_return.add( CRawTerm.from(
             IntStream.range( 0, l_list.size() - 1 ).parallel()
                      .reduce( ( i, j ) ->
-                                  CCommon.<Number, ITerm>raw( l_list.get( i ) ).doubleValue() < CCommon.<Number, ITerm>raw(
-                                      l_list.get( j ) ).doubleValue()
+                                  l_list.get( i ).<Number>toAny().doubleValue() < l_list.get( j ).<Number>toAny().doubleValue()
                                   ? j : i
-                     ).getAsInt()
+                     ).orElseThrow( () -> new CRuntimeException( p_context ) )
         ) );
 
         return CFuzzyValue.from( true );

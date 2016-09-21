@@ -54,7 +54,7 @@ public final class CExp extends IBuildinAction
     {
         p_return.addAll(
             CCommon.flatList( p_argument ).stream()
-                   .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
+                   .mapToDouble( i -> i.<Number>toAny().doubleValue() )
                    .boxed()
                    .map( Math::exp )
                    .map( CRawTerm::from )

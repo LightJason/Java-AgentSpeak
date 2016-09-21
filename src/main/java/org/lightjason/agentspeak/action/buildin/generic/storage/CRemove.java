@@ -80,11 +80,11 @@ public final class CRemove extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = CCommon.raw( p_argument.get( 0 ) );
+        final String l_key = p_argument.get( 0 ).toAny();
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 
-        p_return.add( CRawTerm.from( p_context.agent().storage().remove( CCommon.raw( p_argument.get( 0 ) ) ) ) );
+        p_return.add( CRawTerm.from( p_context.agent().storage().remove( l_key ) ) );
         return CFuzzyValue.from( true );
     }
 

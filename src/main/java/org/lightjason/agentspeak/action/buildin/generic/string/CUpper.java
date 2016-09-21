@@ -62,7 +62,7 @@ public final class CUpper extends IBuildinAction
     {
         p_return.addAll(
             p_argument.stream()
-                      .map( CCommon::<String, ITerm>raw )
+                      .map( ITerm::<String>toAny )
                       .map( String::toUpperCase )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() )

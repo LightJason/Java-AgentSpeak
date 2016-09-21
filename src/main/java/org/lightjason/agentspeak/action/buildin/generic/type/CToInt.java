@@ -60,7 +60,7 @@ public final class CToInt extends IBuildinAction
     )
     {
         p_return.add(
-            CRawTerm.from( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).longValue() )
+            CRawTerm.from( p_argument.get( 0 ).<Number>toAny().longValue() )
         );
         return CFuzzyValue.from( true );
     }

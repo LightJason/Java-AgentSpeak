@@ -62,7 +62,7 @@ public final class CReverse extends IBuildinAction
     {
         p_return.addAll(
             p_argument.stream()
-                      .map( CCommon::<String, ITerm>raw )
+                      .map( ITerm::<String>toAny )
                       .map( i -> new StringBuilder( i ).reverse().toString() )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() )

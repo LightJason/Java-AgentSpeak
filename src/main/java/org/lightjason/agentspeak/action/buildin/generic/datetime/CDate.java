@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.generic.datetime;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -59,14 +60,14 @@ public final class CDate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( CCommon.raw( p_argument.get( 0 ) ) ) : ZonedDateTime.now();
+        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).toAny() ) : ZonedDateTime.now();
 
-        p_return.add( CCommon.raw( l_date.getDayOfMonth() ) );
-        p_return.add( CCommon.raw( l_date.getMonthValue() ) );
-        p_return.add( CCommon.raw( l_date.getYear() ) );
-        p_return.add( CCommon.raw( l_date.getDayOfWeek() ) );
-        p_return.add( CCommon.raw( l_date.getDayOfYear() ) );
-        p_return.add( CCommon.raw( l_date.getZone() ) );
+        p_return.add( CRawTerm.from( l_date.getDayOfMonth() ) );
+        p_return.add( CRawTerm.from( l_date.getMonthValue() ) );
+        p_return.add( CRawTerm.from( l_date.getYear() ) );
+        p_return.add( CRawTerm.from( l_date.getDayOfWeek() ) );
+        p_return.add( CRawTerm.from( l_date.getDayOfYear() ) );
+        p_return.add( CRawTerm.from( l_date.getZone() ) );
 
         return CFuzzyValue.from( true );
     }

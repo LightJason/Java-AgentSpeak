@@ -51,9 +51,9 @@ public final class CThrow extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        if ( CCommon.raw( p_argument.get( 0 ) ) )
+        if ( p_argument.get( 0 ).toAny() )
             throw p_argument.size() == 1 ? new CRuntimeException( p_context ) : new CRuntimeException(
-                CCommon.<String, ITerm>raw( p_argument.get( 1 ) ),
+                p_argument.get( 1 ).<String>toAny(),
                 p_context
             );
         return CFuzzyValue.from( true );

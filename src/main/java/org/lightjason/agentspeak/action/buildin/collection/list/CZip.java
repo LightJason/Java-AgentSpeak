@@ -62,8 +62,8 @@ public final class CZip extends IBuildinAction
     {
         // first and second argument list references
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
-                CCommon.<Collection<?>, ITerm>raw( p_argument.get( 0 ) ).stream(),
-                CCommon.<Collection<?>, ITerm>raw( p_argument.get( 1 ) ).stream(),
+                p_argument.get( 0 ).<Collection<?>>toAny().stream(),
+                p_argument.get( 1 ).<Collection<?>>toAny().stream(),
                 AbstractMap.SimpleImmutableEntry::new
         ).collect( Collectors.toList() );
 

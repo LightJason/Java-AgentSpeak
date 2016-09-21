@@ -60,7 +60,7 @@ public final class CToFloat extends IBuildinAction
     )
     {
         p_return.add(
-            CRawTerm.from( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).doubleValue() )
+            CRawTerm.from( p_argument.get( 0 ).<Number>toAny().doubleValue() )
         );
         return CFuzzyValue.from( true );
     }

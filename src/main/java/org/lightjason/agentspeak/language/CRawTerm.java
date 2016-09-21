@@ -69,17 +69,11 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @SuppressWarnings( "unchecked" )
     public <N> CRawTerm( final N p_value )
     {
-        if ( p_value instanceof IRawTerm<?> )
+        if ( p_value instanceof ITerm )
         {
-            final IRawTerm<?> l_term = (IRawTerm<?>) p_value;
-            m_value = l_term.typed();
+            final ITerm l_term = (ITerm) p_value;
+            m_value = l_term.toAny();
             m_functor = l_term.fqnfunctor();
-        }
-        else if ( p_value instanceof IVariable<?> )
-        {
-            final IVariable<?> l_variable = (IVariable<?>) p_value;
-            m_value = (T) l_variable.get();
-            m_functor = l_variable.fqnfunctor();
         }
         else
         {
@@ -122,7 +116,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
                    (
                         ( p_object instanceof IVariable<?> )
                         && ( ( (IVariable<?>) p_object ).allocated() )
-                        && ( this.hashCode() == ( (IVariable<?>) p_object ).get().hashCode() )
+                        && ( this.hashCode() == ( (IVariable<?>) p_object ).toAny().hashCode() )
                    )
                    || ( ( p_object instanceof ITerm ) && ( this.hashCode() == p_object.hashCode() ) )
                );
@@ -153,14 +147,8 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final ILiteral toLiteral() throws ClassCastException
-    {
-        throw new ClassCastException( "raw term cannot be cast to literal" );
-    }
-
-    @Override
     @SuppressWarnings( "unchecked" )
-    public <T> T toAny() throws ClassCastException
+    public final <T> T toAny()
     {
         return (T) m_value;
     }

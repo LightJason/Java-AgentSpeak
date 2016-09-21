@@ -54,8 +54,8 @@ public final class CBinomial extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
             CombinatoricsUtils.binomialCoefficient(
-                CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue(),
-                CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue()
+                p_argument.get( 0 ).<Number>toAny().intValue(),
+                p_argument.get( 1 ).<Number>toAny().intValue()
             )
         ) );
         return CFuzzyValue.from( true );

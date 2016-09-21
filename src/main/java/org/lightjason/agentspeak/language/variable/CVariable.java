@@ -24,14 +24,13 @@
 package org.lightjason.agentspeak.language.variable;
 
 import com.rits.cloning.Cloner;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CClassCastException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -240,11 +239,12 @@ public class CVariable<T> implements IVariable<T>
      * @param p_value value
      * @return self reference
      */
-    private final IVariable<T> internalset( final T p_value )
+    @SuppressWarnings( "unchecked" )
+    private IVariable<T> internalset( final T p_value )
     {
         // value must be set manually to avoid exception throwing (see CVariable.set)
         if ( !m_any )
-            m_value = CCommon.raw( p_value );
+            m_value = p_value instanceof ITerm ? ( (ITerm) p_value ).toAny() : p_value;
         return this;
     }
 }

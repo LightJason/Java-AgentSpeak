@@ -60,9 +60,7 @@ public final class CAsMap extends IBuildinAction
     )
     {
         // first argument map reference
-        p_return.add( CRawTerm.from(
-            CCommon.<HashMultimap<?, ?>, ITerm>raw( p_argument.get( 0 ) ).asMap()
-        ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<HashMultimap<?, ?>>toAny().asMap() ) );
         return CFuzzyValue.from( true );
     }
 

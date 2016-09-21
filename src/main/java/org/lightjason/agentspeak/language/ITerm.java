@@ -55,20 +55,11 @@ public interface ITerm extends IDeepCopy<ITerm>
     IPath fqnfunctor();
 
     /**
-     * cast to literal
-     *
-     * @return literal
-     * @throws ClassCastException is thrown on casting error
-     */
-    ILiteral toLiteral() throws ClassCastException;
-
-    /**
      * cast to any raw value type
      *
      * @tparam raw type
      * @return any type
-     * @throws ClassCastException is thrown on casting error
      */
-    <T> T toAny() throws ClassCastException;
+    <T> T toAny();
 
 }

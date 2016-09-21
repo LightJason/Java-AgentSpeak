@@ -59,9 +59,10 @@ public final class CPut extends IBuildinAction
     )
     {
         // first argument map reference, second key-value, third value
-        CCommon.<Map<?, ?>, ITerm>raw( p_argument.get( 0 ) ).put(
-            CCommon.raw( p_argument.get( 1 ) ),
-            CCommon.raw( p_argument.get( 2 ) )
+        p_argument.get( 0 ).<Map<?, ?>>toAny()
+        .put(
+            p_argument.get( 1 ).toAny(),
+            p_argument.get( 2 ).toAny()
         );
         return CFuzzyValue.from( true );
     }
