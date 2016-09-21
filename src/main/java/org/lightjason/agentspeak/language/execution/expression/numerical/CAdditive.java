@@ -82,15 +82,15 @@ public final class CAdditive extends IBaseBinary
         {
             case PLUS:
                 p_return.add( CRawTerm.from( this.add(
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
+                    l_argument.get( 0 ).toAny(),
+                    l_argument.get( 1 ).toAny()
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case MINUS:
                 p_return.add( CRawTerm.from( this.subtract(
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
+                    l_argument.get( 0 ).toAny(),
+                    l_argument.get( 1 ).toAny()
                 ) ) );
                 return CFuzzyValue.from( true );
 

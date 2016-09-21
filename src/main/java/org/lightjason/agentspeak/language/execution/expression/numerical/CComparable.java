@@ -102,8 +102,8 @@ public final class CComparable extends IBaseBinary
     @SuppressWarnings( "unchecked" )
     private static boolean checkequal( final ITerm p_value1, final ITerm p_value2 )
     {
-        final Object l_value1 = CCommon.raw( p_value1 );
-        final Object l_value2 = CCommon.raw( p_value2 );
+        final Object l_value1 = p_value1.toAny();
+        final Object l_value2 = p_value2.toAny();
 
         return ( l_value1 instanceof Number ) && ( l_value2 instanceof Number )
                ? ( (Number) l_value1 ).doubleValue() == ( (Number) l_value2 ).doubleValue()

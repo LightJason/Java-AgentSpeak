@@ -82,22 +82,22 @@ public final class CMultiplicative extends IBaseBinary
         {
             case MULTIPLY:
                 p_return.add( CRawTerm.from( this.multiply(
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
+                    l_argument.get( 0 ).toAny(),
+                    l_argument.get( 1 ).toAny()
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case DIVIDE:
                 p_return.add( CRawTerm.from( this.divide(
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
+                    l_argument.get( 0 ).toAny(),
+                    l_argument.get( 1 ).toAny()
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case MODULO:
                 p_return.add( CRawTerm.from( this.modulo(
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 0 ) ),
-                    org.lightjason.agentspeak.language.CCommon.raw( l_argument.get( 1 ) )
+                    l_argument.get( 0 ).toAny(),
+                    l_argument.get( 1 ).toAny()
                 ) ) );
                 return CFuzzyValue.from( true );
 

@@ -152,7 +152,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
         if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return, p_annotation ).value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
-        return CFuzzyValue.from( CCommon.raw( l_return.get( 0 ) ) );
+        return CFuzzyValue.from( l_return.get( 0 ).toAny() );
     }
 
 
