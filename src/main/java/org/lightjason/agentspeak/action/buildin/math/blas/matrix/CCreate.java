@@ -27,7 +27,6 @@ import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -63,13 +62,13 @@ public final class CCreate extends IBuildinAction
     {
         // first argument is row-size, second colum-size
         // optional third argument is matrix type (default dense-matrix)
-        switch ( p_argument.size() > 2 ? EType.valueOf( CCommon.raw( p_argument.get( 3 ) ) ) : EType.DENSE )
+        switch ( p_argument.size() > 2 ? EType.valueOf( p_argument.get( 3 ).toAny() ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add(
                     CRawTerm.from( new DenseDoubleMatrix2D(
-                        CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue(),
-                        CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue()
+                        p_argument.get( 0 ).<Number>toAny().intValue(),
+                        p_argument.get( 1 ).<Number>toAny().intValue()
                     ) )
                 );
                 break;
@@ -77,8 +76,8 @@ public final class CCreate extends IBuildinAction
             case SPARSE:
                 p_return.add(
                     CRawTerm.from( new SparseDoubleMatrix2D(
-                        CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue(),
-                        CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue()
+                        p_argument.get( 0 ).<Number>toAny().intValue(),
+                        p_argument.get( 1 ).<Number>toAny().intValue()
                     ) )
                 );
                 break;

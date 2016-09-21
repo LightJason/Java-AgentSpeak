@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.grammar;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
@@ -56,7 +57,6 @@ import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
-import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 import java.util.Collection;
 import java.util.Collections;

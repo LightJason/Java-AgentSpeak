@@ -28,7 +28,6 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.AbstractMatrix;
 import cern.jet.math.Functions;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;

@@ -23,15 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.math.statistic;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
-import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.BetaDistribution;
 import org.apache.commons.math3.distribution.CauchyDistribution;
@@ -62,6 +53,15 @@ import org.apache.commons.math3.random.Well19937c;
 import org.apache.commons.math3.random.Well44497a;
 import org.apache.commons.math3.random.Well44497b;
 import org.apache.commons.math3.random.Well512a;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.concurrent.Callable;
 

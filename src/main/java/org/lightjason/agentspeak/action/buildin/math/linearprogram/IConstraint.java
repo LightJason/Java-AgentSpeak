@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.buildin.math.linearprogram;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.apache.commons.math3.optim.linear.Relationship;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 
 /**

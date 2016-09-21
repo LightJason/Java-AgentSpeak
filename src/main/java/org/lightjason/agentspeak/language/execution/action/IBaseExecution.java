@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.language.execution.action;
 
 import com.google.common.collect.ImmutableMultiset;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.variable.IVariable;
 

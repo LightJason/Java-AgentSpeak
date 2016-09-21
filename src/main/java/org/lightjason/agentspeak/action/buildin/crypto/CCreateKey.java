@@ -23,14 +23,13 @@
 
 package org.lightjason.agentspeak.action.buildin.crypto;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;

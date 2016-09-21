@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.interpolate;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -30,7 +31,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.math3.analysis.UnivariateFunction;
 
 import java.util.List;
 import java.util.stream.Collectors;

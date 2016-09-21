@@ -25,6 +25,9 @@ package org.lightjason.agentspeak.grammar;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -81,9 +84,6 @@ import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.CVariableEvaluate;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
-import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.MessageFormat;
 import java.util.Collection;

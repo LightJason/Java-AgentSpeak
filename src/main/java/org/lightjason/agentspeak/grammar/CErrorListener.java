@@ -23,14 +23,14 @@
 
 package org.lightjason.agentspeak.grammar;
 
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CSyntaxErrorException;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CSyntaxErrorException;
 
 import java.util.BitSet;
 

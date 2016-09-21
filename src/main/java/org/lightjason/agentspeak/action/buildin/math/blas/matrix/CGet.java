@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -62,10 +61,10 @@ public final class CGet extends IBuildinAction
         // first argument must be a term with a matrix object, second row index, third column index
         p_return.add(
             CRawTerm.from(
-                CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) )
+                p_argument.get( 0 ).<DoubleMatrix2D>toAny()
                     .getQuick(
-                        CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue(),
-                        CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).intValue()
+                        p_argument.get( 1 ).<Number>toAny().intValue(),
+                        p_argument.get( 2 ).<Number>toAny().intValue()
                     )
             )
         );

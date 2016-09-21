@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -54,8 +53,8 @@ public final class CSolve extends IAlgebra
         // first argument matrix, second argument result matrix
         p_return.add( CRawTerm.from(
             ALGEBRA.solve(
-                CCommon.raw( p_return.get( 0 ) ),
-                CCommon.raw( p_return.get( 1 ) )
+                p_return.get( 0 ).toAny(),
+                p_return.get( 1 ).toAny()
             )
         ) );
         return CFuzzyValue.from( true );

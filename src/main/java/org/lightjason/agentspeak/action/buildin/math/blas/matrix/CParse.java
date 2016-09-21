@@ -27,7 +27,7 @@ import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -66,17 +66,17 @@ public final class CParse extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.raw( p_argument.get( 1 ) ) ) : EType.DENSE )
+        switch ( p_argument.size() > 1 ? EType.valueOf( p_argument.get( 1 ).toAny() ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add(
-                    CRawTerm.from( new DenseDoubleMatrix2D( parse( CCommon.raw( p_argument.get( 0 ) ) ) ) )
+                    CRawTerm.from( new DenseDoubleMatrix2D( CParse.parse( p_context, p_argument.get( 0 ).toAny() ) ) )
                 );
                 break;
 
             case SPARSE:
                 p_return.add(
-                    CRawTerm.from( new SparseDoubleMatrix2D( parse( CCommon.raw( p_argument.get( 0 ) ) ) ) )
+                    CRawTerm.from( new SparseDoubleMatrix2D( CParse.parse( p_context, p_argument.get( 0 ).toAny() ) ) )
                 );
                 break;
 
@@ -92,7 +92,7 @@ public final class CParse extends IBuildinAction
      * @param p_string string
      * @return 2D double array
      */
-    private static double[][] parse( final String p_string )
+    private static double[][] parse( final IContext p_context, final String p_string )
     {
         final String[] l_rows = p_string.split( ";" );
         final List<List<Double>> l_matrix = new ArrayList<>();
@@ -111,7 +111,7 @@ public final class CParse extends IBuildinAction
                       return i.size();
                   } )
                   .max()
-                  .getAsInt()
+                  .orElseThrow( () -> new CRuntimeException( p_context ) )
             ];
 
         IntStream.range( 0, l_return.length )

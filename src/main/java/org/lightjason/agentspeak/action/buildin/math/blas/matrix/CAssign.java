@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -62,12 +61,12 @@ public final class CAssign extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second assign value
-        final DoubleMatrix2D l_matrix = CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) );
-        final Object l_value = CCommon.raw( p_argument.get( 1 ) );
+        final DoubleMatrix2D l_matrix = p_argument.get( 0 ).toAny();
+        final Object l_value = p_argument.get( 1 ).toAny();
 
-        if ( l_value instanceof Double )
+        if ( l_value instanceof Number )
         {
-            p_return.add( CRawTerm.from( l_matrix.assign( (Double) l_value ) ) );
+            p_return.add( CRawTerm.from( l_matrix.assign( ( (Number) l_value ).doubleValue() ) ) );
             return CFuzzyValue.from( true );
         }
 

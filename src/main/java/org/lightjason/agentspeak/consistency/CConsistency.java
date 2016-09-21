@@ -33,13 +33,13 @@ import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Functions;
 import cern.jet.math.Mult;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.error.CIllegalStateException;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.generic.storage;
 
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;

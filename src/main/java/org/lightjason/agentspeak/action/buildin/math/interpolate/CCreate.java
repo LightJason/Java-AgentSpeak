@@ -23,6 +23,12 @@
 
 package org.lightjason.agentspeak.action.buildin.math.interpolate;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
+import org.apache.commons.math3.analysis.interpolation.DividedDifferenceInterpolator;
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.analysis.interpolation.LoessInterpolator;
+import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,12 +37,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
-import org.apache.commons.math3.analysis.interpolation.DividedDifferenceInterpolator;
-import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
-import org.apache.commons.math3.analysis.interpolation.LoessInterpolator;
-import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
 
 import java.util.List;
 

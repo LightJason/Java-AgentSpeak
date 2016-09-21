@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -68,14 +67,14 @@ public final class CColumn extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) )
-                        .viewColumn( CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue() ).toArray()
+                    p_argument.get( 0 ).<DoubleMatrix2D>toAny()
+                        .viewColumn( p_argument.get( 1 ).<Number>toAny().intValue() ).toArray()
                 )
                       .boxed().collect( Collectors.toList() )
             )
             : Arrays.stream(
-                CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) )
-                    .viewColumn( CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue() ).toArray()
+                p_argument.get( 0 ).<DoubleMatrix2D>toAny()
+                    .viewColumn( p_argument.get( 1 ).<Number>toAny().intValue() ).toArray()
             )
                     .boxed().collect( Collectors.toList() )
         ) );

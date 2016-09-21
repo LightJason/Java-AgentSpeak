@@ -23,9 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -63,7 +61,7 @@ public final class COneNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.norm1( CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ) )
+                ALGEBRA.norm1( p_argument.get( 0 ).toAny() )
             )
         );
 

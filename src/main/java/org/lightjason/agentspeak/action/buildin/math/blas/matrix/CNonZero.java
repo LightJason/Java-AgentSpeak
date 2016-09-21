@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -60,7 +59,7 @@ public final class CNonZero extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object
-        p_return.add( CRawTerm.from( CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ).cardinality() ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix2D>toAny().cardinality() ) );
         return CFuzzyValue.from( true );
     }
 }

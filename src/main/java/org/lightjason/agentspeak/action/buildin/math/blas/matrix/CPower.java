@@ -23,9 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -64,8 +62,8 @@ public final class CPower extends IAlgebra
         p_return.add(
             CRawTerm.from(
                 ALGEBRA.pow(
-                    CCommon.<DoubleMatrix2D, ITerm>raw( p_argument.get( 0 ) ),
-                    CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).intValue()
+                    p_argument.get( 0 ).toAny(),
+                    p_argument.get( 1 ).<Number>toAny().intValue()
                 )
             )
         );

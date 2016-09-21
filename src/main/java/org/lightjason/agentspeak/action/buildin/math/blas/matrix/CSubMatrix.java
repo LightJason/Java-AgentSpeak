@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -63,11 +62,11 @@ public final class CSubMatrix extends IAlgebra
         // forth begin column index, fifth end column index
         p_return.add( CRawTerm.from(
             ALGEBRA.subMatrix(
-                CCommon.raw( p_argument.get( 0 ) ),
-                CCommon.<Number, ITerm>raw( p_argument.get( 1 ) ).intValue(),
-                CCommon.<Number, ITerm>raw( p_argument.get( 2 ) ).intValue(),
-                CCommon.<Number, ITerm>raw( p_argument.get( 3 ) ).intValue(),
-                CCommon.<Number, ITerm>raw( p_argument.get( 4 ) ).intValue()
+                p_argument.get( 0 ).toAny(),
+                p_argument.get( 1 ).<Number>toAny().intValue(),
+                p_argument.get( 2 ).<Number>toAny().intValue(),
+                p_argument.get( 3 ).<Number>toAny().intValue(),
+                p_argument.get( 4 ).<Number>toAny().intValue()
             )
         ) );
 
