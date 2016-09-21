@@ -24,12 +24,15 @@
 package org.lightjason.agentspeak.language.variable;
 
 import com.rits.cloning.Cloner;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.error.CClassCastException;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.text.MessageFormat;
@@ -105,19 +108,6 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> set( final T p_value )
     {
         return this.internalset( p_value );
-    }
-
-    @Override
-    public T get()
-    {
-        return m_value;
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public <N> N typed()
-    {
-        return (N) m_value;
     }
 
     @Override
@@ -197,6 +187,19 @@ public class CVariable<T> implements IVariable<T>
     public final IPath fqnfunctor()
     {
         return m_functor;
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <N> N toAny()
+    {
+        return (N) m_value;
+    }
+
+    @Override
+    public final ILiteral toLiteral() throws ClassCastException
+    {
+        throw new CClassCastException( MessageFormat.format( "variable [{0}] cannot be cast into literal", m_functor ) );
     }
 
     @Override

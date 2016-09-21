@@ -44,22 +44,6 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
     IVariable<T> set( final T p_value );
 
     /**
-     * gets the value
-     *
-     * @return value
-     */
-    T get();
-
-    /**
-     * gets the value with cast
-     *
-     * @return casted value
-     *
-     * @tparam N casted type
-     */
-    <N> N typed();
-
-    /**
      * returns allocated state
      *
      * @return boolean flag

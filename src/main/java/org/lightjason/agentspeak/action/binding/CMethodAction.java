@@ -109,7 +109,7 @@ public final class CMethodAction extends IBaseAction
                     m_method.invokeWithArguments(
                         Stream.concat(
                             Stream.of( p_context.agent() ),
-                            p_argument.stream().map( CCommon::raw )
+                            p_argument.stream().map( ITerm::toAny )
                         ).collect( Collectors.toList() )
                     ),
                     p_return
