@@ -126,7 +126,7 @@ public final class CCommon
         if ( p_value instanceof IVariable<?> )
             return ( (IVariable<?>) p_value ).typed();
         if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).typed();
+            return ( (IRawTerm<?>) p_value ).toAny();
 
         return (T) p_value;
     }

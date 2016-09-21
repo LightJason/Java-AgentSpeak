@@ -153,6 +153,19 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
+    public final ILiteral toLiteral() throws ClassCastException
+    {
+        throw new ClassCastException( "raw term cannot be cast to literal" );
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <T> T toAny() throws ClassCastException
+    {
+        return (T) m_value;
+    }
+
+    @Override
     public final T get()
     {
         return m_value;

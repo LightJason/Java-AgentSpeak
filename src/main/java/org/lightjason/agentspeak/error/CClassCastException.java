@@ -21,54 +21,41 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language;
+package org.lightjason.agentspeak.error;
 
-import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.common.CCommon;
+
+import java.util.logging.Logger;
 
 
 /**
- * term interface
+ * class cast exception
  */
-public interface ITerm extends IDeepCopy<ITerm>
+@SuppressWarnings( "serial" )
+public final class CClassCastException extends ClassCastException
 {
+    /**
+     * logger
+     */
+    protected static final Logger LOGGER = CCommon.logger( CClassCastException.class );
 
     /**
-     * returns the functor without path
-     *
-     * @return functor
+     * ctor
      */
-    String functor();
+    public CClassCastException()
+    {
+        super();
+        LOGGER.warning( "exception is thrown" );
+    }
 
     /**
-     * returns the path of the functor
+     * ctor
      *
-     * @return path
+     * @param p_message message
      */
-    IPath functorpath();
-
-    /**
-     * returns the full-qualified functor
-     * with path and name
-     *
-     * @return fqn functor
-     */
-    IPath fqnfunctor();
-
-    /**
-     * cast to literal
-     *
-     * @return literal
-     * @throws ClassCastException is thrown on casting error
-     */
-    ILiteral toLiteral() throws ClassCastException;
-
-    /**
-     * cast to any raw value type
-     *
-     * @tparam raw type
-     * @return any type
-     * @throws ClassCastException is thrown on casting error
-     */
-    <T> T toAny() throws ClassCastException;
-
+    public CClassCastException( final String p_message )
+    {
+        super( p_message );
+        LOGGER.warning( p_message );
+    }
 }
