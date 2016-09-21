@@ -64,8 +64,8 @@ public final class CGetStatisticValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final StatisticalSummary l_statistic = CCommon.<StatisticalSummary, ITerm>raw( p_argument.get( 0 ) );
-        final EValue l_value = EValue.valueOf( CCommon.<String, ITerm>raw( p_argument.get( 1 ) ).trim().toUpperCase() );
+        final StatisticalSummary l_statistic = p_argument.get( 0 ).toAny();
+        final EValue l_value = EValue.valueOf( p_argument.get( 1 ).<String>toAny().trim().toUpperCase() );
 
         if ( l_statistic instanceof SummaryStatistics )
         {
@@ -208,7 +208,7 @@ public final class CGetStatisticValue extends IBuildinAction
                     return p_statistic.getKurtosis();
 
                 case PERCENTILE:
-                    return p_statistic.getPercentile( CCommon.<Number, ITerm>raw( p_argument.get( 0 ) ).doubleValue() );
+                    return p_statistic.getPercentile( p_argument.get( 0 ).<Number>toAny().doubleValue() );
 
                 default:
                     throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );

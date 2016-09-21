@@ -62,7 +62,7 @@ public final class CClearStatistic extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final StatisticalSummary l_statistic = CCommon.<StatisticalSummary, ITerm>raw( p_argument.get( 0 ) );
+        final StatisticalSummary l_statistic = p_argument.get( 0 ).toAny();
 
         if ( l_statistic instanceof SummaryStatistics )
             return this.clear( (SummaryStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );

@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -168,7 +169,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
         return CCommon.flatList( p_input ).stream().map( i -> {
 
-            l_localcontext.getMiddle().set( CCommon.raw( i ) );
+            l_localcontext.getMiddle().set( i.toAny() );
             m_body.forEach(
                 j -> j.execute(
                     l_localcontext.getLeft(),
@@ -177,9 +178,9 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
                     new LinkedList<>(),
                     Collections.<ITerm>emptyList()
                 ) );
-            return l_localcontext.getRight() != null ? CCommon.raw( l_localcontext.getRight() ) : null;
+            return l_localcontext.getRight() != null ? l_localcontext.getRight().toAny() : null;
 
-        } ).filter( i -> i != null ).collect( Collectors.toList() );
+        } ).filter( Objects::nonNull ).collect( Collectors.toList() );
     }
 
     /**
@@ -194,15 +195,15 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return CCommon.flatList( p_input ).parallelStream().map( i -> {
 
             final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
-            l_localcontext.getMiddle().set( CCommon.raw( i ) );
+            l_localcontext.getMiddle().set( i.toAny() );
             m_body.forEach(
                 j -> j.execute(
                     l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
                     Collections.<ITerm>emptyList()
                 ) );
-            return l_localcontext.getRight() != null ? CCommon.raw( l_localcontext.getRight() ) : null;
+            return l_localcontext.getRight() != null ? l_localcontext.getRight().toAny() : null;
 
-        } ).filter( i -> i != null ).collect( Collectors.toList() );
+        } ).filter( Objects::nonNull ).collect( Collectors.toList() );
     }
 
 

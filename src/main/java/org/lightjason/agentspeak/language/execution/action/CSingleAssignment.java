@@ -71,7 +71,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
         if ( ( !l_rightreturn.value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
-        ( (IVariable<?>) CCommon.replaceFromContext( p_context, m_value ) ).set( CCommon.raw( l_return.get( 0 ) ) );
+        ( (IVariable<?>) CCommon.replaceFromContext( p_context, m_value ) ).set( l_return.get( 0 ).toAny() );
         return CFuzzyValue.from( true );
     }
 

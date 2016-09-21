@@ -125,9 +125,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
             return CFuzzyValue.from( false );
 
         if ( l_value.valueAssignableTo( Boolean.class ) )
-            return CFuzzyValue.from( l_value.typed() );
+            return CFuzzyValue.from( l_value.toAny() );
 
-        p_return.add( CRawTerm.from( l_value.get() ) );
+        p_return.add( CRawTerm.from( l_value.toAny() ) );
         return CFuzzyValue.from( true );
     }
 

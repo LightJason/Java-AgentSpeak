@@ -62,7 +62,7 @@ public final class CInCircle extends IBuildinAction
     {
         // arguments are: x-value, y-value, circle center x-value, circle center y-value, circle radius
         final List<Double> l_point = p_argument.stream()
-                                               .map( CCommon::<Number, ITerm>raw )
+                                               .map( ITerm::<Number>toAny )
                                                .mapToDouble( Number::doubleValue )
                                                .boxed()
                                                .collect( Collectors.toList() );

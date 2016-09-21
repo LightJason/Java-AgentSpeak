@@ -74,8 +74,7 @@ public final class CVariableUnify extends CDefaultUnify
     {
         final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal(
             m_value,
-            CCommon.raw(
-            CCommon.replaceFromContext( p_context, m_constraint ) )
+            CCommon.replaceFromContext( p_context, m_constraint ).toAny()
         );
         if ( l_variables.size() != m_variablenumber )
             return CFuzzyValue.from( false );

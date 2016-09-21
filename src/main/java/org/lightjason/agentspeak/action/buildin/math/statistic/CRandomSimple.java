@@ -68,7 +68,7 @@ public final class CRandomSimple extends IBuildinAction
         IntStream.range(
             0,
             p_argument.size() > 0
-            ? CCommon.raw( p_argument.get( 0 ) )
+            ? p_argument.get( 0 ).toAny()
             : 1
         ).forEach( i -> p_return.add( CRawTerm.from( m_random.nextDouble() ) ) );
 

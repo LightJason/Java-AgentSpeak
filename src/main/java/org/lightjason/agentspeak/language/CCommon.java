@@ -207,7 +207,7 @@ public final class CCommon
     public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException
     {
         final StringBuilder l_result = new StringBuilder();
-        ( flatList( p_input ) ).forEach( i -> l_result.append( raw( i ).toString() ) );
+        ( flatList( p_input ) ).forEach( i -> l_result.append( i.toAny().toString() ) );
         return l_result.toString().getBytes( "UTF-8" );
     }
 
@@ -256,7 +256,7 @@ public final class CCommon
     private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
     {
         return p_list.stream().flatMap( i -> {
-            final Object l_value = raw( i );
+            final Object l_value = i instanceof ITerm ? ( (ITerm) i).toAny() : i;
             return l_value instanceof Collection<?>
                    ? flattenToStream( (List<?>) l_value )
                    : Stream.of( CRawTerm.from( l_value ) );

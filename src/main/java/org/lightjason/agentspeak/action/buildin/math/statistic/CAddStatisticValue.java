@@ -62,7 +62,7 @@ public final class CAddStatisticValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final StatisticalSummary l_statistic = CCommon.<StatisticalSummary, ITerm>raw( p_argument.get( 0 ) );
+        final StatisticalSummary l_statistic = p_argument.get( 0 ).toAny();
 
         if ( l_statistic instanceof SummaryStatistics )
             return this.push( (SummaryStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );
@@ -82,7 +82,7 @@ public final class CAddStatisticValue extends IBuildinAction
      */
     private IFuzzyValue<Boolean> push( final SummaryStatistics p_statistic, final List<ITerm> p_value )
     {
-        CCommon.flatList( p_value ).forEach( i -> p_statistic.addValue( CCommon.<Number, ITerm>raw( i ).doubleValue() ) );
+        CCommon.flatList( p_value ).forEach( i -> p_statistic.addValue( i.<Number>toAny().doubleValue() ) );
         return CFuzzyValue.from( true );
     }
 
@@ -95,7 +95,7 @@ public final class CAddStatisticValue extends IBuildinAction
      */
     private IFuzzyValue<Boolean> push( final DescriptiveStatistics p_statistic, final List<ITerm> p_value )
     {
-        CCommon.flatList( p_value ).forEach( i -> p_statistic.addValue( CCommon.<Number, ITerm>raw( i ).doubleValue() ) );
+        CCommon.flatList( p_value ).forEach( i -> p_statistic.addValue( i.<Number>toAny().doubleValue() ) );
         return CFuzzyValue.from( true );
     }
 }

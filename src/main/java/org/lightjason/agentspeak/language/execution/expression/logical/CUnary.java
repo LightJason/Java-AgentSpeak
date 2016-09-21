@@ -73,7 +73,7 @@ public final class CUnary extends IBaseUnary
         {
             case NEGATION:
                 p_return.add( CRawTerm.from(
-                    !CCommon.<Boolean, ITerm>raw( l_argument.get( 0 ) )
+                    !l_argument.get( 0 ).<Boolean>toAny()
                 ) );
                 return CFuzzyValue.from( true );
 

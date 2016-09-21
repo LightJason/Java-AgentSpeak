@@ -92,7 +92,7 @@ public final class CCreateDistribution extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final EDistribution l_distribution = EDistribution.valueOf( CCommon.<String, ITerm>raw( p_argument.get( 0 ) ).trim().toUpperCase() );
+        final EDistribution l_distribution = EDistribution.valueOf( p_argument.get( 0 ).<String>toAny().trim().toUpperCase() );
         final int l_requiredarguments = this.minimalArgumentNumber() + l_distribution.getArgumentNumber();
 
         if ( p_argument.size() < l_requiredarguments )
@@ -102,9 +102,9 @@ public final class CCreateDistribution extends IBuildinAction
         p_return.add( CRawTerm.from(
             l_distribution.get(
                 ( p_argument.size() > l_requiredarguments
-                  ? EGenerator.valueOf( CCommon.<String, ITerm>raw( p_argument.get( l_requiredarguments + 1 ) ).trim().toUpperCase() )
+                  ? EGenerator.valueOf( p_argument.get( l_requiredarguments + 1 ).<String>toAny().trim().toUpperCase() )
                   : EGenerator.MERSENNETWISTER ).get(),
-                p_argument.subList( 1, l_requiredarguments ).stream().mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() ).boxed()
+                p_argument.subList( 1, l_requiredarguments ).stream().mapToDouble( i -> i.<Number>toAny().doubleValue() ).boxed()
                           .collect( Collectors.toList() )
             )
         ) );
