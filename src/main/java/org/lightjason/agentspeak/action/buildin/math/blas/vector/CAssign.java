@@ -63,12 +63,12 @@ public final class CAssign extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second assign value
-        final DoubleMatrix1D l_vector = CCommon.<DoubleMatrix1D, ITerm>raw( p_argument.get( 0 ) );
-        final Object l_value = CCommon.raw( p_argument.get( 1 ) );
+        final DoubleMatrix1D l_vector = p_argument.get( 0 ).toAny();
+        final Object l_value = p_argument.get( 1 ).toAny();
 
-        if ( l_value instanceof Double )
+        if ( l_value instanceof Number )
         {
-            p_return.add( CRawTerm.from( l_vector.assign( (Double) l_value ) ) );
+            p_return.add( CRawTerm.from( l_vector.assign( ( (Number) l_value ).doubleValue() ) ) );
             return CFuzzyValue.from( true );
         }
 

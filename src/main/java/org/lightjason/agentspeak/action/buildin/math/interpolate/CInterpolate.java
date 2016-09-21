@@ -61,13 +61,11 @@ public final class CInterpolate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final UnivariateFunction l_function = CCommon.<UnivariateFunction, ITerm>raw( p_argument.get( 0 ) );
+        final UnivariateFunction l_function = p_argument.get( 0 ).toAny();
 
         p_return.addAll(
             CCommon.flatList( p_argument.subList( 1, p_argument.size() ) ).stream()
-                   .mapToDouble(
-                       i -> CCommon.<Number, ITerm>raw( i ).doubleValue()
-                   )
+                   .mapToDouble( i -> i.<Number>toAny().doubleValue() )
                    .mapToObj( i -> CRawTerm.from( l_function.value( i ) ) )
                    .collect( Collectors.toList() )
         );

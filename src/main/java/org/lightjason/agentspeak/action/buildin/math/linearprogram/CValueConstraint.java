@@ -65,13 +65,13 @@ public final class CValueConstraint extends IConstraint
     )
     {
         // create linear constraint based on a value
-        CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>raw( p_argument.get( 0 ) ).getRight().add(
+        p_argument.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>toAny().getRight().add(
             new LinearConstraint(
                 p_argument.subList( 1, p_argument.size() - 2 ).stream()
-                          .mapToDouble( i -> CCommon.<Number, ITerm>raw( i ).doubleValue() )
+                          .mapToDouble( i -> i.<Number>toAny().doubleValue() )
                           .toArray(),
-                this.getRelation( CCommon.raw( p_argument.get( p_argument.size() - 2 ) ) ),
-                CCommon.<Number, ITerm>raw( p_argument.get( p_argument.size() - 1 ) ).doubleValue()
+                this.getRelation( p_argument.get( p_argument.size() - 2 ).toAny() ),
+                p_argument.get( p_argument.size() - 1 ).<Number>toAny().doubleValue()
             )
         );
 

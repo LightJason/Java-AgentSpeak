@@ -45,6 +45,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -77,18 +78,17 @@ public final class CSolve extends IBuildinAction
         // third & four argument can be the number of iterations or string with "non-negative" variables
         final List<OptimizationData> l_settings = new LinkedList<>();
 
-        final Pair<LinearObjectiveFunction, Collection<LinearConstraint>> l_default = CCommon.<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>, ITerm>raw(
-            p_argument.get( 0 ) );
+        final Pair<LinearObjectiveFunction, Collection<LinearConstraint>> l_default = p_argument.get( 0 ).toAny();
         l_settings.add( l_default.getLeft() );
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
         l_settings.addAll( p_argument.subList( 1, p_argument.size() ).stream()
                                      .map( i -> {
                                          if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
-                                             return new MaxIter( CCommon.raw( i ) );
+                                             return new MaxIter( i.toAny() );
 
                                          if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                                             switch ( CCommon.<String, ITerm>raw( i ).trim().toLowerCase() )
+                                             switch ( i.<String>toAny().trim().toLowerCase() )
                                              {
                                                  case "non-negative":
                                                      return new NonNegativeConstraint( true );
@@ -103,7 +103,7 @@ public final class CSolve extends IBuildinAction
 
                                          return null;
                                      } )
-                                     .filter( i -> i != null ).collect( Collectors.toList() )
+                                     .filter( Objects::nonNull ).collect( Collectors.toList() )
         );
 
 

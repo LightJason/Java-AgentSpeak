@@ -63,14 +63,14 @@ public final class CParse extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( p_argument.size() > 1 ? EType.valueOf( CCommon.raw( p_argument.get( 1 ) ) ) : EType.DENSE )
+        switch ( p_argument.size() > 1 ? EType.valueOf( p_argument.get( 1 ).toAny() ) : EType.DENSE )
         {
             case DENSE:
-                p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( parse( CCommon.raw( p_argument.get( 0 ) ) ) ) ) );
+                p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( CParse.parse( p_argument.get( 0 ).toAny() ) ) ) );
                 break;
 
             case SPARSE:
-                p_return.add( CRawTerm.from( new SparseDoubleMatrix1D( parse( CCommon.raw( p_argument.get( 0 ) ) ) ) ) );
+                p_return.add( CRawTerm.from( new SparseDoubleMatrix1D( CParse.parse( p_argument.get( 0 ).toAny() ) ) ) );
                 break;
 
             default:
