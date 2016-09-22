@@ -58,7 +58,7 @@ public final class CIsString extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Object l_value = p_argument.get( 0 ).toAny();
+        final Object l_value = p_argument.get( 0 ).raw();
         final boolean l_return = ( l_value instanceof String ) || ( l_value instanceof Character );
 
         p_return.add( CRawTerm.from( l_return ) );

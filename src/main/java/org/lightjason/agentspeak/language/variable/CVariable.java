@@ -188,7 +188,7 @@ public class CVariable<T> implements IVariable<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <N> N toAny()
+    public <N> N raw()
     {
         return (N) m_value;
     }
@@ -236,7 +236,7 @@ public class CVariable<T> implements IVariable<T>
     {
         // value must be set manually to avoid exception throwing (see CVariable.set)
         if ( !m_any )
-            m_value = p_value instanceof ITerm ? ( (ITerm) p_value ).toAny() : p_value;
+            m_value = p_value instanceof ITerm ? ( (ITerm) p_value ).raw() : p_value;
         return this;
     }
 }

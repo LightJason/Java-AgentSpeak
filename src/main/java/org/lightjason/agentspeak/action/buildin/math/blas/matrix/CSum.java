@@ -59,7 +59,7 @@ public final class CSum extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second index of the element
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix2D>toAny().zSum() ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix2D>raw().zSum() ) );
         return CFuzzyValue.from( true );
     }
 }

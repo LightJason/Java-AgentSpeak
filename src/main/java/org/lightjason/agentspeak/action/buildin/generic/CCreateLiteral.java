@@ -53,7 +53,7 @@ public final class CCreateLiteral extends IBuildinAction
     {
         p_return.add(
             CLiteral.from(
-                p_argument.get( 0 ).toAny(),
+                p_argument.get( 0 ).raw(),
                 p_argument.size() > 1
                 ? p_argument.subList( 1, p_argument.size() )
                 : Collections.emptyList()

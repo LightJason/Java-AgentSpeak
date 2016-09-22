@@ -67,7 +67,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
                                                final List<ITerm> p_annotation
     )
     {
-        this.set( CCommon.replaceFromContext( p_context, m_value ), m_righthand.toAny() );
+        this.set( CCommon.replaceFromContext( p_context, m_value ), m_righthand.raw() );
         return CFuzzyValue.from( true );
     }
 

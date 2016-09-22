@@ -77,19 +77,19 @@ public final class CEquationConstraint extends IConstraint
 
 
         // create linear constraint based on an equation
-        p_argument.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>toAny().getRight().add(
+        p_argument.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
             new LinearConstraint(
                 p_argument.subList( 1, l_index - 2 ).stream()
-                          .mapToDouble( i -> i.<Number>toAny().doubleValue() )
+                          .mapToDouble( i -> i.<Number>raw().doubleValue() )
                           .toArray(),
-                p_argument.get( l_index - 1 ).<Number>toAny().doubleValue(),
+                p_argument.get( l_index - 1 ).<Number>raw().doubleValue(),
 
-                this.getRelation( p_argument.get( l_index ).toAny() ),
+                this.getRelation( p_argument.get( l_index ).raw() ),
 
                 p_argument.subList( l_index + 1, p_argument.size() ).stream()
-                          .mapToDouble( i -> i.<Number>toAny().doubleValue() )
+                          .mapToDouble( i -> i.<Number>raw().doubleValue() )
                           .toArray(),
-                p_argument.get( p_argument.size() - 1 ).<Number>toAny().doubleValue()
+                p_argument.get( p_argument.size() - 1 ).<Number>raw().doubleValue()
             )
         );
 

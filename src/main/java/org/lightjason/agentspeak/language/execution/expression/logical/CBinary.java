@@ -85,15 +85,15 @@ public final class CBinary extends IBaseBinary
         {
 
             case AND:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>toAny() && l_argument.get( 1 ).<Boolean>toAny() ) );
+                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>raw() && l_argument.get( 1 ).<Boolean>raw() ) );
                 return CFuzzyValue.from( true );
 
             case OR:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>toAny() || l_argument.get( 1 ).<Boolean>toAny() ) );
+                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>raw() || l_argument.get( 1 ).<Boolean>raw() ) );
                 return CFuzzyValue.from( true );
 
             case XOR:
-                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>toAny() ^ l_argument.get( 1 ).<Boolean>toAny() ) );
+                p_return.add( CRawTerm.from( l_argument.get( 0 ).<Boolean>raw() ^ l_argument.get( 1 ).<Boolean>raw() ) );
                 return CFuzzyValue.from( true );
 
             default:
@@ -114,11 +114,11 @@ public final class CBinary extends IBaseBinary
         switch ( m_operator )
         {
             case AND:
-                l_result = !p_argument.get( 0 ).<Boolean>toAny();
+                l_result = !p_argument.get( 0 ).<Boolean>raw();
                 break;
 
             case OR:
-                l_result = p_argument.get( 0 ).<Boolean>toAny();
+                l_result = p_argument.get( 0 ).<Boolean>raw();
                 break;
 
             default:

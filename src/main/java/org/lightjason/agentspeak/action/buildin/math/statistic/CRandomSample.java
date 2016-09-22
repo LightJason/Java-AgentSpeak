@@ -67,16 +67,16 @@ public final class CRandomSample extends IBuildinAction
             p_return.add( CRawTerm.from(
                 p_parallel
                 ? Collections.synchronizedList( Arrays.stream(
-                    p_argument.get( 0 ).<AbstractRealDistribution>toAny()
-                        .sample( p_argument.get( 1 ).<Number>toAny().intValue() )
+                    p_argument.get( 0 ).<AbstractRealDistribution>raw()
+                        .sample( p_argument.get( 1 ).<Number>raw().intValue() )
                 ).boxed().collect( Collectors.toList() ) )
                 : Arrays.stream(
-                    p_argument.get( 0 ).<AbstractRealDistribution>toAny()
-                        .sample( p_argument.get( 1 ).<Number>toAny().intValue() )
+                    p_argument.get( 0 ).<AbstractRealDistribution>raw()
+                        .sample( p_argument.get( 1 ).<Number>raw().intValue() )
                 ).boxed().collect( Collectors.toList() )
             ) );
         else
-            p_return.add( CRawTerm.from( p_argument.get( 0 ).<AbstractRealDistribution>toAny().sample() ) );
+            p_return.add( CRawTerm.from( p_argument.get( 0 ).<AbstractRealDistribution>raw().sample() ) );
 
         return CFuzzyValue.from( true );
     }

@@ -59,7 +59,7 @@ public final class CToInt extends IBuildinAction
     )
     {
         p_return.add(
-            CRawTerm.from( p_argument.get( 0 ).<Number>toAny().longValue() )
+            CRawTerm.from( p_argument.get( 0 ).<Number>raw().longValue() )
         );
         return CFuzzyValue.from( true );
     }

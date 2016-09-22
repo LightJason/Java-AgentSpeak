@@ -66,14 +66,14 @@ public final class CRow extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    p_argument.get( 0 ).<DoubleMatrix2D>toAny()
-                        .viewRow( p_argument.get( 1 ).<Number>toAny().intValue() ).toArray()
+                    p_argument.get( 0 ).<DoubleMatrix2D>raw()
+                        .viewRow( p_argument.get( 1 ).<Number>raw().intValue() ).toArray()
                 )
                       .boxed().collect( Collectors.toList() )
             )
             : Arrays.stream(
-                p_argument.get( 0 ).<DoubleMatrix2D>toAny()
-                    .viewRow( p_argument.get( 1 ).<Number>toAny().intValue() ).toArray()
+                p_argument.get( 0 ).<DoubleMatrix2D>raw()
+                    .viewRow( p_argument.get( 1 ).<Number>raw().intValue() ).toArray()
             )
                     .boxed().collect( Collectors.toList() )
         ) );

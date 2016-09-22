@@ -82,15 +82,15 @@ public final class CAdditive extends IBaseBinary
         {
             case PLUS:
                 p_return.add( CRawTerm.from( this.add(
-                    l_argument.get( 0 ).toAny(),
-                    l_argument.get( 1 ).toAny()
+                    l_argument.get( 0 ).raw(),
+                    l_argument.get( 1 ).raw()
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case MINUS:
                 p_return.add( CRawTerm.from( this.subtract(
-                    l_argument.get( 0 ).toAny(),
-                    l_argument.get( 1 ).toAny()
+                    l_argument.get( 0 ).raw(),
+                    l_argument.get( 1 ).raw()
                 ) ) );
                 return CFuzzyValue.from( true );
 

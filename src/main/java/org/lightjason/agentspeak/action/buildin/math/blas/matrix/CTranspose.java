@@ -61,7 +61,7 @@ public final class CTranspose extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.transpose( p_argument.get( 0 ).toAny() )
+                ALGEBRA.transpose( p_argument.get( 0 ).raw() )
             )
         );
 

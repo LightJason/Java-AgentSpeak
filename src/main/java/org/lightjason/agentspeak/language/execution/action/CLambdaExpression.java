@@ -169,7 +169,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
         return CCommon.flatList( p_input ).stream().map( i -> {
 
-            l_localcontext.getMiddle().set( i.toAny() );
+            l_localcontext.getMiddle().set( i.raw() );
             m_body.forEach(
                 j -> j.execute(
                     l_localcontext.getLeft(),
@@ -178,7 +178,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
                     new LinkedList<>(),
                     Collections.<ITerm>emptyList()
                 ) );
-            return l_localcontext.getRight() != null ? l_localcontext.getRight().toAny() : null;
+            return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
 
         } ).filter( Objects::nonNull ).collect( Collectors.toList() );
     }
@@ -195,13 +195,13 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return CCommon.flatList( p_input ).parallelStream().map( i -> {
 
             final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
-            l_localcontext.getMiddle().set( i.toAny() );
+            l_localcontext.getMiddle().set( i.raw() );
             m_body.forEach(
                 j -> j.execute(
                     l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
                     Collections.<ITerm>emptyList()
                 ) );
-            return l_localcontext.getRight() != null ? l_localcontext.getRight().toAny() : null;
+            return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
 
         } ).filter( Objects::nonNull ).collect( Collectors.toList() );
     }

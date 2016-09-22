@@ -78,16 +78,27 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
         IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )
                  .boxed()
-                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( l_flatresult.get( i ).toAny() ) );
+                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( l_flatresult.get( i ).raw() ) );
 
 
         // tail matching
         if ( l_assign.size() < l_flatresult.size() )
-            ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set(
-                CCommon.raw( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) )
-            );
+            ( (IVariable<?>) l_assign.get( l_assign.size() - 1 ) ).set( CMultiAssignment.map( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) ) );
 
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * mapping with implizit cast
+     * @param p_value any value type
+     * @tparam N input type
+     * @tparam M return type
+     * @return value with casted type
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <N, M> N map( final M p_value )
+    {
+        return (N) p_value;
     }
 
     @Override

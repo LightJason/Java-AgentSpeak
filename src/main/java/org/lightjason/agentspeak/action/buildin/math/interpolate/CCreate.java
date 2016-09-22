@@ -67,11 +67,11 @@ public final class CCreate extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            EType.valueOf( p_argument.get( 0 ).<String>toAny().trim().toUpperCase() ).get(
-                CCommon.flatList( p_argument.get( 1 ).toAny() ).stream()
-                       .mapToDouble( i -> i.<Number>toAny().doubleValue() ).toArray(),
-                CCommon.flatList( p_argument.get( 2 ).toAny() ).stream()
-                       .mapToDouble( i -> i.<Number>toAny().doubleValue() ).toArray()
+            EType.valueOf( p_argument.get( 0 ).<String>raw().trim().toUpperCase() ).get(
+                CCommon.flatList( p_argument.get( 1 ).raw() ).stream()
+                       .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray(),
+                CCommon.flatList( p_argument.get( 2 ).raw() ).stream()
+                       .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray()
             )
         ) );
 

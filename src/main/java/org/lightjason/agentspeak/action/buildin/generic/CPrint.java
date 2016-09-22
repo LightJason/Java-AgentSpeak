@@ -128,7 +128,7 @@ public final class CPrint extends IBuildinAction
     private String getString( final Collection<ITerm> p_argument )
     {
         return StringUtils.join( p_argument.stream()
-                                           .map( ITerm::toAny )
+                                           .map( ITerm::raw )
                                            .map( i -> {
                                                if ( i == null )
                                                    return "";

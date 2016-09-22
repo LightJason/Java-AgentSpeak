@@ -59,11 +59,11 @@ public final class CContains extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_string = p_argument.get( 0 ).toAny();
+        final String l_string = p_argument.get( 0 ).raw();
 
         p_return.addAll(
             p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> l_string.contains( i.toAny() ) )
+                      .map( i -> l_string.contains( i.raw() ) )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() )
         );

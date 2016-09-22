@@ -72,7 +72,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
         if ( p_value instanceof ITerm )
         {
             final ITerm l_term = (ITerm) p_value;
-            m_value = l_term.toAny();
+            m_value = l_term.raw();
             m_functor = l_term.fqnfunctor();
         }
         else
@@ -116,7 +116,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
                    (
                         ( p_object instanceof IVariable<?> )
                         && ( ( (IVariable<?>) p_object ).allocated() )
-                        && ( this.hashCode() == ( (IVariable<?>) p_object ).toAny().hashCode() )
+                        && ( this.hashCode() == ( (IVariable<?>) p_object ).raw().hashCode() )
                    )
                    || ( ( p_object instanceof ITerm ) && ( this.hashCode() == p_object.hashCode() ) )
                );
@@ -148,7 +148,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final <T> T toAny()
+    public final <T> T raw()
     {
         return (T) m_value;
     }

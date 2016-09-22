@@ -57,9 +57,9 @@ public final class CSet extends IBuildinAction
     )
     {
         // first argument list reference, second index, third value
-        p_argument.get( 0 ).<List<?>>toAny().set(
-            p_argument.get( 1 ).<Number>toAny().intValue(),
-            p_argument.get( 2 ).toAny()
+        p_argument.get( 0 ).<List<?>>raw().set(
+            p_argument.get( 1 ).<Number>raw().intValue(),
+            p_argument.get( 2 ).raw()
         );
         return CFuzzyValue.from( true );
     }

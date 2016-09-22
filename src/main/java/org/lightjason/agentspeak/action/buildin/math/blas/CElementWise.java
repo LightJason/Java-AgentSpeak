@@ -54,33 +54,33 @@ public class CElementWise extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( p_argument.get( 1 ).<String>toAny().trim() )
+        switch ( p_argument.get( 1 ).<String>raw().trim() )
         {
             case "+":
                 this.plus(
-                    p_argument.get( 0 ).toAny(),
-                    p_argument.get( 2 ).<Number>toAny().doubleValue()
+                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "-":
                 this.minus(
-                    p_argument.get( 0 ).toAny(),
-                    p_argument.get( 2 ).<Number>toAny().doubleValue()
+                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "*":
                 this.multiply(
-                    p_argument.get( 0 ).toAny(),
-                    p_argument.get( 2 ).<Number>toAny().doubleValue()
+                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "/":
                 this.divide(
-                    p_argument.get( 0 ).toAny(),
-                    p_argument.get( 2 ).<Number>toAny().doubleValue()
+                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 

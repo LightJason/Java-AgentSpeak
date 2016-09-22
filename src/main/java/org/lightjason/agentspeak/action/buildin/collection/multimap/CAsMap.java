@@ -59,7 +59,7 @@ public final class CAsMap extends IBuildinAction
     )
     {
         // first argument map reference
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<HashMultimap<?, ?>>toAny().asMap() ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<HashMultimap<?, ?>>raw().asMap() ) );
         return CFuzzyValue.from( true );
     }
 

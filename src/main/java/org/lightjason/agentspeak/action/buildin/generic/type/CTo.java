@@ -63,7 +63,7 @@ public final class CTo extends IBuildinAction
         try
         {
             p_return.add( CRawTerm.from(
-                Class.forName( p_argument.get( 1 ).toAny() ).cast( p_argument.get( 0 ).toAny() ) )
+                Class.forName( p_argument.get( 1 ).raw() ).cast( p_argument.get( 0 ).raw() ) )
             );
 
             return CFuzzyValue.from( true );

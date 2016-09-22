@@ -54,7 +54,7 @@ public final class CSize extends IBuildinAction
         // first argument list reference
         p_return.add(
             CRawTerm.from(
-                p_argument.get( 0 ).<Collection<?>>toAny().size()
+                p_argument.get( 0 ).<Collection<?>>raw().size()
             )
         );
 

@@ -29,21 +29,6 @@ package org.lightjason.agentspeak.language;
  */
 public interface IRawTerm<T> extends ITerm
 {
-    /**
-     * returns the raw valuw
-     *
-     * @return value
-     */
-    T get();
-
-    /**
-     * gets the value with cast
-     *
-     * @return casted value
-     *
-     * @tparam N casted type
-     */
-    <N> N typed();
 
     /**
      * returns allocated state

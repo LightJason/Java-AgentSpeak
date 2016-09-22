@@ -60,7 +60,7 @@ public final class CGet extends IBuildinAction
         // first argument list reference, second key-value
         p_return.add(
             CRawTerm.from(
-                p_argument.get( 0 ).<List<?>>toAny().get( p_argument.get( 1 ).<Number>toAny().intValue() )
+                p_argument.get( 0 ).<List<?>>raw().get( p_argument.get( 1 ).<Number>raw().intValue() )
             )
         );
 

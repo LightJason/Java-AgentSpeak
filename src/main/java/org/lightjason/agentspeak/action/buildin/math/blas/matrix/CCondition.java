@@ -61,7 +61,7 @@ public final class CCondition extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.cond( p_argument.get( 0 ).toAny() )
+                ALGEBRA.cond( p_argument.get( 0 ).raw() )
             )
         );
 

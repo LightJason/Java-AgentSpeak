@@ -59,7 +59,7 @@ public final class CGet extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second index of the element
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix1D>toAny().getQuick( p_argument.get( 1 ).<Number>toAny().intValue() ) ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix1D>raw().getQuick( p_argument.get( 1 ).<Number>raw().intValue() ) ) );
 
         return CFuzzyValue.from( true );
     }

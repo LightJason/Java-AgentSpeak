@@ -59,7 +59,7 @@ public final class CValues extends IBuildinAction
     )
     {
         // first argument map reference
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<Map<?, ?>>toAny().values() ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<Map<?, ?>>raw().values() ) );
         return CFuzzyValue.from( true );
     }
 

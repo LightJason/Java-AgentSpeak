@@ -116,7 +116,7 @@ public final class CUnifier implements IUnifier
                                                               l_return,
                                                               Collections.<ITerm>emptyList()
                                                           );
-                                                          return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>toAny() );
+                                                          return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
                                                       } )
                                                       .findFirst()
                                                       .orElse( Collections.<IVariable<?>>emptySet() );
@@ -153,7 +153,7 @@ public final class CUnifier implements IUnifier
                                                               l_return,
                                                               Collections.<ITerm>emptyList()
                                                           );
-                                                          return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>toAny() );
+                                                          return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
                                                       } )
                                                       .findFirst()
                                                       .orElse( Collections.<IVariable<?>>emptySet() );

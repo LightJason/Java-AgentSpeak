@@ -51,7 +51,7 @@ public final class CPrimeFactors extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( Primes.nextPrime( p_argument.get( 0 ).<Number>toAny().intValue() ) ) );
+        p_return.add( CRawTerm.from( Primes.nextPrime( p_argument.get( 0 ).<Number>raw().intValue() ) ) );
         return CFuzzyValue.from( true );
     }
 

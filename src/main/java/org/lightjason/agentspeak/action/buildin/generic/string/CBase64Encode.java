@@ -66,7 +66,7 @@ public final class CBase64Encode extends IBuildinAction
     {
         p_return.addAll(
             p_argument.stream()
-                      .map( ITerm::<String>toAny )
+                      .map( ITerm::<String>raw )
                       .map( i -> {
                           try
                           {

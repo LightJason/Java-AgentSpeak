@@ -61,7 +61,7 @@ public final class CSize extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<AbstractMatrix>toAny().size() ) );
+        p_return.add( CRawTerm.from( p_argument.get( 0 ).<AbstractMatrix>raw().size() ) );
 
         return CFuzzyValue.from( true );
     }

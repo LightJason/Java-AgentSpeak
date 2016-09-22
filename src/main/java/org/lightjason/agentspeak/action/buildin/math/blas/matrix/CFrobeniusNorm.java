@@ -61,7 +61,7 @@ public final class CFrobeniusNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.normF( p_argument.get( 0 ).toAny() )
+                ALGEBRA.normF( p_argument.get( 0 ).raw() )
             )
         );
 

@@ -60,8 +60,8 @@ public final class CDotProduct extends IBuildinAction
     {
         // first and second argument must be a term with a vector object
         p_return.add( CRawTerm.from(
-            p_argument.get( 0 ).<DoubleMatrix1D>toAny()
-                .zDotProduct( p_argument.get( 1 ).toAny() )
+            p_argument.get( 0 ).<DoubleMatrix1D>raw()
+                .zDotProduct( p_argument.get( 1 ).raw() )
         ) );
         return CFuzzyValue.from( true );
     }

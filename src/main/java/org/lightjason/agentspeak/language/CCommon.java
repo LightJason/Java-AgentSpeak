@@ -65,7 +65,7 @@ public final class CCommon
      */
     public static IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.typed() ) );
+        p_unifiedvariables.forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
         return p_context;
     }
 
@@ -112,23 +112,6 @@ public final class CCommon
                   .map( i -> (IVariable<?>) i )
                   .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
         );
-    }
-
-    /**
-     * returns a native / raw value of a term
-     *
-     * @param p_value any value type
-     * @return term value or raw value
-     */
-    @SuppressWarnings( "unchecked" )
-    public static <T, N> T raw( final N p_value )
-    {
-        if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).typed();
-        if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).toAny();
-
-        return (T) p_value;
     }
 
     /**
@@ -207,7 +190,7 @@ public final class CCommon
     public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException
     {
         final StringBuilder l_result = new StringBuilder();
-        ( flatList( p_input ) ).forEach( i -> l_result.append( i.toAny().toString() ) );
+        ( flatList( p_input ) ).forEach( i -> l_result.append( i.raw().toString() ) );
         return l_result.toString().getBytes( "UTF-8" );
     }
 
@@ -256,7 +239,7 @@ public final class CCommon
     private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
     {
         return p_list.stream().flatMap( i -> {
-            final Object l_value = i instanceof ITerm ? ( (ITerm) i ).toAny() : i;
+            final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
                    ? flattenToStream( (List<?>) l_value )
                    : Stream.of( CRawTerm.from( l_value ) );

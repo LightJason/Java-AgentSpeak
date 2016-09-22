@@ -61,7 +61,7 @@ public final class CColumnNumber extends IBuildinAction
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                p_argument.get( 0 ).<DoubleMatrix2D>toAny().columns()
+                p_argument.get( 0 ).<DoubleMatrix2D>raw().columns()
             )
         );
 

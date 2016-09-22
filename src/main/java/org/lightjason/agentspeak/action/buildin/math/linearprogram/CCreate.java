@@ -67,8 +67,8 @@ public final class CCreate extends IBuildinAction
             new ImmutablePair<>(
                 new LinearObjectiveFunction(
                     p_argument.subList( 0, p_argument.size() - 1 ).stream()
-                              .mapToDouble( i -> i.<Number>toAny().doubleValue() ).toArray(),
-                    p_argument.get( p_argument.size() - 1 ).<Number>toAny().doubleValue()
+                              .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray(),
+                    p_argument.get( p_argument.size() - 1 ).<Number>raw().doubleValue()
                 ),
                 new HashSet<LinearConstraint>()
             )

@@ -82,8 +82,8 @@ public final class CPower extends IBaseBinary
             case POWER:
                 p_return.add( CRawTerm.from(
                     Math.pow(
-                        l_argument.get( 0 ).<Number>toAny().doubleValue(),
-                        l_argument.get( 1 ).<Number>toAny().doubleValue()
+                        l_argument.get( 0 ).<Number>raw().doubleValue(),
+                        l_argument.get( 1 ).<Number>raw().doubleValue()
                     )
                 ) );
                 return CFuzzyValue.from( true );

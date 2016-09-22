@@ -61,7 +61,7 @@ public final class CRank extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.rank( p_argument.get( 0 ).toAny() )
+                ALGEBRA.rank( p_argument.get( 0 ).raw() )
             )
         );
 

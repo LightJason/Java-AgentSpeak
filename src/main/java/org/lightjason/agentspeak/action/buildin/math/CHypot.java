@@ -52,8 +52,8 @@ public final class CHypot extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
             Math.hypot(
-                p_argument.get( 0 ).<Number>toAny().doubleValue(),
-                p_argument.get( 1 ).<Number>toAny().doubleValue()
+                p_argument.get( 0 ).<Number>raw().doubleValue(),
+                p_argument.get( 1 ).<Number>raw().doubleValue()
             )
         ) );
         return CFuzzyValue.from( true );

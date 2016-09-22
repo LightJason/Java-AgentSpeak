@@ -60,6 +60,6 @@ public interface ITerm extends IDeepCopy<ITerm>
      * @tparam raw type
      * @return any type
      */
-    <T> T toAny();
+    <T> T raw();
 
 }

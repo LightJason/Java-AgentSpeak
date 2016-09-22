@@ -61,8 +61,8 @@ public final class CMultiply extends IAlgebra
     )
     {
         // first & second argument are matrix or vector elements
-        final AbstractMatrix l_first = p_argument.get( 0 ).toAny();
-        final AbstractMatrix l_second = p_argument.get( 1 ).toAny();
+        final AbstractMatrix l_first = p_argument.get( 0 ).raw();
+        final AbstractMatrix l_second = p_argument.get( 1 ).raw();
 
         if ( ( l_first instanceof DoubleMatrix1D ) && ( l_second instanceof DoubleMatrix1D ) )
             return this.multiplyVectorVector( (DoubleMatrix1D) l_first, (DoubleMatrix1D) l_second, p_return );

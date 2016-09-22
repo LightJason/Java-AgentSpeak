@@ -58,7 +58,7 @@ public final class CIsNumeric extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final boolean l_return = p_argument.get( 0 ).toAny() instanceof Number;
+        final boolean l_return = p_argument.get( 0 ).raw() instanceof Number;
 
         p_return.add( CRawTerm.from( l_return ) );
         return CFuzzyValue.from( l_return );

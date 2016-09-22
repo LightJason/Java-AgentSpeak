@@ -54,7 +54,7 @@ public final class CLog10 extends IBuildinAction
     {
         p_return.addAll(
             CCommon.flatList( p_argument ).stream()
-                   .mapToDouble( i -> i.<Number>toAny().doubleValue() )
+                   .mapToDouble( i -> i.<Number>raw().doubleValue() )
                    .boxed()
                    .map( Math::log10 )
                    .map( CRawTerm::from )

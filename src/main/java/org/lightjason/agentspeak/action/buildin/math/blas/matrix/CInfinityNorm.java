@@ -61,7 +61,7 @@ public final class CInfinityNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.normInfinity( p_argument.get( 0 ).toAny() )
+                ALGEBRA.normInfinity( p_argument.get( 0 ).raw() )
             )
         );
 

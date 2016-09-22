@@ -78,11 +78,11 @@ public final class CAdd extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = p_argument.get( 0 ).toAny();
+        final String l_key = p_argument.get( 0 ).raw();
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 
-        p_context.agent().storage().put( l_key, p_argument.get( 1 ).toAny() );
+        p_context.agent().storage().put( l_key, p_argument.get( 1 ).raw() );
         return CFuzzyValue.from( true );
     }
 

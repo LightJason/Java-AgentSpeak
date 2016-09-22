@@ -61,7 +61,7 @@ public final class CConcat extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
             p_argument.stream()
-                      .map( ITerm::<String>toAny )
+                      .map( ITerm::<String>raw )
                       .collect( Collectors.joining() )
         ) );
         return CFuzzyValue.from( true );

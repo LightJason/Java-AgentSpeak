@@ -79,7 +79,7 @@ public final class CExists extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = p_argument.get( 0 ).toAny();
+        final String l_key = p_argument.get( 0 ).raw();
         p_return.add( CRawTerm.from( ( !m_forbidden.contains( l_key ) ) && ( p_context.agent().storage().containsKey( l_key ) ) ) );
         return CFuzzyValue.from( true );
     }

@@ -61,7 +61,7 @@ public final class COneNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.norm1( p_argument.get( 0 ).toAny() )
+                ALGEBRA.norm1( p_argument.get( 0 ).raw() )
             )
         );
 

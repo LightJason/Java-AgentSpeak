@@ -59,7 +59,7 @@ public final class CTime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).toAny() ) : ZonedDateTime.now();
+        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).raw() ) : ZonedDateTime.now();
 
         p_return.add( CRawTerm.from( l_time.getHour() ) );
         p_return.add( CRawTerm.from( l_time.getMinute() ) );

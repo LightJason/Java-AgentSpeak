@@ -62,11 +62,11 @@ public final class CSubMatrix extends IAlgebra
         // forth begin column index, fifth end column index
         p_return.add( CRawTerm.from(
             ALGEBRA.subMatrix(
-                p_argument.get( 0 ).toAny(),
-                p_argument.get( 1 ).<Number>toAny().intValue(),
-                p_argument.get( 2 ).<Number>toAny().intValue(),
-                p_argument.get( 3 ).<Number>toAny().intValue(),
-                p_argument.get( 4 ).<Number>toAny().intValue()
+                p_argument.get( 0 ).raw(),
+                p_argument.get( 1 ).<Number>raw().intValue(),
+                p_argument.get( 2 ).<Number>raw().intValue(),
+                p_argument.get( 3 ).<Number>raw().intValue(),
+                p_argument.get( 4 ).<Number>raw().intValue()
             )
         ) );
 

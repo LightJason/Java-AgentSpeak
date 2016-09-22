@@ -67,7 +67,7 @@ public final class CInTriangle extends IBuildinAction
         // triange point 1 x-value, y-value (index 4 / 5),
         // triange point 2 x-value, y-value (index 6 / 7)
         final List<Double> l_point = p_argument.stream()
-                                               .map( ITerm::<Number>toAny )
+                                               .map( ITerm::<Number>raw )
                                                .mapToDouble( Number::doubleValue )
                                                .boxed()
                                                .collect( Collectors.toList() );

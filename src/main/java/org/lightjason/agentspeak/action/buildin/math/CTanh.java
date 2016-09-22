@@ -54,7 +54,7 @@ public final class CTanh extends IBuildinAction
     {
         p_return.addAll(
             CCommon.flatList( p_argument ).stream()
-                   .mapToDouble( i -> i.<Number>toAny().doubleValue() )
+                   .mapToDouble( i -> i.<Number>raw().doubleValue() )
                    .boxed()
                    .map( Math::tanh )
                    .map( CRawTerm::from )

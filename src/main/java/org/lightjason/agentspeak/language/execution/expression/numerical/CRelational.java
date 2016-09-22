@@ -83,8 +83,8 @@ public final class CRelational extends IBaseBinary
             case GREATER:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).toAny(),
-                        l_argument.get( 1 ).toAny()
+                        l_argument.get( 0 ).raw(),
+                        l_argument.get( 1 ).raw()
                     ) > 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -92,8 +92,8 @@ public final class CRelational extends IBaseBinary
             case GREATEREQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).toAny(),
-                        l_argument.get( 1 ).toAny()
+                        l_argument.get( 0 ).raw(),
+                        l_argument.get( 1 ).raw()
                     ) >= 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -101,8 +101,8 @@ public final class CRelational extends IBaseBinary
             case LESS:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).toAny(),
-                        l_argument.get( 1 ).toAny()
+                        l_argument.get( 0 ).raw(),
+                        l_argument.get( 1 ).raw()
                     ) < 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -110,8 +110,8 @@ public final class CRelational extends IBaseBinary
             case LESSEQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).toAny(),
-                        l_argument.get( 1 ).toAny()
+                        l_argument.get( 0 ).raw(),
+                        l_argument.get( 1 ).raw()
                     ) <= 0 )
                 );
                 return CFuzzyValue.from( true );

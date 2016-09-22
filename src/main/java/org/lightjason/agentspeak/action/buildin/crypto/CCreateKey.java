@@ -55,7 +55,7 @@ public final class CCreateKey extends IBuildinAction
     {
         try
         {
-            final Pair<Key, Key> l_key = EAlgorithm.valueOf( p_argument.get( 0 ).<String>toAny().trim().toUpperCase() ).generateKey();
+            final Pair<Key, Key> l_key = EAlgorithm.valueOf( p_argument.get( 0 ).<String>raw().trim().toUpperCase() ).generateKey();
 
             p_return.add( CRawTerm.from( l_key.getLeft() ) );
             if ( l_key.getRight() != null )

@@ -67,7 +67,7 @@ public final class CCreateStatistic extends IBuildinAction
         p_return.add( CRawTerm.from(
             ( p_argument.size() == 0
               ? EType.SUMMARY
-              : EType.valueOf( p_argument.get( 0 ).<String>toAny().trim().toUpperCase() )
+              : EType.valueOf( p_argument.get( 0 ).<String>raw().trim().toUpperCase() )
             ).generate( p_parallel )
         ) );
 

@@ -61,7 +61,7 @@ public final class CTwoNorm extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.norm2( p_argument.get( 0 ).toAny() )
+                ALGEBRA.norm2( p_argument.get( 0 ).raw() )
             )
         );
 

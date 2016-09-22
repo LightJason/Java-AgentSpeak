@@ -66,11 +66,11 @@ public final class CEigenValue extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    new EigenvalueDecomposition( p_argument.get( 0 ).toAny() ).getRealEigenvalues().toArray()
+                    new EigenvalueDecomposition( p_argument.get( 0 ).raw() ).getRealEigenvalues().toArray()
                 ).boxed().sorted().collect( Collectors.toList() )
             )
             : Arrays.stream(
-                new EigenvalueDecomposition( p_argument.get( 0 ).toAny() ).getRealEigenvalues().toArray()
+                new EigenvalueDecomposition( p_argument.get( 0 ).raw() ).getRealEigenvalues().toArray()
             ).boxed().sorted().collect( Collectors.toList() )
         ) );
 

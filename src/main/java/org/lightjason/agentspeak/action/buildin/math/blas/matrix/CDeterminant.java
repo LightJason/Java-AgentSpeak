@@ -61,7 +61,7 @@ public final class CDeterminant extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.det( p_argument.get( 0 ).toAny() )
+                ALGEBRA.det( p_argument.get( 0 ).raw() )
             )
         );
 

@@ -61,9 +61,9 @@ public final class CGet extends IBuildinAction
     {
         // first argument map reference, second key name
         p_return.addAll(
-            p_argument.get( 0 ).<HashMultimap<?, ?>>toAny()
+            p_argument.get( 0 ).<HashMultimap<?, ?>>raw()
                 .asMap()
-                .get( p_argument.get( 1 ).toAny() )
+                .get( p_argument.get( 1 ).raw() )
                 .parallelStream()
                 .map( CRawTerm::from ).collect( Collectors.toList() )
         );

@@ -78,17 +78,17 @@ public final class CSolve extends IBuildinAction
         // third & four argument can be the number of iterations or string with "non-negative" variables
         final List<OptimizationData> l_settings = new LinkedList<>();
 
-        final Pair<LinearObjectiveFunction, Collection<LinearConstraint>> l_default = p_argument.get( 0 ).toAny();
+        final Pair<LinearObjectiveFunction, Collection<LinearConstraint>> l_default = p_argument.get( 0 ).raw();
         l_settings.add( l_default.getLeft() );
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
         l_settings.addAll( p_argument.subList( 1, p_argument.size() ).stream()
                                      .map( i -> {
                                          if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
-                                             return new MaxIter( i.toAny() );
+                                             return new MaxIter( i.raw() );
 
                                          if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                                             switch ( i.<String>toAny().trim().toLowerCase() )
+                                             switch ( i.<String>raw().trim().toLowerCase() )
                                              {
                                                  case "non-negative":
                                                      return new NonNegativeConstraint( true );

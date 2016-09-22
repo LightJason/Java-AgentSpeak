@@ -53,8 +53,8 @@ public final class CBinomial extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
             CombinatoricsUtils.binomialCoefficient(
-                p_argument.get( 0 ).<Number>toAny().intValue(),
-                p_argument.get( 1 ).<Number>toAny().intValue()
+                p_argument.get( 0 ).<Number>raw().intValue(),
+                p_argument.get( 1 ).<Number>raw().intValue()
             )
         ) );
         return CFuzzyValue.from( true );

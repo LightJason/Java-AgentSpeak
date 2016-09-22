@@ -54,7 +54,7 @@ public final class CSignum extends IBuildinAction
     {
         p_return.addAll(
             CCommon.flatList( p_argument ).stream()
-                   .mapToDouble( i -> i.<Number>toAny().doubleValue() )
+                   .mapToDouble( i -> i.<Number>raw().doubleValue() )
                    .boxed()
                    .map( Math::signum )
                    .map( CRawTerm::from )

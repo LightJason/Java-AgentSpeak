@@ -79,7 +79,7 @@ public final class CRemove extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = p_argument.get( 0 ).toAny();
+        final String l_key = p_argument.get( 0 ).raw();
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 

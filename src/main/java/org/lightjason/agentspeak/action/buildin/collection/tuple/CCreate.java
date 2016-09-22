@@ -60,8 +60,8 @@ public final class CCreate extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
                 new AbstractMap.SimpleImmutableEntry<>(
-                        p_argument.get( 0 ).toAny(),
-                        p_argument.get( 1 ).toAny()
+                        p_argument.get( 0 ).raw(),
+                        p_argument.get( 1 ).raw()
                 )
         ) );
 

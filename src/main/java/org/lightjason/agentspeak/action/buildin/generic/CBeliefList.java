@@ -56,10 +56,10 @@ public final class CBeliefList extends IBuildinAction
     {
         final List<ILiteral> l_literal = (
                 p_argument.size() == 1
-                ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).toAny() ) )
+                ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).raw() ) )
                 : p_context.agent().beliefbase().stream(
-                                                         CPath.from( p_argument.get( 0 ).toAny() ),
-                                                         p_argument.get( 1 ).toAny()
+                                                         CPath.from( p_argument.get( 0 ).raw() ),
+                                                         p_argument.get( 1 ).raw()
                 )
         ).collect( Collectors.toList() );
 

@@ -83,9 +83,9 @@ public class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized <N> N toAny()
+    public final synchronized <N> N raw()
     {
-        return super.toAny();
+        return super.raw();
     }
 
     @Override

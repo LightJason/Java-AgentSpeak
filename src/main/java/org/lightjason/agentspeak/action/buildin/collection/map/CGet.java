@@ -61,7 +61,7 @@ public final class CGet extends IBuildinAction
         // first argument map reference, second key-value
         p_return.add(
             CRawTerm.from(
-                p_argument.get( 0 ).<Map<?, ?>>toAny().get( p_argument.get( 1 ).toAny() )
+                p_argument.get( 0 ).<Map<?, ?>>raw().get( p_argument.get( 1 ).raw() )
             )
         );
         return CFuzzyValue.from( true );

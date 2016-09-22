@@ -60,10 +60,10 @@ public final class CSubList extends IBuildinAction
     {
         // first argument set reference, second key-value
         p_return.addAll(
-            p_argument.get( 0 ).<List<?>>toAny()
+            p_argument.get( 0 ).<List<?>>raw()
                 .subList(
-                    p_argument.get( 1 ).<Number>toAny().intValue(),
-                    p_argument.get( 2 ).<Number>toAny().intValue()
+                    p_argument.get( 1 ).<Number>raw().intValue(),
+                    p_argument.get( 2 ).<Number>raw().intValue()
                 )
                 .stream().map( CRawTerm::from ).collect( Collectors.toList() )
         );

@@ -62,13 +62,13 @@ public final class CCreate extends IBuildinAction
     {
         // first argument is row-size, second colum-size
         // optional third argument is matrix type (default dense-matrix)
-        switch ( p_argument.size() > 2 ? EType.valueOf( p_argument.get( 3 ).toAny() ) : EType.DENSE )
+        switch ( p_argument.size() > 2 ? EType.valueOf( p_argument.get( 3 ).raw() ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add(
                     CRawTerm.from( new DenseDoubleMatrix2D(
-                        p_argument.get( 0 ).<Number>toAny().intValue(),
-                        p_argument.get( 1 ).<Number>toAny().intValue()
+                        p_argument.get( 0 ).<Number>raw().intValue(),
+                        p_argument.get( 1 ).<Number>raw().intValue()
                     ) )
                 );
                 break;
@@ -76,8 +76,8 @@ public final class CCreate extends IBuildinAction
             case SPARSE:
                 p_return.add(
                     CRawTerm.from( new SparseDoubleMatrix2D(
-                        p_argument.get( 0 ).<Number>toAny().intValue(),
-                        p_argument.get( 1 ).<Number>toAny().intValue()
+                        p_argument.get( 0 ).<Number>raw().intValue(),
+                        p_argument.get( 1 ).<Number>raw().intValue()
                     ) )
                 );
                 break;

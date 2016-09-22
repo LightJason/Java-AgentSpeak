@@ -61,8 +61,8 @@ public final class CAssign extends IBuildinAction
     )
     {
         // first argument must be a term with a matrix object, second assign value
-        final DoubleMatrix2D l_matrix = p_argument.get( 0 ).toAny();
-        final Object l_value = p_argument.get( 1 ).toAny();
+        final DoubleMatrix2D l_matrix = p_argument.get( 0 ).raw();
+        final Object l_value = p_argument.get( 1 ).raw();
 
         if ( l_value instanceof Number )
         {
