@@ -73,6 +73,12 @@ public final class CRawAction<T> extends IBaseExecution<T>
     }
 
     @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IBaseExecution<?> ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
+    @Override
     public final String toString()
     {
         return m_value.toString();
