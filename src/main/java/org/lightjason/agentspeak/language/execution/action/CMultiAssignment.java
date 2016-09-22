@@ -78,7 +78,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
         IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )
                  .boxed()
-                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( l_flatresult.get( i ).raw() ) );
+                 .forEach( i -> ( (IVariable<?>) l_assign.get( i ) ).set( CMultiAssignment.map( l_flatresult.get( i ).raw() ) ) );
 
 
         // tail matching

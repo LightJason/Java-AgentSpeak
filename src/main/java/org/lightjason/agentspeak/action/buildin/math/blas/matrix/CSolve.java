@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
+import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -53,8 +54,8 @@ public final class CSolve extends IAlgebra
         // first argument matrix, second argument result matrix
         p_return.add( CRawTerm.from(
             ALGEBRA.solve(
-                p_return.get( 0 ).raw(),
-                p_return.get( 1 ).raw()
+                p_return.get( 0 ).<DoubleMatrix2D>raw(),
+                p_return.get( 1 ).<DoubleMatrix2D>raw()
             )
         ) );
         return CFuzzyValue.from( true );

@@ -69,7 +69,7 @@ public final class CValueConstraint extends IConstraint
                 p_argument.subList( 1, p_argument.size() - 2 ).stream()
                           .mapToDouble( i -> i.<Number>raw().doubleValue() )
                           .toArray(),
-                this.getRelation( p_argument.get( p_argument.size() - 2 ).raw() ),
+                this.getRelation( p_argument.get( p_argument.size() - 2 ).<String>raw() ),
                 p_argument.get( p_argument.size() - 1 ).<Number>raw().doubleValue()
             )
         );
