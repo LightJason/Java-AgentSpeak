@@ -126,4 +126,15 @@ public enum EAlgorithm
         return l_cipher;
     }
 
+    /**
+     * additional factory
+     *
+     * @param p_value string value
+     * @return enum
+     */
+    public static EAlgorithm from( final String p_value )
+    {
+        return EAlgorithm.valueOf( p_value.trim().toUpperCase() );
+    }
+
 }

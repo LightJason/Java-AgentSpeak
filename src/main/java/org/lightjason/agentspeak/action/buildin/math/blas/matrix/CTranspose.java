@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
+import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -61,7 +62,7 @@ public final class CTranspose extends IAlgebra
         // first argument must be a term with a matrix object
         p_return.add(
             CRawTerm.from(
-                ALGEBRA.transpose( p_argument.get( 0 ).raw() )
+                ALGEBRA.transpose( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
             )
         );
 

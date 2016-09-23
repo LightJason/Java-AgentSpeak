@@ -67,7 +67,7 @@ public final class CCreateStatistic extends IBuildinAction
         p_return.add( CRawTerm.from(
             ( p_argument.size() == 0
               ? EType.SUMMARY
-              : EType.valueOf( p_argument.get( 0 ).<String>raw().trim().toUpperCase() )
+              : EType.from( p_argument.get( 0 ).<String>raw() )
             ).generate( p_parallel )
         ) );
 
@@ -82,6 +82,17 @@ public final class CCreateStatistic extends IBuildinAction
     {
         SUMMARY,
         DESCRIPTIVE;
+
+        /**
+         * additional factory
+         *
+         * @param p_value string
+         * @return enum
+         */
+        public static EType from( final String p_value )
+        {
+            return EType.valueOf( p_value.trim().toUpperCase() );
+        }
 
         /**
          * returns the statistic object

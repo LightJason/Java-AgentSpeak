@@ -61,7 +61,7 @@ public final class CEncrypt extends IBuildinAction
     )
     {
         final Key l_key = p_argument.get( 0 ).raw();
-        final EAlgorithm l_algorithm = EAlgorithm.valueOf( l_key.getAlgorithm() );
+        final EAlgorithm l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
 
         p_return.addAll(
             p_argument.subList( 1, p_argument.size() ).stream()

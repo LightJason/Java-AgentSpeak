@@ -60,7 +60,7 @@ public final class CParseFloat extends IBuildinAction
     {
         try
         {
-            p_return.add( CRawTerm.from( Double.parseDouble( p_argument.get( 0 ).raw() ) ) );
+            p_return.add( CRawTerm.from( Double.parseDouble( p_argument.get( 0 ).<String>raw() ) ) );
             return CFuzzyValue.from( true );
         }
         catch ( final Exception l_exception )

@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
+import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -66,11 +67,11 @@ public final class CEigenValue extends IBuildinAction
             p_parallel
             ? Collections.synchronizedList(
                 Arrays.stream(
-                    new EigenvalueDecomposition( p_argument.get( 0 ).raw() ).getRealEigenvalues().toArray()
+                    new EigenvalueDecomposition( p_argument.get( 0 ).<DoubleMatrix2D>raw() ).getRealEigenvalues().toArray()
                 ).boxed().sorted().collect( Collectors.toList() )
             )
             : Arrays.stream(
-                new EigenvalueDecomposition( p_argument.get( 0 ).raw() ).getRealEigenvalues().toArray()
+                new EigenvalueDecomposition( p_argument.get( 0 ).<DoubleMatrix2D>raw() ).getRealEigenvalues().toArray()
             ).boxed().sorted().collect( Collectors.toList() )
         ) );
 

@@ -53,7 +53,7 @@ public final class CDateTime extends IBuildinAction
     {
         final ZonedDateTime l_datetime;
         if ( p_argument.size() == 1 )
-            l_datetime = ZonedDateTime.parse( p_argument.get( 0 ).raw() );
+            l_datetime = ZonedDateTime.parse( p_argument.get( 0 ).<String>raw().trim() );
         else
         {
             final int[] l_parts = new int[7];
@@ -87,7 +87,7 @@ public final class CDateTime extends IBuildinAction
                 l_parts[4],
                 l_parts[5],
                 l_parts[6],
-                p_argument.size() > 6 ? ZoneId.systemDefault() : ZoneId.of( p_argument.get( 7 ).raw() )
+                p_argument.size() > 6 ? ZoneId.systemDefault() : ZoneId.of( p_argument.get( 7 ).<String>raw() )
             );
         }
 

@@ -91,7 +91,7 @@ public final class CCreateDistribution extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final EDistribution l_distribution = EDistribution.valueOf( p_argument.get( 0 ).<String>raw().trim().toUpperCase() );
+        final EDistribution l_distribution = EDistribution.from( p_argument.get( 0 ).<String>raw() );
         final int l_requiredarguments = this.minimalArgumentNumber() + l_distribution.getArgumentNumber();
 
         if ( p_argument.size() < l_requiredarguments )
@@ -101,7 +101,7 @@ public final class CCreateDistribution extends IBuildinAction
         p_return.add( CRawTerm.from(
             l_distribution.get(
                 ( p_argument.size() > l_requiredarguments
-                  ? EGenerator.valueOf( p_argument.get( l_requiredarguments + 1 ).<String>raw().trim().toUpperCase() )
+                  ? EGenerator.from( p_argument.get( l_requiredarguments + 1 ).<String>raw() )
                   : EGenerator.MERSENNETWISTER ).get(),
                 p_argument.subList( 1, l_requiredarguments ).stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).boxed()
                           .collect( Collectors.toList() )
@@ -149,6 +149,17 @@ public final class CCreateDistribution extends IBuildinAction
         EDistribution( final int p_arguments )
         {
             m_arguments = p_arguments;
+        }
+
+        /**
+         * additional factory
+         *
+         * @param p_value string
+         * @return enum
+         */
+        public static EDistribution from( final String p_value )
+        {
+            return EDistribution.valueOf( p_value.trim().toUpperCase() );
         }
 
         /**
@@ -258,6 +269,17 @@ public final class CCreateDistribution extends IBuildinAction
         SYNCHRONIZEDWELL4449A,
         WELL44497B,
         SYNCHRONIZEDWELL44497B;
+
+        /**
+         * additional factory
+         *
+         * @param p_value string
+         * @return enum
+         */
+        public static EGenerator from( final String p_value )
+        {
+            return EGenerator.valueOf( p_value.trim().toUpperCase() );
+        }
 
         /**
          * returns a number generator

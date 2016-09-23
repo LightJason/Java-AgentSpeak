@@ -64,7 +64,7 @@ public final class CGetStatisticValue extends IBuildinAction
     )
     {
         final StatisticalSummary l_statistic = p_argument.get( 0 ).raw();
-        final EValue l_value = EValue.valueOf( p_argument.get( 1 ).<String>raw().trim().toUpperCase() );
+        final EValue l_value = EValue.from( p_argument.get( 1 ).<String>raw() );
 
         if ( l_statistic instanceof SummaryStatistics )
         {
@@ -103,6 +103,17 @@ public final class CGetStatisticValue extends IBuildinAction
         MEAN,
         KURTIOSIS,
         PERCENTILE;
+
+        /**
+         * additional factory
+         *
+         * @param p_value string
+         * @return enum
+         */
+        public static EValue from( final String p_value )
+        {
+            return EValue.valueOf( p_value.trim().toUpperCase() );
+        }
 
         /**
          * returns a statistic value
