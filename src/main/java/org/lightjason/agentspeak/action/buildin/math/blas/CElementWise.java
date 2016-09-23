@@ -58,28 +58,28 @@ public class CElementWise extends IBuildinAction
         {
             case "+":
                 this.plus(
-                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 0 ).<AbstractMatrix>raw(),
                     p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "-":
                 this.minus(
-                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 0 ).<AbstractMatrix>raw(),
                     p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "*":
                 this.multiply(
-                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 0 ).<AbstractMatrix>raw(),
                     p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );
 
             case "/":
                 this.divide(
-                    p_argument.get( 0 ).raw(),
+                    p_argument.get( 0 ).<AbstractMatrix>raw(),
                     p_argument.get( 2 ).<Number>raw().doubleValue()
                 );
                 return CFuzzyValue.from( true );

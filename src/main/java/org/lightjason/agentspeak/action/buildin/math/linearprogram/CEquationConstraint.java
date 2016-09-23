@@ -84,7 +84,7 @@ public final class CEquationConstraint extends IConstraint
                           .toArray(),
                 p_argument.get( l_index - 1 ).<Number>raw().doubleValue(),
 
-                this.getRelation( p_argument.get( l_index ).raw() ),
+                this.getRelation( p_argument.get( l_index ).<String>raw() ),
 
                 p_argument.subList( l_index + 1, p_argument.size() ).stream()
                           .mapToDouble( i -> i.<Number>raw().doubleValue() )

@@ -67,10 +67,10 @@ public final class CCreate extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            EType.valueOf( p_argument.get( 0 ).<String>raw().trim().toUpperCase() ).get(
-                CCommon.flatList( p_argument.get( 1 ).raw() ).stream()
+            EType.from( p_argument.get( 0 ).<String>raw() ).get(
+                CCommon.flatList( p_argument.get( 1 ).<List<ITerm>>raw() ).stream()
                        .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray(),
-                CCommon.flatList( p_argument.get( 2 ).raw() ).stream()
+                CCommon.flatList( p_argument.get( 2 ).<List<ITerm>>raw() ).stream()
                        .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray()
             )
         ) );
@@ -90,6 +90,17 @@ public final class CCreate extends IBuildinAction
         LOESS,
         NEVILLE;
 
+
+        /**
+         * additional factory
+         *
+         * @param p_value string
+         * @return enum
+         */
+        public static EType from( final String p_value )
+        {
+            return EType.valueOf( p_value.trim().toUpperCase() );
+        }
 
         /**
          * returns the interpolate objext
