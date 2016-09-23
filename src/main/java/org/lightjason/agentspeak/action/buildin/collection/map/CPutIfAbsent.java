@@ -58,7 +58,7 @@ public final class CPutIfAbsent extends IBuildinAction
     )
     {
         // first argument map reference, second key-value
-        p_argument.get( 0 ).<Map<?, ?>>raw().putIfAbsent( p_argument.get( 1 ).raw(), p_argument.get( 2 ).raw() );
+        p_argument.get( 0 ).<Map<Object, Object>>raw().putIfAbsent( p_argument.get( 1 ).raw(), p_argument.get( 2 ).raw() );
 
         return CFuzzyValue.from( true );
     }

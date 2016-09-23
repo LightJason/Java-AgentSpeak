@@ -61,8 +61,8 @@ public final class CComplement extends IBuildinAction
     )
     {
         // all arguments must be lists, first argument is the full list
-        final Collection<?> l_result = new LinkedList<>( p_argument.get( 0 ).raw() );
-        l_result.removeAll( p_argument.get( 1 ).raw() );
+        final Collection<Object> l_result = new LinkedList<>( p_argument.get( 0 ).<Collection<Object>>raw() );
+        l_result.removeAll( p_argument.get( 1 ).<Collection<Object>>raw() );
         p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedCollection( l_result ) : l_result ) );
 
         return CFuzzyValue.from( true );

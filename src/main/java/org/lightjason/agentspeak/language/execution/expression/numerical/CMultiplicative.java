@@ -82,22 +82,22 @@ public final class CMultiplicative extends IBaseBinary
         {
             case MULTIPLY:
                 p_return.add( CRawTerm.from( this.multiply(
-                    l_argument.get( 0 ).raw(),
-                    l_argument.get( 1 ).raw()
+                    l_argument.get( 0 ).<Number>raw(),
+                    l_argument.get( 1 ).<Number>raw()
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case DIVIDE:
                 p_return.add( CRawTerm.from( this.divide(
-                    l_argument.get( 0 ).raw(),
-                    l_argument.get( 1 ).raw()
+                    l_argument.get( 0 ).<Number>raw(),
+                    l_argument.get( 1 ).<Number>raw()
                 ) ) );
                 return CFuzzyValue.from( true );
 
             case MODULO:
                 p_return.add( CRawTerm.from( this.modulo(
-                    l_argument.get( 0 ).raw(),
-                    l_argument.get( 1 ).raw()
+                    l_argument.get( 0 ).<Number>raw(),
+                    l_argument.get( 1 ).<Number>raw()
                 ) ) );
                 return CFuzzyValue.from( true );
 

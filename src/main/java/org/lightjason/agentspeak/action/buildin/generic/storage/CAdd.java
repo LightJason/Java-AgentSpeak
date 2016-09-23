@@ -82,8 +82,23 @@ public final class CAdd extends IStorage
         if ( m_forbidden.contains( l_key ) )
             return CFuzzyValue.from( false );
 
-        p_context.agent().storage().put( l_key, p_argument.get( 1 ).raw() );
+        p_context.agent().storage().put( l_key, CAdd.map( p_argument.get( 1 ).raw() ) );
         return CFuzzyValue.from( true );
+    }
+
+
+    /**
+     * type mapping method
+     *
+     * @param p_value value
+     * @tparam N return type
+     * @tparam M value type
+     * @return casted value
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <N, M> N map( final M p_value )
+    {
+        return (N) p_value;
     }
 
 }

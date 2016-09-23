@@ -58,7 +58,7 @@ public final class CPut extends IBuildinAction
     )
     {
         // first argument map reference, second key-value, third value
-        p_argument.get( 0 ).<Map<?, ?>>raw().put( p_argument.get( 1 ).raw(), p_argument.get( 2 ).raw() );
+        p_argument.get( 0 ).<Map<Object, Object>>raw().put( p_argument.get( 1 ).raw(), p_argument.get( 2 ).raw() );
 
         return CFuzzyValue.from( true );
     }
