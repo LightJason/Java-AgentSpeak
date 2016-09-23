@@ -83,8 +83,8 @@ public final class CRelational extends IBaseBinary
             case GREATER:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).raw(),
-                        l_argument.get( 1 ).raw()
+                        CRelational.map( l_argument.get( 0 ).raw() ),
+                        CRelational.map( l_argument.get( 1 ).raw() )
                     ) > 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -92,8 +92,8 @@ public final class CRelational extends IBaseBinary
             case GREATEREQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).raw(),
-                        l_argument.get( 1 ).raw()
+                        CRelational.map( l_argument.get( 0 ).raw() ),
+                        CRelational.map( l_argument.get( 1 ).raw() )
                     ) >= 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -101,8 +101,8 @@ public final class CRelational extends IBaseBinary
             case LESS:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).raw(),
-                        l_argument.get( 1 ).raw()
+                        CRelational.map( l_argument.get( 0 ).raw() ),
+                        CRelational.map( l_argument.get( 1 ).raw() )
                     ) < 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -110,8 +110,8 @@ public final class CRelational extends IBaseBinary
             case LESSEQUAL:
                 p_return.add( CRawTerm.from(
                     this.compare(
-                        l_argument.get( 0 ).raw(),
-                        l_argument.get( 1 ).raw()
+                        CRelational.map( l_argument.get( 0 ).raw() ),
+                        CRelational.map( l_argument.get( 1 ).raw() )
                     ) <= 0 )
                 );
                 return CFuzzyValue.from( true );
@@ -135,6 +135,21 @@ public final class CRelational extends IBaseBinary
         return ( p_left instanceof Double ) || ( p_right instanceof Double )
                ? Double.compare( p_left.doubleValue(), p_right.doubleValue() )
                : p_left.compareTo( p_right );
+    }
+
+
+    /**
+     * type mapping method
+     *
+     * @param p_value value
+     * @tparam N return type
+     * @tparam M value type
+     * @return casted value
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <N, M> N map( final M p_value )
+    {
+        return (N) p_value;
     }
 
 }
