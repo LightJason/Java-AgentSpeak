@@ -154,19 +154,6 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final T get()
-    {
-        return m_value;
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final <N> N typed()
-    {
-        return (N) m_value;
-    }
-
-    @Override
     public final boolean allocated()
     {
         return m_value != null;

@@ -31,4 +31,15 @@ public enum EType
 {
     SPARSE,
     DENSE;
+
+    /**
+     * additional factory
+     *
+     * @param p_name name as string
+     * @return enum
+     */
+    public static EType from( final String p_name )
+    {
+        return EType.valueOf( p_name.trim().toUpperCase() );
+    }
 }

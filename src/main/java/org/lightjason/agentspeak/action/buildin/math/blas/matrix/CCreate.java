@@ -62,7 +62,7 @@ public final class CCreate extends IBuildinAction
     {
         // first argument is row-size, second colum-size
         // optional third argument is matrix type (default dense-matrix)
-        switch ( p_argument.size() > 2 ? EType.valueOf( p_argument.get( 3 ).raw() ) : EType.DENSE )
+        switch ( p_argument.size() > 2 ? EType.from( p_argument.get( 3 ).<String>raw() ) : EType.DENSE )
         {
             case DENSE:
                 p_return.add(

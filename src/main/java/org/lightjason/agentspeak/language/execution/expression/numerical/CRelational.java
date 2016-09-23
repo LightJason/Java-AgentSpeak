@@ -68,10 +68,10 @@ public final class CRelational extends IBaseBinary
     {
         // run left-hand- and right-hand-side argument
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
+        if ( !m_lefthandside.execute( p_context, p_parallel, Collections.emptyList(), l_argument, Collections.emptyList() ).value() )
             return CFuzzyValue.from( false );
 
-        if ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
+        if ( !m_righthandside.execute( p_context, p_parallel, Collections.emptyList(), l_argument, Collections.emptyList() ).value() )
             return CFuzzyValue.from( false );
 
         if ( l_argument.size() != 2 )

@@ -90,10 +90,10 @@ public final class CVariableEvaluate implements IVariableEvaluate
 
         // if variable is a string
         if ( l_variable.valueAssignableTo( String.class ) )
-            return this.fromString( l_variable.typed(), p_context );
+            return this.fromString( l_variable.raw(), p_context );
 
         if ( m_variable.valueAssignableTo( ILiteral.class ) )
-            return this.fromLiteral( l_variable.typed(), p_context );
+            return this.fromLiteral( l_variable.raw(), p_context );
 
         throw new CIllegalStateException();
     }
@@ -145,6 +145,12 @@ public final class CVariableEvaluate implements IVariableEvaluate
     public final IPath fqnfunctor()
     {
         return m_variable.fqnfunctor();
+    }
+
+    @Override
+    public final <T> T raw()
+    {
+        return m_variable.raw();
     }
 
     @Override

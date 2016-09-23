@@ -57,7 +57,7 @@ public final class CSet extends IBuildinAction
     )
     {
         // first argument list reference, second index, third value
-        p_argument.get( 0 ).<List<?>>raw().set(
+        p_argument.get( 0 ).<List<Object>>raw().set(
             p_argument.get( 1 ).<Number>raw().intValue(),
             p_argument.get( 2 ).raw()
         );
