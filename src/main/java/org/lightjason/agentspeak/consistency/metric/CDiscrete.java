@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.consistency.metric;
 
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
 
@@ -37,7 +37,7 @@ public final class CDiscrete implements IMetric
 {
 
     @Override
-    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
+    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
     {
         return ( p_first.containsAll( p_second ) ) && ( p_second.containsAll( p_first ) ) ? 0 : 1;
     }

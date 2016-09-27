@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.consistency.metric;
 
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
 import java.util.stream.Stream;
@@ -38,7 +38,7 @@ public final class CSymmetricDifference implements IMetric
 {
 
     @Override
-    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
+    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
     {
         return Stream.concat( p_first.stream(), p_second.stream() )
                     .sorted()

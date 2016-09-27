@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.consistency.metric;
 
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
 
@@ -37,12 +37,12 @@ public interface IMetric
 {
 
     /**
-     * calculates the metric value between literal collections
+     * calculates the metric value between term collections
      *
      * @param p_first first literal collection
      * @param p_second second literal collection
-     * @return double metric
+     * @return double metric value
      */
-    double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second );
+    double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second );
 
 }

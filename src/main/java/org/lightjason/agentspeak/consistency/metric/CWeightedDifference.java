@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.consistency.metric;
 
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
 import java.util.Set;
@@ -39,17 +39,17 @@ public final class CWeightedDifference implements IMetric
 {
 
     @Override
-    public final double calculate( final Collection<ILiteral> p_first, final Collection<ILiteral> p_second )
+    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
     {
         // element aggregation
         final double l_union = Stream.concat( p_first.stream(), p_second.stream() ).count();
-        final Set<ILiteral> l_intersection = p_first.stream().collect( Collectors.toSet() );
+        final Set<ITerm> l_intersection = p_first.stream().collect( Collectors.toSet() );
         l_intersection.retainAll( p_second.stream().collect( Collectors.toSet() ) );
 
         // return distance
         return ( 2.0 * l_union
-                 - p_first.stream().count()
-                 - p_second.stream().count()
+                 - p_first.size()
+                 - p_second.size()
                )
                * l_union
                / l_intersection.size();
