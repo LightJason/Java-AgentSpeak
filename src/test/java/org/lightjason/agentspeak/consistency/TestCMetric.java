@@ -194,8 +194,8 @@ public final class TestCMetric
     )
     {
         final double l_value = p_metric.calculate(
-            p_filter.filter( this.getAgent( p_belief1 ) ).collect( Collectors.toList() ),
-            p_filter.filter( this.getAgent( p_belief2 ) ).collect( Collectors.toList() )
+            p_filter.filter( this.getAgent( p_belief1 ) ),
+            p_filter.filter( this.getAgent( p_belief2 ) )
         );
         assertEquals( p_message, p_excepted, l_value, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );

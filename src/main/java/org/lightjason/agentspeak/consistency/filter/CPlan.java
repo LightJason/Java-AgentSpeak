@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.consistency.filter;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.stream.Stream;
 
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 public final class CPlan implements IFilter
 {
     @Override
-    public final Stream<ILiteral> filter( final IAgent<?> p_agent )
+    public final Stream<? extends ITerm> filter( final IAgent<?> p_agent )
     {
         return p_agent.runningplans().values().stream();
     }

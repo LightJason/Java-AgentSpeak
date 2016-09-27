@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.consistency.metric;
 
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 
 /**
@@ -43,6 +43,6 @@ public interface IMetric
      * @param p_second second literal collection
      * @return double metric value
      */
-    double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second );
+    double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second );
 
 }

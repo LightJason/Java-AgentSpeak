@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.consistency.metric;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -38,13 +40,16 @@ public final class CSymmetricDifference implements IMetric
 {
 
     @Override
-    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
+    public final double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
-        return Stream.concat( p_first.stream(), p_second.stream() )
+        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+
+        return Stream.concat( l_first.stream(), l_second.stream() )
                     .sorted()
                     .distinct()
                     .parallel()
-                    .filter( i -> !( p_first.contains( i ) && ( p_second.contains( i ) ) ) )
+                    .filter( i -> !( l_first.contains( i ) && ( l_second.contains( i ) ) ) )
                     .count();
     }
 

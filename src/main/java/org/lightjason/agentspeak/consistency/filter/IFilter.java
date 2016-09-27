@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.consistency.filter;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.stream.Stream;
 
@@ -39,8 +39,8 @@ public interface IFilter
      * filter to return literal stream
      *
      * @param p_agent agent
-     * @return literal stream for metric calculation
+     * @return term stream for metric calculation
      */
-    Stream<ILiteral> filter( final IAgent<?> p_agent );
+    Stream<? extends ITerm> filter( final IAgent<?> p_agent );
 
 }

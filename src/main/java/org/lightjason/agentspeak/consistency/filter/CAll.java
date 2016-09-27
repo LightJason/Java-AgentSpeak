@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.consistency.filter;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
 import java.util.stream.Stream;
@@ -58,7 +58,7 @@ public final class CAll extends IBaseFilter
     }
 
     @Override
-    public final Stream<ILiteral> filter( final IAgent<?> p_agent )
+    public final Stream<? extends ITerm> filter( final IAgent<?> p_agent )
     {
         return Stream.concat(
             p_agent.runningplans().values().stream(),

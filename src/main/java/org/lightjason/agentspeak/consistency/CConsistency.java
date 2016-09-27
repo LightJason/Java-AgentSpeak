@@ -44,7 +44,6 @@ import org.lightjason.agentspeak.error.CIllegalStateException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -215,8 +214,8 @@ public final class CConsistency implements IConsistency
             return 0;
 
         return m_metric.calculate(
-            m_filter.filter( p_first ).collect( Collectors.toList() ),
-            m_filter.filter( p_second ).collect( Collectors.toList() )
+            m_filter.filter( p_first ),
+            m_filter.filter( p_second )
         );
     }
 

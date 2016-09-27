@@ -40,8 +40,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -75,11 +75,11 @@ public final class CNCD implements IMetric
     }
 
     @Override
-    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
+    public final double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
         return this.ncd(
-            p_first.stream().map( Object::toString ).collect( Collectors.joining( "" ) ),
-            p_second.stream().map( Object::toString ).collect( Collectors.joining( "" ) )
+            p_first.map( Object::toString ).collect( Collectors.joining( "" ) ),
+            p_second.map( Object::toString ).collect( Collectors.joining( "" ) )
         );
     }
 

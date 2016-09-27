@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.consistency.metric;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,17 +40,20 @@ public final class CWeightedDifference implements IMetric
 {
 
     @Override
-    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
+    public final double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
+        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+
         // element aggregation
-        final double l_union = Stream.concat( p_first.stream(), p_second.stream() ).count();
-        final Set<ITerm> l_intersection = p_first.stream().collect( Collectors.toSet() );
-        l_intersection.retainAll( p_second.stream().collect( Collectors.toSet() ) );
+        final double l_union = Stream.concat( l_first.stream(), l_second.stream() ).count();
+        final Set<? extends ITerm> l_intersection = l_first.stream().collect( Collectors.toSet() );
+        l_intersection.retainAll( l_second );
 
         // return distance
         return ( 2.0 * l_union
-                 - p_first.size()
-                 - p_second.size()
+                 - l_first.size()
+                 - l_second.size()
                )
                * l_union
                / l_intersection.size();

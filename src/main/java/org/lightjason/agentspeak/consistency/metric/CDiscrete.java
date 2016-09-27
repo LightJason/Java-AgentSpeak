@@ -26,6 +26,9 @@ package org.lightjason.agentspeak.consistency.metric;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -37,9 +40,12 @@ public final class CDiscrete implements IMetric
 {
 
     @Override
-    public final double calculate( final Collection<ITerm> p_first, final Collection<ITerm> p_second )
+    public final double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
-        return ( p_first.containsAll( p_second ) ) && ( p_second.containsAll( p_first ) ) ? 0 : 1;
+        final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+        final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
+
+        return ( l_first.containsAll( l_second ) ) && ( l_second.containsAll( l_first ) ) ? 0 : 1;
     }
 
 }
