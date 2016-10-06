@@ -297,9 +297,7 @@ public final class CCommon
                    ( l_annotation.classes().length == 0 )
                    || ( Arrays.stream( p_class.getAnnotation( IAgentAction.class ).classes() )
                               .parallel()
-                              .filter( p_class::equals )
-                              .findFirst()
-                              .isPresent()
+                              .anyMatch( p_class::equals )
                    ),
                    l_annotation.access()
                );
@@ -319,9 +317,7 @@ public final class CCommon
                    ( p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0 )
                    || ( Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
                               .parallel()
-                              .filter( p_root::equals )
-                              .findFirst()
-                              .isPresent()
+                              .anyMatch( p_root::equals )
                    )
                );
     }
