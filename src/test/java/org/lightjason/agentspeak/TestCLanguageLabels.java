@@ -415,8 +415,8 @@ public final class TestCLanguageLabels
 
             return (
                 "this".equals( l_return[0] )
-                ? buildlabel( m_package, m_outerclass, m_innerclass, l_return[1] )
-                : buildlabel( m_package, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
+                ? buildlabel( m_package, m_outerclass, m_outerclass, m_innerclass, l_return[1] )
+                : buildlabel( m_package, m_outerclass, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
             ).trim().toLowerCase().replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" );
 
         }
@@ -426,17 +426,22 @@ public final class TestCLanguageLabels
          * (inner & outer class)
          *
          * @param p_package package name
-         * @param p_outerclass outer class
+         * @param p_outerclass1 outer class readed value
+         * @param p_outerclass2 outer class fixed value
          * @param p_innerclass inner class
          * @param p_label label (only firat element is used)
          * @return full-qualified class name
          */
-        private static String buildlabel( final String p_package, final String p_outerclass, final String p_innerclass, final String p_label )
+        private static String buildlabel( final String p_package, final String p_outerclass1, final String p_outerclass2, final String p_innerclass, final String p_label )
         {
+            final String l_outerclass = p_outerclass1.equals( p_outerclass2 )
+                                        ? p_outerclass1
+                                        : MessageFormat.format( "{0}{1}{2}", p_outerclass1, ClassUtils.PACKAGE_SEPARATOR, p_outerclass2 );
+
             return MessageFormat.format(
                 "{0}{1}{2}{3}{4}{5}",
                 p_package, ClassUtils.PACKAGE_SEPARATOR,
-                p_outerclass, p_innerclass.isEmpty() ? "" : ClassUtils.PACKAGE_SEPARATOR,
+                l_outerclass, p_innerclass.isEmpty() ? "" : ClassUtils.PACKAGE_SEPARATOR,
                 p_innerclass,
 
                 p_label.isEmpty()

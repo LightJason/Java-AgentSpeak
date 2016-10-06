@@ -134,7 +134,7 @@ public final class CPath implements IPath
     public static IPath createPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( IPath.class, "createpath" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( CPath.class, "createpath" ) );
 
         return new CPath( p_varargs );
     }
@@ -148,7 +148,7 @@ public final class CPath implements IPath
     public static IPath createPathWithSeperator( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( IPath.class, "createpath" ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( CPath.class, "createpath" ) );
 
         return new CPath(
             Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
