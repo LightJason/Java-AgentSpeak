@@ -104,6 +104,16 @@ public final class CCommon
     }
 
     /**
+     * list of usable languages
+     *
+     * @return list of language pattern
+     */
+    public static String[] languages()
+    {
+        return Arrays.stream( PROPERTIES.getString( "translation" ).split( "," ) ).map( i -> i.trim().toLowerCase() ).toArray( String[]::new );
+    }
+
+    /**
      * returns the language bundle
      *
      * @return bundle

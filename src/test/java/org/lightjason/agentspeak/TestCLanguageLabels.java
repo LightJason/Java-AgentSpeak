@@ -53,6 +53,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertFalse;
@@ -82,29 +83,42 @@ public final class TestCLanguageLabels
         try
         {
             l_uri = CCommon.concaturl( CCommon.resourceurl(), "../../src/main/java/" ).toURI();
-
-            LANGUAGEPROPERY.put(
-                "en",
-                CCommon.concaturl(
-                    CCommon.resourceurl(),
-                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
-                    "language.properties" )
-                ).toURI()
-            );
-
-            LANGUAGEPROPERY.put(
-                "de",
-                CCommon.concaturl(
-                    CCommon.resourceurl(),
-                    MessageFormat.format( "{0}/{1}/{2}", l_resource, CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
-                    "language_de.properties" )
-                ).toURI()
-            );
         }
         catch ( final Exception l_exception )
         {
             assumeTrue( MessageFormat.format( "source directory cannot be read: {0}", l_exception.getMessage() ), false );
         }
+
+        // read all possible languages and define the first as default
+        final String[] l_languages = CCommon.languages();
+        IntStream.range( 0, l_languages.length )
+                 .boxed()
+                 .forEach( i -> {
+                     try
+                     {
+                         LANGUAGEPROPERY.put(
+                             l_languages[i],
+                             CCommon.concaturl(
+                                 CCommon.resourceurl(),
+                                 MessageFormat.format(
+                                     "{0}/{1}/{2}",
+                                     l_resource,
+                                     CCommon.PACKAGEROOT.replace( CLASSSEPARATOR, "/" ),
+                                     MessageFormat.format(
+                                         "language{0}.properties",
+                                         i == 0
+                                         ? ""
+                                         : "_" + l_languages[i]
+                                     )
+                                 )
+                             ).toURI()
+                         );
+                     }
+                     catch ( final Exception l_exception )
+                     {
+                         assumeTrue( MessageFormat.format( "source directory cannot be read: {0}", l_exception.getMessage() ), false );
+                     }
+                 } );
 
         SEARCHPATH = l_uri;
     }
