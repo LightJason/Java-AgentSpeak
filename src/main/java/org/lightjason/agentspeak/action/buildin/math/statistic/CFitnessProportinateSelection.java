@@ -74,6 +74,7 @@ public final class CFitnessProportinateSelection extends IBuildinAction
                                                                         // list can be contains default Java objects or term objects
                                                                         .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
                                                                         .map( Number::doubleValue )
+                                                                        .map( Math::abs )
                                                                         .collect( Collectors.toList() );
 
         if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
