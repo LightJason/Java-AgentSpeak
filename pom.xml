@@ -227,8 +227,8 @@
                 <configuration>
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
-                    <threshold>High</threshold>
-                    <maxRank>1</maxRank>
+                    <threshold>Low</threshold>
+                    <maxRank>20</maxRank>
                 </configuration>
             </plugin>
 

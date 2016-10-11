@@ -100,18 +100,18 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * curent agent cycle
      */
-    private long m_cycle;
+    private final AtomicLong m_cycle = new AtomicLong();
     /**
      * nano seconds at the last cycle
      */
-    private long m_cycletime;
+    private final AtomicLong m_cycletime = new AtomicLong();
     /**
      * number of sleeping cycles
      *
      * @note values >= 0 defines the sleeping time, Long.MAX_VALUE is infinity sleeping
      * negative values defines the activity
      */
-    private volatile long m_sleepingcycles = Long.MIN_VALUE;
+    private final AtomicLong m_sleepingcycles = new AtomicLong( Long.MIN_VALUE );
     /**
      * unifier
      */
@@ -171,8 +171,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return;
 
         Arrays.stream( p_inspector ).parallel().forEach( i -> {
-            i.inspectcycle( m_cycle );
-            i.inspectsleeping( m_sleepingcycles );
+            i.inspectcycle( m_cycle.get() );
+            i.inspectsleeping( m_sleepingcycles.get() );
             i.inspectbelief( m_beliefbase.stream().parallel() );
             i.inspectplans( m_plans.entries().parallelStream().map( j -> new ImmutableTriple<>( j.getValue().getLeft(), j.getValue().getMiddle().get(),
                                                                                                 j.getValue().getRight().get()
@@ -186,14 +186,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {
-        if ( m_sleepingcycles > 0 )
+        if ( m_sleepingcycles.get() > 0 )
             return CFuzzyValue.from( false );
 
         // check if literal does not store any variables
         if ( Stream.concat(
             p_trigger.getLiteral().orderedvalues(),
             p_trigger.getLiteral().annotations()
-        ).filter( i -> i instanceof IVariable<?> ).findFirst().isPresent() )
+        ).anyMatch( i -> i instanceof IVariable<?> ) )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
@@ -214,13 +214,13 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     public final boolean sleeping()
     {
-        return m_sleepingcycles > 0;
+        return m_sleepingcycles.get() > 0;
     }
 
     @Override
     public final IAgent<T> sleep( final long p_cycles )
     {
-        m_sleepingcycles = p_cycles;
+        m_sleepingcycles.set( p_cycles );
         return this;
     }
 
@@ -246,13 +246,13 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     public final long cycletime()
     {
-        return m_cycletime;
+        return m_cycletime.get();
     }
 
     @Override
     public final long cycle()
     {
-        return m_cycle;
+        return m_cycle.get();
     }
 
     @Override
@@ -328,8 +328,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         this.execute( l_execution );
 
         // increment cycle and set the cycle time
-        m_cycle++;
-        m_cycletime = System.nanoTime();
+        m_cycle.incrementAndGet();
+        m_cycletime.set( System.nanoTime() );
 
         return (T) this;
     }
@@ -435,8 +435,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // if the sleeping time ends or the agent will wakedup by a hard call,
         // create the trigger and reset the time value
-        if ( ( m_sleepingcycles == 0 ) || p_immediatly )
-        {
+        if ( ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) ) || p_immediatly )
             m_trigger.add(
                 CTrigger.from(
                     ITrigger.EType.ADDGOAL,
@@ -449,14 +448,11 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                 )
             );
 
-            m_sleepingcycles = Long.MIN_VALUE;
-        }
-
         // if the sleeping time is not infinity decrese the counter
-        if ( ( m_sleepingcycles > 0 ) && ( m_sleepingcycles != Long.MAX_VALUE ) )
-            m_sleepingcycles--;
+        if ( ( m_sleepingcycles.get() > 0 ) && ( m_sleepingcycles.get() != Long.MAX_VALUE ) )
+            m_sleepingcycles.decrementAndGet();
 
-        return m_sleepingcycles <= 0;
+        return m_sleepingcycles.get() <= 0;
     }
 
 }
