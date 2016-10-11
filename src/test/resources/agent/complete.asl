@@ -242,6 +242,11 @@ myfunction(X) :- generic/print("my logical rule", X).
         generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
         generic/print();
 
+
+        Fitness = math/statistic/fitnessproportinateselection( ["a", "b", "c", "d"], [ 1, 10, 1, 1 ] );
+        generic/print( "fitness proportinate selection", Fitness );
+        generic/print();
+
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
