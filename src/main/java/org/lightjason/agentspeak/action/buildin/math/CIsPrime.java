@@ -54,7 +54,7 @@ public final class CIsPrime extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            CCommon.flatList( p_argument ).stream()
+            CCommon.flatcollection( p_argument ).stream()
                    .map( i -> Primes.isPrime( i.<Number>raw().intValue() ) )
                    .collect( Collectors.toList() )
         ) );

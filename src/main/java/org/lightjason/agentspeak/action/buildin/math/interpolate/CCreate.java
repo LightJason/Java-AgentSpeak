@@ -68,9 +68,9 @@ public final class CCreate extends IBuildinAction
     {
         p_return.add( CRawTerm.from(
             EType.from( p_argument.get( 0 ).<String>raw() ).get(
-                CCommon.flatList( p_argument.get( 1 ).<List<ITerm>>raw() ).stream()
+                CCommon.flatcollection( p_argument.get( 1 ).<List<ITerm>>raw() ).stream()
                        .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray(),
-                CCommon.flatList( p_argument.get( 2 ).<List<ITerm>>raw() ).stream()
+                CCommon.flatcollection( p_argument.get( 2 ).<List<ITerm>>raw() ).stream()
                        .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray()
             )
         ) );

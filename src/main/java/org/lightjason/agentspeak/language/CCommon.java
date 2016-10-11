@@ -169,12 +169,13 @@ public final class CCommon
 
 
     /**
-     * flat term map into flat term list
+     * flat term-in-term collection into
+     * a straight term list
      *
      * @param p_terms term collection
      * @return flat term map
      */
-    public static List<ITerm> flatList( final List<? extends ITerm> p_terms )
+    public static List<ITerm> flatcollection( final Collection<? extends ITerm> p_terms )
     {
         return flattenToStream( p_terms ).collect( Collectors.toList() );
     }
@@ -190,7 +191,7 @@ public final class CCommon
     public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException
     {
         final StringBuilder l_result = new StringBuilder();
-        ( flatList( p_input ) ).forEach( i -> l_result.append( i.raw().toString() ) );
+        ( flatcollection( p_input ) ).forEach( i -> l_result.append( i.raw().toString() ) );
         return l_result.toString().getBytes( "UTF-8" );
     }
 
@@ -241,7 +242,7 @@ public final class CCommon
         return p_list.stream().flatMap( i -> {
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
-                   ? flattenToStream( (List<?>) l_value )
+                   ? flattenToStream( (Collection<?>) l_value )
                    : Stream.of( CRawTerm.from( l_value ) );
         } );
     }

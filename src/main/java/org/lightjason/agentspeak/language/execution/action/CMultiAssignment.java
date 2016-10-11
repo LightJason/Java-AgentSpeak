@@ -74,7 +74,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
 
         // position matching on list index
-        final List<ITerm> l_flatresult = CCommon.flatList( l_result );
+        final List<ITerm> l_flatresult = CCommon.flatcollection( l_result );
         final List<ITerm> l_assign = CCommon.replaceFromContext( p_context, m_value );
 
         IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )

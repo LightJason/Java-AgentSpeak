@@ -61,7 +61,7 @@ public final class CUnion extends IBuildinAction
     )
     {
         // all arguments must be lists
-        final List<?> l_result = CCommon.flatList( p_argument ).stream().map( ITerm::raw ).collect( Collectors.toList() );
+        final List<?> l_result = CCommon.flatcollection( p_argument ).stream().map( ITerm::raw ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result

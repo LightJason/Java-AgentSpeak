@@ -343,11 +343,16 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         (L) -> Y : generic/print(Y);
 
-        BL = generic/belieflist( "hallo" );
+        BL = generic/agent/belieflist( "hallo" );
         (BL) -> Y : generic/print(Y);
 
         @(L) -> Y | R : R = Y+1;
         generic/print("lambda return", R);
+        generic/print();
+
+        PL = generic/agent/planlist();
+        PLN = collection/map/keys(PL);
+        (PLN) -> Y : generic/print(Y);
 
         generic/print();
 

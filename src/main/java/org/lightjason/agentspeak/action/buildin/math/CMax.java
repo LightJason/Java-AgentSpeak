@@ -53,7 +53,7 @@ public final class CMax extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            CCommon.flatList( p_argument ).stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).max().orElseThrow( () -> new CRuntimeException( p_context ) )
+            CCommon.flatcollection( p_argument ).stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).max().orElseThrow( () -> new CRuntimeException( p_context ) )
         ) );
         return CFuzzyValue.from( true );
     }

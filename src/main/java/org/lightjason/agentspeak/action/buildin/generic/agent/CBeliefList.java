@@ -21,10 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic;
+package org.lightjason.agentspeak.action.buildin.generic.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -32,13 +34,22 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a literal by the input data
+ * returns a list of all belief literals
  */
-public final class CCreateLiteral extends IBuildinAction
+public final class CBeliefList extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CBeliefList()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -48,17 +59,22 @@ public final class CCreateLiteral extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+                                              final List<ITerm> p_annotation
     )
     {
+        final List<ILiteral> l_literal = (
+                p_argument.size() == 1
+                ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
+                : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
+        ).collect( Collectors.toList() );
+
         p_return.add(
-            CLiteral.from(
-                p_argument.get( 0 ).<String>raw(),
-                p_argument.size() > 1
-                ? p_argument.subList( 1, p_argument.size() )
-                : Collections.emptyList()
-            )
+                CRawTerm.from( p_parallel
+                               ? Collections.synchronizedList( l_literal )
+                               : l_literal
+                )
         );
+
         return CFuzzyValue.from( true );
     }
 

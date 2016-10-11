@@ -58,7 +58,7 @@ public final class CFlatConcat extends IBuildinAction
     )
     {
         // first argument list reference
-        p_return.addAll( CCommon.flatList( p_argument ) );
+        p_return.addAll( CCommon.flatcollection( p_argument ) );
         return CFuzzyValue.from( true );
     }
 

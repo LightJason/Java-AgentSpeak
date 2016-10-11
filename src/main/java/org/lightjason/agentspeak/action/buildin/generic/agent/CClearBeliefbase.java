@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic;
+package org.lightjason.agentspeak.action.buildin.generic.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.common.CPath;
@@ -39,6 +39,14 @@ import java.util.List;
  */
 public final class CClearBeliefbase extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CClearBeliefbase()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int minimalArgumentNumber()

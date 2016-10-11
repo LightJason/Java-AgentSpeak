@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic;
+package org.lightjason.agentspeak.action.buildin.generic.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,6 +38,14 @@ import java.util.List;
  */
 public final class CSleep extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CSleep()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int minimalArgumentNumber()

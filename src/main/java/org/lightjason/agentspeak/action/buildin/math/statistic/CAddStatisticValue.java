@@ -82,7 +82,7 @@ public final class CAddStatisticValue extends IBuildinAction
      */
     private IFuzzyValue<Boolean> push( final SummaryStatistics p_statistic, final List<ITerm> p_value )
     {
-        CCommon.flatList( p_value ).forEach( i -> p_statistic.addValue( i.<Number>raw().doubleValue() ) );
+        CCommon.flatcollection( p_value ).forEach( i -> p_statistic.addValue( i.<Number>raw().doubleValue() ) );
         return CFuzzyValue.from( true );
     }
 
@@ -95,7 +95,7 @@ public final class CAddStatisticValue extends IBuildinAction
      */
     private IFuzzyValue<Boolean> push( final DescriptiveStatistics p_statistic, final List<ITerm> p_value )
     {
-        CCommon.flatList( p_value ).forEach( i -> p_statistic.addValue( i.<Number>raw().doubleValue() ) );
+        CCommon.flatcollection( p_value ).forEach( i -> p_statistic.addValue( i.<Number>raw().doubleValue() ) );
         return CFuzzyValue.from( true );
     }
 }

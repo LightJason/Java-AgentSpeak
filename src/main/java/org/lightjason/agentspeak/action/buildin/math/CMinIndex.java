@@ -53,7 +53,7 @@ public final class CMinIndex extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_list = CCommon.flatList( p_argument );
+        final List<ITerm> l_list = CCommon.flatcollection( p_argument );
 
         p_return.add( CRawTerm.from(
             IntStream.range( 0, l_list.size() - 1 ).parallel()

@@ -167,7 +167,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     {
         final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
 
-        return CCommon.flatList( p_input ).stream().map( i -> {
+        return CCommon.flatcollection( p_input ).stream().map( i -> {
 
             l_localcontext.getMiddle().set( i.raw() );
             m_body.forEach(
@@ -192,7 +192,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      */
     private List<?> executeParallel( final IContext p_context, final List<ITerm> p_input )
     {
-        return CCommon.flatList( p_input ).parallelStream().map( i -> {
+        return CCommon.flatcollection( p_input ).parallelStream().map( i -> {
 
             final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
             l_localcontext.getMiddle().set( i.raw() );

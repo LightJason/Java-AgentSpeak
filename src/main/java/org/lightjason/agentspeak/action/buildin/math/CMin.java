@@ -53,7 +53,7 @@ public final class CMin extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            CCommon.flatList( p_argument ).stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).min().orElseThrow( () -> new CRuntimeException( p_context ) )
+            CCommon.flatcollection( p_argument ).stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).min().orElseThrow( () -> new CRuntimeException( p_context ) )
         ) );
         return CFuzzyValue.from( true );
     }

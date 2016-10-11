@@ -59,7 +59,7 @@ public final class CIsEmpty extends IBuildinAction
     )
     {
         // all arguments are list references
-        p_return.add( CRawTerm.from( CCommon.flatList( p_argument ).isEmpty() ) );
+        p_return.add( CRawTerm.from( CCommon.flatcollection( p_argument ).isEmpty() ) );
         return CFuzzyValue.from( true );
     }
 

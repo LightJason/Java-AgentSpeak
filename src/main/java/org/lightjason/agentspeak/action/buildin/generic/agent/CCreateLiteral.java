@@ -21,25 +21,32 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math;
+package org.lightjason.agentspeak.action.buildin.generic.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * action for floor value \f$ \lfloor x_i \rfloor \f$
+ * creates a literal by the input data
  */
-public final class CFloor extends IBuildinAction
+public final class CCreateLiteral extends IBuildinAction
 {
+
+    /**
+     * ctor
+     */
+    public CCreateLiteral()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -52,13 +59,13 @@ public final class CFloor extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll(
-            CCommon.flatcollection( p_argument ).stream()
-                   .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                   .boxed()
-                   .map( Math::floor )
-                   .map( CRawTerm::from )
-                   .collect( Collectors.toList() )
+        p_return.add(
+            CLiteral.from(
+                p_argument.get( 0 ).<String>raw(),
+                p_argument.size() > 1
+                ? p_argument.subList( 1, p_argument.size() )
+                : Collections.emptyList()
+            )
         );
         return CFuzzyValue.from( true );
     }
