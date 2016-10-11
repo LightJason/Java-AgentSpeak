@@ -62,6 +62,7 @@ public final class CFitnessProportinateSelection extends IBuildinAction
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                          final List<ITerm> p_annotation
     )
@@ -69,14 +70,18 @@ public final class CFitnessProportinateSelection extends IBuildinAction
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
         final List<?> l_items = p_argument.get( 0 ).raw();
-        final List<Double> l_weight = p_argument.get( 1 ).<List<Number>>raw().stream().mapToDouble( Number::doubleValue ).collect( Collectors.toList() );
+        final List<Double> l_weight = p_argument.get( 1 ).<List<?>>raw().stream()
+                                                                        // list can be contains default Java objects or term objects
+                                                                        .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
+                                                                        .map( Number::doubleValue )
+                                                                        .collect( Collectors.toList() );
 
         if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
             return CFuzzyValue.from( false );
 
         // select a random value and scale with the sum
         double l_random = m_random.nextDouble() * l_weight.stream().mapToDouble( i -> i ).sum();
-        for( int i = 0; i < l_weight.size(); i++ )
+        for ( int i = 0; i < l_weight.size(); i++ )
         {
             l_random -= l_weight.get( i );
             if ( l_random <= 0 )

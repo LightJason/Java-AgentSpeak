@@ -243,8 +243,10 @@ myfunction(X) :- generic/print("my logical rule", X).
         generic/print();
 
 
-        Fitness = math/statistic/fitnessproportinateselection( ["a", "b", "c", "d"], [ 1, 10, 1, 1 ] );
-        generic/print( "fitness proportinate selection", Fitness );
+        FValue = collection/list/create(1, 3, 1, 1);
+        Fitness1 = math/statistic/fitnessproportinateselection( ["a", "b", "c", "d"], FValue );
+        Fitness2 = math/statistic/fitnessproportinateselection( ["e", "f", "g", "h"], [1,1,3,1] );
+        generic/print( "fitness proportinate selection", Fitness1, Fitness2 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
