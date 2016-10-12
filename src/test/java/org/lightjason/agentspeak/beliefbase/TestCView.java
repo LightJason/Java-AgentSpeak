@@ -111,7 +111,7 @@ public final class TestCView
     {
 
         @Override
-        public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
+        public final IView<IAgent<?>> apply( final String p_name, final IView<IAgent<?>> p_parent )
         {
             return new CBeliefbasePersistent<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }

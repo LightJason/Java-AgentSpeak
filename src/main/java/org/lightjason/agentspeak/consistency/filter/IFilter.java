@@ -26,21 +26,13 @@ package org.lightjason.agentspeak.consistency.filter;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
 /**
  * filtering  interface of agent literal values for metric
  */
-public interface IFilter
+public interface IFilter extends Function<IAgent<?>, Stream<? extends ITerm>>
 {
-
-    /**
-     * filter to return literal stream
-     *
-     * @param p_agent agent
-     * @return term stream for metric calculation
-     */
-    Stream<? extends ITerm> filter( final IAgent<?> p_agent );
-
 }

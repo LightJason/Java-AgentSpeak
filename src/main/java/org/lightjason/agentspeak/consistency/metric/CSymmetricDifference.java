@@ -40,17 +40,17 @@ public final class CSymmetricDifference implements IMetric
 {
 
     @Override
-    public final double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
+    public final Double apply( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second )
     {
         final Collection<ITerm> l_first = p_first.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
         final Collection<ITerm> l_second = p_second.collect( Collectors.toCollection( HashSet<ITerm>::new ) );
 
-        return Stream.concat( l_first.stream(), l_second.stream() )
-                    .sorted()
-                    .distinct()
-                    .parallel()
-                    .filter( i -> !( l_first.contains( i ) && ( l_second.contains( i ) ) ) )
-                    .count();
+        return (double) Stream.concat( l_first.stream(), l_second.stream() )
+                              .sorted()
+                              .distinct()
+                              .parallel()
+                              .filter( i -> !( l_first.contains( i ) && ( l_second.contains( i ) ) ) )
+                              .count();
     }
 
 }

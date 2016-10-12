@@ -34,9 +34,11 @@ import java.util.stream.Stream;
  */
 public final class CPlan implements IFilter
 {
+
     @Override
-    public final Stream<? extends ITerm> filter( final IAgent<?> p_agent )
+    public final Stream<? extends ITerm> apply( final IAgent<?> p_agent )
     {
         return p_agent.runningplans().values().stream();
     }
+
 }

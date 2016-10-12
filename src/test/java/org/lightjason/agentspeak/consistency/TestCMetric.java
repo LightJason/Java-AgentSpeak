@@ -193,9 +193,9 @@ public final class TestCMetric
                         final double p_excepted, final double p_delta
     )
     {
-        final double l_value = p_metric.calculate(
-            p_filter.filter( this.getAgent( p_belief1 ) ),
-            p_filter.filter( this.getAgent( p_belief2 ) )
+        final double l_value = p_metric.apply(
+            p_filter.apply( this.getAgent( p_belief1 ) ),
+            p_filter.apply( this.getAgent( p_belief2 ) )
         );
         assertEquals( p_message, p_excepted, l_value, p_delta );
         System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
@@ -237,7 +237,7 @@ public final class TestCMetric
     private static final class CGenerator implements IViewGenerator<IAgent<?>>
     {
         @Override
-        public final IView<IAgent<?>> generate( final String p_name, final IView<IAgent<?>> p_parent )
+        public final IView<IAgent<?>> apply( final String p_name, final IView<IAgent<?>> p_parent )
         {
             return new CBeliefbasePersistent<>( new CMultiStorage<>() ).create( p_name, p_parent );
         }

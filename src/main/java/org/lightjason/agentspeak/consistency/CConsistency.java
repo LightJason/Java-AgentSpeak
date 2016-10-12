@@ -128,7 +128,7 @@ public final class CConsistency implements IConsistency
     @Override
     public final boolean add( final IAgent<?> p_object )
     {
-        return m_data.putIfAbsent( p_object, Double.valueOf( 0 ) ) == null;
+        return m_data.putIfAbsent( p_object, 0.0 ) == null;
     }
 
     @Override
@@ -213,9 +213,9 @@ public final class CConsistency implements IConsistency
         if ( p_first.equals( p_second ) )
             return 0;
 
-        return m_metric.calculate(
-            m_filter.filter( p_first ),
-            m_filter.filter( p_second )
+        return m_metric.apply(
+            m_filter.apply( p_first ),
+            m_filter.apply( p_second )
         );
     }
 

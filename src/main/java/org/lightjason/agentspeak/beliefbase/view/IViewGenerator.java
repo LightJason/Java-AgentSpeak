@@ -25,21 +25,16 @@ package org.lightjason.agentspeak.beliefbase.view;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
+import java.util.function.BiFunction;
+
 
 /**
  * interface for generating non-existing beliefbases views
  *
  * @tparam T agent type
+ * @todo add function interface
  */
-public interface IViewGenerator<T extends IAgent<?>>
+public interface IViewGenerator<T extends IAgent<?>> extends BiFunction<String, IView<T>, IView<T>>
 {
 
-    /**
-     * generates a  new view
-     *
-     * @param p_name name of the view
-     * @param p_parent parent
-     * @return view object
-     */
-    IView<T> generate( final String p_name, final IView<T> p_parent );
 }

@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.consistency.metric;
 
 import org.lightjason.agentspeak.language.ITerm;
 
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
@@ -33,16 +34,6 @@ import java.util.stream.Stream;
  *
  * @see http://en.wikipedia.org/wiki/Metric_space
  */
-public interface IMetric
+public interface IMetric extends BiFunction<Stream<? extends ITerm>, Stream<? extends ITerm>, Double>
 {
-
-    /**
-     * calculates the metric value between term collections
-     *
-     * @param p_first first literal collection
-     * @param p_second second literal collection
-     * @return double metric value
-     */
-    double calculate( final Stream<? extends ITerm> p_first, final Stream<? extends ITerm> p_second );
-
 }

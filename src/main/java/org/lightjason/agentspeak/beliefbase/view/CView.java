@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -294,7 +295,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
                             p_generator == null || p_generator.length == 0
                             ? null
-                            : p_generator[0].generate( l_root, this )
+                            : p_generator[0].apply( l_root, this )
                         )
             );
         }
@@ -349,7 +350,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         return Stream.concat(
             Stream.of( this ),
-            Stream.of( this.parent() ).filter( i -> i != null )
+            Stream.of( this.parent() ).filter( Objects::nonNull )
         );
     }
 
