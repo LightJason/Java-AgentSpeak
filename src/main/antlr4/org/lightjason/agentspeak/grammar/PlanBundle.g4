@@ -22,7 +22,7 @@
  */
 
 /**
- * high-level grammar rules of AgentSpeak(L)
+ * high-level grammar rules of AgentSpeak(L++)
  * which defines plan-bundles for importing in an agent
  **/
 grammar PlanBundle;

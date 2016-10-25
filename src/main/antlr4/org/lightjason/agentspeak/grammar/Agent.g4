@@ -22,7 +22,7 @@
  */
 
 /**
- * high-level grammar rules of AgentSpeak(L)
+ * high-level grammar rules of AgentSpeak(L++)
  * which defines the agent
  **/
 grammar Agent;
