@@ -54,7 +54,7 @@ second(true).
 // --- logical rules -------------------------------------------------------------------------------------------------------------------------------------------
 
 fibonacci(X, R)
-    // order of the rules are indeterministic, so for avoid indeterminisitic behaviour
+    // order of the rules are indeterministic, so for avoid indeterministic behaviour
     // add the condition, when the rule can be executed first
     :- X <= 2;  R = 1
     :- X > 2;   TA = X - 1; TB = X - 2; $fibonacci(TA,A); $fibonacci(TB,B); R = A+B
@@ -246,7 +246,7 @@ myfunction(X) :- generic/print("my logical rule", X).
         FValue = collection/list/create(1, 3, 1, 1);
         Fitness1 = math/statistic/fitnessproportinateselection( ["a", "b", "c", "d"], FValue );
         Fitness2 = math/statistic/fitnessproportinateselection( ["e", "f", "g", "h"], [1,1,3,1] );
-        generic/print( "fitness proportinate selection", Fitness1, Fitness2 );
+        generic/print( "fitness proportionate selection", Fitness1, Fitness2 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -339,7 +339,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
 
-        // ---- sequencial & parallel lambda expression --------------------------------------------------------------------------------------------------------
+        // ---- sequential & parallel lambda expression --------------------------------------------------------------------------------------------------------
 
         (L) -> Y : generic/print(Y);
 
@@ -372,14 +372,14 @@ myfunction(X) :- generic/print("my logical rule", X).
         >>( hallo( UN2 ), generic/type/isstring(UN2) ) << true;
         @>>( hallo( UN3 ), generic/type/isnumeric(UN3) && (UN3 > 200) ) << true;
 
-        // unfiy variable (I is defined on the deconstruct call on top)
+        // unify variable (I is defined on the deconstruct call on top)
         >>( blah(UN9), I ) << true;
 
         // manual literal parsing & unification
         UN10 = generic/type/parseliteral("foo(12345)");
         >>( foo(UN11), UN10 ) << true;
 
-        generic/print("unifcation", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
+        generic/print("unification", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -394,7 +394,7 @@ myfunction(X) :- generic/print("my logical rule", X).
         // test-goal exists, so no repair handling (only the functor is checked)
         ?main;
 
-        // run plan immediatly
+        // run plan immediately
         PLAN = "mytest";
         !!PLAN;
         !!PLAN(5);
