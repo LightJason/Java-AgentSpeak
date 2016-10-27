@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  *
  * @see https://en.wikipedia.org/wiki/Fitness_proportionate_selection
  */
-public final class CFitnessProportinateSelection extends IBuildinAction
+public final class CFitnessProportionateSelection extends IBuildinAction
 {
     /**
      * random instance
@@ -50,7 +50,7 @@ public final class CFitnessProportinateSelection extends IBuildinAction
     /**
      * ctor
      */
-    public CFitnessProportinateSelection()
+    public CFitnessProportionateSelection()
     {
         super( 3 );
     }
