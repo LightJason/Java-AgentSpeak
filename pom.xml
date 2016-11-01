@@ -252,6 +252,19 @@
             </plugin>
 
             <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>1.4.3</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
