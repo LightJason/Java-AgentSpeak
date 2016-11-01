@@ -183,7 +183,19 @@ public final class CLiteral implements ILiteral
      * factory
      *
      * @param p_functor functor string
-     * @param p_values value literals
+     * @param p_values value term
+     * @return literal
+     */
+    public static ILiteral from( final String p_functor, final ITerm... p_values )
+    {
+        return from( p_functor, Arrays.stream( p_values ).collect( Collectors.toList() ), Collections.emptySet() );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor string
+     * @param p_values value ter
      * @return literal
      */
     public static ILiteral from( final String p_functor, final Collection<ITerm> p_values )
@@ -195,7 +207,7 @@ public final class CLiteral implements ILiteral
      * factory
      *
      * @param p_functor functor string
-     * @param p_values value literals
+     * @param p_values value term
      * @param p_annotations annotation literals
      * @return literal
      */
