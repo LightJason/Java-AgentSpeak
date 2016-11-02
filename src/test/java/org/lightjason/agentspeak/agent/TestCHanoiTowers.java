@@ -85,7 +85,7 @@ public final class TestCHanoiTowers
     /**
      * number of agents
      */
-    private static final Long AGENTNUMBER = 2L;
+    private static final Long AGENTNUMBER = 1L;
     /**
      * tower map
      */
@@ -144,25 +144,26 @@ public final class TestCHanoiTowers
 
     /**
      * running towers of hanoi
+     *
+     * @throws InterruptedException on thread-sleeping
      */
     @Test
     public final void play() throws InterruptedException
     {
-        while (m_running.get())
+        while ( m_running.get() )
         {
             m_agents.values()
                     .parallelStream()
-                    .forEach( j ->
-                              {
-                                  try
-                                  {
-                                      j.call();
-                                  }
-                                  catch ( final Exception l_exception )
-                                  {
-                                      l_exception.printStackTrace();
-                                  }
-                              } );
+                    .forEach( j -> {
+                        try
+                        {
+                            j.call();
+                        }
+                        catch ( final Exception l_exception )
+                        {
+                            l_exception.printStackTrace();
+                        }
+                    } );
 
             System.out.println( m_tower );
             Thread.sleep( 500 );

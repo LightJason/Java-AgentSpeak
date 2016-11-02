@@ -81,7 +81,10 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final IVariable<?> relocate()
     {
-        return m_relocate.set( this.raw() );
+        return
+            m_relocate instanceof CConstant<?>
+            ? m_relocate
+            : m_relocate.set( this.raw() );
     }
 
     @Override
