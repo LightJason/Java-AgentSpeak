@@ -192,6 +192,7 @@ public final class TestCHanoiTowers
                     Stream.of(
                         new CTowerPush( 0.0 ),
                         new CTowerPop(),
+                        new CTowerSize(),
                         new CCompareSlice( 0.0 ),
                         new CSend()
                     )
@@ -207,6 +208,39 @@ public final class TestCHanoiTowers
         public final CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( (int) p_data[0], m_configuration );
+        }
+    }
+
+
+    /**
+     * returns the number of elements of an tower
+     */
+    private final class CTowerSize extends IBaseAction
+    {
+
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "tower/size" );
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 1;
+        }
+
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                                   final List<ITerm> p_annotation
+        )
+        {
+            final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
+            if (l_tower == null)
+                return CFuzzyValue.from( false );
+
+            p_return.add( CRawTerm.from( l_tower.size() ) );
+            return CFuzzyValue.from( true );
         }
     }
 
@@ -405,7 +439,8 @@ public final class TestCHanoiTowers
             return Stream.of(
                 new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
                 new CConstant<>( "MaxTowerNumber", TOWERNUMBER-1 ),
-                new CConstant<>( "MaxAgentNumber", AGENTNUMBER-1 )
+                new CConstant<>( "MaxAgentNumber", AGENTNUMBER-1 ),
+                new CConstant<>( "MaxSliceNumber", SLICENUMBER )
             );
         }
 
