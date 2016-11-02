@@ -152,6 +152,7 @@ public final class TestCHanoiTowers
     {
         while ( m_running.get() )
         {
+            System.out.println( m_tower );
             m_agents.values()
                     .parallelStream()
                     .forEach( j -> {
@@ -165,7 +166,7 @@ public final class TestCHanoiTowers
                         }
                     } );
 
-            System.out.println( m_tower );
+
             Thread.sleep( 500 );
             System.out.println();
         }

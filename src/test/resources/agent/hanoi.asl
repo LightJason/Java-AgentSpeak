@@ -4,8 +4,7 @@
 
 nexttower(T, M) :-
     T--;
-    T = math/abs(T);
-    T = T % M
+    T = T < 0 ? M - 1 + T : T
 .
 
 
@@ -14,11 +13,11 @@ nexttower(T, M) :-
 
 +!main
     <-
-        !!slice/take(3)
+        !!slice/take(0)
 .
 
 
-
+// https://de.wikipedia.org/wiki/T%C3%BCrme_von_Hanoi#Iterativer_Algorithmus
 
 +!slice/take(T)
     : tower/size(TowerNumber) != SliceNumber
@@ -62,8 +61,7 @@ nexttower(T, M) :-
         generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
 
         // just try next tower counter
-        T++;
-        T = T % TowerNumber;
+        $nexttower(T, TowerNumber);
         !slice/push( T, S )
 .
 
