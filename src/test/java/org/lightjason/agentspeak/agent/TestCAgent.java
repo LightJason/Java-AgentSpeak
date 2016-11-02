@@ -106,8 +106,7 @@ public final class TestCAgent
     public final void testASLManual()
     {
         ASL.entrySet()
-             .forEach( i ->
-             {
+             .forEach( i -> {
                  final Pair<Boolean, String> l_result = testAgentManual( i.getKey(), i.getValue() );
                  assertTrue( l_result.getRight(), l_result.getLeft() );
                  System.out.println( l_result.getValue() );
@@ -122,8 +121,7 @@ public final class TestCAgent
     {
         final Set<String> l_result = ASL.entrySet()
                                         .stream()
-                                        .map( i ->
-                                        {
+                                        .map( i -> {
                                             try
                                             (
                                                 final InputStream l_stream = new FileInputStream( i.getKey() );

@@ -9,33 +9,38 @@
 
 +!slice/take(T)
     <-
-        generic/print("try take from tower", T);
+        generic/print("agent", MyID, "tries to take from tower", T);
         S = tower/pop(T);
-        generic/print("get", S, "from tower", T);
-        !slice/push(3, S)
+        generic/print("agent", MyID, "gets", S, "from tower", T);
+        !slice/push(MaxTowerNumber, S)
 .
+
+-!slice/take(X)
+    <-
+        generic/print("agent", MyID, "cannot take slice from tower", X);
+        T++;
+        !slice/take(T)
+.
+
 
 
 +!push/slice(T, S)
     <-
-        generic/print("try push on tower", T, S);
+        generic/print("agent", MyID, "tries to push on tower", T, S);
         tower/push(T,S);
-        generic/print("push on tower", T, S, "success")
+        generic/print("agent", MyID, "pushs on tower", T, S, "success")
 .
 
 
 -!push/slice(T, S)
     : T > 1 <-
-        generic/print("pushing on tower", T, "with", S, "fails");
+        generic/print("agent", MyID, "pushing on tower", T, "with", S, "fails");
         T--;
         !push/slice(T, S)
 
     : T <= 0 <-
-        !push/slice(3, S)
+        !push/slice(MaxTowerNumber, S)
 .
 
 
--!slice/take(X)
-    <-
-        generic/print("cannot take slice from tower", X)
-.
+

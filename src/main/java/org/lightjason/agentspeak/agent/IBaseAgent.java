@@ -286,6 +286,13 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
+    public final <N extends IAgent<?>> N raw()
+    {
+        return (N) this;
+    }
+
+    @Override
     public String toString()
     {
         return MessageFormat.format(

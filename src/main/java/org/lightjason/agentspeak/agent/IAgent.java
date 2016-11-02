@@ -171,4 +171,12 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      */
     Multimap<IPath, IRule> rules();
 
+    /**
+     * cast the interface agent object
+     * to a specified agent object
+     *
+     * @return specified agent
+     */
+    <N extends IAgent<?>> N raw();
+
 }

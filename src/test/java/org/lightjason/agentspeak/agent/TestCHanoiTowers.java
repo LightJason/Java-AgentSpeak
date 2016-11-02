@@ -35,11 +35,15 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.variable.CConstant;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -59,6 +63,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * test for playing towers of
  * hanoi with an agent
+ *
  * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
  */
 public final class TestCHanoiTowers
@@ -70,15 +75,15 @@ public final class TestCHanoiTowers
     /**
      * number of towers
      **/
-    private static final int TOWERNUMBER = 3;
+    private static final Long TOWERNUMBER = 3L;
     /**
      * number of slices
      */
-    private static final int SLICENUMBER = 3;
+    private static final Long SLICENUMBER = 3L;
     /**
      * number of agents
      */
-    private static final int AGENTNUMBER = 2;
+    private static final Long AGENTNUMBER = 2L;
     /**
      * tower map
      */
@@ -100,26 +105,27 @@ public final class TestCHanoiTowers
     {
 
         final Map<Integer, CTower> l_towermap = new ConcurrentHashMap<>();
-        IntStream.range( 0, TOWERNUMBER )
+        IntStream.range( 0, TOWERNUMBER.intValue() )
                  .forEach( i -> {
-                     final CTower l_tower = new CTower();
-                     l_towermap.put( i, l_tower );
-                     if ( i == 0 )
-                         IntStream.range( 0, SLICENUMBER ).forEach( j -> l_tower.push( new CSlice( SLICENUMBER - j ) ) );
+                    final CTower l_tower = new CTower();
+                    l_towermap.put( i, l_tower );
+                    if ( i == 0 )
+                        IntStream.range( 0, SLICENUMBER.intValue() ).forEach( j -> l_tower.push( new CSlice( SLICENUMBER.intValue() - j ) ) );
                  } );
         m_tower = Collections.unmodifiableMap( l_towermap );
 
 
         final Map<Integer, CAgent> l_agentmap = new ConcurrentHashMap<>();
         try
-        (
-            final InputStream l_asl = new FileInputStream( ASL );
-        )
+            (
+                final InputStream l_asl = new FileInputStream( ASL );
+            )
         {
             final CGenerator l_generator = new CGenerator( l_asl );
-            IntStream.range( 0, AGENTNUMBER )
+            IntStream.range( 0, AGENTNUMBER.intValue() )
                      .forEach( i -> l_agentmap.put( i, l_generator.generatesingle( i ) ) );
-        } catch ( final Exception l_exception )
+        }
+        catch ( final Exception l_exception )
         {
             assertTrue( "asl could not be read", true );
         }
@@ -136,19 +142,33 @@ public final class TestCHanoiTowers
     public final void play()
     {
         IntStream.range( 0, 10 )
-            .forEach( i -> m_agents.values()
-                                   .parallelStream()
-                                   .forEach( j -> {
-                                       try
-                                       {
-                                           j.call();
-                                       }
-                                       catch ( final Exception l_exception )
-                                       {
-                                           l_exception.printStackTrace();
-                                       }
-                                   } )
-            );
+                 .forEach( i -> m_agents.values()
+                                        .parallelStream()
+                                        .forEach( j -> {
+                                            try
+                                            {
+                                                j.call();
+                                            }
+                                            catch ( final Exception l_exception )
+                                            {
+                                                l_exception.printStackTrace();
+                                            }
+                                        } )
+                 );
+    }
+
+
+    /**
+     * main method for manual test
+     *
+     * @param p_args CLI arguments
+     * @throws Exception is thrown on any error
+     */
+    public static void main( final String[] p_args ) throws Exception
+    {
+        final TestCHanoiTowers l_hanoi = new TestCHanoiTowers();
+        l_hanoi.initialize();
+        l_hanoi.play();
     }
 
 
@@ -165,17 +185,20 @@ public final class TestCHanoiTowers
          */
         CGenerator( final InputStream p_stream ) throws Exception
         {
-            super( p_stream,
-                   Stream.concat(
+            super(
+                p_stream,
+                Stream.concat(
                     CCommon.actionsFromPackage(),
                     Stream.of(
-                        new CTowerPush( 0.25 ),
+                        new CTowerPush( 0.0 ),
                         new CTowerPop(),
-                        new CCompareSlice( 0.2 ),
+                        new CCompareSlice( 0.0 ),
                         new CSend()
                     )
-                   ).collect( Collectors.toSet() ),
-                   IAggregation.EMPTY
+                ).collect( Collectors.toSet() ),
+                IAggregation.EMPTY,
+                Collections.emptySet(),
+                new CVariableBuilder()
             );
         }
 
@@ -222,11 +245,11 @@ public final class TestCHanoiTowers
 
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+                                                   final List<ITerm> p_annotation
         )
         {
-            final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Integer>raw() );
-            if (  ( l_tower == null ) || ( Math.random() < m_failprobability )  )
+            final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
+            if ( ( l_tower == null ) || ( Math.random() < m_failprobability ) )
                 return CFuzzyValue.from( false );
 
             try
@@ -261,7 +284,7 @@ public final class TestCHanoiTowers
 
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+                                                   final List<ITerm> p_annotation
         )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
@@ -272,7 +295,8 @@ public final class TestCHanoiTowers
             {
                 p_return.add( CRawTerm.from( l_tower.pop() ) );
                 return CFuzzyValue.from( true );
-            } catch (final Exception l_exception)
+            }
+            catch ( final Exception l_exception )
             {
                 return CFuzzyValue.from( false );
             }
@@ -292,6 +316,7 @@ public final class TestCHanoiTowers
 
         /**
          * ctor
+         *
          * @param p_invertprobability probability to invert result
          */
         CCompareSlice( final double p_invertprobability )
@@ -331,7 +356,7 @@ public final class TestCHanoiTowers
         @Override
         public final IPath name()
         {
-            return CPath.from( "message/send"  );
+            return CPath.from( "message/send" );
         }
 
         @Override
@@ -341,24 +366,24 @@ public final class TestCHanoiTowers
         }
 
         @Override
-        @SuppressWarnings( "unchcked" )
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+                                                   final List<ITerm> p_annotation
         )
         {
             final CAgent l_receiver = m_agents.get( p_argument.get( 0 ).<Integer>raw() );
             if ( l_receiver == null )
-                return CFuzzyValue.from(  false  );
+                return CFuzzyValue.from( false );
 
             l_receiver.trigger(
                 CTrigger.from(
                     ITrigger.EType.ADDGOAL,
-                    CLiteral.from( "receive",
-                                    CLiteral.from(
-                                        "message",
-                                        p_argument.get( 1 )
-                                    ),
-                                    CLiteral.from( "from", CRawTerm.from( ( (CAgent) p_context.agent() ).id() ) )
+                    CLiteral.from(
+                        "receive",
+                        CLiteral.from(
+                            "message",
+                            p_argument.get( 1 )
+                        ),
+                        CLiteral.from( "from", CRawTerm.from( p_context.agent().<CAgent>raw().id() ) )
                     )
                 )
             );
@@ -369,9 +394,28 @@ public final class TestCHanoiTowers
 
 
     /**
+     * variable builder
+     */
+    private static final class CVariableBuilder implements IVariableBuilder
+    {
+
+        @Override
+        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
+        {
+            return Stream.of(
+                new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
+                new CConstant<>( "MaxTowerNumber", TOWERNUMBER-1 ),
+                new CConstant<>( "MaxAgentNumber", AGENTNUMBER-1 )
+            );
+        }
+
+    }
+
+
+    /**
      * agent class
      */
-    private class CAgent extends IBaseAgent<CAgent>
+    private static class CAgent extends IBaseAgent<CAgent>
     {
         /**
          * id of the agent
@@ -422,19 +466,20 @@ public final class TestCHanoiTowers
             m_size = p_size;
         }
 
+        @Override
+        public String toString()
+        {
+            return MessageFormat.format( "slice {0}", m_size );
+        }
+
         /**
          * returns the size
+         *
          * @return slice size
          */
         final int size()
         {
             return m_size;
-        }
-
-        @Override
-        public String toString()
-        {
-            return MessageFormat.format( "slice {0}", m_size );
         }
     }
 
@@ -444,16 +489,16 @@ public final class TestCHanoiTowers
     private static final class CTower extends Stack<CSlice>
     {
         @Override
-        public synchronized CSlice push( final CSlice p_item )
+        public final synchronized CSlice push( final CSlice p_item )
         {
-            if (  ( this.size() > 0 ) && ( this.peek().size() < p_item.size() )  )
+            if ( ( this.size() > 0 ) && ( this.peek().size() < p_item.size() ) )
                 throw new IllegalArgumentException();
 
             return super.push( p_item );
         }
 
         @Override
-        public synchronized CSlice pop()
+        public final synchronized CSlice pop()
         {
             if ( this.isEmpty() )
                 throw new IllegalStateException();
@@ -462,34 +507,22 @@ public final class TestCHanoiTowers
         }
 
         @Override
-        public synchronized CSlice peek()
+        public final synchronized CSlice peek()
         {
             return super.peek();
         }
 
         @Override
-        public synchronized boolean empty()
+        public final synchronized boolean empty()
         {
             return super.empty();
         }
 
         @Override
-        public synchronized int search( final Object o )
+        public final synchronized int search( final Object p_object )
         {
-            return super.search( o );
+            return super.search( p_object );
         }
     }
 
-
-    /**
-     * main method for manual test
-     * @param p_args CLI arguments
-     * @throws Exception is thrown on any error
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        final TestCHanoiTowers l_hanoi = new TestCHanoiTowers();
-        l_hanoi.initialize();
-        l_hanoi.play();
-    }
 }
