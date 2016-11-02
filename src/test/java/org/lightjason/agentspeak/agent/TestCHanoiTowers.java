@@ -165,7 +165,7 @@ public final class TestCHanoiTowers
                               } );
 
             System.out.println( m_tower );
-            Thread.sleep( 1000 );
+            Thread.sleep( 500 );
             System.out.println();
         }
 
@@ -448,7 +448,7 @@ public final class TestCHanoiTowers
                                                    final List<ITerm> p_annotation
         )
         {
-            final CAgent l_receiver = m_agents.get( p_argument.get( 0 ).<Integer>raw() );
+            final CAgent l_receiver = m_agents.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( l_receiver == null )
                 return CFuzzyValue.from( false );
 
@@ -459,12 +459,14 @@ public final class TestCHanoiTowers
                         "receive",
                         CLiteral.from(
                             "message",
-                            p_argument.get( 1 )
+                            p_argument.subList( 1, p_argument.size() ).stream().map( i -> CRawTerm.from( i.raw() ) )
                         ),
                         CLiteral.from( "from", CRawTerm.from( p_context.agent().<CAgent>raw().id() ) )
                     )
-                )
+                ),
+                true
             );
+
             return CFuzzyValue.from( true );
         }
 
@@ -482,9 +484,9 @@ public final class TestCHanoiTowers
         {
             return Stream.of(
                 new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                new CConstant<>( "MaxTowerNumber", TOWERNUMBER - 1 ),
-                new CConstant<>( "MaxAgentNumber", AGENTNUMBER - 1 ),
-                new CConstant<>( "MaxSliceNumber", SLICENUMBER )
+                new CConstant<>( "TowerNumber", TOWERNUMBER - 1 ),
+                new CConstant<>( "AgentNumber", AGENTNUMBER - 1 ),
+                new CConstant<>( "SliceNumber", SLICENUMBER )
             );
         }
 
