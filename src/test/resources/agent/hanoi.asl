@@ -41,12 +41,12 @@
 
 
 -!slice/push(T, S)
-    : T >= 0 <-
+    <-
         generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
+        T--;
+        T = math/abs(T);
+        T = T % MaxTowerNumber;
         !slice/push( T, S )
-
-    : T < 0 <-
-        !slice/push( MaxTowerNumber, S )
 .
 
 
