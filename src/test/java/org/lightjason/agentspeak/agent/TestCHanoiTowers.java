@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -92,6 +93,10 @@ public final class TestCHanoiTowers
      * agent map
      */
     private Map<Integer, CAgent> m_agents;
+    /**
+     * running flag (agent can disable execution)
+     */
+    private AtomicBoolean m_running;
 
 
 
@@ -103,14 +108,15 @@ public final class TestCHanoiTowers
     @Before
     public void initialize() throws Exception
     {
+        m_running = new AtomicBoolean( true );
 
         final Map<Integer, CTower> l_towermap = new ConcurrentHashMap<>();
         IntStream.range( 0, TOWERNUMBER.intValue() )
                  .forEach( i -> {
-                    final CTower l_tower = new CTower();
-                    l_towermap.put( i, l_tower );
-                    if ( i == 0 )
-                        IntStream.range( 0, SLICENUMBER.intValue() ).forEach( j -> l_tower.push( new CSlice( SLICENUMBER.intValue() - j ) ) );
+                     final CTower l_tower = new CTower();
+                     l_towermap.put( i, l_tower );
+                     if ( i == 0 )
+                         IntStream.range( 0, SLICENUMBER.intValue() ).forEach( j -> l_tower.push( new CSlice( SLICENUMBER.intValue() - j ) ) );
                  } );
         m_tower = Collections.unmodifiableMap( l_towermap );
 
@@ -141,21 +147,21 @@ public final class TestCHanoiTowers
     @Test
     public final void play()
     {
-        IntStream.range( 0, 15 )
-                 .forEach( i -> m_agents.values()
-                                        .parallelStream()
-                                        .forEach( j -> {
-                                            try
-                                            {
-                                                j.call();
-                                            }
-                                            catch ( final Exception l_exception )
-                                            {
-                                                l_exception.printStackTrace();
-                                            }
-                                        } )
-                 );
-        System.out.println(m_tower);
+        while (m_running.get())
+            m_agents.values()
+                .parallelStream()
+                .forEach( j -> {
+                    try
+                    {
+                        j.call();
+                    }
+                    catch ( final Exception l_exception )
+                    {
+                        l_exception.printStackTrace();
+                    }
+                } );
+
+        System.out.println( m_tower );
     }
 
 
@@ -195,7 +201,8 @@ public final class TestCHanoiTowers
                         new CTowerPop(),
                         new CTowerSize(),
                         new CCompareSlice( 0.0 ),
-                        new CSend()
+                        new CSend(),
+                        new CStop()
                     )
                 ).collect( Collectors.toSet() ),
                 IAggregation.EMPTY,
@@ -209,6 +216,34 @@ public final class TestCHanoiTowers
         public final CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( (int) p_data[0], m_configuration );
+        }
+    }
+
+    /**
+     * stop action
+     */
+    private final class CStop extends IBaseAction
+    {
+
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "stop" );
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 0;
+        }
+
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                             final List<ITerm> p_annotation
+        )
+        {
+            m_running.set( false );
+            return CFuzzyValue.from( true );
         }
     }
 
@@ -237,7 +272,7 @@ public final class TestCHanoiTowers
         )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if (l_tower == null)
+            if ( l_tower == null )
                 return CFuzzyValue.from( false );
 
             p_return.add( CRawTerm.from( l_tower.size() ) );
@@ -439,8 +474,8 @@ public final class TestCHanoiTowers
         {
             return Stream.of(
                 new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                new CConstant<>( "MaxTowerNumber", TOWERNUMBER-1 ),
-                new CConstant<>( "MaxAgentNumber", AGENTNUMBER-1 ),
+                new CConstant<>( "MaxTowerNumber", TOWERNUMBER - 1 ),
+                new CConstant<>( "MaxAgentNumber", AGENTNUMBER - 1 ),
                 new CConstant<>( "MaxSliceNumber", SLICENUMBER )
             );
         }

@@ -8,7 +8,7 @@
 
 
 +!slice/take(T)
-    : tower/size(MaxTowerNumber) \== MaxSliceNumber
+    : tower/size(MaxTowerNumber) != MaxSliceNumber
         <-
             generic/print( "agent", MyID, "tries to take from tower", T );
             S = tower/pop( T );
@@ -17,7 +17,8 @@
 
     : tower/size(MaxTowerNumber) == MaxSliceNumber
         <-
-            generic/print( "everything done" )
+            generic/print( "everything done" );
+            stop()
 .
 
 -!slice/take(T)
@@ -45,7 +46,7 @@
         !slice/push( T, S )
 
     : T <= 0 <-
-        !slice/push( MaxTowerNumber, S)
+        !slice/push( MaxTowerNumber, S )
 .
 
 

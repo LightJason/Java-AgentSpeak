@@ -118,7 +118,7 @@ LESSEQUAL                  : '<=';
 GREATER                    : '>';
 GREATEREQUAL               : '>=';
 EQUAL                      : '==';
-NOTEQUAL                   : '\\==';
+NOTEQUAL                   : '\\==' | '!=';
 
 
 POW                        : '**';
