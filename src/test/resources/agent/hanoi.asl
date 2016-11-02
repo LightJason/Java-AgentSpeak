@@ -29,7 +29,7 @@
 
 
 
-+!push/slice(T, S)
++!slice/push(T, S)
     <-
         generic/print( "agent", MyID, "tries to push on tower", T, S );
         tower/push( T, S );
@@ -38,14 +38,14 @@
 .
 
 
--!push/slice(T, S)
+-!slice/push(T, S)
     : T > 1 <-
         generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
         T--;
-        !push/slice( T, S )
+        !slice/push( T, S )
 
     : T <= 0 <-
-        !push/slice( MaxTowerNumber, S)
+        !slice/push( MaxTowerNumber, S)
 .
 
 

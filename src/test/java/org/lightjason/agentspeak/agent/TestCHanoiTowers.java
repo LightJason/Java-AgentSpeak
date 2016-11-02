@@ -141,7 +141,7 @@ public final class TestCHanoiTowers
     @Test
     public final void play()
     {
-        IntStream.range( 0, 10 )
+        IntStream.range( 0, 15 )
                  .forEach( i -> m_agents.values()
                                         .parallelStream()
                                         .forEach( j -> {
@@ -155,6 +155,7 @@ public final class TestCHanoiTowers
                                             }
                                         } )
                  );
+        System.out.println(m_tower);
     }
 
 
