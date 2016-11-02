@@ -46,6 +46,7 @@ import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -131,7 +132,7 @@ public final class TestCHanoiTowers
             IntStream.range( 0, AGENTNUMBER.intValue() )
                      .forEach( i -> l_agentmap.put( i, l_generator.generatesingle( i ) ) );
         }
-        catch ( final Exception l_exception )
+        catch ( final IOException l_exception )
         {
             assertTrue( "asl could not be read", true );
         }
@@ -145,21 +146,28 @@ public final class TestCHanoiTowers
      * running towers of hanoi
      */
     @Test
-    public final void play()
+    public final void play() throws InterruptedException
     {
         while (m_running.get())
+        {
             m_agents.values()
-                .parallelStream()
-                .forEach( j -> {
-                    try
-                    {
-                        j.call();
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                        l_exception.printStackTrace();
-                    }
-                } );
+                    .parallelStream()
+                    .forEach( j ->
+                              {
+                                  try
+                                  {
+                                      j.call();
+                                  }
+                                  catch ( final Exception l_exception )
+                                  {
+                                      l_exception.printStackTrace();
+                                  }
+                              } );
+
+            System.out.println( m_tower );
+            Thread.sleep( 1000 );
+            System.out.println();
+        }
 
         System.out.println( m_tower );
     }
@@ -327,7 +335,7 @@ public final class TestCHanoiTowers
                 l_tower.push( p_argument.get( 1 ).<CSlice>raw() );
                 return CFuzzyValue.from( true );
             }
-            catch ( final Exception l_exception )
+            catch ( final IllegalStateException l_exception )
             {
                 return CFuzzyValue.from( false );
             }
@@ -366,7 +374,7 @@ public final class TestCHanoiTowers
                 p_return.add( CRawTerm.from( l_tower.pop() ) );
                 return CFuzzyValue.from( true );
             }
-            catch ( final Exception l_exception )
+            catch ( final IllegalStateException l_exception )
             {
                 return CFuzzyValue.from( false );
             }
@@ -563,7 +571,7 @@ public final class TestCHanoiTowers
         public final synchronized CSlice push( final CSlice p_item )
         {
             if ( ( this.size() > 0 ) && ( this.peek().size() < p_item.size() ) )
-                throw new IllegalArgumentException();
+                throw new IllegalStateException();
 
             return super.push( p_item );
         }

@@ -25,6 +25,7 @@
     <-
         generic/print( "agent", MyID, "cannot take slice from tower", T );
         T++;
+        T = T % MaxTowerNumber;
         !slice/take( T )
 .
 
@@ -40,12 +41,11 @@
 
 
 -!slice/push(T, S)
-    : T > 1 <-
+    : T >= 0 <-
         generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
-        T--;
         !slice/push( T, S )
 
-    : T <= 0 <-
+    : T < 0 <-
         !slice/push( MaxTowerNumber, S )
 .
 
