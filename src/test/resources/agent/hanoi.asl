@@ -15,11 +15,6 @@ nexttower(T, M) :-
 .
 
 
--!main <- generic/print("main fails"); stop().
-
-
-// https://de.wikipedia.org/wiki/T%C3%BCrme_von_Hanoi#Iterativer_Algorithmus
-
 +!slice/take( T )
     : tower/size(TowerMaxIndex) != 3
         <-
@@ -57,11 +52,12 @@ nexttower(T, M) :-
         !slice/take( T )
 .
 
--!slice/push( T, S )
-        <-
-            generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
 
-            // just try next tower counter
-            $nexttower( T, TowerMaxIndex );
-            !slice/push( T, S )
+-!slice/push( T, S )
+    <-
+        generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
+
+        // just try next tower counter
+        $nexttower( T, TowerMaxIndex );
+        !slice/push( T, S )
 .
