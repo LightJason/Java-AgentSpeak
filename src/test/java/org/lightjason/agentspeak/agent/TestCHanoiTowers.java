@@ -486,9 +486,10 @@ public final class TestCHanoiTowers
         {
             return Stream.of(
                 new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                new CConstant<>( "TowerNumber", TOWERNUMBER - 1 ),
-                new CConstant<>( "AgentNumber", AGENTNUMBER - 1 ),
-                new CConstant<>( "SliceNumber", SLICENUMBER )
+                new CConstant<>( "TowerCount", TOWERNUMBER ),
+                new CConstant<>( "TowerMaxIndex", TOWERNUMBER - 1 ),
+                new CConstant<>( "AgentMaxIndex", AGENTNUMBER - 1 ),
+                new CConstant<>( "SliceCount", SLICENUMBER )
             );
         }
 
