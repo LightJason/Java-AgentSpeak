@@ -47,7 +47,7 @@ nexttower(T, M) :-
     <-
         generic/print( "agent", MyID, "tries to push on tower", T, S );
         tower/push( T, S );
-        generic/print( "agent", MyID, "pushs on tower", T, S, "success" );
+        generic/print( "agent", MyID, "pushs on tower", T, S, "successfully" );
 
         // pushing is successful, just go to the next tower
         $nexttower( T, TowerMaxIndex );
@@ -56,7 +56,7 @@ nexttower(T, M) :-
 
 -!slice/push( T, S )
         <-
-            generic/print( "agent", MyID, "pushing on tower", T, "with", S );
+            generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
 
             // just try next tower counter
             $nexttower( T, TowerMaxIndex );
