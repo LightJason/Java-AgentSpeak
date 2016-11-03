@@ -488,7 +488,6 @@ public final class TestCHanoiTowers
                 new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
                 new CConstant<>( "TowerCount", TOWERNUMBER ),
                 new CConstant<>( "TowerMaxIndex", TOWERNUMBER - 1 ),
-                new CConstant<>( "AgentMaxIndex", AGENTNUMBER - 1 ),
                 new CConstant<>( "SliceCount", SLICENUMBER )
             );
         }

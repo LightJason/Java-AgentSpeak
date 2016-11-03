@@ -18,7 +18,7 @@ nexttower(T, M) :-
 // https://de.wikipedia.org/wiki/T%C3%BCrme_von_Hanoi#Iterativer_Algorithmus
 
 +!slice/take( T )
-    : tower/size(TowerMaxIndex) != SliceCount
+    : tower/size(TowerMaxIndex) != 3
         <-
             generic/print( "agent", MyID, "tries to take from tower", T );
             S = tower/pop( T );
@@ -28,7 +28,7 @@ nexttower(T, M) :-
             $nexttower( T, TowerMaxIndex );
             !slice/push( T, S )
 
-    : tower/size(TowerMaxIndex) == SliceCount
+    : tower/size(TowerMaxIndex) == 3
         <-
             generic/print( "everything done" );
             stop()
