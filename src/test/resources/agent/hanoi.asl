@@ -17,7 +17,11 @@ incrementpusherror(X, T) :-
     +pusherror(X)
 .
 
-
+resetpusherror() :-
+    >>pusherror(X);
+    -pusherror(X);
+    +pusherror(0)
+.
 
 
 +!main
@@ -37,7 +41,7 @@ incrementpusherror(X, T) :-
 
             // clockweise transpose
             C = T;
-            $nexttower(T, TowerCount);
+            $nexttower(T, TowerMaxIndex);
             !slice/push(C, T, S)
 
     : tower/size(TowerMaxIndex) == SliceCount
@@ -62,17 +66,18 @@ incrementpusherror(X, T) :-
         generic/print( "agent", MyID, "pushs on tower", T, S, "success" );
 
         // try to clear the current tower
+        $resetpusherror;
         !slice/take( C )
 .
 
 -!slice/push(C, T, S)
-    : >>( pusherror(X), X <= TowerCount )
+    : >>( pusherror(X), X < TowerCount )
         <-
             generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails - current fails", X );
 
             // just try next tower counter
             $incrementpusherror( X, TowerCount );
-            $nexttower( T, TowerCount );
+            $nexttower( T, TowerMaxIndex );
             !slice/push( C, T, S )
 
     : >>( pusherror(X), X == TowerMaxIndex )
@@ -81,7 +86,7 @@ incrementpusherror(X, T) :-
             $incrementpusherror( X, TowerCount );
             !!slice/push( C, T, S );
 
-            $nexttower( C, TowerCount );
+            $nexttower( C, TowerMaxIndex );
             !slice/take( C )
 .
 
