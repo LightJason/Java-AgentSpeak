@@ -1,6 +1,3 @@
-pusherror(0).
-
-
 !main.
 
 
@@ -10,18 +7,6 @@ nexttower(T, M) :-
     T = T < 0 ? M - 1 + T : T
 .
 
-incrementpusherror(E, T) :-
-    -pusherror(E);
-    E++;
-    E = E % T;
-    +pusherror(E)
-.
-
-resetpusherror() :-
-    >>pusherror(E);
-    -pusherror(E);
-    +pusherror(0)
-.
 
 
 +!main
@@ -64,91 +49,16 @@ resetpusherror() :-
         tower/push( T, S );
         generic/print( "agent", MyID, "pushs on tower", T, S, "success" );
 
-        // try to clear the current tower
-        $resetpusherror;
+        // pushing is successful, just go to the next tower
+        $nexttower( T, TowerMaxIndex );
         !slice/take( T )
 .
 
 -!slice/push( T, S )
-    : >>( pusherror(E), E < TowerMaxIndex )
         <-
-            $incrementpusherror( E, TowerCount );
-            generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails - current fails", E );
+            generic/print( "agent", MyID, "pushing on tower", T, "with", S );
 
             // just try next tower counter
-
             $nexttower( T, TowerMaxIndex );
             !slice/push( T, S )
-
-    : >>( pusherror(E), E >= TowerMaxIndex )
-        <-
-            $incrementpusherror( E, TowerCount );
-            generic/print( "agent", MyID, "tested all towers but no one can passed, pushing on tower", T, "with", S, "fails - current fails", E );
-
-            !!slice/push( T, S );
-
-            $nexttower( T, TowerMaxIndex );
-            !slice/take( T )
 .
-
-
-/*
-
-+!slice/take(T)
-    : tower/size(TowerNumber) != SliceNumber
-        <-
-            generic/print( "agent", MyID, "tries to take from tower", T );
-            S = tower/pop( T );
-            generic/print( "agent", MyID, "gets", S, "from tower", T );
-            +intention( TowerNumber, S );
-            !slice/push( TowerNumber, S )
-
-    : tower/size(TowerNumber) == SliceNumber
-        <-
-            generic/print( "everything done" );
-            stop()
-.
-
--!slice/take(T)
-    <-
-        generic/print( "agent", MyID, "cannot take slice from tower", T );
-        T++;
-        T = T % TowerNumber;
-        !slice/take( T )
-.
-
-
-
-
-
-
--!slice/push(T, S)
-    <-
-        generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails" );
-
-        R = MyID;
-        R++;
-        R = R % AgentNumber;
-        message/send( R, T,S );
-
-        generic/agent/sleep(2)
-.
-
-
-
-+!receive(M, from(A))
-    : >>( message(T,S), M )
-        <-
-            generic/print( "agent", MyID, "receives message from agent", A, "that he will put", S, "on tower", T )
-
-.
-
-
-+!wakeup
-    : >>intention(T,S)
-        <-
-            generic/print( "agent", MyID, "with intention to push", S, "on tower", T);
-            !slice/push( T,S )
-.
-
-*/

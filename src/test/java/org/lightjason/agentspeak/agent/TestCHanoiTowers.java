@@ -167,7 +167,7 @@ public final class TestCHanoiTowers
                     } );
 
 
-            Thread.sleep( 1000 );
+            Thread.sleep( 500 );
             System.out.println();
         }
 
