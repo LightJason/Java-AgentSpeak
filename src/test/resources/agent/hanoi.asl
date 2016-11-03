@@ -10,16 +10,16 @@ nexttower(T, M) :-
     T = T < 0 ? M - 1 + T : T
 .
 
-incrementpusherror(X, T) :-
-    -pusherror(X);
-    X++;
-    X = X % T;
-    +pusherror(X)
+incrementpusherror(E, T) :-
+    -pusherror(E);
+    E++;
+    E = E % T;
+    +pusherror(E)
 .
 
 resetpusherror() :-
-    >>pusherror(X);
-    -pusherror(X);
+    >>pusherror(E);
+    -pusherror(E);
     +pusherror(0)
 .
 
@@ -40,9 +40,8 @@ resetpusherror() :-
             generic/print( "agent", MyID, "gets", S, "from tower", T );
 
             // clockweise transpose
-            C = T;
-            $nexttower(T, TowerMaxIndex);
-            !slice/push(C, T, S)
+            $nexttower( T, TowerMaxIndex );
+            !slice/push( T, S )
 
     : tower/size(TowerMaxIndex) == SliceCount
         <-
@@ -59,7 +58,7 @@ resetpusherror() :-
 .
 
 
-+!slice/push( C, T, S )
++!slice/push( T, S )
     <-
         generic/print( "agent", MyID, "tries to push on tower", T, S );
         tower/push( T, S );
@@ -67,27 +66,29 @@ resetpusherror() :-
 
         // try to clear the current tower
         $resetpusherror;
-        !slice/take( C )
+        !slice/take( T )
 .
 
--!slice/push(C, T, S)
-    : >>( pusherror(X), X < TowerCount )
+-!slice/push( T, S )
+    : >>( pusherror(E), E < TowerMaxIndex )
         <-
-            generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails - current fails", X );
+            $incrementpusherror( E, TowerCount );
+            generic/print( "agent", MyID, "pushing on tower", T, "with", S, "fails - current fails", E );
 
             // just try next tower counter
-            $incrementpusherror( X, TowerCount );
+
             $nexttower( T, TowerMaxIndex );
-            !slice/push( C, T, S )
+            !slice/push( T, S )
 
-    : >>( pusherror(X), X == TowerMaxIndex )
+    : >>( pusherror(E), E >= TowerMaxIndex )
         <-
-            generic/print( "agent", MyID, "tested all towers but no one can passed, pushing on tower", T, "with", S, "fails - current fails", X );
-            $incrementpusherror( X, TowerCount );
-            !!slice/push( C, T, S );
+            $incrementpusherror( E, TowerCount );
+            generic/print( "agent", MyID, "tested all towers but no one can passed, pushing on tower", T, "with", S, "fails - current fails", E );
 
-            $nexttower( C, TowerMaxIndex );
-            !slice/take( C )
+            !!slice/push( T, S );
+
+            $nexttower( T, TowerMaxIndex );
+            !slice/take( T )
 .
 
 
