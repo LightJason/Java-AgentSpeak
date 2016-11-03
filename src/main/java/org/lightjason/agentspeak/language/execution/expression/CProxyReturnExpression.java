@@ -38,8 +38,6 @@ import java.util.stream.Stream;
 
 /**
  * encpasulating any execution context
- *
- * @warning the class returns the result of the execution call only
  */
 public final class CProxyReturnExpression<T extends IExecution> implements IExpression
 {
@@ -64,8 +62,15 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
                                                final List<ITerm> p_annotation
     )
     {
-        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, new LinkedList<>(), p_annotation );
-        p_return.add( CRawTerm.from( l_return.value() ) );
+        final List<ITerm> l_returnarguments = new LinkedList<>();
+        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, l_returnarguments, p_annotation );
+
+        // compare returning arguments, on empty return execution result, otherwise return arguments
+        if ( l_returnarguments.isEmpty() )
+            p_return.add( CRawTerm.from( l_return.value() ) );
+        else
+            p_return.addAll( l_returnarguments );
+
         return l_return;
     }
 

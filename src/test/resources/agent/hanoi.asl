@@ -15,6 +15,9 @@ nexttower(T, M) :-
 .
 
 
+-!main <- generic/print("main fails"); stop().
+
+
 // https://de.wikipedia.org/wiki/T%C3%BCrme_von_Hanoi#Iterativer_Algorithmus
 
 +!slice/take( T )
