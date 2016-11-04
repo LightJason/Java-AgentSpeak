@@ -29,15 +29,11 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.beliefbase.storage.IBeliefPerceive;
-import org.lightjason.agentspeak.beliefbase.storage.IStorage;
-import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
@@ -182,7 +178,6 @@ public final class TestCAgent
                 ACTIONS.keySet(),
                 new CAggregation( ACTIONS ),
                 Collections.<IPlanBundle>emptySet(),
-                Stream.of( new CBeliefPerceive() ).collect( Collectors.toSet() ),
                 new CVariableBuilder()
             ).generatesingle();
 
@@ -249,16 +244,14 @@ public final class TestCAgent
          * @param p_actions set with action
          * @param p_aggregation aggregation function
          * @param p_planbundle set with planbundles
-         * @param p_beliefperceiver beliefbase updater
          * @param p_variablebuilder variable builder (can be set to null)
          * @throws Exception thrown on error
          */
         CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                         final Set<IBeliefPerceive<ILiteral, IView<IAgent<?>>, IAgent<?>>> p_beliefperceiver,
                          final IVariableBuilder p_variablebuilder
         ) throws Exception
         {
-            super( p_stream, p_actions, p_aggregation, p_planbundle, p_beliefperceiver, p_variablebuilder );
+            super( p_stream, p_actions, p_aggregation, p_planbundle, p_variablebuilder );
         }
 
         /**
@@ -267,16 +260,14 @@ public final class TestCAgent
          * @param p_stream input stream
          * @param p_actions set with action
          * @param p_aggregation aggregation function
-         * @param p_beliefperceiver beliefbase updater
          * @param p_variablebuilder variable builder (can be set to null)
          * @throws Exception thrown on error
          */
         CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
-                         final Set<IBeliefPerceive<ILiteral, IView<IAgent<?>>, IAgent<?>>> p_beliefperceiver,
                          final IVariableBuilder p_variablebuilder
         ) throws Exception
         {
-            super( p_stream, p_actions, p_aggregation, p_beliefperceiver, p_variablebuilder );
+            super( p_stream, p_actions, p_aggregation, p_variablebuilder );
         }
 
         @Override
@@ -289,18 +280,7 @@ public final class TestCAgent
 
 
 
-    /**
-     * beliefbase update e.g. environment updates
-     */
-    private static final class CBeliefPerceive implements IBeliefPerceive<ILiteral, IView<IAgent<?>>, IAgent<?>>
-    {
-        @Override
-        public final void perceive( final IAgent<?> p_agent,
-                                    final IStorage<ILiteral, IView<IAgent<?>>, IAgent<?>> p_storage )
-        {
 
-        }
-    }
 
     /**
      * aggregation function

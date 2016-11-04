@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
-import org.lightjason.agentspeak.beliefbase.storage.IBeliefPerceive;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
@@ -34,7 +33,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.util.Collection;
-import java.util.Set;
 
 
 /**
@@ -94,12 +92,5 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      * @return collection of initial beliefs
      */
     Collection<ILiteral> initialbeliefs();
-
-    /**
-     * returns perceivable
-     *
-     * @return belief perceiver stream
-     */
-    Set<IBeliefPerceive<ILiteral, IView<T>, T>> perceivable();
 
 }

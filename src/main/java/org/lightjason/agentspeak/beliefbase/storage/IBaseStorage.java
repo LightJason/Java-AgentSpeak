@@ -25,42 +25,16 @@ package org.lightjason.agentspeak.beliefbase.storage;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
-import java.util.Collections;
-import java.util.Set;
-
 
 /**
  * default structure of a storage
  */
 public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorage<N, M, T>
 {
-    /**
-     * belief perceiver object
-     */
-    private final Set<IBeliefPerceive<N, M, T>> m_perceive;
-
-    /**
-     * ctor
-     */
-    protected IBaseStorage()
-    {
-        this( Collections.emptySet() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_perceive perceive objects
-     */
-    protected IBaseStorage( final Set<IBeliefPerceive<N, M, T>> p_perceive )
-    {
-        m_perceive = p_perceive;
-    }
 
     @Override
-    public final T update( final T p_agent )
+    public T update( final T p_agent )
     {
-        m_perceive.parallelStream().forEach( i -> i.perceive( p_agent, this ) );
         return p_agent;
     }
 

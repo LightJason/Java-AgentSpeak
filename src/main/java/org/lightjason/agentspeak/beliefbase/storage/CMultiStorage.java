@@ -29,13 +29,9 @@ import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -58,35 +54,6 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
      **/
     private final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
 
-
-    /**
-     * ctor
-     */
-    public CMultiStorage()
-    {
-        super();
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_perceive perceive objects
-     */
-    @SafeVarargs
-    public CMultiStorage( final IBeliefPerceive<N, M, T>... p_perceive )
-    {
-        this( Collections.unmodifiableSet( Arrays.stream( p_perceive ).collect( Collectors.toSet() ) ) );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_perceive perceive objects
-     */
-    public CMultiStorage( final Set<IBeliefPerceive<N, M, T>> p_perceive )
-    {
-        super( p_perceive );
-    }
 
     @Override
     public final Stream<N> streamMultiElements()
