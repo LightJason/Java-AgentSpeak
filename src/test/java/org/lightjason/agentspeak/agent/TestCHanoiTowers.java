@@ -65,6 +65,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
  */
+@SuppressWarnings( "serial" )
 public final class TestCHanoiTowers
 {
     /**
