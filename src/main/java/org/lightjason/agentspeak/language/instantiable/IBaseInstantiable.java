@@ -97,7 +97,7 @@ public abstract class IBaseInstantiable implements IInstantiable
                 Stream.of(
                     m_annotation.containsKey( IAnnotation.EType.SCORE )
                     ? m_annotation.get( IAnnotation.EType.SCORE ).<Double>value()
-                    : new Double( 0 )
+                    : Double.valueOf( 0 )
                 )
             )
         );

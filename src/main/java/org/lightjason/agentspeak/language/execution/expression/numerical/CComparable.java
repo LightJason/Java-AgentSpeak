@@ -97,7 +97,7 @@ public final class CComparable extends IBaseBinary
         final Object l_value2 = p_value2.raw();
 
         return ( l_value1 instanceof Number ) && ( l_value2 instanceof Number )
-               ? ( (Number) l_value1 ).doubleValue() == ( (Number) l_value2 ).doubleValue()
+               ? Double.valueOf( ( (Number) l_value1 ).doubleValue() ).equals( ( (Number) l_value2 ).doubleValue() )
                : l_value1.equals( l_value2 );
     }
 
