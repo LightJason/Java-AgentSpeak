@@ -109,23 +109,23 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.logger( CASTVisitorAgent.class );
+    private static final Logger LOGGER = CCommon.logger( CASTVisitorAgent.class );
     /**
      * set with initial beliefs
      */
-    protected final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
+    private final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
     /**
      * map with plans
      */
-    protected final Set<IPlan> m_plans = new HashSet<>();
+    private final Set<IPlan> m_plans = new HashSet<>();
     /**
      * map with logical rules
      */
-    protected final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
+    private final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
     /**
      * map with action definition
      */
-    protected final Map<IPath, IAction> m_actions;
+    private final Map<IPath, IAction> m_actions;
 
     /**
      * ctor

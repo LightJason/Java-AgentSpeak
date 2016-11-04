@@ -74,23 +74,23 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     /**
      * map with action definition
      */
-    protected final Map<IPath, IAction> m_actions;
+    private final Map<IPath, IAction> m_actions;
     /**
      * map with logical rules
      */
-    protected final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
+    private final Multimap<IPath, IRule> m_rules = LinkedHashMultimap.create();
     /**
      * parsed literal
      */
-    protected ILiteral m_literal;
+    private ILiteral m_literal;
     /**
      * parsed expression
      */
-    protected IExpression m_expression;
+    private IExpression m_expression;
     /**
      * parsed term
      */
-    protected ITerm m_term;
+    private ITerm m_term;
 
 
     /**

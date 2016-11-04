@@ -66,7 +66,7 @@ public final class CCommon
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.logger( CCommon.class );
+    private static final Logger LOGGER = CCommon.logger( CCommon.class );
     /**
      * language resource bundle
      **/

@@ -48,7 +48,7 @@ public final class CRule extends IBaseInstantiable implements IRule
     /**
      * identifier of the rule
      */
-    protected final ILiteral m_id;
+    private final ILiteral m_id;
 
     /**
      * ctor

@@ -55,11 +55,11 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     /**
      * trigger event
      */
-    protected final ITrigger m_triggerevent;
+    private final ITrigger m_triggerevent;
     /**
      * execution condition / expression
      */
-    protected final IExpression m_condition;
+    private final IExpression m_condition;
 
 
     /**
