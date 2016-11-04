@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
-import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -39,8 +38,6 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -152,7 +149,7 @@ public final class TestCHanoiTowers
     {
         while ( m_running.get() )
         {
-            System.out.println( m_tower );
+            System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
                     .forEach( j -> {
@@ -165,13 +162,7 @@ public final class TestCHanoiTowers
                             l_exception.printStackTrace();
                         }
                     } );
-
-
-            Thread.sleep( 500 );
-            System.out.println();
         }
-
-        System.out.println( m_tower );
     }
 
 
@@ -210,8 +201,6 @@ public final class TestCHanoiTowers
                         new CTowerPush( 0.0 ),
                         new CTowerPop(),
                         new CTowerSize(),
-                        new CCompareSlice( 0.0 ),
-                        new CSend(),
                         new CStop()
                     )
                 ).collect( Collectors.toSet() ),
@@ -381,97 +370,6 @@ public final class TestCHanoiTowers
                 return CFuzzyValue.from( false );
             }
         }
-    }
-
-    /**
-     * compare action for slices with probability
-     * to do it wrong
-     */
-    private static final class CCompareSlice extends IBaseAction
-    {
-        /**
-         * probability to get a wrong result
-         */
-        private final double m_invertprobability;
-
-        /**
-         * ctor
-         *
-         * @param p_invertprobability probability to invert result
-         */
-        CCompareSlice( final double p_invertprobability )
-        {
-            m_invertprobability = p_invertprobability;
-        }
-
-        @Override
-        public final IPath name()
-        {
-            return CPath.from( "slice/less" );
-        }
-
-        @Override
-        public final int minimalArgumentNumber()
-        {
-            return 2;
-        }
-
-        @Override
-        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
-        )
-        {
-            return CFuzzyValue.from(
-                Math.random() < m_invertprobability != p_argument.get( 0 ).<CSlice>raw().size() < p_argument.get( 1 ).<CSlice>raw().size()
-            );
-        }
-    }
-
-    /**
-     * action for communication between agents
-     */
-    private final class CSend extends IBaseAction
-    {
-
-        @Override
-        public final IPath name()
-        {
-            return CPath.from( "message/send" );
-        }
-
-        @Override
-        public final int minimalArgumentNumber()
-        {
-            return 2;
-        }
-
-        @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                                   final List<ITerm> p_annotation
-        )
-        {
-            final CAgent l_receiver = m_agents.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( l_receiver == null )
-                return CFuzzyValue.from( false );
-
-            l_receiver.trigger(
-                CTrigger.from(
-                    ITrigger.EType.ADDGOAL,
-                    CLiteral.from(
-                        "receive",
-                        CLiteral.from(
-                            "message",
-                            p_argument.subList( 1, p_argument.size() ).stream().map( i -> CRawTerm.from( i.raw() ) )
-                        ),
-                        CLiteral.from( "from", CRawTerm.from( p_context.agent().<CAgent>raw().id() ) )
-                    )
-                ),
-                true
-            );
-
-            return CFuzzyValue.from( true );
-        }
-
     }
 
 
