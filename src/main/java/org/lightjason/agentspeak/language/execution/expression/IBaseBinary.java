@@ -26,9 +26,13 @@ package org.lightjason.agentspeak.language.execution.expression;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 
@@ -67,6 +71,33 @@ public abstract class IBaseBinary implements IBinaryExpression
         m_lefthandside = p_lefthandside;
         m_righthandside = p_righthandside;
     }
+
+    /**
+     * execute expression arguments
+     *
+     * @param p_context execution context
+     * @param p_parallel parallel execution
+     * @param p_argument returning arguments of the expressions
+     * @return boolean of successfully execution
+     * @throws IllegalArgumentException is thrown if more than two arguments are returned
+     */
+    protected final boolean executearguments( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument ) throws IllegalArgumentException
+    {
+        // run left-hand- and right-hand-side argument
+        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_argument, Collections.<ITerm>emptyList() ).value() )
+             || ( p_argument.isEmpty() ) )
+            return false;
+
+        if ( ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_argument, Collections.<ITerm>emptyList() ).value() )
+             || ( p_argument.isEmpty() ) )
+            return false;
+
+        if ( p_argument.size() != 2 )
+            throw new CIllegalArgumentException( CCommon.languagestring( IBaseBinary.class, "argumentnumber" ) );
+
+        return true;
+    }
+
 
     @Override
     public final IExpression leftHandSide()

@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,16 +65,9 @@ public final class CRelational extends IBaseBinary
                                                final List<ITerm> p_annotation
     )
     {
-        // run left-hand- and right-hand-side argument
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !m_lefthandside.execute( p_context, p_parallel, Collections.emptyList(), l_argument, Collections.emptyList() ).value() )
+        if ( !this.executearguments( p_context, p_parallel, l_argument ) )
             return CFuzzyValue.from( false );
-
-        if ( !m_righthandside.execute( p_context, p_parallel, Collections.emptyList(), l_argument, Collections.emptyList() ).value() )
-            return CFuzzyValue.from( false );
-
-        if ( l_argument.size() != 2 )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "argumentnumber" ) );
 
 
         switch ( m_operator )
