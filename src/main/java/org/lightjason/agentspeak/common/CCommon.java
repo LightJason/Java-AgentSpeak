@@ -435,7 +435,7 @@ public final class CCommon
      */
     private static String languagelabel( final Class<?> p_class, final String p_label )
     {
-        return ( p_class.getCanonicalName().toLowerCase() + "." + p_label.toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
+        return ( p_class.getCanonicalName().toLowerCase( Locale.ROOT ) + "." + p_label.toLowerCase( Locale.ROOT ) ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(
             PACKAGEROOT + ".", "" );
     }
 
@@ -453,7 +453,7 @@ public final class CCommon
                                                final boolean p_reload
         ) throws IllegalAccessException, InstantiationException, IOException
         {
-            InputStream l_stream = null;
+            final InputStream l_stream;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
 
             if ( !p_reload )
@@ -473,20 +473,9 @@ public final class CCommon
                 l_stream = l_connection.getInputStream();
             }
 
-            try
-            {
-                return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
-
-            }
-            catch ( final Exception l_exception )
-            {
-            }
-            finally
-            {
-                l_stream.close();
-            }
-
-            return null;
+            final ResourceBundle l_bundle = new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
+            l_stream.close();
+            return l_bundle;
         }
     }
 

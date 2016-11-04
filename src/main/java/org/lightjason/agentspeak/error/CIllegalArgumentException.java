@@ -37,7 +37,7 @@ public final class CIllegalArgumentException extends IllegalArgumentException im
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.logger( CIllegalArgumentException.class );
+    private static final Logger LOGGER = CCommon.logger( CIllegalArgumentException.class );
 
     /**
      * ctor

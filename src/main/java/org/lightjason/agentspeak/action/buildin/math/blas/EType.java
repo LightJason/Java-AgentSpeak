@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.math.blas;
 
 
+import java.util.Locale;
+
+
 /**
  * blas types
  */
@@ -40,6 +43,6 @@ public enum EType
      */
     public static EType from( final String p_name )
     {
-        return EType.valueOf( p_name.trim().toUpperCase() );
+        return EType.valueOf( p_name.trim().toUpperCase( Locale.ROOT ) );
     }
 }

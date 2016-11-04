@@ -63,6 +63,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 
@@ -159,7 +160,7 @@ public final class CCreateDistribution extends IBuildinAction
          */
         public static EDistribution from( final String p_value )
         {
-            return EDistribution.valueOf( p_value.trim().toUpperCase() );
+            return EDistribution.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
 
         /**
@@ -278,7 +279,7 @@ public final class CCreateDistribution extends IBuildinAction
          */
         public static EGenerator from( final String p_value )
         {
-            return EGenerator.valueOf( p_value.trim().toUpperCase() );
+            return EGenerator.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
 
         /**

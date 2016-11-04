@@ -37,6 +37,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -85,7 +86,7 @@ public final class CHash extends IBuildinAction
      */
     private String hash( final String p_algorithm, final byte[] p_data ) throws NoSuchAlgorithmException
     {
-        switch ( p_algorithm.trim().toLowerCase() )
+        switch ( p_algorithm.trim().toLowerCase( Locale.ROOT ) )
         {
             case "adler-32":
                 return Hashing.adler32().newHasher().putBytes( p_data ).hash().toString();

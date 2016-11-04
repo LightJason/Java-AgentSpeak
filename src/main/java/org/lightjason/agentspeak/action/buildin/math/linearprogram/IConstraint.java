@@ -28,6 +28,8 @@ import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
+import java.util.Locale;
+
 
 /**
  * abstract class for constraint actions
@@ -51,7 +53,7 @@ public abstract class IConstraint extends IBuildinAction
      */
     protected final Relationship getRelation( final String p_symbol )
     {
-        switch ( p_symbol.trim().toLowerCase() )
+        switch ( p_symbol.trim().toLowerCase( Locale.ROOT ) )
         {
             case "less":
             case "less-equal":

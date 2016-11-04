@@ -87,34 +87,4 @@ public final class CBinary extends IBaseBinary
         }
     }
 
-    /**
-     * run a fast check on boolean operators to stop execution
-     *
-     * @param p_argument argument list
-     * @param p_return modified return list
-     * @return boolean flag if fast check result value
-     */
-    private boolean fastCheck( final List<ITerm> p_argument, final List<ITerm> p_return )
-    {
-        final boolean l_result;
-        switch ( m_operator )
-        {
-            case AND:
-                l_result = !p_argument.get( 0 ).<Boolean>raw();
-                break;
-
-            case OR:
-                l_result = p_argument.get( 0 ).<Boolean>raw();
-                break;
-
-            default:
-                l_result = false;
-        }
-
-        if ( l_result )
-            p_return.addAll( p_argument );
-
-        return l_result;
-    }
-
 }

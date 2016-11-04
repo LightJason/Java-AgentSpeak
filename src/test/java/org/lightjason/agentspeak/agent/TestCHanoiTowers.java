@@ -468,6 +468,7 @@ public final class TestCHanoiTowers
     /**
      * tower
      */
+    @SuppressWarnings( "serial" )
     private static final class CTower extends Stack<CSlice>
     {
         @Override

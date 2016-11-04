@@ -36,6 +36,7 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 
 /**
@@ -134,7 +135,7 @@ public enum EAlgorithm
      */
     public static EAlgorithm from( final String p_value )
     {
-        return EAlgorithm.valueOf( p_value.trim().toUpperCase() );
+        return EAlgorithm.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }
 
 }

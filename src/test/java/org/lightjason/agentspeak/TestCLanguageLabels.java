@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -296,17 +297,6 @@ public final class TestCLanguageLabels
         l_test.testResourceString();
     }
 
-    /**
-     * method to build a package path
-     *
-     * @param p_names list of package parts
-     * @return full-qualified string
-     */
-    private static String packagepath( final String... p_names )
-    {
-        return StringUtils.join( p_names, ClassUtils.PACKAGE_SEPARATOR );
-    }
-
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -411,13 +401,13 @@ public final class TestCLanguageLabels
             // class name
             l_return[0] = l_split[0].replace( TRANSLATEMETHODNAME, "" ).replace( "(", "" ).trim();
             // label name
-            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
+            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase( Locale.ROOT );
 
             return (
                 "this".equals( l_return[0] )
                 ? buildlabel( m_package, m_outerclass, m_outerclass, m_innerclass, l_return[1] )
                 : buildlabel( m_package, m_outerclass, l_return[0].replace( ".class", "" ).replace( m_package + CLASSSEPARATOR, "" ), "", l_return[1] )
-            ).trim().toLowerCase().replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" );
+            ).trim().toLowerCase( Locale.ROOT ).replace( CCommon.PACKAGEROOT + CLASSSEPARATOR, "" );
 
         }
 

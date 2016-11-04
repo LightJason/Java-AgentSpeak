@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -112,7 +113,7 @@ public final class CGetStatisticValue extends IBuildinAction
          */
         public static EValue from( final String p_value )
         {
-            return EValue.valueOf( p_value.trim().toUpperCase() );
+            return EValue.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
 
         /**

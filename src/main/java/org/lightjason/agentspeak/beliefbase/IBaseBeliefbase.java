@@ -153,6 +153,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
     /**
      * class to represent the event structure
      */
+    @SuppressWarnings( "serial" )
     protected final class CEventMap extends ConcurrentHashMap<IView<T>, Set<ITrigger>> implements Map<IView<T>, Set<ITrigger>>
     {
         /**

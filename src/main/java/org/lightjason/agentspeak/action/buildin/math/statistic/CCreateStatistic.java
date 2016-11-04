@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -91,7 +92,7 @@ public final class CCreateStatistic extends IBuildinAction
          */
         public static EType from( final String p_value )
         {
-            return EType.valueOf( p_value.trim().toUpperCase() );
+            return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
 
         /**

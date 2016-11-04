@@ -36,6 +36,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,8 +72,8 @@ public final class CMethodAction extends IBaseAction
         m_arguments = p_method.getParameterCount();
         m_name = CPath.from(
             p_method.isAnnotationPresent( IAgentActionName.class ) && !p_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
-            ? p_method.getAnnotation( IAgentActionName.class ).name().toLowerCase()
-            : p_method.getName().toLowerCase()
+            ? p_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
+            : p_method.getName().toLowerCase( Locale.ROOT )
         );
         m_method = MethodHandles.lookup().unreflect( p_method );
     }

@@ -48,11 +48,11 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     /**
      * view name
      */
-    protected final String m_name;
+    private final String m_name;
     /**
      * reference to the beliefbase context
      */
-    protected final IBeliefbase<T> m_beliefbase;
+    private final IBeliefbase<T> m_beliefbase;
     /**
      * parent name
      */
