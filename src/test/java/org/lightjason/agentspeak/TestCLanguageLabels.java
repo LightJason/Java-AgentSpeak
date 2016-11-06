@@ -343,7 +343,7 @@ public final class TestCLanguageLabels
         @Override
         public void visit( final PackageDeclaration p_package, final Object p_arg )
         {
-            m_package = p_package.getName().toStringWithoutComments();
+            m_package = p_package.getName().toString();
             super.visit( p_package, p_arg );
         }
 
@@ -376,7 +376,7 @@ public final class TestCLanguageLabels
         @Override
         public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
         {
-            final String l_label = this.label( p_methodcall.toStringWithoutComments() );
+            final String l_label = this.label( p_methodcall.toString() );
             if ( !l_label.isEmpty() )
                 m_label.add( l_label );
 
