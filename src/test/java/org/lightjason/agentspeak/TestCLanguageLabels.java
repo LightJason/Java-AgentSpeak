@@ -351,9 +351,9 @@ public final class TestCLanguageLabels
         public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
         {
             if ( m_outerclass.isEmpty() )
-                m_outerclass = p_class.getName();
+                m_outerclass = p_class.getName().toString();
             else
-                m_innerclass = p_class.getName();
+                m_innerclass = p_class.getName().toString();
 
             super.visit( p_class, p_arg );
 
@@ -364,9 +364,9 @@ public final class TestCLanguageLabels
         public void visit( final EnumDeclaration p_enum, final Object p_arg )
         {
             if ( m_outerclass.isEmpty() )
-                m_outerclass = p_enum.getName();
+                m_outerclass = p_enum.getName().toString();
             else
-                m_innerclass = p_enum.getName();
+                m_innerclass = p_enum.getName().toString();
 
             super.visit( p_enum, p_arg );
 

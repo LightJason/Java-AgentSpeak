@@ -199,7 +199,7 @@ public final class TestCHanoiTowers
                 Stream.concat(
                     CCommon.actionsFromPackage(),
                     Stream.of(
-                        new CTowerPush( 0.0 ),
+                        new CTowerPush( 0.33 ),
                         new CTowerPop(),
                         new CTowerSize(),
                         new CStop()
