@@ -502,18 +502,18 @@ public final class CLiteral implements ILiteral
         public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
         {
             final IASTVisitorType l_visitor = new CASTVisitorType();
-            l_visitor.visit( this.getParser( p_stream ).literal_type() );
+            l_visitor.visit( this.parser( p_stream ).literal_type() );
             return l_visitor;
         }
 
         @Override
-        protected final Class<TypeLexer> getLexerClass()
+        protected final Class<TypeLexer> lexerclass()
         {
             return TypeLexer.class;
         }
 
         @Override
-        protected final Class<TypeParser> getParserClass()
+        protected final Class<TypeParser> parserclass()
         {
             return TypeParser.class;
         }

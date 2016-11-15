@@ -69,14 +69,14 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      * @throws InvocationTargetException on lexer / parser invocation error
      * @throws InstantiationException on lexer / parser instantiation error
      */
-    protected final P getParser( final InputStream p_stream )
+    protected final P parser( final InputStream p_stream )
     throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
-        final L l_lexer = this.getLexerClass().getConstructor( CharStream.class ).newInstance( new ANTLRInputStream( p_stream ) );
+        final L l_lexer = this.lexerclass().getConstructor( CharStream.class ).newInstance( new ANTLRInputStream( p_stream ) );
         l_lexer.removeErrorListeners();
         l_lexer.addErrorListener( m_errorlistener );
 
-        final P l_parser = this.getParserClass().getConstructor( TokenStream.class ).newInstance( new CommonTokenStream( l_lexer ) );
+        final P l_parser = this.parserclass().getConstructor( TokenStream.class ).newInstance( new CommonTokenStream( l_lexer ) );
         l_parser.removeErrorListeners();
         l_parser.addErrorListener( m_errorlistener );
 
@@ -88,12 +88,12 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      *
      * @return class of lexer
      */
-    protected abstract Class<L> getLexerClass();
+    protected abstract Class<L> lexerclass();
 
     /**
      * returns the parser class reference
      *
      * @return class of parser
      */
-    protected abstract Class<P> getParserClass();
+    protected abstract Class<P> parserclass();
 }
