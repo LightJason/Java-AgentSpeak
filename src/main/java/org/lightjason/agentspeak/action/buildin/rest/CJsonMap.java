@@ -23,11 +23,15 @@
 
 package org.lightjason.agentspeak.action.buildin.rest;
 
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -37,11 +41,33 @@ public final class CJsonMap extends IBaseRest
 {
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                          final List<ITerm> p_annotation
     )
     {
-        return null;
+        try
+        {
+            final Map<String, ?> l_data = IBaseRest.httpdata(
+                p_argument.get( 0 ).<String>raw(),
+                Map.class
+            );
+
+            p_return.add(
+                p_argument.size() == 2
+                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatmap( l_data ) )
+                : IBaseRest.baseliteral(
+                        p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
+                        flatmap( l_data )
+                )
+            );
+
+            return CFuzzyValue.from( true );
+        }
+        catch ( final IOException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
     }
 
 }

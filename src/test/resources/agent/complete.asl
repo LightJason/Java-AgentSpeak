@@ -211,6 +211,9 @@ myfunction(X) :- generic/print("my logical rule", X).
         GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
         +webservice( GH );
 
+        GO = rest/jsonmap( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
+        +webservice( GO );
+
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
