@@ -21,44 +21,47 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math;
+package org.lightjason.agentspeak.action.buildin.rest;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * action for sinus value \f$ sin( x_i ) \f$
+ * restful service call
  */
-public final class CSin extends IBuildinAction
+public final class CJsonList extends IBaseRest
 {
 
     @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
-
-    @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+                                         final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument ).stream()
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
-               .boxed()
-               .map( Math::sin )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        try
+        {
+            final List<?> l_data = IBaseRest.httpdata(
+                                            p_argument.get( 0 ).<String>raw(),
+                                            p_argument.size() > 2 ? p_argument.get( 2 ).<String>raw() : "",
+                                            List.class
+            );
 
-        return CFuzzyValue.from( true );
+            l_data.stream().map( i -> CLiteral.from( p_argument.get( 1 ).<String>raw(), flat( (Map<String, ?>) i ) ) ).forEach( p_return::add );
+
+            return CFuzzyValue.from( true );
+        }
+        catch ( final IOException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
     }
 
 }

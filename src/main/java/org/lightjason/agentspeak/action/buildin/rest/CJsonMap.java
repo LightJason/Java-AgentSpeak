@@ -21,44 +21,27 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math;
+package org.lightjason.agentspeak.action.buildin.rest;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 
 
 /**
- * action for sinus value \f$ sin( x_i ) \f$
+ * action for calling a restful service with map result
  */
-public final class CSin extends IBuildinAction
+public final class CJsonMap extends IBaseRest
 {
 
     @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
-
-    @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+                                         final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument ).stream()
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
-               .boxed()
-               .map( Math::sin )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        return null;
     }
 
 }

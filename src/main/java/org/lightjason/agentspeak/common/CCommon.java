@@ -47,6 +47,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -171,7 +172,7 @@ public final class CCommon
                                     } )
 
                                     // action can be instantiate
-                                    .filter( i -> i != null )
+                                    .filter( Objects::nonNull )
 
                                     // check usable action name
                                     .filter( CCommon::actionusable );
@@ -213,7 +214,7 @@ public final class CCommon
                        } )
 
                        // action can be instantiate
-                       .filter( i -> i != null )
+                       .filter( Objects::nonNull )
 
                        // check usable action name
                        .filter( CCommon::actionusable );

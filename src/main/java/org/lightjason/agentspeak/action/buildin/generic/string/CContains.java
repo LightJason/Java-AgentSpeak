@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -61,12 +60,11 @@ public final class CContains extends IBuildinAction
     {
         final String l_string = p_argument.get( 0 ).raw();
 
-        p_return.addAll(
-            p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> l_string.contains( i.raw() ) )
-                      .map( CRawTerm::from )
-                      .collect( Collectors.toList() )
-        );
+        p_argument.subList( 1, p_argument.size() ).stream()
+                  .map( i -> l_string.contains( i.raw() ) )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -59,7 +58,7 @@ public final class CToString extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll( p_argument.stream().map( i -> CRawTerm.from( i.raw().toString() ) ).collect( Collectors.toList() ) );
+        p_argument.stream().map( i -> CRawTerm.from( i.raw().toString() ) ).forEach( p_return::add );
         return CFuzzyValue.from( true );
     }
 

@@ -34,7 +34,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -64,23 +63,22 @@ public final class CBase64Encode extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll(
-            p_argument.stream()
-                      .map( ITerm::<String>raw )
-                      .map( i -> {
-                          try
-                          {
-                              return Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) );
-                          }
-                          catch ( final UnsupportedEncodingException l_exception )
-                          {
-                              return null;
-                          }
-                      } )
-                      .filter( Objects::nonNull )
-                      .map( CRawTerm::from )
-                      .collect( Collectors.toList() )
-        );
+        p_argument.stream()
+                  .map( ITerm::<String>raw )
+                  .map( i -> {
+                      try
+                      {
+                          return Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) );
+                      }
+                      catch ( final UnsupportedEncodingException l_exception )
+                      {
+                          return null;
+                      }
+                  } )
+                  .filter( Objects::nonNull )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

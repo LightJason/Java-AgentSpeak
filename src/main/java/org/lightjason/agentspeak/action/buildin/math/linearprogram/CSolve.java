@@ -113,9 +113,7 @@ public final class CSolve extends IBuildinAction
 
         p_return.add( CRawTerm.from( l_result.getValue() ) );
         p_return.add( CRawTerm.from( l_result.getPoint().length ) );
-        p_return.addAll(
-            Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::from ).collect( Collectors.toList() )
-        );
+        Arrays.stream( l_result.getPoint() ).boxed().map( CRawTerm::from ).forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

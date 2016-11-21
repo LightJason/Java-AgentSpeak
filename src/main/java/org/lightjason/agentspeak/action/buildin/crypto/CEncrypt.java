@@ -40,7 +40,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -63,24 +62,22 @@ public final class CEncrypt extends IBuildinAction
         final Key l_key = p_argument.get( 0 ).raw();
         final EAlgorithm l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
 
-        p_return.addAll(
-            p_argument.subList( 1, p_argument.size() ).stream()
-                      .map( i -> SerializationUtils.serialize( i.raw() ) )
-                      .map( i -> {
-                          try
-                          {
-                              return l_algorithm.getEncryptCipher( l_key ).doFinal( i );
-                          }
-                          catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                              | BadPaddingException | IllegalBlockSizeException l_exception )
-                          {
-                              return null;
-                          }
-                      } )
-                      .filter( Objects::nonNull )
-                      .map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) )
-                      .collect( Collectors.toList() )
-        );
+        p_argument.subList( 1, p_argument.size() ).stream()
+                  .map( i -> SerializationUtils.serialize( i.raw() ) )
+                  .map( i -> {
+                      try
+                      {
+                          return l_algorithm.getEncryptCipher( l_key ).doFinal( i );
+                      }
+                      catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                          | BadPaddingException | IllegalBlockSizeException l_exception )
+                      {
+                          return null;
+                      }
+                  } )
+                  .filter( Objects::nonNull )
+                  .map( i -> CRawTerm.from( Base64.getEncoder().encodeToString( i ) ) )
+                  .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -63,13 +62,12 @@ public final class CBase64Decode extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll(
-            p_argument.stream()
-                      .map( ITerm::<String>raw )
-                      .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
-                      .map( CRawTerm::from )
-                      .collect( Collectors.toList() )
-        );
+        p_argument.stream()
+                  .map( ITerm::<String>raw )
+                  .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

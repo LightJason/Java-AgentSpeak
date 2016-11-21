@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -53,11 +52,11 @@ public final class CIsPrime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            CCommon.flatcollection( p_argument ).stream()
-                   .map( i -> Primes.isPrime( i.<Number>raw().intValue() ) )
-                   .collect( Collectors.toList() )
-        ) );
+        CCommon.flatcollection( p_argument ).stream()
+               .map( i -> Primes.isPrime( i.<Number>raw().intValue() ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

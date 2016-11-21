@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -60,13 +59,13 @@ public final class CGet extends IBuildinAction
     )
     {
         // first argument map reference, second key name
-        p_return.addAll(
-            p_argument.get( 0 ).<HashMultimap<?, ?>>raw()
-                .asMap()
-                .get( p_argument.get( 1 ).raw() )
-                .parallelStream()
-                .map( CRawTerm::from ).collect( Collectors.toList() )
-        );
+        p_argument.get( 0 ).<HashMultimap<?, ?>>raw()
+            .asMap()
+            .get( p_argument.get( 1 ).raw() )
+            .parallelStream()
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

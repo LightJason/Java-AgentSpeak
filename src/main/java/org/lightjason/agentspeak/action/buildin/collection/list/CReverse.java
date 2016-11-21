@@ -59,7 +59,7 @@ public final class CReverse extends IBuildinAction
     )
     {
         // all arguments are list references
-        p_return.addAll( Lists.reverse( CCommon.flatcollection( p_argument ) ) );
+        Lists.reverse( CCommon.flatcollection( p_argument ) ).forEach( p_return::add );
         return CFuzzyValue.from( true );
     }
 

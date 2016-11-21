@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -59,14 +58,15 @@ public final class CSubList extends IBuildinAction
     )
     {
         // first argument set reference, second key-value
-        p_return.addAll(
-            p_argument.get( 0 ).<List<?>>raw()
-                .subList(
-                    p_argument.get( 1 ).<Number>raw().intValue(),
-                    p_argument.get( 2 ).<Number>raw().intValue()
-                )
-                .stream().map( CRawTerm::from ).collect( Collectors.toList() )
-        );
+        p_argument.get( 0 ).<List<?>>raw()
+            .subList(
+                p_argument.get( 1 ).<Number>raw().intValue(),
+                p_argument.get( 2 ).<Number>raw().intValue()
+            )
+            .stream()
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

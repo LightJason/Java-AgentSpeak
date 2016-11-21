@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -59,13 +58,12 @@ public final class CUpper extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.addAll(
-            p_argument.stream()
-                      .map( ITerm::<String>raw )
-                      .map( String::toUpperCase )
-                      .map( CRawTerm::from )
-                      .collect( Collectors.toList() )
-        );
+        p_argument.stream()
+                  .map( ITerm::<String>raw )
+                  .map( String::toUpperCase )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 
