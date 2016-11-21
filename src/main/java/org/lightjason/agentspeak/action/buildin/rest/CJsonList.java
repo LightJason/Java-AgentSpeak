@@ -35,7 +35,7 @@ import java.util.Map;
 
 
 /**
- * restful service call
+ * action for calling a restful service with a json object list
  */
 public final class CJsonList extends IBaseRest
 {

@@ -35,9 +35,9 @@ import java.util.Map;
 
 
 /**
- * action for calling a restful service with map result
+ * action for calling a restful service with a json object
  */
-public final class CJsonMap extends IBaseRest
+public final class CJsonObject extends IBaseRest
 {
 
     @Override
