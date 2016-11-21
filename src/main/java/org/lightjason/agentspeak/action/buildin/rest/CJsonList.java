@@ -50,11 +50,21 @@ public final class CJsonList extends IBaseRest
         {
             final List<?> l_data = IBaseRest.httpdata(
                                             p_argument.get( 0 ).<String>raw(),
-                                            p_argument.size() > 2 ? p_argument.get( 2 ).<String>raw() : "",
                                             List.class
             );
 
-            l_data.stream().map( i -> CLiteral.from( p_argument.get( 1 ).<String>raw(), flat( (Map<String, ?>) i ) ) ).forEach( p_return::add );
+            if ( p_argument.size() == 2 )
+                l_data.stream()
+                      .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatmap( (Map<String, ?>) i ) ) )
+                      .forEach( p_return::add );
+            else
+                p_return.add(
+                    IBaseRest.baseliteral(
+                        p_argument.subList( 1, p_argument.size() - 1 ).stream().map( ITerm::<String>raw ),
+                        l_data.stream()
+                              .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatmap( (Map<String, ?>) i ) ) )
+                    )
+                );
 
             return CFuzzyValue.from( true );
         }

@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.io.IOException;
@@ -40,6 +41,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Stack;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -59,13 +62,12 @@ public abstract class IBaseRest extends IBuildinAction
      * run HTTP request
      *
      * @param p_url url
-     * @param p_useragent user agent
      * @param p_class convert class type
      * @return data string
      * @throws IOException is thrown on io errors
      */
     @SuppressWarnings( "unchecked" )
-    protected static <T> T httpdata( final String p_url, final String p_useragent, final Class<T> p_class ) throws IOException
+    protected static <T> T httpdata( final String p_url, final Class<T> p_class ) throws IOException
     {
         final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
 
@@ -74,11 +76,9 @@ public abstract class IBaseRest extends IBuildinAction
 
         // set a HTTP-User-Agent if not exists
         l_connection.setRequestProperty( "User-Agent",
-                                         ( p_useragent != null ) && ( !p_useragent.isEmpty() )
-                                         ? p_useragent
-                                         : ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
-                                            ? CCommon.PACKAGEROOT
-                                            : System.getProperty( "http.agent" )
+                                         ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
+                                         ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
+                                         : System.getProperty( "http.agent" )
         );
 
         // read stream data
@@ -99,6 +99,25 @@ public abstract class IBaseRest extends IBuildinAction
         return l_result;
     }
 
+    /**
+     * creates a literal structure from a stream of string elements,
+     * the string stream will be build in a tree structure
+     *
+     * @param p_functor stream with functor strings
+     * @param p_values value stream
+     * @return term
+     */
+    protected static ITerm baseliteral( final Stream<String> p_functor, final Stream<ITerm> p_values )
+    {
+        final Stack<String> l_tree = p_functor.collect( Collectors.toCollection( Stack::new ) );
+
+        ILiteral l_literal = CLiteral.from( l_tree.pop(), p_values );
+        while ( !l_tree.isEmpty() )
+            l_literal = CLiteral.from( l_tree.pop(), l_literal );
+
+        return l_literal;
+    }
+
 
     /**
      * transformas a map into a literal
@@ -107,7 +126,7 @@ public abstract class IBaseRest extends IBuildinAction
      * @return term stream
      */
     @SuppressWarnings( "unchecked" )
-    protected static Stream<ITerm> flat( final Map<String, ?> p_map )
+    protected static Stream<ITerm> flatmap( final Map<String, ?> p_map )
     {
         return p_map.entrySet()
              .stream()
@@ -115,7 +134,7 @@ public abstract class IBaseRest extends IBuildinAction
                             i.getKey().toLowerCase(),
 
                             i.getValue() instanceof Map
-                            ? flat( (Map<String, ?>) i.getValue() )
+                            ? flatmap( (Map<String, ?>) i.getValue() )
                             : Stream.of( CRawTerm.from( i.getValue() ) )
                         )
              );

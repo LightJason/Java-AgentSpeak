@@ -206,10 +206,10 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
 
-        // --- restful api -------------------------------------------------------------------------------------------------------------------------------------
+        // --- restful api (push to beliefbase) ----------------------------------------------------------------------------------------------------------------
 
-        GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github" );
-        generic/print( GH );
+        GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
+        +webservice( GH );
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
