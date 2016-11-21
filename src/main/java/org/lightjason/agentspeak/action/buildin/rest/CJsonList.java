@@ -55,14 +55,14 @@ public final class CJsonList extends IBaseRest
 
             if ( p_argument.size() == 2 )
                 l_data.stream()
-                      .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatmap( (Map<String, ?>) i ) ) )
+                      .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
                       .forEach( p_return::add );
             else
                 p_return.add(
                     IBaseRest.baseliteral(
                         p_argument.subList( 1, p_argument.size() - 1 ).stream().map( ITerm::<String>raw ),
                         l_data.stream()
-                              .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatmap( (Map<String, ?>) i ) ) )
+                              .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
                     )
                 );
 

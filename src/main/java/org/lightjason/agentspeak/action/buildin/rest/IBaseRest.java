@@ -40,6 +40,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -120,24 +121,48 @@ public abstract class IBaseRest extends IBuildinAction
 
 
     /**
+     * converts an object into a term stream
+     *
+     * @param p_object object
+     * @returnterm stream
+     */
+    @SuppressWarnings( "unchecked" )
+    protected static Stream<ITerm> flatterm( final Object p_object )
+    {
+        return p_object instanceof Map
+               ? flatmap( (Map<String, ?>) p_object )
+               : p_object instanceof Collection
+                 ? flatcollection( (Collection) p_object )
+                 : Stream.of( CRawTerm.from( p_object ) );
+    }
+
+    /**
      * transformas a map into a literal
      *
      * @param p_map input map
      * @return term stream
      */
-    @SuppressWarnings( "unchecked" )
-    protected static Stream<ITerm> flatmap( final Map<String, ?> p_map )
+    private static Stream<ITerm> flatmap( final Map<String, ?> p_map )
     {
         return p_map.entrySet()
              .stream()
              .map( i -> CLiteral.from(
                             i.getKey().toLowerCase(),
-
-                            i.getValue() instanceof Map
-                            ? flatmap( (Map<String, ?>) i.getValue() )
-                            : Stream.of( CRawTerm.from( i.getValue() ) )
+                            flatterm( i.getValue() )
                         )
              );
+    }
+
+    /**
+     *
+     * transforms a collection into a term stream
+     *
+     * @param p_collection collection
+     * @return term stream
+     */
+    private static Stream<ITerm> flatcollection( final Collection<?> p_collection )
+    {
+        return p_collection.stream().flatMap( IBaseRest::flatterm );
     }
 
 }

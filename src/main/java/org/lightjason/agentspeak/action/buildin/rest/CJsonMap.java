@@ -55,10 +55,10 @@ public final class CJsonMap extends IBaseRest
 
             p_return.add(
                 p_argument.size() == 2
-                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatmap( l_data ) )
+                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
                 : IBaseRest.baseliteral(
                         p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
-                        flatmap( l_data )
+                        flatterm( l_data )
                 )
             );
 
