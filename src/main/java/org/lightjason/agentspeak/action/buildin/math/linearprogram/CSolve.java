@@ -46,7 +46,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -82,29 +81,30 @@ public final class CSolve extends IBuildinAction
         l_settings.add( l_default.getLeft() );
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
-        l_settings.addAll( p_argument.subList( 1, p_argument.size() ).stream()
-                                     .map( i -> {
-                                         if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
-                                             return new MaxIter( i.raw() );
+        p_argument.subList( 1, p_argument.size() ).stream()
+                                 .map( i -> {
+                                     if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                         return new MaxIter( i.raw() );
 
-                                         if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                                             switch ( i.<String>raw().trim().toLowerCase() )
-                                             {
-                                                 case "non-negative":
-                                                     return new NonNegativeConstraint( true );
-                                                 case "maximize":
-                                                     return GoalType.MAXIMIZE;
-                                                 case "minimize":
-                                                     return GoalType.MINIMIZE;
+                                     if ( CCommon.rawvalueAssignableTo( i, String.class ) )
+                                         switch ( i.<String>raw().trim().toLowerCase() )
+                                         {
+                                             case "non-negative":
+                                                 return new NonNegativeConstraint( true );
+                                             case "maximize":
+                                                 return GoalType.MAXIMIZE;
+                                             case "minimize":
+                                                 return GoalType.MINIMIZE;
 
-                                                 default:
-                                                     return null;
-                                             }
+                                             default:
+                                                 return null;
+                                         }
 
-                                         return null;
-                                     } )
-                                     .filter( Objects::nonNull ).collect( Collectors.toList() )
-        );
+                                     return null;
+                                 } )
+                                 .filter( Objects::nonNull )
+                                 .forEach( l_settings::add );
+
 
 
         // optimze and return

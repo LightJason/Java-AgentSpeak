@@ -220,7 +220,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
         final Set<IVariable<?>> l_variables = new HashSet<>( p_context.instancevariables().values() );
 
-        l_variables.addAll( m_body.stream().flatMap( IExecution::variables ).collect( Collectors.toList() ) );
+        m_body.stream().flatMap( IExecution::variables ).forEach( l_variables::add );
         l_variables.remove( l_iterator );
         l_variables.add( l_iterator );
 
