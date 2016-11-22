@@ -95,9 +95,12 @@ abstract class IBaseHanoiTowers
 
     /**
      * initialize call
+     * @param p_agentnumber number of agents
+     * @param p_towernumber number of towers
+     * @param p_slicenumber number of slices
      * @param p_asl asl file
      * @param p_action action stream
-     * @throws Exception on initialize error
+     * @throws Exception thrown on initialize error
      */
     protected final void initialize( final long p_agentnumber, final long p_towernumber, final long p_slicenumber,
                                      final String p_asl, final Stream<IAction> p_action ) throws Exception

@@ -124,7 +124,7 @@ public abstract class IBaseRest extends IBuildinAction
      * converts an object into a term stream
      *
      * @param p_object object
-     * @returnterm stream
+     * @return term stream
      */
     @SuppressWarnings( "unchecked" )
     protected static Stream<ITerm> flatterm( final Object p_object )
@@ -147,7 +147,7 @@ public abstract class IBaseRest extends IBuildinAction
         return p_map.entrySet()
              .stream()
              .map( i -> CLiteral.from(
-                            i.getKey().toLowerCase(),
+                            i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
                             flatterm( i.getValue() )
                         )
              );
