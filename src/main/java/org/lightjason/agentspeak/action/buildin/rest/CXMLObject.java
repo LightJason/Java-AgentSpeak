@@ -35,36 +35,26 @@ import java.util.Map;
 
 
 /**
- * action for calling a restful service with a json object list
+ * action to call a restful service with xml data
  */
-public final class CJsonList extends IBaseRest
+public class CXMLObject extends IBaseRest
 {
-
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                          final List<ITerm> p_annotation
     )
     {
         try
         {
-            final List<?> l_data = IBaseRest.json(
-                                            p_argument.get( 0 ).<String>raw(),
-                                            List.class
+            final Map<String, ?> l_data = IBaseRest.xml( p_argument.get( 0 ).<String>raw() );
+            p_return.add(
+                p_argument.size() == 2
+                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
+                : IBaseRest.baseliteral(
+                    p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
+                    flatterm( l_data )
+                )
             );
-
-            if ( p_argument.size() == 2 )
-                l_data.stream()
-                      .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
-                      .forEach( p_return::add );
-            else
-                p_return.add(
-                    IBaseRest.baseliteral(
-                        p_argument.subList( 1, p_argument.size() - 1 ).stream().map( ITerm::<String>raw ),
-                        l_data.stream()
-                              .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
-                    )
-                );
 
             return CFuzzyValue.from( true );
         }
@@ -73,5 +63,4 @@ public final class CJsonList extends IBaseRest
             return CFuzzyValue.from( false );
         }
     }
-
 }

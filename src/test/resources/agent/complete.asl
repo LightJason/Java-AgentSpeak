@@ -214,6 +214,9 @@ myfunction(X) :- generic/print("my logical rule", X).
         GO = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
         +webservice( GO );
 
+        WP = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
+        +webservice( WP );
+
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 

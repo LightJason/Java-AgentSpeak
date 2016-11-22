@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
@@ -49,6 +50,8 @@ import java.util.stream.Stream;
 
 /**
  * base class to read data from the restful service
+ * @note all action which inherits this class uses the system property "http.agent" for defining
+ * the http user-agent
  */
 public abstract class IBaseRest extends IBuildinAction
 {
@@ -60,15 +63,39 @@ public abstract class IBaseRest extends IBuildinAction
     }
 
     /**
-     * run HTTP request
+     * reads a json structure from an url
      *
      * @param p_url url
      * @param p_class convert class type
-     * @return data string
+     * @return data object
+     * @throws IOException is thrown on io errors
+     */
+    protected static <T> T json( final String p_url, final Class<T> p_class ) throws IOException
+    {
+        return new ObjectMapper().readValue( IBaseRest.httpdata( p_url ), p_class );
+    }
+
+    /**
+     * reads a xml structure from an url
+     *
+     * @param p_url url
+     * @return map with xml data
      * @throws IOException is thrown on io errors
      */
     @SuppressWarnings( "unchecked" )
-    protected static <T> T httpdata( final String p_url, final Class<T> p_class ) throws IOException
+    protected static Map<String, ?> xml( final String p_url ) throws IOException
+    {
+        return new XmlMapper().readValue( IBaseRest.httpdata( p_url ), Map.class );
+    }
+
+    /**
+     * creates a HTTP connection and reads the data
+     *
+     * @param p_url url
+     * @return url data
+     * @throws IOException is thrown on connection errors
+     */
+    private static String httpdata( final String p_url ) throws IOException
     {
         final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
 
@@ -84,20 +111,17 @@ public abstract class IBaseRest extends IBuildinAction
 
         // read stream data
         final InputStream l_stream = l_connection.getInputStream();
-        final T l_result = new ObjectMapper().readValue(
-                                                         CharStreams.toString(
-                                                            new InputStreamReader(
-                                                                l_stream,
-                                                                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
-                                                                ? Charsets.UTF_8
-                                                                : Charset.forName( l_connection.getContentEncoding() )
-                                                            )
-                                                         ),
-                                                         p_class
+        final String l_return = CharStreams.toString(
+            new InputStreamReader(
+                l_stream,
+                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
+                ? Charsets.UTF_8
+                : Charset.forName( l_connection.getContentEncoding() )
+            )
         );
         Closeables.closeQuietly( l_stream );
 
-        return l_result;
+        return l_return;
     }
 
     /**

@@ -48,7 +48,7 @@ public final class CJsonObject extends IBaseRest
     {
         try
         {
-            final Map<String, ?> l_data = IBaseRest.httpdata(
+            final Map<String, ?> l_data = IBaseRest.json(
                 p_argument.get( 0 ).<String>raw(),
                 Map.class
             );
