@@ -492,8 +492,9 @@ public final class CLiteral implements ILiteral
 
         /**
          * ctor
+         * @throws NoSuchMethodException on ctor-method call
          */
-        CParser()
+        CParser() throws NoSuchMethodException
         {
             super( new CErrorListener() );
         }

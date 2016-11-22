@@ -45,8 +45,9 @@ public final class CParserAgent extends IParserBase<IASTVisitorAgent, AgentLexer
      * ctor
      *
      * @param p_actions agent actions
+     * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserAgent( final Set<IAction> p_actions )
+    public CParserAgent( final Set<IAction> p_actions ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;

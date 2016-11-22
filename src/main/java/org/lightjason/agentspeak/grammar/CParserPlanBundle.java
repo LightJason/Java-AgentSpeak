@@ -45,8 +45,9 @@ public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, 
      * ctor
      *
      * @param p_actions agent actions
+     * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserPlanBundle( final Set<IAction> p_actions )
+    public CParserPlanBundle( final Set<IAction> p_actions ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;

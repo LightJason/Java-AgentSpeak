@@ -33,6 +33,7 @@ import org.antlr.v4.runtime.TokenStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -45,16 +46,27 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      * error listener
      */
     private final ANTLRErrorListener m_errorlistener;
+    /**
+     * ctor lexer reference
+     */
+    private final Constructor<L> m_ctorlexer;
+    /**
+     * ctor parser reference
+     */
+    private final Constructor<P> m_ctorparser;
 
 
     /**
      * ctor
      *
      * @param p_errorlistener listener instance
+     * @throws NoSuchMethodException on ctor-method call
      */
-    protected IParserBase( final ANTLRErrorListener p_errorlistener )
+    protected IParserBase( final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
     {
         m_errorlistener = p_errorlistener;
+        m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );
+        m_ctorparser = this.parserclass().getConstructor( TokenStream.class );
     }
 
     /**
@@ -64,19 +76,17 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      * @return parser (for using in visitor interface)
      *
      * @throws IOException on io-stream errors
-     * @throws NoSuchMethodException on ctor-method call
      * @throws IllegalAccessException on lexer / parser method access error
      * @throws InvocationTargetException on lexer / parser invocation error
      * @throws InstantiationException on lexer / parser instantiation error
      */
-    protected final P parser( final InputStream p_stream )
-    throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
+    protected final P parser( final InputStream p_stream ) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
-        final L l_lexer = this.lexerclass().getConstructor( CharStream.class ).newInstance( new ANTLRInputStream( p_stream ) );
+        final L l_lexer = m_ctorlexer.newInstance( new ANTLRInputStream( p_stream ) );
         l_lexer.removeErrorListeners();
         l_lexer.addErrorListener( m_errorlistener );
 
-        final P l_parser = this.parserclass().getConstructor( TokenStream.class ).newInstance( new CommonTokenStream( l_lexer ) );
+        final P l_parser = m_ctorparser.newInstance( new CommonTokenStream( l_lexer ) );
         l_parser.removeErrorListeners();
         l_parser.addErrorListener( m_errorlistener );
 
