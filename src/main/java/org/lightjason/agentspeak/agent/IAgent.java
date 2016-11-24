@@ -55,8 +55,9 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * inspector method
      *
      * @param p_inspector inspector object
+     * @return inspector array
      */
-    void inspect( final IInspector... p_inspector );
+    IInspector[] inspect( final IInspector... p_inspector );
 
     /**
      * trigger an event
