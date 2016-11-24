@@ -165,10 +165,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public IInspector[] inspect( final IInspector... p_inspector )
+    public <N extends IInspector> Stream<N> inspect( final N... p_inspector )
     {
         if ( p_inspector == null )
-            return null;
+            return Stream.of();
 
         return Arrays.stream( p_inspector ).parallel().map( i -> {
             i.inspectcycle( m_cycle.get() );
@@ -181,7 +181,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             i.inspectstorage( m_storage.entrySet().parallelStream() );
             i.inspectrules( m_rules.values().parallelStream() );
             return i;
-        } ).toArray( IInspector[]::new );
+        } );
     }
 
     @Override

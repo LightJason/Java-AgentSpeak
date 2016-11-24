@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 
 /**
@@ -55,9 +56,9 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * inspector method
      *
      * @param p_inspector inspector object
-     * @return inspector array
+     * @return inspector stream or empty stream
      */
-    IInspector[] inspect( final IInspector... p_inspector );
+    <N extends IInspector> Stream<N> inspect( final N... p_inspector );
 
     /**
      * trigger an event
