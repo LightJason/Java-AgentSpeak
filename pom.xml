@@ -150,7 +150,7 @@
         <dependency>
             <groupId>com.codepoetics</groupId>
             <artifactId>protonpack</artifactId>
-            <version>1.10</version>
+            <version>1.11</version>
         </dependency>
 
         <dependency>
