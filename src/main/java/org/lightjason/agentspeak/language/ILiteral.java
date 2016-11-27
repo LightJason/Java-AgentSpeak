@@ -91,6 +91,8 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
 
     /**
      * getter of the literal for the negation
+     *
+     * @return negated flag
      */
     boolean negated();
 

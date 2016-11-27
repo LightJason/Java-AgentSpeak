@@ -60,6 +60,8 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -112,6 +114,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * negative values defines the activity
      */
     private final AtomicLong m_sleepingcycles = new AtomicLong( Long.MIN_VALUE );
+    /**
+     * set for waking-up literals
+     */
+    private final Set<ITerm> m_sleepingterm = Collections.synchronizedSet( new HashSet<>() );
     /**
      * unifier
      */
@@ -191,10 +197,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return CFuzzyValue.from( false );
 
         // check if literal does not store any variables
-        if ( Stream.concat(
-            p_trigger.getLiteral().orderedvalues(),
-            p_trigger.getLiteral().annotations()
-        ).anyMatch( i -> i instanceof IVariable<?> ) )
+        if ( p_trigger.getLiteral().hasVariable() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
@@ -219,16 +222,35 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final IAgent<T> sleep( final long p_cycles )
+    public final IAgent<T> sleep( final long p_cycles, final ITerm... p_term )
     {
-        m_sleepingcycles.set( p_cycles );
-        return this;
+        return this.sleep(
+            p_cycles,
+            ( p_term == null ) || ( p_term.length == 0 )
+            ? Stream.of()
+            : Arrays.stream( p_term )
+        );
     }
 
     @Override
-    public final IAgent<T> wakeup( final ITerm... p_value )
+    public final IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_literal )
     {
-        this.active( true, p_value );
+        m_sleepingcycles.set( p_cycles );
+        p_literal.filter( i -> !i.hasVariable() ).forEach( m_sleepingterm::add );
+        return this;
+    }
+
+
+    @Override
+    public final IAgent<T> wakeup( final ITerm... p_term )
+    {
+        (
+            ( p_term == null ) || ( p_term.length == 0 )
+            ? Stream.<ITerm>of()
+            : Arrays.stream( p_term )
+        ).forEach( m_sleepingterm::add );
+
+        this.active( true );
         return this;
     }
 
@@ -436,25 +458,33 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * runs the wakeup goal
      *
      * @param p_immediatly runs the wake always
-     * @param p_value wakeup term
      * @return returns true if the agent is active
      */
-    private boolean active( final boolean p_immediatly, final ITerm... p_value )
+    private boolean active( final boolean p_immediatly )
     {
         // if the sleeping time ends or the agent will wakedup by a hard call,
         // create the trigger and reset the time value
         if ( ( m_sleepingcycles.compareAndSet( 0, Long.MIN_VALUE ) ) || p_immediatly )
-            m_trigger.add(
-                CTrigger.from(
-                    ITrigger.EType.ADDGOAL,
-                    CLiteral.from(
-                        "wakeup",
-                        p_value == null
-                        ? Stream.<ITerm>empty()
-                        : Arrays.stream( p_value )
+        {
+            (
+                m_sleepingterm.isEmpty()
+
+                ? m_sleepingterm.parallelStream()
+                                .map( i -> CTrigger.from(
+                                       ITrigger.EType.ADDGOAL,
+                                       CLiteral.from( "wakeup", i )
+                                   ) )
+
+                : Stream.of( CTrigger.from(
+                    ITrigger.EType.ADDGOAL, CLiteral.from(
+                    "wakeup"
                     )
-                )
-            );
+                ) )
+
+            ).forEach( m_trigger::add );
+
+            m_sleepingterm.clear();
+        }
 
         // if the sleeping time is not infinity decrese the counter
         if ( ( m_sleepingcycles.get() > 0 ) && ( m_sleepingcycles.get() != Long.MAX_VALUE ) )

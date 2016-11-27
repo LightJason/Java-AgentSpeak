@@ -186,6 +186,12 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
+    public final boolean hasVariable()
+    {
+        return true;
+    }
+
+    @Override
     @SuppressWarnings( "unchecked" )
     public <N> N raw()
     {

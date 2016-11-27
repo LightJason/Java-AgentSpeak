@@ -51,6 +51,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -323,6 +324,15 @@ public final class CLiteral implements ILiteral
     public final boolean hasAt()
     {
         return m_at;
+    }
+
+    @Override
+    public final boolean hasVariable()
+    {
+        return Stream.concat(
+            m_orderedvalues.parallelStream(),
+            m_annotations.entries().parallelStream().map( Map.Entry::getValue )
+        ).anyMatch( ITerm::hasVariable );
     }
 
     @Override

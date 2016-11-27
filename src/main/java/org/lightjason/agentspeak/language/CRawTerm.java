@@ -147,6 +147,12 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
+    public final boolean hasVariable()
+    {
+        return false;
+    }
+
+    @Override
     @SuppressWarnings( "unchecked" )
     public final <T> T raw()
     {

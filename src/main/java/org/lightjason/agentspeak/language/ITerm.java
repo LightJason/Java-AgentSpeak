@@ -55,6 +55,13 @@ public interface ITerm extends IDeepCopy<ITerm>
     IPath fqnfunctor();
 
     /**
+     * checks if the literal has variables
+     *
+     * @return variable flag
+     */
+    boolean hasVariable();
+
+    /**
      * cast to any raw value type
      *
      * @tparam raw type

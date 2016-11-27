@@ -96,9 +96,19 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * pushs the agent into sleeping state
      *
      * @param p_cycles number of cycles for sleeping - if is set to maximum the sleeping time is infinity
+     * @param p_term literal list for wake-up calls
      * @return agent reference
      */
-    IAgent<T> sleep( final long p_cycles );
+    IAgent<T> sleep( final long p_cycles, final ITerm... p_term );
+
+    /**
+     * pushs the agent into sleeping state
+     *
+     * @param p_cycles number of cycles for sleeping - if is set to maximum the sleeping time is infinity
+     * @param p_term literal stream for wake-up calls
+     * @return agent reference
+     */
+    IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_term );
 
     /**
      * wake-up the agent by generating wakeup-goal

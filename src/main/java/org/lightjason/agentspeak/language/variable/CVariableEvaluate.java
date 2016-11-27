@@ -148,6 +148,12 @@ public final class CVariableEvaluate implements IVariableEvaluate
     }
 
     @Override
+    public final boolean hasVariable()
+    {
+        return true;
+    }
+
+    @Override
     public final <T> T raw()
     {
         return m_variable.raw();
