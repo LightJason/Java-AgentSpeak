@@ -312,7 +312,7 @@ public final class TestCLanguageLabels
         /**
          * reg expression to extract label data
          */
-        private static final Pattern LANGUAGEMETHODPATTERN = Pattern.compile( TRANSLATEMETHODNAME + ".+\\)" );
+        private static final Pattern LANGUAGEMETHODPATTERN = Pattern.compile( TRANSLATEMETHODNAME + ".+?\\)" );
         /**
          * inner class name *
          */
