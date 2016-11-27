@@ -469,17 +469,17 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             (
                 m_sleepingterm.isEmpty()
 
-                ? m_sleepingterm.parallelStream()
-                                .map( i -> CTrigger.from(
-                                       ITrigger.EType.ADDGOAL,
-                                       CLiteral.from( "wakeup", i )
-                                   ) )
-
-                : Stream.of( CTrigger.from(
+                ? Stream.of( CTrigger.from(
                     ITrigger.EType.ADDGOAL, CLiteral.from(
                     "wakeup"
                     )
                 ) )
+
+                : m_sleepingterm.parallelStream()
+                                .map( i -> CTrigger.from(
+                                    ITrigger.EType.ADDGOAL,
+                                    CLiteral.from( "wakeup", i )
+                                ) )
 
             ).forEach( m_trigger::add );
 
