@@ -240,16 +240,20 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return this;
     }
 
-
     @Override
     public final IAgent<T> wakeup( final ITerm... p_term )
     {
-        (
+        return this.wakeup(
             ( p_term == null ) || ( p_term.length == 0 )
-            ? Stream.<ITerm>of()
+            ? Stream.of()
             : Arrays.stream( p_term )
-        ).forEach( m_sleepingterm::add );
+        );
+    }
 
+    @Override
+    public final IAgent<T> wakeup( final Stream<ITerm> p_term )
+    {
+        p_term.forEach( m_sleepingterm::add );
         this.active( true );
         return this;
     }
