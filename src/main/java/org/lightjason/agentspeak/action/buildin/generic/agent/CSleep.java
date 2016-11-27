@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -65,7 +66,9 @@ public final class CSleep extends IBuildinAction
                 ? p_argument.get( 0 ).<Number>raw().longValue()
                 : Long.MAX_VALUE,
 
-                p_argument.subList( 1, p_argument.size() ).stream()
+                p_annotation.size() > 1
+                ? p_argument.subList( 1, p_argument.size() ).stream()
+                : Stream.of()
 
             ).sleeping()
         );
