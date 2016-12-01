@@ -17,9 +17,9 @@ machine:
 
     environment:
         GIT_AUTHOR_NAME: CircleCI
-        GIT_AUTHOR_EMAIL: info@flashpixx.de
+        GIT_AUTHOR_EMAIL: info@lightjason.org
         GIT_COMMITTER_NAME: CircleCI
-        GIT_COMMITTER_EMAIL: info@flashpixx.de
+        GIT_COMMITTER_EMAIL: info@lightjason.org
 
     java:
         version: oraclejdk8
