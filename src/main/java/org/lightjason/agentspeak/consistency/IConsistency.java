@@ -58,15 +58,17 @@ public interface IConsistency extends Callable<IConsistency>
      * adds a new object
      *
      * @param p_object new object
+     * @return self reference
      */
-    boolean add( final IAgent<?> p_object );
+    IConsistency add( final IAgent<?> p_object );
 
     /**
      * removes an object
      *
      * @param p_object removing object
+     * @return self reference
      */
-    boolean remove( final IAgent<?> p_object );
+    IConsistency remove( final IAgent<?> p_object );
 
     /**
      * returns the used metric

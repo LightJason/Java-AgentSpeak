@@ -128,9 +128,10 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final boolean add( final IAgent<?> p_object )
+    public final IConsistency add( final IAgent<?> p_object )
     {
-        return m_data.putIfAbsent( p_object, 0.0 ) == null;
+        m_data.putIfAbsent( p_object, 0.0 );
+        return this;
     }
 
     @Override
@@ -186,9 +187,10 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
-    public final boolean remove( final IAgent<?> p_object )
+    public final IConsistency remove( final IAgent<?> p_object )
     {
-        return m_data.remove( p_object ) != null;
+        m_data.remove( p_object );
+        return this;
     }
 
     @Override
