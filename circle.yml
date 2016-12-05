@@ -31,7 +31,7 @@ dependencies:
 test:
     override:
         - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false
-        - mvn site
+        - mvn site -DskipTests
 
     post:
 
