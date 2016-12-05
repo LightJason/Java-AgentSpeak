@@ -41,10 +41,12 @@ import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -199,6 +201,18 @@ public final class CConsistency implements IConsistency
     public final IFilter filter()
     {
         return m_filter;
+    }
+
+    @Override
+    public final Stream<Map.Entry<IAgent<?>, Double>> stream()
+    {
+        return m_data.entrySet().stream();
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "{0}{1}", super.toString(), m_data );
     }
 
     /**

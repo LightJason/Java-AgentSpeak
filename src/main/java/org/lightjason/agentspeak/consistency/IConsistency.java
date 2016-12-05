@@ -28,7 +28,9 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.stream.Stream;
 
 
 /**
@@ -79,5 +81,12 @@ public interface IConsistency extends Callable<IConsistency>
      * @return filter
      */
     IFilter filter();
+
+    /**
+     * stream over all data
+     *
+     * @return entry with agent and consistency value
+     */
+    Stream<Map.Entry<IAgent<?>, Double>> stream();
 
 }
