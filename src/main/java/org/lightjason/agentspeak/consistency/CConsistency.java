@@ -194,6 +194,14 @@ public final class CConsistency implements IConsistency
     }
 
     @Override
+    public final IConsistency clear()
+    {
+        m_statistic.clear();
+        m_data.clear();
+        return this;
+    }
+
+    @Override
     public final IMetric metric()
     {
         return m_metric;

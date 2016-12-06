@@ -71,6 +71,12 @@ public interface IConsistency extends Callable<IConsistency>
     IConsistency remove( final IAgent<?> p_object );
 
     /**
+     * clear
+     * @return self reference
+     */
+    IConsistency clear();
+
+    /**
      * returns the used metric
      *
      * @return metric
