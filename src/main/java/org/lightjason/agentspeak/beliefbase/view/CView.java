@@ -117,12 +117,17 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     // --- operations ------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final IView<T> add( final ILiteral... p_literal )
+    public final IView<T> add( final Stream<ILiteral> p_literal )
     {
-        Arrays.stream( p_literal )
-            .parallel()
+        p_literal.parallel()
             .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );
         return this;
+    }
+
+    @Override
+    public final IView<T> add( final ILiteral... p_literal )
+    {
+        return this.add( Arrays.stream( p_literal ) );
     }
 
     @Override
@@ -162,12 +167,17 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     }
 
     @Override
-    public final IView<T> remove( final ILiteral p_literal )
+    public final IView<T> remove( final Stream<ILiteral> p_literal )
     {
-        this.leafview( this.walk( p_literal.functorpath() ) )
-            .beliefbase()
-            .remove( p_literal.shallowcopysuffix() );
+        p_literal.parallel()
+            .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().remove( i.shallowcopysuffix() ) );
         return this;
+    }
+
+    @Override
+    public final IView<T> remove( final ILiteral... p_literal )
+    {
+        return this.remove( Arrays.stream( p_literal ) );
     }
 
     @Override

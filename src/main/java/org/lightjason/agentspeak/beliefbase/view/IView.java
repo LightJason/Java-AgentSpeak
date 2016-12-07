@@ -146,8 +146,16 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
     /**
      * adds a literal in the current structure
      *
+     * @param p_literal literal stream
+     * @return self reference
+     */
+    IView<T> add( final Stream<ILiteral> p_literal );
+
+    /**
+     * adds a literal in the current structure
+     *
      * @param p_literal literal
-     * @return boolean flag for correct adding
+     * @return self reference
      */
     IView<T> add( final ILiteral... p_literal );
 
@@ -155,7 +163,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * adds view in the current structure
      *
      * @param p_view existing view
-     * @return current view
+     * @return self reference
      */
     @SuppressWarnings( "unchecked" )
     IView<T> add( final IView<T>... p_view );
@@ -165,7 +173,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      *
      * @param p_path path
      * @param p_view existing view
-     * @return current view
+     * @return self reference
      */
     @SuppressWarnings( "unchecked" )
     IView<T> add( final IPath p_path, final IView<T>... p_view );
@@ -175,16 +183,24 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
     /**
      * removes a literal in the current structure
      *
-     * @param p_literal literal
-     * @return boolean flag for correct removing
+     * @param p_literal literal stream
+     * @return self reference
      */
-    IView<T> remove( final ILiteral p_literal );
+    IView<T> remove( final Stream<ILiteral> p_literal );
+
+    /**
+     * removes a literal in the current structure
+     *
+     * @param p_literal literal
+     * @return self reference
+     */
+    IView<T> remove( final ILiteral... p_literal );
 
     /**
      * removes a view in the current structure
      *
      * @param p_view view
-     * @return boolean flag for correct removing
+     * @return self reference
      */
     IView<T> remove( final IView<T> p_view );
 
