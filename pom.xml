@@ -241,7 +241,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.4</version>
                 <configuration>
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
@@ -338,7 +338,7 @@
     <!-- main build -->
     <build>
         <!-- default goal is set to package and checking dependency updates -->
-        <defaultGoal>install versions:display-dependency-updates versions:display-plugin-updates</defaultGoal>
+        <defaultGoal>install versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates</defaultGoal>
 
         <!-- include resource directory with replacing configuration variables -->
         <resources>
