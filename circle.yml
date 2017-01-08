@@ -46,8 +46,8 @@ test:
         - mv -f circle.yml /tmp
         - mv -f .gitignore /tmp
         - git checkout master
-        - git push origin :gh-pages
-        - git branch -D gh-pages
+        - git push origin :gh-pages || true
+        - git fetch -p
         - git checkout --orphan gh-pages
         - rm -Rf *
         - mv -f /tmp/.gitignore .
