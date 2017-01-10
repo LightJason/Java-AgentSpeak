@@ -30,17 +30,17 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
- * action to define a fitness-proportinate-selection mechanism
- *
- * @see https://en.wikipedia.org/wiki/Fitness_proportionate_selection
+ * abstract class for creating a selection one element
+ * of a list based on a fitness weight
  */
-public final class CFitnessProportionateSelection extends IBuildinAction
+public abstract class ISelection extends IBuildinAction
 {
     /**
      * random instance
@@ -50,7 +50,7 @@ public final class CFitnessProportionateSelection extends IBuildinAction
     /**
      * ctor
      */
-    public CFitnessProportionateSelection()
+    protected ISelection()
     {
         super( 3 );
     }
@@ -58,24 +58,28 @@ public final class CFitnessProportionateSelection extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 2 + this.additionalArgumentNumber();
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
         final List<?> l_items = p_argument.get( 0 ).raw();
-        final List<Double> l_weight = p_argument.get( 1 ).<List<?>>raw().stream()
-                                                                        // list can be contains default Java objects or term objects
-                                                                        .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
-                                                                        .map( Number::doubleValue )
-                                                                        .map( Math::abs )
-                                                                        .collect( Collectors.toList() );
+        final List<Double> l_weight = this.weight(
+                                        l_items,
+                                        p_argument.get( 1 ).<List<?>>raw().stream()
+                                        // list can be contains default Java objects or term objects
+                                            .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
+                                            .map( Number::doubleValue )
+                                            .map( Math::abs ),
+                                        p_argument.subList( 2, p_argument.size() ),
+                                        p_annotation
+        );
 
         if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
             return CFuzzyValue.from( false );
@@ -95,5 +99,24 @@ public final class CFitnessProportionateSelection extends IBuildinAction
         // on rounding error return last element
         p_return.add( CRawTerm.from( l_items.get( l_items.size() - 1 ) ) );
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * modifies the weights
+     * @param p_items item list
+     * @param p_values stream of weights
+     * @param p_argument additional arguments
+     * @param p_annotation annotations
+     * @return list with weights
+     */
+    protected abstract List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation );
+
+    /**
+     * number of additional parameter
+     * @return additional number
+     */
+    protected int additionalArgumentNumber()
+    {
+        return 0;
     }
 }
