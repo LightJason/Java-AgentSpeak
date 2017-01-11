@@ -76,7 +76,7 @@ public final class CContext implements IContext
     }
 
     @Override
-    public IContext duplicate()
+    public final IContext duplicate()
     {
         return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
     }
@@ -88,7 +88,7 @@ public final class CContext implements IContext
     }
 
     @Override
-    public IInstantiable instance()
+    public final IInstantiable instance()
     {
         return m_instance;
     }

@@ -380,21 +380,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         return m_plans.get( p_trigger ).parallelStream()
 
-                      // filter for possible trigger
-                      .filter( i -> i.getLeft().getTrigger().getType().equals( p_trigger.getType() ) )
-
-                      // filter trigger-literal for avoid duplicated instantiation on non-existing values / annotations
-                      .filter( i -> ( i.getLeft().getTrigger().getLiteral().emptyValues() == p_trigger.getLiteral().emptyValues() )
-                                    && ( i.getLeft().getTrigger().getLiteral().emptyAnnotations() == p_trigger.getLiteral().emptyAnnotations() )
-                      )
-
-                      // unify variables in plan definition
-                      .map( i -> new ImmutablePair<>( i, m_unifier.literal( i.getLeft().getTrigger().getLiteral(), p_trigger.getLiteral() ) ) )
-
-                      // avoid uninstantiated variables
-                      .filter( i -> i.getRight().size()
-                                    == CCommon.variablefrequency( i.getLeft().getLeft().getTrigger().getLiteral() ).size()
-                      )
+                      // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
+                      .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, p_trigger, i.getLeft().getTrigger() ) ) )
+                      .filter( i -> i.getRight().getLeft() )
 
                       // initialize context
                       .map( i -> {
@@ -405,7 +393,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                           return new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
                               this,
                               (Stream<IVariable<?>>) Stream.of(
-                                  i.getRight().stream(),
+                                  i.getRight().getRight().stream(),
 
                                   // execution count
                                   Stream.of( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) ),

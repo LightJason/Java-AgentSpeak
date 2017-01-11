@@ -57,6 +57,11 @@ public interface ITrigger extends IShallowCopy<ITrigger>
      */
     int getVariableSize();
 
+    /**
+     * unifies the trigger literal
+     */
+
+
 
     /**
      * event types

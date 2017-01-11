@@ -25,11 +25,15 @@ package org.lightjason.agentspeak.language;
 
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -93,6 +97,30 @@ public final class CCommon
               } );
 
         return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
+    }
+
+    /**
+     * unifies trigger
+     *
+     * @param p_unifier unifier
+     * @param p_source input trigger (with values)
+     * @param p_target trigger (of a plan / rule)
+     * @return  pair of valid unification and unified variables
+     */
+    public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( final IUnifier p_unifier, final ITrigger p_source, final ITrigger p_target )
+    {
+        // filter for avoid duplicated instantiation on non-existing values / annotations
+        if ( !( ( p_source.getLiteral().emptyValues() == p_target.getLiteral().emptyValues() )
+             && ( p_source.getLiteral().emptyAnnotations() == p_target.getLiteral().emptyAnnotations() ) ) )
+            return new ImmutablePair<>( false, Collections.emptySet() );
+
+        // unify variables
+        final Set<IVariable<?>> l_variables = p_unifier.literal( p_target.getLiteral(), p_source.getLiteral() );
+
+        // check for completely unification (of all variables)
+        return l_variables.size() == CCommon.variablefrequency( p_target.getLiteral() ).size()
+               ? new ImmutablePair<>( true, l_variables )
+               : new ImmutablePair<>( false, Collections.emptySet() );
     }
 
     /**
