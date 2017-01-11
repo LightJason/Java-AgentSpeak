@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.agent;
 
 import com.google.common.collect.Multimap;
-import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
@@ -161,7 +161,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return plan map
      */
-    Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> plans();
+    Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> plans();
 
     /**
      * return fuzzy operator

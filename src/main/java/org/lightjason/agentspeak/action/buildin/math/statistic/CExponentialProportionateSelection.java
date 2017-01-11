@@ -43,7 +43,7 @@ public final class CExponentialProportionateSelection extends ISelection
     protected final List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation )
     {
         final double l_demand = p_argument.get( 0 ).<Number>raw().doubleValue();
-        return p_values.map( i ->  Math.exp( -i / l_demand ) ).collect( Collectors.toList() );
+        return p_values.map( i ->  Math.exp( i / l_demand ) ).collect( Collectors.toList() );
     }
 
     @Override

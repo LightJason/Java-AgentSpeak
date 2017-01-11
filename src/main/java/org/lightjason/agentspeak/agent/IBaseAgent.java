@@ -33,8 +33,8 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
@@ -54,8 +54,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.score.IAggregation;
-import org.lightjason.agentspeak.language.variable.CConstant;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -98,7 +96,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * map with all existing plans and successful / fail runs
      */
-    protected final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
+    protected final Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
     /**
      * curent agent cycle
      */
@@ -156,7 +154,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // initial plans and rules
         p_configuration.plans().parallelStream()
-                       .forEach( i -> m_plans.put( i.getTrigger(), new MutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
+                       .forEach( i -> m_plans.put( i.getTrigger(), new ImmutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
         p_configuration.rules().parallelStream()
                        .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
@@ -283,7 +281,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final Multimap<ITrigger, MutableTriple<IPlan, AtomicLong, AtomicLong>> plans()
+    public final Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> plans()
     {
         return m_plans;
     }
@@ -351,7 +349,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         m_fuzzy.getDefuzzyfication().update( (T) this );
 
         // create a list of all possible execution elements, that is a local cache for well-defined execution
-        final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
+        final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
             m_trigger.parallelStream(),
             m_beliefbase.trigger().parallel()
         ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
@@ -375,8 +373,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @param p_trigger trigger
      * @return list with tupel of plan-triple and context for execution
      */
-    @SuppressWarnings( "unchecked" )
-    private Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
+    private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
     {
         return m_plans.get( p_trigger ).parallelStream()
 
@@ -385,30 +382,16 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                       .filter( i -> i.getRight().getLeft() )
 
                       // initialize context
-                      .map( i -> {
-                          final double l_fails = i.getLeft().getMiddle().get();
-                          final double l_succeed = i.getLeft().getRight().get();
-                          final double l_sum = l_succeed + l_fails;
-
-                          return new ImmutablePair<>( i.getLeft(), i.getLeft().getLeft().instantiate(
-                              this,
-                              (Stream<IVariable<?>>) Stream.of(
-                                  i.getRight().getRight().stream(),
-
-                                  // execution count
-                                  Stream.of( new CConstant<>( "PlanSuccessful", i.getLeft().getMiddle() ) ),
-                                  Stream.of( new CConstant<>( "PlanFail", i.getLeft().getRight() ) ),
-                                  Stream.of( new CConstant<>( "PlanRuns", l_sum ) ),
-
-                                  // execution ratio
-                                  Stream.of( new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : l_succeed / l_sum ) ),
-                                  Stream.of( new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : l_fails / l_sum ) )
-
-                              )
-                                                           .reduce( Stream::concat )
-                                                           .orElseGet( Stream::<IVariable<?>>empty )
-                          ) );
-                      } )
+                      .map( i -> new ImmutablePair<>(
+                                    i.getLeft(),
+                                    CCommon.instantiateplan(
+                                        i.getLeft().getLeft(),
+                                        i.getLeft().getMiddle().get(),
+                                        i.getLeft().getRight().get(),
+                                        this,
+                                        i.getRight().getRight()
+                                    ).getRight()
+                      ) )
 
                       // check plan condition
                       .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) )
@@ -423,7 +406,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @param p_execution execution list
      * @return fuzzy result
      */
-    private IFuzzyValue<Boolean> execute( final Collection<Pair<MutableTriple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
+    private IFuzzyValue<Boolean> execute( final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
