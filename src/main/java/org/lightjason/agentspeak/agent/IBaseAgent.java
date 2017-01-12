@@ -29,7 +29,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -86,9 +85,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
     /**
-     * execution trigger
+     * execution trigger with content hash
      */
-    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
+    protected final Map<Integer, ITrigger> m_trigger = new ConcurrentHashMap<>();
     /**
      * multimap with rules
      */
@@ -159,7 +158,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                        .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         if ( p_configuration.initialgoal() != null )
-            m_trigger.add( p_configuration.initialgoal() );
+            m_trigger.put( p_configuration.initialgoal().contenthash(), p_configuration.initialgoal() );
     }
 
     @Override
@@ -203,7 +202,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return this.execute( this.executionlist( p_trigger ) );
 
         // add trigger for the next cycle
-        m_trigger.add( p_trigger );
+        m_trigger.put( p_trigger.contenthash(), p_trigger );
         return CFuzzyValue.from( true );
     }
 
@@ -327,7 +326,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             StringUtils.join(
                 StreamUtils.zip(
                     Stream.of( "Trigger", "Running Plans", "Beliefbase" ),
-                    Stream.of( m_trigger, m_runningplans.keySet(), m_beliefbase ),
+                    Stream.of( m_trigger.values(), m_runningplans.keySet(), m_beliefbase ),
                     ( l, c ) -> MessageFormat.format( "{0}: {1}", l, c )
                 ).toArray(),
                 " / "
@@ -350,7 +349,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // create a list of all possible execution elements, that is a local cache for well-defined execution
         final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
-            m_trigger.parallelStream(),
+            m_trigger.values().parallelStream(),
             m_beliefbase.trigger().parallel()
         ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
 
@@ -456,7 +455,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                                     CLiteral.from( "wakeup", i )
                                 ) )
 
-            ).forEach( m_trigger::add );
+            ).forEach( i -> m_trigger.put( i.contenthash(), i ) );
 
             m_sleepingterm.clear();
         }

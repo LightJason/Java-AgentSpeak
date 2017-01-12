@@ -30,8 +30,9 @@ import org.lightjason.agentspeak.language.IShallowCopy;
 /**
  * event definition
  *
- * @note trigger are equal iif type and literal functor are equal,
- * unification is used to define the literal variables
+ * @note trigger are equal iif type and literal functor are equal
+ * and number of arguments are equal, otherwise unification is used
+ * to define the literal variables
  */
 public interface ITrigger extends IShallowCopy<ITrigger>
 {
@@ -58,8 +59,10 @@ public interface ITrigger extends IShallowCopy<ITrigger>
     int getVariableSize();
 
     /**
-     * unifies the trigger literal
+     * returns a hash value over the whole content
+     * @return content hash value
      */
+    int contenthash();
 
 
 

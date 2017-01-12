@@ -52,6 +52,10 @@ public final class CTrigger implements ITrigger
      * hashcode
      */
     private final int m_hashcode;
+    /**
+     * content hashcode
+     */
+    private final int m_contenthash;
 
     /**
      * ctor
@@ -70,6 +74,7 @@ public final class CTrigger implements ITrigger
         m_literal = p_literal;
         m_variables = CCommon.variablefrequency( p_literal ).size();
         m_hashcode = m_event.hashCode() + m_literal.fqnfunctor().hashCode() + (int) p_literal.values().count() + (int) p_literal.annotations().count();
+        m_contenthash = m_event.hashCode() + m_literal.hashCode();
     }
 
     /**
@@ -118,6 +123,12 @@ public final class CTrigger implements ITrigger
     public final int getVariableSize()
     {
         return m_variables;
+    }
+
+    @Override
+    public final int contenthash()
+    {
+        return m_contenthash;
     }
 
     @Override
