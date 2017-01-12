@@ -58,6 +58,7 @@ public final class CTrigger implements ITrigger
      *
      * @param p_event type
      * @param p_literal literal with unified variables
+     * @bug hash code function does not match of trigger with equal number of arguments but different argument values
      */
     @SuppressWarnings( "unchecked" )
     public CTrigger( final EType p_event, final ILiteral p_literal )
