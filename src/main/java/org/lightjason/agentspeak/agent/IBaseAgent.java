@@ -203,7 +203,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return this.execute( this.executionelements( p_trigger ).collect( Collectors.toSet() ) );
 
         // add trigger for the next cycle
-        m_trigger.put( p_trigger.contenthash(), p_trigger );
+        m_trigger.putIfAbsent( p_trigger.contenthash(), p_trigger );
         return CFuzzyValue.from( true );
     }
 
@@ -377,7 +377,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return p_trigger.flatMap( i -> {
             m_trigger.remove( i.contenthash() );
             return this.executionelements( i );
-        } ).collect( Collectors.toSet() );
+        } ).map( i -> {
+            System.out.println( i );
+            return i;
+        }).collect( Collectors.toSet() );
     }
 
     /**
@@ -418,6 +421,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     private IFuzzyValue<Boolean> execute( final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
     {
+        System.out.println();
+        //System.out.println( p_execution );
+
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
             i.getLeft().getLeft().getTrigger().getLiteral().fqnfunctor(),

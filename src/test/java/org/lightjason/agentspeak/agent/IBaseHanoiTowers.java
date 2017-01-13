@@ -140,6 +140,7 @@ abstract class IBaseHanoiTowers
         }
         catch ( final IOException l_exception )
         {
+            l_exception.printStackTrace();
             assertTrue( "asl could not be read", true );
         }
         m_agents = Collections.unmodifiableMap( l_agentmap );

@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IBaseAction;
@@ -39,6 +40,7 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,7 +98,8 @@ public final class TestCAgentExecution
         }
         catch ( final Exception l_exception )
         {
-            assertTrue( "asl could not be read", true );
+            l_exception.printStackTrace();
+            assertTrue( "asl could not be read: {0}", true );
         }
     }
 
@@ -108,8 +111,13 @@ public final class TestCAgentExecution
     @Test
     public final void executionorder() throws Exception
     {
+        Assume.assumeNotNull( m_agent );
+        Assume.assumeNotNull( m_running );
+
         while ( m_running.get() )
             m_agent.call();
+
+        System.out.println( m_log );
     }
 
 

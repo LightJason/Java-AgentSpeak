@@ -32,4 +32,18 @@
 
 
 
-+!main <- generic/print("test running"); stop().
++!main <-
+    log("main");
+    !multiple("first");
+    !multiple("second")
+.
+
++!multiple(X) <-
+    log(X);
+    !single
+.
+
++!single <-
+    log("single");
+    stop
+.
