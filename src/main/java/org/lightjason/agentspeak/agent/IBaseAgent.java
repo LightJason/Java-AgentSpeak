@@ -167,8 +167,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_beliefbase;
     }
 
+    @SafeVarargs
     @Override
-    public <N extends IInspector> Stream<N> inspect( final N... p_inspector )
+    public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
     {
         if ( p_inspector == null )
             return Stream.of();
@@ -199,7 +200,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // run plan immediatly and return
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
-            return this.execute( this.executionlist( p_trigger ) );
+            return this.execute( this.executionelements( p_trigger ).collect( Collectors.toSet() ) );
 
         // add trigger for the next cycle
         m_trigger.put( p_trigger.contenthash(), p_trigger );
@@ -347,16 +348,16 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // update defuzzification
         m_fuzzy.getDefuzzyfication().update( (T) this );
 
-        // create a list of all possible execution elements, that is a local cache for well-defined execution
-        final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
-            m_trigger.values().parallelStream(),
-            m_beliefbase.trigger().parallel()
-        ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
-
         // clear running plan- and trigger list and execute elements
         m_runningplans.clear();
-        m_trigger.clear();
-        this.execute( l_execution );
+        this.execute(
+            this.generateexecution(
+                Stream.concat(
+                    m_trigger.values().parallelStream(),
+                    m_beliefbase.trigger().parallel()
+                )
+            )
+        );
 
         // increment cycle and set the cycle time
         m_cycle.incrementAndGet();
@@ -365,14 +366,27 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return (T) this;
     }
 
+    /**
+     * generates collection of execution elements
+     *
+     * @param p_trigger trigger stream
+     * @return collection with execution elements
+     */
+    private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
+    {
+        return p_trigger.flatMap( i -> {
+            m_trigger.remove( i.contenthash() );
+            return this.executionelements( i );
+        } ).collect( Collectors.toSet() );
+    }
 
     /**
      * create execution list with plan and context
      *
      * @param p_trigger trigger
-     * @return list with tupel of plan-triple and context for execution
+     * @return stream with plans
      */
-    private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
+    private Stream<ImmutablePair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> executionelements( final ITrigger p_trigger )
     {
         return m_plans.get( p_trigger ).parallelStream()
 
@@ -393,10 +407,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                       ) )
 
                       // check plan condition
-                      .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) )
-
-                      // create execution collection
-                      .collect( Collectors.toList() );
+                      .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) );
     }
 
     /**
