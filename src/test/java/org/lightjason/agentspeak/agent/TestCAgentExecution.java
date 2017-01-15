@@ -40,7 +40,6 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

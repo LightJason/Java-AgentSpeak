@@ -380,7 +380,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         } ).map( i -> {
             System.out.println( i );
             return i;
-        }).collect( Collectors.toSet() );
+        } ).collect( Collectors.toSet() );
     }
 
     /**
