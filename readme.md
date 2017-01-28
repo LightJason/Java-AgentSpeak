@@ -21,6 +21,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org/)
 * [Source code documentation](http://lightjason.github.io/AgentSpeak/)
 * [Open Hub Code Statistic](https://www.openhub.net/p/LightJason-AgentSpeak)
+* [Libraries.io Statistic](https://libraries.io/github/LightJason/AgentSpeak)
 
 
 
