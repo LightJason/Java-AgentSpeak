@@ -62,7 +62,7 @@ public final class CCommon
     }
 
     /**
-     * updates within an instance context all variables with the variable
+     * updates within an instance context all variables of the stream
      *
      * @param p_context context
      * @param p_unifiedvariables unified variables as stream
@@ -75,7 +75,7 @@ public final class CCommon
     }
 
     /**
-     * creates the instantiate execution context
+     * creates the instantiate execution context with default variables
      *
      * @param p_instance instance object
      * @param p_agent agent
@@ -101,7 +101,7 @@ public final class CCommon
     }
 
     /**
-     * unifies trigger
+     * unifies trigger and creates the set of variables
      *
      * @param p_unifier unifier
      * @param p_source input trigger (with values)
@@ -125,7 +125,7 @@ public final class CCommon
     }
 
     /**
-     * instantiate a plan
+     * instantiate a plan with context and plan-specific variables
      *
      * @param p_plan plan
      * @param p_fail fail runs

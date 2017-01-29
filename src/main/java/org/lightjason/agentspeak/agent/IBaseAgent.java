@@ -56,14 +56,12 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -200,7 +198,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // run plan immediatly and return
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
-            return this.execute( this.executionelements( p_trigger ).collect( Collectors.toSet() ) );
+            return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
 
         // add trigger for the next cycle
         m_trigger.putIfAbsent( p_trigger.contenthash(), p_trigger );
@@ -350,6 +348,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // clear running plan- and trigger list and execute elements
         m_runningplans.clear();
+        System.out.println( "---> " + m_cycle + "        " + m_trigger.values() );
         this.execute(
             this.generateexecution(
                 Stream.concat(
@@ -366,35 +365,20 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return (T) this;
     }
 
-    /**
-     * generates collection of execution elements
-     *
-     * @param p_trigger trigger stream
-     * @return collection with execution elements
-     */
-    private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
-    {
-        return p_trigger.flatMap( i -> {
-            m_trigger.remove( i.contenthash() );
-            return this.executionelements( i );
-        } ).map( i -> {
-            System.out.println( i );
-            return i;
-        } ).collect( Collectors.toSet() );
-    }
 
     /**
      * create execution list with plan and context
      *
-     * @param p_trigger trigger
-     * @return stream with plans
+     * @param p_trigger trigger stream
+     * @return stream with plans, instantiated execution context and plan statistic
      */
-    private Stream<ImmutablePair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> executionelements( final ITrigger p_trigger )
+    private Stream<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
     {
-        return m_plans.get( p_trigger ).parallelStream()
+        return p_trigger.flatMap( j ->
+            m_plans.get( m_trigger.remove( j.contenthash() ) ).parallelStream()
 
                       // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
-                      .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, p_trigger, i.getLeft().getTrigger() ) ) )
+                      .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, j, i.getLeft().getTrigger() ) ) )
                       .filter( i -> i.getRight().getLeft() )
 
                       // initialize context
@@ -410,28 +394,29 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                       ) )
 
                       // check plan condition
-                      .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) );
+                      .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) )
+        );
+
     }
 
     /**
      * execute list of plans
      *
-     * @param p_execution execution list
-     * @return fuzzy result
+     * @param p_execution execution stream with instantiated plans and context
+     * @return fuzzy result for each executaed plan
      */
-    private IFuzzyValue<Boolean> execute( final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
+    private IFuzzyValue<Boolean> execute( final Stream<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
     {
-        System.out.println();
-        //System.out.println( p_execution );
-
         // update executable plan list, so that test-goals are defined all the time
+        /*
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
             i.getLeft().getLeft().getTrigger().getLiteral().fqnfunctor(),
             i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
         ) );
+        **/
 
         // execute plan and return values and return execution result
-        return p_execution.parallelStream().map( i -> {
+        return p_execution.parallel().map( i -> {
 
             final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
             if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
