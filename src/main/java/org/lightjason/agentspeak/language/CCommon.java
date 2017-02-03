@@ -100,6 +100,7 @@ public final class CCommon
         return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
     }
 
+
     /**
      * unifies trigger and creates the set of variables
      *
@@ -135,7 +136,8 @@ public final class CCommon
      * @return pair of plan and context object
      */
     public static Pair<IPlan, IContext> instantiateplan( final IPlan p_plan, final double p_fail, final double p_success,
-                                                         final IAgent<?> p_agent, final Set<IVariable<?>> p_variables )
+                                                          final IAgent<?> p_agent, final Set<IVariable<?>> p_variables
+    )
     {
         final double l_sum = p_success + p_fail;
         return new ImmutablePair<>( p_plan, p_plan.instantiate(
@@ -154,6 +156,9 @@ public final class CCommon
                 ) ) )
         );
     }
+
+
+
 
 
     /**
@@ -190,7 +195,7 @@ public final class CCommon
         if ( p_value instanceof IRawTerm<?> )
             return ( (IRawTerm<?>) p_value ).valueAssignableTo( p_class );
 
-        return Arrays.stream( p_class ).map( i -> i.isAssignableFrom( p_value.getClass() ) ).anyMatch( i -> i );
+        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( p_value.getClass() ) );
     }
 
 
@@ -262,10 +267,9 @@ public final class CCommon
      * @param p_input term stream
      * @return term stream
      */
-    @SuppressWarnings( "unchecked" )
     public static Stream<ITerm> recursiveterm( final Stream<ITerm> p_input )
     {
-        return p_input.flatMap( i -> i instanceof ILiteral ? recursiveterm( ( (ILiteral) i ).orderedvalues() ) : Stream.of( i ) );
+        return p_input.flatMap( i -> i instanceof ILiteral ? recursiveterm( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
     }
 
     /**
