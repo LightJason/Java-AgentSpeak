@@ -318,7 +318,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final synchronized IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
+    public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {
         if ( m_sleepingcycles.get() > 0 )
             return CFuzzyValue.from( false );
@@ -331,8 +331,11 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
             return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
 
-        // add trigger for the next cycle
-        m_trigger.putIfAbsent( p_trigger.contenthash(), p_trigger );
+        // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
+        synchronized ( this )
+        {
+            m_trigger.putIfAbsent( p_trigger.contenthash(), p_trigger );
+        }
         return CFuzzyValue.from( true );
     }
 
