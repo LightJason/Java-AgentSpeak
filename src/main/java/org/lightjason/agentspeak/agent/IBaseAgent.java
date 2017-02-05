@@ -372,6 +372,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     private synchronized Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecutionlist()
     {
+        System.out.println( "---> " + m_trigger.values() );
+
         m_runningplans.clear();
         final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = this.generateexecution(
             Stream.concat(
@@ -380,6 +382,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             )
         );
         m_trigger.clear();
+
+        //System.out.println( l_execution );
+
         return l_execution;
     }
 
@@ -387,6 +392,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * create execution list with plan and context
      *
+     * @bug multiple trigger are not working correctly
      * @param p_trigger trigger stream
      * @return collection with excutable plans, instantiated execution context and plan statistic
      */
@@ -420,7 +426,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                            // check plan condition
                            .filter( j -> m_fuzzy.getDefuzzyfication().defuzzify( j.getLeft().getLeft().condition( j.getRight() ) ) );
             }
-        ).collect( Collectors.toSet() );
+        ).collect( Collectors.toList() );
 
     }
 
