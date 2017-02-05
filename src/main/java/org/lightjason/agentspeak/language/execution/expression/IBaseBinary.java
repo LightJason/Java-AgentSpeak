@@ -126,7 +126,7 @@ public abstract class IBaseBinary implements IBinaryExpression
     @Override
     public final int hashCode()
     {
-        return m_lefthandside.hashCode() + m_righthandside.hashCode() + m_operator.hashCode();
+        return m_lefthandside.hashCode() ^ m_righthandside.hashCode() ^ m_operator.hashCode();
     }
 
     @Override

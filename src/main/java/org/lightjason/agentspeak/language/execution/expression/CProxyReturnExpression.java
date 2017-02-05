@@ -69,7 +69,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
         if ( l_returnarguments.isEmpty() )
             p_return.add( CRawTerm.from( l_return.value() ) );
         else
-            l_returnarguments.forEach( p_return::add );
+            p_return.addAll( l_returnarguments );
 
         return l_return;
     }
@@ -95,7 +95,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
     @Override
     public final boolean equals( final Object p_object )
     {
-        return m_execution.equals( p_object );
+        return ( p_object != null ) && ( p_object instanceof IExpression ) && ( m_execution.equals( p_object ) );
     }
 
     @Override

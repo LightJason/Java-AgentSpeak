@@ -141,10 +141,10 @@ public final class CLiteral implements ILiteral
 
         // calculates hash value
         m_hash = m_functor.hashCode()
-                 + IntStream.range( 0, m_orderedvalues.size() ).boxed().mapToInt( i -> ( i + 1 ) * m_orderedvalues.get( i ).hashCode() ).sum()
-                 + m_annotations.values().stream().mapToInt( Object::hashCode ).sum()
-                 + ( m_negated ? 17737 : 55529 )
-                 + ( m_at ? 2741 : 8081 );
+                 ^ IntStream.range( 0, m_orderedvalues.size() ).boxed().mapToInt( i -> ( i + 1 ) * m_orderedvalues.get( i ).hashCode() ).sum()
+                 ^ m_annotations.values().stream().mapToInt( Object::hashCode ).sum()
+                 ^ ( m_negated ? 0 : 55529 )
+                 ^ ( m_at ? 0 : 8081 );
 
 
         // calculates the structure hash value (Murmur3) of the value and annotation definition

@@ -52,12 +52,17 @@ public final class CTrigger implements ITrigger
      * hashcode
      */
     private final int m_hashcode;
+    /**
+     * content hashcode
+     */
+    private final int m_contenthash;
 
     /**
      * ctor
      *
      * @param p_event type
      * @param p_literal literal with unified variables
+     * @bug hash code function does not match of trigger with equal number of arguments but different argument values
      */
     @SuppressWarnings( "unchecked" )
     public CTrigger( final EType p_event, final ILiteral p_literal )
@@ -68,11 +73,12 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = CCommon.variablefrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() + m_literal.fqnfunctor().hashCode() + (int) p_literal.values().count() + (int) p_literal.annotations().count();
+        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) p_literal.values().count() ^ (int) p_literal.annotations().count();
+        m_contenthash = m_event.hashCode() ^ m_literal.hashCode();
     }
 
     /**
-     * creates a trigger event
+     * creates a trigger event^
      *
      * @param p_event event
      * @param p_literal trigger literal
@@ -117,6 +123,12 @@ public final class CTrigger implements ITrigger
     public final int getVariableSize()
     {
         return m_variables;
+    }
+
+    @Override
+    public final int contenthash()
+    {
+        return m_contenthash;
     }
 
     @Override

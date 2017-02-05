@@ -87,7 +87,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() + m_true.hashCode() + m_false.hashCode();
+        return m_value.hashCode() ^ m_true.hashCode() ^ m_false.hashCode();
     }
 
     @Override

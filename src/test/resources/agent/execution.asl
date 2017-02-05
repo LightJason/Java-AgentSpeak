@@ -21,67 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.annotation;
 
-import java.util.Arrays;
+// -----
+// agent for testing execution structure
+// -----
 
 
-/**
- * annotation base
- *
- * @tparam T annotation data
- */
-public abstract class IBaseAnnotation<T> implements IAnnotation<T>
-{
-    /**
-     * number data
-     */
-    protected final T m_value;
-    /**
-     * annotation type
-     */
-    protected final EType m_type;
+ // initial-goal
+ !main.
 
-    /**
-     * ctor
-     *
-     * @param p_type type
-     * @param p_value data
-     */
-    protected IBaseAnnotation( final EType p_type, final T p_value )
-    {
-        m_value = p_value;
-        m_type = p_type;
-    }
 
-    @Override
-    public final int hashCode()
-    {
-        return m_type.hashCode();
-    }
 
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return ( p_object != null ) && ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
-    }
++!main <-
+    log("main");
+    !multiple("first");
+    !multiple("second")
+.
 
-    @Override
-    public final EType id()
-    {
-        return m_type;
-    }
++!multiple(X) <-
+    log(X);
+    !single
+.
 
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final <N> N value()
-    {
-        return (N) m_value;
-    }
-
-    @Override
-    public final boolean valueAssignableTo( final Class<?>... p_class )
-    {
-        return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
-    }
-}
++!single <-
+    log("single");
+    stop
+.

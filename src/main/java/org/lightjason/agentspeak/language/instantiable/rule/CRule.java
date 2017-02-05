@@ -62,7 +62,7 @@ public final class CRule extends IBaseInstantiable implements IRule
             p_action,
             Collections.<IAnnotation<?>>emptySet(),
             p_id.hashCode()
-            + p_action.stream().mapToInt( i -> i.hashCode() ).sum()
+            + p_action.stream().mapToInt( Object::hashCode ).sum()
         );
         m_id = p_id;
     }

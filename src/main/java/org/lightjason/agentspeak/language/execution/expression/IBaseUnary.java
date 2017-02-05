@@ -83,7 +83,7 @@ public abstract class IBaseUnary implements IUnaryExpression
     @Override
     public final int hashCode()
     {
-        return m_expression.hashCode() + m_operator.hashCode();
+        return m_expression.hashCode() ^ m_operator.hashCode();
     }
 
     @Override

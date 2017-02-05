@@ -51,6 +51,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -91,6 +92,12 @@ abstract class IBaseHanoiTowers
      */
     private AtomicBoolean m_running;
 
+
+    static
+    {
+        // disable logger
+        LogManager.getLogManager().reset();
+    }
 
 
     /**
@@ -133,6 +140,7 @@ abstract class IBaseHanoiTowers
         }
         catch ( final IOException l_exception )
         {
+            l_exception.printStackTrace();
             assertTrue( "asl could not be read", true );
         }
         m_agents = Collections.unmodifiableMap( l_agentmap );

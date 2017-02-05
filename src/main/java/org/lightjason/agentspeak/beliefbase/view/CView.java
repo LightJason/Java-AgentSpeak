@@ -393,7 +393,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final int hashCode()
     {
-        return m_name.hashCode() + m_beliefbase.hashCode();
+        return m_name.hashCode() ^ m_beliefbase.hashCode();
     }
 
     @Override

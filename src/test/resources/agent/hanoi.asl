@@ -21,6 +21,14 @@
  * @endcond
  */
 
+
+
+// -----
+// agent for playing towers-of-hanoi
+// @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
+// ----
+
+
 // initial-goal
 !main.
 

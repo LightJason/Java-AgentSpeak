@@ -74,7 +74,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() + m_righthand.hashCode();
+        return m_value.hashCode() ^ m_righthand.hashCode();
     }
 
     @Override

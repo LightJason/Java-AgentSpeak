@@ -29,7 +29,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -61,6 +60,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -86,9 +86,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
     /**
-     * execution trigger
+     * execution trigger with content hash
      */
-    protected final Set<ITrigger> m_trigger = Sets.newConcurrentHashSet();
+    protected final Map<Integer, ITrigger> m_trigger = new ConcurrentHashMap<>();
     /**
      * multimap with rules
      */
@@ -159,7 +159,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                        .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
 
         if ( p_configuration.initialgoal() != null )
-            m_trigger.add( p_configuration.initialgoal() );
+            m_trigger.put( p_configuration.initialgoal().contenthash(), p_configuration.initialgoal() );
     }
 
     @Override
@@ -168,8 +168,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_beliefbase;
     }
 
+    @SafeVarargs
     @Override
-    public <N extends IInspector> Stream<N> inspect( final N... p_inspector )
+    public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
     {
         if ( p_inspector == null )
             return Stream.of();
@@ -186,25 +187,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             i.inspectrules( m_rules.values().parallelStream() );
             return i;
         } );
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
-    {
-        if ( m_sleepingcycles.get() > 0 )
-            return CFuzzyValue.from( false );
-
-        // check if literal does not store any variables
-        if ( p_trigger.getLiteral().hasVariable() )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
-
-        // run plan immediatly and return
-        if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
-            return this.execute( this.executionlist( p_trigger ) );
-
-        // add trigger for the next cycle
-        m_trigger.add( p_trigger );
-        return CFuzzyValue.from( true );
     }
 
     @Override
@@ -327,12 +309,34 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             StringUtils.join(
                 StreamUtils.zip(
                     Stream.of( "Trigger", "Running Plans", "Beliefbase" ),
-                    Stream.of( m_trigger, m_runningplans.keySet(), m_beliefbase ),
+                    Stream.of( m_trigger.values(), m_runningplans.keySet(), m_beliefbase ),
                     ( l, c ) -> MessageFormat.format( "{0}: {1}", l, c )
                 ).toArray(),
                 " / "
             )
         );
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
+    {
+        if ( m_sleepingcycles.get() > 0 )
+            return CFuzzyValue.from( false );
+
+        // check if literal does not store any variables
+        if ( p_trigger.getLiteral().hasVariable() )
+            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
+
+        // run plan immediatly and return
+        if ( ( p_immediately != null ) && ( p_immediately.length > 0 ) && ( p_immediately[0] ) )
+            return this.execute( this.generateexecution( Stream.of( p_trigger ) ) );
+
+        // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
+        synchronized ( this )
+        {
+            m_trigger.putIfAbsent( p_trigger.contenthash(), p_trigger );
+        }
+        return CFuzzyValue.from( true );
     }
 
     @Override
@@ -348,16 +352,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // update defuzzification
         m_fuzzy.getDefuzzyfication().update( (T) this );
 
-        // create a list of all possible execution elements, that is a local cache for well-defined execution
-        final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = Stream.concat(
-            m_trigger.parallelStream(),
-            m_beliefbase.trigger().parallel()
-        ).flatMap( i -> this.executionlist( i ).parallelStream() ).collect( Collectors.toList() );
-
         // clear running plan- and trigger list and execute elements
-        m_runningplans.clear();
-        m_trigger.clear();
-        this.execute( l_execution );
+        this.execute( this.generateexecutionlist() );
+
 
         // increment cycle and set the cycle time
         m_cycle.incrementAndGet();
@@ -366,45 +363,74 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return (T) this;
     }
 
+    /**
+     * create the plan executionlist with clearing internal structures
+     *
+     * @note must be synchronized for avoid indeterministic trigger list
+     *
+     * @return collection with execution plan and context
+     */
+    private synchronized Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecutionlist()
+    {
+        m_runningplans.clear();
+        final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = this.generateexecution(
+            Stream.concat(
+                m_trigger.values().parallelStream(),
+                m_beliefbase.trigger().parallel()
+            )
+        );
+        m_trigger.clear();
+
+        return l_execution;
+    }
+
 
     /**
      * create execution list with plan and context
      *
-     * @param p_trigger trigger
-     * @return list with tupel of plan-triple and context for execution
+     * @param p_trigger trigger stream
+     * @return collection with excutable plans, instantiated execution context and plan statistic
      */
-    private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> executionlist( final ITrigger p_trigger )
+    private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
     {
-        return m_plans.get( p_trigger ).parallelStream()
+        return p_trigger
+            .filter( Objects::nonNull )
+            .flatMap( i -> {
+                final Collection<Triple<IPlan, AtomicLong, AtomicLong>> l_plans = m_plans.get( i );
 
-                      // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
-                      .map( i -> new ImmutablePair<>( i, CCommon.unifytrigger( m_unifier, p_trigger, i.getLeft().getTrigger() ) ) )
-                      .filter( i -> i.getRight().getLeft() )
+                return l_plans == null
+                       ? Stream.of()
+                       : l_plans
+                           .parallelStream()
 
-                      // initialize context
-                      .map( i -> new ImmutablePair<>(
-                                    i.getLeft(),
-                                    CCommon.instantiateplan(
-                                        i.getLeft().getLeft(),
-                                        i.getLeft().getMiddle().get(),
-                                        i.getLeft().getRight().get(),
-                                        this,
-                                        i.getRight().getRight()
-                                    ).getRight()
-                      ) )
+                           // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
+                           .map( j -> new ImmutablePair<>( j, CCommon.unifytrigger( m_unifier, i, j.getLeft().getTrigger() ) ) )
+                           .filter( j -> j.getRight().getLeft() )
 
-                      // check plan condition
-                      .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().getLeft().condition( i.getRight() ) ) )
+                           // initialize context
+                           .map( j -> new ImmutablePair<>(
+                               j.getLeft(),
+                               CCommon.instantiateplan(
+                                   j.getLeft().getLeft(),
+                                   j.getLeft().getMiddle().get(),
+                                   j.getLeft().getRight().get(),
+                                   this,
+                                   j.getRight().getRight()
+                               ).getRight()
+                           ) )
 
-                      // create execution collection
-                      .collect( Collectors.toList() );
+                           // check plan condition
+                           .filter( j -> m_fuzzy.getDefuzzyfication().defuzzify( j.getLeft().getLeft().condition( j.getRight() ) ) );
+            }
+        ).collect( Collectors.toList() );
+
     }
 
     /**
      * execute list of plans
      *
-     * @param p_execution execution list
-     * @return fuzzy result
+     * @param p_execution execution collection with instantiated plans and context
+     * @return fuzzy result for each executaed plan
      */
     private IFuzzyValue<Boolean> execute( final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> p_execution )
     {
@@ -456,7 +482,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                                     CLiteral.from( "wakeup", i )
                                 ) )
 
-            ).forEach( m_trigger::add );
+            ).forEach( i -> m_trigger.put( i.contenthash(), i ) );
 
             m_sleepingterm.clear();
         }

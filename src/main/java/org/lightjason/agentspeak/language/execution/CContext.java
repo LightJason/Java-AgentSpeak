@@ -102,7 +102,7 @@ public final class CContext implements IContext
     @Override
     public final int hashCode()
     {
-        return m_agent.hashCode() + m_instance.hashCode() + m_variables.keySet().hashCode();
+        return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();
     }
 
     @Override
@@ -114,7 +114,7 @@ public final class CContext implements IContext
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_variables, m_instance, m_agent );
+        return MessageFormat.format( "{0} [{1} | {2} | {3}]", super.toString(), m_variables.values(), m_instance, m_agent );
     }
 
 }
