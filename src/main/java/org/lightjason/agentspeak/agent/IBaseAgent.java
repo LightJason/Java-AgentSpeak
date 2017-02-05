@@ -402,6 +402,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             .filter( Objects::nonNull )
             .flatMap( i -> {
                 final Collection<Triple<IPlan, AtomicLong, AtomicLong>> l_plans = m_plans.get( i );
+
+                System.out.println( "--> " + l_plans );
+
                 return l_plans == null
                        ? Stream.of()
                        : l_plans

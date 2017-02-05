@@ -124,7 +124,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     @Override
     public final int hashCode()
     {
-        return m_initialize.hashCode() + m_value.hashCode() + m_body.hashCode() + ( m_parallel ? 9931 : 0 );
+        return m_initialize.hashCode() ^ m_value.hashCode() ^ m_body.hashCode() ^ ( m_parallel ? 9931 : 0 );
     }
 
     @Override

@@ -102,7 +102,7 @@ public final class CContext implements IContext
     @Override
     public final int hashCode()
     {
-        return m_agent.hashCode() + m_instance.hashCode() + m_variables.keySet().hashCode();
+        return m_agent.hashCode() ^ m_instance.hashCode() ^ m_variables.keySet().hashCode();
     }
 
     @Override

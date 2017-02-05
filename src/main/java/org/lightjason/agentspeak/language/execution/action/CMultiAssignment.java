@@ -92,7 +92,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() + m_righthand.hashCode();
+        return m_value.hashCode() ^ m_righthand.hashCode();
     }
 
     @Override
