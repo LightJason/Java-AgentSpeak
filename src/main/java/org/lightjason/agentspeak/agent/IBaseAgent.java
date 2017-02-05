@@ -372,7 +372,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     private synchronized Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecutionlist()
     {
-        System.out.println( "---> " + m_trigger.values() );
+        System.out.println( "===> " + m_trigger.values() );
 
         m_runningplans.clear();
         final Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> l_execution = this.generateexecution(
@@ -394,7 +394,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @param p_trigger trigger stream
      * @return collection with excutable plans, instantiated execution context and plan statistic
-     * @bug multiple trigger are not working correctly
+     * @bug multiple trigger are not working correctly -> unification overwrites trigger variables -> cloning trigger objectfor avoid overwriting
      */
     private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
     {
@@ -403,7 +403,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             .flatMap( i -> {
                 final Collection<Triple<IPlan, AtomicLong, AtomicLong>> l_plans = m_plans.get( i );
 
-                System.out.println( "--> " + l_plans );
+                System.out.println( "==> " + i + " ==> " + l_plans.stream().map( n -> n.getLeft().getTrigger() ).collect( Collectors.toList() ) );
 
                 return l_plans == null
                        ? Stream.of()
