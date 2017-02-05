@@ -392,9 +392,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * create execution list with plan and context
      *
-     * @bug multiple trigger are not working correctly
      * @param p_trigger trigger stream
      * @return collection with excutable plans, instantiated execution context and plan statistic
+     * @bug multiple trigger are not working correctly
      */
     private Collection<Pair<Triple<IPlan, AtomicLong, AtomicLong>, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
     {
