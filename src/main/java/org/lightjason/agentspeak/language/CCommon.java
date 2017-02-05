@@ -104,6 +104,7 @@ public final class CCommon
     /**
      * unifies trigger and creates the set of variables
      *
+     * @note target trigger literal must be cloned to avoid variable overwriting
      * @param p_unifier unifier
      * @param p_source input trigger (with values)
      * @param p_target trigger (of a plan / rule)
@@ -116,8 +117,8 @@ public final class CCommon
              && ( p_source.getLiteral().emptyAnnotations() == p_target.getLiteral().emptyAnnotations() ) ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 
-        // unify variables
-        final Set<IVariable<?>> l_variables = p_unifier.literal( p_target.getLiteral(), p_source.getLiteral() );
+        // unify variables, source trigger literal must be copied
+        final Set<IVariable<?>> l_variables = p_unifier.literal( p_target.getLiteral().deepcopy().<ILiteral>raw(), p_source.getLiteral() );
 
         // check for completely unification (of all variables)
         return l_variables.size() == CCommon.variablefrequency( p_target.getLiteral() ).size()
