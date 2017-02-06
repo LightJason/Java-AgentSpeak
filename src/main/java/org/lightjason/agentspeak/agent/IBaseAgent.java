@@ -422,7 +422,10 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                            // check plan condition
                            .filter( j -> m_fuzzy.getDefuzzyfication().defuzzify( j.getLeft().getLeft().condition( j.getRight() ) ) );
             }
-        ).collect( Collectors.toList() );
+        )
+        // collectors-call must be toList not toSet because plan-execution can be have equal elements
+        // so a set avoid multiple plan-execution
+        .collect( Collectors.toList() );
 
     }
 
