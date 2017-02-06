@@ -23,6 +23,9 @@
 
 package org.lightjason.agentspeak.agent;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,12 +43,13 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertTrue;
@@ -71,7 +75,11 @@ public final class TestCAgentExecution
     /**
      * logs for plan execution
      */
-    private final List<Object> m_log = Collections.synchronizedList( new LinkedList<>() );
+    private final Multimap<Long, String> m_log = Multimaps.synchronizedMultimap( HashMultimap.create() );
+    /**
+     * log results
+     */
+    private final Multimap<Long, String> m_result = HashMultimap.create();
 
 
     static
@@ -100,6 +108,13 @@ public final class TestCAgentExecution
             l_exception.printStackTrace();
             assertTrue( "asl could not be read: {0}", true );
         }
+
+
+        // define execution results
+        m_result.put( Long.valueOf( 0 ), "main" );
+        m_result.put( Long.valueOf( 1 ), "first" );
+        m_result.put( Long.valueOf( 1 ), "second" );
+        m_result.put( Long.valueOf( 2 ), "single" );
     }
 
     /**
@@ -113,10 +128,28 @@ public final class TestCAgentExecution
         Assume.assumeNotNull( m_agent );
         Assume.assumeNotNull( m_running );
 
+
         while ( m_running.get() )
             m_agent.call();
 
-        System.out.println( m_log );
+
+        // check execution results
+        assertTrue(
+            MessageFormat.format(  "number of cycles are incorrect, excpected [{0}] contains [{1}]", m_result.asMap().size(), m_log.asMap().size() ),
+            IntStream.range( 0, m_result.asMap().size() ).allMatch( i -> m_log.containsKey( Long.valueOf( i ) ) )
+        );
+
+        assertTrue(
+            MessageFormat.format( "number of log elements during execution are incorrect, expected {0} result {1}", m_result.asMap(), m_log.asMap() ),
+            IntStream.range( 0, m_result.asMap().size() )
+                     .allMatch( i -> m_result.get( Long.valueOf( i ) ).size() == m_log.asMap().getOrDefault( Long.valueOf( i ), Collections.emptyList() ).size() )
+        );
+
+        IntStream.range( 0, m_result.asMap().size() ).forEach( i -> assertTrue(
+            MessageFormat.format(  "expected result {0} for index {2} is not equal to log {1}", m_result.get( Long.valueOf( i ) ), m_log.get( Long.valueOf( i ) ), i ),
+            m_result.get( Long.valueOf( i ) ).stream().allMatch( j -> m_log.get( Long.valueOf( i ) ).contains( j ) )
+        ) );
+
     }
 
 
@@ -238,7 +271,7 @@ public final class TestCAgentExecution
                                                    final List<ITerm> p_annotation
         )
         {
-            m_log.add( p_argument.get( 0 ).<Object>raw() );
+            m_log.put( p_context.agent().cycle(), p_argument.get( 0 ).<String>raw()  );
             return CFuzzyValue.from( true );
         }
     }
