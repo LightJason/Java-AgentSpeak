@@ -1,4 +1,4 @@
-# Doxyfile 1.8.10
+# Doxyfile 1.8.13
 
 #---------------------------------------------------------------------------
 # Project related configuration options
@@ -45,6 +45,7 @@ OPTIMIZE_FOR_FORTRAN   = NO
 OPTIMIZE_OUTPUT_VHDL   = NO
 EXTENSION_MAPPING      =
 MARKDOWN_SUPPORT       = YES
+TOC_INCLUDE_HEADINGS   = 0
 AUTOLINK_SUPPORT       = YES
 BUILTIN_STL_SUPPORT    = NO
 CPP_CLI_SUPPORT        = NO
@@ -105,6 +106,7 @@ WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = YES
+WARN_AS_ERROR          = NO
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           =
 #---------------------------------------------------------------------------
@@ -198,7 +200,9 @@ FORMULA_TRANSPARENT    = YES
 USE_MATHJAX            = YES
 MATHJAX_FORMAT         = HTML-CSS
 MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest/
-MATHJAX_EXTENSIONS     = TeX/AMSmath TeX/AMSsymbols TeX/MathTools
+MATHJAX_EXTENSIONS     = TeX/AMSmath \
+                         TeX/AMSsymbols \
+                         TeX/MathTools
 MATHJAX_CODEFILE       =
 SEARCHENGINE           = YES
 SERVER_BASED_SEARCH    = NO
@@ -211,10 +215,10 @@ EXTRA_SEARCH_MAPPINGS  =
 # Configuration options related to the LaTeX output
 #---------------------------------------------------------------------------
 GENERATE_LATEX         = NO
-LATEX_OUTPUT           = latex
+LATEX_OUTPUT           = ../latex
 LATEX_CMD_NAME         =
 MAKEINDEX_CMD_NAME     =
-COMPACT_LATEX          = NO
+COMPACT_LATEX          = YES
 PAPER_TYPE             = a4
 EXTRA_PACKAGES         = amsmath
 LATEX_HEADER           =
@@ -223,10 +227,11 @@ LATEX_EXTRA_STYLESHEET =
 LATEX_EXTRA_FILES      =
 PDF_HYPERLINKS         = YES
 USE_PDFLATEX           = YES
-LATEX_BATCHMODE        = NO
-LATEX_HIDE_INDICES     = NO
-LATEX_SOURCE_CODE      = NO
-LATEX_BIB_STYLE        = plain
+LATEX_BATCHMODE        = YES
+LATEX_HIDE_INDICES     = YES
+LATEX_SOURCE_CODE      = YES
+LATEX_BIB_STYLE        = alpha
+LATEX_TIMESTAMP        = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the RTF output
 #---------------------------------------------------------------------------
@@ -320,6 +325,7 @@ DOTFILE_DIRS           =
 MSCFILE_DIRS           =
 DIAFILE_DIRS           =
 PLANTUML_JAR_PATH      =
+PLANTUML_CFG_FILE      =
 PLANTUML_INCLUDE_PATH  =
 DOT_GRAPH_MAX_NODES    = 1000
 MAX_DOT_GRAPH_DEPTH    = 1000
