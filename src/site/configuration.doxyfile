@@ -222,7 +222,7 @@ COMPACT_LATEX          = YES
 PAPER_TYPE             = a4
 EXTRA_PACKAGES         = amsmath
 LATEX_HEADER           =
-LATEX_FOOTER           =
+LATEX_FOOTER           = src/site/footer.tex
 LATEX_EXTRA_STYLESHEET =
 LATEX_EXTRA_FILES      =
 PDF_HYPERLINKS         = YES
@@ -254,14 +254,14 @@ MAN_LINKS              = NO
 # Configuration options related to the XML output
 #---------------------------------------------------------------------------
 GENERATE_XML           = NO
-XML_OUTPUT             = documentation/xml
+XML_OUTPUT             = ../xml
 XML_PROGRAMLISTING     = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the DOCBOOK output
 #---------------------------------------------------------------------------
 GENERATE_DOCBOOK       = NO
-DOCBOOK_OUTPUT         = docbook
-DOCBOOK_PROGRAMLISTING = NO
+DOCBOOK_OUTPUT         = ../docbook
+DOCBOOK_PROGRAMLISTING = YES
 #---------------------------------------------------------------------------
 # Configuration options for the AutoGen Definitions output
 #---------------------------------------------------------------------------
