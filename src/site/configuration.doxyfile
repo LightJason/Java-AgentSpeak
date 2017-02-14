@@ -222,7 +222,7 @@ COMPACT_LATEX          = YES
 PAPER_TYPE             = a4
 EXTRA_PACKAGES         = amsmath
 LATEX_HEADER           =
-LATEX_FOOTER           = src/site/footer.tex
+LATEX_FOOTER           =
 LATEX_EXTRA_STYLESHEET =
 LATEX_EXTRA_FILES      =
 PDF_HYPERLINKS         = YES
@@ -259,7 +259,7 @@ XML_PROGRAMLISTING     = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the DOCBOOK output
 #---------------------------------------------------------------------------
-GENERATE_DOCBOOK       = NO
+GENERATE_DOCBOOK       = YES
 DOCBOOK_OUTPUT         = ../docbook
 DOCBOOK_PROGRAMLISTING = YES
 #---------------------------------------------------------------------------

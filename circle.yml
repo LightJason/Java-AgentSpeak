@@ -26,33 +26,37 @@ machine:
 
 dependencies:
     pre:
-        - sudo apt-get install doxygen graphviz
+        - sudo apt-get install doxygen graphviz fop docbook-xsl
 
 test:
     override:
         - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false
-        - mvn site
 
     post:
-
         # Maven Site CircleCI build
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
         - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+        - mvn site
+        - fop -xsl /usr/local/docbook-xsl/fo/docbook.xsl -xml target/docbook/index.xml -pdf target/site/sources/documentation.pdf
 
-        # Documentation Build with Update to GH-Pages Branch
-        - git checkout master
-        - mv -f target/site /tmp
-        - git checkout gh-pages
-        - mv -f circle.yml /tmp
-        - mv -f .gitignore /tmp
-        - git checkout master
-        - git push origin :gh-pages || true
-        - git branch -D gh-pages || true
-        - git checkout --orphan gh-pages
-        - rm -Rf *
-        - mv -f /tmp/.gitignore .
-        - mv -f /tmp/circle.yml .
-        - mv -f /tmp/site/* .
-        - git add --all .
-        - git commit -m "current documentation"
-        - git push origin gh-pages
+deployment:
+    production:
+        branch: master
+        commands:
+            # Documentation Build with Update to GH-Pages Branch
+            - git checkout master
+            - mv -f target/site /tmp
+            - git checkout gh-pages
+            - mv -f circle.yml /tmp
+            - mv -f .gitignore /tmp
+            - git checkout master
+            - git push origin :gh-pages || true
+            - git branch -D gh-pages || true
+            - git checkout --orphan gh-pages
+            - rm -Rf *
+            - mv -f /tmp/.gitignore .
+            - mv -f /tmp/circle.yml .
+            - mv -f /tmp/site/* .
+            - git add --all .
+            - git commit -m "current documentation"
+            - git push origin gh-pages
