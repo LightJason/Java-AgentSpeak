@@ -26,24 +26,27 @@ machine:
 
 dependencies:
     pre:
-        - sudo apt-get install doxygen graphviz fop docbook-xsl
+        # fop docbook-xsl xsltproc
+        - sudo apt-get install doxygen graphviz
 
 test:
     override:
         - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false
 
     post:
-        # Maven Site CircleCI build
+        # create CircleCI reports
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
         - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+        # documentation  build
         - mvn site
-        - fop -xsl /usr/local/docbook-xsl/fo/docbook.xsl -xml target/docbook/index.xml -pdf target/site/sources/documentation.pdf
+        #- xsltproc -o target/site/sources/documentation.fo /usr/share/xml/docbook/stylesheet/docbook-xsl/fo/docbook.xsl target/docbook/index.xml
+        #- fop target/site/sources/documentation.fo target/site/sources/documentation.pdf
 
 deployment:
     production:
         branch: master
         commands:
-            # Documentation Build with Update to GH-Pages Branch
+            # documentation deployment to gh-pages
             - git checkout master
             - mv -f target/site /tmp
             - git checkout gh-pages

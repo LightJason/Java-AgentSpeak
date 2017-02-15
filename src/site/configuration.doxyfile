@@ -259,7 +259,7 @@ XML_PROGRAMLISTING     = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the DOCBOOK output
 #---------------------------------------------------------------------------
-GENERATE_DOCBOOK       = YES
+GENERATE_DOCBOOK       = NO
 DOCBOOK_OUTPUT         = ../docbook
 DOCBOOK_PROGRAMLISTING = YES
 #---------------------------------------------------------------------------
