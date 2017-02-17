@@ -43,6 +43,7 @@
 
             <xsl:text>"</xsl:text><xsl:value-of select="$name" /><xsl:text>" : </xsl:text>
             <xsl:text>{</xsl:text>
+            <xsl:text>"name" : "</xsl:text><xsl:value-of select="$name" /><xsl:text>",</xsl:text>
             <xsl:text>"id" : "</xsl:text><xsl:value-of select="@id" /><xsl:text>",</xsl:text>
             <xsl:text>"group" : "</xsl:text><xsl:value-of select="replace($name, concat('/', tokenize($name, '/')[last()]), '')" /><xslt:text>",</xslt:text>
             <xsl:text>"briefdescription": "</xsl:text><xsl:value-of select="replace(briefdescription, '\\', '\\\\')" /><xsl:text>",</xsl:text>
