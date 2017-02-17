@@ -15,6 +15,7 @@
 !src/site/*.htm*
 !src/site/*.css
 !src/site/*.xml
+!src/site/*.xslt
 !src/site/*.graffle
 
 !src/analysis/**/*.xml
