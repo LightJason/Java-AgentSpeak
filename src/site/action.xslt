@@ -20,33 +20,34 @@
     ######################################################################################
 
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions"
-                xmlns:local="localDocumentNamespace">
+<xsl:stylesheet xmlns:xsl = "http://www.w3.org/1999/XSL/Transform" version = "2.0"
+                xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:fn = "http://www.w3.org/2005/xpath-functions"
+                xmlns:local = "localDocumentNamespace" xmlns:xslt = "http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output method="text" version="1.0" encoding="UTF-8" indent="no" standalone="yes"/>
     <xsl:strip-space elements="*"/>
 
     <!-- match root node -->
     <xsl:template match="/*">
-        <xsl:text>[</xsl:text>
+        <xsl:text>{</xsl:text>
         <xsl:apply-templates>
             <xsl:sort select="compoundname"/>
         </xsl:apply-templates>
-        <xsl:text>]</xsl:text>
+        <xsl:text>}</xsl:text>
     </xsl:template>
 
     <!-- create json object of a class node (only public classes and if the class is an inheritance of IBuildinAction) -->
     <xsl:template match="compounddef[@kind='class' and (not(@abstract) or @abstrac!='yes') and @prot='public' and inheritancegraph/node/label='org.lightjason.agentspeak.action.buildin.IBuildinAction']">
-        <xsl:text>{</xsl:text>
         <!-- replace base package and class prefix, replace :: to / and create lower-case -->
-        <xsl:text>"name": "</xsl:text><xsl:value-of select="lower-case(normalize-space(replace(replace(replace(compoundname, 'org::lightjason::agentspeak::action::buildin::', ''), '::C', '::'), '::', '/')))" /><xsl:text>",</xsl:text>
+        <xsl:variable name="name" as="xs:string"><xsl:value-of select="replace(replace(replace( lower-case(normalize-space(compoundname)), 'org::lightjason::agentspeak::action::buildin::', ''), '::c', '::'), '::', '/')" /></xsl:variable>
+
+        <xsl:text>"</xsl:text><xsl:value-of select="$name" /><xsl:text>" : </xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:text>"id" : "</xsl:text><xsl:value-of select="@id" /><xsl:text>",</xsl:text>
+        <xsl:text>"group" : "</xsl:text><xsl:value-of select="replace($name, concat('/', tokenize($name, '/')[last()]), '')" /><xslt:text>",</xslt:text>
         <xsl:text>"briefdescription": "</xsl:text><xsl:value-of select="replace(briefdescription, '\\', '\\\\')" /><xsl:text>",</xsl:text>
         <xsl:text>"detaildescription": "</xsl:text><xsl:value-of select="replace(detaildescription, '\\', '\\\\')"/><xsl:text>"</xsl:text>
-        <xsl:text>}</xsl:text>
-        <xsl:if test="position() > 0">
-            <xsl:text>, </xsl:text>
-        </xsl:if>
+        <xsl:text>},</xsl:text>
     </xsl:template>
 
     <!-- match all other node -->
