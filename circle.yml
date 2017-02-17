@@ -27,7 +27,7 @@ machine:
 dependencies:
     pre:
         - sudo apt-get install doxygen graphviz xsltproc
-        - curl -L https://sourceforge.net/projects/saxon/files/latest/download\?source\=files | tar -xf-
+        - sudo curl -L https://sourceforge.net/projects/saxon/files/latest/download\?source\=files | tar -xf- saxon9he.jar
 
 test:
     override:
