@@ -27,7 +27,7 @@ machine:
 dependencies:
     pre:
         - sudo apt-get install doxygen graphviz xsltproc
-        - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && tar xf saxon.zip saxon9he.jar
+        - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip saxon.zip saxon9he.jar
 
 test:
     override:
