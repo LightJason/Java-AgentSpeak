@@ -47,7 +47,35 @@
             <xsl:text>"id" : "</xsl:text><xsl:value-of select="@id" /><xsl:text>",</xsl:text>
             <xsl:text>"group" : "</xsl:text><xsl:value-of select="replace($name, concat('/', tokenize($name, '/')[last()]), '')" /><xslt:text>",</xslt:text>
             <xsl:text>"briefdescription": "</xsl:text><xsl:value-of select="replace(briefdescription, '\\', '\\\\')" /><xsl:text>",</xsl:text>
-            <xsl:text>"detaildescription": "</xsl:text><xsl:value-of select="replace(detaildescription, '\\', '\\\\')"/><xsl:text>"</xsl:text>
+            <xsl:text>"detaildescription": "</xsl:text><xsl:value-of select="replace(detaileddescription/para/text(), '\\', '\\\\')" /><xsl:text>",</xsl:text>
+
+            <xsl:text>"see": [</xsl:text>
+            <xsl:for-each select="detaileddescription/para/simplesect[@kind='see']/para/ulink">
+                <xsl:if test="position() > 1">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+                <xsl:text>"</xsl:text><xsl:value-of select="@url" /><xsl:text>"</xsl:text>
+            </xsl:for-each>
+            <xsl:text>],</xsl:text>
+
+            <xsl:text>"warning": [</xsl:text>
+            <xsl:for-each select="detaileddescription/para/simplesect[@kind='warning']">
+                <xsl:if test="position() > 1">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+                <xsl:text>"</xsl:text><xsl:value-of select="para" /><xsl:text>"</xsl:text>
+            </xsl:for-each>
+            <xsl:text>],</xsl:text>
+
+            <xsl:text>"note": [</xsl:text>
+            <xsl:for-each select="detaileddescription/para/simplesect[@kind='note']">
+                <xsl:if test="position() > 1">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+                <xsl:text>"</xsl:text><xsl:value-of select="para" /><xsl:text>"</xsl:text>
+            </xsl:for-each>
+            <xsl:text>]</xsl:text>
+
             <xsl:text>}</xsl:text>
 
         </xsl:for-each>
