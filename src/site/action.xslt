@@ -41,8 +41,8 @@
             <xsl:text>{</xsl:text>
             <xsl:text>"name" : "</xsl:text><xsl:value-of select="$name" /><xsl:text>",</xsl:text>
             <xsl:text>"id" : "</xsl:text><xsl:value-of select="@id" /><xsl:text>",</xsl:text>
-            <xsl:text>"briefdescription": "</xsl:text><xsl:value-of select="replace(briefdescription, '\\', '\\\\')" /><xsl:text>",</xsl:text>
-            <xsl:text>"detaildescription": "</xsl:text><xsl:value-of select="replace(detaileddescription/para/text(), '\\', '\\\\')" /><xsl:text>",</xsl:text>
+            <xsl:text>"briefdescription": "</xsl:text><xsl:value-of select="normalize-space(replace(briefdescription, '\\', '\\\\'))" /><xsl:text>",</xsl:text>
+            <xsl:text>"detaildescription": "</xsl:text><xsl:value-of select="normalize-space(replace(string-join(detaileddescription/para/node(), ' '), '\\', '\\\\'))" /><xsl:text>",</xsl:text>
 
             <xsl:text>"group" : "</xsl:text>
             <xsl:for-each select="tokenize($name, '/')">
