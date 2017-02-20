@@ -37,7 +37,8 @@ import java.util.List;
 
 
 /**
- * creates the complement between lists
+ * creates the complement between lists.
+ * The action uses two input arguments $ A $ and $ B $ and returns a list of all elements which contains $ A \setminus B $
  */
 public final class CComplement extends IBuildinAction
 {

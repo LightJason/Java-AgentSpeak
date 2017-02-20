@@ -34,7 +34,8 @@ import java.util.List;
 
 
 /**
- * returns an element of the list by the index
+ * returns an element of the list by the index.
+ * The first argument is a list and the second an index, so the action returns the element
  */
 public final class CGet extends IBuildinAction
 {

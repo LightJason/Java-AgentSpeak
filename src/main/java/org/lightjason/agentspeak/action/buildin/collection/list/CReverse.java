@@ -35,7 +35,8 @@ import java.util.List;
 
 
 /**
- * reverses a list
+ * reverses a list.
+ * All arguments of the action are lists and the action will remove nested structures and reverse all elements in a single list
  */
 public final class CReverse extends IBuildinAction
 {
@@ -59,7 +60,7 @@ public final class CReverse extends IBuildinAction
     )
     {
         // all arguments are list references
-        Lists.reverse( CCommon.flatcollection( p_argument ) ).forEach( p_return::add );
+        p_return.addAll( Lists.reverse( CCommon.flatcollection( p_argument ) ) );
         return CFuzzyValue.from( true );
     }
 

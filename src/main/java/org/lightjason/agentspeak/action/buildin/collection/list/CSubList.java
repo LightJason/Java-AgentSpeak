@@ -34,7 +34,9 @@ import java.util.List;
 
 
 /**
- * returns a sublist within the index range [start,end)
+ * returns a sublist within the index range.
+ * Creates a sublist of an existing list by an index range, first argument is the list object, second the lower-bound,
+ * third the upper-bound within the range $ [ \text{lower-bound}, \text{upper-bound} ) $
  */
 public final class CSubList extends IBuildinAction
 {

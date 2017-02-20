@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates the intersection between lists
+ * creates the intersection between lists.
+ * All arguments are lists and the action returns the intersection $ \cap M_i \forall i \in \mathbb{N} $
  */
 public final class CIntersect extends IBuildinAction
 {
@@ -67,13 +68,12 @@ public final class CIntersect extends IBuildinAction
                                         .distinct()
                                         .filter(
                                             i -> p_argument.parallelStream()
-                                                           .map( j -> j.<Collection<ITerm>>raw()
+                                                           .allMatch( j -> j.<Collection<ITerm>>raw()
                                                                .parallelStream()
                                                                .map( ITerm::raw )
                                                                .collect( Collectors.toList() )
                                                                .contains( i )
                                                            )
-                                                           .allMatch( j -> j )
                                         ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(

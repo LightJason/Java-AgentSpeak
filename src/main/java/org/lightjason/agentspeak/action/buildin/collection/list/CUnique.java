@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.collection.list;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,10 +36,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns an unique list of the list
+ * returns an unique list of the list.
+ * All arguments are collections and the action removes nested structures and returns a list with unique elements
  */
 public final class CUnique extends IBuildinAction
 {
@@ -62,7 +65,7 @@ public final class CUnique extends IBuildinAction
     )
     {
         // first argument list reference
-        final List<?> l_result = new LinkedList<>( new HashSet<>( p_argument.get( 0 ).<Collection<?>>raw() ) );
+        final List<?> l_result = new LinkedList<>( CCommon.flatcollection( p_argument ).stream().map( ITerm::raw ).collect( Collectors.toSet() ) );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result

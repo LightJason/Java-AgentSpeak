@@ -34,7 +34,8 @@ import java.util.List;
 
 
 /**
- * returns an element of the list by the index
+ * returns an element of the list by the index.
+ * Removes an element by the list index, the first argument is the list object, the second argument is the index
  */
 public final class CRemove extends IBuildinAction
 {

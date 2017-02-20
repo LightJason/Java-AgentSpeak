@@ -35,7 +35,8 @@ import java.util.List;
 
 
 /**
- * returns the size of the collection
+ * returns the size of the collection.
+ * The first parameter contains a collcation and the return argument is the size of this collection
  */
 public final class CSize extends IBuildinAction
 {

@@ -34,7 +34,8 @@ import java.util.List;
 
 
 /**
- * returns a flat concated list of any term data
+ * returns a flat concated list of any term data.
+ * The arguments of this action are nested lists and the action transfer all nested structures to a straight list
  */
 public final class CFlatConcat extends IBuildinAction
 {
@@ -58,7 +59,7 @@ public final class CFlatConcat extends IBuildinAction
     )
     {
         // first argument list reference
-        CCommon.flatcollection( p_argument ).forEach( p_return::add );
+        p_return.addAll( CCommon.flatcollection( p_argument ) );
         return CFuzzyValue.from( true );
     }
 

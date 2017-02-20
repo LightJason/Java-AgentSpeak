@@ -35,7 +35,8 @@ import java.util.List;
 
 
 /**
- * checks a list if empty
+ * checks a list if empty.
+ * Concats all list arguments (and removes the nested structures) and returns a boolean of the empty check
  */
 public final class CIsEmpty extends IBuildinAction
 {
