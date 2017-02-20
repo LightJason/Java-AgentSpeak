@@ -47,7 +47,10 @@
             <xsl:text>"group" : "</xsl:text>
             <xsl:for-each select="tokenize($name, '/')">
                 <xsl:choose>
-                    <xsl:when test="position() != last()"><xsl:value-of select="."/><xsl:text>/</xsl:text></xsl:when>
+                    <xsl:when test="position() != last()"><xsl:value-of select="."/></xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="position() != last()-1 and position() != last()"><xsl:text>/</xsl:text></xsl:when>
                 </xsl:choose>
             </xsl:for-each>
             <xslt:text>",</xslt:text>
