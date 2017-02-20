@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 /**
  * creates a list of tuples with elements of two lists.
- * Creates list of tupels of both list arguments $ \mathbb{X} $ and $ \mathbb{Y} $ and returns a list of $ \langle x_i, y_i \rangle $
+ * Creates list of tupels of both list arguments \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$ and returns a list of \f$ \langle x_i, y_i \rangle \f$
  */
 public final class CZip extends IBuildinAction
 {

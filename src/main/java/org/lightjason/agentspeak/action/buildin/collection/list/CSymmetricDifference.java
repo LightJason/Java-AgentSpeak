@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * creates the symmetric difference between lists (difference of union and intersection).
  * Creates the symmetric difference of all arguments, so all arguments are collections and the action will return
- * a list with the symmetric difference $ (\mathbb{X} \setminus \matbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) $
+ * a list with the symmetric difference \f$ (\mathbb{X} \setminus \matbb{Y}) \cup (\mathbb{B} \setminus \mathbb{A}) \f$
  *
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */

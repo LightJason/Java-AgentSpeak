@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 /**
  * creates the intersection between lists.
- * All arguments are lists and the action returns the intersection $ \cap M_i \forall i \in \mathbb{N} $
+ * All arguments are lists and the action returns the intersection \f$ \cap M_i \forall i \in \mathbb{N} \f$
  */
 public final class CIntersect extends IBuildinAction
 {

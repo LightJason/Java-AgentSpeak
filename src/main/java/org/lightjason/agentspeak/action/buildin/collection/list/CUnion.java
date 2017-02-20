@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 /**
  * creates the union between lists (not unique).
- * Creates the union of all arguemnts with removing nested structures $ \cup X_i \forall i \in \mathbb{N} $
+ * Creates the union of all arguemnts with removing nested structures \f$ \cup X_i \forall i \in \mathbb{N} \f$
  */
 public final class CUnion extends IBuildinAction
 {

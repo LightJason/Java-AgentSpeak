@@ -38,7 +38,7 @@ import java.util.stream.IntStream;
 
 /**
  * creates a list with a integer ranged list.
- * Creates a list of integer values within the range $ [\text{argument 1}, \text{argument 2}) $
+ * Creates a list of integer values within the range \f$ [\text{argument 1}, \text{argument 2}) \f$
  */
 public final class CRange extends IBuildinAction
 {

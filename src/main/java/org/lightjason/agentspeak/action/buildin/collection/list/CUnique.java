@@ -31,9 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;

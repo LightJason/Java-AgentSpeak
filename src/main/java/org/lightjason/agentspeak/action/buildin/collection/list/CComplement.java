@@ -38,7 +38,8 @@ import java.util.List;
 
 /**
  * creates the complement between lists.
- * The action uses two input arguments $ A $ and $ B $ and returns a list of all elements which contains $ A \setminus B $
+ * The action uses two input arguments \f$ \mathbb{A} \f$ and \f$ \mathbb{B} \f$ and returns a
+ * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$
  */
 public final class CComplement extends IBuildinAction
 {
