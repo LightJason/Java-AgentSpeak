@@ -121,9 +121,9 @@
 
     <!-- program listing -->
     <xsl:template match="programlisting">
-        <xsl:text> &lt;code&gt;</xsl:text>
+        <xsl:text> &lt;pre&gt;&lt;code&gt;</xsl:text>
         <xsl:apply-templates/>
-        <xsl:text>&lt;/code&gt; </xsl:text>
+        <xsl:text>&lt;/code&gt;&lt;/pre&gt; </xsl:text>
     </xsl:template>
 
     <xsl:template match="codeline">
