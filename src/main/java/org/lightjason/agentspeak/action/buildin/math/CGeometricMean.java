@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -60,7 +59,7 @@ public final class CGeometricMean extends IBuildinAction
         final Collection<ITerm> l_arguments = CCommon.flatcollection( p_argument );
 
         p_return.add( CRawTerm.from(
-            Math.pow( l_arguments.stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).reduce( 1, (i, j) -> i * j ), 1.0 / l_arguments.size() )
+            Math.pow( l_arguments.stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).reduce( 1, ( i, j ) -> i * j ), 1.0 / l_arguments.size() )
         ) );
 
         return CFuzzyValue.from( true );

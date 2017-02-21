@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
