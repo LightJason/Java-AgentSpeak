@@ -41,7 +41,12 @@ import java.util.Locale;
 
 
 /**
- * hash algorithm
+ * hash algorithm.
+ * The actions creates a hash values of datasets, the first argument is the name of the hasing algorithm
+ * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512),
+ * for all other arguments a hash value is calculated and the action returns the hash values back, only
+ * if the hash algorithm is unknown the action wil fail
+ * @code [Hash1 | Hash2 | Hash3] = crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 ); @endcode
  *
  * @see http://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
  * @see https://github.com/google/guava/wiki/HashingExplained

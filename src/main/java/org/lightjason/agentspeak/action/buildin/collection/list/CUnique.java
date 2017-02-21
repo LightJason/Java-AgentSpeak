@@ -39,7 +39,8 @@ import java.util.stream.Collectors;
 
 /**
  * returns an unique list of the list.
- * All arguments are collections and the action removes nested structures and returns a list with unique elements
+ * All arguments are collections and the action removes nested
+ * structures and returns a list with unique elements, the action fails never
  * @code U = collection/list/unique( L ); @endcode
  */
 public final class CUnique extends IBuildinAction
