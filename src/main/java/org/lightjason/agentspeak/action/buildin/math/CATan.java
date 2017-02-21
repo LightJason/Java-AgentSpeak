@@ -35,7 +35,12 @@ import java.util.List;
 
 
 /**
- * action for tangens value \f$ tan( x_i ) \f$
+ * action for tangens value.
+ * The action calculates \f$ tan( x_i ) \f$ for all arguments, the return
+ * value is in \f$ [0, \pi) \f$
+ * @code [A | B | C] = math/atan( -1, -5, 3 ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Inverse_trigonometric_functions
  */
 public final class CATan extends IBuildinAction
 {

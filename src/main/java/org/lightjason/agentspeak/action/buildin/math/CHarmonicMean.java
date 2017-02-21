@@ -21,60 +21,49 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.rest;
+package org.lightjason.agentspeak.action.buildin.math;
 
-import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 
 /**
- * action for calling a restful webservice with a json object.
- * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
- * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
- * @code W = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
+ * action for harmonic mean.
+ * The action calculates \f$ \frac{i}]{\sum_{i} \frac{1}{x_i}} \f$ over all arguments, action fails never
+ * @code G = math/harmonicmean( 1, 3, 9, [10, [11, 12]] ); @endcode
  *
- * @see https://en.wikipedia.org/wiki/Representational_state_transfer
- * @see https://en.wikipedia.org/wiki/Web_service
- * @see https://en.wikipedia.org/wiki/JSON
+ * @see https://en.wikipedia.org/wiki/Average
  */
-public final class CJsonObject extends IBaseRest
+public final class CHarmonicMean extends IBuildinAction
 {
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
-        try
-        {
-            final Map<String, ?> l_data = IBaseRest.json(
-                p_argument.get( 0 ).<String>raw(),
-                Map.class
-            );
+        final Collection<ITerm> l_arguments = CCommon.flatcollection( p_argument );
 
-            p_return.add(
-                p_argument.size() == 2
-                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
-                : IBaseRest.baseliteral(
-                        p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
-                        flatterm( l_data )
-                )
-            );
+        p_return.add( CRawTerm.from(
+            l_arguments.size() / l_arguments.stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).map( i -> 1 / i ).sum()
+        ) );
 
-            return CFuzzyValue.from( true );
-        }
-        catch ( final IOException l_exception )
-        {
-            return CFuzzyValue.from( false );
-        }
+        return CFuzzyValue.from( true );
     }
 
 }

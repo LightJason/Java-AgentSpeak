@@ -43,7 +43,10 @@ import java.util.stream.Collectors;
 
 
 /**
- * action for sum of elements
+ * action for sum of elements.
+ * Prints a set of messages to the commandline / output-stream, the command
+ * can be used with a variable set of arguments and fails never
+ * @code generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y); @endcode
  */
 public final class CPrint extends IBuildinAction
 {

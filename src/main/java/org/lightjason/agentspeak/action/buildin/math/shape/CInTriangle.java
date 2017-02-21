@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
  * action check if a point is within a triangle
  *
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
- * @see http://jsfiddle.net/dog_funtom/H7D7g/
  */
 public final class CInTriangle extends IBuildinAction
 {

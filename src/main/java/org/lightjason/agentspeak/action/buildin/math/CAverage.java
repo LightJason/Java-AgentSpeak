@@ -36,7 +36,12 @@ import java.util.List;
 
 
 /**
- * action for average \f$ \frac{1}{i} \sum_{i} x_i \f$
+ * action for average.
+ * The action calculates \f$ \frac{1}{i} \sum_{i} x_i \f$ over all arguments, action
+ * fails never, but can throw a runtime exception
+ * @code A = math/average( 1, 3, 9, [10, [11, 12]] ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CAverage extends IBuildinAction
 {

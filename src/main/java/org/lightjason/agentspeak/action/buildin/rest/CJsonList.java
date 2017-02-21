@@ -35,7 +35,11 @@ import java.util.Map;
 
 
 /**
- * action for calling a restful webservice with a JSON object list
+ * action for calling a restful webservice with a JSON object list.
+ * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
+ * all other arguments are the literal elements of the returning literal, the webservice must return a JSON list and
+ * the last argument will used to encapsulate the list elements
+ * @code W = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service

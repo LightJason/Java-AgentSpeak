@@ -35,7 +35,11 @@ import java.util.List;
 
 
 /**
- * action for absolute value \f$ \lvert x_i \rvert \f$
+ * action for absolute value.
+ * The action calculates \f$ \lvert x_i \rvert \f$ for all arguments
+ * @code [A | B | C] = math/abs( -1, -5, 3 ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Absolute_value
  */
 public final class CAbs extends IBuildinAction
 {
