@@ -38,7 +38,7 @@ test:
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
         - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
         # documentation  build
-        - mvn site
+        - mvn site -DskipTests=true
         - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
         - java -jar saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
 

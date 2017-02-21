@@ -113,26 +113,30 @@
 
     <!-- latex formula -->
     <xsl:template match="formula">
-        <xsl:value-of select="concat(' ', normalize-space(replace(., '\\', '\\\\')), ' ')"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text> </xsl:text>
     </xsl:template>
 
 
     <!-- program listing -->
     <xsl:template match="programlisting">
-        <xsl:text>&lt;code&gt;</xsl:text>
+        <xsl:text> &lt;code&gt;</xsl:text>
         <xsl:apply-templates/>
-        <xsl:text>&lt;/code&gt;</xsl:text>
+        <xsl:text>&lt;/code&gt; </xsl:text>
     </xsl:template>
 
     <xsl:template match="codeline">
-        <xsl:value-of select="." />
-        <xsl:text>\\n</xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>\n</xsl:text>
     </xsl:template>
 
 
     <!-- default text node handling -->
     <xsl:template match="text()|@*">
-        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:variable name="escapedquote">\\"</xsl:variable>
+        <xsl:variable name="singlequote">"</xsl:variable>
+        <xsl:value-of select="normalize-space(replace(replace(., '\\', '\\\\'), $singlequote, $escapedquote))" />
     </xsl:template>
 
 </xsl:stylesheet>
