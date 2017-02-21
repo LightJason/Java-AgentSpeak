@@ -36,6 +36,7 @@ import java.util.List;
 /**
  * returns an element of the list by the index.
  * The first argument is a list and the second an index, so the action returns the element
+ * @code V = collection/list/get( L, 2 ); @endcode
  */
 public final class CGet extends IBuildinAction
 {

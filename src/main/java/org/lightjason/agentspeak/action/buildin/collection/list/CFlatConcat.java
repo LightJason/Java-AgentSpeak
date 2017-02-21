@@ -36,6 +36,7 @@ import java.util.List;
 /**
  * returns a flat concated list of any term data.
  * The arguments of this action are nested lists and the action transfer all nested structures to a straight list
+ * @code F = collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] ); @endcode
  */
 public final class CFlatConcat extends IBuildinAction
 {

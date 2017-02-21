@@ -38,11 +38,12 @@
             <xsl:variable name="name" as="xs:string"><xsl:value-of select="replace(replace(replace( lower-case(normalize-space(compoundname)), 'org::lightjason::agentspeak::action::buildin::', ''), '::c', '::'), '::', '/')" /></xsl:variable>
 
             <xsl:text>"</xsl:text><xsl:value-of select="$name" /><xsl:text>" : </xsl:text>
+
             <xsl:text>{</xsl:text>
             <xsl:text>"name" : "</xsl:text><xsl:value-of select="$name" /><xsl:text>",</xsl:text>
             <xsl:text>"id" : "</xsl:text><xsl:value-of select="@id" /><xsl:text>",</xsl:text>
-            <xsl:text>"briefdescription": "</xsl:text><xsl:value-of select="normalize-space(replace(briefdescription, '\\', '\\\\'))" /><xsl:text>",</xsl:text>
-            <xsl:text>"detaildescription": "</xsl:text><xsl:value-of select="normalize-space(replace(string-join(detaileddescription/para[count(descendant::*) &gt; 0 and count(text()) &gt; 0], ' '), '\\', '\\\\'))" /><xsl:text>",</xsl:text>
+            <xsl:apply-templates select="briefdescription"/><xsl:text>,</xsl:text>
+            <xsl:apply-templates select="detaileddescription"/><xsl:text>,</xsl:text>
 
             <xsl:text>"group" : "</xsl:text>
             <xsl:for-each select="tokenize($name, '/')">
@@ -59,7 +60,7 @@
             <xsl:for-each select="detaileddescription/para/simplesect[@kind='see']/para/ulink">
                 <xsl:text>"</xsl:text><xsl:value-of select="@url" /><xsl:text>"</xsl:text>
                 <xsl:choose>
-                    <xsl:when test="position() != last()">,<br/></xsl:when>
+                    <xsl:when test="position() != last()">,</xsl:when>
                 </xsl:choose>
             </xsl:for-each>
             <xsl:text>],</xsl:text>
@@ -77,16 +78,15 @@
             <xsl:for-each select="detaileddescription/para/simplesect[@kind='note']">
                 <xsl:text>"</xsl:text><xsl:value-of select="para" /><xsl:text>"</xsl:text>
                 <xsl:choose>
-                    <xsl:when test="position() != last()">,<br/></xsl:when>
+                    <xsl:when test="position() != last()">,</xsl:when>
                 </xsl:choose>
             </xsl:for-each>
             <xsl:text>]</xsl:text>
 
             <xsl:text>}</xsl:text>
 
-
             <xsl:choose>
-                <xsl:when test="position() != last()">,<br/></xsl:when>
+                <xsl:when test="position() != last()">,</xsl:when>
             </xsl:choose>
 
         </xsl:for-each>
@@ -94,8 +94,41 @@
         <xsl:text>}</xsl:text>
     </xsl:template>
 
-    <!-- match all other node -->
-    <xsl:template match="node()"/>
+
+    <!-- brief description -->
+    <xsl:template match="briefdescription">
+        <xsl:text>"briefdescription": "</xsl:text>
+            <xsl:apply-templates/>
+        <xsl:text>"</xsl:text>
+    </xsl:template>
+
+
+    <!-- detailed description -->
+    <xsl:template match="detaileddescription">
+        <xsl:text>"detaildescription": "</xsl:text>
+            <xsl:apply-templates select="para[count(descendant::*) &gt; 0 and count(text()) &gt; 0]"/>
+        <xsl:text>"</xsl:text>
+    </xsl:template>
+
+
+    <!-- latex formula -->
+    <xsl:template match="formula">
+        <xsl:value-of select="concat(' ', normalize-space(replace(., '\\', '\\\\')), ' ')"/>
+    </xsl:template>
+
+
+    <!-- program listing -->
+    <xsl:template match="programlisting">
+        <xsl:text>&lt;code&gt;</xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>&lt;/code&gt;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="codeline">
+        <xsl:value-of select="." />
+        <xsl:text>\\n</xsl:text>
+    </xsl:template>
+
 
     <!-- default text node handling -->
     <xsl:template match="text()|@*">
