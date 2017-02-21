@@ -35,7 +35,11 @@ import java.util.Map;
 
 
 /**
- * action for calling a restful service with a json object list
+ * action for calling a restful webservice with a JSON object list
+ *
+ * @see https://en.wikipedia.org/wiki/Representational_state_transfer
+ * @see https://en.wikipedia.org/wiki/Web_service
+ * @see https://en.wikipedia.org/wiki/JSON
  */
 public final class CJsonList extends IBaseRest
 {

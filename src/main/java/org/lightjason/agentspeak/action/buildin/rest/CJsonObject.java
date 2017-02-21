@@ -35,7 +35,14 @@ import java.util.Map;
 
 
 /**
- * action for calling a restful service with a json object
+ * action for calling a restful webservice with a json object.
+ * Creates a literal based on an JSON webservice which returns an object, the first argument is the URL of the webservice,
+ * all other arguments are the literal elements of the returning literal
+ * @code GO = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Representational_state_transfer
+ * @see https://en.wikipedia.org/wiki/Web_service
+ * @see https://en.wikipedia.org/wiki/JSON
  */
 public final class CJsonObject extends IBaseRest
 {

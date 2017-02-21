@@ -42,7 +42,7 @@ import java.util.List;
  * the action fails if the key cannot generated
  * @code [PublicKey, PrivateKey] = cypto/createkey( "AES | DES | RSA" ); @endcode
  *
- * @note The private key is set only on RSA algorithm
+ * @note The private key is set on RSA algorithm only
  * @see https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/Data_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/RSA_(cryptosystem)

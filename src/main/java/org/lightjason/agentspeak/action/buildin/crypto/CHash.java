@@ -48,6 +48,13 @@ import java.util.Locale;
  * if the hash algorithm is unknown the action wil fail
  * @code [Hash1 | Hash2 | Hash3] = crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 ); @endcode
  *
+ * @see https://en.wikipedia.org/wiki/Secure_Hash_Algorithm
+ * @see https://en.wikipedia.org/wiki/MD2_(cryptography)
+ * @see https://en.wikipedia.org/wiki/MD5
+ * @see https://en.wikipedia.org/wiki/Adler-32
+ * @see https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+ * @see https://en.wikipedia.org/wiki/MurmurHash
+ * @see https://en.wikipedia.org/wiki/SipHash
  * @see http://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
  * @see https://github.com/google/guava/wiki/HashingExplained
  */
