@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * action for parsing a float from string
+ * action for parsing an integer from string
  */
 public final class CParseInt extends IBuildinAction
 {

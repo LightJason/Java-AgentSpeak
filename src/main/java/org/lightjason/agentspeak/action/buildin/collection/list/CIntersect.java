@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 /**
  * creates the intersection between lists.
  * All arguments are lists and the action returns the intersection \f$ \cap M_i \forall i \in \mathbb{N} \f$
+ * @code I = collection/list/intersect( [1,2,[3,4]], [3,4,[8,9]], [1,2,3,5] ); @endcode
  */
 public final class CIntersect extends IBuildinAction
 {
