@@ -42,8 +42,21 @@
             </xsl:variable>
 
             <xsl:text>"</xsl:text><xsl:value-of select = "$name" /><xsl:text>" : </xsl:text>
-
             <xsl:text>{</xsl:text>
+
+            <!-- sorting field length of group and string with values -->
+            <xsl:text>"sort" : "</xsl:text>
+            <xsl:for-each select = "tokenize($name, '/')">
+                <xsl:choose>
+                    <xsl:when test = "position() = last()">
+                        <xsl:value-of select="count(tokenize($name, '/'))-1"/>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:value-of select = "substring(concat(., '                         '), 1, 25)" />
+            </xsl:for-each>
+            <xslt:text>",</xslt:text>
+
+            <!-- content data -->
             <xsl:text>"name" : "</xsl:text><xsl:value-of select = "$name" /><xsl:text>",</xsl:text>
             <xsl:text>"id" : "</xsl:text><xsl:value-of select = "@id" /><xsl:text>",</xsl:text>
             <xsl:apply-templates select = "briefdescription" />
@@ -63,12 +76,6 @@
                         <xsl:text>/</xsl:text>
                     </xsl:when>
                 </xsl:choose>
-            </xsl:for-each>
-            <xslt:text>",</xslt:text>
-
-            <xsl:text>"sort" : "</xsl:text>
-            <xsl:for-each select = "tokenize($name, '/')">
-                <xsl:value-of select = "substring(concat(., '                    '), 1, 20)" />
             </xsl:for-each>
             <xslt:text>",</xslt:text>
 
