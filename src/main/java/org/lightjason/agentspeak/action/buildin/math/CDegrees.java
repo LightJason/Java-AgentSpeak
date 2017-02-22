@@ -35,7 +35,12 @@ import java.util.List;
 
 
 /**
- * action for converting value to radians value
+ * action for converting angle value to degree value.
+ * Converts all radian arguments into degree values
+ * \f$ \frac{x_i \cdot 180}{\pi} \f$
+ * @code [A|B] = math/degrees(); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Radian
  */
 public final class CDegrees extends IBuildinAction
 {

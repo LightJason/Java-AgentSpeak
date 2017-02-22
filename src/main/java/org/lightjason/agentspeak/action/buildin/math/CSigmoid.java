@@ -32,23 +32,27 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.Function;
 
 
 /**
- * action for ceil value.
- * Ceils any argument values with \f$ \lceil x_i \rceil \f$ and returns
- * all values, the action never fails
- * @code [A|B|C] = math/ceil(1.3, 2.8, 9.7); @endcode
+ * action for calculating a parameterized sigmoid function.
+ * Action calculates the sigmoid function for each value, the definition
+ * of the function is \f$ \frac{\alpha}{ \beta + e^{ - \gamma \cdot t }} \f$
+ * \f$ \alpha \f$ is the first, \f$ \beta \f$ the second and \f$ \gamma \f$ the third
+ * argument, all values beginning at the fourth position will be used for t, so the
+ * action returns all values but and is never failing.
+ * @code [A | B | C] = math/sigmoid( 1,1,1, 10,20,30 ); @endcode
  *
- * @see https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
+ * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
-public final class CCeil extends IBuildinAction
+public final class CSigmoid extends IBuildinAction
 {
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 3;
     }
 
     @Override
@@ -56,10 +60,13 @@ public final class CCeil extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        final Function<Double, Double> l_sigmoid = (i) ->
+            p_argument.get( 0 ).<Double>raw() / ( p_argument.get( 1 ).<Double>raw() + Math.exp( -p_argument.get( 2 ).<Double>raw() ) * i );
+
         CCommon.flatcollection( p_argument ).stream()
-               .mapToDouble( i ->  i.<Number>raw().doubleValue() )
+               .mapToDouble( i -> i.<Number>raw().doubleValue() )
                .boxed()
-               .map( Math::ceil )
+               .map( l_sigmoid )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

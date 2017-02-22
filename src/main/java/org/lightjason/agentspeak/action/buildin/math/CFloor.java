@@ -35,7 +35,12 @@ import java.util.List;
 
 
 /**
- * action for floor value \f$ \lfloor x_i \rfloor \f$
+ * action for floor value.
+ * Floors any argument values with \f$ \lfloor x_i \rfloor \f$ and returns
+ * all values, the action never fails
+ * @code [A|B|C] = math/floor(1.3, 2.8, 9.7); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
  */
 public final class CFloor extends IBuildinAction
 {

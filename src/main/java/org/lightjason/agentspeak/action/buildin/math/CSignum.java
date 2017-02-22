@@ -36,6 +36,8 @@ import java.util.List;
 
 /**
  * action for signum value
+ *
+ * @see https://en.wikipedia.org/wiki/Sign_function
  */
 public final class CSignum extends IBuildinAction
 {

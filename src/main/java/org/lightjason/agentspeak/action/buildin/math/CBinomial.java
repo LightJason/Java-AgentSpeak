@@ -35,7 +35,12 @@ import java.util.List;
 
 
 /**
- * action for calculating binomial coefficient \f$ \binom{n}{k} \f$
+ * action for calculating binomial coefficient.
+ * Calcluates \f$ \binom{n}{k} \f$, where n is the
+ * first argument and k the second, the action fails never
+ * @code B = math/binomial( 49, 6 ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
 public final class CBinomial extends IBuildinAction
 {
