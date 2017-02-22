@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * Creates list of tupels of both list arguments
  * \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$ and returns
  * a list of \f$ \langle x_i, y_i \rangle \f$, the action fails never
- * @code T = collection/list/zip( [1,,3,5,7], [2,4,6,8] ); @endcode
+ * @code T = collection/list/zip( [1,3,5,7], [2,4,6,8] ); @endcode
  */
 public final class CZip extends IBuildinAction
 {

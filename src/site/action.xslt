@@ -56,6 +56,14 @@
             </xsl:for-each>
             <xslt:text>",</xslt:text>
 
+            <xsl:text>"sort" : "</xsl:text>
+            <xsl:for-each select="tokenize($name, '/')">
+                <xsl:choose>
+                    <xsl:when test="position() &lt; last()"><xsl:value-of select="substring(concat(., '                    '), 1, 20)" /></xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
+            <xslt:text>",</xslt:text>
+
             <xsl:text>"see": [</xsl:text>
             <xsl:for-each select="detaileddescription/para/simplesect[@kind='see']/para/ulink">
                 <xsl:text>"</xsl:text><xsl:value-of select="@url" /><xsl:text>"</xsl:text>
@@ -136,7 +144,7 @@
     <xsl:template match="text()|@*">
         <xsl:variable name="escapedquote">\\"</xsl:variable>
         <xsl:variable name="singlequote">"</xsl:variable>
-        <xsl:value-of select="normalize-space(replace(replace(., '\\', '\\\\'), $singlequote, $escapedquote))" />
+        <xsl:value-of select="replace(replace(., '\\', '\\\\'), $singlequote, $escapedquote)" />
     </xsl:template>
 
 </xsl:stylesheet>
