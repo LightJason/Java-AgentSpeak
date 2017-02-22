@@ -35,7 +35,12 @@ import java.util.List;
 
 
 /**
- * action for calculating stirling number \f$ S(n,k) \f$
+ * action for calculating stirling number.
+ * The  action calculates the stirling number with \f$ S(n,k)=\left\{\begin{matrix} n \\ k \end{matrix}\right\}= S_n^{(k)} \f$
+ * n as first argument and k as second argument, the action fails never
+ * @code S = math/stirling(2,3); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Stirling_number
  */
 public final class CStirling extends IBuildinAction
 {

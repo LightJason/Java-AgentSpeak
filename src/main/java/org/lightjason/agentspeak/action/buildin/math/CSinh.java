@@ -35,7 +35,10 @@ import java.util.List;
 
 
 /**
- * action for sinus hyperbolic value \f$ sinh( x_i ) \f$
+ * action for sinus hyperbolic value.
+ * \f$ sinh( x_i ) \f$
+ *
+ * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CSinh extends IBuildinAction
 {

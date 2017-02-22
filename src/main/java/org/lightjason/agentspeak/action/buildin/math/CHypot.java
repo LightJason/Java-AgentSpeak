@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.math;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,7 +36,10 @@ import java.util.List;
 
 
 /**
- * action for calculating \f$ \sqrt{ x^2 + y^2 } \f$
+ * action for calculating the euclidian length.
+ * Calculates for each pair of arguments \f$ \sqrt{ x_{i}^{2} + y_{i}^{2} } \f$ and
+ * fail iif the number of arguments are odd, it unflats all list elements
+ * @code [A|B|C] = math/hypot( 1, [2, [3]], [4, 5]); @endcode
  */
 public final class CHypot extends IBuildinAction
 {
@@ -50,12 +55,17 @@ public final class CHypot extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            Math.hypot(
-                p_argument.get( 0 ).<Number>raw().doubleValue(),
-                p_argument.get( 1 ).<Number>raw().doubleValue()
-            )
-        ) );
+        if ( p_argument.size() % 2 != 0 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed( CCommon.flatcollection( p_argument ).stream(), 2 )
+                   .map( i -> Math.hypot(
+                       i.get( 0 ).<Number>raw().doubleValue(),
+                       i.get( 1 ).<Number>raw().doubleValue()
+                   ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

@@ -36,6 +36,8 @@ import java.util.List;
 
 /**
  * action for logarithm value \f$ log( x_i ) \f$
+ *
+ * @see https://en.wikipedia.org/wiki/Logarithm
  */
 public final class CLog extends IBuildinAction
 {

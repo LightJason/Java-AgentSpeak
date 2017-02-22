@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * action for sum of elements \f$ \sum_{i} x_i \f$
+ * action for sum of elements.
+ * Sums all unflatten arguments \f$ \sum_{i} x_i \f$, the action never fails
+ * @code S = math/sum( 3, 4, [1, -5, [3, 4]], 10, 12); @endcode
  */
 public final class CSum extends IBuildinAction
 {

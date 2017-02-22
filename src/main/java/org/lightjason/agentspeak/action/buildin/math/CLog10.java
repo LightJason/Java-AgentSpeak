@@ -36,6 +36,8 @@ import java.util.List;
 
 /**
  * action for logarithm (base 10) value \f$ log_{10} x_i \f$
+ *
+ * @see https://en.wikipedia.org/wiki/Logarithm
  */
 public final class CLog10 extends IBuildinAction
 {

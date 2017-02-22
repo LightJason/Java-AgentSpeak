@@ -35,20 +35,20 @@ import java.util.List;
 
 
 /**
- * action for converting degree value into radian.
- * Converts all degree arguments into radian values
- * \f$ \frac{x_i \cdot \pi}{180} \f$
- * @code A = math/radians( 180 ); @endcode
- *
- * @see https://en.wikipedia.org/wiki/Radian
+ * action for pow .
+ * Calculates the pow for each unflatten argument
+ * \f$ x_i^t \f$, the first argument is the exponent
+ * t and all other arguments will be used for \f$ x_i \f$,
+ * the action fails never
+ * @code [A|B|C] = math/pow(2, -2, 2, 9); @endcode
  */
-public final class CRadians extends IBuildinAction
+public final class CPow extends IBuildinAction
 {
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -56,10 +56,12 @@ public final class CRadians extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument ).stream()
+        final double l_exponent = p_argument.get( 0 ).raw();
+
+        CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) ).stream()
                .mapToDouble( i -> i.<Number>raw().doubleValue() )
                .boxed()
-               .map( Math::toRadians )
+               .map( i -> Math.pow( i, l_exponent ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

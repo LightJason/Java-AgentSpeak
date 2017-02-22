@@ -35,7 +35,12 @@ import java.util.List;
 
 
 /**
- * action for tangens hyperbolic value \f$ tanh( x_i ) \f$
+ * action for tangens hyperbolic value.
+ * Calculates for each unflatten argument
+ * \f$ tanh( x_i ) \f$ and fails never
+ * @code [A|B|C] = math/tanh( [1,2], 3 ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CTanh extends IBuildinAction
 {

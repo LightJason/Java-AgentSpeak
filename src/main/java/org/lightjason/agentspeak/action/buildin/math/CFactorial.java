@@ -37,6 +37,8 @@ import java.util.List;
 
 /**
  * action for calculating factorial \f$ ! x_i \f$
+ *
+ * @see https://en.wikipedia.org/wiki/Factorial
  */
 public final class CFactorial extends IBuildinAction
 {
