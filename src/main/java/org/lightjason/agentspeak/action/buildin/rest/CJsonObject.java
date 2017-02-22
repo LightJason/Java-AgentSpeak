@@ -35,7 +35,7 @@ import java.util.Map;
 
 
 /**
- * action for calling a restful webservice with a json object.
+ * action for calling a restful webservice with a JSON object.
  * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
  * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
  * @code W = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode

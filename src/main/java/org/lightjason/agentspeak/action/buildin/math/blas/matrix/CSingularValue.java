@@ -39,7 +39,9 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates the singular value decomposition of a matrix
+ * creates the singular value decomposition of a matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
  */
 public final class CSingularValue extends IBuildinAction
 {

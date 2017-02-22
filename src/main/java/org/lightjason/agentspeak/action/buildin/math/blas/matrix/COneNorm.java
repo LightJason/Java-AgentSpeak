@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * returns the one-norm of a matrix
+ * returns the one-norm of a matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
 public final class COneNorm extends IAlgebra
 {

@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * returns the matrix power
+ * returns the matrix power.
+ *
+ * @see https://en.wikipedia.org/wiki/Matrix_exponential
  */
 public final class CPower extends IAlgebra
 {

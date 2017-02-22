@@ -39,7 +39,9 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix
+ * creates the eigenvalues of a matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
  */
 public final class CEigenValue extends IBuildinAction
 {

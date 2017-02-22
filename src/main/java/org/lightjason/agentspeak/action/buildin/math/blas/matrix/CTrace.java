@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * creates the trace of the matrix
+ * creates the trace of the matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Trace_(linear_algebra)
  */
 public final class CTrace extends IAlgebra
 {

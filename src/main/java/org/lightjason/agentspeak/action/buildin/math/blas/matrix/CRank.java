@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * rank of the matrix
+ * rank of the matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
  */
 public final class CRank extends IAlgebra
 {

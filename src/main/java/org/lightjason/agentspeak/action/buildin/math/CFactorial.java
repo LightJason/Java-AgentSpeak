@@ -36,7 +36,10 @@ import java.util.List;
 
 
 /**
- * action for calculating factorial \f$ ! x_i \f$
+ * action for calculating factorial.
+ * Creates the factorial \f$ ! x_i \f$ for all
+ * unflattern arguments and the action fails never
+ * @code [A|B|C|D|E] = math/factorial( 5, [[1,2], 3,4]); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Factorial
  */

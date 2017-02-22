@@ -36,7 +36,12 @@ import java.util.List;
 
 
 /**
- * action for checking for a prime number
+ * action for checking for a prime number.
+ * Checks for all unflatten arguments if the number is a prime number
+ * and returns a boolean of this check, the actions never fails
+ * @code [P1|P2] = math/isprime(3, 4); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Primality_test
  */
 public final class CIsPrime extends IBuildinAction
 {

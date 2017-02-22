@@ -23,9 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -35,17 +33,18 @@ import java.util.List;
 
 
 /**
- * returns the infinitiy-norm of a matrix.
+ * creates the graph laplacian.
  *
- * @see https://en.wikipedia.org/wiki/Uniform_norm
+ * @bug not implement yet
+ * @see https://en.wikipedia.org/wiki/Laplacian_matrix
  */
-public final class CInfinityNorm extends IAlgebra
+public final class CGraphLaplacian extends IAlgebra
 {
 
     /**
      * ctor
      */
-    public CInfinityNorm()
+    public CGraphLaplacian()
     {
         super( 4 );
     }
@@ -61,12 +60,7 @@ public final class CInfinityNorm extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.normInfinity( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        //p_argument.get( 0 ).<DoubleMatrix2D>raw();
 
         return CFuzzyValue.from( true );
     }

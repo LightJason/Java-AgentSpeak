@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * returns the two-norm of a matrix
+ * returns the two-norm of a matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
 public final class CTwoNorm extends IAlgebra
 {

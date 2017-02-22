@@ -35,7 +35,9 @@ import java.util.List;
 
 
 /**
- * returns the determinant of a matrix
+ * returns the determinant of a matrix.
+ *
+ * @see https://en.wikipedia.org/wiki/Determinant
  */
 public final class CDeterminant extends IAlgebra
 {

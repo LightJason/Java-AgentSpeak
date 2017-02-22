@@ -37,7 +37,8 @@ import java.util.List;
 
 /**
  * action for geometric mean.
- * The action calculates \f$ \sqrt[i]{\prod_{i} x_i} \f$ over all arguments, action fails never
+ * The action calculates \f$ \sqrt[i]{\prod_{i} x_i} \f$
+ * over all unflatten arguments, action fails never
  * @code G = math/geometricmean( 1, 3, 9, [10, [11, 12]] ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Average

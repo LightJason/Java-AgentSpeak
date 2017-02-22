@@ -35,7 +35,10 @@ import java.util.List;
 
 
 /**
- * action for logarithm (base 10) value \f$ log_{10} x_i \f$
+ * action for logarithm (base 10) value.
+ * Calculates the logarithm of the base 10 \f$ log_{10} x_i \f$
+ * for all unflatten arguments
+ * @code [A|B|C] = math/log10( [1,2], 3 ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Logarithm
  */
