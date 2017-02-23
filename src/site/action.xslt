@@ -138,17 +138,17 @@
 
     <!-- latex formula -->
     <xsl:template match = "formula">
-        <xsl:text> </xsl:text>
+        <xsl:text> &lt;!-- htmlmin:ignore --&gt;</xsl:text>
         <xsl:apply-templates />
-        <xsl:text> </xsl:text>
+        <xsl:text>&lt;!-- htmlmin:ignore --&gt; </xsl:text>
     </xsl:template>
 
 
     <!-- program listing -->
     <xsl:template match = "programlisting">
-        <xsl:text> &lt;pre&gt;&lt;code&gt;</xsl:text>
+        <xsl:text> &lt;!-- htmlmin:ignore --&gt;&lt;pre&gt;&lt;code&gt;</xsl:text>
         <xsl:apply-templates />
-        <xsl:text>&lt;/code&gt;&lt;/pre&gt; </xsl:text>
+        <xsl:text>&lt;/code&gt;&lt;/pre&gt;&lt;!-- htmlmin:ignore --&gt; </xsl:text>
     </xsl:template>
 
     <xsl:template match = "codeline">
