@@ -88,6 +88,15 @@
             </xsl:for-each>
             <xsl:text>],</xsl:text>
 
+            <xsl:text>"bug": [</xsl:text>
+            <xsl:for-each select = "detaileddescription/para/xrefsect/xreftitle[text() = 'Bug']">
+                <xsl:text>"</xsl:text><xsl:value-of select = "../xrefdescription" /><xsl:text>"</xsl:text>
+                <xsl:choose>
+                    <xsl:when test = "position() != last()">,</xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
+            <xsl:text>],</xsl:text>
+
             <xsl:text>"warning": [</xsl:text>
             <xsl:for-each select = "detaileddescription/para/simplesect[@kind='warning']">
                 <xsl:text>"</xsl:text><xsl:value-of select = "para" /><xsl:text>"</xsl:text>
