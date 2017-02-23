@@ -90,7 +90,7 @@
 
             <xsl:text>"bug": [</xsl:text>
             <xsl:for-each select = "detaileddescription/para/xrefsect/xreftitle[text() = 'Bug']">
-                <xsl:text>"</xsl:text><xsl:value-of select = "../xrefdescription" /><xsl:text>"</xsl:text>
+                <xsl:text>"</xsl:text><xsl:value-of select = "../xrefdescription[count(.) = 1]" /><xsl:text>"</xsl:text>
                 <xsl:choose>
                     <xsl:when test = "position() != last()">,</xsl:when>
                 </xsl:choose>
