@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.generic.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -30,27 +30,25 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.nio.charset.Charset;
-import java.util.Base64;
 import java.util.List;
 
 
 /**
- * action to decodes a string with Base64.
- * Creates from each string argument, which is
- * based64 encoded the decoded string version,
- * the action never fails
- * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
+ * combines all arguments to a single result with the xor-operator.
+ * This action uses the logical exclusive-or
+ * to combine all logical arguments in a single
+ * result, the action never fails
+ * @code R = generic/bool/xor( Logical1, Logical2, Logical3, Logical4 ); @endcode
  *
- * @see https://en.wikipedia.org/wiki/Base64
+ * @see https://en.wikipedia.org/wiki/Exclusive_or
  */
-public final class CBase64Decode extends IBuildinAction
+public final class CXor extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CBase64Decode()
+    public CXor()
     {
         super( 3 );
     }
@@ -66,12 +64,7 @@ public final class CBase64Decode extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_argument.stream()
-                  .map( ITerm::<String>raw )
-                  .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
-                  .map( CRawTerm::from )
-                  .forEach( p_return::add );
-
+        p_return.add( CRawTerm.from( p_argument.stream().anyMatch( ITerm::<Boolean>raw ) && !p_argument.stream().allMatch( ITerm::<Boolean>raw ) ) );
         return CFuzzyValue.from( true );
     }
 

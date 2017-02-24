@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.generic.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -30,27 +30,25 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.nio.charset.Charset;
-import java.util.Base64;
 import java.util.List;
 
 
 /**
- * action to decodes a string with Base64.
- * Creates from each string argument, which is
- * based64 encoded the decoded string version,
- * the action never fails
- * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
+ * inverts all argument.
+ * This action uses the logical negation and
+ * inverts all logical boolean arguments and returns
+ * all elements, the action never fails
+ * @code [R1|R2|R3|R4] = generic/bool/not( Logical1, Logical2, Logical3, Logical4 ); @endcode
  *
- * @see https://en.wikipedia.org/wiki/Base64
+ * @see https://en.wikipedia.org/wiki/Negation
  */
-public final class CBase64Decode extends IBuildinAction
+public final class CNot extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CBase64Decode()
+    public CNot()
     {
         super( 3 );
     }
@@ -67,9 +65,8 @@ public final class CBase64Decode extends IBuildinAction
     )
     {
         p_argument.stream()
-                  .map( ITerm::<String>raw )
-                  .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
-                  .map( CRawTerm::from )
+                  .map( ITerm::<Boolean>raw )
+                  .map( i -> !i ).map( CRawTerm::from )
                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );

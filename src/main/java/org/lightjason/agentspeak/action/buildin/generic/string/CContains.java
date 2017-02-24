@@ -34,7 +34,11 @@ import java.util.List;
 
 
 /**
- * action to check string for a substring
+ * action to check string for containing another string.
+ * The action checks the first string argument if it contains
+ * all other arguments, but it returns the boolean result for
+ * each argument, the action never fails
+ * @code [L1|L2] = generic/string/contains("this is a long string", "long", "string"); @endcode
  */
 public final class CContains extends IBuildinAction
 {
@@ -60,7 +64,7 @@ public final class CContains extends IBuildinAction
     {
         final String l_string = p_argument.get( 0 ).raw();
 
-        p_argument.subList( 1, p_argument.size() ).stream()
+        p_argument.stream().skip( 1 )
                   .map( i -> l_string.contains( i.raw() ) )
                   .map( CRawTerm::from )
                   .forEach( p_return::add );

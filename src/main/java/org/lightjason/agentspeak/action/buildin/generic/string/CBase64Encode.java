@@ -33,11 +33,13 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
- * action to encodes a string with Base64
+ * action to encodes a string with Base64.
+ * Creates from each string argument the base64 encoded
+ * version, the action fails on encoding errors
+ * @code [A|B] = generic/string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Base64
  */
@@ -63,23 +65,20 @@ public final class CBase64Encode extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_argument.stream()
-                  .map( ITerm::<String>raw )
-                  .map( i -> {
-                      try
-                      {
-                          return Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) );
-                      }
-                      catch ( final UnsupportedEncodingException l_exception )
-                      {
-                          return null;
-                      }
-                  } )
-                  .filter( Objects::nonNull )
-                  .map( CRawTerm::from )
-                  .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.from(
+            p_argument.stream()
+                .map( ITerm::<String>raw )
+                .allMatch( i -> {
+                    try
+                    {
+                        p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
+                        return true;
+                    }
+                    catch ( final UnsupportedEncodingException l_exception )
+                    {
+                        return false;
+                    }
+                } )
+        );
     }
-
 }
