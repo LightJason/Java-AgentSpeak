@@ -51,7 +51,7 @@ public final class CTan extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument ).stream()
+        CCommon.flatcollection( p_argument )
                .mapToDouble( i -> i.<Number>raw().doubleValue() )
                .boxed()
                .map( Math::tan )

@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -53,7 +54,7 @@ public final class CMinIndex extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_list = CCommon.flatcollection( p_argument );
+        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
             IntStream.range( 0, l_list.size() - 1 ).parallel()

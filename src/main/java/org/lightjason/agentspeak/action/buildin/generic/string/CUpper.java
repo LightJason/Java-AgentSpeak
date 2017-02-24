@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -58,11 +59,11 @@ public final class CUpper extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_argument.stream()
-                  .map( ITerm::<String>raw )
-                  .map( String::toUpperCase )
-                  .map( CRawTerm::from )
-                  .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( String::toUpperCase )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

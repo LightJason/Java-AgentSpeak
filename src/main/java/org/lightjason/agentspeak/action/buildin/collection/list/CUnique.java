@@ -65,7 +65,7 @@ public final class CUnique extends IBuildinAction
     )
     {
         // first argument list reference
-        final List<?> l_result = new LinkedList<>( CCommon.flatcollection( p_argument ).stream().map( ITerm::raw ).collect( Collectors.toSet() ) );
+        final List<?> l_result = new LinkedList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result

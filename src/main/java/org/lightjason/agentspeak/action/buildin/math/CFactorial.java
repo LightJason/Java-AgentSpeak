@@ -57,7 +57,7 @@ public final class CFactorial extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument ).stream()
+        CCommon.flatcollection( p_argument )
                .map( i -> CombinatoricsUtils.factorial( i.<Number>raw().intValue() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );

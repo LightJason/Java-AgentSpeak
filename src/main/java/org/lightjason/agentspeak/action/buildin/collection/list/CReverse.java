@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -63,7 +64,7 @@ public final class CReverse extends IBuildinAction
     )
     {
         // all arguments are list references
-        p_return.addAll( Lists.reverse( CCommon.flatcollection( p_argument ) ) );
+        p_return.addAll( Lists.reverse( CCommon.flatcollection( p_argument ).collect( Collectors.toList() ) ) );
         return CFuzzyValue.from( true );
     }
 

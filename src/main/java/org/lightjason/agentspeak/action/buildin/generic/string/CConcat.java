@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -63,9 +64,9 @@ public final class CConcat extends IBuildinAction
     )
     {
         p_return.add( CRawTerm.from(
-            p_argument.stream()
-                      .map( ITerm::<String>raw )
-                      .collect( Collectors.joining() )
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::<String>raw )
+                   .collect( Collectors.joining() )
         ) );
         return CFuzzyValue.from( true );
     }

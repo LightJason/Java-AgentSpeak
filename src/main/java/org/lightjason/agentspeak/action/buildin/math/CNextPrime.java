@@ -53,7 +53,6 @@ public final class CNextPrime extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .stream()
                .map( i -> Primes.nextPrime( i.<Number>raw().intValue() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );

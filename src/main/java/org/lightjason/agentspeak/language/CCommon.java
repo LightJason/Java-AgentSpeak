@@ -240,11 +240,11 @@ public final class CCommon
      * a straight term list
      *
      * @param p_terms term collection
-     * @return flat term map
+     * @return flat term stream
      */
-    public static List<ITerm> flatcollection( final Collection<? extends ITerm> p_terms )
+    public static Stream<ITerm> flatcollection( final Collection<? extends ITerm> p_terms )
     {
-        return flattenToStream( p_terms ).collect( Collectors.toList() );
+        return flattenToStream( p_terms );
     }
 
     /**

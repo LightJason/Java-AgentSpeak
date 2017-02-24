@@ -31,7 +31,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -57,10 +56,10 @@ public final class CHarmonicMean extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Collection<ITerm> l_arguments = CCommon.flatcollection( p_argument );
+        final double l_arguments = CCommon.flatcollection( p_argument ).count();
 
         p_return.add( CRawTerm.from(
-            l_arguments.size() / l_arguments.stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).map( i -> 1 / i ).sum()
+            l_arguments / CCommon.flatcollection( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).map( i -> 1 / i ).sum()
         ) );
 
         return CFuzzyValue.from( true );

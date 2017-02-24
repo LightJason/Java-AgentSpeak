@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -66,19 +67,19 @@ public final class CBase64Encode extends IBuildinAction
     )
     {
         return CFuzzyValue.from(
-            p_argument.stream()
-                .map( ITerm::<String>raw )
-                .allMatch( i -> {
-                    try
-                    {
-                        p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
-                        return true;
-                    }
-                    catch ( final UnsupportedEncodingException l_exception )
-                    {
-                        return false;
-                    }
-                } )
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::<String>raw )
+                   .allMatch( i -> {
+                       try
+                       {
+                           p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
+                           return true;
+                       }
+                       catch ( final UnsupportedEncodingException l_exception )
+                       {
+                           return false;
+                       }
+                   } )
         );
     }
 }

@@ -62,7 +62,7 @@ public final class CInterpolate extends IBuildinAction
     {
         final UnivariateFunction l_function = p_argument.get( 0 ).raw();
 
-        CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) ).stream()
+        CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) )
                .mapToDouble( i -> i.<Number>raw().doubleValue() )
                .mapToObj( i -> CRawTerm.from( l_function.value( i ) ) )
                .forEach( p_return::add );
