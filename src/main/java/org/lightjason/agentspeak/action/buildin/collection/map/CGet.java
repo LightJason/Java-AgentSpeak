@@ -35,7 +35,11 @@ import java.util.Map;
 
 
 /**
- * returns an element of the map by its key value
+ * returns an element of the map.
+ * Returns a value of the map which is referenced
+ * by the key, the action fails if the map does not
+ * contains the key, first argument is the map, second the key
+ * @code V = collection/map/get( Map, "key" ); @endcode
  */
 public final class CGet extends IBuildinAction
 {
@@ -59,9 +63,15 @@ public final class CGet extends IBuildinAction
     )
     {
         // first argument map reference, second key-value
+        final Map<?, ?> l_map = p_argument.get( 0 ).<Map<?, ?>>raw();
+        final Object l_key = p_argument.get( 1 ).raw();
+
+        if ( !l_map.containsKey( l_key ) )
+            return CFuzzyValue.from( false );
+
         p_return.add(
             CRawTerm.from(
-                p_argument.get( 0 ).<Map<?, ?>>raw().get( p_argument.get( 1 ).raw() )
+                l_map.get( l_key )
             )
         );
         return CFuzzyValue.from( true );

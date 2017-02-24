@@ -35,7 +35,12 @@ import java.util.Map;
 
 
 /**
- * removes an element of the map
+ * removes elements from the map.
+ * Removes of possible all arguments from the map,
+ * first argument is the map reference all other
+ * arguments are key values returns the arguments
+ * (or null if not exists) and never fails
+ * @code [A|B|C] = collection/map/remove( Map, "a", 12, "c");  @endcode
  */
 public final class CRemove extends IBuildinAction
 {
@@ -59,11 +64,8 @@ public final class CRemove extends IBuildinAction
     )
     {
         // first argument map reference, second key-value
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<Map<?, ?>>raw().remove( p_argument.get( 1 ).raw() )
-            )
-        );
+        final Map<?, ?> l_map = p_argument.get( 0 ).<Map<?, ?>>raw();
+        p_argument.stream().skip( 1 ).map( i -> l_map.remove( i.raw() ) ).map( CRawTerm::from ).forEach( p_return::add );
         return CFuzzyValue.from( true );
     }
 

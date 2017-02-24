@@ -36,7 +36,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * creates a hashmap
+ * creates a hashmap.
+ * Returns an empty hashmap (key-value pair) and never fails
+ * @code M = collection/map/create(); @endcode
  */
 public final class CCreate extends IBuildinAction
 {

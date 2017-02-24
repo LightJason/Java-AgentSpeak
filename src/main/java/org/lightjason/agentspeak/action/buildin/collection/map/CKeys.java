@@ -30,12 +30,17 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
- * returns all key values of the map
+ * returns all key values of the map.
+ * Returns a list with all key values of the argument
+ * maps and fails never, all arguments must be maps
+ * @code L = collection/map/keys( Map1, Map2, Map3 ); @endcode
  */
 public final class CKeys extends IBuildinAction
 {
@@ -58,8 +63,16 @@ public final class CKeys extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument map reference
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<Map<?, ?>>raw().keySet() ) );
+        // arguments are map references
+        final List<?> l_result = p_argument.stream()
+                                           .flatMap( i -> i.<Map<?, ?>>raw().keySet().stream() )
+                                           .collect( Collectors.toList() );
+
+        p_return.add(
+            CRawTerm.from(
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            )
+        );
         return CFuzzyValue.from( true );
     }
 

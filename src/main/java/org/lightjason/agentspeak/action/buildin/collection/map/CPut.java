@@ -34,7 +34,11 @@ import java.util.Map;
 
 
 /**
- * adds an element to the map
+ * adds an element to all map arguments.
+ * First argument is a key value, second the value, all
+ * other values are map references, the key-value pair
+ * is added and the action never fails
+ * @code collection/map/put( "key", "value", Map1, Map2 ); @endcode
  */
 public final class CPut extends IBuildinAction
 {
@@ -57,8 +61,10 @@ public final class CPut extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument map reference, second key-value, third value
-        p_argument.get( 0 ).<Map<Object, Object>>raw().put( p_argument.get( 1 ).raw(), p_argument.get( 2 ).raw() );
+        // first key, second value, all other arguments are map references
+        p_argument.stream()
+                  .skip( 2 )
+                  .forEach( i -> i.<Map<Object, Object>>raw().put( p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }

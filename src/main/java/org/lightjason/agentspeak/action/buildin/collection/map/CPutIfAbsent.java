@@ -34,7 +34,11 @@ import java.util.Map;
 
 
 /**
- * adds an element to the map iif not exists
+ * adds an element to all map arguments iif not exists.
+ * First argument is a key value, second the value, all
+ * other values are map references, the key-value pair
+ * is added iif not exists and the action never fails
+ * @code collection/map/putifabsent( "key", "value", Map1, Map2 ); @endcode
  */
 public final class CPutIfAbsent extends IBuildinAction
 {
@@ -57,8 +61,10 @@ public final class CPutIfAbsent extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument map reference, second key-value
-        p_argument.get( 0 ).<Map<Object, Object>>raw().putIfAbsent( p_argument.get( 1 ).raw(), p_argument.get( 2 ).raw() );
+        // first key, second value, all other arguments are map references
+        p_argument.stream()
+                  .skip( 2 )
+                  .forEach( i -> i.<Map<Object, Object>>raw().putIfAbsent( p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }

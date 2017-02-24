@@ -32,10 +32,15 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.AbstractMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * unflats the tuple into variables
+ * unflats the tuples into variables.
+ * All arguments are tupels and each tupel
+ * will be extract into two variables, the
+ * action never fails
+ * @code [A|B|C|D] = collection/tupel/flat( Tupel1, Tupel2 ); @endcode
  */
 public final class CFlat extends IBuildinAction
 {
@@ -58,12 +63,11 @@ public final class CFlat extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            p_argument.get( 0 ).<AbstractMap.Entry<?, ?>>raw().getKey()
-        ) );
-        p_return.add( CRawTerm.from(
-                p_argument.get( 0 ).<AbstractMap.Entry<?, ?>>raw().getValue()
-        ) );
+        p_argument.stream()
+                  .map( ITerm::<AbstractMap.Entry<?, ?>>raw )
+                  .flatMap( i -> Stream.of( i.getKey(), i.getValue() ) )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

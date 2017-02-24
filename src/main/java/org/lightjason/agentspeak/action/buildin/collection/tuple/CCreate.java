@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.tuple;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -35,7 +36,11 @@ import java.util.List;
 
 
 /**
- * creates a tuple of two elements
+ * creates a tuple of two elements.
+ * The number of arguments must be even and each
+ * two elements will be combined into a tupel and
+ * never fails
+ * @code [A|B] = collection/tupel/create("A", "1", "B", "2"); @endcode
  */
 public final class CCreate extends IBuildinAction
 {
@@ -58,12 +63,14 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-                new AbstractMap.SimpleImmutableEntry<>(
-                        p_argument.get( 0 ).raw(),
-                        p_argument.get( 1 ).raw()
-                )
-        ) );
+        StreamUtils
+            .windowed( p_argument.stream(), 2 )
+            .map( i -> new AbstractMap.SimpleImmutableEntry<>(
+                        i.get( 0 ).raw(),
+                        i.get( 1 ).raw()
+            ) )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
