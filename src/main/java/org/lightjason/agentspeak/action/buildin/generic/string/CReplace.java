@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,7 +35,14 @@ import java.util.List;
 
 
 /**
- * action to replace any occurence within a string
+ * action to replace all occurence within a string.
+ * The action replaces the first argument with the second argument
+ * on each string beginning at the third argument and returns
+ * all replaced strings, the action never fails
+ * @code @endcode
+ *
+ * @note the first argument of the action be defined as a regular expression
+ * @see https://en.wikipedia.org/wiki/Regular_expression
  */
 public final class CReplace extends IBuildinAction
 {
@@ -58,13 +66,15 @@ public final class CReplace extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // input are three strings
-        p_return.add( CRawTerm.from(
-            p_argument.get( 0 ).<String>raw().replaceAll(
-                p_argument.get( 1 ).<String>raw(),
-                p_argument.get( 2 ).<String>raw()
-            )
-        ) );
+        final String l_search = p_argument.get( 0 ).<String>raw();
+        final String l_replace = p_argument.get( 1 ).<String>raw();
+
+        CCommon.flatcollection( p_argument )
+               .skip( 2 )
+               .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

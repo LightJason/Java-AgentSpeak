@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.generic.string;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,12 @@ import java.util.List;
 
 
 /**
- * action to create a random string
+ * action to create random strings, with a definied length.
+ * The first argument are the characters, that will be used to create the string,
+ * all other arguments are numbers to present the lnegth of the returning string
+ * and the action never fails
+ * @code [A|B|C] = generic/string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
+ *
  */
 public final class CRandom extends IBuildinAction
 {
@@ -51,7 +57,7 @@ public final class CRandom extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -59,14 +65,16 @@ public final class CRandom extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            p_argument.size() > 1
-            ? RandomStringUtils.random(
-                p_argument.get( 0 ).<Number>raw().intValue(),
-                p_argument.get( 1 ).<String>raw().toCharArray()
-            )
-            : RandomStringUtils.random( p_argument.get( 0 ).<Number>raw().intValue() )
-        ) );
+        final char[] l_characters = p_argument.get( 0 ).<String>raw().toCharArray();
+
+        CCommon.flatcollection( p_argument )
+            .skip( 1 )
+            .map( i -> RandomStringUtils.random(
+                           i.<Number>raw().intValue(),
+                            l_characters
+            ) )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

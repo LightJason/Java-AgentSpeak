@@ -166,7 +166,7 @@ myfunction(X) :- generic/print("my logical rule", X).
         SUpper = generic/string/upper("AbCdefg");
         SLower = generic/string/lower("AbCdefg");
         SReplace = generic/string/replace( "a1b1defg1xyz1ui", "1", "-" );
-        SRand = generic/string/random( 20, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" );
+        SRand = generic/string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
         generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SRand, "--", SReplace);
         generic/print();
 

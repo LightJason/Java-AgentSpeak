@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,7 +35,11 @@ import java.util.List;
 
 
 /**
- * action to check string for starts-with
+ * action to check string for ends-with.
+ * The acion checks the string, that is the first argument,
+ * with each other arguments for the operation ends-with,
+ * the action never fails
+ * @code [L1|L2] = generic/string/endswith("this is a long string", "long string", "string"); @endcode
  */
 public final class CEndsWith extends IBuildinAction
 {
@@ -60,10 +65,10 @@ public final class CEndsWith extends IBuildinAction
     {
         final String l_string = p_argument.get( 0 ).raw();
 
-        p_argument.subList( 1, p_argument.size() ).stream()
-                  .map( i -> l_string.endsWith( i.raw() ) )
-                  .map( CRawTerm::from )
-                  .forEach( p_return::add );
+        CCommon.flatcollection( p_argument ).skip( 1 )
+               .map( i -> l_string.endsWith( i.raw() ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
