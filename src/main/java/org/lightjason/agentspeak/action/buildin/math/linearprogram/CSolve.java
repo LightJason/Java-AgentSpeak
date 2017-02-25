@@ -49,7 +49,23 @@ import java.util.Objects;
 
 
 /**
- * solves the linear program
+ * solves the linear program and returns the solution.
+ * The action solves the linear program and returns the
+ * solution. The first argument is the linear program,
+ * all other arguments can be a number or a string with
+ * the definition:
+ *
+ * + maximize / minimize defines the optimization goal
+ * + non-negative defines all variables with non-negative values
+ * + number is the number of iteration for solving
+ *
+ * The return arguments are at the first the value, second
+ * the number of all referenced \f$ x_i \f$ points and after
+ * that all arguments the values of \f$ x_i \f$
+ * @code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" ); @encode
+ *
+ * @see https://en.wikipedia.org/wiki/Linear_programming
+ * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
 public final class CSolve extends IBuildinAction
 {
@@ -74,7 +90,7 @@ public final class CSolve extends IBuildinAction
     )
     {
         // first argument is the LP pair object, second argument is the goal-type (maximize / minimize),
-        // third & four argument can be the number of iterations or string with "non-negative" variables
+        // third & fourth argument can be the number of iterations or string with "non-negative" variables
         final List<OptimizationData> l_settings = new LinkedList<>();
 
         final Pair<LinearObjectiveFunction, Collection<LinearConstraint>> l_default = p_argument.get( 0 ).raw();
@@ -104,8 +120,6 @@ public final class CSolve extends IBuildinAction
                                  } )
                                  .filter( Objects::nonNull )
                                  .forEach( l_settings::add );
-
-
 
         // optimze and return
         final SimplexSolver l_lp = new SimplexSolver();

@@ -131,16 +131,16 @@
     <!-- detailed description -->
     <xsl:template match = "detaileddescription">
         <xsl:text>"detaildescription": "</xsl:text>
-        <xsl:apply-templates select = "para[count(descendant::*) &gt; 0 and count(text()) &gt; 0]" />
+        <xsl:apply-templates select = "para[count(simplesect) = 0]" />
         <xsl:text>"</xsl:text>
     </xsl:template>
 
 
     <!-- latex formula -->
     <xsl:template match = "formula">
-        <xsl:text> &lt;!-- htmlmin:ignore --&gt;</xsl:text>
+        <xsl:text>&lt;!-- htmlmin:ignore --&gt;</xsl:text>
         <xsl:apply-templates />
-        <xsl:text>&lt;!-- htmlmin:ignore --&gt; </xsl:text>
+        <xsl:text>&lt;!-- htmlmin:ignore --&gt;</xsl:text>
     </xsl:template>
 
 
@@ -148,12 +148,23 @@
     <xsl:template match = "programlisting">
         <xsl:text> &lt;!-- htmlmin:ignore --&gt;&lt;pre&gt;&lt;code&gt;</xsl:text>
         <xsl:apply-templates />
-        <xsl:text>&lt;/code&gt;&lt;/pre&gt;&lt;!-- htmlmin:ignore --&gt; </xsl:text>
+        <xsl:text>&lt;/code&gt;&lt;/pre&gt;&lt;!-- htmlmin:ignore --&gt;</xsl:text>
     </xsl:template>
 
     <xsl:template match = "codeline">
         <xsl:apply-templates />
         <xsl:text>\n</xsl:text>
+    </xsl:template>
+
+    <!-- list item to translate into html -->
+    <xsl:template match = "itemizedlist">
+        <xsl:text>&lt;ul&gt;</xsl:text>
+        <xsl:text>&lt;/ul&gt;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match = "listitem">
+        <xsl:text>&lt;li&gt;</xsl:text>
+        <xsl:text>&lt;/li&gt;</xsl:text>
     </xsl:template>
 
 

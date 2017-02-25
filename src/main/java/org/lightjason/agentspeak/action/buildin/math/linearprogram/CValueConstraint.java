@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.math.linearprogram;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -33,13 +34,27 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * add a linear value constraint to the LP with the definition
- * \f$ \sum_{i=1} c_i \cdot x_i   =      v \f$,
- * \f$ \sum_{i=1} c_i \cdot x_i   \geq   v \f$
- * \f$ \sum_{i=1} c_i \cdot x_i   \leq   v \f$
+ * add a linear value constraint to the LP.
+ * The action create a value constaint with one of
+ * the definitions:
+ *
+ * + \f$ \sum_{i=1} c_i \cdot x_i   =      v \f$
+ * + \f$ \sum_{i=1} c_i \cdot x_i   \geq   v \f$
+ * + \f$ \sum_{i=1} c_i \cdot x_i   \leq   v \f$
+ *
+ * the first \f$ n-2 \f$ arguments are the \f$ c_i \f$,
+ * the \f$ n-1 \f$ argument ist the relation symbol
+ * (\f$ = \f$, \f$ \geq \f$ or \f$ \leq \f$) as string
+ * and the last value is the \f$ v \f$ value and the action
+ * never fails
+ * @code math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Linear_programming
+ * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
 public final class CValueConstraint extends IConstraint
 {
@@ -63,14 +78,18 @@ public final class CValueConstraint extends IConstraint
                                                final List<ITerm> p_annotation
     )
     {
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
         // create linear constraint based on a value
-        p_argument.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
+        l_arguments.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
             new LinearConstraint(
-                p_argument.subList( 1, p_argument.size() - 2 ).stream()
-                          .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                          .toArray(),
-                this.getRelation( p_argument.get( p_argument.size() - 2 ).<String>raw() ),
-                p_argument.get( p_argument.size() - 1 ).<Number>raw().doubleValue()
+                l_arguments.stream()
+                       .limit( l_arguments.size() - 2 )
+                       .skip( 1 )
+                       .mapToDouble( i -> i.<Number>raw().doubleValue() )
+                       .toArray(),
+                this.getRelation( l_arguments.get( l_arguments.size() - 2 ).<String>raw() ),
+                l_arguments.get( l_arguments.size() - 1 ).<Number>raw().doubleValue()
             )
         );
 

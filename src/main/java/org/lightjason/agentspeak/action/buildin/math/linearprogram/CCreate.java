@@ -27,6 +27,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,11 +36,20 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to create a linear program with an
- * objective functions \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + d \f$
+ * action to create a linear program.
+ * This action creates the linear program with
+ * the objective functions \f$ \left( \sum_{i=1} c_i \cdot x_i \right) + d \f$,
+ * the first \f$ n-1 \f$ arguments are the \f$ c_i \f$ values (coefficients) and the last
+ * argument is the \f$ d \f$ value (constant) of the objective function, the action
+ * is never failing
+ * @code LP = math/linearprogram/create(1,2, [3, [4,5]], 10); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Linear_programming
+ * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
 public final class CCreate extends IBuildinAction
 {
@@ -55,7 +65,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -63,12 +73,15 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        final List<Double> l_arguments = CCommon.flatcollection( p_argument )
+                                                .map( i -> i.<Number>raw().doubleValue() )
+                                                .collect( Collectors.toList() );
+
         p_return.add( CRawTerm.from(
             new ImmutablePair<>(
                 new LinearObjectiveFunction(
-                    p_argument.subList( 0, p_argument.size() - 1 ).stream()
-                              .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray(),
-                    p_argument.get( p_argument.size() - 1 ).<Number>raw().doubleValue()
+                    l_arguments.stream().limit( l_arguments.size() - 1 ).mapToDouble( i -> i ).toArray(),
+                    l_arguments.get( l_arguments.size() - 1 )
                 ),
                 new HashSet<LinearConstraint>()
             )
