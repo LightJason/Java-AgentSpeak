@@ -62,7 +62,7 @@ import java.util.Objects;
  * The return arguments are at the first the value, second
  * the number of all referenced \f$ x_i \f$ points and after
  * that all arguments the values of \f$ x_i \f$
- * @code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" ); @encode
+ * @code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html

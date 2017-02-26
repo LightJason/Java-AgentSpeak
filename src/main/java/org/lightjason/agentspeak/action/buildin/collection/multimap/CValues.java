@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
+import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -33,15 +34,14 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
 /**
- * returns all values of the map.
+ * returns all values of the multimap.
  * Returns a list with all values of the argument
- * maps and fails never
- * @code L = collection/map/values( Map1, Map2, Map3 ); @endcode
+ * multimaps and fails never
+ * @code L = collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 ); @endcode
  */
 public final class CValues extends IBuildinAction
 {
@@ -66,8 +66,8 @@ public final class CValues extends IBuildinAction
     {
         // arguments are map references
         final List<?> l_result = CCommon.flatcollection( p_argument )
-                                                   .flatMap( i -> i.<Map<?, ?>>raw().values().stream() )
-                                                   .collect( Collectors.toList() );
+                                        .flatMap( i -> i.<Multimap<?, ?>>raw().values().stream() )
+                                        .collect( Collectors.toList() );
 
         p_return.add(
             CRawTerm.from(
