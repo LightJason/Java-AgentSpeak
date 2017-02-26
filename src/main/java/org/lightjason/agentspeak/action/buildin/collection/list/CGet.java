@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.collection.list;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -31,13 +32,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * returns an element of the list by the index.
- * The first argument is a list and the second an index, so the
- * action returns the element, the action fails never
- * @code V = collection/list/get( L, 2 ); @endcode
+ * The first argument is a list object and all other
+ * arguments are index values, so the action returns
+ * the elements, the action fails never
+ * @code
+    V = collection/list/get( L, 2, 7 );
+ * @endcode
  */
 public final class CGet extends IBuildinAction
 {
@@ -60,12 +65,15 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument list reference, second key-value
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<List<?>>raw().get( p_argument.get( 1 ).<Number>raw().intValue() )
-            )
-        );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<?> l_list = l_arguments.get( 0 ).<List<?>>raw();
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( i -> i.<Number>raw().intValue() )
+                   .map( l_list::get )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

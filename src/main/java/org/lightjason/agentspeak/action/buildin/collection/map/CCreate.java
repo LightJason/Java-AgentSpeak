@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,12 +34,16 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 
 /**
  * creates a hashmap.
- * Returns an empty hashmap (key-value pair) and never fails
+ * Returns an empty hashmap (key-value pair) and
+ * optional arguments must be even and it will create a key-value structure, the
+ * action fails on an odd number of arguments except zero only
  * @code M = collection/map/create(); @endcode
  */
 public final class CCreate extends IBuildinAction
@@ -61,7 +67,15 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( p_parallel ? new ConcurrentHashMap<>() : new HashMap<>() ) );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
+            return CFuzzyValue.from( false );
+
+        final Map<Object, Object> l_map = p_parallel ? new ConcurrentHashMap<>() : new HashMap<>();
+        StreamUtils.windowed( l_arguments.stream(), 2 )
+                   .forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+        p_return.add( CRawTerm.from( l_map ) );
+
         return CFuzzyValue.from( true );
     }
 

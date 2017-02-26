@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.collection.tuple;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -40,7 +41,7 @@ import java.util.List;
  * The number of arguments must be even and each
  * two elements will be combined into a tupel and
  * never fails
- * @code [A|B] = collection/tupel/create("A", "1", "B", "2"); @endcode
+ * @code [A|B] = collection/tupel/create("A", "1", ["B", "2"]); @endcode
  */
 public final class CCreate extends IBuildinAction
 {
@@ -64,7 +65,7 @@ public final class CCreate extends IBuildinAction
     )
     {
         StreamUtils
-            .windowed( p_argument.stream(), 2 )
+            .windowed( CCommon.flatcollection( p_argument ), 2 )
             .map( i -> new AbstractMap.SimpleImmutableEntry<>(
                         i.get( 0 ).raw(),
                         i.get( 1 ).raw()

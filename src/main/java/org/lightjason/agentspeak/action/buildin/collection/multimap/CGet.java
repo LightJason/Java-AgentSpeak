@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
 import com.google.common.collect.HashMultimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,10 +33,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
- * get a element-list of the multimap by key
+ * get a element-list of the multimap by key.
+ * The action can return multiple lists of elements by different keys,
+ * one key is needed and the action never failing
+ * @code
+    [A|B|C] = collection/multimap/get( Map, "key1", "key2", ["key3"] );
+ * @endcode
  */
 public final class CGet extends IBuildinAction
 {
@@ -58,13 +66,14 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument map reference, second key name
-        p_argument.get( 0 ).<HashMultimap<?, ?>>raw()
-            .asMap()
-            .get( p_argument.get( 1 ).raw() )
-            .parallelStream()
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final Map<?, ?> l_map = l_arguments.get( 0 ).<HashMultimap<?, ?>>raw().asMap();
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( i -> l_map.get( i.raw() ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

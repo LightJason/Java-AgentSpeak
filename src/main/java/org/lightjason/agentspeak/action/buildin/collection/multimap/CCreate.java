@@ -23,9 +23,11 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimaps;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -33,10 +35,18 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a multi-hashmap
+ * creates a multi-hashmap.
+ * The action creates a multi-hashmap object and returns the object,
+ * optional arguments must be even and it will create a key-value structure, the
+ * action fails on an odd number of arguments except zero only
+ * @code
+    M1 = collection/multimap/create();
+    M2 = collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
+ * @endcode
  */
 public final class CCreate extends IBuildinAction
 {
@@ -59,7 +69,14 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( p_parallel ? Multimaps.synchronizedSetMultimap( HashMultimap.create() ) : HashMultimap.create() ) );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
+            return CFuzzyValue.from( false );
+
+        final HashMultimap<Object, Object> l_map = HashMultimap.create();
+        StreamUtils.windowed( l_arguments.stream(), 2 ).forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+        p_return.add( CRawTerm.from( p_parallel ? Multimaps.synchronizedSetMultimap( l_map ) : l_map ) );
+
         return CFuzzyValue.from( true );
     }
 

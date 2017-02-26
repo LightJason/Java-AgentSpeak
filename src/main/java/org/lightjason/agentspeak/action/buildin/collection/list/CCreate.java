@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.collection.list;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -31,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,10 @@ import java.util.stream.Collectors;
  * creates a list.
  * Creates a list of the arguments, so each argument of the action is put to the list,
  * is the argument empty an empty-list object will be returned, the action fails never
- * @code L = collection/list/create("a", 1, "b", 2); @endcode
+ * @code
+    L1 = collection/list/create("a", 1, ["b", 2]);
+    L2 = collection/list/create();
+ * @endcode
  */
 public final class CCreate extends IBuildinAction
 {
@@ -63,8 +68,8 @@ public final class CCreate extends IBuildinAction
     )
     {
         final List<?> l_list = p_argument.isEmpty()
-                               ? Collections.emptyList()
-                               : p_argument.stream().map( ITerm::raw ).collect( Collectors.toList() );
+                               ? new LinkedList<>()
+                               : CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
             p_parallel

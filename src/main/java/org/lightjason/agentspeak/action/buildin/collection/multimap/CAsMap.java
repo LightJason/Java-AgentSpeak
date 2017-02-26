@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
 import com.google.common.collect.HashMultimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,13 @@ import java.util.List;
 
 
 /**
- * returns the multimap as map
+ * returns the multimap as map.
+ * Actions translates multimap objects into map objects,
+ * action never fails
+ * @code
+    X = collection/multimap/asmap( MultiMap );
+    [A|B] = collection/multimap/asmap( MultiMap1, MultiMap2 );
+ * @endcode
  */
 public final class CAsMap extends IBuildinAction
 {
@@ -58,8 +65,12 @@ public final class CAsMap extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument map reference
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<HashMultimap<?, ?>>raw().asMap() ) );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<HashMultimap<?, ?>>raw )
+               .map( i -> i.asMap() )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

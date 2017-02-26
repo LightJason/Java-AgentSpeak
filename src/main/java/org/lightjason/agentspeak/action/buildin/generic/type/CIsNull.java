@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,27 +32,19 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 
 /**
- * returns an element of the map.
- * Returns values of the map which is referenced
- * by the key, the action fails never, the first
- * argument is the map object, all other arguments are
- * the keys
- * @code
-    V1 = collection/map/get( Map, "key" );
-    [V2|V3] = collection/map/get( Map, "Key1", "Key2" );
- * @endcode
+ * action to check if a value is a null value
  */
-public final class CGet extends IBuildinAction
+public final class CIsNull extends IBuildinAction
 {
+
     /**
      * ctor
      */
-    public CGet()
+    public CIsNull()
     {
         super( 3 );
     }
@@ -60,7 +52,7 @@ public final class CGet extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -68,14 +60,11 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        final Map<?, ?> l_map = l_arguments.get( 0 ).<Map<?, ?>>raw();
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( i -> l_map.get( i.raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::raw )
+               .map( Objects::isNull )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
