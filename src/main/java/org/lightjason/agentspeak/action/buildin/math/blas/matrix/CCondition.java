@@ -36,7 +36,7 @@ import java.util.List;
 
 
 /**
- * returns the condition of a matrix,
+ * returns the condition of a matrix.
  * Calculates for each input matrix the condition number
  * and returns the value, the action never fails
  * @code [C1|C2] = math/blas/matrix/condition(M1,M2); @endcode

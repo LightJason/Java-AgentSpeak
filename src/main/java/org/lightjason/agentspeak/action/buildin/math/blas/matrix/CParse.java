@@ -42,8 +42,9 @@ import java.util.stream.IntStream;
 
 
 /**
- * creates a dense- or sparse-matrix from a string
- * semicolon splits the rows, spaces / comma splits the columns
+ * creates a dense- or sparse-matrix from a string.
+ *
+ * @note semicolon splits the rows, spaces / comma splits the columns
  */
 public final class CParse extends IBuildinAction
 {

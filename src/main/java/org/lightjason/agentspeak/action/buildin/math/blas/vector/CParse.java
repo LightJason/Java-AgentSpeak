@@ -38,8 +38,9 @@ import java.util.List;
 
 
 /**
- * creates a dense- or sparse-vector from as string
- * seperator is comma, semicolon or space
+ * creates a dense- or sparse-vector from as string.
+ *
+ * @note seperator is comma, semicolon or space
  */
 public final class CParse extends IBuildinAction
 {
