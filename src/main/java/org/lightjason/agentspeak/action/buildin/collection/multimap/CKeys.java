@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
+import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,15 +33,14 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
 /**
- * returns all key values of the map.
+ * returns all key values of the multimap.
  * Returns a unique list with all key values of the argument
- * maps and fails never, all arguments must be maps
- * @code L = collection/map/keys( Map1, Map2, Map3 ); @endcode
+ * maps and fails never, all arguments must be multimaps
+ * @code L = collection/map/keys( MultiMap1, MultiMap2, MultiMap3 ); @endcode
  */
 public final class CKeys extends IBuildinAction
 {
@@ -65,7 +65,7 @@ public final class CKeys extends IBuildinAction
     {
         // arguments are map references
         final List<?> l_result = p_argument.stream()
-                                           .flatMap( i -> i.<Map<?, ?>>raw().keySet().stream() )
+                                           .flatMap( i -> i.<Multimap<?, ?>>raw().keySet().stream() )
                                            .sorted()
                                            .distinct()
                                            .collect( Collectors.toList() );

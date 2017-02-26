@@ -21,33 +21,31 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
+import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
- * returns all key values of the map.
- * Returns a unique list with all key values of the argument
- * maps and fails never, all arguments must be maps
- * @code L = collection/map/keys( Map1, Map2, Map3 ); @endcode
+ * adds an element to all map arguments.
+ * First argument is a key value, second the value, all
+ * other values are map references, the key-value pair
+ * is added and the action never fails
+ * @code collection/map/put( "key", "value", MultiMap1, MultiMap2 ); @endcode
  */
-public final class CKeys extends IBuildinAction
+public final class CPut extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CKeys()
+    public CPut()
     {
         super( 3 );
     }
@@ -55,7 +53,7 @@ public final class CKeys extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -63,18 +61,11 @@ public final class CKeys extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // arguments are map references
-        final List<?> l_result = p_argument.stream()
-                                           .flatMap( i -> i.<Map<?, ?>>raw().keySet().stream() )
-                                           .sorted()
-                                           .distinct()
-                                           .collect( Collectors.toList() );
+        // first key, second value, all other arguments are map references
+        p_argument.stream()
+                  .skip( 2 )
+                  .forEach( i -> i.<Multimap<Object, Object>>raw().put( p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
 
-        p_return.add(
-            CRawTerm.from(
-                p_parallel ? Collections.synchronizedList( l_result ) : l_result
-            )
-        );
         return CFuzzyValue.from( true );
     }
 
