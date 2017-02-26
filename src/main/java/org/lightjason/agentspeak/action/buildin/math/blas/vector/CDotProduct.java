@@ -24,7 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,10 +34,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns sum of a vector
+ * returns dot-product of vectors.
+ * The action calculates for each tupel of vectors
+ * the dot-product, so the argument number must be odd
+ * otherwise the action fails
+ * @code [D1|D2] = math/blas/vector(V1V2, [V3, V4] ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Dot_product
  */
 public final class CDotProduct extends IBuildinAction
 {
@@ -58,11 +67,15 @@ public final class CDotProduct extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first and second argument must be a term with a vector object
-        p_return.add( CRawTerm.from(
-            p_argument.get( 0 ).<DoubleMatrix1D>raw()
-                .zDotProduct( p_argument.get( 1 ).<DoubleMatrix1D>raw() )
-        ) );
+        final List<DoubleMatrix1D> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed( l_arguments.stream(), 2 )
+                   .map( i -> i.get( 0 ).zDotProduct( i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 }

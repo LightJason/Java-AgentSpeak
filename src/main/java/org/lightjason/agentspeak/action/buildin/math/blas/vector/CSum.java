@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,10 @@ import java.util.List;
 
 
 /**
- * returns sum of a vector
+ * returns sum of a vector.
+ * Calculates for each input vector the sum and returns
+ * the value, the action never fails
+ * @code [S1|S2] = math/blas/vector/sum(V1,V2); @endcode
  */
 public final class CSum extends IBuildinAction
 {
@@ -58,8 +62,13 @@ public final class CSum extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a vector object
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix1D>raw().zSum() ) );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix1D>raw )
+               .map( DoubleMatrix1D::zSum )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 }
