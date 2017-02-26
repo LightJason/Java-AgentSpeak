@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * action to create random strings, with a definied length.
  * The first argument are the characters, that will be used to create the string,
- * all other arguments are numbers to present the lnegth of the returning string
+ * all other arguments are numbers to present the length of the returning string
  * and the action never fails
  * @code [A|B|C] = generic/string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
  *

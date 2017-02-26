@@ -35,7 +35,6 @@ import java.util.List;
 
 
 /**
- /**
  * action to check string for starts-with.
  * The acion checks the string, that is the first argument,
  * with each other arguments for the operation starts-with,

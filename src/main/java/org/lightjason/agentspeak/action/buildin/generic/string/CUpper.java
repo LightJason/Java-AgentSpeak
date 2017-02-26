@@ -38,7 +38,7 @@ import java.util.List;
  * action to create an upper-case string.
  * All arguments of the action will change
  * to a upper-case string and the action never fails
- * @code [A|B|C|D] = generic/string/upper("ABC", "EF", ["DE", "XYZ"]); @endcode
+ * @code [A|B|C|D] = generic/string/upper("AbC", "Ef", ["de", "XYZ"]); @endcode
  */
 public final class CUpper extends IBuildinAction
 {
