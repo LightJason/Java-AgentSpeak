@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -36,6 +37,9 @@ import java.util.List;
 
 /**
  * creates the trace of the matrix.
+ * Returns for each matrix input argument the
+ * trace, the action never fails
+ * @code [T1|T2] = math/blas/matrix/trace(M1,M2); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Trace_(linear_algebra)
  */
@@ -61,12 +65,12 @@ public final class CTrace extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.trace( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( ALGEBRA::trace )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

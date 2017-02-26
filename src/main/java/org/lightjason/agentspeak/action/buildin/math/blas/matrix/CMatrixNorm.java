@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,17 +36,20 @@ import java.util.List;
 
 
 /**
- * returns the frobenius-norm of a matrix.
+ * returns the frobenius- / matrix-norm of a matrix.
+ * For each input matrix object the frobenius- / matrix-norm
+ * is calculates and returned, the action never fails
+ * @code [N1|N2] = math/blas/matrix/matrixnorm(M1,M2); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
-public final class CFrobeniusNorm extends IAlgebra
+public final class CMatrixNorm extends IAlgebra
 {
 
     /**
      * ctor
      */
-    public CFrobeniusNorm()
+    public CMatrixNorm()
     {
         super( 4 );
     }
@@ -61,12 +65,12 @@ public final class CFrobeniusNorm extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.normF( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( ALGEBRA::normF )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -36,6 +37,9 @@ import java.util.List;
 
 /**
  * returns the determinant of a matrix.
+ * Calculates for each input matrix the determinat
+ * and returns it, the action never fails
+ * @code [D1|D2|D3] = math/blas/determinant(M1, [M2, M3]); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Determinant
  */
@@ -61,12 +65,12 @@ public final class CDeterminant extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.det( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        // input matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( ALGEBRA::det )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

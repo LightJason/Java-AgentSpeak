@@ -23,19 +23,34 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.jet.math.Mult;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
  * calculates the largest eigenvector with perron-frobenius theorem.
+ * The action calculates the largest eigenvector of a sequared matrix
+ * based on the perron-frobenius theorem, the calculation is \f$ E_{t+1} = M \cdot E_t \f$,
+ * the action uses on the first argument the number of iterations and all other argumentes
+ * are squared matrices, the returning arguments are the eigenvector for each matrix, the
+ * action never fails
+ * @code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);
  *
- * @bug not implement yet
  * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
  */
 public final class CPerronFrobenius extends IAlgebra
@@ -60,7 +75,37 @@ public final class CPerronFrobenius extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        //p_argument.get( 0 ).<DoubleMatrix2D>raw();
+        final Random l_random = ThreadLocalRandom.current();
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_annotation ).collect( Collectors.toList() );
+
+        // create eigenvectors
+        final List<DoubleMatrix1D> l_eigenvector = IntStream
+            .range( 0, l_arguments.size() - 1 )
+            .parallel()
+            .boxed()
+            .map( i -> new double[l_arguments.get( i ).<DoubleMatrix2D>raw().rows()] )
+            .map( DenseDoubleMatrix1D::new )
+            .map( i -> {
+                IntStream.range( 0, i.size() )
+                    .forEach( j -> i.setQuick( j, l_random.nextDouble() ) );
+                return i;
+            } )
+            .collect( Collectors.toList() );
+
+        // run iteration
+        IntStream.range( 0, l_arguments.get( 0 ).<Number>raw().intValue() )
+                 .forEach( i -> IntStream
+                     .range( 0, l_arguments.size() )
+                     .boxed()
+                     .parallel()
+                     .forEach( j -> {
+                         l_eigenvector.get( j ).assign( ALGEBRA.mult( l_arguments.get( j + 1 ).<DoubleMatrix2D>raw(), l_eigenvector.get( j ) ) );
+                         l_eigenvector.get( j ).assign( Mult.div( ALGEBRA.norm2( l_eigenvector.get( j ) ) ) );
+                     } ) );
+
+        l_eigenvector.stream()
+                     .map( CRawTerm::from )
+                     .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

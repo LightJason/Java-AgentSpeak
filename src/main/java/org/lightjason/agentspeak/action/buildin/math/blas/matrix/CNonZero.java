@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,10 @@ import java.util.List;
 
 
 /**
- * returns the number of non-zero cells
+ * returns the number of non-zero cells.
+ * Gets the number of non-zero cells on each matrix
+ * input and returns the value, the action never fails
+ * @code [NZ1|NZ2] = math/blas/matrix/nonzero(M1,M2); @endcode
  */
 public final class CNonZero extends IBuildinAction
 {
@@ -58,8 +62,13 @@ public final class CNonZero extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix2D>raw().cardinality() ) );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( DoubleMatrix2D::cardinality )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 }

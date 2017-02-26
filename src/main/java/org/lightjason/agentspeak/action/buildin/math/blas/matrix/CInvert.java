@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,12 @@ import java.util.List;
 
 
 /**
- * inverts the matrix
+ * inverts the matrix.
+ * Inverts each input matrix and returns
+ * it, the action never fails
+ * @code [I1|I2] = math/blas/matrix/invert(M1,M2); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Invertible_matrix
  */
 public final class CInvert extends IAlgebra
 {
@@ -59,12 +65,12 @@ public final class CInvert extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.inverse( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( ALGEBRA::inverse )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

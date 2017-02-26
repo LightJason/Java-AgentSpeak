@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,12 @@ import java.util.List;
 
 
 /**
- * transpose the matrix
+ * transpose a matrix.
+ * Creates for each input matrix the transposed
+ * matrix and returns it, the action never fails
+ * @code [T1|T2] = math/blas/matrix/transpose(M1,M2); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Transpose
  */
 public final class CTranspose extends IAlgebra
 {
@@ -59,12 +65,12 @@ public final class CTranspose extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.transpose( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( ALGEBRA::transpose )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

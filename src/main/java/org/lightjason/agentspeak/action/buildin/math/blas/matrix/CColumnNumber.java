@@ -24,7 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.AbstractMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +37,10 @@ import java.util.List;
 
 
 /**
- * returns the column number of a matrix
+ * returns the column number of a matrix.
+ * Reads the column number of each input matrix and returns
+ * the value, the action never fails.
+ * @code [C1|C2] = math/blas/matrix/columnnumber(M1,M2); @endcode
  */
 public final class CColumnNumber extends IBuildinAction
 {
@@ -58,12 +63,12 @@ public final class CColumnNumber extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<DoubleMatrix2D>raw().columns()
-            )
-        );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( AbstractMatrix2D::columns )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

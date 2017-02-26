@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -36,6 +37,9 @@ import java.util.List;
 
 /**
  * rank of the matrix.
+ * For each input matrix the rank is calculated and returned,
+ * the action never fails
+ * @code [R1|R2] = math/blas/matrix/rank(M1,M2); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
  */
@@ -61,12 +65,12 @@ public final class CRank extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.rank( p_argument.get( 0 ).<DoubleMatrix2D>raw() )
-            )
-        );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( ALGEBRA::rank )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
