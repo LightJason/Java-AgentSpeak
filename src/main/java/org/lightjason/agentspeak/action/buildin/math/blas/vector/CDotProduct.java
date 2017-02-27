@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * The action calculates for each tupel of vectors
  * the dot-product, so the argument number must be odd
  * otherwise the action fails
- * @code [D1|D2] = math/blas/vector(V1V2, [V3, V4] ); @endcode
+ * @code [D1|D2] = math/blas/vector(V1,V2, [V3, V4] ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Dot_product
  */

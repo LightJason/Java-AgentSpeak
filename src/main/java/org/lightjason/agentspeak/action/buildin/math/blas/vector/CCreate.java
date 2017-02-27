@@ -27,6 +27,7 @@ import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,10 +35,15 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a dense- or sparse-vector
+ * creates a dense- or sparse-vector.
+ * the first \f$ n-1 \$f arguments are the size of the vector,
+ * the last argument defines as string a dense or sparse vector (default
+ * is dense) and the action never fails
+ * @code [A|B|C] = math/blas/vector( 3, 2, 1, "dense | sparse"); @endcode
  */
 public final class CCreate extends IBuildinAction
 {
@@ -60,24 +66,44 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument is the element size,
-        // optional second argument is matrix type (default dense-matrix)
-        switch ( p_argument.size() > 1 ? EType.from( p_argument.get( 1 ).<String>raw() ) : EType.DENSE )
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int l_limit;
+        final EType l_type;
+        if ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+        {
+            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_limit = l_arguments.size() - 1;
+        }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = l_arguments.size();
+        }
+
+        // create vectors
+        switch ( l_type )
         {
             case DENSE:
-                p_return.add(
-                    CRawTerm.from( new DenseDoubleMatrix1D( p_argument.get( 0 ).<Number>raw().intValue() ) )
-                );
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( i -> i.<Number>raw().intValue() )
+                           .map( DenseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
                 break;
 
             case SPARSE:
-                p_return.add(
-                    CRawTerm.from( new SparseDoubleMatrix1D( p_argument.get( 0 ).<Number>raw().intValue() ) )
-                );
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( i -> i.<Number>raw().intValue() )
+                           .map( SparseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
                 break;
 
             default:
         }
+
         return CFuzzyValue.from( true );
     }
 
