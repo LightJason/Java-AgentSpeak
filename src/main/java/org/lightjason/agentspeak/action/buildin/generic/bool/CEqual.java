@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.generic.bool;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,24 +33,25 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * inverts all argument.
- * This action uses the logical negation and
- * inverts all logical boolean arguments and returns
- * all elements, the action never fails
- * @code [R1|R2|R3|R4] = generic/bool/not( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * checks elements of equality.
+ * The actions checks all tupel of arguments of equality and
+ * fails if the unflatten argument number is odd.
+ * @code [E1|E2] = generic/bool/equal( "this is equal", "this is equal", [123, "test"] ); @endcode
  *
- * @see https://en.wikipedia.org/wiki/Negation
+ * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * so keep in mind, that you use the correct number type on the argument input
  */
-public final class CNot extends IBuildinAction
+public final class CEqual extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CNot()
+    public CEqual()
     {
         super( 3 );
     }
@@ -65,10 +67,14 @@ public final class CNot extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<Boolean>raw )
-               .map( i -> !i ).map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed( l_arguments.stream(), 2 )
+                   .map( i -> i.get( 0 ).equals( i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

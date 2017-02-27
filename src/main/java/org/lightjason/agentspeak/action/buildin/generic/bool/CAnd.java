@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -38,7 +39,7 @@ import java.util.List;
  * This action uses the logical cpnjunction
  * to combine all logical arguments in a single
  * result, the action never fails
- * @code R = generic/bool/and( Logical1, Logical2, Logical3, Logical4 ); @endcode
+ * @code R = generic/bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Logical_conjunction
  */
@@ -64,7 +65,12 @@ public final class CAnd extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( p_argument.stream().allMatch( ITerm::<Boolean>raw ) ) );
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .allMatch( ITerm::<Boolean>raw )
+            )
+        );
         return CFuzzyValue.from( true );
     }
 

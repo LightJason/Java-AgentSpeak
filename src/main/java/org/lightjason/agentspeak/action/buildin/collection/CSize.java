@@ -23,21 +23,26 @@
 
 package org.lightjason.agentspeak.action.buildin.collection;
 
+import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 /**
  * returns the size of the collection.
- * The first parameter contains a collcation and the return argument is the size of this collection
- * @code S = collection/size( L ); @endcode
+ * All arguments must be collections and the action returns
+ * the size of each collection, the action never fails
+ * @code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel ); @endcode
+ *
+ * @note on non-collection type the action returns a zero value
  */
 public final class CSize extends IBuildinAction
 {
@@ -53,14 +58,36 @@ public final class CSize extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument list reference
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<Collection<?>>raw().size()
-            )
-        );
+        // any term type
+        CCommon.flatcollection( p_argument )
+               .map( CSize::size )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
 
+    /**
+     * returns the size of a collection type
+     * or zero on other
+     *
+     * @param p_term term value
+     * @return element number
+     */
+    private static long size( final ITerm p_term )
+    {
+        if ( CCommon.rawvalueAssignableTo( p_term, List.class ) )
+            return p_term.<List<?>>raw().size();
+
+        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+            return p_term.<Map<?, ?>>raw().size();
+
+        if ( CCommon.rawvalueAssignableTo( p_term, Multimap.class ) )
+            return p_term.<Multimap<?, ?>>raw().size();
+
+        if ( CCommon.rawvalueAssignableTo( p_term, Map.Entry.class ) )
+            return 2;
+
+        return 0;
+    }
 }

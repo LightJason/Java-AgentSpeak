@@ -35,21 +35,18 @@ import java.util.List;
 
 
 /**
- * inverts all argument.
- * This action uses the logical negation and
- * inverts all logical boolean arguments and returns
- * all elements, the action never fails
- * @code [R1|R2|R3|R4] = generic/bool/not( Logical1, [Logical2, Logical3], Logical4 ); @endcode
- *
- * @see https://en.wikipedia.org/wiki/Negation
+ * count the number of false values.
+ * This action counts the number of false
+ * values, the action never fails
+ * @code R = generic/bool/countfalse( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  */
-public final class CNot extends IBuildinAction
+public final class CCountFalse extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CNot()
+    public CCountFalse()
     {
         super( 3 );
     }
@@ -65,11 +62,14 @@ public final class CNot extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<Boolean>raw )
-               .map( i -> !i ).map( CRawTerm::from )
-               .forEach( p_return::add );
-
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .map( ITerm::<Boolean>raw )
+                       .filter( i -> !i )
+                       .count()
+            )
+        );
         return CFuzzyValue.from( true );
     }
 
