@@ -23,7 +23,12 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.jet.math.Functions;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -34,12 +39,13 @@ import java.util.List;
 
 /**
  * creates the graph laplacian.
+ * For each input matrix, which must be symmetric,
+ * the graph laplacian is calculated and returned,
+ * the action never fails
  *
- * @bug not implement yet
+ * @code [L1|L2] = math/blas/matrix/graphlaplacian( SymmetricMatrix1, SymmetricMatrix2 ); @endcode
  * @see https://en.wikipedia.org/wiki/Laplacian_matrix
- * @deprecated refactor
  */
-@Deprecated
 public final class CGraphLaplacian extends IAlgebra
 {
 
@@ -62,8 +68,18 @@ public final class CGraphLaplacian extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        //p_argument.get( 0 ).<DoubleMatrix2D>raw();
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( i -> DoubleFactory2D
+                   .sparse
+                   .identity( Math.max( i.columns(), i.rows() ) )
+                   .assign( Functions.mult( ALGEBRA.trace( i ) ) )
+                   .assign( i, ( n, m ) -> n - m )
+               )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
+
 }
