@@ -21,11 +21,13 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
+package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
-import cern.colt.bitvector.BitMatrix;
-import com.codepoetics.protonpack.StreamUtils;
+import cern.colt.bitvector.BitVector;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -33,22 +35,25 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a bit matrix.
- * All tuple arguments are defined the size of bit matrix, so
- * for each input tuple argument a bit matrix will be created and
- * returned, the action never fails
- * @code [A|B] = math/bit/matrix/create( 3,2, [1, 12] ); @endcode
+ * converts the bit vector to a blas vector.
+ * The action converts the bit vector to a blas vector,
+ * the last argument can be "dense" or "sparse", all
+ * other arguments are bit vectors and the actions
+ * never fails
+ * @code [A|B] = math/bit/vector/blas( Bit1, Bit2, "dense | sparse" ); @endcode
  */
-public final class CCreate extends IBuildinAction
+public final class CBlas extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCreate()
+    public CBlas()
     {
         super( 4 );
     }
@@ -64,19 +69,53 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        StreamUtils.windowed(
-            CCommon.flatcollection( p_argument )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-            2
-        )
-                   .map( i -> new BitMatrix( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int l_limit;
+        final EType l_type;
+        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        {
+            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_limit = l_arguments.size() - 1;
+        }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = l_arguments.size();
+        }
 
-        return CFuzzyValue.from( true );
+
+        // create vectors
+        switch ( l_type )
+        {
+            case DENSE:
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<BitVector>raw )
+                           .map( BitVector::elements )
+                           .map( i -> Arrays.stream( i ).mapToDouble( j -> j ).toArray() )
+                           .map( DenseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
+
+
+            case SPARSE:
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<BitVector>raw )
+                           .map( BitVector::elements )
+                           .map( i -> Arrays.stream( i ).mapToDouble( j -> j ).toArray() )
+                           .map( SparseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
+
+            default:
+        }
+
+        return CFuzzyValue.from( false );
     }
-
 }
-

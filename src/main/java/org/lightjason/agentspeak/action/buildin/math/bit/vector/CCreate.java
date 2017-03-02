@@ -21,7 +21,6 @@
  * @endcond
  */
 
-
 package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
 import cern.colt.bitvector.BitVector;

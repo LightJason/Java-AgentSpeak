@@ -63,7 +63,7 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_annotation )
+        CCommon.flatcollection( p_argument )
                .map( ITerm::<BitVector>raw )
                .map( BitVector::copy )
                .map( CRawTerm::from )
@@ -72,4 +72,3 @@ public final class CCopy extends IBuildinAction
         return CFuzzyValue.from( true );
     }
 }
-

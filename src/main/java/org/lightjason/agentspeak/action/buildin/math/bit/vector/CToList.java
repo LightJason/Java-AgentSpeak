@@ -21,10 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
+package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
-import cern.colt.bitvector.BitMatrix;
-import com.codepoetics.protonpack.StreamUtils;
+import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -33,22 +32,22 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a bit matrix.
- * All tuple arguments are defined the size of bit matrix, so
- * for each input tuple argument a bit matrix will be created and
- * returned, the action never fails
- * @code [A|B] = math/bit/matrix/create( 3,2, [1, 12] ); @endcode
+ * returns the long value of the bit vector.
  */
-public final class CCreate extends IBuildinAction
+public final class CToList extends IBuildinAction
 {
+
     /**
      * ctor
      */
-    public CCreate()
+    public CToList()
     {
         super( 4 );
     }
@@ -59,24 +58,19 @@ public final class CCreate extends IBuildinAction
         return 1;
     }
 
+
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        StreamUtils.windowed(
-            CCommon.flatcollection( p_argument )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-            2
-        )
-                   .map( i -> new BitMatrix( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<BitVector>raw )
+               .map( i -> Arrays.stream( i.elements() ).boxed().collect( Collectors.toList() ) )
+               .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
-
 }
-

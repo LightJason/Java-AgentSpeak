@@ -21,10 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
+package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
-import cern.colt.bitvector.BitMatrix;
-import com.codepoetics.protonpack.StreamUtils;
+import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,21 +33,22 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a bit matrix.
- * All tuple arguments are defined the size of bit matrix, so
- * for each input tuple argument a bit matrix will be created and
- * returned, the action never fails
- * @code [A|B] = math/bit/matrix/create( 3,2, [1, 12] ); @endcode
+ * returns for the index a boolean value.
+ * The action returns for the first argument, which
+ * is a bit vector, all boolean values for all
+ * given index values
+ * @code [B1|B3|B5] = math/bit/vector/bool( BitVector, 1, [3, 5] ); @endcode
  */
-public final class CCreate extends IBuildinAction
+public final class CBool extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCreate()
+    public CBool()
     {
         super( 4 );
     }
@@ -56,7 +56,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -64,19 +64,17 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        StreamUtils.windowed(
-            CCommon.flatcollection( p_argument )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-            2
-        )
-                   .map( i -> new BitMatrix( i.get( 0 ), i.get( 1 ) ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+               .skip( 1 )
+               .map( ITerm::<Number>raw )
+               .mapToInt( Number::intValue )
+               .boxed()
+               .map( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
-
 }
-
