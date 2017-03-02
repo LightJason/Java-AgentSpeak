@@ -98,27 +98,26 @@ public final class CSolve extends IBuildinAction
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
         p_argument.subList( 1, p_argument.size() ).stream()
-                  .map( i ->
-                        {
-                            if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
-                                return new MaxIter( i.raw() );
+                  .map( i -> {
+                      if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
+                          return new MaxIter( i.raw() );
 
-                            if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                                switch ( i.<String>raw().trim().toLowerCase() )
-                                {
-                                    case "non-negative":
-                                        return new NonNegativeConstraint( true );
-                                    case "maximize":
-                                        return GoalType.MAXIMIZE;
-                                    case "minimize":
-                                        return GoalType.MINIMIZE;
+                      if ( CCommon.rawvalueAssignableTo( i, String.class ) )
+                          switch ( i.<String>raw().trim().toLowerCase() )
+                          {
+                              case "non-negative":
+                                  return new NonNegativeConstraint( true );
+                              case "maximize":
+                                  return GoalType.MAXIMIZE;
+                              case "minimize":
+                                  return GoalType.MINIMIZE;
 
-                                    default:
-                                        return null;
-                                }
+                              default:
+                                  return null;
+                          }
 
-                            return null;
-                        } )
+                      return null;
+                  } )
                   .filter( Objects::nonNull )
                   .forEach( l_settings::add );
 

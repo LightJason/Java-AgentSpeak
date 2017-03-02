@@ -38,6 +38,7 @@ import java.util.List;
 
 /**
  * elementweise vector / matrix operation
+ * @deprecated refactor
  */
 @Deprecated
 public class CElementWise extends IBuildinAction

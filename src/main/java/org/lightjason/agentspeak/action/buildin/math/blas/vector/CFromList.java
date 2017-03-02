@@ -88,16 +88,15 @@ public final class CFromList extends IBuildinAction
                   .limit( l_limit )
                   .map( ITerm::<List<Number>>raw )
                   .map( i -> i.stream().mapToDouble( Number::doubleValue ).toArray() )
-                  .map( i ->
-                        {
-                            switch ( l_type )
-                            {
-                                case SPARSE:
-                                    return new SparseDoubleMatrix1D( i );
-                                default:
-                                    return new DenseDoubleMatrix1D( i );
-                            }
-                        } )
+                  .map( i -> {
+                      switch ( l_type )
+                      {
+                          case SPARSE:
+                              return new SparseDoubleMatrix1D( i );
+                          default:
+                              return new DenseDoubleMatrix1D( i );
+                      }
+                  } )
                   .map( CRawTerm::from )
                   .forEach( p_return::add );
 

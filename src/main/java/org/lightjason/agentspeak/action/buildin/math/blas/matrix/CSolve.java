@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * solver of matrix-equation \f$ A \cdot X = B \f$
+ * @deprecated refactor
  */
 @Deprecated
 public final class CSolve extends IAlgebra

@@ -37,6 +37,7 @@ import java.util.List;
  *
  * @bug not implement yet
  * @see https://en.wikipedia.org/wiki/Laplacian_matrix
+ * @deprecated refactor
  */
 @Deprecated
 public final class CNormalizedGraphLaplacian extends IAlgebra

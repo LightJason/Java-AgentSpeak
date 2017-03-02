@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
  * creates the singular value decomposition of a matrix.
  *
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
+ * @deprecated refactor
  */
 @Deprecated
 public final class CSingularValue extends IBuildinAction

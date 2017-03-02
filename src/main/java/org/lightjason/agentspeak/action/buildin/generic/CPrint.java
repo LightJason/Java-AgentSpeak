@@ -133,16 +133,18 @@ public final class CPrint extends IBuildinAction
     {
         return StringUtils.join( p_argument.stream()
                                            .map( ITerm::raw )
-                                           .map( i ->
-                                                 {
-                                                     if ( i == null )
-                                                         return "";
+                                           .map( i -> {
+                                               if ( i == null )
+                                                   return "";
 
-                                                     final IFormatter<?> l_formatter = m_formatter.parallelStream()
-                                                                                                  .filter( j -> j.isAssignableTo( i.getClass() ) )
-                                                                                                  .limit( 1 ).findFirst().orElse( null );
-                                                     return l_formatter == null ? i.toString() : l_formatter.toString( i );
-                                                 } )
+                                               final IFormatter<?> l_formatter = m_formatter.parallelStream()
+                                                                                          .filter( j -> j.isAssignableTo( i.getClass() ) )
+                                                                                          .limit( 1 )
+                                                                                          .findFirst()
+                                                                                          .orElse( null );
+
+                                               return l_formatter == null ? i.toString() : l_formatter.toString( i );
+                                           } )
                                            .collect( Collectors.toList() ), m_seperator );
     }
 

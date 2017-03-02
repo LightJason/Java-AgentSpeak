@@ -177,10 +177,10 @@ myfunction(X) :- generic/print("my logical rule", X).
         // --- blas arithmetic ---------------------------------------------------------------------------------------------------------------------------------
 
         M = math/blas/matrix/create(2,2);
-        math/blas/matrix/set(M, 0,0, 1);
-        math/blas/matrix/set(M, 0,1, 2);
-        math/blas/matrix/set(M, 1,0, 3);
-        math/blas/matrix/set(M, 1,1, 4);
+        math/blas/matrix/set(0,0, 1, M);
+        math/blas/matrix/set(0,1, 2, M);
+        math/blas/matrix/set(1,0, 3, M);
+        math/blas/matrix/set(1,1, 4, M);
         Det = math/blas/matrix/determinant(M);
         EV  = math/blas/matrix/eigenvalue(M);
         generic/print("matrix", M,Det,EV);

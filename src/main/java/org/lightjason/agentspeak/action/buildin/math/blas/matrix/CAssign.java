@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * assigns a value or matrix to all elements
+ * @deprecated refactor
  */
 @Deprecated
 public final class CAssign extends IBuildinAction

@@ -68,25 +68,24 @@ public final class CEncrypt extends IBuildinAction
 
         return CFuzzyValue.from( p_argument.subList( 1, p_argument.size() ).stream()
                                            .map( i -> SerializationUtils.serialize( i.raw() ) )
-                                           .allMatch( i ->
-                                                      {
-                                                          try
-                                                          {
-                                                              p_return.add(
-                                                                  CRawTerm.from(
-                                                                      Base64.getEncoder().encodeToString(
-                                                                          l_algorithm.getEncryptCipher( l_key ).doFinal( i )
-                                                                      )
-                                                                  )
-                                                              );
-                                                              return true;
-                                                          }
-                                                          catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                                              | BadPaddingException | IllegalBlockSizeException l_exception )
-                                                          {
-                                                              return false;
-                                                          }
-                                                      } )
+                                           .allMatch( i -> {
+                                               try
+                                               {
+                                                   p_return.add(
+                                                       CRawTerm.from(
+                                                           Base64.getEncoder().encodeToString(
+                                                               l_algorithm.getEncryptCipher( l_key ).doFinal( i )
+                                                           )
+                                                       )
+                                                   );
+                                                   return true;
+                                               }
+                                               catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                                                    | BadPaddingException | IllegalBlockSizeException l_exception )
+                                               {
+                                                   return false;
+                                               }
+                                           } )
         );
     }
 

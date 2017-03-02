@@ -45,6 +45,7 @@ import java.util.stream.IntStream;
  * creates a dense- or sparse-matrix from a string.
  *
  * @note semicolon splits the rows, spaces / comma splits the columns
+ * @deprecated refactor
  */
 @Deprecated
 public final class CParse extends IBuildinAction
@@ -109,11 +110,10 @@ public final class CParse extends IBuildinAction
                                    .boxed()
                                    .collect( Collectors.toList() )
                   )
-                  .mapToInt( i ->
-                             {
-                                 l_matrix.add( i );
-                                 return i.size();
-                             } )
+                  .mapToInt( i -> {
+                      l_matrix.add( i );
+                      return i.size();
+                  } )
                   .max()
                   .orElseThrow( () -> new CRuntimeException( p_context ) )
             ];

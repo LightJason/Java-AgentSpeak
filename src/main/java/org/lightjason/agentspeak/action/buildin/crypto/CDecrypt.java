@@ -68,25 +68,24 @@ public final class CDecrypt extends IBuildinAction
 
         return CFuzzyValue.from( p_argument.subList( 1, p_argument.size() ).stream()
                                            .map( i -> Base64.getDecoder().decode( i.<String>raw() ) )
-                                           .allMatch( i ->
-                                                      {
-                                                          try
-                                                          {
-                                                              p_return.add(
-                                                                  CRawTerm.from(
-                                                                      SerializationUtils.deserialize(
-                                                                          l_algorithm.getDecryptCipher( l_key ).doFinal( i )
-                                                                      )
-                                                                  )
-                                                              );
-                                                              return true;
-                                                          }
-                                                          catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                                              | BadPaddingException | IllegalBlockSizeException l_exception )
-                                                          {
-                                                              return false;
-                                                          }
-                                                      } )
+                                           .allMatch( i -> {
+                                               try
+                                               {
+                                                   p_return.add(
+                                                        CRawTerm.from(
+                                                            SerializationUtils.deserialize(
+                                                                l_algorithm.getDecryptCipher( l_key ).doFinal( i )
+                                                            )
+                                                        )
+                                                   );
+                                                   return true;
+                                               }
+                                               catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                                                      | BadPaddingException | IllegalBlockSizeException l_exception )
+                                               {
+                                                   return false;
+                                               }
+                                           } )
         );
     }
 

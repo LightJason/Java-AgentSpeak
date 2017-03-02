@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
  * creates the eigenvalues of a matrix.
  *
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
+ * @deprecated refactor
  */
 @Deprecated
 public final class CEigenValue extends IBuildinAction

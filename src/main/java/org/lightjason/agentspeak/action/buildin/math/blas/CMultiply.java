@@ -37,6 +37,7 @@ import java.util.List;
 
 /**
  * defines matrix- / vector-products
+ * @deprecated refactor
  */
 @Deprecated
 public final class CMultiply extends IAlgebra
