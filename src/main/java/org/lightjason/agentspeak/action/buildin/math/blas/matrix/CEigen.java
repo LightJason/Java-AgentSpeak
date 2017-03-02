@@ -26,31 +26,31 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * creates the eigenvalues of a matrix.
+ * creates the real eigenvalues and eigenvectors of a matrix.
+ * For each input matrix argument the eigen decomposition
+ * is executed and two elements eigenvalues (as vector) and
+ * eigenvectors (as matrix) are returned, the action never fails.
  *
+ * @code [Values1|Vectors1|Values2|Vectors2] = math/blas/matrix/eigen( Matrix1, Matrix2 ); @endcode
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
- * @deprecated refactor
  */
-@Deprecated
-public final class CEigenValue extends IBuildinAction
+public final class CEigen extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CEigenValue()
+    public CEigen()
     {
         super( 4 );
     }
@@ -66,18 +66,13 @@ public final class CEigenValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // argument must be a term with a matrix object
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedList(
-                Arrays.stream(
-                    new EigenvalueDecomposition( p_argument.get( 0 ).<DoubleMatrix2D>raw() ).getRealEigenvalues().toArray()
-                ).boxed().sorted().collect( Collectors.toList() )
-            )
-            : Arrays.stream(
-                new EigenvalueDecomposition( p_argument.get( 0 ).<DoubleMatrix2D>raw() ).getRealEigenvalues().toArray()
-            ).boxed().sorted().collect( Collectors.toList() )
-        ) );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( EigenvalueDecomposition::new )
+               .forEach( i -> {
+                   p_return.add( CRawTerm.from( i.getRealEigenvalues() ) );
+                   p_return.add( CRawTerm.from( i.getV() ) );
+               } );
 
         return CFuzzyValue.from( true );
     }

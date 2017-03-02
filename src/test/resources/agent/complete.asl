@@ -182,8 +182,8 @@ myfunction(X) :- generic/print("my logical rule", X).
         math/blas/matrix/set(1,0, 3, M);
         math/blas/matrix/set(1,1, 4, M);
         Det = math/blas/matrix/determinant(M);
-        EV  = math/blas/matrix/eigenvalue(M);
-        generic/print("matrix", M,Det,EV);
+        [EVal|EVec]  = math/blas/matrix/eigen(M);
+        generic/print("matrix", M,Det,EVal,EVec);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

@@ -28,6 +28,7 @@ import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.error.CRuntimeException;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -43,11 +44,14 @@ import java.util.stream.IntStream;
 
 /**
  * creates a dense- or sparse-matrix from a string.
+ * The action parses each argument and returns the matrix object,
+ * the last argument can be a string with "dense" or "sparse" to
+ * defining a dense or sparse matrix, all other arguments string with
+ * a semicolon and space / comma seperated list, the action never fails
  *
+ * @code [A|B|C] = math/blas/matrix/parse("1,2;3,4", "5 6 7; 8 9 10", "dense|sparse" ) @endcode
  * @note semicolon splits the rows, spaces / comma splits the columns
- * @deprecated refactor
  */
-@Deprecated
 public final class CParse extends IBuildinAction
 {
     /**
@@ -69,34 +73,61 @@ public final class CParse extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( p_argument.size() > 1 ? EType.from( p_argument.get( 1 ).<String>raw() ) : EType.DENSE )
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int l_limit;
+        final EType l_type;
+        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        {
+            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_limit = l_arguments.size() - 1;
+        }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = l_arguments.size();
+        }
+
+
+        // create vectors
+        switch ( l_type )
         {
             case DENSE:
-                p_return.add(
-                    CRawTerm.from( new DenseDoubleMatrix2D( CParse.parse( p_context, p_argument.get( 0 ).<String>raw() ) ) )
-                );
-                break;
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<String>raw )
+                           .map( i -> CParse.parse( i, p_context ) )
+                           .map( DenseDoubleMatrix2D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
 
             case SPARSE:
-                p_return.add(
-                    CRawTerm.from( new SparseDoubleMatrix2D( CParse.parse( p_context, p_argument.get( 0 ).<String>raw() ) ) )
-                );
-                break;
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<String>raw )
+                           .map( i -> CParse.parse( i, p_context ) )
+                           .map( SparseDoubleMatrix2D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
 
             default:
         }
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.from( false );
     }
 
     /**
      * parse the string in a list of lists with doubles
      *
-     * @param p_context execution context
      * @param p_string string
+     * @param p_context execution context
      * @return 2D double array
      */
-    private static double[][] parse( final IContext p_context, final String p_string )
+    private static double[][] parse( final String p_string, final IContext p_context )
     {
         final String[] l_rows = p_string.split( ";" );
         final List<List<Double>> l_matrix = new ArrayList<>();

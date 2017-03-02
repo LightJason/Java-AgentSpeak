@@ -96,7 +96,8 @@ public final class CParse extends IBuildinAction
                            .map( DenseDoubleMatrix1D::new )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
-                break;
+
+                return CFuzzyValue.from( true );
 
             case SPARSE:
                 l_arguments.stream()
@@ -106,12 +107,13 @@ public final class CParse extends IBuildinAction
                            .map( SparseDoubleMatrix1D::new )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
-                break;
+
+                return CFuzzyValue.from( true );
 
             default:
         }
 
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.from( false );
     }
 
     /**
