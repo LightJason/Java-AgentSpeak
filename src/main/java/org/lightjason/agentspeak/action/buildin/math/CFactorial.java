@@ -58,7 +58,10 @@ public final class CFactorial extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .map( i -> CombinatoricsUtils.factorial( i.<Number>raw().intValue() ) )
+               .map( ITerm::<Number>raw )
+               .mapToInt( Number::intValue )
+               .boxed()
+               .map( CombinatoricsUtils::factorial )
                .map( CRawTerm::from )
                .forEach( p_return::add );
         return CFuzzyValue.from( true );

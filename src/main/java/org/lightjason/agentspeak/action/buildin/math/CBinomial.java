@@ -23,8 +23,10 @@
 
 package org.lightjason.agentspeak.action.buildin.math;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -37,8 +39,9 @@ import java.util.List;
 /**
  * action for calculating binomial coefficient.
  * Calcluates \f$ \binom{n}{k} \f$, where n is the
- * first argument and k the second, the action fails never
- * @code B = math/binomial( 49, 6 ); @endcode
+ * first argument and k the second of each given input
+ * tupel, the action fails never
+ * @code [B1|B2] = math/binomial( 49, 6,  30, 5 ); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
@@ -56,12 +59,17 @@ public final class CBinomial extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            CombinatoricsUtils.binomialCoefficient(
-                p_argument.get( 0 ).<Number>raw().intValue(),
-                p_argument.get( 1 ).<Number>raw().intValue()
-            )
-        ) );
+        StreamUtils.windowed(
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::<Number>raw )
+                   .mapToInt( Number::intValue )
+                   .boxed(),
+            2
+        )
+            .map( i -> CombinatoricsUtils.binomialCoefficient( i.get( 0 ), i.get( 1 ) ) )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

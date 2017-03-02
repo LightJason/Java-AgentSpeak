@@ -58,9 +58,14 @@ public final class CHarmonicMean extends IBuildinAction
     {
         final double l_arguments = CCommon.flatcollection( p_argument ).count();
 
-        p_return.add( CRawTerm.from(
-            l_arguments / CCommon.flatcollection( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).map( i -> 1 / i ).sum()
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                l_arguments / CCommon.flatcollection( p_argument )
+                                     .map( ITerm::<Number>raw )
+                                     .mapToDouble( Number::doubleValue )
+                                     .map( i -> 1 / i ).sum()
+            )
+        );
 
         return CFuzzyValue.from( true );
     }

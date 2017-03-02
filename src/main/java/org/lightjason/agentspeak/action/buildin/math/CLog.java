@@ -58,7 +58,8 @@ public final class CLog extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::log )
                .map( CRawTerm::from )

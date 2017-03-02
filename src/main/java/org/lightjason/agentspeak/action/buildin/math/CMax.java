@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,7 +35,11 @@ import java.util.List;
 
 
 /**
- * action for maximum \f$ max( x_0, x_1, \ldots, x_i ) \f$
+ * action for maximum.
+ * The action calculates for all unflatten arguments
+ * the maxmimum with \f$ max( x_0, x_1, \ldots, x_i ) \f$,
+ * the action never fails
+ * @code Max = math/max( 2, 5, 7, [3, 2] ); @endcode
  */
 public final class CMax extends IBuildinAction
 {
@@ -52,9 +55,14 @@ public final class CMax extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            CCommon.flatcollection( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).max().orElseThrow( () -> new CRuntimeException( p_context ) )
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .map( ITerm::<Number>raw )
+                       .mapToDouble( Number::doubleValue )
+                       .max()
+            )
+        );
         return CFuzzyValue.from( true );
     }
 }

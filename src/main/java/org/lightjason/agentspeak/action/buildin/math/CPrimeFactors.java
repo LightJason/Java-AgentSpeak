@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math;
 
 import org.apache.commons.math3.primes.Primes;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,13 @@ import java.util.List;
 
 
 /**
- * action for creating prime factors
+ * action for creating prime factors list.
+ * For each argument the action returns a list
+ * of prime factors and fails never.
+ * @code [L1|L2] = math/primfactors( 8, [120] ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Prime_number
+ * @see https://en.wikipedia.org/wiki/Primality_test
  */
 public final class CPrimeFactors extends IBuildinAction
 {
@@ -51,7 +58,14 @@ public final class CPrimeFactors extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( Primes.nextPrime( p_argument.get( 0 ).<Number>raw().intValue() ) ) );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<Number>raw )
+               .mapToInt( Number::intValue )
+               .boxed()
+               .map( Primes::primeFactors )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

@@ -38,7 +38,11 @@ import java.util.stream.IntStream;
 
 
 /**
- * action for index of minimum
+ * action for index of minimum.
+ * The action takes of the given unflatten input the minimum and
+ * returns the index within the unflatten argument list, the
+ * action never fails
+ * @code MinIndex = math/minindex( 5, 6, [7,8, [1,2,3]] ); @endcode
  */
 public final class CMinIndex extends IBuildinAction
 {
@@ -54,15 +58,20 @@ public final class CMinIndex extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<Double> l_list = CCommon.flatcollection( p_argument )
+                                           .map( ITerm::<Number>raw )
+                                           .mapToDouble( Number::doubleValue )
+                                           .boxed()
+                                           .collect( Collectors.toList() );
 
-        p_return.add( CRawTerm.from(
-            IntStream.range( 0, l_list.size() - 1 ).parallel()
-                     .reduce( ( i, j ) ->
-                                  l_list.get( i ).<Number>raw().doubleValue() < l_list.get( j ).<Number>raw().doubleValue()
-                                  ? i : j
-                     ).orElseThrow( () -> new CRuntimeException( p_context ) )
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                IntStream.range( 0, l_list.size() - 1 )
+                     .parallel()
+                     .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
+                     .orElseThrow( () -> new CRuntimeException( p_context ) )
+            )
+        );
 
         return CFuzzyValue.from( true );
     }

@@ -57,7 +57,8 @@ public final class CCeil extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .mapToDouble( i ->  i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::ceil )
                .map( CRawTerm::from )

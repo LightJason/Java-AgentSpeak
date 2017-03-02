@@ -56,7 +56,8 @@ public final class CAbs extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::abs )
                .map( CRawTerm::from )

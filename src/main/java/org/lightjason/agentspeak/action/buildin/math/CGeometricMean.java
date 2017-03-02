@@ -58,9 +58,16 @@ public final class CGeometricMean extends IBuildinAction
     {
         final long l_arguments = CCommon.flatcollection( p_argument ).count();
 
-        p_return.add( CRawTerm.from(
-            Math.pow( CCommon.flatcollection( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).reduce( 1, ( i, j ) -> i * j ), 1.0 / l_arguments )
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                Math.pow(
+                    CCommon.flatcollection( p_argument )
+                       .map( ITerm::<Number>raw )
+                       .mapToDouble( Number::doubleValue )
+                       .reduce( 1, ( i, j ) -> i * j ), 1.0 / l_arguments
+                )
+            )
+        );
 
         return CFuzzyValue.from( true );
     }

@@ -57,7 +57,8 @@ public final class CCosh extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::cosh )
                .map( CRawTerm::from )

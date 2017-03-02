@@ -36,7 +36,13 @@ import java.util.List;
 
 
 /**
- * action for create the next prime number
+ * action for create the next prime number.
+ * The action calculates the next prime number relative to
+ * the given argument value, the action never fails
+ * @code [A|B|C] = math/nextprime( [12, [144, 1096]] ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Prime_number
+ * @see https://en.wikipedia.org/wiki/Primality_test
  */
 public final class CNextPrime extends IBuildinAction
 {
@@ -53,7 +59,8 @@ public final class CNextPrime extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .map( i -> Primes.nextPrime( i.<Number>raw().intValue() ) )
+               .map( ITerm::<Number>raw )
+               .map( i -> Primes.nextPrime( i.intValue() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

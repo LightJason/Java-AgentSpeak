@@ -57,7 +57,8 @@ public final class CRadians extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( Math::toRadians )
                .map( CRawTerm::from )

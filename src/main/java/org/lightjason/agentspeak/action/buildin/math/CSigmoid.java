@@ -64,7 +64,8 @@ public final class CSigmoid extends IBuildinAction
             p_argument.get( 0 ).<Double>raw() / ( p_argument.get( 1 ).<Double>raw() + Math.exp( -p_argument.get( 2 ).<Double>raw() ) * i );
 
         CCommon.flatcollection( p_argument )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( l_sigmoid )
                .map( CRawTerm::from )

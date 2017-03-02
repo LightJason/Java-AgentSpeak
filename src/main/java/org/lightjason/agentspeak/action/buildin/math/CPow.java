@@ -59,7 +59,8 @@ public final class CPow extends IBuildinAction
         final double l_exponent = p_argument.get( 0 ).raw();
 
         CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
+               .map( ITerm::<Number>raw )
+               .mapToDouble( Number::doubleValue )
                .boxed()
                .map( i -> Math.pow( i, l_exponent ) )
                .map( CRawTerm::from )

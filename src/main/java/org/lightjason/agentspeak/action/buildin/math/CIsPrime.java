@@ -41,6 +41,7 @@ import java.util.List;
  * and returns a boolean of this check, the actions never fails
  * @code [P1|P2] = math/isprime(3, 4); @endcode
  *
+ * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */
 public final class CIsPrime extends IBuildinAction
@@ -58,7 +59,8 @@ public final class CIsPrime extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .map( i -> Primes.isPrime( i.<Number>raw().intValue() ) )
+               .map( ITerm::<Number>raw )
+               .map( i -> Primes.isPrime( i.intValue() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
