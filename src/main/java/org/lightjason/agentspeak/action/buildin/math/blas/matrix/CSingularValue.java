@@ -24,27 +24,28 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.linalg.SingularValueDecomposition;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
  * creates the singular value decomposition of a matrix.
+ * For each input matrix the singular value decompisition is
+ * called and the values, and the two matrixes (left / right)
+ * are returned, the action never fails
  *
+ * @code [Values1|U1|V1|Values2|U2|V2] = blas/matrix/singularvalue(Matrix1, Matrix2); @endcode
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
- * @deprecated refactor
  */
-@Deprecated
 public final class CSingularValue extends IBuildinAction
 {
     /**
@@ -66,18 +67,14 @@ public final class CSingularValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // argument must be a term with a matrix object
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedList(
-                Arrays.stream(
-                    new SingularValueDecomposition( p_argument.get( 0 ).<DoubleMatrix2D>raw() ).getSingularValues()
-                ).boxed().sorted().collect( Collectors.toList() )
-            )
-            : Arrays.stream(
-                new SingularValueDecomposition( p_argument.get( 0 ).<DoubleMatrix2D>raw() ).getSingularValues()
-            ).boxed().sorted().collect( Collectors.toList() )
-        ) );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( SingularValueDecomposition::new )
+               .forEach( i -> {
+                   p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( i.getSingularValues() ) ) );
+                   p_return.add( CRawTerm.from( i.getU() ) );
+                   p_return.add( CRawTerm.from( i.getV() ) );
+               } );
 
         return CFuzzyValue.from( true );
     }
