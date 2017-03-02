@@ -39,8 +39,8 @@ import java.util.List;
  * The action replaces the first argument with the second argument
  * on each string beginning at the third argument and returns
  * all replaced strings, the action never fails
- * @code @endcode
  *
+ * @code @endcode
  * @note the first argument of the action be defined as a regular expression
  * @see https://en.wikipedia.org/wiki/Regular_expression
  */

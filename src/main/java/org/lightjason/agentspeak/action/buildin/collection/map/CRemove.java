@@ -40,6 +40,7 @@ import java.util.Map;
  * first argument is the map reference all other
  * arguments are key values returns the arguments
  * (or null if not exists) and never fails
+ *
  * @code [A|B|C] = collection/map/remove( Map, "a", 12, "c");  @endcode
  */
 public final class CRemove extends IBuildinAction

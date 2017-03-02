@@ -40,6 +40,7 @@ import java.util.List;
  * returns the column number of a matrix.
  * Reads the column number of each input matrix and returns
  * the value, the action never fails.
+ *
  * @code [C1|C2] = math/blas/matrix/columnnumber(M1,M2); @endcode
  */
 public final class CColumnNumber extends IBuildinAction

@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
  * action for creating prime factors list.
  * For each argument the action returns a list
  * of prime factors and fails never.
- * @code [L1|L2] = math/primfactors( 8, [120] ); @endcode
  *
+ * @code [L1|L2] = math/primfactors( 8, [120] ); @endcode
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */

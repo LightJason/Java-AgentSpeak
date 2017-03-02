@@ -25,22 +25,25 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * returns a single column of a matrix
+ * returns a single column of a matrix.
+ * The action returns a column of a matrix as vector,
+ * the first argument is the index of the column, all
+ * other a matrix objects, the action never fails
+ *
+ * @code [V1|V2] = math/blas/matrix/column(3, Matrix1, [Matrix2]); @endcode
  */
-@Deprecated
 public final class CColumn extends IBuildinAction
 {
 
@@ -63,22 +66,14 @@ public final class CColumn extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second column index
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedList(
-                Arrays.stream(
-                    p_argument.get( 0 ).<DoubleMatrix2D>raw()
-                        .viewColumn( p_argument.get( 1 ).<Number>raw().intValue() ).toArray()
-                )
-                      .boxed().collect( Collectors.toList() )
-            )
-            : Arrays.stream(
-                p_argument.get( 0 ).<DoubleMatrix2D>raw()
-                    .viewColumn( p_argument.get( 1 ).<Number>raw().intValue() ).toArray()
-            )
-                    .boxed().collect( Collectors.toList() )
-        ) );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<DoubleMatrix2D>raw )
+                   .map( i -> i.viewColumn( l_arguments.get( 0 ).<Number>raw().intValue() ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

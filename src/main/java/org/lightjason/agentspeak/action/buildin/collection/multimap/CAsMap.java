@@ -39,9 +39,9 @@ import java.util.List;
  * returns the multimap as map.
  * Actions translates multimap objects into map objects,
  * action never fails
- * @code
-    X = collection/multimap/asmap( MultiMap );
-    [A|B] = collection/multimap/asmap( MultiMap1, MultiMap2 );
+ *
+ * @code X = collection/multimap/asmap( MultiMap );
+ * [A|B] = collection/multimap/asmap( MultiMap1, MultiMap2 );
  * @endcode
  */
 public final class CAsMap extends IBuildinAction

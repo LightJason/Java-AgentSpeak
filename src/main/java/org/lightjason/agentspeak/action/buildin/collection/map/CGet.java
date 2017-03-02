@@ -42,9 +42,9 @@ import java.util.stream.Collectors;
  * by the key, the action fails never, the first
  * argument is the map object, all other arguments are
  * the keys
- * @code
-    V1 = collection/map/get( Map, "key" );
-    [V2|V3] = collection/map/get( Map, "Key1", "Key2" );
+ *
+ * @code V1 = collection/map/get( Map, "key" );
+ * [V2|V3] = collection/map/get( Map, "Key1", "Key2" );
  * @endcode
  */
 public final class CGet extends IBuildinAction

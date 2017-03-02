@@ -38,8 +38,8 @@ import java.util.List;
  * The action fails never but throws a Java runtime exception on a boolean condition,
  * the first argument is a boolean value on true the exception is thrown, second argument
  * can be a string with a message
- * @code generic/throw( true, "a message" ); @endcode
  *
+ * @code generic/throw( true, "a message" ); @endcode
  * @note the exception must be catched outside the agent call method
  */
 public final class CThrow extends IBuildinAction

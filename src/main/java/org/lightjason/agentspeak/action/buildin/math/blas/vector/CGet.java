@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  * The action returns the values by the given index,
  * first argument is the vector and all other values
  * are the index values, the action never fails
+ *
  * @code [X|Y|Z] = math/blas/vector/get( Vector, 1, [4, 5] ); @endcode
  */
 public final class CGet extends IBuildinAction

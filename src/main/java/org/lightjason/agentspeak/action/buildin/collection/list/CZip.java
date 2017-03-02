@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
  * Creates list of tupels of both list arguments
  * \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$ and returns
  * a list of \f$ \langle x_i, y_i \rangle \f$, the action fails never
+ *
  * @code T = collection/list/zip( [1,3,5,7], [2,4,6,8] ); @endcode
  */
 public final class CZip extends IBuildinAction
@@ -68,13 +69,13 @@ public final class CZip extends IBuildinAction
     {
         // first and second argument list references
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
-                p_argument.get( 0 ).<Collection<?>>raw().stream(),
-                p_argument.get( 1 ).<Collection<?>>raw().stream(),
-                AbstractMap.SimpleImmutableEntry::new
+            p_argument.get( 0 ).<Collection<?>>raw().stream(),
+            p_argument.get( 1 ).<Collection<?>>raw().stream(),
+            AbstractMap.SimpleImmutableEntry::new
         ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
-                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            p_parallel ? Collections.synchronizedList( l_result ) : l_result
         ) );
 
         return CFuzzyValue.from( true );

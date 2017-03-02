@@ -24,7 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,12 +34,18 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a single element of a matrix
+ * returns a single element of a matrix.
+ * The action returns single elements of a matrix,
+ * the first argument is a matrix object, the other
+ * arguments are index tuples and the action never
+ * fails
+ *
+ * @code [A|B] = math/blas/matrix( Matrix, 3,4, 1,2 ); @endcode
  */
-@Deprecated
 public final class CGet extends IBuildinAction
 {
     /**
@@ -59,16 +67,19 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second row index, third column index
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<DoubleMatrix2D>raw()
-                    .getQuick(
-                        p_argument.get( 1 ).<Number>raw().intValue(),
-                        p_argument.get( 2 ).<Number>raw().intValue()
-                    )
-            )
-        );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        StreamUtils.windowed(
+            l_arguments.stream()
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+                       .mapToInt( Number::intValue )
+                       .boxed(),
+            2
+        )
+                   .map( i -> l_arguments.get( 0 ).<DoubleMatrix2D>raw().getQuick( i.get( 0 ), i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

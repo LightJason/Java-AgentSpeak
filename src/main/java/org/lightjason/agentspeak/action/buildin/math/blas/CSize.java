@@ -38,6 +38,7 @@ import java.util.List;
 /**
  * returns the elements within the BLAS structure.
  * The action returns the size of each BLAS structure
+ *
  * @code [S1|S2|S3] = math/blas/size( M1, [M2, M3] ); @endcode
  */
 public final class CSize extends IBuildinAction

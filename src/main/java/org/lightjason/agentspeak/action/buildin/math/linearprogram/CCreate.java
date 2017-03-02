@@ -46,8 +46,8 @@ import java.util.stream.Collectors;
  * the first \f$ n-1 \f$ arguments are the \f$ c_i \f$ values (coefficients) and the last
  * argument is the \f$ d \f$ value (constant) of the objective function, the action
  * is never failing
- * @code LP = math/linearprogram/create(1,2, [3, [4,5]], 10); @endcode
  *
+ * @code LP = math/linearprogram/create(1,2, [3, [4,5]], 10); @endcode
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */

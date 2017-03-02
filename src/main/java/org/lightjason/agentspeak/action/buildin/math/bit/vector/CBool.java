@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  * The action returns for the first argument, which
  * is a bit vector, all boolean values for all
  * given index values
+ *
  * @code [B1|B3|B5] = math/bit/vector/bool( BitVector, 1, [3, 5] ); @endcode
  */
 public final class CBool extends IBuildinAction
@@ -67,13 +68,13 @@ public final class CBool extends IBuildinAction
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
         l_arguments.stream()
-               .skip( 1 )
-               .map( ITerm::<Number>raw )
-               .mapToInt( Number::intValue )
-               .boxed()
-               .map( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+                   .skip( 1 )
+                   .map( ITerm::<Number>raw )
+                   .mapToInt( Number::intValue )
+                   .boxed()
+                   .map( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
  * Returns an empty hashmap (key-value pair) and
  * optional arguments must be even and it will create a key-value structure, the
  * action fails on an odd number of arguments except zero only
+ *
  * @code M = collection/map/create(); @endcode
  */
 public final class CCreate extends IBuildinAction

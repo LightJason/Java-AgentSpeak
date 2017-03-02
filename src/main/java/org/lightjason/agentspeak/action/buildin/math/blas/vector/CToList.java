@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
  * converts a vector to a list.
  * The action creates lists of each input vector,
  * the action never fails
+ *
  * @code [L1|L2|L3] = math/blas/vector/tolist( Vector1, [Vector2, Vector3] ); @endcode
  */
 public final class CToList extends IBuildinAction
@@ -66,11 +67,11 @@ public final class CToList extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-            .map( ITerm::<DoubleMatrix1D>raw )
-            .map( i -> Arrays.stream( i.toArray() ).boxed().collect( Collectors.toList() ) )
-            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+               .map( ITerm::<DoubleMatrix1D>raw )
+               .map( i -> Arrays.stream( i.toArray() ).boxed().collect( Collectors.toList() ) )
+               .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -38,6 +38,7 @@ import java.util.List;
  * action for sinus value.
  * The action calculates \f$ sin( x_i ) \f$ for
  * each argument in radians and returns the values
+ *
  * @code [A | B] = math/sin(3, 4); @endcode
  */
 public final class CSin extends IBuildinAction

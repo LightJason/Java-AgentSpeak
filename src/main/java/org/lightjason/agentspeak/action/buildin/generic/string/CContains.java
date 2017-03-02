@@ -39,6 +39,7 @@ import java.util.List;
  * The action checks the first string argument if it contains
  * all other arguments, but it returns the boolean result for
  * each argument, the action never fails
+ *
  * @code [L1|L2] = generic/string/contains("this is a long string", "long", "string"); @endcode
  */
 public final class CContains extends IBuildinAction

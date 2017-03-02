@@ -39,8 +39,8 @@ import java.util.List;
  * This action uses the logical exclusive-or
  * to combine all logical arguments in a single
  * result, the action never fails
- * @code R = generic/bool/xor( Logical1, Logical2, [Logical3, Logical4] ); @endcode
  *
+ * @code R = generic/bool/xor( Logical1, Logical2, [Logical3, Logical4] ); @endcode
  * @see https://en.wikipedia.org/wiki/Exclusive_or
  */
 public final class CXor extends IBuildinAction

@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  * returns all values of the map.
  * Returns a list with all values of the argument
  * maps and fails never
+ *
  * @code L = collection/map/values( Map1, Map2, Map3 ); @endcode
  */
 public final class CValues extends IBuildinAction
@@ -66,8 +67,8 @@ public final class CValues extends IBuildinAction
     {
         // arguments are map references
         final List<?> l_result = CCommon.flatcollection( p_argument )
-                                                   .flatMap( i -> i.<Map<?, ?>>raw().values().stream() )
-                                                   .collect( Collectors.toList() );
+                                        .flatMap( i -> i.<Map<?, ?>>raw().values().stream() )
+                                        .collect( Collectors.toList() );
 
         p_return.add(
             CRawTerm.from(

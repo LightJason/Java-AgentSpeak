@@ -40,8 +40,8 @@ import java.util.List;
  * The first argument are the characters, that will be used to create the string,
  * all other arguments are numbers to present the length of the returning string
  * and the action never fails
- * @code [A|B|C] = generic/string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
  *
+ * @code [A|B|C] = generic/string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
  */
 public final class CRandom extends IBuildinAction
 {
@@ -68,13 +68,13 @@ public final class CRandom extends IBuildinAction
         final char[] l_characters = p_argument.get( 0 ).<String>raw().toCharArray();
 
         CCommon.flatcollection( p_argument )
-            .skip( 1 )
-            .map( i -> RandomStringUtils.random(
-                           i.<Number>raw().intValue(),
-                            l_characters
-            ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+               .skip( 1 )
+               .map( i -> RandomStringUtils.random(
+                   i.<Number>raw().intValue(),
+                   l_characters
+               ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -46,6 +46,7 @@ import java.util.List;
  * The actions decrypts data by the key, that is set on the first argument,
  * all other arguments are datasets for encrypting, the actions returns all
  * drcrypted datasets back and fails if a dataset cannot be decrypted
+ *
  * @code [DecyptData1 | DecyptData2 | DecyptData3] = crypto/decrypt( Key, Dataset1, Dataset2, Dataset3 ); @endcode
  */
 public final class CDecrypt extends IBuildinAction
@@ -66,25 +67,26 @@ public final class CDecrypt extends IBuildinAction
         final EAlgorithm l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
 
         return CFuzzyValue.from( p_argument.subList( 1, p_argument.size() ).stream()
-                         .map( i -> Base64.getDecoder().decode( i.<String>raw() ) )
-                         .allMatch( i -> {
-                             try
-                             {
-                                 p_return.add(
-                                     CRawTerm.from(
-                                         SerializationUtils.deserialize(
-                                             l_algorithm.getDecryptCipher( l_key ).doFinal( i )
-                                         )
-                                     )
-                                 );
-                                 return true;
-                             }
-                             catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                 | BadPaddingException | IllegalBlockSizeException l_exception )
-                             {
-                                 return false;
-                             }
-                         } )
+                                           .map( i -> Base64.getDecoder().decode( i.<String>raw() ) )
+                                           .allMatch( i ->
+                                                      {
+                                                          try
+                                                          {
+                                                              p_return.add(
+                                                                  CRawTerm.from(
+                                                                      SerializationUtils.deserialize(
+                                                                          l_algorithm.getDecryptCipher( l_key ).doFinal( i )
+                                                                      )
+                                                                  )
+                                                              );
+                                                              return true;
+                                                          }
+                                                          catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                                                              | BadPaddingException | IllegalBlockSizeException l_exception )
+                                                          {
+                                                              return false;
+                                                          }
+                                                      } )
         );
     }
 

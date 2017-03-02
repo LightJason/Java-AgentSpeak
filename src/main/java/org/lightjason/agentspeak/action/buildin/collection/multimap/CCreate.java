@@ -43,9 +43,9 @@ import java.util.stream.Collectors;
  * The action creates a multi-hashmap object and returns the object,
  * optional arguments must be even and it will create a key-value structure, the
  * action fails on an odd number of arguments except zero only
- * @code
-    M1 = collection/multimap/create();
-    M2 = collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
+ *
+ * @code M1 = collection/multimap/create();
+ * M2 = collection/multimap/create( "key1", 123, ["Key2", "Value2"] );
  * @endcode
  */
 public final class CCreate extends IBuildinAction

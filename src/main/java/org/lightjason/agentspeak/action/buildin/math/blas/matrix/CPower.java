@@ -42,8 +42,8 @@ import java.util.stream.Collectors;
  * first argument is the exponent, all other arguments are
  * input matrix vlaues and the returns the power value for each
  * input matrix
- * @code [M1|M2|M3] = blas/matrix/power(3, M1, [M2, [M3]]); @endcode
  *
+ * @code [M1|M2|M3] = blas/matrix/power(3, M1, [M2, [M3]]); @endcode
  * @see https://en.wikipedia.org/wiki/Matrix_exponential
  */
 public final class CPower extends IAlgebra

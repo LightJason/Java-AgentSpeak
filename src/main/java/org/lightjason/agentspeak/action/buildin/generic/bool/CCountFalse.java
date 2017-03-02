@@ -38,6 +38,7 @@ import java.util.List;
  * count the number of false values.
  * This action counts the number of false
  * values, the action never fails
+ *
  * @code R = generic/bool/countfalse( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  */
 public final class CCountFalse extends IBuildinAction

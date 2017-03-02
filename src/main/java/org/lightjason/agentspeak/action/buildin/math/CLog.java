@@ -38,8 +38,8 @@ import java.util.List;
  * action for logarithm value.
  * Calculates the natural logarithm \f$ log( x_i ) \f$
  * for each unflatten argument
- * @code [A|B|C] = math/log( [1,2], 3 ); @endcode
  *
+ * @code [A|B|C] = math/log( [1,2], 3 ); @endcode
  * @see https://en.wikipedia.org/wiki/Natural_logarithm
  * @see https://en.wikipedia.org/wiki/Logarithm
  */

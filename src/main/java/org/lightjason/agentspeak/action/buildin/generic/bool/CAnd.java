@@ -39,8 +39,8 @@ import java.util.List;
  * This action uses the logical cpnjunction
  * to combine all logical arguments in a single
  * result, the action never fails
- * @code R = generic/bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  *
+ * @code R = generic/bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  * @see https://en.wikipedia.org/wiki/Logical_conjunction
  */
 public final class CAnd extends IBuildinAction

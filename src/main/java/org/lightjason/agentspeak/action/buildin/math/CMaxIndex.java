@@ -42,6 +42,7 @@ import java.util.stream.IntStream;
  * The action takes of the given unflatten input the maximum and
  * returns the index within the unflatten argument list, the
  * action never fails
+ *
  * @code MaxIndex = math/maxindex( 5, 6, [7,8, [1,2,3]] ); @endcode
  */
 public final class CMaxIndex extends IBuildinAction

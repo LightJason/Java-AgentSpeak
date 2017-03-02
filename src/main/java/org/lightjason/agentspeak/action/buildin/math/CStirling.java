@@ -42,8 +42,8 @@ import java.util.List;
  * with \f$ S(n,k)=\left\{\begin{matrix} n \\ k \end{matrix}\right\}= S_n^{(k)} \f$
  * of each tuple of the unflatten argument list, n is the first value of the tupel
  * and k is the second value of the tupel, the action fails never
- * @code [S1|S2] = math/stirling(2,3, [4,5]); @endcode
  *
+ * @code [S1|S2] = math/stirling(2,3, [4,5]); @endcode
  * @see https://en.wikipedia.org/wiki/Stirling_number
  */
 public final class CStirling extends IBuildinAction
@@ -62,14 +62,14 @@ public final class CStirling extends IBuildinAction
     {
         StreamUtils.windowed(
             CCommon.flatcollection( p_annotation )
-            .map( ITerm::<Number>raw )
-            .mapToInt( Number::intValue )
-            .boxed(),
+                   .map( ITerm::<Number>raw )
+                   .mapToInt( Number::intValue )
+                   .boxed(),
             2
         )
-            .map( i -> CombinatoricsUtils.stirlingS2( i.get( 0 ), i.get( 1 ) ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+                   .map( i -> CombinatoricsUtils.stirlingS2( i.get( 0 ), i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

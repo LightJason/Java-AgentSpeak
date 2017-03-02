@@ -39,8 +39,8 @@ import java.util.Map;
  * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
  * all other arguments are the literal elements of the returning literal, the webservice must return a JSON list and
  * the last argument will used to encapsulate the list elements
- * @code W = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" ); @endcode
  *
+ * @code W = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" ); @endcode
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/JSON
@@ -51,14 +51,14 @@ public final class CJsonList extends IBaseRest
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
         try
         {
             final List<?> l_data = IBaseRest.json(
-                                            p_argument.get( 0 ).<String>raw(),
-                                            List.class
+                p_argument.get( 0 ).<String>raw(),
+                List.class
             );
 
             if ( p_argument.size() == 2 )

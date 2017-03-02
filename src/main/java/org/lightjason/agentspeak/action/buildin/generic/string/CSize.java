@@ -38,6 +38,7 @@ import java.util.List;
  * action to get the string length.
  * For each argument the string length will be returned
  * and the action never fails
+ *
  * @code [A|B|C] = generic/string/size("A", ["CC", "XYZ"]); @endcode
  */
 public final class CSize extends IBuildinAction

@@ -39,6 +39,7 @@ import java.util.List;
  * action for calculating the euclidian length.
  * Calculates for each pair of arguments \f$ \sqrt{ x_{i}^{2} + y_{i}^{2} } \f$ and
  * fail iif the number of arguments are odd, it unflats all list elements
+ *
  * @code [A|B|C] = math/hypot( 1, [2, [3]], [4, 5]); @endcode
  */
 public final class CHypot extends IBuildinAction

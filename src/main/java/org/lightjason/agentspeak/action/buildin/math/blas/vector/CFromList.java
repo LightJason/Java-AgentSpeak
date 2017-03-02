@@ -44,8 +44,8 @@ import java.util.List;
  * lists of numbers, the last optional argument can be a string
  * with "dense | sparse" to create dense or sparse structures,
  * the action never fails
- * @code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" ); @endcode
  *
+ * @code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" ); @endcode
  */
 public final class CFromList extends IBuildinAction
 {
@@ -88,14 +88,16 @@ public final class CFromList extends IBuildinAction
                   .limit( l_limit )
                   .map( ITerm::<List<Number>>raw )
                   .map( i -> i.stream().mapToDouble( Number::doubleValue ).toArray() )
-                  .map( i -> {
-                      switch ( l_type )
-                      {
-                          case SPARSE: return new SparseDoubleMatrix1D( i );
-                          default :
-                              return new DenseDoubleMatrix1D( i );
-                      }
-                  } )
+                  .map( i ->
+                        {
+                            switch ( l_type )
+                            {
+                                case SPARSE:
+                                    return new SparseDoubleMatrix1D( i );
+                                default:
+                                    return new DenseDoubleMatrix1D( i );
+                            }
+                        } )
                   .map( CRawTerm::from )
                   .forEach( p_return::add );
 

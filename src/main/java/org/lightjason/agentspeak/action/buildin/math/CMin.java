@@ -39,6 +39,7 @@ import java.util.List;
  * The action calculates for all unflatten arguments
  * the minimum with \f$ min( x_0, x_1, \ldots, x_i ) \f$,
  * the action never fails
+ *
  * @code Max = math/min( 2, 5, 7, [3, 2] ); @endcode
  */
 public final class CMin extends IBuildinAction

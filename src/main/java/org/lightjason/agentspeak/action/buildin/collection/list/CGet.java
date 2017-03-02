@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
  * The first argument is a list object and all other
  * arguments are index values, so the action returns
  * the elements, the action fails never
- * @code
-    V = collection/list/get( L, 2, 7 );
+ *
+ * @code V = collection/list/get( L, 2, 7 );
  * @endcode
  */
 public final class CGet extends IBuildinAction

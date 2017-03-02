@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
  * The action creates a vector, the first \f$ n-1 \f$ arguments are
  * the size of the vector, the last argument defines as string a
  * dense or sparse vector (default is dense) and the action never fails
+ *
  * @code [A|B|C] = math/blas/vector/create( 3, 2, 1, "dense | sparse"); @endcode
  */
 public final class CCreate extends IBuildinAction
@@ -114,6 +115,6 @@ public final class CCreate extends IBuildinAction
         }
 
         return CFuzzyValue.from( false );
-}
+    }
 
 }

@@ -39,8 +39,8 @@ import java.util.List;
  * The action calculates for each unflatten input
  * value in radians the \f$ tan( x_i ) \f$ value,
  * the action never fails
- * @code [X|Y|Z] = math/tan( pi, 1.3*pi, 0.43*pi ); @endcode
  *
+ * @code [X|Y|Z] = math/tan( pi, 1.3*pi, 0.43*pi ); @endcode
  * @see https://en.wikipedia.org/wiki/Trigonometric_functions
  */
 public final class CTan extends IBuildinAction

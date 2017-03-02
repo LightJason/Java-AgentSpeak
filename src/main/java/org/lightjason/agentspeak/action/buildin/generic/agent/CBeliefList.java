@@ -59,20 +59,20 @@ public final class CBeliefList extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                              final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
         final List<ILiteral> l_literal = (
-                p_argument.size() == 1
-                ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
-                : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
+            p_argument.size() == 1
+            ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
+            : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
         ).collect( Collectors.toList() );
 
         p_return.add(
-                CRawTerm.from( p_parallel
-                               ? Collections.synchronizedList( l_literal )
-                               : l_literal
-                )
+            CRawTerm.from( p_parallel
+                           ? Collections.synchronizedList( l_literal )
+                           : l_literal
+            )
         );
 
         return CFuzzyValue.from( true );

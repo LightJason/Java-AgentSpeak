@@ -39,6 +39,7 @@ import java.util.List;
  * returns sum of a matrix.
  * Calculates for each input matrix the sum and returns
  * the value, the action never fails
+ *
  * @code [S1|S2] = math/blas/matrix/sum(M1,M2); @endcode
  */
 public final class CSum extends IBuildinAction

@@ -38,8 +38,8 @@ import java.util.Map;
  * action for calling a restful webservice with a JSON object.
  * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
  * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
- * @code W = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
  *
+ * @code W = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/JSON
@@ -50,7 +50,7 @@ public final class CJsonObject extends IBaseRest
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
         try
@@ -64,8 +64,8 @@ public final class CJsonObject extends IBaseRest
                 p_argument.size() == 2
                 ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
                 : IBaseRest.baseliteral(
-                        p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
-                        flatterm( l_data )
+                    p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
+                    flatterm( l_data )
                 )
             );
 

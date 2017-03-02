@@ -38,8 +38,8 @@ import java.util.List;
  * action for sinus hyperbolic value.
  * For each unflatten input argument the \f$ sinh( x_i ) \f$
  * is calculated and the action never fails
- * @code [X|Y|Z] = math/sinh( 3.2, [5,8, [1.2]] ); @endcode
  *
+ * @code [X|Y|Z] = math/sinh( 3.2, [5,8, [1.2]] ); @endcode
  * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CSinh extends IBuildinAction

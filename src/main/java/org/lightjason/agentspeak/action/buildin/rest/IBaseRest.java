@@ -50,6 +50,7 @@ import java.util.stream.Stream;
 
 /**
  * base class to read data from the restful service
+ *
  * @note all action which inherits this class uses the system property "http.agent" for defining
  * the http user-agent
  */
@@ -68,6 +69,7 @@ public abstract class IBaseRest extends IBuildinAction
      * @param p_url url
      * @param p_class convert class type
      * @return data object
+     *
      * @throws IOException is thrown on io errors
      */
     protected static <T> T json( final String p_url, final Class<T> p_class ) throws IOException
@@ -80,48 +82,13 @@ public abstract class IBaseRest extends IBuildinAction
      *
      * @param p_url url
      * @return map with xml data
+     *
      * @throws IOException is thrown on io errors
      */
     @SuppressWarnings( "unchecked" )
     protected static Map<String, ?> xml( final String p_url ) throws IOException
     {
         return new XmlMapper().readValue( IBaseRest.httpdata( p_url ), Map.class );
-    }
-
-    /**
-     * creates a HTTP connection and reads the data
-     *
-     * @param p_url url
-     * @return url data
-     * @throws IOException is thrown on connection errors
-     */
-    private static String httpdata( final String p_url ) throws IOException
-    {
-        final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
-
-        // follow HTTP redirects
-        l_connection.setInstanceFollowRedirects( true );
-
-        // set a HTTP-User-Agent if not exists
-        l_connection.setRequestProperty( "User-Agent",
-                                         ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
-                                         ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
-                                         : System.getProperty( "http.agent" )
-        );
-
-        // read stream data
-        final InputStream l_stream = l_connection.getInputStream();
-        final String l_return = CharStreams.toString(
-            new InputStreamReader(
-                l_stream,
-                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
-                ? Charsets.UTF_8
-                : Charset.forName( l_connection.getContentEncoding() )
-            )
-        );
-        Closeables.closeQuietly( l_stream );
-
-        return l_return;
     }
 
     /**
@@ -143,7 +110,6 @@ public abstract class IBaseRest extends IBuildinAction
         return l_literal;
     }
 
-
     /**
      * converts an object into a term stream
      *
@@ -161,6 +127,44 @@ public abstract class IBaseRest extends IBuildinAction
     }
 
     /**
+     * creates a HTTP connection and reads the data
+     *
+     * @param p_url url
+     * @return url data
+     *
+     * @throws IOException is thrown on connection errors
+     */
+    private static String httpdata( final String p_url ) throws IOException
+    {
+        final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
+
+        // follow HTTP redirects
+        l_connection.setInstanceFollowRedirects( true );
+
+        // set a HTTP-User-Agent if not exists
+        l_connection.setRequestProperty(
+            "User-Agent",
+            ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
+            ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
+            : System.getProperty( "http.agent" )
+        );
+
+        // read stream data
+        final InputStream l_stream = l_connection.getInputStream();
+        final String l_return = CharStreams.toString(
+            new InputStreamReader(
+                l_stream,
+                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
+                ? Charsets.UTF_8
+                : Charset.forName( l_connection.getContentEncoding() )
+            )
+        );
+        Closeables.closeQuietly( l_stream );
+
+        return l_return;
+    }
+
+    /**
      * transformas a map into a literal
      *
      * @param p_map input map
@@ -169,16 +173,15 @@ public abstract class IBaseRest extends IBuildinAction
     private static Stream<ITerm> flatmap( final Map<String, ?> p_map )
     {
         return p_map.entrySet()
-             .stream()
-             .map( i -> CLiteral.from(
-                            i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
-                            flatterm( i.getValue() )
-                        )
-             );
+                    .stream()
+                    .map( i -> CLiteral.from(
+                        i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
+                        flatterm( i.getValue() )
+                          )
+                    );
     }
 
     /**
-     *
      * transforms a collection into a term stream
      *
      * @param p_collection collection

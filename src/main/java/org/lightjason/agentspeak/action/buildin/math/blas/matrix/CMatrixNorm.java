@@ -39,8 +39,8 @@ import java.util.List;
  * returns the frobenius- / matrix-norm of a matrix.
  * For each input matrix object the frobenius- / matrix-norm
  * is calculates and returned, the action never fails
- * @code [N1|N2] = math/blas/matrix/matrixnorm(M1,M2); @endcode
  *
+ * @code [N1|N2] = math/blas/matrix/matrixnorm(M1,M2); @endcode
  * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
 public final class CMatrixNorm extends IAlgebra

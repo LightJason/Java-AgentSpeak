@@ -62,8 +62,8 @@ import java.util.Objects;
  * The return arguments are at the first the value, second
  * the number of all referenced \f$ x_i \f$ points and after
  * that all arguments the values of \f$ x_i \f$
- * @code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" ); @endcode
  *
+ * @code [Value|CountXi|Xi] = math/linearprogram/solve( LP, "maximize", "non-negative" ); @endcode
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -98,28 +98,29 @@ public final class CSolve extends IBuildinAction
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
         p_argument.subList( 1, p_argument.size() ).stream()
-                                 .map( i -> {
-                                     if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
-                                         return new MaxIter( i.raw() );
+                  .map( i ->
+                        {
+                            if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                return new MaxIter( i.raw() );
 
-                                     if ( CCommon.rawvalueAssignableTo( i, String.class ) )
-                                         switch ( i.<String>raw().trim().toLowerCase() )
-                                         {
-                                             case "non-negative":
-                                                 return new NonNegativeConstraint( true );
-                                             case "maximize":
-                                                 return GoalType.MAXIMIZE;
-                                             case "minimize":
-                                                 return GoalType.MINIMIZE;
+                            if ( CCommon.rawvalueAssignableTo( i, String.class ) )
+                                switch ( i.<String>raw().trim().toLowerCase() )
+                                {
+                                    case "non-negative":
+                                        return new NonNegativeConstraint( true );
+                                    case "maximize":
+                                        return GoalType.MAXIMIZE;
+                                    case "minimize":
+                                        return GoalType.MINIMIZE;
 
-                                             default:
-                                                 return null;
-                                         }
+                                    default:
+                                        return null;
+                                }
 
-                                     return null;
-                                 } )
-                                 .filter( Objects::nonNull )
-                                 .forEach( l_settings::add );
+                            return null;
+                        } )
+                  .filter( Objects::nonNull )
+                  .forEach( l_settings::add );
 
         // optimze and return
         final SimplexSolver l_lp = new SimplexSolver();

@@ -41,8 +41,8 @@ import java.util.List;
  * Calcluates \f$ \binom{n}{k} \f$, where n is the
  * first argument and k the second of each given input
  * tupel, the action fails never
- * @code [B1|B2] = math/binomial( 49, 6,  30, 5 ); @endcode
  *
+ * @code [B1|B2] = math/binomial( 49, 6,  30, 5 ); @endcode
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
 public final class CBinomial extends IBuildinAction
@@ -66,9 +66,9 @@ public final class CBinomial extends IBuildinAction
                    .boxed(),
             2
         )
-            .map( i -> CombinatoricsUtils.binomialCoefficient( i.get( 0 ), i.get( 1 ) ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+                   .map( i -> CombinatoricsUtils.binomialCoefficient( i.get( 0 ), i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

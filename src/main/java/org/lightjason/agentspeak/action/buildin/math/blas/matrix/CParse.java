@@ -109,10 +109,11 @@ public final class CParse extends IBuildinAction
                                    .boxed()
                                    .collect( Collectors.toList() )
                   )
-                  .mapToInt( i -> {
-                      l_matrix.add( i );
-                      return i.size();
-                  } )
+                  .mapToInt( i ->
+                             {
+                                 l_matrix.add( i );
+                                 return i.size();
+                             } )
                   .max()
                   .orElseThrow( () -> new CRuntimeException( p_context ) )
             ];

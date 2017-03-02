@@ -41,6 +41,7 @@ import java.util.List;
  * All tuple arguments are defined the size of bit matrix, so
  * for each input tuple argument a bit matrix will be created and
  * returned, the action never fails
+ *
  * @code [A|B] = math/bit/matrix/create( 3,2, [1, 12] ); @endcode
  */
 public final class CCreate extends IBuildinAction

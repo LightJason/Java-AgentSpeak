@@ -42,8 +42,8 @@ import java.util.function.Function;
  * \f$ \alpha \f$ is the first, \f$ \beta \f$ the second and \f$ \gamma \f$ the third
  * argument, all values beginning at the fourth position will be used for t, so the
  * action returns all values but and is never failing.
- * @code [A | B | C] = math/sigmoid( 1,1,1, 10,20,30 ); @endcode
  *
+ * @code [A | B | C] = math/sigmoid( 1,1,1, 10,20,30 ); @endcode
  * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
 public final class CSigmoid extends IBuildinAction
@@ -60,7 +60,7 @@ public final class CSigmoid extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Function<Double, Double> l_sigmoid = (i) ->
+        final Function<Double, Double> l_sigmoid = ( i ) ->
             p_argument.get( 0 ).<Double>raw() / ( p_argument.get( 1 ).<Double>raw() + Math.exp( -p_argument.get( 2 ).<Double>raw() ) * i );
 
         CCommon.flatcollection( p_argument )

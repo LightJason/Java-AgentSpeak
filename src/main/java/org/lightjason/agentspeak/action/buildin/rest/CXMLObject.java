@@ -38,8 +38,8 @@ import java.util.Map;
  * action to call a restful webservice with XML data.
  * Creates a literal from an XML REST-webservice, first argument
  * is the URL of the webservice and second argument the functor of the literal
- * @code W = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" ); @endcode
  *
+ * @code W = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" ); @endcode
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/XML
@@ -48,7 +48,7 @@ public class CXMLObject extends IBaseRest
 {
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
         try

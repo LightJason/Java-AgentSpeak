@@ -42,6 +42,7 @@ import java.util.stream.IntStream;
  * The action takes of the given unflatten input the minimum and
  * returns the index within the unflatten argument list, the
  * action never fails
+ *
  * @code MinIndex = math/minindex( 5, 6, [7,8, [1,2,3]] ); @endcode
  */
 public final class CMinIndex extends IBuildinAction
@@ -67,9 +68,9 @@ public final class CMinIndex extends IBuildinAction
         p_return.add(
             CRawTerm.from(
                 (long) IntStream.range( 0, l_list.size() - 1 )
-                     .parallel()
-                     .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
-                     .orElseThrow( () -> new CRuntimeException( p_context ) )
+                                .parallel()
+                                .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
+                                .orElseThrow( () -> new CRuntimeException( p_context ) )
             )
         );
 

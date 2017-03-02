@@ -38,8 +38,8 @@ import java.util.List;
  * action for geometric mean.
  * The action calculates \f$ \sqrt[i]{\prod_{i} x_i} \f$
  * over all unflatten arguments, action fails never
- * @code G = math/geometricmean( 1, 3, 9, [10, [11, 12]] ); @endcode
  *
+ * @code G = math/geometricmean( 1, 3, 9, [10, [11, 12]] ); @endcode
  * @see https://en.wikipedia.org/wiki/Average
  */
 public final class CGeometricMean extends IBuildinAction
@@ -62,9 +62,9 @@ public final class CGeometricMean extends IBuildinAction
             CRawTerm.from(
                 Math.pow(
                     CCommon.flatcollection( p_argument )
-                       .map( ITerm::<Number>raw )
-                       .mapToDouble( Number::doubleValue )
-                       .reduce( 1, ( i, j ) -> i * j ), 1.0 / l_arguments
+                           .map( ITerm::<Number>raw )
+                           .mapToDouble( Number::doubleValue )
+                           .reduce( 1, ( i, j ) -> i * j ), 1.0 / l_arguments
                 )
             )
         );

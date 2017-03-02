@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
  * checks elements of inequality.
  * The actions checks all tupel of arguments of inequality and
  * fails if the unflatten argument number is odd.
- * @code [NE1|NE2] = generic/bool/notequal( "this is equal", "this is equal", [123, "test"] ); @endcode
  *
+ * @code [NE1|NE2] = generic/bool/notequal( "this is equal", "this is equal", [123, "test"] ); @endcode
  * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  */

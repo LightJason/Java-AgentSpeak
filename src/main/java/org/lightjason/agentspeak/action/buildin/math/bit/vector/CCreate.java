@@ -40,6 +40,7 @@ import java.util.List;
  * All arguments are defined the size of bit vectors, so
  * for each input argument a bit vector will be created and
  * returned, the action never fails
+ *
  * @code [A|B|C|D] = math/bit/vector/create( 3, [2, [1, 12]] ); @endcode
  */
 public final class CCreate extends IBuildinAction

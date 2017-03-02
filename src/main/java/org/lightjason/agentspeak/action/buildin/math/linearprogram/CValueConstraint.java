@@ -51,8 +51,8 @@ import java.util.stream.Collectors;
  * (\f$ = \f$, \f$ \geq \f$ or \f$ \leq \f$) as string
  * and the last value is the \f$ v \f$ value and the action
  * never fails
- * @code math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 ); @endcode
  *
+ * @code math/linearprogram/valueconstaint( LP, [2,5,[7,8,[9]]], "<", 100 ); @endcode
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -84,10 +84,10 @@ public final class CValueConstraint extends IConstraint
         l_arguments.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
             new LinearConstraint(
                 l_arguments.stream()
-                       .limit( l_arguments.size() - 2 )
-                       .skip( 1 )
-                       .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                       .toArray(),
+                           .limit( l_arguments.size() - 2 )
+                           .skip( 1 )
+                           .mapToDouble( i -> i.<Number>raw().doubleValue() )
+                           .toArray(),
                 this.getRelation( l_arguments.get( l_arguments.size() - 2 ).<String>raw() ),
                 l_arguments.get( l_arguments.size() - 1 ).<Number>raw().doubleValue()
             )

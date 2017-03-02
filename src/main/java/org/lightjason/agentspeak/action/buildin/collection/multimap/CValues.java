@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  * returns all values of the multimap.
  * Returns a list with all values of the argument
  * multimaps and fails never
+ *
  * @code L = collection/multimap/values( MultiMap1, MultiMap2, MultiMap3 ); @endcode
  */
 public final class CValues extends IBuildinAction

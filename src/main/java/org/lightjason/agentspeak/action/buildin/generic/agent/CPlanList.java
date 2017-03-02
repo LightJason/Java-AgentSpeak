@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.generic.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
-
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -68,8 +67,8 @@ public final class CPlanList extends IBuildinAction
         final Map<ITerm, AbstractMap.Entry<Long, Long>> l_map = new HashMap<>();
         p_context.agent().plans().values()
                  .forEach( i -> l_map.put(
-                                i.getLeft().getTrigger().getLiteral(),
-                                new AbstractMap.SimpleImmutableEntry<>( i.getMiddle().get(), i.getRight().get() )
+                     i.getLeft().getTrigger().getLiteral(),
+                     new AbstractMap.SimpleImmutableEntry<>( i.getMiddle().get(), i.getRight().get() )
                  ) );
 
         p_return.add( CRawTerm.from(

@@ -39,8 +39,8 @@ import java.util.List;
  * returns the one-norm of a matrix.
  * Calculates for each input matrix the one-norm
  * and returns the value, the action never fails
- * @code [N1|N2] = math/blas/matrix/onenorm(M1,M2); @endcode
  *
+ * @code [N1|N2] = math/blas/matrix/onenorm(M1,M2); @endcode
  * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
 public final class COneNorm extends IAlgebra

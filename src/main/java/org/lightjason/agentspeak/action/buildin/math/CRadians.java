@@ -38,8 +38,8 @@ import java.util.List;
  * action for converting degree value into radian.
  * Converts all degree arguments into radian values
  * \f$ \frac{x_i \cdot \pi}{180} \f$
- * @code A = math/radians( 180 ); @endcode
  *
+ * @code A = math/radians( 180 ); @endcode
  * @see https://en.wikipedia.org/wiki/Radian
  */
 public final class CRadians extends IBuildinAction

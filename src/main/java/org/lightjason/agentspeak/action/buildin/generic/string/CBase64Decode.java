@@ -41,8 +41,8 @@ import java.util.List;
  * Creates from each string argument, which is
  * based64 encoded the decoded string version,
  * the action never fails
- * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
  *
+ * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Decode extends IBuildinAction
@@ -68,10 +68,10 @@ public final class CBase64Decode extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-                  .map( ITerm::<String>raw )
-                  .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
-                  .map( CRawTerm::from )
-                  .forEach( p_return::add );
+               .map( ITerm::<String>raw )
+               .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

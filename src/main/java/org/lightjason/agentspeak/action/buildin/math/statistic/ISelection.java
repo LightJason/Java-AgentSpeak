@@ -70,14 +70,14 @@ public abstract class ISelection extends IBuildinAction
         // second parameter is a numeric value for each element
         final List<?> l_items = p_argument.get( 0 ).raw();
         final List<Double> l_weight = this.weight(
-                                        l_items,
-                                        p_argument.get( 1 ).<List<?>>raw().stream()
-                                        // list can be contains default Java objects or term objects
-                                            .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
-                                            .map( Number::doubleValue )
-                                            .map( Math::abs ),
-                                        p_argument.subList( 2, p_argument.size() ),
-                                        p_annotation
+            l_items,
+            p_argument.get( 1 ).<List<?>>raw().stream()
+                                              // list can be contains default Java objects or term objects
+                                              .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
+                                              .map( Number::doubleValue )
+                                              .map( Math::abs ),
+            p_argument.subList( 2, p_argument.size() ),
+            p_annotation
         );
 
         if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
@@ -102,16 +102,19 @@ public abstract class ISelection extends IBuildinAction
 
     /**
      * modifies the weights
+     *
      * @param p_items item list
      * @param p_values stream of weights
      * @param p_argument additional arguments
      * @param p_annotation annotations
      * @return list with weights
      */
-    protected abstract List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation );
+    protected abstract List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation
+    );
 
     /**
      * number of additional parameter
+     *
      * @return additional number
      */
     protected int additionalArgumentNumber()

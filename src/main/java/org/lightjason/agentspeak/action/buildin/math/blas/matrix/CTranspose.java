@@ -39,8 +39,8 @@ import java.util.List;
  * transpose a matrix.
  * Creates for each input matrix the transposed
  * matrix and returns it, the action never fails
- * @code [T1|T2] = math/blas/matrix/transpose(M1,M2); @endcode
  *
+ * @code [T1|T2] = math/blas/matrix/transpose(M1,M2); @endcode
  * @see https://en.wikipedia.org/wiki/Transpose
  */
 public final class CTranspose extends IAlgebra

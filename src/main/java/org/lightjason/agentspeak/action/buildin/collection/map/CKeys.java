@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
  * returns all key values of the map.
  * Returns a unique list with all key values of the argument
  * maps and fails never, all arguments must be maps
+ *
  * @code L = collection/map/keys( Map1, Map2, Map3 ); @endcode
  */
 public final class CKeys extends IBuildinAction

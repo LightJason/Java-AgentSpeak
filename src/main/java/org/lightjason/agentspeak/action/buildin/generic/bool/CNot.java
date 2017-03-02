@@ -39,8 +39,8 @@ import java.util.List;
  * This action uses the logical negation and
  * inverts all logical boolean arguments and returns
  * all elements, the action never fails
- * @code [R1|R2|R3|R4] = generic/bool/not( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  *
+ * @code [R1|R2|R3|R4] = generic/bool/not( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  * @see https://en.wikipedia.org/wiki/Negation
  */
 public final class CNot extends IBuildinAction

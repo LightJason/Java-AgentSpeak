@@ -40,8 +40,8 @@ import java.util.List;
  * action to encodes a string with Base64.
  * Creates from each string argument the base64 encoded
  * version, the action fails on encoding errors
- * @code [A|B] = generic/string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
  *
+ * @code [A|B] = generic/string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Encode extends IBuildinAction
@@ -69,17 +69,18 @@ public final class CBase64Encode extends IBuildinAction
         return CFuzzyValue.from(
             CCommon.flatcollection( p_argument )
                    .map( ITerm::<String>raw )
-                   .allMatch( i -> {
-                       try
-                       {
-                           p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
-                           return true;
-                       }
-                       catch ( final UnsupportedEncodingException l_exception )
-                       {
-                           return false;
-                       }
-                   } )
+                   .allMatch( i ->
+                              {
+                                  try
+                                  {
+                                      p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
+                                      return true;
+                                  }
+                                  catch ( final UnsupportedEncodingException l_exception )
+                                  {
+                                      return false;
+                                  }
+                              } )
         );
     }
 }

@@ -25,8 +25,10 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,12 +36,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a dense- or sparse-matrix
+ * creates a dense- or sparse-matrix.
+ * The action creates densore or sparse matrix objects, the
+ * last object is a string with dense or sparse, all other
+ * arguments are tuples of row and column size.
+ *
+ * @code [M1|M2] = math/blas/matrix/create(2,2, [3,2], "dense|sparse"); @endcode
  */
-@Deprecated
 public final class CCreate extends IBuildinAction
 {
     /**
@@ -53,7 +60,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -61,31 +68,60 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument is row-size, second colum-size
-        // optional third argument is matrix type (default dense-matrix)
-        switch ( p_argument.size() > 2 ? EType.from( p_argument.get( 3 ).<String>raw() ) : EType.DENSE )
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int l_limit;
+        final EType l_type;
+        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        {
+            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_limit = l_arguments.size() - 1;
+        }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = l_arguments.size();
+        }
+
+
+        // create matrix
+        switch ( l_type )
         {
             case DENSE:
-                p_return.add(
-                    CRawTerm.from( new DenseDoubleMatrix2D(
-                        p_argument.get( 0 ).<Number>raw().intValue(),
-                        p_argument.get( 1 ).<Number>raw().intValue()
-                    ) )
-                );
-                break;
+                StreamUtils.windowed(
+                    l_arguments.stream()
+                               .limit( l_limit )
+                               .map( ITerm::<Number>raw )
+                               .mapToInt( Number::intValue )
+                               .boxed(),
+                    2
+                )
+                           .map( i -> new DenseDoubleMatrix2D( i.get( 0 ), i.get( 1 ) ) )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
+
 
             case SPARSE:
-                p_return.add(
-                    CRawTerm.from( new SparseDoubleMatrix2D(
-                        p_argument.get( 0 ).<Number>raw().intValue(),
-                        p_argument.get( 1 ).<Number>raw().intValue()
-                    ) )
-                );
-                break;
+                StreamUtils.windowed(
+                    l_arguments.stream()
+                               .limit( l_limit )
+                               .map( ITerm::<Number>raw )
+                               .mapToInt( Number::intValue )
+                               .boxed(),
+                    2
+                )
+                           .map( i -> new SparseDoubleMatrix2D( i.get( 0 ), i.get( 1 ) ) )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
 
             default:
         }
-        return CFuzzyValue.from( true );
+
+        return CFuzzyValue.from( false );
     }
 
 }

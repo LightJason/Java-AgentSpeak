@@ -50,12 +50,11 @@ import java.util.stream.IntStream;
  * The first arguments is the LP object, the following arguments are the \f$ c_i \f$ values, after that the \f$ c_{const} \f$ value must be added, in the middle
  * of the arguments the relation symbol (\f$ = \f$, \f$ \geq \f$ or \f$ \leq \f$) must be set as string, after that all \f$ r_i \f$
  * elements must be set and the last argument is the \f$ r_{const} \f$, the action never fails
- * @code math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 ) @endcode
  *
+ * @code math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 ) @endcode
  * @warning the action throws an exception if the relation symbol is not found
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
- *
  */
 public final class CEquationConstraint extends IConstraint
 {
@@ -97,10 +96,10 @@ public final class CEquationConstraint extends IConstraint
 
                 // c_i values
                 l_arguments.stream()
-                    .limit( l_index - 2 )
-                    .skip( 1 )
-                    .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                    .toArray(),
+                           .limit( l_index - 2 )
+                           .skip( 1 )
+                           .mapToDouble( i -> i.<Number>raw().doubleValue() )
+                           .toArray(),
 
                 // c_const value
                 l_arguments.get( l_index - 1 ).<Number>raw().doubleValue(),
@@ -110,9 +109,9 @@ public final class CEquationConstraint extends IConstraint
 
                 // r_i values
                 l_arguments.stream()
-                    .skip( l_index + 2 )
-                    .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                    .toArray(),
+                           .skip( l_index + 2 )
+                           .mapToDouble( i -> i.<Number>raw().doubleValue() )
+                           .toArray(),
 
                 // r_const value
                 l_arguments.get( p_argument.size() - 1 ).<Number>raw().doubleValue()

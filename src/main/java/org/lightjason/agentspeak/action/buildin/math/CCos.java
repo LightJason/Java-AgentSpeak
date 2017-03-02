@@ -38,6 +38,7 @@ import java.util.List;
  * action for cosinus value.
  * The action calculates \f$ cos( x_i ) \f$ for
  * each argument in radians and returns the values
+ *
  * @code [A | B] = math/cos(3, 4); @endcode
  */
 public final class CCos extends IBuildinAction

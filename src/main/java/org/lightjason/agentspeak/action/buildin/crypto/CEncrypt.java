@@ -46,6 +46,7 @@ import java.util.List;
  * Encrypts a set of datasets, which can be complex objects, the first argument of the action
  * is the encrypting key and all other arguments are datasets, the action returns all encypted
  * datasets and fails if one encryption fails
+ *
  * @code [Encypt1 | Encrypt2 | Encypt3] = crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 ); @endcode
  */
 public final class CEncrypt extends IBuildinAction
@@ -66,25 +67,26 @@ public final class CEncrypt extends IBuildinAction
         final EAlgorithm l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
 
         return CFuzzyValue.from( p_argument.subList( 1, p_argument.size() ).stream()
-                  .map( i -> SerializationUtils.serialize( i.raw() ) )
-                  .allMatch( i -> {
-                      try
-                      {
-                          p_return.add(
-                              CRawTerm.from(
-                                  Base64.getEncoder().encodeToString(
-                                      l_algorithm.getEncryptCipher( l_key ).doFinal( i )
-                                  )
-                              )
-                          );
-                          return true;
-                      }
-                      catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                          | BadPaddingException | IllegalBlockSizeException l_exception )
-                      {
-                          return false;
-                      }
-                  } )
+                                           .map( i -> SerializationUtils.serialize( i.raw() ) )
+                                           .allMatch( i ->
+                                                      {
+                                                          try
+                                                          {
+                                                              p_return.add(
+                                                                  CRawTerm.from(
+                                                                      Base64.getEncoder().encodeToString(
+                                                                          l_algorithm.getEncryptCipher( l_key ).doFinal( i )
+                                                                      )
+                                                                  )
+                                                              );
+                                                              return true;
+                                                          }
+                                                          catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
+                                                              | BadPaddingException | IllegalBlockSizeException l_exception )
+                                                          {
+                                                              return false;
+                                                          }
+                                                      } )
         );
     }
 

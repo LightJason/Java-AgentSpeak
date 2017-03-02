@@ -49,8 +49,8 @@ import java.util.stream.IntStream;
  * the action uses on the first argument the number of iterations and all other argumentes
  * are squared matrices, the returning arguments are the eigenvector for each matrix, the
  * action never fails
- * @code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);
  *
+ * @code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);
  * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
  */
 public final class CPerronFrobenius extends IAlgebra
@@ -85,11 +85,12 @@ public final class CPerronFrobenius extends IAlgebra
             .boxed()
             .map( i -> new double[l_arguments.get( i ).<DoubleMatrix2D>raw().rows()] )
             .map( DenseDoubleMatrix1D::new )
-            .map( i -> {
-                IntStream.range( 0, i.size() )
-                    .forEach( j -> i.setQuick( j, l_random.nextDouble() ) );
-                return i;
-            } )
+            .map( i ->
+                  {
+                      IntStream.range( 0, i.size() )
+                               .forEach( j -> i.setQuick( j, l_random.nextDouble() ) );
+                      return i;
+                  } )
             .collect( Collectors.toList() );
 
         // run iteration
@@ -98,10 +99,11 @@ public final class CPerronFrobenius extends IAlgebra
                      .range( 0, l_arguments.size() )
                      .boxed()
                      .parallel()
-                     .forEach( j -> {
-                         l_eigenvector.get( j ).assign( ALGEBRA.mult( l_arguments.get( j + 1 ).<DoubleMatrix2D>raw(), l_eigenvector.get( j ) ) );
-                         l_eigenvector.get( j ).assign( Mult.div( ALGEBRA.norm2( l_eigenvector.get( j ) ) ) );
-                     } ) );
+                     .forEach( j ->
+                               {
+                                   l_eigenvector.get( j ).assign( ALGEBRA.mult( l_arguments.get( j + 1 ).<DoubleMatrix2D>raw(), l_eigenvector.get( j ) ) );
+                                   l_eigenvector.get( j ).assign( Mult.div( ALGEBRA.norm2( l_eigenvector.get( j ) ) ) );
+                               } ) );
 
         l_eigenvector.stream()
                      .map( CRawTerm::from )

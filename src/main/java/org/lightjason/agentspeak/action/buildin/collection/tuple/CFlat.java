@@ -40,6 +40,7 @@ import java.util.stream.Stream;
  * All arguments are tupels and each tupel
  * will be extract into two variables, the
  * action never fails
+ *
  * @code [A|B|C|D] = collection/tupel/flat( Tupel1, Tupel2 ); @endcode
  */
 public final class CFlat extends IBuildinAction

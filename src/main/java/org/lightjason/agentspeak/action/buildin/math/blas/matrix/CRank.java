@@ -39,8 +39,8 @@ import java.util.List;
  * rank of the matrix.
  * For each input matrix the rank is calculated and returned,
  * the action never fails
- * @code [R1|R2] = math/blas/matrix/rank(M1,M2); @endcode
  *
+ * @code [R1|R2] = math/blas/matrix/rank(M1,M2); @endcode
  * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
  */
 public final class CRank extends IAlgebra

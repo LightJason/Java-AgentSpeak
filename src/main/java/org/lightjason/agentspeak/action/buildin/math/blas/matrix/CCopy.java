@@ -40,6 +40,7 @@ import java.util.List;
  * All input matrix object will be
  * copied and returned, the action
  * never fails
+ *
  * @code [A|B] = math/blas/matrix/copy( Matrix1, Matrix2 ); @endcode
  */
 public final class CCopy extends IBuildinAction

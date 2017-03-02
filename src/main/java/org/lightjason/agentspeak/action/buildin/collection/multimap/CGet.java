@@ -41,8 +41,8 @@ import java.util.stream.Collectors;
  * get a element-list of the multimap by key.
  * The action can return multiple lists of elements by different keys,
  * one key is needed and the action never failing
- * @code
-    [A|B|C] = collection/multimap/get( Map, "key1", "key2", ["key3"] );
+ *
+ * @code [A|B|C] = collection/multimap/get( Map, "key1", "key2", ["key3"] );
  * @endcode
  */
 public final class CGet extends IBuildinAction

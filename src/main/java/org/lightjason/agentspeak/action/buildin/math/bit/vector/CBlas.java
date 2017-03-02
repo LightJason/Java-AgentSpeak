@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
  * the last argument can be "dense" or "sparse", all
  * other arguments are bit vectors and the actions
  * never fails
+ *
  * @code [A|B] = math/bit/vector/blas( Bit1, Bit2, "dense | sparse" ); @endcode
  */
 public final class CBlas extends IBuildinAction

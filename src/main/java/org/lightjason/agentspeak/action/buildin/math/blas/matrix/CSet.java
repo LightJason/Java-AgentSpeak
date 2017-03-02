@@ -25,18 +25,25 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * set a single element of a matrix
+ * set a single element of a matrix.
+ * The action sets a value into the matrix, the
+ * first argument is the row index, second argument
+ * the column index, the third value, the new value,
+ * all other arguments are matrix objects
+ *
+ * @code math/blas/matrix/set(2,2, 0.33, Matrix1, [Matrix2, Matrix3] ); @endcode
  */
-@Deprecated
 public final class CSet extends IBuildinAction
 {
     /**
@@ -58,13 +65,17 @@ public final class CSet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second row index, third column index, fourth the value
-        p_argument.get( 0 ).<DoubleMatrix2D>raw()
-            .setQuick(
-                p_argument.get( 1 ).<Number>raw().intValue(),
-                p_argument.get( 2 ).<Number>raw().intValue(),
-                p_argument.get( 3 ).<Number>raw().doubleValue()
-        );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 3 )
+                   .parallel()
+                   .map( ITerm::<DoubleMatrix2D>raw )
+                   .forEach( i -> i.setQuick(
+                       l_arguments.get( 0 ).<Number>raw().intValue(),
+                       l_arguments.get( 1 ).<Number>raw().intValue(),
+                       l_arguments.get( 2 ).<Number>raw().doubleValue()
+                   ) );
 
         return CFuzzyValue.from( true );
     }

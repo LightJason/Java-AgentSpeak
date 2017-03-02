@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
  * All arguments of the action are lists and the action will remove
  * nested structures and reverse all elements in a single list,
  * the action fails never
+ *
  * @code R = collection/list/reverse( L, [1,2], [3,4,[7,8]] ); @endcode
  */
 public final class CReverse extends IBuildinAction

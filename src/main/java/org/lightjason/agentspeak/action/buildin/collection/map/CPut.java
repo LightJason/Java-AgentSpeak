@@ -38,6 +38,7 @@ import java.util.Map;
  * First argument is a key value, second the value, all
  * other values are map references, the key-value pair
  * is added and the action never fails
+ *
  * @code collection/map/put( "key", "value", Map1, Map2 ); @endcode
  */
 public final class CPut extends IBuildinAction

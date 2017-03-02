@@ -91,9 +91,10 @@ public final class CAdd extends IStorage
      * type mapping method
      *
      * @param p_value value
+     * @return casted value
+     *
      * @tparam N return type
      * @tparam M value type
-     * @return casted value
      */
     @SuppressWarnings( "unchecked" )
     private static <N, M> N map( final M p_value )

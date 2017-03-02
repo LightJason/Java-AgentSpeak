@@ -39,6 +39,7 @@ import java.util.List;
  * returns the number of non-zero cells.
  * Gets the number of non-zero cells on each matrix
  * input and returns the value, the action never fails
+ *
  * @code [NZ1|NZ2] = math/blas/matrix/nonzero(M1,M2); @endcode
  */
 public final class CNonZero extends IBuildinAction

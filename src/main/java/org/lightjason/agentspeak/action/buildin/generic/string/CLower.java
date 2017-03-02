@@ -38,6 +38,7 @@ import java.util.List;
  * action to create a lower-case string.
  * All arguments of the action will change
  * to a lower-case string and the action never fails
+ *
  * @code [A|B|C|D] = generic/string/lower("AbC", "Ef", ["de", "XyZ"]); @endcode
  */
 public final class CLower extends IBuildinAction

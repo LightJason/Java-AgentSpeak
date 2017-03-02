@@ -39,6 +39,7 @@ import java.util.List;
  * The acion checks the string, that is the first argument,
  * with each other arguments for the operation ends-with,
  * the action never fails
+ *
  * @code [L1|L2] = generic/string/endswith("this is a long string", "long string", "string"); @endcode
  */
 public final class CEndsWith extends IBuildinAction

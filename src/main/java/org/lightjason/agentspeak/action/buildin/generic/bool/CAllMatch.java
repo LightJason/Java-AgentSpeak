@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
  * checks all elements are equal to the first argument.
  * The actions checks the first argument to all other if this
  * matchs for equality, the action never fails
- * @code AllEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
  *
+ * @code AllEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
  * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  */
@@ -71,8 +71,8 @@ public final class CAllMatch extends IBuildinAction
         p_return.add(
             CRawTerm.from(
                 l_arguments.stream()
-                   .skip( 1 )
-                   .allMatch( i -> l_arguments.get( 0 ).equals( i ) )
+                           .skip( 1 )
+                           .allMatch( i -> l_arguments.get( 0 ).equals( i ) )
             )
         );
 
