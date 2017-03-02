@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas;
 
 import cern.colt.matrix.impl.AbstractMatrix;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,9 @@ import java.util.List;
 
 
 /**
- * returns the elements within the BLAS structure
+ * returns the elements within the BLAS structure.
+ * The action returns the size of each BLAS structure
+ * @code [S1|S2|S3] = math/blas/size( M1, [M2, M3] ); @endcode
  */
 public final class CSize extends IBuildinAction
 {
@@ -55,13 +58,16 @@ public final class CSize extends IBuildinAction
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<AbstractMatrix>raw().size() ) );
+        CCommon.flatcollection( p_annotation )
+               .map( ITerm::<AbstractMatrix>raw )
+               .mapToLong( AbstractMatrix::size )
+               .boxed()
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

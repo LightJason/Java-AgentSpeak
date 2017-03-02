@@ -35,7 +35,13 @@ import java.util.List;
 
 
 /**
- * action for rounded value
+ * action for rounded value.
+ * This action calculates for each unflatten
+ * input argument the rounded value and the action
+ * fails never
+ * @code [I1|I2|I3] = math/round( 5.5, [1.2, [2.7]] ); @endcode
+ *
+ * @see https://en.wikipedia.org/wiki/Rounding
  */
 public final class CRound extends IBuildinAction
 {

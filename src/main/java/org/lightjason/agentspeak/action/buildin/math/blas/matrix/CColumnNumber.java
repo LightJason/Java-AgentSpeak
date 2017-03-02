@@ -66,7 +66,8 @@ public final class CColumnNumber extends IBuildinAction
         // arguments are matrix objects
         CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( AbstractMatrix2D::columns )
+               .mapToLong( AbstractMatrix2D::columns )
+               .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

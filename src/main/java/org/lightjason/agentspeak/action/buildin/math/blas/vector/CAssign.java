@@ -38,6 +38,7 @@ import java.util.stream.IntStream;
 /**
  * assigns a value or matrix to all elements
  */
+@Deprecated
 public final class CAssign extends IBuildinAction
 {
 

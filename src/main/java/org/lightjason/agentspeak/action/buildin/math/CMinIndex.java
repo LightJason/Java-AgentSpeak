@@ -66,7 +66,7 @@ public final class CMinIndex extends IBuildinAction
 
         p_return.add(
             CRawTerm.from(
-                IntStream.range( 0, l_list.size() - 1 )
+                (long) IntStream.range( 0, l_list.size() - 1 )
                      .parallel()
                      .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? i : j )
                      .orElseThrow( () -> new CRuntimeException( p_context ) )

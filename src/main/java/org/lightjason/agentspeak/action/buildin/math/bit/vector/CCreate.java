@@ -21,10 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+
+import cern.colt.bitvector.BitVector;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,20 +37,18 @@ import java.util.List;
 
 
 /**
- * rank of the matrix.
- * For each input matrix the rank is calculated and returned,
- * the action never fails
- * @code [R1|R2] = math/blas/matrix/rank(M1,M2); @endcode
- *
- * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
+ * creates a bit vector.
+ * All arguments are defined the size of bit vectors, so
+ * for each input argument a bit vector will be created and
+ * returned, the action never fails
+ * @code [A|B|C|D] = math/bit/vector/create( 3, [2, [1, 12]] ); @endcode
  */
-public final class CRank extends IAlgebra
+public final class CCreate extends IBuildinAction
 {
-
     /**
      * ctor
      */
-    public CRank()
+    public CCreate()
     {
         super( 4 );
     }
@@ -65,14 +64,15 @@ public final class CRank extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // arguments are matrix objects
         CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .mapToLong( ALGEBRA::rank )
+               .map( ITerm::<Number>raw )
+               .mapToInt( Number::intValue )
                .boxed()
+               .map( BitVector::new )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
+
 }

@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -38,7 +39,10 @@ import java.util.stream.Collectors;
 
 
 /**
- * converts a vector to a list
+ * converts a vector to a list.
+ * The action creates lists of each input vector,
+ * the action never fails
+ * @code [L1|L2|L3] = math/blas/vector/tolist( Vector1, [Vector2, Vector3] ); @endcode
  */
 public final class CToList extends IBuildinAction
 {
@@ -61,19 +65,13 @@ public final class CToList extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a vector object
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedList(
-                Arrays.stream(
-                    p_argument.get( 0 ).<DoubleMatrix1D>raw().toArray()
-                )
-                      .boxed()
-                      .collect( Collectors.toList() ) )
-            : Arrays.stream( p_argument.get( 0 ).<DoubleMatrix1D>raw().toArray() )
-                    .boxed()
-                    .collect( Collectors.toList() )
-        ) );
+        CCommon.flatcollection( p_argument )
+            .map( ITerm::<DoubleMatrix1D>raw )
+            .map( i -> Arrays.stream( i.toArray() ).boxed().collect( Collectors.toList() ) )
+            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 }

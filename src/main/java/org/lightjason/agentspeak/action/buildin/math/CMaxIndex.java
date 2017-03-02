@@ -66,10 +66,10 @@ public final class CMaxIndex extends IBuildinAction
 
         p_return.add(
             CRawTerm.from(
-                IntStream.range( 0, l_list.size() - 1 )
-                         .parallel()
-                         .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? j : i )
-                         .orElseThrow( () -> new CRuntimeException( p_context ) )
+                (long) IntStream.range( 0, l_list.size() - 1 )
+                                .parallel()
+                                .reduce( ( i, j ) -> l_list.get( i ) < l_list.get( j ) ? j : i )
+                                .orElseThrow( () -> new CRuntimeException( p_context ) )
             )
         );
 

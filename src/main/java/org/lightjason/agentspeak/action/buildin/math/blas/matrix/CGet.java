@@ -37,6 +37,7 @@ import java.util.List;
 /**
  * returns a single element of a matrix
  */
+@Deprecated
 public final class CGet extends IBuildinAction
 {
     /**

@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
  *
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
  */
+@Deprecated
 public final class CEigenValue extends IBuildinAction
 {
     /**

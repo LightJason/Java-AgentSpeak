@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 /**
  * returns a single row of a matrix
  */
+@Deprecated
 public final class CRow extends IBuildinAction
 {
     /**

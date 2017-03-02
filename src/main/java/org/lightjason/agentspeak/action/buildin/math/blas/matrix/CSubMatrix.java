@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,10 +33,15 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a submatrix
+ * returns a submatrix.
+ * The first four arguments defines the index values of the
+ * submatrix ( from/to row, from/to column ) and each matrix
+ * object that starts at the fiveth position will
+ * @code [M1|M2] = math/blas/matrix/submatrix( FromRow, ToRow, FromColumn, ToColumn, Matrix1, [ Matrix2 ] );  @endcode
  */
 public final class CSubMatrix extends IAlgebra
 {
@@ -58,18 +64,19 @@ public final class CSubMatrix extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object,
-        // second begin row index, third end row index
-        // forth begin column index, fifth end column index
-        p_return.add( CRawTerm.from(
-            ALGEBRA.subMatrix(
-                p_argument.get( 0 ).<DoubleMatrix2D>raw(),
-                p_argument.get( 1 ).<Number>raw().intValue(),
-                p_argument.get( 2 ).<Number>raw().intValue(),
-                p_argument.get( 3 ).<Number>raw().intValue(),
-                p_argument.get( 4 ).<Number>raw().intValue()
-            )
-        ) );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 4 )
+                   .map( i -> ALGEBRA.subMatrix(
+                       i.<DoubleMatrix2D>raw(),
+                       l_arguments.get( 0 ).<Number>raw().intValue(),
+                       l_arguments.get( 1 ).<Number>raw().intValue(),
+                       l_arguments.get( 2 ).<Number>raw().intValue(),
+                       l_arguments.get( 3 ).<Number>raw().intValue()
+                   ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

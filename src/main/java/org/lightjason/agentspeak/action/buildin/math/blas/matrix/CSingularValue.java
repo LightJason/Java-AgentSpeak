@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
  *
  * @see https://en.wikipedia.org/wiki/Singular_value_decomposition
  */
+@Deprecated
 public final class CSingularValue extends IBuildinAction
 {
     /**

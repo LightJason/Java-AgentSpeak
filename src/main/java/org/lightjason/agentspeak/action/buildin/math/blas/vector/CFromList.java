@@ -23,11 +23,11 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
-import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,11 +35,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 
 /**
- * creates a dense- or sparse-vector from a list
+ * creates a dense- or sparse-vector from a list.
+ * All input arguments will be converted to a
+ * dense or sparse vector, so the arguments must be
+ * lists of numbers, the last optional argument can be a string
+ * with "dense | sparse" to create dense or sparse structures,
+ * the action never fails
+ * @code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" ); @endcode
+ *
  */
 public final class CFromList extends IBuildinAction
 {
@@ -62,35 +68,38 @@ public final class CFromList extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument is the list type
-        // optional second argument is matrix type (default dense-matrix)
-        final List<Double> l_data = p_argument.get( 0 ).raw();
-        switch ( p_argument.size() > 1 ? EType.from( p_argument.get( 1 ).<String>raw() ) : EType.DENSE )
+        final int l_limit;
+        final EType l_type;
+        if ( ( CCommon.rawvalueAssignableTo( p_argument.get( p_argument.size() - 1 ), String.class ) )
+             && ( EType.exists( p_argument.get( p_argument.size() - 1 ).<String>raw() ) ) )
         {
-            case DENSE:
-                p_return.add( assign( l_data, new DenseDoubleMatrix1D( l_data.size() ) ) );
-                break;
-
-            case SPARSE:
-                p_return.add( assign( l_data, new SparseDoubleMatrix1D( l_data.size() ) ) );
-                break;
-
-            default:
+            l_type = EType.from( p_argument.get( p_argument.size() - 1 ).<String>raw() );
+            l_limit = p_argument.size() - 1;
         }
-        return CFuzzyValue.from( true );
-    }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = p_argument.size();
+        }
 
-    /**
-     * assigns the list values to the vector
-     *
-     * @param p_data list
-     * @param p_vector vector
-     * @return term
-     */
-    private static ITerm assign( final List<Double> p_data, final DoubleMatrix1D p_vector )
-    {
-        IntStream.range( 0, p_data.size() ).boxed().forEach( i -> p_vector.setQuick( i, p_data.get( i ) ) );
-        return CRawTerm.from( p_vector );
+
+        // create vectors from lists
+        p_argument.stream()
+                  .limit( l_limit )
+                  .map( ITerm::<List<Number>>raw )
+                  .map( i -> i.stream().mapToDouble( Number::doubleValue ).toArray() )
+                  .map( i -> {
+                      switch ( l_type )
+                      {
+                          case SPARSE: return new SparseDoubleMatrix1D( i );
+                          default :
+                              return new DenseDoubleMatrix1D( i );
+                      }
+                  } )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
+
+        return CFuzzyValue.from( true );
     }
 
 }

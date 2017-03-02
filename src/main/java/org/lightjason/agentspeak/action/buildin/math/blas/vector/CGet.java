@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,10 +33,15 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a single element of a vector
+ * returns a single element of a vector.
+ * The action returns the values by the given index,
+ * first argument is the vector and all other values
+ * are the index values, the action never fails
+ * @code [X|Y|Z] = math/blas/vector/get( Vector, 1, [4, 5] ); @endcode
  */
 public final class CGet extends IBuildinAction
 {
@@ -58,8 +64,15 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second index of the element
-        p_return.add( CRawTerm.from( p_argument.get( 0 ).<DoubleMatrix1D>raw().getQuick( p_argument.get( 1 ).<Number>raw().intValue() ) ) );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<Number>raw )
+                   .map( Number::intValue )
+                   .map( i -> l_arguments.get( 0 ).<DoubleMatrix1D>raw().get( i ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

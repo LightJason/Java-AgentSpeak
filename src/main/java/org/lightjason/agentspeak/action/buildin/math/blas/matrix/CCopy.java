@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +36,11 @@ import java.util.List;
 
 
 /**
- * returns a copy of the matrix
+ * returns a copy of the matrix.
+ * All input matrix object will be
+ * copied and returned, the action
+ * never fails
+ * @code [A|B] = math/blas/matrix/copy( Matrix1, Matrix2 ); @endcode
  */
 public final class CCopy extends IBuildinAction
 {
@@ -58,12 +63,11 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<DoubleMatrix2D>raw().copy()
-            )
-        );
+        CCommon.flatcollection( p_annotation )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( DoubleMatrix2D::copy )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

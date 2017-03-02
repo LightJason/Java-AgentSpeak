@@ -36,6 +36,7 @@ import java.util.List;
 /**
  * set a single element of a matrix
  */
+@Deprecated
 public final class CSet extends IBuildinAction
 {
     /**

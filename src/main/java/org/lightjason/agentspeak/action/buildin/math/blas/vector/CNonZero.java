@@ -65,7 +65,8 @@ public final class CNonZero extends IBuildinAction
         // arguments are matrix objects
         CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix1D>raw )
-               .map( DoubleMatrix1D::cardinality )
+               .mapToLong( DoubleMatrix1D::cardinality )
+               .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

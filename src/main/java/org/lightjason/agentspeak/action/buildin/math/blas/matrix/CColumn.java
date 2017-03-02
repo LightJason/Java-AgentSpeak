@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 /**
  * returns a single column of a matrix
  */
+@Deprecated
 public final class CColumn extends IBuildinAction
 {
 

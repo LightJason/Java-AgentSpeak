@@ -40,10 +40,10 @@ import java.util.stream.Collectors;
 
 /**
  * creates a dense- or sparse-vector.
- * the first \f$ n-1 \f$ arguments are the size of the vector,
- * the last argument defines as string a dense or sparse vector (default
- * is dense) and the action never fails
- * @code [A|B|C] = math/blas/vector( 3, 2, 1, "dense | sparse"); @endcode
+ * The action creates a vector, the first \f$ n-1 \f$ arguments are
+ * the size of the vector, the last argument defines as string a
+ * dense or sparse vector (default is dense) and the action never fails
+ * @code [A|B|C] = math/blas/vector/create( 3, 2, 1, "dense | sparse"); @endcode
  */
 public final class CCreate extends IBuildinAction
 {
@@ -69,7 +69,8 @@ public final class CCreate extends IBuildinAction
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
         final int l_limit;
         final EType l_type;
-        if ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
         {
             l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
             l_limit = l_arguments.size() - 1;
@@ -80,13 +81,16 @@ public final class CCreate extends IBuildinAction
             l_limit = l_arguments.size();
         }
 
+
         // create vectors
         switch ( l_type )
         {
             case DENSE:
                 l_arguments.stream()
                            .limit( l_limit )
-                           .map( i -> i.<Number>raw().intValue() )
+                           .map( ITerm::<Number>raw )
+                           .mapToInt( Number::intValue )
+                           .boxed()
                            .map( DenseDoubleMatrix1D::new )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
@@ -95,7 +99,9 @@ public final class CCreate extends IBuildinAction
             case SPARSE:
                 l_arguments.stream()
                            .limit( l_limit )
-                           .map( i -> i.<Number>raw().intValue() )
+                           .map( ITerm::<Number>raw )
+                           .mapToInt( Number::intValue )
+                           .boxed()
                            .map( SparseDoubleMatrix1D::new )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );

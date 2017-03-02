@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,10 +33,16 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * returns the matrix power.
+ * The action creates the matrix power, the
+ * first argument is the exponent, all other arguments are
+ * input matrix vlaues and the returns the power value for each
+ * input matrix
+ * @code [M1|M2|M3] = blas/matrix/power(3, M1, [M2, [M3]]); @endcode
  *
  * @see https://en.wikipedia.org/wiki/Matrix_exponential
  */
@@ -61,15 +68,14 @@ public final class CPower extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second argument must be the exponent
-        p_return.add(
-            CRawTerm.from(
-                ALGEBRA.pow(
-                    p_argument.get( 0 ).<DoubleMatrix2D>raw(),
-                    p_argument.get( 1 ).<Number>raw().intValue()
-                )
-            )
-        );
+        final List<ITerm> l_argument = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_argument.stream()
+                  .skip( 1 )
+                  .map( ITerm::<DoubleMatrix2D>raw )
+                  .map( i -> ALGEBRA.pow( i, l_argument.get( 0 ).<Number>raw().intValue() ) )
+                  .map( CRawTerm::from )
+                  .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

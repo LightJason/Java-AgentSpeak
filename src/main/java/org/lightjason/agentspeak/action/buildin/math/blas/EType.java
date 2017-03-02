@@ -24,7 +24,11 @@
 package org.lightjason.agentspeak.action.buildin.math.blas;
 
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -36,6 +40,11 @@ public enum EType
     DENSE;
 
     /**
+     * set with names
+     */
+    private static final Set<String> NAMES = Collections.unmodifiableSet( Arrays.stream( EType.values() ).map( Enum::name ).collect( Collectors.toSet() ) );
+
+    /**
      * additional factory
      *
      * @param p_name name as string
@@ -45,4 +54,16 @@ public enum EType
     {
         return EType.valueOf( p_name.trim().toUpperCase( Locale.ROOT ) );
     }
+
+    /**
+     * check method to check if a enum value with a name exists
+     *
+     * @param p_name name as string
+     * @return boolean if enum value exists
+     */
+    public static boolean exists( final String p_name )
+    {
+        return NAMES.contains( p_name.trim().toUpperCase( Locale.ROOT ) );
+    }
+
 }

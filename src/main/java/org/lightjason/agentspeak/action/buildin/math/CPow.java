@@ -35,7 +35,7 @@ import java.util.List;
 
 
 /**
- * action for pow .
+ * action for pow.
  * Calculates the pow for each unflatten argument
  * \f$ x_i^t \f$, the first argument is the exponent
  * t and all other arguments will be used for \f$ x_i \f$,

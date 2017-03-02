@@ -27,6 +27,7 @@ import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,10 +36,15 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * creates a dense- or sparse-vector from as string.
+ * The action creates for each input argument a vector
+ * by parsing the string, the last string can be "dense | sparse"
+ * to defining a sparse / dense vector, the action never fails
+ * @code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" );
  *
  * @note seperator is comma, semicolon or space
  */
@@ -63,18 +69,48 @@ public final class CParse extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( p_argument.size() > 1 ? EType.from( p_argument.get( 1 ).<String>raw() ) : EType.DENSE )
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int l_limit;
+        final EType l_type;
+        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        {
+            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_limit = l_arguments.size() - 1;
+        }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = l_arguments.size();
+        }
+
+
+        // create vectors
+        switch ( l_type )
         {
             case DENSE:
-                p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( CParse.parse( p_argument.get( 0 ).<String>raw() ) ) ) );
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<String>raw )
+                           .map( CParse::parse )
+                           .map( DenseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
                 break;
 
             case SPARSE:
-                p_return.add( CRawTerm.from( new SparseDoubleMatrix1D( CParse.parse( p_argument.get( 0 ).<String>raw() ) ) ) );
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<String>raw )
+                           .map( CParse::parse )
+                           .map( SparseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
                 break;
 
             default:
         }
+
         return CFuzzyValue.from( true );
     }
 

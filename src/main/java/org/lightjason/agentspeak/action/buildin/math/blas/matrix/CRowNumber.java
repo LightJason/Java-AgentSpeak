@@ -66,7 +66,8 @@ public final class CRowNumber extends IBuildinAction
         // arguments are matrix objects
         CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( AbstractMatrix2D::rows )
+               .mapToLong( AbstractMatrix2D::rows )
+               .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -63,6 +64,7 @@ public final class CPrimeFactors extends IBuildinAction
                .mapToInt( Number::intValue )
                .boxed()
                .map( Primes::primeFactors )
+               .map( i -> i.stream().mapToLong( j -> j ).boxed().collect( Collectors.toList() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

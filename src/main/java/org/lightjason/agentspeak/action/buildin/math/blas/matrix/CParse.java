@@ -46,6 +46,7 @@ import java.util.stream.IntStream;
  *
  * @note semicolon splits the rows, spaces / comma splits the columns
  */
+@Deprecated
 public final class CParse extends IBuildinAction
 {
     /**

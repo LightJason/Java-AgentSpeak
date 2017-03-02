@@ -39,6 +39,7 @@ import java.util.List;
 /**
  * creates a dense- or sparse-matrix
  */
+@Deprecated
 public final class CCreate extends IBuildinAction
 {
     /**
