@@ -168,8 +168,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_beliefbase;
     }
 
-    @SafeVarargs
     @Override
+    @SafeVarargs
     public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
     {
         if ( p_inspector == null )

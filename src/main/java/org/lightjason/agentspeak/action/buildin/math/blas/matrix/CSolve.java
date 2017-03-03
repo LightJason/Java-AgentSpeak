@@ -23,8 +23,12 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,10 +39,15 @@ import java.util.List;
 
 
 /**
- * solver of matrix-equation \f$ A \cdot X = B \f$
- * @deprecated refactor
+ * solver of matrix-equation.
+ * The action solve the equation \f$ A \cdot X = B \f$
+ * for each input tuple, \f$ A \f$ is the first matrix argument
+ * within the tuple and \f$ B \f$ the second, which can be a
+ * matrix or vector, for each tuple the action returns \f$ X \f$,
+ * the action never fails
+ *
+ * @code [R1|R2] = math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] ); @endcode
  */
-@Deprecated
 public final class CSolve extends IAlgebra
 {
     @Override
@@ -53,13 +62,30 @@ public final class CSolve extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument matrix, second argument result matrix
-        p_return.add( CRawTerm.from(
-            ALGEBRA.solve(
-                p_return.get( 0 ).<DoubleMatrix2D>raw(),
-                p_return.get( 1 ).<DoubleMatrix2D>raw()
-            )
-        ) );
+        StreamUtils.windowed(
+            CCommon.flatcollection( p_argument ),
+            2
+        )
+            .map( i -> ALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * creates a matrix from the input term
+     *
+     * @param p_term term with vector or matrix
+     * @return matrix
+     */
+    private static DoubleMatrix2D result( final ITerm p_term )
+    {
+        if ( CCommon.rawvalueAssignableTo( p_term, DoubleMatrix2D.class ) )
+            return p_term.<DoubleMatrix2D>raw();
+
+        final DoubleMatrix2D l_result = new DenseDoubleMatrix2D( p_term.<DoubleMatrix1D>raw().size(), 1 );
+        l_result.viewColumn( 0 ).assign( p_term.<DoubleMatrix1D>raw() );
+        return l_result;
     }
 }

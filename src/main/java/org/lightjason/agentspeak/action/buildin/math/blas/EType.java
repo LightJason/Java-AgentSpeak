@@ -42,7 +42,7 @@ public enum EType
     /**
      * set with names
      */
-    private static final Set<String> NAMES = Collections.unmodifiableSet( Arrays.stream( EType.values() ).map( Enum::name ).collect( Collectors.toSet() ) );
+    private static final Set<String> NAMES = Collections.unmodifiableSet( Arrays.stream( EType.values() ).map( i -> i.name() ).collect( Collectors.toSet() ) );
 
     /**
      * additional factory

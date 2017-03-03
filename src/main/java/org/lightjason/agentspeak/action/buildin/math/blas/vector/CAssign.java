@@ -25,21 +25,27 @@ package org.lightjason.agentspeak.action.buildin.math.blas.vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 
 /**
- * assigns a value or matrix to all elements
- * @deprecated refactor
+ * assigns a value or vector to all elements.
+ * The action assign the first argument to all
+ * other arguments which must be vectors
+ *
+ * @code
+    math/blas/vector/assign(2, Vector1, [Vector2, Vector3] );
+    math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
+ * @endcode
+ *
  */
-@Deprecated
 public final class CAssign extends IBuildinAction
 {
 
@@ -63,29 +69,29 @@ public final class CAssign extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument must be a term with a matrix object, second assign value
-        final DoubleMatrix1D l_vector = p_argument.get( 0 ).raw();
-        final Object l_value = p_argument.get( 1 ).raw();
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
-        if ( l_value instanceof Number )
-        {
-            p_return.add( CRawTerm.from( l_vector.assign( ( (Number) l_value ).doubleValue() ) ) );
-            return CFuzzyValue.from( true );
-        }
+        return CFuzzyValue.from(
+            l_arguments.stream()
+                       .skip( 1 )
+                       .parallel()
+                       .allMatch( i -> {
 
-        if ( l_value instanceof DoubleMatrix1D )
-        {
-            p_return.add( CRawTerm.from( l_vector.assign( (DoubleMatrix1D) l_value ) ) );
-            return CFuzzyValue.from( true );
-        }
+                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Number.class ) )
+                           {
+                               i.<DoubleMatrix1D>raw().assign( l_arguments.get( 0 ).<Number>raw().doubleValue() );
+                               return true;
+                           }
 
-        if ( l_value instanceof List<?> )
-        {
-            final List<Double> l_data = (List<Double>) l_value;
-            IntStream.range( 0, Math.min( l_vector.size(), l_data.size() ) ).boxed().forEach( i -> l_vector.setQuick( i, l_data.get( i ) ) );
-            return CFuzzyValue.from( true );
-        }
+                           if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), DoubleMatrix1D.class ) )
+                           {
+                               i.<DoubleMatrix1D>raw().assign( l_arguments.get( 0 ).<DoubleMatrix1D>raw() );
+                               return true;
+                           }
 
-        return CFuzzyValue.from( false );
+                           return false;
+
+                       } )
+        );
     }
 }

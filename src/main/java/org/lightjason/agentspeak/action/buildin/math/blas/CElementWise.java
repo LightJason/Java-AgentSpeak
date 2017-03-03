@@ -67,7 +67,7 @@ public class CElementWise extends IBuildinAction
                 StreamUtils.windowed(
                 CCommon.flatcollection( p_argument ),
             3
-            ).allMatch( i -> {
+            ).parallel().allMatch( i -> {
 
                 switch ( i.get( 1 ).<String>raw().trim() )
                 {

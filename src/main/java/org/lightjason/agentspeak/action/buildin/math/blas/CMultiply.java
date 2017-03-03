@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.math.blas;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.AbstractMatrix;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -71,42 +70,41 @@ public final class CMultiply extends IAlgebra
             StreamUtils.windowed(
                 CCommon.flatcollection( p_argument ),
                 2
-            ).allMatch( i ->
-                        {
+            ).parallel().allMatch( i -> {
 
-                            if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
-                                 && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
-                                return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply(
-                                    i.get( 0 ), i.get( 1 ),
-                                    ( u, v ) -> ALGEBRA.multOuter( u, v, null ),
-                                    p_return
-                                );
+                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
+                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
+                    return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply(
+                        i.get( 0 ), i.get( 1 ),
+                        ( u, v ) -> ALGEBRA.multOuter( u, v, null ),
+                        p_return
+                    );
 
-                            if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
-                                 && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
-                                return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply(
-                                    i.get( 0 ), i.get( 1 ),
-                                    ALGEBRA::mult,
-                                    p_return
-                                );
+                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
+                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
+                    return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply(
+                        i.get( 0 ), i.get( 1 ),
+                        ALGEBRA::mult,
+                        p_return
+                    );
 
-                            if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
-                                 && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
-                                return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply(
-                                    i.get( 0 ), i.get( 1 ),
-                                    ALGEBRA::mult,
-                                    p_return
-                                );
+                if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
+                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
+                    return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply(
+                        i.get( 0 ), i.get( 1 ),
+                        ALGEBRA::mult,
+                        p_return
+                    );
 
-                            return ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
-                                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
-                                   && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply(
-                                i.get( 0 ), i.get( 1 ),
-                                ( u, v ) -> ALGEBRA.mult( v, u ),
-                                p_return
-                            );
+                return ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
+                         && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
+                       && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply(
+                    i.get( 0 ), i.get( 1 ),
+                    ( u, v ) -> ALGEBRA.mult( v, u ),
+                    p_return
+                );
 
-                        } )
+            } )
         );
     }
 
