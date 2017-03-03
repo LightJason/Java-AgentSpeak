@@ -111,10 +111,10 @@ public final class CCreate extends IBuildinAction
 
                 return CFuzzyValue.from( true );
 
-            default:
-        }
 
-        return CFuzzyValue.from( false );
+            default:
+                return CFuzzyValue.from( false );
+        }
     }
 
 }

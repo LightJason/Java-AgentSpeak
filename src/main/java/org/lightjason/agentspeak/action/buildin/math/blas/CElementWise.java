@@ -23,24 +23,26 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas;
 
+import cern.colt.function.DoubleDoubleFunction;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.AbstractMatrix;
 import cern.jet.math.Functions;
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 
 /**
- * elementweise vector / matrix operation
- * @deprecated refactor
+ * elementweise vector / matrix operation.
+ *
  */
-@Deprecated
 public class CElementWise extends IBuildinAction
 {
 
@@ -56,100 +58,92 @@ public class CElementWise extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        switch ( p_argument.get( 1 ).<String>raw().trim() )
+        return CFuzzyValue.from(
+                StreamUtils.windowed(
+                CCommon.flatcollection( p_argument ),
+            3
+            ).allMatch( i -> {
+
+                switch ( i.get( 1 ).<String>raw().trim() )
+                {
+                    case "+" :
+                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.plus, ( n, m ) -> n + m );
+
+                    case "|+|" :
+                        return CElementWise.apply( i.get( 0 ), i.get( 1 ),  Functions.plusAbs, ( n, m ) -> Math.abs( n + m ) );
+
+                    case "-" :
+                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.minus, ( n, m ) -> n - m );
+
+                    case "*" :
+                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.mult, ( n, m ) -> n * m );
+
+                    case "/" :
+                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.div, ( n, m ) -> n / m );
+
+                    default:
+                        return false;
+                }
+
+            } )
+        );
+    }
+
+
+    /**
+     * elementwise assign
+     *
+     * @param p_left left term argument (matrix argument)
+     * @param p_right matrix or scalar value argument
+     * @param p_matrixfunction function for matrix-matrix operation
+     * @param p_scalarfunction scalar function for value
+     * @return successful executed
+     * @note DoubleMatrix1D and DoubleMatrix2D does not use an equal
+     * super class for defining the assign method, so code must be
+     * created twice for each type
+     */
+    private static boolean apply( final ITerm p_left, final ITerm p_right,
+                                  final DoubleDoubleFunction p_matrixfunction, final BiFunction<Double, Double, Double> p_scalarfunction )
+    {
+        // operation for matrix
+        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix2D.class ) )
         {
-            case "+":
-                this.plus(
-                    p_argument.get( 0 ).<AbstractMatrix>raw(),
-                    p_argument.get( 2 ).<Number>raw().doubleValue()
-                );
-                return CFuzzyValue.from( true );
+            final DoubleMatrix2D l_assign = p_left.<DoubleMatrix2D>raw();
 
-            case "-":
-                this.minus(
-                    p_argument.get( 0 ).<AbstractMatrix>raw(),
-                    p_argument.get( 2 ).<Number>raw().doubleValue()
-                );
-                return CFuzzyValue.from( true );
+            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix2D.class ) )
+            {
+                l_assign.assign( p_right.<DoubleMatrix2D>raw(), p_matrixfunction );
+                return true;
+            }
 
-            case "*":
-                this.multiply(
-                    p_argument.get( 0 ).<AbstractMatrix>raw(),
-                    p_argument.get( 2 ).<Number>raw().doubleValue()
-                );
-                return CFuzzyValue.from( true );
-
-            case "/":
-                this.divide(
-                    p_argument.get( 0 ).<AbstractMatrix>raw(),
-                    p_argument.get( 2 ).<Number>raw().doubleValue()
-                );
-                return CFuzzyValue.from( true );
-
-
-            default:
-                return CFuzzyValue.from( false );
+            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
+            {
+                l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                return true;
+            }
         }
+
+        // operation for vector
+        if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix1D.class ) )
+        {
+            final DoubleMatrix1D l_assign = p_left.<DoubleMatrix1D>raw();
+
+            if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix1D.class ) )
+            {
+                l_assign.assign( p_right.<DoubleMatrix1D>raw(), p_matrixfunction );
+                return true;
+            }
+
+            if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
+            {
+                l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
-    /**
-     * plus operator
-     *
-     * @param p_matrix matrix element
-     * @param p_value value element
-     */
-    private void plus( final AbstractMatrix p_matrix, final double p_value )
-    {
-        if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( Functions.plus( p_value ) );
-        else
-            ( (DoubleMatrix2D) p_matrix ).assign( Functions.plus( p_value ) );
-    }
-
-
-    /**
-     * minus operator
-     *
-     * @param p_matrix matrix element
-     * @param p_value value element
-     */
-    private void minus( final AbstractMatrix p_matrix, final double p_value )
-    {
-        if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( Functions.minus( p_value ) );
-        else
-            ( (DoubleMatrix2D) p_matrix ).assign( Functions.minus( p_value ) );
-    }
-
-
-    /**
-     * multiply operator
-     *
-     * @param p_matrix matrix element
-     * @param p_value value element
-     */
-    private void multiply( final AbstractMatrix p_matrix, final double p_value )
-    {
-        if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( Functions.mult( p_value ) );
-        else
-            ( (DoubleMatrix2D) p_matrix ).assign( Functions.mult( p_value ) );
-    }
-
-
-    /**
-     * divide operator
-     *
-     * @param p_matrix matrix element
-     * @param p_value value element
-     */
-    private void divide( final AbstractMatrix p_matrix, final double p_value )
-    {
-        if ( p_matrix instanceof DoubleMatrix1D )
-            ( (DoubleMatrix1D) p_matrix ).assign( Functions.div( p_value ) );
-        else
-            ( (DoubleMatrix2D) p_matrix ).assign( Functions.div( p_value ) );
-    }
 
 }
