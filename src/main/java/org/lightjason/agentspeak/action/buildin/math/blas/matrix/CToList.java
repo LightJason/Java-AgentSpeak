@@ -23,10 +23,8 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
-import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -34,25 +32,25 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * creates the normalized graph laplacian.
- * For each input matrix, which must be symmetric,
- * the normalized graph laplacian is calculated and returned,
+ * converts a matrix rowise to a list.
+ * The action creates lists of each input matrix,
  * the action never fails
  *
- * @code [L1|L2] = math/blas/matrix/normalizedgraphlaplacian( SymmetricMatrix1, SymmetricMatrix2 ); @endcode
- * @see https://en.wikipedia.org/wiki/Laplacian_matrix
+ * @code [L1|L2|L3] = math/blas/matrix/tolist( Matrix1, [Matrix2, Matrix3] ); @endcode
  */
-public final class CNormalizedGraphLaplacian extends IAlgebra
+public final class CToList extends IBuildinAction
 {
-
     /**
      * ctor
      */
-    public CNormalizedGraphLaplacian()
+    public CToList()
     {
         super( 4 );
     }
@@ -70,14 +68,8 @@ public final class CNormalizedGraphLaplacian extends IAlgebra
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( i -> {
-                   final DoubleMatrix2D l_degree = DoubleFactory2D
-                             .sparse
-                             .identity( Math.max( i.columns(), i.rows() ) )
-                             .assign( Functions.mult( ALGEBRA.trace( i ) ) );
-
-                   return ALGEBRA.mult( ALGEBRA.inverse( l_degree ), l_degree.assign( i, ( n, m ) -> n - m ) );
-               } )
+               .map( i -> Arrays.stream( i.toArray() ).flatMap( j -> Arrays.stream( j ).boxed() ).collect( Collectors.toList() ) )
+               .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

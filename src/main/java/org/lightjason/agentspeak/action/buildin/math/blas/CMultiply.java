@@ -62,6 +62,10 @@ public final class CMultiply extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
+
+
+
+
         // first & second argument are matrix or vector elements
         final AbstractMatrix l_first = p_argument.get( 0 ).raw();
         final AbstractMatrix l_second = p_argument.get( 1 ).raw();

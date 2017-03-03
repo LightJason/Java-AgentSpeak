@@ -41,6 +41,12 @@ import java.util.function.BiFunction;
 
 /**
  * elementweise vector / matrix operation.
+ * The action calculates elementwise different
+ * operations (plus, plus-absolute, minus, multiply, divide),
+ * all arguments are triples of matrix-operator-matrix|scalar,
+ * and the operation is assigned to the left-side matrix, the
+ * action fails on assigning problems
+ * @code math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]); @endcode
  *
  */
 public class CElementWise extends IBuildinAction
@@ -53,7 +59,6 @@ public class CElementWise extends IBuildinAction
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
