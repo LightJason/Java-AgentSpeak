@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.action.buildin.math.blas;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.AbstractMatrix;
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -33,13 +35,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 
 /**
- * defines matrix- / vector-products
- * @deprecated refactor
+ * defines matrix- / vector-products.
+ * The action multiplies tupel-wise all unflatten arguments,
+ * the action fails iif the multiply cannot executed e.g. on wrong
+ * input
+ *
+ * @code [M1|M2|M3] = math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] ); @endcode
  */
-@Deprecated
 public final class CMultiply extends IAlgebra
 {
     /**
@@ -57,74 +63,69 @@ public final class CMultiply extends IAlgebra
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
+        return CFuzzyValue.from(
+            StreamUtils.windowed(
+                CCommon.flatcollection( p_argument ),
+                2
+            ).allMatch( i ->
+                        {
 
+                            if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
+                                 && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
+                                return CMultiply.<DoubleMatrix1D, DoubleMatrix1D>apply(
+                                    i.get( 0 ), i.get( 1 ),
+                                    ( u, v ) -> ALGEBRA.multOuter( u, v, null ),
+                                    p_return
+                                );
 
+                            if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
+                                 && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
+                                return CMultiply.<DoubleMatrix2D, DoubleMatrix2D>apply(
+                                    i.get( 0 ), i.get( 1 ),
+                                    ALGEBRA::mult,
+                                    p_return
+                                );
 
+                            if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix2D.class ) )
+                                 && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )
+                                return CMultiply.<DoubleMatrix2D, DoubleMatrix1D>apply(
+                                    i.get( 0 ), i.get( 1 ),
+                                    ALGEBRA::mult,
+                                    p_return
+                                );
 
-        // first & second argument are matrix or vector elements
-        final AbstractMatrix l_first = p_argument.get( 0 ).raw();
-        final AbstractMatrix l_second = p_argument.get( 1 ).raw();
+                            return ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
+                                     && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix2D.class ) ) )
+                                   && CMultiply.<DoubleMatrix1D, DoubleMatrix2D>apply(
+                                i.get( 0 ), i.get( 1 ),
+                                ( u, v ) -> ALGEBRA.mult( v, u ),
+                                p_return
+                            );
 
-        if ( ( l_first instanceof DoubleMatrix1D ) && ( l_second instanceof DoubleMatrix1D ) )
-            return this.multiplyVectorVector( (DoubleMatrix1D) l_first, (DoubleMatrix1D) l_second, p_return );
-
-        if ( ( l_first instanceof DoubleMatrix2D ) && ( l_second instanceof DoubleMatrix2D ) )
-            return this.multiplyVectorVector( (DoubleMatrix2D) l_first, (DoubleMatrix2D) l_second, p_return );
-
-        if ( ( l_first instanceof DoubleMatrix2D ) && ( l_second instanceof DoubleMatrix1D ) )
-            return this.multiplyMatrixVector( (DoubleMatrix2D) l_first, (DoubleMatrix1D) l_second, p_return );
-
-        if ( ( l_first instanceof DoubleMatrix1D ) && ( l_second instanceof DoubleMatrix2D ) )
-            return this.multiplyMatrixVector( (DoubleMatrix2D) l_second, (DoubleMatrix1D) l_first, p_return );
-
-        return CFuzzyValue.from( false );
+                        } )
+        );
     }
 
     /**
-     * outer-vector product
+     * apply method
      *
-     * @param p_first vector
-     * @param p_second vector
-     * @param p_return return matrix
-     * @return fuzzy boolean
+     * @param p_left first element
+     * @param p_right second element
+     * @param p_function function for the two elements
+     * @param p_return return list
+     * @tparam U first argument type
+     * @tparam V second argument type
+     * @return successful executed
      */
-    private IFuzzyValue<Boolean> multiplyVectorVector( final DoubleMatrix1D p_first, final DoubleMatrix1D p_second, final List<ITerm> p_return )
+    private static <U, V> boolean apply( final ITerm p_left, final ITerm p_right, final BiFunction<U, V, ?> p_function, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( ALGEBRA.multOuter( p_first, p_second, null ) ) );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.from( p_function.apply( p_left.<U>raw(), p_right.<V>raw() ) ) );
+        return true;
     }
 
-    /**
-     * matrix-vector product
-     *
-     * @param p_first matrix
-     * @param p_second vector
-     * @param p_return return vector
-     * @return fuzzy boolean
-     */
-    private IFuzzyValue<Boolean> multiplyMatrixVector( final DoubleMatrix2D p_first, final DoubleMatrix1D p_second, final List<ITerm> p_return )
-    {
-        p_return.add( CRawTerm.from( ALGEBRA.mult( p_first, p_second ) ) );
-        return CFuzzyValue.from( true );
-    }
-
-    /**
-     * matrix-matrix product
-     *
-     * @param p_first matrix
-     * @param p_second matrix
-     * @param p_return return matrix
-     * @return fuzzy boolean
-     */
-    private IFuzzyValue<Boolean> multiplyVectorVector( final DoubleMatrix2D p_first, final DoubleMatrix2D p_second, final List<ITerm> p_return )
-    {
-        p_return.add( CRawTerm.from( ALGEBRA.mult( p_first, p_second ) ) );
-        return CFuzzyValue.from( true );
-    }
 
 }
