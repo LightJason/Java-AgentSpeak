@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -74,16 +75,19 @@ public final class CRandomSimple extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
+        (
+            p_argument.size() == 0
+            ? Stream.of( 1 )
+            : CCommon.flatcollection( p_argument )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
-               .map( i -> i == 1
-                          ? m_random.nextDouble()
-                          : p_parallel
-                            ? Collections.synchronizedList(
-                                IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
-                            )
-                            : IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
+        ).map( i -> i == 1
+                    ? m_random.nextDouble()
+                    : p_parallel
+                      ? Collections.synchronizedList(
+                        IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
+                      )
+                      : IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
                )
                .map( CRawTerm::from )
                .forEach( p_return::add );
