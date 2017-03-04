@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.math.shape;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +37,14 @@ import java.util.stream.Collectors;
 
 
 /**
- * action check if a point is within a circle
+ * action check if a point is within a circle.
+ * The action checks if a point is within a circle,
+ * the first three arguments defines the circle (x- / y-position
+ * and radius), all other arguments will be used as tuples
+ * (x- / y-position) which defines the point, the action fails
+ * on wrong input
+ *
+ * @code [In1|In2] = math/shape/incircle( 1,1,1,  2,2.5, [3,4] ); @endcode
  */
 public final class CInCircle extends IBuildinAction
 {
@@ -51,7 +60,7 @@ public final class CInCircle extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 5;
+        return 1;
     }
 
     @Override
@@ -59,16 +68,19 @@ public final class CInCircle extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // arguments are: x-value, y-value, circle center x-value, circle center y-value, circle radius
-        final List<Double> l_point = p_argument.stream()
-                                               .map( ITerm::<Number>raw )
-                                               .mapToDouble( Number::doubleValue )
-                                               .boxed()
-                                               .collect( Collectors.toList() );
+        final List<Double> l_arguments = CCommon.flatcollection( p_argument )
+                                                .map( ITerm::<Number>raw )
+                                                .mapToDouble( Number::doubleValue )
+                                                .boxed()
+                                                .collect( Collectors.toList() );
+        if ( l_arguments.size() < 5 )
+            return CFuzzyValue.from( false );
 
-        p_return.add( CRawTerm.from(
-            Math.hypot( l_point.get( 0 ) - l_point.get( 2 ), l_point.get( 1 ) - l_point.get( 3 ) ) <= Math.pow( l_point.get( 4 ), 2 )
-        ) );
+
+        StreamUtils.windowed( l_arguments.stream().skip( 3 ), 2 )
+                   .map( i -> Math.hypot( i.get( 0 ) - l_arguments.get( 0 ), i.get( 1 ) - l_arguments.get( 1 ) ) <= Math.pow( l_arguments.get( 2 ), 2 ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

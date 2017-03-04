@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.math.shape;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,8 +37,12 @@ import java.util.stream.Collectors;
 
 
 /**
- * action check if a point is within a triangle
+ * action check if a point is within a triangle.
+ * The first three tuple of arguments defines the triangle
+ * coordinate (x- / y-position), all other tuples are the tuples
+ * of x- / y-position, the action fails on wrong input
  *
+ * @code [In1|In2] = math/shape/intriangle( [[350,320], [25,375], 40,55], [160,270], 0,0 ); @endcode
  * @see https://en.wikipedia.org/wiki/Barycentric_coordinate_system
  */
 public final class CInTriangle extends IBuildinAction
@@ -61,38 +67,41 @@ public final class CInTriangle extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // arguments are: x-value, y-value (index 0 / 1),
-        // triange point 0 x-value, y-value (index 2 / 3),
-        // triange point 1 x-value, y-value (index 4 / 5),
-        // triange point 2 x-value, y-value (index 6 / 7)
-        final List<Double> l_point = p_argument.stream()
-                                               .map( ITerm::<Number>raw )
-                                               .mapToDouble( Number::doubleValue )
-                                               .boxed()
-                                               .collect( Collectors.toList() );
+        final List<Double> l_arguments = CCommon.flatcollection( p_argument )
+                                                .map( ITerm::<Number>raw )
+                                                .mapToDouble( Number::doubleValue )
+                                                .boxed()
+                                                .collect( Collectors.toList() );
+        if ( l_arguments.size() < 8 )
+            return CFuzzyValue.from( false );
 
-        final double l_xvalue = l_point.get( 3 ) * l_point.get( 6 )
-                                - l_point.get( 2 ) * l_point.get( 7 )
-                                + ( l_point.get( 7 ) - l_point.get( 3 ) ) * l_point.get( 0 )
-                                + ( l_point.get( 2 ) - l_point.get( 6 ) ) * l_point.get( 1 );
+        StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2 )
+                   .map( i -> {
+                       i.add(
+                           l_arguments.get( 1 ) * l_arguments.get( 4 )
+                           - l_arguments.get( 0 ) * l_arguments.get( 5 )
+                           + ( l_arguments.get( 5 ) - l_arguments.get( 1 ) ) * i.get( 0 )
+                           + ( l_arguments.get( 0 ) - l_arguments.get( 4 ) ) * i.get( 1 )
+                       );
 
-        final double l_yvalue = l_point.get( 2 ) * l_point.get( 5 )
-                                - l_point.get( 3 ) * l_point.get( 4 )
-                                + ( l_point.get( 3 ) - l_point.get( 5 ) ) * l_point.get( 0 )
-                                + ( l_point.get( 4 ) - l_point.get( 2 ) ) * l_point.get( 1 );
+                       i.add(
+                           l_arguments.get( 0 ) * l_arguments.get( 3 )
+                           - l_arguments.get( 1 ) * l_arguments.get( 2 )
+                           + ( l_arguments.get( 1 ) - l_arguments.get( 3 ) ) * i.get( 0 )
+                           + ( l_arguments.get( 2 ) - l_arguments.get( 0 ) ) * i.get( 1 )
+                       );
 
-        if ( ( l_xvalue <= 0 ) || ( l_yvalue <= 0 ) )
-        {
-            p_return.add( CRawTerm.from( false ) );
-            return CFuzzyValue.from( true );
-        }
+                       return i;
+                   } )
+                   .map( i -> ( i.get( 2 ) > 0 ) && ( i.get( 3 ) > 0 )
+                              && ( i.get( 2 ) + i.get( 3 ) < -l_arguments.get( 3 ) * l_arguments.get( 4 )
+                                                             + l_arguments.get( 1 ) * ( -l_arguments.get( 2 ) + l_arguments.get( 3 ) )
+                                                             + l_arguments.get( 0 ) * ( l_arguments.get( 3 ) - l_arguments.get( 5 ) )
+                                                             + l_arguments.get( 2 ) * l_arguments.get( 5 ) )
+                   )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
-        p_return.add( CRawTerm.from(
-            l_xvalue + l_yvalue < -l_point.get( 5 ) * l_point.get( 6 )
-                                  + l_point.get( 3 ) * ( -l_point.get( 4 ) + l_point.get( 6 ) )
-                                  + l_point.get( 2 ) * ( l_point.get( 5 ) - l_point.get( 7 ) )
-                                  + l_point.get( 4 ) * l_point.get( 7 )
-        ) );
         return CFuzzyValue.from( true );
     }
 

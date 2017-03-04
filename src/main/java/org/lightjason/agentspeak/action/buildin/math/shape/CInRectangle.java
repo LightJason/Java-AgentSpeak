@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.math.shape;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,7 +37,14 @@ import java.util.stream.Collectors;
 
 
 /**
- * action check if a point within a rectangle
+ * action check if a point within a rectangle.
+ * The first four arguments descripes the rectangle
+ * (left-upper corner x- / y-postion, right-bottom corner
+ * x- / y-position), all other arguments will used
+ * as tuples with x- / y-position and will be checked
+ * to the rectangle, the action fail on wrong input
+ *
+ * @code [In1|In2] = math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 ); @endcode
  */
 public final class CInRectangle extends IBuildinAction
 {
@@ -51,7 +60,7 @@ public final class CInRectangle extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 6;
+        return 1;
     }
 
     @Override
@@ -59,17 +68,22 @@ public final class CInRectangle extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // arguments are: x-value, y-value, left-top x-value, left-top y-value, left-bottom x-value, left-bottom y-value
-        final List<Double> l_point = p_argument.stream()
-                                               .map( ITerm::<Number>raw )
-                                               .mapToDouble( Number::doubleValue )
-                                               .boxed()
-                                               .collect( Collectors.toList() );
+        final List<Double> l_arguments = CCommon.flatcollection( p_argument )
+                                                .map( ITerm::<Number>raw )
+                                                .mapToDouble( Number::doubleValue )
+                                                .boxed()
+                                                .collect( Collectors.toList() );
 
-        p_return.add( CRawTerm.from(
-            l_point.get( 2 ) <= l_point.get( 0 ) && l_point.get( 0 ) <= l_point.get( 4 )
-            && l_point.get( 3 ) <= l_point.get( 1 ) && l_point.get( 1 ) <= l_point.get( 5 )
-        ) );
+        if ( l_arguments.size() < 6 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed( l_arguments.stream().skip( 4 ), 2 )
+                   // check in order upper-left x-position <= x-value <= buttom-right x-position, upper-left y-position <= y-value <= buttom-right y-position
+                   .map( i -> l_arguments.get( 0 ) <= i.get( 0 ) && i.get( 0 ) <= l_arguments.get( 2 )
+                         && l_arguments.get( 1 ) <= i.get( 1 ) && i.get( 1 ) <= l_arguments.get( 3 )
+                   )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
