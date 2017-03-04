@@ -40,10 +40,24 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 
 /**
- * action to create a spline interpolation
+ * action to create a spline interpolation.
+ * The action creates an interpolation object,
+ * the first is the type of interpolation (akima,
+ * divideddifference, linear, loess, neville), and all other
+ * number arguments are the the base values for interpolation,
+ * the first \f$ \frac{n}{2} \f$ are x-values the other \f$ \frac{n}{2} \f$
+ * values are the y-values
+ *
+ * @code PI = math/interpolate/create("akima|divideddifference|linear|loess|neville", [-5,1,2,8,14], [7,3,7,4,8]); @endcode
+ * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
+ * @see https://en.wikipedia.org/wiki/Divided_differences
+ * @see https://en.wikipedia.org/wiki/Linear_interpolation
+ * @see https://en.wikipedia.org/wiki/Local_regression
+ * @see https://en.wikipedia.org/wiki/Neville%27s_algorithm
  */
 public final class CCreate extends IBuildinAction
 {
@@ -59,7 +73,7 @@ public final class CCreate extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -67,14 +81,31 @@ public final class CCreate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            EType.from( p_argument.get( 0 ).<String>raw() ).get(
-                CCommon.flatcollection( p_argument.get( 1 ).<List<ITerm>>raw() )
-                       .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray(),
-                CCommon.flatcollection( p_argument.get( 2 ).<List<ITerm>>raw() )
-                       .mapToDouble( i -> i.<Number>raw().doubleValue() ).toArray()
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 0 )
+            return CFuzzyValue.from( false );
+
+        final int l_datasize = ( l_arguments.size() - 1 ) / 2;
+        p_return.add(
+            CRawTerm.from(
+                EType.from( l_arguments.get( 0 ).<String>raw() )
+                     .get(
+
+                         l_arguments.stream()
+                                    .skip( 1 )
+                                    .limit( l_datasize )
+                                    .map( ITerm::<Number>raw )
+                                    .mapToDouble( Number::doubleValue )
+                                    .toArray(),
+
+                         l_arguments.stream()
+                                     .skip( l_datasize + 1 )
+                                     .map( ITerm::<Number>raw )
+                                     .mapToDouble( Number::doubleValue )
+                                     .toArray()
+                )
             )
-        ) );
+        );
 
         return CFuzzyValue.from( true );
     }

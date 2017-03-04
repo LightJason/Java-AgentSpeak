@@ -33,10 +33,18 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to create interpolated values
+ * action to create interpolated values.
+ * The action interpolates values, the first
+ * argument is the interpolating function, all
+ * other values number values (x-position) for
+ * interpolation
+ *
+ * @code [A|B|C] = math/interpolate/interpolation( InterpolatingFunction, 3, [10, [50]] ); @endcode
+ * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
 public final class CInterpolate extends IBuildinAction
 {
@@ -60,12 +68,16 @@ public final class CInterpolate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final UnivariateFunction l_function = p_argument.get( 0 ).raw();
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
-        CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) )
-               .mapToDouble( i -> i.<Number>raw().doubleValue() )
-               .mapToObj( i -> CRawTerm.from( l_function.value( i ) ) )
-               .forEach( p_return::add );
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<Number>raw )
+                   .map( Number::doubleValue )
+                   .mapToDouble( i -> l_arguments.get( 0 ).<UnivariateFunction>raw().value( i ) )
+                   .boxed()
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
