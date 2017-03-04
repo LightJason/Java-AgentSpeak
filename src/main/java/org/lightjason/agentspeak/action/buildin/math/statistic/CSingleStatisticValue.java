@@ -40,9 +40,9 @@ import java.util.stream.Collectors;
 /**
  * gets a single statistic value of multiple statistic objects.
  * The action returns for each statistic object the statistic value,
- * the first argument is a string with the statitic value "geometricmean, max,
+ * the first argument is a string with the statitic value name (geometricmean, max,
  * min, count, populationvariance, quadraticmean, secondmoment,
- * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis"
+ * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis)
  * all other arguments are statistic objects
  *
  * @code [V1|V2|V3] = math/statistic/getstatisticvalue( "mean|min|max|...", Statistic1, [Statistic2, Statistic3] ); @endcode
