@@ -233,7 +233,6 @@ myfunction(X) :- generic/print("my logical rule", X).
         MaxIdx = math/maxindex(RV);
         InRect = math/shape/inrectangle( 0,0, 4,5,   2,1 );
         InCircle = math/shape/incircle( 2,2,1,  2,1 );
-        //InTriangle = math/shape/intriangle( 0,0,  50,100,  100,0,   50,20 );
         InTriangle = math/shape/intriangle( 350,320,  25,375,  40,55,    160,270 );
 
         generic/print("min & max index", MinIdx, MaxIdx);
