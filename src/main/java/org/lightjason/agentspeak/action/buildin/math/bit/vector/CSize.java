@@ -36,19 +36,19 @@ import java.util.List;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
+ * returns the size of the vector.
+ * All input vector object will return
+ * their size (number of bits), the action
  * never fails
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code [A|B] = math/bit/vector/size( Vector1, Vector2 ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CSize extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CSize()
     {
         super( 4 );
     }
@@ -66,7 +66,7 @@ public final class CCopy extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
+               .map( BitVector::size )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

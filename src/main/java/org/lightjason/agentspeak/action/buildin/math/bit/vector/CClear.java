@@ -23,32 +23,33 @@
 
 package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
-import cern.colt.bitvector.BitVector;
+import jdk.nashorn.internal.runtime.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
- * never fails
+ * sets the indexed bit to false within the bit vector.
+ * The action gets bit vectors and index positions and
+ * in each bit vector the given bit positions are set
+ * to false
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CClear extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CClear()
     {
         super( 4 );
     }
@@ -56,7 +57,7 @@ public final class CCopy extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -64,11 +65,17 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int[] l_index = l_arguments.parallelStream()
+                                         .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                         .map( ITerm::<Number>raw )
+                                         .mapToInt( Number::intValue )
+                                         .toArray();
+
+        l_arguments.parallelStream()
+                   .filter( i -> CCommon.rawvalueAssignableTo( i, BitVector.class ) )
+                   .map( ITerm::<BitVector>raw )
+                   .forEach( i -> Arrays.stream( l_index ).forEach( i::clear ) );
 
         return CFuzzyValue.from( true );
     }

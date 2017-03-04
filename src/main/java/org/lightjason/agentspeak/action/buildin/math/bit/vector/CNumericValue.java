@@ -33,22 +33,23 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
- * never fails
+ * returns for the index a numeric value.
+ * The action returns for the first argument, which
+ * is a bit vector, all numeric values for all
+ * given index values (0 = false, 1 = true)
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code [B1|B2|B3] = math/bit/vector/numericvalue( BitVector, 1, [3, 5] ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CNumericValue extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CNumericValue()
     {
         super( 4 );
     }
@@ -56,7 +57,7 @@ public final class CCopy extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -64,11 +65,17 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<Number>raw )
+                   .mapToInt( Number::intValue )
+                   .boxed()
+                   .mapToLong( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) ? 1 : 0 )
+                   .boxed()
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

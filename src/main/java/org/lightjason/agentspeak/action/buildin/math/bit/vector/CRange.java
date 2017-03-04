@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
 import cern.colt.bitvector.BitVector;
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -33,22 +34,25 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
- * never fails
+ * returns a new bit vector, based on the current.
+ * The action returns a new bit vector based on the
+ * range, the first argument is a bit vector,
+ * all other arguments are tuples of ranges,
+ * the action fails on wrong input, index starts
+ * at zero
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code [V1|V2] = math/bit/vector/range( BitVector, 0, 1, [3, 5] ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CRange extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CRange()
     {
         super( 4 );
     }
@@ -56,7 +60,7 @@ public final class CCopy extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -64,11 +68,20 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed(
+            l_arguments.stream()
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+                       .mapToInt( Number::intValue )
+                       .boxed(),
+            2
+        ).map( i -> l_arguments.get( 0 ).<BitVector>raw().partFromTo( i.get( 0 ), i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

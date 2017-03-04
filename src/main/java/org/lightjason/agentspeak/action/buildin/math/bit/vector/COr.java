@@ -24,52 +24,24 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
 import cern.colt.bitvector.BitVector;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-
-import java.util.List;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
- * never fails
+ * performs the logical or operation to all bit vectors.
+ * The action runs the logical or operator, the first
+ * argument is the bit vector, that is combined with
+ * all other bit vectors, so \f$ v_i = v_i \text{ || } v_1 \f$
+ * is performed
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code math/bit/vector/or( Vector, Vector1, Vector2 ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class COr extends IOperator
 {
-    /**
-     * ctor
-     */
-    public CCopy()
-    {
-        super( 4 );
-    }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final void apply( final BitVector p_target, final BitVector p_source )
     {
-        return 1;
+        p_target.or( p_source );
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
-    }
 }

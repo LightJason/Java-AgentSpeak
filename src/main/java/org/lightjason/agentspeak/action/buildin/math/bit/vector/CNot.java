@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -36,19 +35,16 @@ import java.util.List;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
- * never fails
+ * performs the logical not operation to all bit vectors.
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code math/bit/vector/not( Vector1, Vector2 ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CNot extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CNot()
     {
         super( 4 );
     }
@@ -65,10 +61,9 @@ public final class CCopy extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
+               .parallel()
                .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+               .forEach( BitVector::not );
 
         return CFuzzyValue.from( true );
     }

@@ -39,7 +39,11 @@ import java.util.stream.Collectors;
 
 
 /**
- * returns the long value of the bit vector.
+ * returns the long values of the bit vector as list.
+ * The action creates a list with 0 / 1 values of
+ * the values of the bit vector, the action never fails
+ *
+ * @code [L1|L2] = math/bit/vector/tolist( Vector1, Vector2 ); @endcode
  */
 public final class CToList extends IBuildinAction
 {

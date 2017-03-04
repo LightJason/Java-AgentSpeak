@@ -24,58 +24,24 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
 import cern.colt.bitvector.BitVector;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns for the index a boolean value.
- * The action returns for the first argument, which
- * is a bit vector, all boolean values for all
- * given index values
+ * performs the logical not-and operation to all bit vectors.
+ * The action runs the logical not-and operator, the first
+ * argument is the bit vector, that is combined with
+ * all other bit vectors, so \f$ v_i = v_i \text{ && not } v_1 \f$
+ * is performed
  *
- * @code [B1|B3|B5] = math/bit/vector/bool( BitVector, 1, [3, 5] ); @endcode
+ * @code math/bit/vector/nand( Vector, Vector1, Vector2 ); @endcode
  */
-public final class CBool extends IBuildinAction
+public final class CNAnd extends IOperator
 {
-    /**
-     * ctor
-     */
-    public CBool()
-    {
-        super( 4 );
-    }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final void apply( final BitVector p_target, final BitVector p_source )
     {
-        return 2;
+        p_target.andNot( p_source );
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed()
-                   .map( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
-    }
 }

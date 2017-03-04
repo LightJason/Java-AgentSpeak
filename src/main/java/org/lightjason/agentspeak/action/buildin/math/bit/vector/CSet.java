@@ -26,29 +26,31 @@ package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
- * never fails
+ * sets bit position by index and value.
+ * The first argument is the bit vector, the second
+ * argument is a boolean value or number value (0 = false),
+ * all other values are index positions, each index bit
+ * within the bit vector will be set to the given value,
+ * the action never fails
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code math/bit/vector/set( BitVector, true, 1, [3, 7]); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CSet extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CSet()
     {
         super( 4 );
     }
@@ -56,7 +58,7 @@ public final class CCopy extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 3;
     }
 
     @Override
@@ -64,11 +66,17 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final boolean l_value = CCommon.rawvalueAssignableTo( l_arguments.get( 1 ), Number.class )
+                                ? l_arguments.get( 1 ).<Number>raw().intValue() != 0
+                                : l_arguments.get( 1 ).<Boolean>raw();
+
+        l_arguments.stream()
+                   .skip( 2 )
+                   .map( ITerm::<Number>raw )
+                   .mapToInt( Number::intValue )
+                   .boxed()
+                   .forEach( i -> l_arguments.get( 0 ).<BitVector>raw().put( i, l_value ) );
 
         return CFuzzyValue.from( true );
     }

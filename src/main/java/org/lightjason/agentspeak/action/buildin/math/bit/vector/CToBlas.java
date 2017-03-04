@@ -24,7 +24,10 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
 import cern.colt.bitvector.BitVector;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,23 +35,26 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns a copy of the vector.
- * All input vector object will be
- * copied and returned, the action
+ * converts the bit vector to a blas vector.
+ * The action converts the bit vector to a blas vector,
+ * the last argument can be "dense" or "sparse", all
+ * other arguments are bit vectors and the actions
  * never fails
  *
- * @code [A|B] = math/bit/vector/copy( Vector1, Vector2 ); @endcode
+ * @code [A|B] = math/bit/vector/blas( Bit1, Bit2, "dense | sparse" ); @endcode
  */
-public final class CCopy extends IBuildinAction
+public final class CToBlas extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CCopy()
+    public CToBlas()
     {
         super( 4 );
     }
@@ -64,12 +70,53 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::copy )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final int l_limit;
+        final EType l_type;
+        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( l_arguments.size() - 1 ), String.class ) )
+             && ( EType.exists( l_arguments.get( l_arguments.size() - 1 ).<String>raw() ) ) )
+        {
+            l_type = EType.from( l_arguments.get( l_arguments.size() - 1 ).<String>raw() );
+            l_limit = l_arguments.size() - 1;
+        }
+        else
+        {
+            l_type = EType.DENSE;
+            l_limit = l_arguments.size();
+        }
 
-        return CFuzzyValue.from( true );
+
+        // create vectors
+        switch ( l_type )
+        {
+            case DENSE:
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<BitVector>raw )
+                           .map( BitVector::elements )
+                           .map( i -> Arrays.stream( i ).mapToDouble( j -> j ).toArray() )
+                           .map( DenseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
+
+
+            case SPARSE:
+                l_arguments.stream()
+                           .limit( l_limit )
+                           .map( ITerm::<BitVector>raw )
+                           .map( BitVector::elements )
+                           .map( i -> Arrays.stream( i ).mapToDouble( j -> j ).toArray() )
+                           .map( SparseDoubleMatrix1D::new )
+                           .map( CRawTerm::from )
+                           .forEach( p_return::add );
+
+                return CFuzzyValue.from( true );
+
+            default:
+        }
+
+        return CFuzzyValue.from( false );
     }
 }
