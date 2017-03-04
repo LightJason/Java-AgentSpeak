@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,31 +32,21 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * action to concat /join all strings.
- * All string arguments will be join to a single
- * result, the action never fails
+ * counts the number of true values.
+ * This actioncounts the number of true values and fails never
  *
- * @code S = generic/string/concat("A", "B", "C"); @endcode
+ * @code C = generic/bool/counttrue( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  */
-public final class CConcat extends IBuildinAction
+public final class CCountTrue extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CConcat()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -64,11 +54,14 @@ public final class CConcat extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from(
-            CCommon.flatcollection( p_argument )
-                   .map( ITerm::<String>raw )
-                   .collect( Collectors.joining() )
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .map( ITerm::<Boolean>raw )
+                       .filter( i -> i )
+                       .count()
+            )
+        );
         return CFuzzyValue.from( true );
     }
 

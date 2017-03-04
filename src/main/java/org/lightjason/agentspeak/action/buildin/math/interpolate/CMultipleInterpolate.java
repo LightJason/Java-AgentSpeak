@@ -21,77 +21,64 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.datetime;
+package org.lightjason.agentspeak.action.buildin.math.interpolate;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to create a date-time structure
+ * action to create interpolated values.
+ * The action interpolates a single value, the first
+ * argument is the value (x-position), all
+ * other interpolating functions, the action never fails
+ * interpolation
+ *
+ * @code [A|B|C] = math/interpolate/multipleinterpolate( 5, InterpolatingFunction1, [InterpolatingFunction2, [InterpolatingFunction3]] ); @endcode
+ * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
-public final class CDateTime extends IBuildinAction
+public final class CMultipleInterpolate extends IBuildinAction
 {
-    @Override
-    public int minimalArgumentNumber()
+
+    /**
+     * ctor
+     */
+    public CMultipleInterpolate()
     {
-        return 1;
+        super( 3 );
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+    public final int minimalArgumentNumber()
+    {
+        return 2;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_datetime;
-        if ( p_argument.size() == 1 )
-            l_datetime = ZonedDateTime.parse( p_argument.get( 0 ).<String>raw().trim() );
-        else
-        {
-            final int[] l_parts = new int[7];
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
-            // read day-month-year structure
-            l_parts[0] = p_argument.get( 0 ).raw();
-            l_parts[1] = p_argument.get( 1 ).raw();
-            l_parts[2] = p_argument.get( 2 ).raw();
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<UnivariateFunction>raw )
+                   .mapToDouble( i -> i.value( l_arguments.get( 0 ).<Number>raw().doubleValue() ) )
+                   .boxed()
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
-            // if is set read hour-.minutes
-            if ( p_argument.size() >= 4 )
-            {
-                l_parts[3] = p_argument.get( 3 ).raw();
-                l_parts[4] = p_argument.get( 4 ).raw();
-            }
-
-            // if is set read seconds
-            if ( p_argument.size() >= 5 )
-                l_parts[5] = p_argument.get( 5 ).raw();
-
-            // if is set read nanoseconds
-            if ( p_argument.size() >= 6 )
-                l_parts[6] = p_argument.get( 6 ).raw();
-
-            // create date-time and add zone-id
-            l_datetime = ZonedDateTime.of(
-                l_parts[0],
-                l_parts[1],
-                l_parts[2],
-                l_parts[3],
-                l_parts[4],
-                l_parts[5],
-                l_parts[6],
-                p_argument.size() > 6 ? ZoneId.systemDefault() : ZoneId.of( p_argument.get( 7 ).<String>raw() )
-            );
-        }
-
-        p_return.add( CRawTerm.from( l_datetime ) );
         return CFuzzyValue.from( true );
     }
+
 }

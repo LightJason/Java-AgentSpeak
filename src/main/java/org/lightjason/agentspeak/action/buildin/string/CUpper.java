@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,21 +35,14 @@ import java.util.List;
 
 
 /**
- * counts the number of true values.
- * This actioncounts the number of true values and fails never
+ * action to create an upper-case string.
+ * All arguments of the action will change
+ * to a upper-case string and the action never fails
  *
- * @code C = generic/bool/counttrue( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * @code [A|B|C|D] = generic/string/upper("AbC", "Ef", ["de", "XYZ"]); @endcode
  */
-public final class CCountTrue extends IBuildinAction
+public final class CUpper extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CCountTrue()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -62,14 +55,12 @@ public final class CCountTrue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CRawTerm.from(
-                CCommon.flatcollection( p_argument )
-                       .map( ITerm::<Boolean>raw )
-                       .filter( i -> i )
-                       .count()
-            )
-        );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( String::toUpperCase )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

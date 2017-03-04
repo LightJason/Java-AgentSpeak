@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.bool;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,27 +33,20 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * combines all arguments to a single result with the or-operator.
- * This action uses the logical disjunction
- * to combine all logical arguments in a single
- * result, the action never fails
+ * checks elements of equality.
+ * The actions checks all tupel of arguments of equality and
+ * fails if the unflatten argument number is odd.
  *
- * @code R = generic/bool/or( Logical1, [Logical2, Logical3], Logical4 ); @endcode
- * @see https://en.wikipedia.org/wiki/Logical_disjunction
+ * @code [E1|E2] = generic/bool/equal( "this is equal", "this is equal", [123, "test"] ); @endcode
+ * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * so keep in mind, that you use the correct number type on the argument input
  */
-public final class COr extends IBuildinAction
+public final class CEqual extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public COr()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -65,12 +59,15 @@ public final class COr extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CRawTerm.from(
-                CCommon.flatcollection( p_argument )
-                       .anyMatch( ITerm::<Boolean>raw )
-            )
-        );
+        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed( l_arguments.stream(), 2 )
+                   .map( i -> i.get( 0 ).equals( i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

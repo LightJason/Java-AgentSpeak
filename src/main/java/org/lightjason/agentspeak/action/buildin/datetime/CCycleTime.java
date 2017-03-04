@@ -21,10 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.datetime;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,27 +34,15 @@ import java.util.List;
 
 
 /**
- * action to reverse a string.
- * The action reverse each argument string and returns
- * the reversed string, the action never fails
- *
- * @code [A|B|C] = generic/string/reverse("Foo Bar", ["ABBA", "Eevee"]); @endcode
+ * action to get time in nanoseconds to the last cycle call
  */
-public final class CReverse extends IBuildinAction
+public class CCycleTime extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CReverse()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -63,12 +50,7 @@ public final class CReverse extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<String>raw )
-               .map( i -> new StringBuilder( i ).reverse().toString() )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
+        p_return.add( CRawTerm.from( System.nanoTime() - p_context.agent().cycletime() ) );
         return CFuzzyValue.from( true );
     }
 

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,22 +35,16 @@ import java.util.List;
 
 
 /**
- * action to create an upper-case string.
- * All arguments of the action will change
- * to a upper-case string and the action never fails
+ * combines all arguments to a single result with the xor-operator.
+ * This action uses the logical exclusive-or
+ * to combine all logical arguments in a single
+ * result, the action never fails
  *
- * @code [A|B|C|D] = generic/string/upper("AbC", "Ef", ["de", "XYZ"]); @endcode
+ * @code R = generic/bool/xor( Logical1, Logical2, [Logical3, Logical4] ); @endcode
+ * @see https://en.wikipedia.org/wiki/Exclusive_or
  */
-public final class CUpper extends IBuildinAction
+public final class CXor extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CUpper()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -63,12 +57,14 @@ public final class CUpper extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<String>raw )
-               .map( String::toUpperCase )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .anyMatch( ITerm::<Boolean>raw )
+                && !CCommon.flatcollection( p_argument )
+                           .allMatch( ITerm::<Boolean>raw )
+            )
+        );
         return CFuzzyValue.from( true );
     }
 

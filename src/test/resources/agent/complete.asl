@@ -161,12 +161,12 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- string ------------------------------------------------------------------------------------------------------------------------------------------
 
-        SBase64 = generic/string/base64encode( "Base64 encoded string" );
-        SReverse = generic/string/reverse( "abcdefg" );
-        SUpper = generic/string/upper("AbCdefg");
-        SLower = generic/string/lower("AbCdefg");
-        SReplace = generic/string/replace( "a1b1defg1xyz1ui", "1", "-" );
-        SRand = generic/string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
+        SBase64 = string/base64encode( "Base64 encoded string" );
+        SReverse = string/reverse( "abcdefg" );
+        SUpper = string/upper("AbCdefg");
+        SLower = string/lower("AbCdefg");
+        SReplace = string/replace( "a1b1defg1xyz1ui", "1", "-" );
+        SRand = string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
         generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SRand, "--", SReplace);
         generic/print();
 
@@ -203,8 +203,8 @@ myfunction(X) :- generic/print("my logical rule", X).
 
         // --- date / time -------------------------------------------------------------------------------------------------------------------------------------
 
-        [Hour | Minute | Second | Nano | Zone1 ] = generic/datetime/time();
-        [Day | Month | Year | DayOfWeek | DayOfYear | Zone2 ] = generic/datetime/date();
+        [Hour | Minute | Second | Nano | Zone1 ] = datetime/time();
+        [Day | Month | Year | DayOfWeek | DayOfYear | Zone2 ] = datetime/date();
         generic/print("date & time", Hour, Minute, Second, Nano, Zone1, "--", Day, Month, Year, DayOfWeek, DayOfYear, Zone2);
         generic/print();
 
@@ -292,9 +292,22 @@ myfunction(X) :- generic/print("my logical rule", X).
         // --- polynomial interpolation ------------------------------------------------------------------------------------------------------------------------
 
         PI = math/interpolate/create("neville", [-5,1,2,8,14], [7,3,7,4,8]);
-        [PIV] = math/interpolate/interpolate( PI, 3 , 5, 10, -3);
+        [PIV] = math/interpolate/singleinterpolate( PI, 3 , 5, 10, -3);
 
         generic/print("interpolate", PIV);
+        generic/print();
+
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+        // --- boolean operators -------------------------------------------------------------------------------------------------------------------------------
+
+        BAnd = bool/and( true, false, true );
+        BOr  = bool/or( true, false, false );
+        BXor = bool/xor( true, false, true, false );
+
+        generic/print("boolean", BAnd, BOr, BXor);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

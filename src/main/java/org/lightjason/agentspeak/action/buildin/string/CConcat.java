@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,26 +32,18 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to check string for containing another string.
- * The action checks the first string argument if it contains
- * all other arguments, but it returns the boolean result for
- * each argument, the action never fails
+ * action to concat /join all strings.
+ * All string arguments will be join to a single
+ * result, the action never fails
  *
- * @code [L1|L2] = generic/string/contains("this is a long string", "long", "string"); @endcode
+ * @code S = generic/string/concat("A", "B", "C"); @endcode
  */
-public final class CContains extends IBuildinAction
+public final class CConcat extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CContains()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -64,13 +56,11 @@ public final class CContains extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_string = p_argument.get( 0 ).raw();
-
-        CCommon.flatcollection( p_argument ).skip( 1 )
-               .map( i -> l_string.contains( i.raw() ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
+        p_return.add( CRawTerm.from(
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::<String>raw )
+                   .collect( Collectors.joining() )
+        ) );
         return CFuzzyValue.from( true );
     }
 

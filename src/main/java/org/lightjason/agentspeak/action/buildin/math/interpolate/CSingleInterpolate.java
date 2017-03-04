@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.math.interpolate;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,22 +33,26 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to get the string length.
- * For each argument the string length will be returned
- * and the action never fails
+ * action to create interpolated values.
+ * The action interpolates values, the first
+ * argument is the interpolating function, all
+ * other number values (x-position) for
+ * interpolation
  *
- * @code [A|B|C] = generic/string/size("A", ["CC", "XYZ"]); @endcode
+ * @code [A|B|C] = math/interpolate/singleinterpolate( InterpolatingFunction, 3, [10, [50]] ); @endcode
+ * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
-public final class CSize extends IBuildinAction
+public final class CSingleInterpolate extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CSize()
+    public CSingleInterpolate()
     {
         super( 3 );
     }
@@ -55,7 +60,7 @@ public final class CSize extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -63,11 +68,16 @@ public final class CSize extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<String>raw )
-               .map( String::length )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<Number>raw )
+                   .map( Number::doubleValue )
+                   .mapToDouble( i -> l_arguments.get( 0 ).<UnivariateFunction>raw().value( i ) )
+                   .boxed()
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

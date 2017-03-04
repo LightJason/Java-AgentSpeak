@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.datetime;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,23 +35,20 @@ import java.util.List;
 
 
 /**
- * action to get time in nanoseconds to the last cycle call
+ * action to check string for starts-with.
+ * The acion checks the string, that is the first argument,
+ * with each other arguments for the operation starts-with,
+ * the action never fails
+ *
+ * @code [L1|L2] = generic/string/startswith("this is a long string", "long string", "string"); @endcode
  */
-public class CCycleTime extends IBuildinAction
+public final class CStartsWith extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CCycleTime()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 2;
     }
 
     @Override
@@ -58,7 +56,13 @@ public class CCycleTime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( System.nanoTime() - p_context.agent().cycletime() ) );
+        final String l_string = p_argument.get( 0 ).raw();
+
+        CCommon.flatcollection( p_argument ).skip( 1 )
+               .map( i -> l_string.startsWith( i.raw() ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

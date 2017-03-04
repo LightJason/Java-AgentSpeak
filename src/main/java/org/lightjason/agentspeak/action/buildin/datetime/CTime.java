@@ -21,44 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.datetime;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
 /**
- * action to replace all occurence within a string.
- * The action replaces the first argument with the second argument
- * on each string beginning at the third argument and returns
- * all replaced strings, the action never fails
- *
- * @code @endcode
- * @note the first argument of the action be defined as a regular expression
- * @see https://en.wikipedia.org/wiki/Regular_expression
+ * action for getting the current time
  */
-public final class CReplace extends IBuildinAction
+public final class CTime extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CReplace()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 0;
     }
 
     @Override
@@ -66,14 +51,13 @@ public final class CReplace extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_search = p_argument.get( 0 ).<String>raw();
-        final String l_replace = p_argument.get( 1 ).<String>raw();
+        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).<String>raw().trim() ) : ZonedDateTime.now();
 
-        CCommon.flatcollection( p_argument )
-               .skip( 2 )
-               .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        p_return.add( CRawTerm.from( l_time.getHour() ) );
+        p_return.add( CRawTerm.from( l_time.getMinute() ) );
+        p_return.add( CRawTerm.from( l_time.getSecond() ) );
+        p_return.add( CRawTerm.from( l_time.getNano() ) );
+        p_return.add( CRawTerm.from( l_time.getZone() ) );
 
         return CFuzzyValue.from( true );
     }

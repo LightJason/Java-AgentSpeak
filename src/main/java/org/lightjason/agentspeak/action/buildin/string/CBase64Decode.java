@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,28 +31,22 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.List;
 
 
 /**
- * combines all arguments to a single result with the and-operator.
- * This action uses the logical cpnjunction
- * to combine all logical arguments in a single
- * result, the action never fails
+ * action to decodes a string with Base64.
+ * Creates from each string argument, which is
+ * based64 encoded the decoded string version,
+ * the action never fails
  *
- * @code R = generic/bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
- * @see https://en.wikipedia.org/wiki/Logical_conjunction
+ * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
+ * @see https://en.wikipedia.org/wiki/Base64
  */
-public final class CAnd extends IBuildinAction
+public final class CBase64Decode extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CAnd()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -65,12 +59,12 @@ public final class CAnd extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CRawTerm.from(
-                CCommon.flatcollection( p_argument )
-                       .allMatch( ITerm::<Boolean>raw )
-            )
-        );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

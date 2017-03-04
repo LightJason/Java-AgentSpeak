@@ -21,9 +21,8 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.string;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,32 +31,26 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.List;
 
 
 /**
- * action to create random strings, with a definied length.
- * The first argument are the characters, that will be used to create the string,
- * all other arguments are numbers to present the length of the returning string
- * and the action never fails
+ * action to encodes a string with Base64.
+ * Creates from each string argument the base64 encoded
+ * version, the action fails on encoding errors
  *
- * @code [A|B|C] = generic/string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
+ * @code [A|B] = generic/string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
+ * @see https://en.wikipedia.org/wiki/Base64
  */
-public final class CRandom extends IBuildinAction
+public final class CBase64Encode extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CRandom()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -65,18 +58,20 @@ public final class CRandom extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final char[] l_characters = p_argument.get( 0 ).<String>raw().toCharArray();
-
-        CCommon.flatcollection( p_argument )
-               .skip( 1 )
-               .map( i -> RandomStringUtils.random(
-                   i.<Number>raw().intValue(),
-                   l_characters
-               ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::<String>raw )
+                   .allMatch( i -> {
+                       try
+                       {
+                           p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
+                           return true;
+                       }
+                       catch ( final UnsupportedEncodingException l_exception )
+                       {
+                           return false;
+                       }
+                   } )
+        );
     }
-
 }

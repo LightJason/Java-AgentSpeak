@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -31,35 +31,24 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.nio.charset.Charset;
-import java.util.Base64;
 import java.util.List;
 
 
 /**
- * action to decodes a string with Base64.
- * Creates from each string argument, which is
- * based64 encoded the decoded string version,
- * the action never fails
+ * action to check string for containing another string.
+ * The action checks the first string argument if it contains
+ * all other arguments, but it returns the boolean result for
+ * each argument, the action never fails
  *
- * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
- * @see https://en.wikipedia.org/wiki/Base64
+ * @code [L1|L2] = generic/string/contains("this is a long string", "long", "string"); @endcode
  */
-public final class CBase64Decode extends IBuildinAction
+public final class CContains extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CBase64Decode()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -67,9 +56,10 @@ public final class CBase64Decode extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<String>raw )
-               .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
+        final String l_string = p_argument.get( 0 ).raw();
+
+        CCommon.flatcollection( p_argument ).skip( 1 )
+               .map( i -> l_string.contains( i.raw() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

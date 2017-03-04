@@ -21,9 +21,8 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.interpolate;
+package org.lightjason.agentspeak.action.buildin.string;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -33,34 +32,25 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * action to create interpolated values.
- * The action interpolates values, the first
- * argument is the interpolating function, all
- * other values number values (x-position) for
- * interpolation
+ * action to replace all occurence within a string.
+ * The action replaces the first argument with the second argument
+ * on each string beginning at the third argument and returns
+ * all replaced strings, the action never fails
  *
- * @code [A|B|C] = math/interpolate/interpolate( InterpolatingFunction, 3, [10, [50]] ); @endcode
- * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
+ * @code @endcode
+ * @note the first argument of the action be defined as a regular expression
+ * @see https://en.wikipedia.org/wiki/Regular_expression
  */
-public final class CInterpolate extends IBuildinAction
+public final class CReplace extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CInterpolate()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -68,16 +58,14 @@ public final class CInterpolate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final String l_search = p_argument.get( 0 ).<String>raw();
+        final String l_replace = p_argument.get( 1 ).<String>raw();
 
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .map( Number::doubleValue )
-                   .mapToDouble( i -> l_arguments.get( 0 ).<UnivariateFunction>raw().value( i ) )
-                   .boxed()
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .skip( 2 )
+               .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

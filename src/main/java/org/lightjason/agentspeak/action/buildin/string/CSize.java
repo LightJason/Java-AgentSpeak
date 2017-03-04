@@ -21,9 +21,8 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.string;
 
-import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -33,28 +32,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * checks elements of inequality.
- * The actions checks all tupel of arguments of inequality and
- * fails if the unflatten argument number is odd.
+ * action to get the string length.
+ * For each argument the string length will be returned
+ * and the action never fails
  *
- * @code [NE1|NE2] = generic/bool/notequal( "this is equal", "this is equal", [123, "test"] ); @endcode
- * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
- * so keep in mind, that you use the correct number type on the argument input
+ * @code [A|B|C] = generic/string/size("A", ["CC", "XYZ"]); @endcode
  */
-public final class CNotEqual extends IBuildinAction
+public final class CSize extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CNotEqual()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -67,14 +55,11 @@ public final class CNotEqual extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.from( false );
-
-        StreamUtils.windowed( l_arguments.stream(), 2 )
-                   .map( i -> !i.get( 0 ).equals( i.get( 1 ) ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( String::length )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.bool;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,25 +33,20 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to create a lower-case string.
- * All arguments of the action will change
- * to a lower-case string and the action never fails
+ * checks elements of inequality.
+ * The actions checks all tupel of arguments of inequality and
+ * fails if the unflatten argument number is odd.
  *
- * @code [A|B|C|D] = generic/string/lower("AbC", "Ef", ["de", "XyZ"]); @endcode
+ * @code [NE1|NE2] = generic/bool/notequal( "this is equal", "this is equal", [123, "test"] ); @endcode
+ * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * so keep in mind, that you use the correct number type on the argument input
  */
-public final class CLower extends IBuildinAction
+public final class CNotEqual extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CLower()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -63,11 +59,14 @@ public final class CLower extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<String>raw )
-               .map( String::toLowerCase )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed( l_arguments.stream(), 2 )
+                   .map( i -> !i.get( 0 ).equals( i.get( 1 ) ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

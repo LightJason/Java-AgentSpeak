@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,27 +32,20 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * combines all arguments to a single result with the xor-operator.
- * This action uses the logical exclusive-or
- * to combine all logical arguments in a single
- * result, the action never fails
+ * checks any elements are equal to the first argument.
+ * The actions checks the first argument to all other if any
+ * matchs for equality, the action never fails
  *
- * @code R = generic/bool/xor( Logical1, Logical2, [Logical3, Logical4] ); @endcode
- * @see https://en.wikipedia.org/wiki/Exclusive_or
+ * @code AnyEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
+ * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * so keep in mind, that you use the correct number type on the argument input
  */
-public final class CXor extends IBuildinAction
+public final class CAnyMatch extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CXor()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -65,14 +58,16 @@ public final class CXor extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+
         p_return.add(
             CRawTerm.from(
-                CCommon.flatcollection( p_argument )
-                       .anyMatch( ITerm::<Boolean>raw )
-                && !CCommon.flatcollection( p_argument )
-                           .allMatch( ITerm::<Boolean>raw )
+                l_arguments.stream()
+                           .skip( 1 )
+                           .anyMatch( i -> l_arguments.get( 0 ).equals( i ) )
             )
         );
+
         return CFuzzyValue.from( true );
     }
 

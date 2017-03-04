@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,28 +32,17 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * checks all elements are equal to the first argument.
- * The actions checks the first argument to all other if this
- * matchs for equality, the action never fails
+ * action to create a lower-case string.
+ * All arguments of the action will change
+ * to a lower-case string and the action never fails
  *
- * @code AllEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
- * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
- * so keep in mind, that you use the correct number type on the argument input
+ * @code [A|B|C|D] = generic/string/lower("AbC", "Ef", ["de", "XyZ"]); @endcode
  */
-public final class CAllMatch extends IBuildinAction
+public final class CLower extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CAllMatch()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -66,15 +55,11 @@ public final class CAllMatch extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-
-        p_return.add(
-            CRawTerm.from(
-                l_arguments.stream()
-                           .skip( 1 )
-                           .allMatch( i -> l_arguments.get( 0 ).equals( i ) )
-            )
-        );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( String::toLowerCase )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

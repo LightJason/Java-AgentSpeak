@@ -21,37 +21,35 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.datetime;
+package org.lightjason.agentspeak.action.buildin.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 
 /**
- * action for getting the current date
+ * combines all arguments to a single result with the or-operator.
+ * This action uses the logical disjunction
+ * to combine all logical arguments in a single
+ * result, the action never fails
+ *
+ * @code R = generic/bool/or( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * @see https://en.wikipedia.org/wiki/Logical_disjunction
  */
-public final class CDate extends IBuildinAction
+public final class COr extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CDate()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -59,15 +57,12 @@ public final class CDate extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).<String>raw() ) : ZonedDateTime.now();
-
-        p_return.add( CRawTerm.from( l_date.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( l_date.getMonthValue() ) );
-        p_return.add( CRawTerm.from( l_date.getYear() ) );
-        p_return.add( CRawTerm.from( l_date.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( l_date.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( l_date.getZone() ) );
-
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .anyMatch( ITerm::<Boolean>raw )
+            )
+        );
         return CFuzzyValue.from( true );
     }
 

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,25 +32,20 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * count the number of false values.
- * This action counts the number of false
- * values, the action never fails
+ * checks all elements are equal to the first argument.
+ * The actions checks the first argument to all other if this
+ * matchs for equality, the action never fails
  *
- * @code R = generic/bool/countfalse( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * @code AllEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
+ * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * so keep in mind, that you use the correct number type on the argument input
  */
-public final class CCountFalse extends IBuildinAction
+public final class CAllMatch extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CCountFalse()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -63,14 +58,16 @@ public final class CCountFalse extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+
         p_return.add(
             CRawTerm.from(
-                CCommon.flatcollection( p_argument )
-                       .map( ITerm::<Boolean>raw )
-                       .filter( i -> !i )
-                       .count()
+                l_arguments.stream()
+                           .skip( 1 )
+                           .allMatch( i -> l_arguments.get( 0 ).equals( i ) )
             )
         );
+
         return CFuzzyValue.from( true );
     }
 

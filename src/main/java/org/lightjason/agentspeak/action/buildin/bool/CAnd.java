@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.string;
+package org.lightjason.agentspeak.action.buildin.bool;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,28 +35,21 @@ import java.util.List;
 
 
 /**
- * action to check string for ends-with.
- * The acion checks the string, that is the first argument,
- * with each other arguments for the operation ends-with,
- * the action never fails
+ * combines all arguments to a single result with the and-operator.
+ * This action uses the logical cpnjunction
+ * to combine all logical arguments in a single
+ * result, the action never fails
  *
- * @code [L1|L2] = generic/string/endswith("this is a long string", "long string", "string"); @endcode
+ * @code R = generic/bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * @see https://en.wikipedia.org/wiki/Logical_conjunction
  */
-public final class CEndsWith extends IBuildinAction
+public final class CAnd extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CEndsWith()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -64,13 +57,12 @@ public final class CEndsWith extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_string = p_argument.get( 0 ).raw();
-
-        CCommon.flatcollection( p_argument ).skip( 1 )
-               .map( i -> l_string.endsWith( i.raw() ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
+        p_return.add(
+            CRawTerm.from(
+                CCommon.flatcollection( p_argument )
+                       .allMatch( ITerm::<Boolean>raw )
+            )
+        );
         return CFuzzyValue.from( true );
     }
 

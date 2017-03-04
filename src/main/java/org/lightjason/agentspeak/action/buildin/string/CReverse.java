@@ -21,37 +21,33 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.datetime;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 
 /**
- * action for getting the current time
+ * action to reverse a string.
+ * The action reverse each argument string and returns
+ * the reversed string, the action never fails
+ *
+ * @code [A|B|C] = generic/string/reverse("Foo Bar", ["ABBA", "Eevee"]); @endcode
  */
-public final class CTime extends IBuildinAction
+public final class CReverse extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CTime()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -59,13 +55,11 @@ public final class CTime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).<String>raw().trim() ) : ZonedDateTime.now();
-
-        p_return.add( CRawTerm.from( l_time.getHour() ) );
-        p_return.add( CRawTerm.from( l_time.getMinute() ) );
-        p_return.add( CRawTerm.from( l_time.getSecond() ) );
-        p_return.add( CRawTerm.from( l_time.getNano() ) );
-        p_return.add( CRawTerm.from( l_time.getZone() ) );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( i -> new StringBuilder( i ).reverse().toString() )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

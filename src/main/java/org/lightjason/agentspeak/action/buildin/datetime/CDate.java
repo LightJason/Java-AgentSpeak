@@ -21,44 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.datetime;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * checks any elements are equal to the first argument.
- * The actions checks the first argument to all other if any
- * matchs for equality, the action never fails
- *
- * @code AnyEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
- * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
- * so keep in mind, that you use the correct number type on the argument input
+ * action for getting the current date
  */
-public final class CAnyMatch extends IBuildinAction
+public final class CDate extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CAnyMatch()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -66,15 +51,14 @@ public final class CAnyMatch extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        final ZonedDateTime l_date = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).<String>raw() ) : ZonedDateTime.now();
 
-        p_return.add(
-            CRawTerm.from(
-                l_arguments.stream()
-                           .skip( 1 )
-                           .anyMatch( i -> l_arguments.get( 0 ).equals( i ) )
-            )
-        );
+        p_return.add( CRawTerm.from( l_date.getDayOfMonth() ) );
+        p_return.add( CRawTerm.from( l_date.getMonthValue() ) );
+        p_return.add( CRawTerm.from( l_date.getYear() ) );
+        p_return.add( CRawTerm.from( l_date.getDayOfWeek() ) );
+        p_return.add( CRawTerm.from( l_date.getDayOfYear() ) );
+        p_return.add( CRawTerm.from( l_date.getZone() ) );
 
         return CFuzzyValue.from( true );
     }

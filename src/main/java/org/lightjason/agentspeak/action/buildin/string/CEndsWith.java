@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.bool;
+package org.lightjason.agentspeak.action.buildin.string;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,29 +35,20 @@ import java.util.List;
 
 
 /**
- * inverts all argument.
- * This action uses the logical negation and
- * inverts all logical boolean arguments and returns
- * all elements, the action never fails
+ * action to check string for ends-with.
+ * The acion checks the string, that is the first argument,
+ * with each other arguments for the operation ends-with,
+ * the action never fails
  *
- * @code [R1|R2|R3|R4] = generic/bool/not( Logical1, [Logical2, Logical3], Logical4 ); @endcode
- * @see https://en.wikipedia.org/wiki/Negation
+ * @code [L1|L2] = generic/string/endswith("this is a long string", "long string", "string"); @endcode
  */
-public final class CNot extends IBuildinAction
+public final class CEndsWith extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CNot()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -65,9 +56,11 @@ public final class CNot extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<Boolean>raw )
-               .map( i -> !i ).map( CRawTerm::from )
+        final String l_string = p_argument.get( 0 ).raw();
+
+        CCommon.flatcollection( p_argument ).skip( 1 )
+               .map( i -> l_string.endsWith( i.raw() ) )
+               .map( CRawTerm::from )
                .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
