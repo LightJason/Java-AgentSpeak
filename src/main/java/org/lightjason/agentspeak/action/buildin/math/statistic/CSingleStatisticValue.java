@@ -24,12 +24,8 @@
 package org.lightjason.agentspeak.action.buildin.math.statistic;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
-import org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatistics;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,27 +34,26 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 
 /**
- * action to create a statistic.
- * The action creates statistic objects to collect data,
- * each argument must be a string with "summary" or "descriptive"
- * for a summary or descriptive statistic object, on no arguments
- * a summary statistic object is created, the action never fails
+ * gets a single statistic value of multiple statistic objects.
+ * The action returns for each statistic object the statistic value,
+ * the first argument is a string with the statitic value "geometricmean, max,
+ * min, count, populationvariance, quadraticmean, secondmoment,
+ * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis"
+ * all other arguments are statistic objects
  *
- * @code [S1|S2] = math/statistic/createstaistic("summary", ["descriptive"]); @endcode
- * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
+ * @code [V1|V2|V3] = math/statistic/getstatisticvalue( "mean|min|max|...", Statistic1, [Statistic2, Statistic3] ); @endcode
  */
-public final class CCreateStatistic extends IBuildinAction
+public final class CSingleStatisticValue extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public CCreateStatistic()
+    public CSingleStatisticValue()
     {
         super( 3 );
     }
@@ -66,68 +61,33 @@ public final class CCreateStatistic extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 2;
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final EStatisticValue l_value = EStatisticValue.from( l_arguments.get( 0 ).<String>raw() );
 
-        (
-            p_argument.size() == 0
-            ? Stream.of( EType.SUMMARY )
-            : CCommon.flatcollection( p_argument ).map( ITerm::<String>raw ).map( EType::from )
-        ).map( i -> i.generate( p_parallel ) )
-         .map( CRawTerm::from ).forEach( p_return::add );
+        l_arguments.stream()
+                   .skip( 1 )
+                   .mapToDouble( i -> {
+
+                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                           return l_value.value( i.<SummaryStatistics>raw() );
+
+                       return l_value.value( i.<DescriptiveStatistics>raw() );
+
+                   } )
+                   .boxed()
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
 
-
-    /**
-     * enume statistic type
-     */
-    private enum EType
-    {
-        SUMMARY,
-        DESCRIPTIVE;
-
-        /**
-         * additional factory
-         *
-         * @param p_value string
-         * @return enum
-         */
-        public static EType from( final String p_value )
-        {
-            return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
-        }
-
-        /**
-         * returns the statistic object
-         *
-         * @param p_parallel parallel-safe
-         * @return statistic object
-         */
-        public final StatisticalSummary generate( final Boolean p_parallel )
-        {
-            switch ( this )
-            {
-                case SUMMARY:
-                    return p_parallel
-                           ? new SynchronizedSummaryStatistics()
-                           : new SummaryStatistics();
-
-                case DESCRIPTIVE:
-                    return p_parallel
-                           ? new SynchronizedDescriptiveStatistics()
-                           : new DescriptiveStatistics();
-
-                default:
-                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
-            }
-        }
-    }
 }

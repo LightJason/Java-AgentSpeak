@@ -248,17 +248,8 @@ myfunction(X) :- generic/print("my logical rule", X).
         Statistic = math/statistic/createstatistic();
         math/statistic/addstatisticvalue(Statistic, RV, L);
 
-        SMax = math/statistic/getstatisticvalue(Statistic, "max");
-        SMin = math/statistic/getstatisticvalue(Statistic, "min");
-        SCount = math/statistic/getstatisticvalue(Statistic, "count");
-        SPopVariance = math/statistic/getstatisticvalue(Statistic, "populationvariance");
-        SQuadraticMean = math/statistic/getstatisticvalue(Statistic, "quadraticmean");
-        SSecondMom = math/statistic/getstatisticvalue(Statistic, "secondmoment");
-        SStd = math/statistic/getstatisticvalue(Statistic, "standarddeviation");
-        SSum = math/statistic/getstatisticvalue(Statistic, "sum");
-        SSumSq = math/statistic/getstatisticvalue(Statistic, "sumsquare");
-        SVar = math/statistic/getstatisticvalue(Statistic, "variance");
-        SMean = math/statistic/getstatisticvalue(Statistic, "mean");
+        [SMax|SMin|SCount|SPopVariance|SQuadraticMean|SSecondMom|SStd|SSum|SSumSq|SVar|SMean]  = math/statistic/multiplestatisticvalue(Statistic, "max", "min", "count", "populationvariance", "quadraticmean", "secondmoment", "standarddeviation", "sum", "sumsquare", "variance", "mean" );
+        SX = math/statistic/singlestatisticvalue("mean", Statistic);
 
         generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
         generic/print();

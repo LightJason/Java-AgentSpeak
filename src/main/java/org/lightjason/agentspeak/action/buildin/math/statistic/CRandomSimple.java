@@ -24,19 +24,29 @@
 package org.lightjason.agentspeak.action.buildin.math.statistic;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
 /**
- * create a (set) of simple random values
+ * create a (set) of simple random values.
+ * Returns single or a list of random (uniform distributed)
+ * values, all arguments are the number of returning
+ * values, if the argument number is 1 a single random
+ * value is returned, is the number greater than 1 a list
+ * of values is returned
+ *
+ * @code [V1|L1|V2|L2] = math/statistic/randomsimple( 1, 5, 1, 10 ); @endcode
  */
 public final class CRandomSimple extends IBuildinAction
 {
@@ -64,12 +74,19 @@ public final class CRandomSimple extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        IntStream.range(
-            0,
-            p_argument.size() > 0
-            ? p_argument.get( 0 ).<Number>raw().intValue()
-            : 1
-        ).forEach( i -> p_return.add( CRawTerm.from( m_random.nextDouble() ) ) );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<Number>raw )
+               .map( Number::intValue )
+               .map( i -> i == 1
+                          ? m_random.nextDouble()
+                          : p_parallel
+                            ? Collections.synchronizedList(
+                                IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
+                            )
+                            : IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
+               )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

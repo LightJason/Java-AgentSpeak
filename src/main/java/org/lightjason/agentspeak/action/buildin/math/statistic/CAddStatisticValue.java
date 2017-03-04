@@ -33,11 +33,20 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to push a value to the statistic object
+ * action to push a values to the statistic object.
+ * The actions adds the given argument number values to each
+ * statistic objects within the arguments, the ordering of values and
+ * statistic object is free, each value will be added to each
+ * statistic object and the action fails on a wrong input, only
+ * number and statistic objects are allowed
+ *
+ * @code math/statistic/addstatisticvalue( StatisticObject1, [1,2,3, StatisticObject2], 1,5,8, StatisticObject3 ); @endcode
  */
 public final class CAddStatisticValue extends IBuildinAction
 {
@@ -53,49 +62,41 @@ public final class CAddStatisticValue extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        final StatisticalSummary l_statistic = p_argument.get( 0 ).raw();
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final double[] l_values = l_arguments.parallelStream()
+                                           .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                           .map( ITerm::<Number>raw )
+                                           .mapToDouble( Number::doubleValue ).toArray();
 
-        if ( l_statistic instanceof SummaryStatistics )
-            return this.push( (SummaryStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );
+        return CFuzzyValue.from(
+            l_arguments.parallelStream()
+                   .filter( i -> CCommon.rawvalueAssignableTo( i, StatisticalSummary.class ) )
+                   .allMatch( i -> {
 
-        if ( l_statistic instanceof DescriptiveStatistics )
-            return this.push( (DescriptiveStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );
+                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                       {
+                           Arrays.stream( l_values ).forEach( j -> i.<SummaryStatistics>raw().addValue( j ) );
+                           return true;
+                       }
 
-        return CFuzzyValue.from( false );
+                       if ( CCommon.rawvalueAssignableTo( i, DescriptiveStatistics.class ) )
+                       {
+                           Arrays.stream( l_values ).forEach( j -> i.<DescriptiveStatistics>raw().addValue( j ) );
+                           return true;
+                       }
+
+                       return false;
+                   } )
+        );
+
     }
 
-    /**
-     * push values to the statistics
-     *
-     * @param p_statistic statistic object
-     * @param p_value values
-     * @return boolean result
-     */
-    private IFuzzyValue<Boolean> push( final SummaryStatistics p_statistic, final List<ITerm> p_value )
-    {
-        CCommon.flatcollection( p_value ).forEach( i -> p_statistic.addValue( i.<Number>raw().doubleValue() ) );
-        return CFuzzyValue.from( true );
-    }
-
-    /**
-     * push values to the statistics
-     *
-     * @param p_statistic statistic object
-     * @param p_value values
-     * @return boolean result
-     */
-    private IFuzzyValue<Boolean> push( final DescriptiveStatistics p_statistic, final List<ITerm> p_value )
-    {
-        CCommon.flatcollection( p_value ).forEach( i -> p_statistic.addValue( i.<Number>raw().doubleValue() ) );
-        return CFuzzyValue.from( true );
-    }
 }

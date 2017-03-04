@@ -24,9 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.math.statistic;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -36,7 +36,11 @@ import java.util.List;
 
 
 /**
- * action to clears the statistic
+ * action to clears the statistic.
+ * The actions clears statistic objects, so
+ * all arguments must be statistic objects
+ *
+ * @code math/statistic/clearstatistic( Statistic1, [Statistic2, [Statistic3]] ); @endcode
  */
 public final class CClearStatistic extends IBuildinAction
 {
@@ -56,46 +60,47 @@ public final class CClearStatistic extends IBuildinAction
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation
     )
     {
-        final StatisticalSummary l_statistic = p_argument.get( 0 ).raw();
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
+                   .parallel()
+                   .allMatch( i -> {
 
-        if ( l_statistic instanceof SummaryStatistics )
-            return this.clear( (SummaryStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );
+                       if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
+                            return CClearStatistic.apply( i.<SummaryStatistics>raw() );
 
-        if ( l_statistic instanceof DescriptiveStatistics )
-            return this.clear( (DescriptiveStatistics) l_statistic, p_argument.subList( 1, p_argument.size() ) );
+                       return CCommon.rawvalueAssignableTo( i, DescriptiveStatistics.class ) && CClearStatistic.apply(
+                            i.<DescriptiveStatistics>raw() );
 
-        return CFuzzyValue.from( false );
+                   } )
+        );
     }
 
     /**
-     * clears the statistics
+     * clear a summary statistic
      *
      * @param p_statistic statistic object
-     * @param p_value values
-     * @return boolean result
+     * @return successful clear
      */
-    private IFuzzyValue<Boolean> clear( final SummaryStatistics p_statistic, final List<ITerm> p_value )
+    private static boolean apply( final SummaryStatistics p_statistic )
     {
         p_statistic.clear();
-        return CFuzzyValue.from( true );
+        return true;
     }
 
     /**
-     * clears the statistics
+     * clear a descriptive statistic
      *
      * @param p_statistic statistic object
-     * @param p_value values
-     * @return boolean result
+     * @return successful clear
      */
-    private IFuzzyValue<Boolean> clear( final DescriptiveStatistics p_statistic, final List<ITerm> p_value )
+    private static boolean apply( final DescriptiveStatistics p_statistic )
     {
-
         p_statistic.clear();
-        return CFuzzyValue.from( true );
+        return true;
     }
+
 }

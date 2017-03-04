@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * other values number values (x-position) for
  * interpolation
  *
- * @code [A|B|C] = math/interpolate/interpolation( InterpolatingFunction, 3, [10, [50]] ); @endcode
+ * @code [A|B|C] = math/interpolate/interpolate( InterpolatingFunction, 3, [10, [50]] ); @endcode
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
 public final class CInterpolate extends IBuildinAction
