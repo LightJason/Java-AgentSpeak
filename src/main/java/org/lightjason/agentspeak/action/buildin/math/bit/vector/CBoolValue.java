@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * returns for the index a boolean value.
  * The action returns for the first argument, which
  * is a bit vector, all boolean values for all
- * given index values
+ * given index values, the action never fails
  *
  * @code [B1|B2|B3] = math/bit/vector/boolvalue( BitVector, 1, [3, 5] ); @endcode
  */

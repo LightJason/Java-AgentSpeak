@@ -36,6 +36,9 @@ import java.util.List;
 
 /**
  * performs the logical not operation to all bit vectors.
+ * Each input argument defines a bit vector and
+ * the action apply the logical not operator, the action
+ * never fails
  *
  * @code math/bit/vector/not( Vector1, Vector2 ); @endcode
  */

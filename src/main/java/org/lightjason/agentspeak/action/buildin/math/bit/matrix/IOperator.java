@@ -21,9 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.bitvector.BitVector;
+import cern.colt.bitvector.BitMatrix;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * defines an abstract operator for bit vector
+ * defines an abstract operator for bit matrix
  */
 public abstract class IOperator extends IBuildinAction
 {
@@ -60,8 +60,8 @@ public abstract class IOperator extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<BitVector> l_arguments = CCommon.flatcollection( p_argument )
-                                                   .map( ITerm::<BitVector>raw )
+        final List<BitMatrix> l_arguments = CCommon.flatcollection( p_argument )
+                                                   .map( ITerm::<BitMatrix>raw )
                                                    .collect( Collectors.toList() );
 
         l_arguments.stream()
@@ -79,5 +79,5 @@ public abstract class IOperator extends IBuildinAction
      * @param p_target bit vector which will modifed
      * @param p_source source of modification
      */
-    protected abstract void apply( final BitVector p_target, final BitVector p_source );
+    protected abstract void apply( final BitMatrix p_target, final BitMatrix p_source );
 }

@@ -40,7 +40,8 @@ import java.util.stream.Collectors;
  * returns for the index a numeric value.
  * The action returns for the first argument, which
  * is a bit vector, all numeric values for all
- * given index values (0 = false, 1 = true)
+ * given index values (0 = false, 1 = true),
+ * the action never fails
  *
  * @code [B1|B2|B3] = math/bit/vector/numericvalue( BitVector, 1, [3, 5] ); @endcode
  */

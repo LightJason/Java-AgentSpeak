@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * sets the indexed bit to false within the bit vector.
  * The action gets bit vectors and index positions and
  * in each bit vector the given bit positions are set
- * to false
+ * to false, the action never fails
  *
  * @code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] ); @endcode
  */

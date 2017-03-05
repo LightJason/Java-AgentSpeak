@@ -21,27 +21,53 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.bitvector.BitVector;
+import cern.colt.bitvector.BitMatrix;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 
 
 /**
- * performs the logical not-and operation to all bit vectors.
- * The action runs the logical not-and operator, the first
- * argument is the bit vector, that is combined with
- * all other bit vectors, so \f$ v_i = v_i \text{ && not } v_1 \f$
- * is performed, the action never fails
+ * performs the logical not operation to all bit matrices.
+ * Each input argument defines a bit matrix and
+ * the action apply the logical not operator, the action
+ * never fails
  *
- * @code math/bit/vector/nand( Vector, Vector1, Vector2 ); @endcode
+ * @code math/bit/matrix/not( Matrix1, Matrix2 ); @endcode
  */
-public final class CNAnd extends IOperator
+public final class CNot extends IBuildinAction
 {
-
-    @Override
-    protected final void apply( final BitVector p_target, final BitVector p_source )
+    /**
+     * ctor
+     */
+    public CNot()
     {
-        p_target.andNot( p_source );
+        super( 4 );
     }
 
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        CCommon.flatcollection( p_argument )
+               .parallel()
+               .map( ITerm::<BitMatrix>raw )
+               .forEach( BitMatrix::not );
+
+        return CFuzzyValue.from( true );
+    }
 }

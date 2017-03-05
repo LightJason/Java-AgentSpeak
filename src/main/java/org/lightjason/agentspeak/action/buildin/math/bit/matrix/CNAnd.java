@@ -21,25 +21,25 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.bitvector.BitVector;
+import cern.colt.bitvector.BitMatrix;
 
 
 /**
- * performs the logical not-and operation to all bit vectors.
+ * performs the logical not-and operation to all bit matrices.
  * The action runs the logical not-and operator, the first
- * argument is the bit vector, that is combined with
- * all other bit vectors, so \f$ v_i = v_i \text{ && not } v_1 \f$
+ * argument is the bit matrix, that is combined with
+ * all other bit matrices, so \f$ m_i = m_i \text{ && not } m_1 \f$
  * is performed, the action never fails
  *
- * @code math/bit/vector/nand( Vector, Vector1, Vector2 ); @endcode
+ * @code math/bit/matrix/nand( Matrix, Matrix1, Matrix2 ); @endcode
  */
 public final class CNAnd extends IOperator
 {
 
     @Override
-    protected final void apply( final BitVector p_target, final BitVector p_source )
+    protected final void apply( final BitMatrix p_target, final BitMatrix p_source )
     {
         p_target.andNot( p_source );
     }

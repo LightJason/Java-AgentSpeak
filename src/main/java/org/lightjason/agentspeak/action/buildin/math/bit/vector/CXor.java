@@ -31,7 +31,7 @@ import cern.colt.bitvector.BitVector;
  * The action runs the logical xor operator, the first
  * argument is the bit vector, that is combined with
  * all other bit vectors, so \f$ v_i = v_i \text{ ^ } v_1 \f$
- * is performed
+ * is performed, the action never fails
  *
  * @code math/bit/vector/xor( Vector, Vector1, Vector2 ); @endcode
  */

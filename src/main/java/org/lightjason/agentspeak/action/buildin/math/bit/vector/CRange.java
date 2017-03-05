@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * range, the first argument is a bit vector,
  * all other arguments are tuples of ranges,
  * the action fails on wrong input, index starts
- * at zero
+ * at zero, the action never fails
  *
  * @code [V1|V2] = math/bit/vector/range( BitVector, 0, 1, [3, 5] ); @endcode
  */
