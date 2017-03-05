@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  * returns a copy of the vector.
- * All input vector object will be
+ * All input vector objects will be
  * copied and returned, the action
  * never fails
  *

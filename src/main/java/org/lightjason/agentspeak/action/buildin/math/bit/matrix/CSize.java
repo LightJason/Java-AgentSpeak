@@ -21,9 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.bitvector.BitVector;
+import cern.colt.bitvector.BitMatrix;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -36,12 +36,12 @@ import java.util.List;
 
 
 /**
- * returns the size of the vector.
- * All input vector objects will return
- * their size (number of bits), the action
+ * returns the size (rows * columns) of the matrix.
+ * All input matrix objects will return
+ * their size (number of bits for the rows * columns), the action
  * never fails
  *
- * @code [A|B] = math/bit/vector/size( Vector1, Vector2 ); @endcode
+ * @code [A|B] = math/bit/matrix/size( Matrix1, Matrix2 ); @endcode
  */
 public final class CSize extends IBuildinAction
 {
@@ -65,8 +65,8 @@ public final class CSize extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::size )
+               .map( ITerm::<BitMatrix>raw )
+               .map( BitMatrix::size )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

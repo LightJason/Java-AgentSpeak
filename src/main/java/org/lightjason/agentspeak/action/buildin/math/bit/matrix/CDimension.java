@@ -21,9 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.bitvector.BitVector;
+import cern.colt.bitvector.BitMatrix;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -36,19 +36,18 @@ import java.util.List;
 
 
 /**
- * returns the size of the vector.
- * All input vector objects will return
- * their size (number of bits), the action
- * never fails
+ * returns the dimension (rows / columns) of a bit matrix.
+ * Reads the dimension of each input matrix and returns
+ * the rows and columns, the action never fails.
  *
- * @code [A|B] = math/bit/vector/size( Vector1, Vector2 ); @endcode
+ * @code [Row1|Column1|Row2|Column2] = math/bit/matrix/dimension(M1,M2); @endcode
  */
-public final class CSize extends IBuildinAction
+public final class CDimension extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CSize()
+    public CDimension()
     {
         super( 4 );
     }
@@ -64,11 +63,13 @@ public final class CSize extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        // arguments are matrix objects
         CCommon.flatcollection( p_argument )
-               .map( ITerm::<BitVector>raw )
-               .map( BitVector::size )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+               .map( ITerm::<BitMatrix>raw )
+               .forEach( i -> {
+                   p_return.add( CRawTerm.from( (long) i.rows() ) );
+                   p_return.add( CRawTerm.from( (long) i.columns() ) );
+               } );
 
         return CFuzzyValue.from( true );
     }
