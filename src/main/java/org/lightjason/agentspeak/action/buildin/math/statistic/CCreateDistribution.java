@@ -54,21 +54,38 @@ import org.apache.commons.math3.random.Well44497a;
 import org.apache.commons.math3.random.Well44497b;
 import org.apache.commons.math3.random.Well512a;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
- * creates a distribution object
+ * creates a distribution object.
+ * The action creates a distribution objects, with an individual
+ * pseudo-random generator and different distribution paramter,
+ * the action never fails, the following distributions are supported
+ * with the following number of numeric arguments
+ *
+ * + normal distribution with 2 arguments (expected value, variance)
+ *
+ * The following pseudo-random number generators are supported:
+ *
+ * + mersennetwister (default)
+ *
+ * @code [D1|D2] = math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] ); @endcode
  */
 public final class CCreateDistribution extends IBuildinAction
 {
@@ -92,22 +109,45 @@ public final class CCreateDistribution extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final EDistribution l_distribution = EDistribution.from( p_argument.get( 0 ).<String>raw() );
-        final int l_requiredarguments = this.minimalArgumentNumber() + l_distribution.getArgumentNumber();
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
-        if ( p_argument.size() < l_requiredarguments )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "distributionarguments" ) );
+        IntStream.range( 0, l_arguments.size() )
+                 .filter( i -> CCommon.rawvalueAssignableTo( l_arguments.get( i ), String.class ) )
+                 .mapToObj( i -> new AbstractMap.SimpleImmutableEntry<>( i, l_arguments.get( i ).<String>raw() ) )
+                 .filter( i -> EDistribution.exist( i.getValue() ) )
+                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), EDistribution.from( i.getValue() ) ) )
+                 .map( i -> {
 
+                     // check if next argument to the distribution name a generator name
+                     final int l_skip;
+                     final EGenerator l_generator;
 
-        p_return.add( CRawTerm.from(
-            l_distribution.get(
-                ( p_argument.size() > l_requiredarguments
-                  ? EGenerator.from( p_argument.get( l_requiredarguments + 1 ).<String>raw() )
-                  : EGenerator.MERSENNETWISTER ).get(),
-                p_argument.subList( 1, l_requiredarguments ).stream().mapToDouble( i -> i.<Number>raw().doubleValue() ).boxed()
-                          .collect( Collectors.toList() )
-            )
-        ) );
+                     if ( ( i.getKey() < l_arguments.size() - 1 ) && ( CCommon.rawvalueAssignableTo( l_arguments.get( i.getKey() + 1 ), String.class ) ) )
+                     {
+                         l_skip = 1;
+                         l_generator = EGenerator.from( l_arguments.get( i.getKey() + 1 ).<String>raw() );
+                     }
+                     else
+                     {
+                         l_skip = 0;
+                         l_generator = EGenerator.MERSENNETWISTER;
+                     }
+
+                     // generate distribution object, arguments after distribution are the initialize parameter
+                     return i.getValue()
+                             .get(
+                                 l_generator.get(),
+                                 l_arguments.stream()
+                                            .skip( i.getKey() + 1 + l_skip )
+                                            .limit( i.getValue().getArgumentNumber() )
+                                            .map( ITerm::<Number>raw )
+                                            .mapToDouble( Number::doubleValue )
+                                            .toArray()
+                             );
+
+                 } )
+                 .map( CRawTerm::from )
+                 .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
@@ -138,6 +178,15 @@ public final class CCreateDistribution extends IBuildinAction
         WEIBULL( 2 );
 
         /**
+         * enum name list
+         */
+        private static final Set<String> NAMES = Collections.unmodifiableSet(
+                                                    Arrays.stream( EDistribution.values() )
+                                                          .map( i -> i.name().toUpperCase( Locale.ROOT ) )
+                                                          .collect( Collectors.toSet() )
+        );
+
+        /**
          * number of arguments
          */
         private final int m_arguments;
@@ -164,6 +213,17 @@ public final class CCreateDistribution extends IBuildinAction
         }
 
         /**
+         * checks if a name exists within the enum
+         *
+         * @param p_value string name
+         * @return exist boolean
+         */
+        public static boolean exist( final String p_value )
+        {
+            return NAMES.contains( p_value.trim().toUpperCase( Locale.ROOT ) );
+        }
+
+        /**
          * return number of arguments
          *
          * @return argument number
@@ -180,66 +240,66 @@ public final class CCreateDistribution extends IBuildinAction
          * @param p_arguments arguments
          * @return real distribution
          */
-        public final AbstractRealDistribution get( final RandomGenerator p_generator, final List<Double> p_arguments )
+        public final AbstractRealDistribution get( final RandomGenerator p_generator, final double[] p_arguments )
         {
             switch ( this )
             {
                 case BETA:
-                    return new BetaDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new BetaDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case CAUCHY:
-                    return new CauchyDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new CauchyDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case CHISQUARE:
-                    return new ChiSquaredDistribution( p_generator, p_arguments.get( 0 ) );
+                    return new ChiSquaredDistribution( p_generator, p_arguments[0] );
 
                 case EXPONENTIAL:
-                    return new ExponentialDistribution( p_generator, p_arguments.get( 0 ) );
+                    return new ExponentialDistribution( p_generator, p_arguments[0] );
 
                 case F:
-                    return new FDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new FDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case GAMMA:
-                    return new GammaDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new GammaDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case GUMBLE:
-                    return new GumbelDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new GumbelDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case LAPLACE:
-                    return new LaplaceDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new LaplaceDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case LEVY:
-                    return new LevyDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new LevyDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case LOGISTIC:
-                    return new LogisticDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new LogisticDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case LOGNORMAL:
-                    return new LogNormalDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new LogNormalDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case NAKAGAMI:
                     return new NakagamiDistribution(
-                        p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ),
+                        p_generator, p_arguments[0], p_arguments[1],
                         NakagamiDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY
                     );
 
                 case NORMAL:
-                    return new NormalDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new NormalDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case PARETO:
-                    return new ParetoDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new ParetoDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case T:
-                    return new TDistribution( p_generator, p_arguments.get( 0 ) );
+                    return new TDistribution( p_generator, p_arguments[0] );
 
                 case TRIANGULAR:
-                    return new TriangularDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ), p_arguments.get( 2 ) );
+                    return new TriangularDistribution( p_generator, p_arguments[0], p_arguments[1], p_arguments[2] );
 
                 case UNIFORM:
-                    return new UniformRealDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new UniformRealDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 case WEIBULL:
-                    return new WeibullDistribution( p_generator, p_arguments.get( 0 ), p_arguments.get( 1 ) );
+                    return new WeibullDistribution( p_generator, p_arguments[0], p_arguments[1] );
 
                 default:
                     throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
