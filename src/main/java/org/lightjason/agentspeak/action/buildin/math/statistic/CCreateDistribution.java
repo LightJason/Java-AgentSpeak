@@ -79,13 +79,64 @@ import java.util.stream.IntStream;
  * the action never fails, the following distributions are supported
  * with the following number of numeric arguments
  *
+ * + beta distribution with 2 arguments (\f$ \alpha \f$ and \f$ \beta \f$)
+ * + cauchy distribution with 2 arguments (media and scale)
+ * + chi-square distribution with 1 argument (degree off freedom)
+ * + exponential distribution with 1 argument (mean)
+ * + f distribution with 2 arguments (degrees of freedom, denominator degrees of freedom)
+ * + gamma distribution with 2 arguments (shape and scale)
+ * + gumble distribution with 2 arguments (\f$ \mu \f$ and \f$ \beta \f$)
+ * + laplace distirbution with 2 arguments (\f$ \mu \f$ and \f$ \beta \f$)
+ * + levy distirbution with 2 arguments (\f$ \mu \f$ and \f$ c \f$)
+ * + logistic distirbution with 2 arguments (\f$ \mu \f$ and \f$ s \f$)
+ * + lognormal distirbution with 2 arguments (scale and shape)
+ * + nakagami distribution with 2 arguments (\f$ \mu \f$ and \f$ \omega \f$)
  * + normal distribution with 2 arguments (expected value, variance)
+ * + pareto distribution with 2 arguments (scale and shape)
+ * + t distribution with 1 argument (degrees of freedom)
+ * + triangular distribution with 3 arguments (a, b, c)
+ * + uniform distribution with 2 arguments (lower and upper)
+ * + weibull distribution with 2 arguments (\f$ \alpha \f$ and \f$ \beta \f$)
  *
  * The following pseudo-random number generators are supported:
  *
  * + mersennetwister (default)
+ * + synchronizedmersennetwister
+ * + isaac
+ * + synchronizedisaac
+ * + internal
+ * + synchronizedinternal
+ * + well512a
+ * + synchronizedwell512a
+ * + well1024a
+ * + synchronizedwell1024a
+ * + well19937a
+ * + synchronizedwell19937a
+ * + well19937c
+ * + synchronizedwell19937c
+ * + well4449a
+ * + synchronizedwell4449a
+ * + well44497b
+ * + synchronizedwell44497b
  *
  * @code [D1|D2] = math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] ); @endcode
+ * @see https://en.wikipedia.org/wiki/Beta_distribution
+ * @see https://en.wikipedia.org/wiki/Cauchy_distribution
+ * @see https://en.wikipedia.org/wiki/Chi-squared_distribution
+ * @see https://en.wikipedia.org/wiki/Exponential_distribution
+ * @see https://en.wikipedia.org/wiki/F-distribution
+ * @see https://en.wikipedia.org/wiki/Gamma_distribution
+ * @see https://en.wikipedia.org/wiki/Gumbel_distribution
+ * @see https://en.wikipedia.org/wiki/L%C3%A9vy_distribution
+ * @see https://en.wikipedia.org/wiki/Logistic_distribution
+ * @see https://en.wikipedia.org/wiki/Log-normal_distribution
+ * @see https://en.wikipedia.org/wiki/Nakagami_distribution
+ * @see https://en.wikipedia.org/wiki/Normal_distribution
+ * @see https://en.wikipedia.org/wiki/Pareto_distribution
+ * @see https://en.wikipedia.org/wiki/Student%27s_t-distribution
+ * @see https://en.wikipedia.org/wiki/Triangular_distribution
+ * @see https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)
+ * @see https://en.wikipedia.org/wiki/Weibull_distribution
  */
 public final class CCreateDistribution extends IBuildinAction
 {
@@ -314,8 +365,8 @@ public final class CCreateDistribution extends IBuildinAction
     {
         MERSENNETWISTER,
         SYNCHRONIZEDMERSENNETWISTER,
-        ISSAAC,
-        SYNCHRONIZEDISSAAC,
+        ISAAC,
+        SYNCHRONIZEDISAAC,
         INTERNAL,
         SYNCHRONIZEDINTERNAL,
         WELL512A,
@@ -357,10 +408,10 @@ public final class CCreateDistribution extends IBuildinAction
                 case SYNCHRONIZEDMERSENNETWISTER:
                     return new SynchronizedRandomGenerator( new MersenneTwister() );
 
-                case ISSAAC:
+                case ISAAC:
                     return new ISAACRandom();
 
-                case SYNCHRONIZEDISSAAC:
+                case SYNCHRONIZEDISAAC:
                     return new SynchronizedRandomGenerator( new ISAACRandom() );
 
                 case INTERNAL:

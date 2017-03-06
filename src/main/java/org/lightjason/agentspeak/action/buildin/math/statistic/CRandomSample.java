@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.statistic;
 
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -62,23 +64,38 @@ public final class CRandomSample extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument distribution reference, second optional value number of random values
-        if ( p_argument.size() > 1 )
-            p_return.add( CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( Arrays.stream(
-                    p_argument.get( 0 ).<AbstractRealDistribution>raw()
-                        .sample( p_argument.get( 1 ).<Number>raw().intValue() )
-                ).boxed().collect( Collectors.toList() ) )
-                : Arrays.stream(
-                    p_argument.get( 0 ).<AbstractRealDistribution>raw()
-                        .sample( p_argument.get( 1 ).<Number>raw().intValue() )
-                ).boxed().collect( Collectors.toList() )
-            ) );
-        else
-            p_return.add( CRawTerm.from( p_argument.get( 0 ).<AbstractRealDistribution>raw().sample() ) );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        (
+            l_arguments.size() < 2
+            ? Stream.of( 1 )
+            : l_arguments.stream()
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+        )
+            .mapToInt( Number::intValue )
+            .mapToObj( i -> CRandomSample.samples( l_arguments.get( 0 ).<AbstractRealDistribution>raw(), i, p_parallel ) )
+            .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * creates the sample structure
+     *
+     * @param p_distribution distribution object
+     * @param p_size size of the returned values
+     * @param p_parallel parallel flag
+     * @return term with data
+     */
+    private static ITerm samples( final AbstractRealDistribution p_distribution, final int p_size, final boolean p_parallel )
+    {
+        if ( p_size < 2 )
+            return CRawTerm.from( p_distribution.sample() );
+
+        final List<Double> l_list = Arrays.stream( p_distribution.sample( p_size ) ).boxed().collect( Collectors.toList() );
+        return CRawTerm.from( p_parallel ? Collections.synchronizedList( l_list ) : l_list );
+
     }
 
 }
