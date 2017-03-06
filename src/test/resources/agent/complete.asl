@@ -129,9 +129,10 @@ myfunction(X) :- generic/print("my logical rule", X).
         Union = collection/list/union( [1,2,3], [2,3,4], [3,4,5] );
         SD = collection/list/symmetricdifference( [1,2,3], [3,4] );
         CP = collection/list/complement( [1,2,3,4,5], [1,2] );
+        LSize = collection/size( L );
 
         generic/print("list elements", A,B,C,D,E,F,G, L);
-        generic/print("intersection & union & symmetric difference & complement", Intersect, "--", Union, "--", SD, "--", CP);
+        generic/print("intersection & union & symmetric difference & complement", Intersect, "--", Union, "--", SD, "--", CP, "--", LSize);
         generic/print();
 
         // -----------------------------------------------------------------------------------------------------------------------------------------------------

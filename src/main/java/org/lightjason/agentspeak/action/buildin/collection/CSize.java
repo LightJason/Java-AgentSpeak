@@ -59,7 +59,7 @@ public final class CSize extends IBuildinAction
     )
     {
         // any term type
-        CCommon.flatcollection( p_argument )
+        p_argument.stream()
                .map( CSize::size )
                .map( CRawTerm::from )
                .forEach( p_return::add );
