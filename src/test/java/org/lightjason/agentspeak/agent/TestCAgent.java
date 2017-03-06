@@ -101,12 +101,11 @@ public final class TestCAgent
     @Test
     public final void testASLManual()
     {
-        ASL.entrySet()
-             .forEach( i -> {
-                 final Pair<Boolean, String> l_result = testAgentManual( i.getKey(), i.getValue() );
-                 assertTrue( l_result.getRight(), l_result.getLeft() );
-                 System.out.println( l_result.getValue() );
-             } );
+        ASL.forEach( ( i, j ) -> {
+            final Pair<Boolean, String> l_result = testAgentManual( i, j );
+            assertTrue( l_result.getRight(), l_result.getLeft() );
+            System.out.println( l_result.getValue() );
+        } );
     }
 
     /**

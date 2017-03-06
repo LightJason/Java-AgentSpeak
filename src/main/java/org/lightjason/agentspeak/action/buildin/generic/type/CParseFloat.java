@@ -23,52 +23,40 @@
 
 package org.lightjason.agentspeak.action.buildin.generic.type;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.text.MessageFormat;
-import java.util.List;
+import java.util.AbstractMap;
+import java.util.Map;
 
 
 /**
- * action for parsing a float from string
+ * action for parsing a float from string.
+ * Parses each argument to a floating point value
+ * and returns the value, the action fails on
+ * parsing errors
+ *
+ * @code [X|Y|Z] = generic/type/parsefloat( "1.45", ["8.88", "9"] ); @endcode
  */
-public final class CParseFloat extends IBuildinAction
+public final class CParseFloat extends IParse
 {
+
     /**
-     * ctor
+     * parses the input string
+     *
+     * @param p_value string value
+     * @return tuple with boolean (for parsing error) and term
      */
-    public CParseFloat()
-    {
-        super( 3 );
-    }
-
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected final Map.Entry<Boolean, ITerm> parse( final String p_value )
     {
         try
         {
-            p_return.add( CRawTerm.from( Double.parseDouble( p_argument.get( 0 ).<String>raw() ) ) );
-            return CFuzzyValue.from( true );
+            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.from( Double.parseDouble( p_value ) ) );
         }
         catch ( final Exception l_exception )
         {
-            LOGGER.warning( MessageFormat.format( "parsing float [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
-            return CFuzzyValue.from( false );
+            return new AbstractMap.SimpleImmutableEntry<>( false, null );
         }
-
     }
 
 }

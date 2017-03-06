@@ -25,30 +25,24 @@ package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 
 /**
- * action to check if a value is a null value.
- * The actions checks all arguments if the values
- * are null, the action never fails and returns booleans
- *
- * @code [A|B] = generic/type(X,Y); @endcode
+ * abstract class to define parsing actions
  */
-public final class CIsNull extends IBuildinAction
+public abstract class IParse extends IBuildinAction
 {
-
     /**
      * ctor
      */
-    public CIsNull()
+    protected IParse()
     {
         super( 3 );
     }
@@ -64,13 +58,26 @@ public final class CIsNull extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::raw )
-               .map( Objects::isNull )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::<String>raw )
+                   .map( this::parse )
+                   .allMatch( i -> {
 
-        return CFuzzyValue.from( true );
+                       p_return.add( i.getValue() );
+                       return i.getKey();
+
+                   } )
+        );
     }
+
+
+    /**
+     * parses the input string
+     *
+     * @param p_value string value
+     * @return tuple with boolean (for parsing error) and term
+     */
+    protected abstract Map.Entry<Boolean, ITerm> parse( final String p_value );
 
 }

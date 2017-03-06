@@ -31,8 +31,13 @@ import java.util.stream.Stream;
 
 
 /**
- * action to define a exponential fitness-proportinate-selection mechanism
+ * action to define a exponential fitness-proportinate-selection mechanism.
+ * The action defines a fitness-proportinate-selection based on a linear
+ * distribution, the first and second argument must be a list, the first
+ * list contains elements, the second list contains numeric values for defining
+ * the weights
  *
+ * @code S = math/statistic/exponentialproportionateselection( RationalFactor, ["a","b","c","d"], [0.5, 0.7, 0.9, 3] ); @endcode
  * @see https://en.wikipedia.org/wiki/Fitness_proportionate_selection
  */
 public final class CLinearProportionateSelection extends ISelection

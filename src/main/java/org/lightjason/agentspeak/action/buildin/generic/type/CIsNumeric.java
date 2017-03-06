@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -34,7 +34,12 @@ import java.util.List;
 
 
 /**
- * action to check if a type is a number
+ * action to check if a type is a number.
+ * The actions checks all arguments for a
+ * number value and it fails if one of the
+ * arguments not a number
+ *
+ * @code generic/type/isnumeric( X, 3.5 ); @endcode
  */
 public final class CIsNumeric extends IBuildinAction
 {
@@ -58,10 +63,11 @@ public final class CIsNumeric extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final boolean l_return = p_argument.get( 0 ).raw() instanceof Number;
-
-        p_return.add( CRawTerm.from( l_return ) );
-        return CFuzzyValue.from( l_return );
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
+               .map( ITerm::raw )
+               .allMatch( i -> i instanceof Number )
+         );
     }
 
 }
