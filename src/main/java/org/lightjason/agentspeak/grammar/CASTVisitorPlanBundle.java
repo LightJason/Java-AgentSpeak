@@ -310,16 +310,13 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitPlan_goal_trigger( final PlanBundleParser.Plan_goal_triggerContext p_context )
     {
-        switch ( p_context.getText() )
-        {
-            case "+!":
-                return ITrigger.EType.ADDGOAL;
-            case "-!":
-                return ITrigger.EType.DELETEGOAL;
+        if ( ITrigger.EType.ADDGOAL.sequence().equals( p_context.getText() ) )
+            return ITrigger.EType.ADDGOAL;
 
-            default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "goaltrigger", p_context.getText() ) );
-        }
+        if ( ITrigger.EType.DELETEGOAL.sequence().equals( p_context.getText() ) )
+            return ITrigger.EType.DELETEGOAL;
+
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "goaltrigger", p_context.getText() ) );
     }
 
 
@@ -327,16 +324,13 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitPlan_belief_trigger( final PlanBundleParser.Plan_belief_triggerContext p_context )
     {
-        switch ( p_context.getText() )
-        {
-            case "+":
-                return ITrigger.EType.ADDBELIEF;
-            case "-":
-                return ITrigger.EType.DELETEBELIEF;
+        if ( ITrigger.EType.ADDBELIEF.sequence().equals( p_context.getText() ) )
+            return ITrigger.EType.ADDBELIEF;
 
-            default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "belieftrigger", p_context.getText() ) );
-        }
+        if ( ITrigger.EType.DELETEBELIEF.sequence().equals( p_context.getText() ) )
+            return ITrigger.EType.DELETEBELIEF;
+
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "belieftrigger", p_context.getText() ) );
     }
 
 

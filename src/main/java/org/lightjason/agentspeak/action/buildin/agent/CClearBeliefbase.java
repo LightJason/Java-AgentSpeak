@@ -21,32 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.agent;
+package org.lightjason.agentspeak.action.buildin.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 
 /**
- * sets the agent to the sleep state for an
- * infinity or fixed time
+ * clears all elements from the beliefbase.
+ * The action clear th beliefbase, the arguments
+ * are optional and can be string paths to beliefbases
+ *
+ * @code agent/clearbeliefbase( "env", "foo" ); @endcode
  */
-public final class CSleep extends IBuildinAction
+public final class CClearBeliefbase extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CSleep()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -59,19 +56,17 @@ public final class CSleep extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from(
-            p_context.agent().sleep(
+        p_context.agent()
+                 .beliefbase()
+                 .clear(
+                    p_argument.size() == 0
+                    ? null
+                    : CCommon.flatcollection( p_argument )
+                             .parallel()
+                             .map( i -> CPath.from( i.raw() ) )
+                             .toArray( IPath[]::new ) );
 
-                p_argument.size() > 0
-                ? p_argument.get( 0 ).<Number>raw().longValue()
-                : Long.MAX_VALUE,
-
-                p_annotation.size() > 1
-                ? p_argument.subList( 1, p_argument.size() ).stream()
-                : Stream.of()
-
-            ).sleeping()
-        );
+        return CFuzzyValue.from( true );
     }
 
 }

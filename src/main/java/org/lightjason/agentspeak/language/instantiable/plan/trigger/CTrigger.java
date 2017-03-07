@@ -142,4 +142,10 @@ public final class CTrigger implements ITrigger
     {
         return new CTrigger( m_event, m_literal.shallowcopysuffix() );
     }
+
+    @Override
+    public final int compareTo( final ITrigger p_other )
+    {
+        return p_other.toString().compareTo( this.toString() );
+    }
 }

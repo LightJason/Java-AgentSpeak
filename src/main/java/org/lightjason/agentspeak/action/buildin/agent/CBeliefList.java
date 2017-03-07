@@ -21,37 +21,41 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.agent;
+package org.lightjason.agentspeak.action.buildin.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.common.CPath;
-import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * clears all elements from the beliefbase
+ * returns a list of all belief literals.
+ * The action creates a list of literals,
+ * the arguments are optional, the first
+ * argument is a boolean for the negation
+ * definition, the second argument is the
+ * belief functor, if no arguments are give,
+ * the full belieflist is returned
+ *
+ * @code L = agent/belieflist( true, "path/subpath/literalfunctor" ); @endcode
+ *
  */
-public final class CClearBeliefbase extends IBuildinAction
+public final class CBeliefList extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CClearBeliefbase()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -59,13 +63,19 @@ public final class CClearBeliefbase extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_context.agent().beliefbase().clear(
-            p_argument.size() == 0
-            ? null
-            : p_argument.parallelStream()
-                        .map( i -> CPath.from( i.raw() ) )
-                        .toArray( IPath[]::new )
+        final List<ILiteral> l_literal = (
+            p_argument.size() == 1
+            ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
+            : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
+        ).collect( Collectors.toList() );
+
+        p_return.add(
+            CRawTerm.from( p_parallel
+                           ? Collections.synchronizedList( l_literal )
+                           : l_literal
+            )
         );
+
         return CFuzzyValue.from( true );
     }
 

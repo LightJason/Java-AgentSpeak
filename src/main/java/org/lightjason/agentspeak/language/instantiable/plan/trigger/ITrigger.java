@@ -23,8 +23,15 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan.trigger;
 
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IShallowCopy;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -34,7 +41,7 @@ import org.lightjason.agentspeak.language.IShallowCopy;
  * and number of arguments are equal, otherwise unification is used
  * to define the literal variables
  */
-public interface ITrigger extends IShallowCopy<ITrigger>
+public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
 {
 
     /**
@@ -77,6 +84,14 @@ public interface ITrigger extends IShallowCopy<ITrigger>
         DELETEGOAL( "-!" );
 
         /**
+         * math with elements for intantiation
+         */
+        private static final Map<String, EType> ELEMENTS = Collections.unmodifiableMap(
+                                                                Arrays.stream( EType.values() )
+                                                                      .collect( Collectors.toMap( EType::sequence, i -> i ) )
+                                                           );
+
+        /**
          * text name of the enum
          */
         private final String m_name;
@@ -95,6 +110,30 @@ public interface ITrigger extends IShallowCopy<ITrigger>
         public String toString()
         {
             return m_name;
+        }
+
+        /**
+         * returns the trigger sequence
+         *
+         * @return trigger sequence string
+         */
+        public final String sequence()
+        {
+            return m_name;
+        }
+
+        /**
+         * returns a trigger type by the char sequence
+         * @param p_sequence sequence
+         * @return trigger type
+         */
+        public static EType from( final String p_sequence )
+        {
+            final EType l_type = ELEMENTS.get( p_sequence.trim() );
+            if ( l_type == null )
+                throw new CIllegalArgumentException( CCommon.languagestring( EType.class, "sequencenotfound", p_sequence ) );
+
+            return l_type;
         }
     }
 

@@ -21,37 +21,34 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.agent;
+package org.lightjason.agentspeak.action.buildin.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * creates a literal by the input data
+ * sets the agent to the sleep state.
+ * The action applys the sleep state
+ * of the current agent. The first
+ * optional argument can be a sleeping
+ * time (in agent cycles)
+ *
+ * @code agent/sleep(3); @endcode
  */
-public final class CCreateLiteral extends IBuildinAction
+public final class CSleep extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CCreateLiteral()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -59,15 +56,19 @@ public final class CCreateLiteral extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CLiteral.from(
-                p_argument.get( 0 ).<String>raw(),
-                p_argument.size() > 1
-                ? p_argument.subList( 1, p_argument.size() )
-                : Collections.emptyList()
-            )
+        return CFuzzyValue.from(
+            p_context.agent().sleep(
+
+                p_argument.size() > 0
+                ? p_argument.get( 0 ).<Number>raw().longValue()
+                : Long.MAX_VALUE,
+
+                p_annotation.size() > 1
+                ? p_argument.subList( 1, p_argument.size() ).stream()
+                : Stream.of()
+
+            ).sleeping()
         );
-        return CFuzzyValue.from( true );
     }
 
 }

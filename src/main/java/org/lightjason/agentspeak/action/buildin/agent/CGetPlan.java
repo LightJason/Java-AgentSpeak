@@ -21,42 +21,43 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.agent;
+package org.lightjason.agentspeak.action.buildin.agent;
 
+import com.codepoetics.protonpack.StreamUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
+import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
-import java.util.AbstractMap;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
- * action to get plan-information as a map
- * with string with literal of plan-literal
- * as tupel of successful and failed plans
+ * action to get a plan object.
+ * The actions returns a (set of) plan(s),
+ * the arguments are tuples of a string with the trigger
+ * and a string or literal with the plan definition, for
+ * each tuple the plan object will returned, the action
+ * fails on non-existing plan
+ *
+ * @code [A|B] = agent/getplan( "+!", "myplan(X)", "-!", Literal ); @endcode
  */
-public final class CPlanList extends IBuildinAction
+public final class CGetPlan extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CPlanList()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -64,19 +65,51 @@ public final class CPlanList extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Map<ITerm, AbstractMap.Entry<Long, Long>> l_map = new HashMap<>();
-        p_context.agent().plans().values()
-                 .forEach( i -> l_map.put(
-                     i.getLeft().getTrigger().getLiteral(),
-                     new AbstractMap.SimpleImmutableEntry<>( i.getMiddle().get(), i.getRight().get() )
-                 ) );
+        return CFuzzyValue.from(
+            StreamUtils.windowed(
+                CCommon.flatcollection( p_argument ),
+                2
+            ).allMatch( i -> CGetPlan.queryplan( ITrigger.EType.from( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )
+        );
+    }
 
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedMap( l_map )
-            : l_map
-        ) );
+    /**
+     * query tha plan from an agent
+     *
+     * @param p_trigger trigger type
+     * @param p_literal literal as string or literal object
+     * @param p_agent agent
+     * @param p_return list with return arguments
+     * @return flag to query plan
+     */
+    private static boolean queryplan( final ITrigger.EType p_trigger, final ITerm p_literal, final IAgent<?> p_agent, final List<ITerm> p_return )
+    {
+        final ILiteral l_literal;
+        try
+        {
 
-        return CFuzzyValue.from( true );
+            l_literal = CCommon.rawvalueAssignableTo( p_literal, ILiteral.class )
+                        ? p_literal.<ILiteral>raw()
+                        : CLiteral.parse( p_literal.<String>raw() );
+
+        }
+        catch ( final Exception l_exception )
+        {
+            return false;
+        }
+
+
+        final ITrigger l_trigger = CTrigger.from( p_trigger, l_literal );
+        if ( !p_agent.plans().containsKey( l_literal ) )
+            return false;
+
+        p_agent.plans()
+               .get( l_trigger )
+               .stream()
+               .map( Triple::getLeft )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
+        return true;
     }
 }

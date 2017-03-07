@@ -21,36 +21,30 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.type;
+package org.lightjason.agentspeak.action.buildin.generic;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
 
 
 /**
- * abstract class to cast / translate a value.
- * The action converts each input argument into
- * the string represenation and returns the string,
- * the action never fails
+ * creates a literal by the input data.
+ * The action create a literal, so the first
+ * argument is a string with the literal functor
+ * all other arguments will be used for the literal
+ * values
  *
- * @code [A|B|C] = generic/type/tostring( X, Y Z ); @endcode
+ * @code L = generic/createliteral( "literal/functor/with/path", 123, "value" ); @endcode
  */
-public abstract class ICast extends IBuildinAction
+public final class CCreateLiteral extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    protected ICast()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -63,19 +57,15 @@ public abstract class ICast extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
-               .allMatch( i -> this.cast( i.raw(), p_return ) )
+        p_return.add(
+            CLiteral.from(
+                p_argument.get( 0 ).<String>raw(),
+                p_argument.size() > 1
+                ? p_argument.subList( 1, p_argument.size() )
+                : Collections.emptyList()
+            )
         );
+        return CFuzzyValue.from( true );
     }
 
-
-    /**
-     * cast / translates value
-     *
-     * @param p_value term value
-     * @param p_return return arguments
-     * @return successful boolean
-     */
-    protected abstract boolean cast( final ITerm p_value, final List<ITerm> p_return );
 }

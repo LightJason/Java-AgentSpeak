@@ -21,61 +21,60 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.agent;
+package org.lightjason.agentspeak.action.buildin.agent;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * returns a list of all belief literals
+ * action to get plan-information as list.
+ * The action returns a list of tuples with
+ * the a string (trigger definition) and the
+ * plan literal, the action never fails
+ *
+ * @code L = agent/planlist(); @endcode
  */
-public final class CBeliefList extends IBuildinAction
+public final class CPlanList extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CBeliefList()
-    {
-        super( 3 );
-    }
 
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
-        final List<ILiteral> l_literal = (
-            p_argument.size() == 1
-            ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
-            : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
-        ).collect( Collectors.toList() );
+        final List<?> l_list = p_context.agent()
+                 .plans()
+                 .values()
+                 .stream()
+                 .map( i -> i.getLeft().getTrigger() )
+                 .sorted()
+                 .distinct()
+                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getType().toString(), i.getLiteral() ) )
+                 .collect( Collectors.toList() );
 
         p_return.add(
-            CRawTerm.from( p_parallel
-                           ? Collections.synchronizedList( l_literal )
-                           : l_literal
+            CRawTerm.from(
+                p_parallel
+                ? Collections.synchronizedList( l_list )
+                : l_list
             )
         );
 
         return CFuzzyValue.from( true );
     }
-
 }
