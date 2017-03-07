@@ -24,18 +24,24 @@
 package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to cast any java object type
+ * action to cast any java object type.
+ * The action casts any value to the given full-qualified
+ * class name in the first argument, the action fails on
+ * casting errors
+ *
+ * @code [A|B] = generic/type/to( "java.lang.String", X, Y ); @endcode
  */
 public final class CTo extends IBuildinAction
 {
@@ -59,17 +65,41 @@ public final class CTo extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first reference of Java object, second string with Java class name
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        return CFuzzyValue.from(
+            l_arguments.stream()
+               .skip( 1 )
+               .map( ITerm::raw )
+               .allMatch( i -> CTo.cast( l_arguments.get( 0 ).<String>raw(), i, p_return ) )
+        );
+
+    }
+
+
+    /**
+     * cast any object into
+     * another type
+     *
+     * @param p_class full-qualified class name
+     * @param p_object object
+     * @param p_return list with return terms
+     * @return successfull flag
+     */
+    private static boolean cast( final String p_class, final Object p_object, final List<ITerm> p_return )
+    {
         try
         {
-            p_return.add( CRawTerm.from( Class.forName( p_argument.get( 1 ).<String>raw() ).cast( p_argument.get( 0 ).raw() ) ) );
-
-            return CFuzzyValue.from( true );
+            p_return.add(
+                CRawTerm.from(
+                    Class.forName( p_class ).cast( p_object )
+                )
+            );
+            return true;
         }
         catch ( final ClassNotFoundException l_exception )
         {
-            LOGGER.warning( MessageFormat.format( "casting [{0}] error: {1}", p_argument.get( 0 ), l_exception ) );
-            return CFuzzyValue.from( false );
+            return false;
         }
     }
 

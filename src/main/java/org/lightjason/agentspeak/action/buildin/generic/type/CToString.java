@@ -23,43 +23,34 @@
 
 package org.lightjason.agentspeak.action.buildin.generic.type;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 
 /**
- * action to convert any data to its string representation
+ * converts a value into the string represenation.
+ * The action converts any argument into the string
+ * represenation, the action never fails
+ *
+ * @code @endcode
  */
-public final class CToString extends IBuildinAction
+public final class CToString extends ICast
 {
 
     /**
-     * ctor
+     * cast / translates value
+     *
+     * @param p_value term value
+     * @param p_return return arguments
+     * @return successful boolean
      */
-    public CToString()
+    protected final boolean cast( final ITerm p_value, final List<ITerm> p_return )
     {
-        super( 3 );
-    }
-
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        p_argument.stream().map( i -> CRawTerm.from( i.raw().toString() ) ).forEach( p_return::add );
-        return CFuzzyValue.from( true );
+        p_return.add( CRawTerm.from( MessageFormat.format( "{0}", p_value.raw() ) ) );
+        return true;
     }
 
 }

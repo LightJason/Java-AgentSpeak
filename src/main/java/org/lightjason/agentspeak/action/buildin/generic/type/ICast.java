@@ -23,34 +23,54 @@
 
 package org.lightjason.agentspeak.action.buildin.generic.type;
 
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 
 
 /**
- * action to cast a value to an floating-point value.
- * Cast any argument into a floating-point number,
- * the action fails on casting errors
- *
- * @code [N1|N2] = generic/type/tofloat( X, Y ); @endcode
+ * abstract class to cast / translate a value
  */
-public final class CToFloat extends ICast
+public abstract class ICast extends IBuildinAction
 {
 
-    @Override
-    protected final boolean cast( final ITerm p_value, final List<ITerm> p_return )
+    /**
+     * ctor
+     */
+    protected ICast()
     {
-        try
-        {
-            p_return.add( CRawTerm.from( p_value.<Number>raw().doubleValue() ) );
-            return true;
-        }
-        catch ( final Exception l_exception )
-        {
-            return false;
-        }
+        super( 3 );
     }
 
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
+               .allMatch( i -> this.cast( i.raw(), p_return ) )
+        );
+    }
+
+
+    /**
+     * cast / translates value
+     *
+     * @param p_value term value
+     * @param p_return return arguments
+     * @return successful boolean
+     */
+    protected abstract boolean cast( final ITerm p_value, final List<ITerm> p_return );
 }

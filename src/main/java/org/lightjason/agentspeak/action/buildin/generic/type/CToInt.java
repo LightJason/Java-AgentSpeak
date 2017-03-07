@@ -23,45 +23,34 @@
 
 package org.lightjason.agentspeak.action.buildin.generic.type;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 
 
 /**
- * action to cast a vale to an integral value
+ * action to cast a value to an integer value.
+ * Cast any argument into an integer number,
+ * the action fails on casting errors
+ *
+ * @code [N1|N2] = generic/type/tofloat( X, Y ); @endcode
  */
-public final class CToInt extends IBuildinAction
+public final class CToInt extends ICast
 {
 
-    /**
-     * ctor
-     */
-    public CToInt()
-    {
-        super( 3 );
-    }
-
     @Override
-    public final int minimalArgumentNumber()
+    protected final boolean cast( final ITerm p_value, final List<ITerm> p_return )
     {
-        return 1;
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        p_return.add(
-            CRawTerm.from( p_argument.get( 0 ).<Number>raw().longValue() )
-        );
-        return CFuzzyValue.from( true );
+        try
+        {
+            p_return.add( CRawTerm.from( p_value.<Number>raw().longValue() ) );
+            return true;
+        }
+        catch ( final Exception l_exception )
+        {
+            return false;
+        }
     }
 
 }

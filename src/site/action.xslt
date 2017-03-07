@@ -159,11 +159,13 @@
     <!-- list item to translate into html -->
     <xsl:template match = "itemizedlist">
         <xsl:text>&lt;ul&gt;</xsl:text>
+        <xsl:apply-templates />
         <xsl:text>&lt;/ul&gt;</xsl:text>
     </xsl:template>
 
     <xsl:template match = "listitem">
         <xsl:text>&lt;li&gt;</xsl:text>
+        <xsl:apply-templates />
         <xsl:text>&lt;/li&gt;</xsl:text>
     </xsl:template>
 
