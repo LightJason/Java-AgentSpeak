@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * action to concat /join all strings.
+ * action to concat / join all strings.
  * All string arguments will be join to a single
  * result, the action never fails
  *
