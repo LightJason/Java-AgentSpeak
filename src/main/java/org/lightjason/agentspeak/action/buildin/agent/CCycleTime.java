@@ -34,7 +34,12 @@ import java.util.List;
 
 
 /**
- * action to get time in nanoseconds to the last cycle call
+ * action to get cycle time.
+ * The action returns the time between
+ * the last cycle and the current time
+ * in nanoseconds and fails never
+ *
+ * @code T = agent/cycletime(); @endcode
  */
 public class CCycleTime extends IBuildinAction
 {
@@ -50,7 +55,11 @@ public class CCycleTime extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add( CRawTerm.from( System.nanoTime() - p_context.agent().cycletime() ) );
+        p_return.add(
+            CRawTerm.from(
+                System.nanoTime() - p_context.agent().cycletime()
+            )
+        );
         return CFuzzyValue.from( true );
     }
 
