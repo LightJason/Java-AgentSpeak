@@ -21,8 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.storage;
+package org.lightjason.agentspeak.action.buildin.storage;
 
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -34,15 +37,21 @@ import java.util.List;
 
 
 /**
- * adds or overwrites an element in the agent-storage
+ * removes an element by name from the storage.
+ * The actions removes any value from the storage
+ * which is referenced by the key and returns the
+ * value, the action fails on forbidden key or non
+ * exisiting elements
+ *
+ * @code [A|B] = storage/remove("foo", "bar"); @endcode
  */
-public final class CAdd extends IStorage
+public final class CRemove extends IStorage
 {
 
     /**
      * ctor
      */
-    public CAdd()
+    public CRemove()
     {
         super();
     }
@@ -52,7 +61,7 @@ public final class CAdd extends IStorage
      *
      * @param p_forbidden forbidden keys
      */
-    public CAdd( final String... p_forbidden )
+    public CRemove( final String... p_forbidden )
     {
         super( Arrays.asList( p_forbidden ) );
     }
@@ -62,7 +71,7 @@ public final class CAdd extends IStorage
      *
      * @param p_fordbidden forbidden keys
      */
-    public CAdd( final Collection<String> p_fordbidden )
+    public CRemove( final Collection<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -70,7 +79,7 @@ public final class CAdd extends IStorage
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -78,28 +87,33 @@ public final class CAdd extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = p_argument.get( 0 ).raw();
-        if ( m_forbidden.contains( l_key ) )
-            return CFuzzyValue.from( false );
-
-        p_context.agent().storage().put( l_key, CAdd.map( p_argument.get( 1 ).raw() ) );
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.from(
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .allMatch( i -> this.remove( p_context.agent(), i, p_return ) )
+        );
     }
 
 
     /**
-     * type mapping method
+     * removes a value from the storage
      *
-     * @param p_value value
-     * @return casted value
-     *
-     * @tparam N return type
-     * @tparam M value type
+     * @param p_agent agent
+     * @param p_key key
+     * @param p_return return arguments
+     * @return boolean flag if the item is not forbidden and is exists
      */
-    @SuppressWarnings( "unchecked" )
-    private static <N, M> N map( final M p_value )
+    private boolean remove( final IAgent<?> p_agent, final String p_key, final List<ITerm> p_return )
     {
-        return (N) p_value;
+        if ( ( m_forbidden.contains( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )
+            return false;
+
+        p_return.add(
+            CRawTerm.from(
+                p_agent.storage().remove( p_key )
+            )
+        );
+        return true;
     }
 
 }

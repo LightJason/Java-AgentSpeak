@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.storage;
+package org.lightjason.agentspeak.action.buildin.storage;
 
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -35,15 +36,19 @@ import java.util.List;
 
 
 /**
- * removes an element by name from the agent-storage
+ * check if an element exists within the agent-storage.
+ * The action checks if an element is within the action and
+ * returns the boolean flag, the action never fails
+ *
+ * @code [A|B] = storage/exist( "foo", "bar" ); @endcode
  */
-public final class CRemove extends IStorage
+public final class CExists extends IStorage
 {
 
     /**
      * ctor
      */
-    public CRemove()
+    public CExists()
     {
         super();
     }
@@ -53,7 +58,7 @@ public final class CRemove extends IStorage
      *
      * @param p_forbidden forbidden keys
      */
-    public CRemove( final String... p_forbidden )
+    public CExists( final String... p_forbidden )
     {
         super( Arrays.asList( p_forbidden ) );
     }
@@ -63,7 +68,7 @@ public final class CRemove extends IStorage
      *
      * @param p_fordbidden forbidden keys
      */
-    public CRemove( final Collection<String> p_fordbidden )
+    public CExists( final Collection<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -79,11 +84,12 @@ public final class CRemove extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        final String l_key = p_argument.get( 0 ).raw();
-        if ( m_forbidden.contains( l_key ) )
-            return CFuzzyValue.from( false );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( i -> ( !m_forbidden.contains( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
-        p_return.add( CRawTerm.from( p_context.agent().storage().remove( l_key ) ) );
         return CFuzzyValue.from( true );
     }
 

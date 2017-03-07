@@ -21,67 +21,48 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.storage;
+package org.lightjason.agentspeak.action.buildin.agent;
 
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
- * check if an element exists within the agent-storage
+ * adds a plan to the plan-base.
+ * The actions adds all arguments which
+ * are plans to the plan-base of the current
+ * agent, the action never fails
+ *
+ * @code agent/addplan( Plan1, Plan2, [Plan3, [Plan4]] ); @endcode
  */
-public final class CExists extends IStorage
+public final class CAddPlan extends IBuildinAction
 {
-
-    /**
-     * ctor
-     */
-    public CExists()
-    {
-        super();
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_forbidden forbidden keys
-     */
-    public CExists( final String... p_forbidden )
-    {
-        super( Arrays.asList( p_forbidden ) );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_fordbidden forbidden keys
-     */
-    public CExists( final Collection<String> p_fordbidden )
-    {
-        super( p_fordbidden );
-    }
-
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                         final List<ITerm> p_annotation
     )
     {
-        final String l_key = p_argument.get( 0 ).raw();
-        p_return.add( CRawTerm.from( ( !m_forbidden.contains( l_key ) ) && ( p_context.agent().storage().containsKey( l_key ) ) ) );
+        CCommon.flatcollection( p_argument )
+               .parallel()
+               .map( ITerm::<IPlan>raw )
+               .map( i -> new ImmutableTriple<>( i, new AtomicLong(), new AtomicLong(  ) ) )
+               .forEach( i -> p_context.agent().plans().put( i.getLeft().getTrigger(), i ) );
+
         return CFuzzyValue.from( true );
     }
-
 }

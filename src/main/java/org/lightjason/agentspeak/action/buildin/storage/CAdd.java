@@ -21,30 +21,58 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic;
+package org.lightjason.agentspeak.action.buildin.storage;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CLiteral;
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 
 /**
- * creates a literal by the input data.
- * The action create a literal, so the first
- * argument is a string with the literal functor
- * all other arguments will be used for the literal
- * values
+ * adds or overwrites an element in the agent-storage.
+ * The action adds all tuples into the storage, the arguments
+ * are tuples of a name and any value, if the key is forbidden
+ * or the arguments number is odd, the action fails
  *
- * @code L = generic/createliteral( "literal/functor/with/path", 123, "value" ); @endcode
+ * @code storage/add( "foo", X, "bar", Y ); @endcode
  */
-public final class CCreateLiteral extends IBuildinAction
+public final class CAdd extends IStorage
 {
+
+    /**
+     * ctor
+     */
+    public CAdd()
+    {
+        super();
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CAdd( final String... p_forbidden )
+    {
+        super( Arrays.asList( p_forbidden ) );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_fordbidden forbidden keys
+     */
+    public CAdd( final Collection<String> p_fordbidden )
+    {
+        super( p_fordbidden );
+    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -57,15 +85,30 @@ public final class CCreateLiteral extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CLiteral.from(
-                p_argument.get( 0 ).<String>raw(),
-                p_argument.size() > 1
-                ? p_argument.subList( 1, p_argument.size() )
-                : Collections.emptyList()
-            )
+        return CFuzzyValue.from(
+            StreamUtils.windowed(
+                p_argument.stream(),
+                2
+            ).allMatch( i -> this.add( p_context.agent(), i.get( 0 ).<String>raw(), i.get( 1 ) ) )
         );
-        return CFuzzyValue.from( true );
+
+    }
+
+    /**
+     * adds a value into the storage
+     *
+     * @param p_agent agent
+     * @param p_key key
+     * @param p_value value
+     * @return boolean flag if the item is not forbidden
+     */
+    private boolean add( final IAgent<?> p_agent, final String p_key, final ITerm p_value )
+    {
+        if ( m_forbidden.contains( p_key ) )
+            return false;
+
+        p_agent.storage().put( p_key, p_value.raw() );
+        return true;
     }
 
 }

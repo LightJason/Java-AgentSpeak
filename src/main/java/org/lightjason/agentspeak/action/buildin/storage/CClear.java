@@ -21,34 +21,45 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.generic.storage;
+package org.lightjason.agentspeak.action.buildin.storage;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.List;
 
 
 /**
- * storage default definitions
+ * removes all elements of the storage.
+ * The action removes all elements from the storage
+ * except the elements wich are forbidden, the action,
+ * never fails
+ *
+ * @code storage/clear(); @endcode
  */
-public abstract class IStorage extends IBuildinAction
+public final class CClear extends IStorage
 {
-
-    /**
-     * set with forbidden keys
-     */
-    protected final Set<String> m_forbidden;
 
     /**
      * ctor
      */
-    protected IStorage()
+    public CClear()
     {
-        super( 3 );
-        m_forbidden = Collections.<String>emptySet();
+        super();
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_forbidden forbidden keys
+     */
+    public CClear( final String... p_forbidden )
+    {
+        super( Arrays.asList( p_forbidden ) );
     }
 
     /**
@@ -56,19 +67,27 @@ public abstract class IStorage extends IBuildinAction
      *
      * @param p_fordbidden forbidden keys
      */
-    protected IStorage( final Collection<String> p_fordbidden )
+    public CClear( final Collection<String> p_fordbidden )
     {
-        super( 3 );
-        m_forbidden = new ConcurrentSkipListSet<>( p_fordbidden );
+        super( p_fordbidden );
     }
 
-    /**
-     * returns the set with forbidden keys
-     *
-     * @return set with keys
-     */
-    public final Set<String> getForbiddenKeys()
+    @Override
+    public final int minimalArgumentNumber()
     {
-        return m_forbidden;
+        return 0;
     }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        p_context.agent().storage().keySet().parallelStream()
+                 .filter( i -> !m_forbidden.contains( i ) )
+                 .forEach( i -> p_context.agent().storage().remove( i ) );
+
+        return CFuzzyValue.from( true );
+    }
+
 }
