@@ -38,7 +38,7 @@ import java.util.List;
  * date-time is used, the action fails on
  * wrong input
  *
- * @code [Hour|Minute|Second|Nano|Zone] = datetime/time( "now" ); @endcode
+ * @code [Hour|Minute|Second|Nano] = datetime/time( "now" ); @endcode
  */
 public final class CTime extends IDateTime
 {
@@ -50,7 +50,6 @@ public final class CTime extends IDateTime
         p_return.add( CRawTerm.from( p_datetime.getMinute() ) );
         p_return.add( CRawTerm.from( p_datetime.getSecond() ) );
         p_return.add( CRawTerm.from( p_datetime.getNano() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
 
         return true;
     }

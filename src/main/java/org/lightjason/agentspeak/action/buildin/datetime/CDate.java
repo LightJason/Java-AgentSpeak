@@ -37,6 +37,8 @@ import java.util.List;
  * if the string is empty or "now" the current
  * date-time is used, the action fails on
  * wrong input
+ *
+ * @code [Year|Month|Day|DayOfWeek|DayOfYear] = datetime/date( "now" ); @endcode
  */
 public final class CDate extends IDateTime
 {
@@ -44,12 +46,11 @@ public final class CDate extends IDateTime
     @Override
     protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
         p_return.add( CRawTerm.from( p_datetime.getYear() ) );
+        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
+        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
         p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
         p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
 
         return true;
     }
