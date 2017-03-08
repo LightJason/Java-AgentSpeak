@@ -35,10 +35,10 @@ import java.util.List;
  * The action returns the time elements,
  * the actions parses the string arguments
  * and for each argument the time values are
- * returnes, the action fails on wrong input
+ * returnes, if the string is empty or "now"
+ * the current time is returned, the action
+ * fails on wrong input
  *
- * @note if the string is empty or "now" the current
- * time is returned
  * @code [Hour|Minute|Second|Nano|Zone] = datetime/time( "now" ); @endcode
  */
 public final class CTime extends IDateTime
