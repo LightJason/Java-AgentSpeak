@@ -44,6 +44,11 @@ import java.util.stream.Stream;
  */
 public abstract class IBetween extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    protected IBetween()
+    {}
 
     @Override
     public final int minimalArgumentNumber()

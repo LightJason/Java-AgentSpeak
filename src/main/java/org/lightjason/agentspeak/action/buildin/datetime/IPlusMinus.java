@@ -45,6 +45,12 @@ import java.util.stream.Stream;
  */
 public abstract class IPlusMinus extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    protected IPlusMinus()
+    {
+    }
 
     @Override
     public final int minimalArgumentNumber()
