@@ -31,28 +31,25 @@ import java.util.List;
 
 
 /**
- * action for getting the current time.
- * The action returns the time elements
+ * returns the zone-id.
+ * The action returns the zone-id
  * of a parsed string or date-time object,
  * if the string is empty or "now" the current
  * date-time is used, the action fails on
  * wrong input
  *
- * @code [Hour|Minute|Second|Nano|Zone] = datetime/time( "now" ); @endcode
+ * @code ZoneID = datetime/zoneid( "now" ); @endcode
  */
-public final class CTime extends IDateTime
+public final class CZoneid extends IDateTime
 {
-
     @Override
     protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getHour() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMinute() ) );
-        p_return.add( CRawTerm.from( p_datetime.getSecond() ) );
-        p_return.add( CRawTerm.from( p_datetime.getNano() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
-
+        p_return.add(
+            CRawTerm.from(
+                p_datetime.getZone().getId()
+            )
+        );
         return true;
     }
-
 }

@@ -46,7 +46,8 @@ public abstract class IDateTime extends IBuildinAction
      * ctor
      */
     protected IDateTime()
-    {}
+    {
+    }
 
     @Override
     public final int minimalArgumentNumber()
@@ -67,37 +68,8 @@ public abstract class IDateTime extends IBuildinAction
                 : CCommon.flatcollection( p_argument )
 
             )
-                .map( ITerm::<String>raw )
-                .map( String::trim )
                 .allMatch( i -> this.getdatetime( i, p_return ) )
         );
-    }
-
-
-    /**
-     * creates the date representation
-     *
-     * @param p_value date value, empty or now returns the current date
-     * @param p_return return arguments
-     * @return successfull execution
-     */
-    private boolean getdatetime( final String p_value, final List<ITerm> p_return )
-    {
-        final ZonedDateTime l_datetime;
-
-        try
-        {
-
-            l_datetime = ( p_value.isEmpty() ) || ( "now".equalsIgnoreCase( p_value ) )
-                     ? ZonedDateTime.now()
-                     : ZonedDateTime.parse( p_value );
-        }
-        catch ( final Exception l_excaption )
-        {
-            return false;
-        }
-
-        return this.elements( l_datetime, p_return );
     }
 
     /**
@@ -108,4 +80,31 @@ public abstract class IDateTime extends IBuildinAction
      * @return successfull return
      */
     protected abstract boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return );
+
+    /**
+     * creates the date representation
+     *
+     * @param p_value date value, empty or now returns the current date
+     * @param p_return return arguments
+     * @return successfull execution
+     */
+    private boolean getdatetime( final ITerm p_value, final List<ITerm> p_return )
+    {
+        if ( CCommon.rawvalueAssignableTo( p_value, ZonedDateTime.class ) )
+            return this.elements( p_value.<ZonedDateTime>raw(), p_return );
+
+        try
+        {
+            return this.elements(
+                ( p_value.<String>raw().isEmpty() ) || ( "now".equalsIgnoreCase( p_value.<String>raw() ) )
+                ? ZonedDateTime.now()
+                : ZonedDateTime.parse( p_value.<String>raw() ),
+                p_return
+            );
+        }
+        catch ( final Exception l_excaption )
+        {
+            return false;
+        }
+    }
 }

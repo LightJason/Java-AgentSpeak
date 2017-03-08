@@ -31,7 +31,12 @@ import java.util.List;
 
 
 /**
- * action for getting the current date
+ * action for getting the current date.
+ * The action returns the date elements
+ * of a parsed string or date-time object,
+ * if the string is empty or "now" the current
+ * date-time is used, the action fails on
+ * wrong input
  */
 public final class CDate extends IDateTime
 {
