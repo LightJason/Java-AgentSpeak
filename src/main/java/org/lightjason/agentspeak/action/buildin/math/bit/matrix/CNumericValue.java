@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * given index tuples (0 = false, 1 = true),
  * the action fails on wrong input
  *
- * @code [B1|B2] = math/bit/matrix/numericvalue( BitMatrix, 1, 2, [3, 5] ); @endcode
+ * @code [B1|B2] = math/bit/matrix/numericvalue( BitMatrix, 1, 2, [Row, Column] ); @endcode
  */
 public final class CNumericValue extends IBuildinAction
 {
@@ -78,7 +78,7 @@ public final class CNumericValue extends IBuildinAction
                    .mapToInt( Number::intValue )
                    .boxed(),
                    2
-        ).mapToLong( i -> l_arguments.get( 0 ).<BitMatrix>raw().get( i.get( 0 ), i.get( 1 ) ) ? 1 : 0 )
+        ).mapToLong( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) ? 1 : 0 )
             .boxed()
             .map( CRawTerm::from )
             .forEach( p_return::add );

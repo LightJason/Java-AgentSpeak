@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
 import cern.colt.bitvector.BitMatrix;
-import com.codepoetics.protonpack.StreamUtils;
+import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,54 +34,56 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
- * returns for the index tuple a boolean value.
- * The action returns for the first argument, which
- * is a bit matrix, all boolean values for all
- * given index tuples (row / column), the action
- * fail on incorrect input
+ * converts the bit matrix into a bit vector.
+ * The action converts each bit matrix argument
+ * into a bit vector with the size of the matrix,
+ * the bit within the vector are row-wise copied
+ * from the matrix and the action never fails
  *
- * @code [B1|B2] = math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] ); @endcode
+ * @code [V1|V2] = math/bit/matrix/tovector( Matrix1, Matrix2 ); @endcode
  */
-public final class CBoolValue extends IBuildinAction
+public final class CToVector extends IBuildinAction
 {
-    /**
-     * ctor
-     */
-    public CBoolValue()
-    {
-        super( 4 );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+                                         final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
-
-        StreamUtils.windowed(
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-        2
-        ).map( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<BitMatrix>raw )
+               .map( CToVector::transform )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * transforms the matrix into the bit vector
+     *
+     * @param p_matrix matrix
+     * @return vector
+     */
+    private static BitVector transform( final BitMatrix p_matrix )
+    {
+        final BitVector l_result = new BitVector( p_matrix.size() );
+
+        IntStream.range( 0, p_matrix.rows() )
+                 .boxed()
+                 .forEach( i -> IntStream.range( 0, p_matrix.columns() )
+                                         .boxed()
+                                         .forEach( j -> l_result.putQuick( ( i + 1 ) * j, p_matrix.getQuick( j, i ) ) ) );
+
+        return l_result;
     }
 }

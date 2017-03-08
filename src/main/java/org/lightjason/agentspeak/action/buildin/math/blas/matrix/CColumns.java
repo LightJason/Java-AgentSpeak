@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
+package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.bitvector.BitMatrix;
-import com.codepoetics.protonpack.StreamUtils;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.AbstractMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,24 +34,21 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns for the index tuple a boolean value.
- * The action returns for the first argument, which
- * is a bit matrix, all boolean values for all
- * given index tuples (row / column), the action
- * fail on incorrect input
+ * returns the column number of a matrix.
+ * Reads the column number of each input matrix and returns
+ * the value, the action never fails.
  *
- * @code [B1|B2] = math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] ); @endcode
+ * @code [C1|C2] = math/blas/matrix/columns(M1,M2); @endcode
  */
-public final class CBoolValue extends IBuildinAction
+public final class CColumns extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CBoolValue()
+    public CColumns()
     {
         super( 4 );
     }
@@ -59,7 +56,7 @@ public final class CBoolValue extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -67,20 +64,13 @@ public final class CBoolValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
-
-        StreamUtils.windowed(
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-        2
-        ).map( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+        // arguments are matrix objects
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .mapToLong( AbstractMatrix2D::columns )
+               .boxed()
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

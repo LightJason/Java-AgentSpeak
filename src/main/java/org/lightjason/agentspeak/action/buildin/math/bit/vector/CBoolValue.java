@@ -72,7 +72,7 @@ public final class CBoolValue extends IBuildinAction
                    .map( ITerm::<Number>raw )
                    .mapToInt( Number::intValue )
                    .boxed()
-                   .map( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) )
+                   .map( i -> l_arguments.get( 0 ).<BitVector>raw().getQuick( i ) )
                    .map( CRawTerm::from )
                    .forEach( p_return::add );
 

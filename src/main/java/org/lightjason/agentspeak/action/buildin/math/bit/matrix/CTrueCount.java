@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
 import cern.colt.bitvector.BitMatrix;
-import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,24 +33,21 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns for the index tuple a boolean value.
- * The action returns for the first argument, which
- * is a bit matrix, all boolean values for all
- * given index tuples (row / column), the action
- * fail on incorrect input
+ * returns the number of true values.
+ * The actions returnf for each input matrix the
+ * number of true values, the action never fails
  *
- * @code [B1|B2] = math/bit/matrix/boolvalue( BitMatrix, 1, 2, [3, 5] ); @endcode
+ * @code [A|B] = math/bit/matrix/truecount( BitMatrix1, BitMatrix2 ); @endcode
  */
-public final class CBoolValue extends IBuildinAction
+public final class CTrueCount extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CBoolValue()
+    public CTrueCount()
     {
         super( 4 );
     }
@@ -59,7 +55,7 @@ public final class CBoolValue extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -67,20 +63,12 @@ public final class CBoolValue extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
-
-        StreamUtils.windowed(
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Number>raw )
-                   .mapToInt( Number::intValue )
-                   .boxed(),
-        2
-        ).map( i -> l_arguments.get( 0 ).<BitMatrix>raw().getQuick( i.get( 1 ), i.get( 0 ) ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<BitMatrix>raw )
+               .mapToLong( BitMatrix::cardinality )
+               .boxed()
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

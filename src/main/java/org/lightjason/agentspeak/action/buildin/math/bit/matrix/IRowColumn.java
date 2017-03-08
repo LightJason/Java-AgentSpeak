@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.AbstractMatrix2D;
+import cern.colt.bitvector.BitMatrix;
+import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,21 +34,20 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns the column number of a matrix.
- * Reads the column number of each input matrix and returns
- * the value, the action never fails.
- *
- * @code [C1|C2] = math/blas/matrix/columnnumber(M1,M2); @endcode
+ * abstract class for extracting row / columns
+ * form a bit matrix
  */
-public final class CColumnNumber extends IBuildinAction
+public abstract class IRowColumn extends IBuildinAction
 {
+
     /**
      * ctor
      */
-    public CColumnNumber()
+    protected IRowColumn()
     {
         super( 4 );
     }
@@ -64,14 +63,24 @@ public final class CColumnNumber extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // arguments are matrix objects
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .mapToLong( AbstractMatrix2D::columns )
-               .boxed()
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+
+        l_arguments.stream()
+                   .skip( 1 )
+                   .map( ITerm::<BitMatrix>raw )
+                   .map( i -> this.extract( i, l_arguments.get( 0 ).<Number>raw().intValue() ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
+
+    /**
+     * extracts the data into a bit vector
+     *
+     * @param p_matrix matrix object
+     * @param p_index index value
+     * @return bit vector
+     */
+    protected abstract BitVector extract( final BitMatrix p_matrix, final int p_index );
 }

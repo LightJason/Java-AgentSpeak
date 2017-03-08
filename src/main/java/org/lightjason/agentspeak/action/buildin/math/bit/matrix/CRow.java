@@ -21,57 +21,35 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.AbstractMatrix2D;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import cern.colt.bitvector.BitMatrix;
+import cern.colt.bitvector.BitVector;
 
-import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
- * returns the row number of a matrix.
- * Reads the row number of each input matrix and returns
- * the value, the action never fails.
+ * returns a single row of a bit matrix.
+ * The action returns a row of a matrix as vector,
+ * the first argument is the index of the row, all
+ * other arguments are matrix object, the action
+ * never fails
  *
- * @code [C1|C2] = math/blas/matrix/rownumber(M1,M2); @endcode
+ * @code [R1|R2] = math/bit/matrix/row(2, Matrix1, [Matrix2]); @endcode
  */
-public final class CRowNumber extends IBuildinAction
+public final class CRow extends IRowColumn
 {
-    /**
-     * ctor
-     */
-    public CRowNumber()
-    {
-        super( 4 );
-    }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final BitVector extract( final BitMatrix p_matrix, final int p_index )
     {
-        return 1;
+        final BitVector l_result = new BitVector( p_matrix.columns() );
+        IntStream.range( 0, p_matrix.columns() )
+                 .boxed()
+                 .forEach( i -> l_result.putQuick( i, p_matrix.getQuick( i, p_index ) ) );
+
+        return l_result;
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        // arguments are matrix objects
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .mapToLong( AbstractMatrix2D::rows )
-               .boxed()
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
-    }
 }

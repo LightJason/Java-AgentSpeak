@@ -73,7 +73,7 @@ public final class CNumericValue extends IBuildinAction
                    .map( ITerm::<Number>raw )
                    .mapToInt( Number::intValue )
                    .boxed()
-                   .mapToLong( i -> l_arguments.get( 0 ).<BitVector>raw().get( i ) ? 1 : 0 )
+                   .mapToLong( i -> l_arguments.get( 0 ).<BitVector>raw().getQuick( i ) ? 1 : 0 )
                    .boxed()
                    .map( CRawTerm::from )
                    .forEach( p_return::add );
