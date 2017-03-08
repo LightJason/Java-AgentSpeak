@@ -23,30 +23,59 @@
 
 package org.lightjason.agentspeak.action.buildin.datetime;
 
+import com.codepoetics.protonpack.StreamUtils;
+import org.joda.time.Instant;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * action for getting the current date
+ * abstract class to calculate difference
+ * between date-time elements
  */
-public final class CDate extends IDateTime
+public abstract class IBetween extends IBuildinAction
 {
 
     @Override
-    protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
+    public final int minimalArgumentNumber()
     {
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
-        p_return.add( CRawTerm.from( p_datetime.getYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
-
-        return true;
+        return 1;
     }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        this.apply(
+            StreamUtils.windowed(
+                CCommon.flatcollection( p_argument )
+                       .map( ITerm::<ZonedDateTime>raw )
+                       .map( Instant::new ),
+                2
+            )
+        )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * calculating method
+     *
+     * @param p_datetime stream with list of date-time elements
+     * @return output stream
+     */
+    protected abstract Stream<?> apply( final Stream<List<Instant>> p_datetime );
 
 }

@@ -23,43 +23,37 @@
 
 package org.lightjason.agentspeak.action.buildin.datetime;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
 
 /**
- * action for getting the current time
+ * action for getting the current time.
+ * The action returns the time elements,
+ * the actions parses the string arguments
+ * and for each argument the time values are
+ * returnes, the action fails on wrong input
+ *
+ * @note if the string is empty or "now" the current
+ * time is returned
+ * @code [Hour|Minute|Second|Nano|Zone] = datetime/time( "now" ); @endcode
  */
-public final class CTime extends IBuildinAction
+public final class CTime extends IDateTime
 {
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
     {
-        return 0;
-    }
+        p_return.add( CRawTerm.from( p_datetime.getHour() ) );
+        p_return.add( CRawTerm.from( p_datetime.getMinute() ) );
+        p_return.add( CRawTerm.from( p_datetime.getSecond() ) );
+        p_return.add( CRawTerm.from( p_datetime.getNano() ) );
+        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        final ZonedDateTime l_time = p_argument.size() == 1 ? ZonedDateTime.parse( p_argument.get( 0 ).<String>raw().trim() ) : ZonedDateTime.now();
-
-        p_return.add( CRawTerm.from( l_time.getHour() ) );
-        p_return.add( CRawTerm.from( l_time.getMinute() ) );
-        p_return.add( CRawTerm.from( l_time.getSecond() ) );
-        p_return.add( CRawTerm.from( l_time.getNano() ) );
-        p_return.add( CRawTerm.from( l_time.getZone() ) );
-
-        return CFuzzyValue.from( true );
+        return true;
     }
 
 }

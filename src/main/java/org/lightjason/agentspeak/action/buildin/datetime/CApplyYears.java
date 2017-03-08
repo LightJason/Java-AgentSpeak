@@ -23,30 +23,36 @@
 
 package org.lightjason.agentspeak.action.buildin.datetime;
 
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
 
 import java.time.ZonedDateTime;
-import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
- * action for getting the current date
+ * subtract or adds a number of years.
+ * The action adds / subtracts a number of
+ * years to the date-time objects, the first
+ * argument is a string with minus or plus,
+ * the second argument the number and all other
+ * arguments are date-time objects, the action
+ * returns the modified date-time objects, the action
+ * never fails
+ *
+ * @code [O1|O2] = datetime/applyyears( "minus|plus" 3, DateTime1, DateTime2 ); @endcode
  */
-public final class CDate extends IDateTime
+public final class CApplyYears extends IPlusMinus
 {
 
     @Override
-    protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
+    protected final Stream<?> applyminus( final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
-        p_return.add( CRawTerm.from( p_datetime.getYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
+        return p_datetime.map( i -> i.minusYears( p_value ) );
+    }
 
-        return true;
+    @Override
+    protected final Stream<?> applyplus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    {
+        return p_datetime.map( i -> i.plusYears( p_value ) );
     }
 
 }

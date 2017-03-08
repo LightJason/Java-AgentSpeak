@@ -23,30 +23,32 @@
 
 package org.lightjason.agentspeak.action.buildin.datetime;
 
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
+import org.joda.time.Days;
+import org.joda.time.Instant;
 
-import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Stream;
+
 
 
 /**
- * action for getting the current date
+ * returns the days between two dates.
+ * The actions returns the number of days between
+ * two date-time objects, the action never
+ * fails
+ *
+ * @code [D1|D2] = datetime/daysbetween( DateTime1, DateTime2, DateTime3, DateTime4 ); @endcode
  */
-public final class CDate extends IDateTime
+public final class CDaysBetween extends IBetween
 {
 
     @Override
-    protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
+    protected final Stream<?> apply( final Stream<List<Instant>> p_datetime )
     {
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
-        p_return.add( CRawTerm.from( p_datetime.getYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
-
-        return true;
+        return p_datetime
+                .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )
+                .mapToLong( Days::getDays )
+                .boxed();
     }
 
 }

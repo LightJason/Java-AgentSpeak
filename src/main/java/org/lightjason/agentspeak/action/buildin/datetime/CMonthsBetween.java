@@ -23,30 +23,32 @@
 
 package org.lightjason.agentspeak.action.buildin.datetime;
 
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
+import org.joda.time.Instant;
+import org.joda.time.Months;
 
-import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Stream;
+
 
 
 /**
- * action for getting the current date
+ * returns the months between two dates.
+ * The actions returns the number of months between
+ * two date-time objects, the action never
+ * fails
+ *
+ * @code [M1|M2] = datetime/monthsbetween( DateTime1, DateTime2, DateTime3, DateTime4 ); @endcode
  */
-public final class CDate extends IDateTime
+public final class CMonthsBetween extends IBetween
 {
 
     @Override
-    protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
+    protected final Stream<?> apply( final Stream<List<Instant>> p_datetime )
     {
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
-        p_return.add( CRawTerm.from( p_datetime.getYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
-
-        return true;
+        return p_datetime
+            .map( i -> Months.monthsBetween( i.get( 0 ), i.get( 1 ) ) )
+            .mapToLong( Months::getMonths )
+            .boxed();
     }
 
 }

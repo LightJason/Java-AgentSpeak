@@ -31,21 +31,22 @@ import java.util.List;
 
 
 /**
- * action for getting the current date
+ * returns a date-time object.
+ * The action returns a date-time object based
+ * on the string input arguments, the action
+ * parses the string if the string is empty or
+ * "now" the current date-time will returned, the
+ * action never fails
+ *
+ * @code [O1|O2] = datetime/create( "now", "2007-12-03T10:15:30+01:00[Europe/Paris]" ); @endcode
  */
-public final class CDate extends IDateTime
+public final class CCreate extends IDateTime
 {
 
     @Override
     protected final boolean elements( final ZonedDateTime p_datetime, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( p_datetime.getDayOfMonth() ) );
-        p_return.add( CRawTerm.from( p_datetime.getMonthValue() ) );
-        p_return.add( CRawTerm.from( p_datetime.getYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfWeek() ) );
-        p_return.add( CRawTerm.from( p_datetime.getDayOfYear() ) );
-        p_return.add( CRawTerm.from( p_datetime.getZone() ) );
-
+        p_return.add( CRawTerm.from( p_datetime ) );
         return true;
     }
 
