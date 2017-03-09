@@ -258,8 +258,8 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         FValue = collection/list/create(1, 3, 1, 1);
-        Fitness1 = math/statistic/linearproportionateselection( ["a", "b", "c", "d"], FValue );
-        Fitness2 = math/statistic/exponentialproportionateselection( ["e", "f", "g", "h"], [1,1,3,1], 3 );
+        Fitness1 = math/statistic/linearselection( ["a", "b", "c", "d"], FValue );
+        Fitness2 = math/statistic/exponentialselection( ["e", "f", "g", "h"], [1,1,3,1], 3 );
         generic/print( "fitness proportionate selection", Fitness1, Fitness2 );
         generic/print();
 

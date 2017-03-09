@@ -40,7 +40,13 @@ import java.util.stream.Stream;
 
 
 /**
- * create a (set) of random values
+ * create a (set) of random values.
+ * The action creates a set or single random value
+ * based on a distirbution, the first argument
+ * is the distirbution and all other arguments defines
+ * the size of the samples
+ *
+ * @code [R1|R2] = math/statistic/randomsample( Distribution, 1, 5 ); @endcode
  */
 public final class CRandomSample extends IBuildinAction
 {

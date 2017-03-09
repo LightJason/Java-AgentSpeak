@@ -33,15 +33,14 @@ import java.util.stream.Stream;
 /**
  * action to define a fitness-proportinate-selection mechanism.
  * The action defines a fitness-proportinate-selection based on an exponential
- * distribution, the first argument is the demand / rational factor, the second
- * and third argument must be a list, the first list contains elements, the second
- * list contains numeric values for defining the weights
+ * distribution, the first and second argument must be a list, the first list contains elements, the second
+ * list contains numeric values for defining the weights, the third argument is the demand / rational factor
  *
- * @code S = math/statistic/exponentialproportionateselection( RationalFactor, ["a","b","c","d"], [0.5, 0.7, 0.9, 3] ); @endcode
+ * @code S = math/statistic/exponentialselection( ["a","b","c","d"], [0.5, 0.7, 0.9, 3], RationalFactor ); @endcode
  * @see https://en.wikipedia.org/wiki/Boltzmann_distribution
  * @see https://en.wikipedia.org/wiki/Log-linear_model
  */
-public final class CExponentialProportionateSelection extends ISelection
+public final class CExponentialSelection extends ISelection
 {
 
     @Override
