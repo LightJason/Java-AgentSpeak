@@ -32,7 +32,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Decode;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Encode;
+import org.lightjason.agentspeak.action.buildin.string.CConcat;
+import org.lightjason.agentspeak.action.buildin.string.CContains;
+import org.lightjason.agentspeak.action.buildin.string.CEndsWith;
 import org.lightjason.agentspeak.action.buildin.string.CLower;
+import org.lightjason.agentspeak.action.buildin.string.CRandom;
 import org.lightjason.agentspeak.action.buildin.string.CReverse;
 import org.lightjason.agentspeak.action.buildin.string.CSize;
 import org.lightjason.agentspeak.action.buildin.string.CUpper;
@@ -64,12 +68,14 @@ public final class TestCActionString
     public static Object[] generate()
     {
         return Stream.of(
-                Stream.of( "fooo", "#!$foo", "1234097", "AbCDef", "foo", "BAR" ).collect( Collectors.toList() )
+                Stream.of( "fooo", "#!$foo", "1234o097", "AboCDef", "foo", "BARo" ).collect( Collectors.toList() )
         ).toArray();
     }
 
     /**
      * test base64 en- and decode
+     *
+     * @param p_input test arguments
      */
     @Test
     @UseDataProvider( "generate" )
@@ -103,15 +109,17 @@ public final class TestCActionString
 
 
     /**
-     * test upper
+     * test concat
+     *
+     * @param p_input test arguments
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void upper( final List<String> p_input )
+    public final void concat( final List<String> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CUpper().execute(
+        new CConcat().execute(
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
@@ -119,16 +127,46 @@ public final class TestCActionString
             Collections.emptyList()
         );
 
-
-        StreamUtils.zip(
-            p_input.stream().map( i -> i.toUpperCase( Locale.ROOT ) ),
-            l_return.stream().map( ITerm::<String>raw ),
-            AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertEquals(
+            l_return.get( 0 ).<String>raw(),
+            p_input.stream().collect( Collectors.joining() )
+        );
     }
+
+
+    /**
+     * test concat
+     *
+     * @param p_input test arguments
+     */
+    @Test
+    @UseDataProvider( "generate" )
+    public final void contains( final List<String> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CContains().execute(
+            null,
+            false,
+            Stream.concat(
+                Stream.of( p_input.stream().collect( Collectors.joining() ) ),
+                p_input.stream()
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue(
+            l_return.stream()
+                    .allMatch( ITerm::<Boolean>raw )
+        );
+    }
+
 
     /**
      * test lower
+     *
+     * @param p_input test arguments
      */
     @Test
     @UseDataProvider( "generate" )
@@ -152,8 +190,11 @@ public final class TestCActionString
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
 
+
     /**
      * test reverse
+     *
+     * @param p_input test arguments
      */
     @Test
     @UseDataProvider( "generate" )
@@ -177,8 +218,11 @@ public final class TestCActionString
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
 
+
     /**
      * test size
+     *
+     * @param p_input test arguments
      */
     @Test
     @UseDataProvider( "generate" )
@@ -204,6 +248,64 @@ public final class TestCActionString
 
 
     /**
+     * test random
+     *
+     * @param p_input test arguments
+     */
+    @Test
+    @UseDataProvider( "generate" )
+    public final void random( final List<String> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CRandom().execute(
+            null,
+            false,
+            Stream.concat(
+                Stream.of( p_input.stream().collect( Collectors.joining() ) ),
+                p_input.stream().mapToInt( String::length ).boxed()
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        StreamUtils.zip(
+            p_input.stream().mapToInt( String::length ).boxed(),
+            l_return.stream().map( ITerm::<String>raw ).mapToInt( String::length ).boxed(),
+            AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+    }
+
+
+    /**
+     * test upper
+     *
+     * @param p_input test arguments
+     */
+    @Test
+    @UseDataProvider( "generate" )
+    public final void upper( final List<String> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CUpper().execute(
+            null,
+            false,
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+
+        StreamUtils.zip(
+            p_input.stream().map( i -> i.toUpperCase( Locale.ROOT ) ),
+            l_return.stream().map( ITerm::<String>raw ),
+            AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+    }
+
+
+    /**
      * main test call
      *
      * @param p_args arguments
@@ -217,10 +319,13 @@ public final class TestCActionString
               .map( i -> (List<String>) i )
               .forEach( i -> {
                   l_test.base64( i );
-                  l_test.upper( i );
+                  l_test.concat( i );
+                  l_test.contains( i );
                   l_test.lower( i );
-                  l_test.reverse( i );
                   l_test.size( i );
+                  l_test.reverse( i );
+                  l_test.random( i );
+                  l_test.upper( i );
               } );
     }
 
