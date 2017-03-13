@@ -85,7 +85,7 @@ public final class CLevenshtein extends IBuildinAction
         // create distance
         l_strings.stream()
                  .skip( 1 )
-                 .mapToDouble( i -> CCommon.levenshtein( l_strings.get( 0 ), i, l_weights.get( 0 ), l_weights.get( 1 ), l_weights.get( 2 ) ) )
+                 .mapToDouble( i -> CCommon.levenshtein( l_strings.get( 0 ), i, l_weights.get( 1 ), l_weights.get( 1 ), l_weights.get( 2 ) ) )
                  .boxed()
                  .map( CRawTerm::from )
                  .forEach( p_return::add );
