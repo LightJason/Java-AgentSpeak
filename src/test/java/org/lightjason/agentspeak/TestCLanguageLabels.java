@@ -236,52 +236,55 @@ public final class TestCLanguageLabels
         if ( l_ignoredlabel.size() > 0 )
             System.err.println( MessageFormat.format( "labels that starts with {0} are ignored, because parsing errors are occurred", l_ignoredlabel ) );
 
-        LANGUAGEPROPERY.entrySet()
-                       .forEach( i -> {
-                           try
-                           {
-                               final Properties l_property = new Properties();
-                               l_property.load( new FileInputStream( new File( i.getValue() ) ) );
+        LANGUAGEPROPERY.forEach( ( k, v ) -> {
+            try
+                 (
+                     final FileInputStream l_stream = new FileInputStream( new File( v ) )
+                 )
+            {
+                final Properties l_property = new Properties();
+                l_property.load( l_stream );
 
-                               final Set<String> l_parseditems = new HashSet<>( l_label );
-                               final Set<String> l_propertyitems = l_property.keySet().parallelStream().map( Object::toString ).collect( Collectors.toSet() );
+                final Set<String> l_parseditems = new HashSet<>( l_label );
+                final Set<String> l_propertyitems = l_property.keySet().parallelStream().map( Object::toString ).collect(
+                    Collectors.toSet() );
 
-                               // --- check if all property items are within the parsed labels
-                               l_parseditems.removeAll( l_propertyitems );
-                               assertTrue(
-                                   MessageFormat.format(
-                                       "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the language file:\n{2}",
-                                       i.getKey(),
-                                       l_parseditems.size(),
-                                       StringUtils.join( l_parseditems, ", " )
-                                   ),
-                                   l_parseditems.isEmpty()
-                               );
+                // --- check if all property items are within the parsed labels
+                l_parseditems.removeAll( l_propertyitems );
+                assertTrue(
+                    MessageFormat.format(
+                        "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the language file:\n{2}",
+                        k,
+                        l_parseditems.size(),
+                        StringUtils.join( l_parseditems, ", " )
+                    ),
+                    l_parseditems.isEmpty()
+                );
 
 
-                               // --- check if all parsed labels within the property item and remove ignored labels
-                               l_propertyitems.removeAll( l_label );
-                               final Set<String> l_ignoredpropertyitems = l_propertyitems.parallelStream()
-                                                                                         .filter( j -> l_ignoredlabel.parallelStream()
-                                                                                                                     .map( j::startsWith )
-                                                                                                                     .allMatch( l -> false )
-                                                                                         )
-                                                                                         .collect( Collectors.toSet() );
-                               assertTrue(
-                                   MessageFormat.format(
-                                       "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the source code:\n{2}",
-                                       i.getKey(),
-                                       l_ignoredpropertyitems.size(),
-                                       StringUtils.join( l_ignoredpropertyitems, ", " )
-                                   ),
-                                   l_ignoredpropertyitems.isEmpty()
-                               );
-                           }
-                           catch ( final IOException l_exception )
-                           {
-                               assertTrue( MessageFormat.format( "io exception: {0}", l_exception.getMessage() ), false );
-                           }
-                       } );
+                // --- check if all parsed labels within the property item and remove ignored labels
+                l_propertyitems.removeAll( l_label );
+                final Set<String> l_ignoredpropertyitems = l_propertyitems.parallelStream()
+                                                                          .filter( j -> l_ignoredlabel.parallelStream()
+                                                                                                      .map( j::startsWith )
+                                                                                                      .allMatch( l -> false )
+                                                                          )
+                                                                          .collect( Collectors.toSet() );
+                assertTrue(
+                    MessageFormat.format(
+                        "the following {1,choice,1#key|1<keys} in language [{0}] {1,choice,1#is|1<are} not existing within the source code:\n{2}",
+                        k,
+                        l_ignoredpropertyitems.size(),
+                        StringUtils.join( l_ignoredpropertyitems, ", " )
+                    ),
+                    l_ignoredpropertyitems.isEmpty()
+                );
+            }
+            catch ( final IOException l_exception )
+            {
+                assertTrue( MessageFormat.format( "io exception: {0}", l_exception.getMessage() ), false );
+            }
+        } );
     }
 
     /**
