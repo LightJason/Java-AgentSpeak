@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.beliefbase;
 
 import com.google.common.collect.Sets;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.CView;
 import org.lightjason.agentspeak.beliefbase.view.IView;
@@ -53,6 +54,7 @@ import java.util.stream.Stream;
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
 @SuppressWarnings( "serial" )
+@SuppressFBWarnings( "RI_REDUNDANT_INTERFACES" )
 public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbase<T>
 {
     /**
@@ -154,6 +156,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * class to represent the event structure
      */
     @SuppressWarnings( "serial" )
+    @SuppressFBWarnings( "SE_NO_SERIALVERSIONID" )
     protected final class CEventMap extends ConcurrentHashMap<IView<T>, Set<ITrigger>> implements Map<IView<T>, Set<ITrigger>>
     {
         /**

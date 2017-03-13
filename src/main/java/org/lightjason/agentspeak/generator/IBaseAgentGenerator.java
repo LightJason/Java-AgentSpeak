@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.generator;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
@@ -52,6 +53,7 @@ import java.util.stream.Stream;
 /**
  * agent generator
  */
+@SuppressFBWarnings( "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" )
 public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
     /**

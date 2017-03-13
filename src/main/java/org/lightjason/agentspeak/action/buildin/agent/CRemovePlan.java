@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
@@ -47,6 +48,7 @@ import java.util.List;
  *
  * @code agent/removeplan( "+!", "myplan(X)", "-!", Literal ); @endcode
  */
+@SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CRemovePlan extends IBuildinAction
 {
     @Override

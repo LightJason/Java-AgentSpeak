@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.agent.IAgent;
@@ -51,6 +52,7 @@ import java.util.List;
  *
  * @code [A|B] = agent/getplan( "+!", "myplan(X)", "-!", Literal ); @endcode
  */
+@SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CGetPlan extends IBuildinAction
 {
 

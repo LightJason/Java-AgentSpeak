@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -102,7 +103,7 @@ public abstract class IDateTime extends IBuildinAction
                 p_return
             );
         }
-        catch ( final Exception l_excaption )
+        catch ( final DateTimeParseException l_excaption )
         {
             return false;
         }
