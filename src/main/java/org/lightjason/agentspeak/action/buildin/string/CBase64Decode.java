@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.List;
@@ -43,6 +44,7 @@ import java.util.List;
  * the action never fails
  *
  * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
+ * @note return null on encoding errors
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Decode extends IBuildinAction
@@ -61,11 +63,29 @@ public final class CBase64Decode extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> new String( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
+               .map( i -> CBase64Decode.from( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * create a string with enconding
+     *
+     * @param p_character byte character
+     * @return string or null on error
+     */
+    private static String from( final byte[] p_character )
+    {
+        try
+        {
+            return new String( p_character, "UTF-8" );
+        }
+        catch ( final UnsupportedEncodingException l_exception )
+        {
+            return null;
+        }
     }
 
 }
