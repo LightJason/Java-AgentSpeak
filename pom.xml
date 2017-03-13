@@ -118,6 +118,12 @@
 
         <!-- base structures -->
         <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>findbugs</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.6</version>
@@ -212,10 +218,12 @@
             <version>3.1.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>findbugs</artifactId>
-            <version>3.0.1</version>
+            <groupId>com.tngtech.java</groupId>
+            <artifactId>junit-dataprovider</artifactId>
+            <version>[1.11.0,)</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

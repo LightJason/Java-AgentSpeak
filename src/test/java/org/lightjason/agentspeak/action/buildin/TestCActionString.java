@@ -24,8 +24,12 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import com.codepoetics.protonpack.StreamUtils;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Decode;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Encode;
 import org.lightjason.agentspeak.action.buildin.string.CLower;
@@ -37,6 +41,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -47,23 +52,36 @@ import java.util.stream.Stream;
 /**
  * test for string actions
  */
+@RunWith( DataProviderRunner.class )
 public final class TestCActionString
 {
+
+    /**
+     * data provider generator
+     * @return data
+     */
+    @DataProvider
+    public static Object[] generate()
+    {
+        return Stream.of(
+                Stream.of( "fooo", "#!$foo", "1234097", "AbCDef", "foo", "BAR" ).collect( Collectors.toList() )
+        ).toArray();
+    }
 
     /**
      * test base64 en- and decode
      */
     @Test
-    public final void base64()
+    @UseDataProvider( "generate" )
+    public final void base64( final List<String> p_input )
     {
-        final List<ITerm> l_arguments = Stream.of( "test", "#!$foo", "1234097" ).map( CRawTerm::from ).collect( Collectors.toList() );
         final List<ITerm> l_return = new ArrayList<>();
         final List<ITerm> l_result = new ArrayList<>();
 
         new CBase64Encode().execute(
             null,
             false,
-            l_arguments,
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -77,8 +95,8 @@ public final class TestCActionString
         );
 
         StreamUtils.zip(
-            l_arguments.stream(),
-            l_result.stream(),
+            p_input.stream(),
+            l_result.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
@@ -88,22 +106,22 @@ public final class TestCActionString
      * test upper
      */
     @Test
-    public final void upper()
+    @UseDataProvider( "generate" )
+    public final void upper( final List<String> p_input )
     {
-        final List<String> l_input = Stream.of( "AbCDef", "foo", "BAR" ).collect( Collectors.toList() );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CUpper().execute(
             null,
             false,
-            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
 
         StreamUtils.zip(
-            l_input.stream().map( i -> i.toUpperCase( Locale.ROOT ) ),
+            p_input.stream().map( i -> i.toUpperCase( Locale.ROOT ) ),
             l_return.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
@@ -113,22 +131,22 @@ public final class TestCActionString
      * test lower
      */
     @Test
-    public final void lower()
+    @UseDataProvider( "generate" )
+    public final void lower( final List<String> p_input )
     {
-        final List<String> l_input = Stream.of( "AbCDef", "foo", "BAR" ).collect( Collectors.toList() );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLower().execute(
             null,
             false,
-            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
 
         StreamUtils.zip(
-            l_input.stream().map( i -> i.toLowerCase( Locale.ROOT ) ),
+            p_input.stream().map( i -> i.toLowerCase( Locale.ROOT ) ),
             l_return.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
@@ -138,22 +156,22 @@ public final class TestCActionString
      * test reverse
      */
     @Test
-    public final void reverse()
+    @UseDataProvider( "generate" )
+    public final void reverse( final List<String> p_input )
     {
-        final List<String> l_input = Stream.of( "AbCDef", "foo", "BAR" ).collect( Collectors.toList() );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CReverse().execute(
             null,
             false,
-            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
 
         StreamUtils.zip(
-            l_input.stream().map( i -> new StringBuilder( i ).reverse().toString() ),
+            p_input.stream().map( i -> new StringBuilder( i ).reverse().toString() ),
             l_return.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
@@ -163,22 +181,22 @@ public final class TestCActionString
      * test size
      */
     @Test
-    public final void size()
+    @UseDataProvider( "generate" )
+    public final void size( final List<String> p_input )
     {
-        final List<String> l_input = Stream.of( "AbCDef", "foo", "BAR" ).collect( Collectors.toList() );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
             null,
             false,
-            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
 
         StreamUtils.zip(
-            l_input.stream().mapToLong( String::length ).boxed(),
+            p_input.stream().mapToLong( String::length ).boxed(),
             l_return.stream().map( ITerm::<Number>raw ).map( Number::longValue ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
@@ -190,15 +208,20 @@ public final class TestCActionString
      *
      * @param p_args arguments
      */
+    @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
         final TestCActionString l_test = new TestCActionString();
 
-        l_test.base64();
-        l_test.upper();
-        l_test.lower();
-        l_test.reverse();
-        l_test.size();
+        Arrays.stream( TestCActionString.generate() )
+              .map( i -> (List<String>) i )
+              .forEach( i -> {
+                  l_test.base64( i );
+                  l_test.upper( i );
+                  l_test.lower( i );
+                  l_test.reverse( i );
+                  l_test.size( i );
+              } );
     }
 
 }
