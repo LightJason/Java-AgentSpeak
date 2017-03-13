@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -294,6 +295,57 @@ public final class CCommon
     public static Hasher getTermHashing()
     {
         return Hashing.murmur3_32().newHasher();
+    }
+
+    /**
+     * calculates the levenshtein distance
+     *
+     * @param p_first first string
+     * @param p_second second string
+     * @param p_insertweight inserting weight
+     * @param p_replaceweight replace weight
+     * @param p_deleteweight delete weight
+     * @return distance
+     * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
+     */
+    public static double levenshtein( final String p_first, final String p_second, final double p_insertweight, final double p_replaceweight, final double p_deleteweight )
+    {
+        // the array of distances
+        double[] l_cost = IntStream.range( 0, p_first.length() + 1 ).mapToDouble( i -> i ).toArray();
+        double[] l_newcost = new double[l_cost.length];
+
+        for ( int j = 1; j < p_second.length() + 1; j++ )
+        {
+            l_newcost[0] = j;
+
+            // calculate cost of operation for all characters
+            for ( int i = 1; i < l_cost.length; i++ )
+                l_newcost[i] = min(
+                    l_cost[i - 1] + ( p_first.charAt( i - 1 ) == p_second.charAt( j - 1 ) ? 0 : p_replaceweight ),
+                    l_newcost[i - 1] + p_deleteweight,
+                    l_cost[i] + p_insertweight
+                );
+
+            final double[] l_swap = l_cost;
+            l_cost = l_newcost;
+            l_newcost = l_swap;
+        }
+
+        return l_cost[p_first.length()];
+    }
+
+
+    /**
+     * returns the minimum of three elemens
+     *
+     * @param p_first first value
+     * @param p_second second value
+     * @param p_third third value
+     * @return minimum
+     */
+    public static double min( final double p_first, final double p_second, final double p_third )
+    {
+        return Math.min( Math.min( p_first, p_second ), p_third );
     }
 
     /*

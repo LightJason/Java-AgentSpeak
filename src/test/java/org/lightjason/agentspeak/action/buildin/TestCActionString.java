@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.action.buildin.string.CBase64Decode;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Encode;
 import org.lightjason.agentspeak.action.buildin.string.CConcat;
 import org.lightjason.agentspeak.action.buildin.string.CContains;
-import org.lightjason.agentspeak.action.buildin.string.CEndsWith;
 import org.lightjason.agentspeak.action.buildin.string.CLower;
 import org.lightjason.agentspeak.action.buildin.string.CRandom;
 import org.lightjason.agentspeak.action.buildin.string.CReverse;
