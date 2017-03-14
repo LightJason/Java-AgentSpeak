@@ -21,8 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.string;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
+import cern.colt.bitvector.BitMatrix;
+import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -36,17 +38,15 @@ import java.util.stream.Collectors;
 
 
 /**
- * calculates the normalized-compression-distance.
- * The action calculates the normalized-compression-distance between
- * string, if the first argument matches a compression algorithm ( BZIP |
- * GZIP | DEFLATE | PACK200 | XZ ), it will be used for defining the compression,
- * the next string argument will be the input string and the distances will be
- * calculated between the first and all other arguments, the action fails on wrong input
+ * calculates the hamming distance.
+ * The action calculates between bit matrices,
+ * the distance will be calculated between the first
+ * and all other arguments, the action never fails
  *
- * @code [A|B] = string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" ); @endcode
- * @see https://en.wikipedia.org/wiki/Normalized_compression_distance
+ * @code [A|B] = math/bit/matrix/hammingdistance( Matrix1, Matrix2, Matrix3 ); @endcode
+ * @see https://en.wikipedia.org/wiki/Hamming_distance
  */
-public final class CNCD extends IBuildinAction
+public final class CHammingDistance extends IBuildinAction
 {
     @Override
     public final int minimalArgumentNumber()
@@ -56,36 +56,21 @@ public final class CNCD extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+                                               final List<ITerm> p_annotation
+    )
     {
-        final List<String> l_arguments = CCommon.flatcollection( p_argument )
-                                                .map( ITerm::<String>raw )
-                                                .collect( Collectors.toList() );
-
-        // get arguments
-        final int l_skip;
-        final CCommon.ECompression l_compression;
-
-        if ( CCommon.ECompression.exist( l_arguments.get( 0 ) ) )
-        {
-            l_compression = CCommon.ECompression.from( l_arguments.get( 0 ) );
-            l_skip = 1;
-        }
-        else
-        {
-            l_compression = CCommon.ECompression.BZIP;
-            l_skip = 0;
-        }
-
-        // check input arguments
-        if ( l_arguments.size() < 2 + l_skip )
+        final List<BitMatrix> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::<BitMatrix>raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 2 )
             return CFuzzyValue.from( false );
 
-
-        // calculate distance
         l_arguments.stream()
-                   .skip( l_skip + 1 )
-                   .mapToDouble( i -> CCommon.ncd( l_compression, l_arguments.get( l_skip ), i ) )
+                   .skip( 1 )
+                   .map( BitMatrix::copy )
+                   .map( i -> {
+                       i.xor( l_arguments.get( 0 ) );
+                       return i;
+                   } )
+                   .mapToLong( BitMatrix::cardinality )
                    .boxed()
                    .map( CRawTerm::from )
                    .forEach( p_return::add );
