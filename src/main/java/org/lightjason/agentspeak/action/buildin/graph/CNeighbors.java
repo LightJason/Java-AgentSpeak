@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
  * argument is the vertex, all other graphs,
  * the action never fails
  *
- * @note returned list of neighbors is unmodifyable
  * @code [N1|N2] = graph/neighbors( Vertex, Graph1, Graph2 ); @endcode
+ * @note returned list of neighbors is unmodifyable
  */
 public final class CNeighbors extends IBuildinAction
 {
@@ -57,16 +57,17 @@ public final class CNeighbors extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation )
+                                               final List<ITerm> p_annotation
+    )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
         l_arguments.stream()
-               .skip( 1 )
-               .map( ITerm::<AbstractGraph<Object, Object>>raw )
-               .map( i -> i.getNeighbors( l_arguments.get( 0 ).raw() ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+                   .skip( 1 )
+                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
+                   .map( i -> i.getNeighbors( l_arguments.get( 0 ).raw() ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

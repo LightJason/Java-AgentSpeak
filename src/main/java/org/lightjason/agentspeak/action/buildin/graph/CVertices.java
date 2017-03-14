@@ -40,8 +40,8 @@ import java.util.List;
  * The action returns a list of all vertices
  * for each graph argument
  *
- * @note the returned vertex list is unmodifyable list
  * @code [V1|V2] = graph/vertices( Graph1, Graph2 ); @endcode
+ * @note the returned vertex list is unmodifyable list
  */
 public final class CVertices extends IBuildinAction
 {
@@ -53,7 +53,8 @@ public final class CVertices extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation )
+                                               final List<ITerm> p_annotation
+    )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<AbstractGraph<?, ?>>raw )

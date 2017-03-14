@@ -56,6 +56,7 @@ import java.util.stream.Collectors;
  * a sparse graph is created, the action never fails
  *
  * @code [G1|G2] = graph/create( "sparse", "directedsparse" ); @endcode
+ *
  * @see https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
  */
 public class CCreate extends IBuildinAction
@@ -68,7 +69,7 @@ public class CCreate extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+                                               final List<ITerm> p_annotation
     )
     {
         CCommon.flatcollection( p_argument )
@@ -98,9 +99,9 @@ public class CCreate extends IBuildinAction
          * graph names
          */
         private static final Set<String> TYPES = Collections.unmodifiableSet(
-                                                    Arrays.stream( EGraphTypes.values() )
-                                                          .map( i -> i.name().toUpperCase( Locale.ROOT ) )
-                                                          .collect( Collectors.toSet() )
+            Arrays.stream( EGraphTypes.values() )
+                  .map( i -> i.name().toUpperCase( Locale.ROOT ) )
+                  .collect( Collectors.toSet() )
         );
 
         /**
@@ -112,17 +113,23 @@ public class CCreate extends IBuildinAction
         {
             switch ( this )
             {
-                case SPARSE: return new SparseGraph<>();
+                case SPARSE:
+                    return new SparseGraph<>();
 
-                case SPARSEMULTI: return new SparseMultigraph<>();
+                case SPARSEMULTI:
+                    return new SparseMultigraph<>();
 
-                case DIRECTEDSPARSE: return new DirectedSparseGraph<>();
+                case DIRECTEDSPARSE:
+                    return new DirectedSparseGraph<>();
 
-                case DIRECTEDSPARSEMULTI: return new DirectedSparseMultigraph<>();
+                case DIRECTEDSPARSEMULTI:
+                    return new DirectedSparseMultigraph<>();
 
-                case UNDIRECTEDSPARSE: return new UndirectedSparseGraph<>();
+                case UNDIRECTEDSPARSE:
+                    return new UndirectedSparseGraph<>();
 
-                case UNDIRECTEDSPARSEMULTI: return new UndirectedSparseMultigraph<>();
+                case UNDIRECTEDSPARSEMULTI:
+                    return new UndirectedSparseMultigraph<>();
 
                 default:
                     throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );

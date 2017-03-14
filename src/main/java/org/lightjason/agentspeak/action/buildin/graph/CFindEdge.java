@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.AbstractGraph;
-import edu.uci.ics.jung.graph.Hypergraph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,16 +33,18 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * returns the number of vertices.
- * The action returns the number of vertices
- * within a graph and never fails
+ * retruns an edge.
+ * The action returns an edge between two vertices,
+ * the first two arguments are vertices, all other arguments
+ * are graphs, returning values are edges, the action never fails
  *
- * @code [V1|V2] = graph/vertexcount( Graph1, Graph2 ); @endcode
+ * @code [E1|E2|E3] = graph/findedge( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
  */
-public final class CVertexCount extends IBuildinAction
+public final class CFindEdge extends IBuildinAction
 {
     @Override
     public final int minimalArgumentNumber()
@@ -53,15 +54,18 @@ public final class CVertexCount extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                         final List<ITerm> p_annotation )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<AbstractGraph<?, ?>>raw )
-               .mapToLong( Hypergraph::getVertexCount )
-               .boxed()
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 3 )
+            return CFuzzyValue.from( false );
+
+        l_arguments.stream()
+                   .skip( 2 )
+                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
+                   .map( i -> i.findEdge( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
+                   .map( CRawTerm::from )
+                   .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

@@ -41,8 +41,8 @@ import java.util.List;
  * The action returns for all graph arguments
  * a list of edges, the action never fails
  *
- * @note the return argument is an unmodifyable list
  * @code [E1|E2] = graph/edges( Graph1, Graph2 ); @endcode
+ * @note the return argument is an unmodifyable list
  */
 public final class CEdges extends IBuildinAction
 {
@@ -54,7 +54,8 @@ public final class CEdges extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+                                               final List<ITerm> p_annotation
+    )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<AbstractGraph<?, ?>>raw )
