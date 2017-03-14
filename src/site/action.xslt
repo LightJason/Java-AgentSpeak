@@ -131,7 +131,7 @@
     <!-- detailed description -->
     <xsl:template match = "detaileddescription">
         <xsl:text>"detaildescription": "</xsl:text>
-        <xsl:apply-templates select = "para[count(simplesect) = 0]" />
+        <xsl:apply-templates select = "para" />
         <xsl:text>"</xsl:text>
     </xsl:template>
 
@@ -144,7 +144,7 @@
     </xsl:template>
 
 
-    <!-- program listing -->
+    <!-- program listing, ignore simplesect, because it is read on the main template -->
     <xsl:template match = "programlisting">
         <xsl:text> &lt;!-- htmlmin:ignore --&gt;&lt;pre&gt;&lt;code&gt;</xsl:text>
         <xsl:apply-templates />
@@ -155,6 +155,8 @@
         <xsl:apply-templates />
         <xsl:text>\n</xsl:text>
     </xsl:template>
+
+    <xsl:template match = "simplesect"/>
 
     <!-- list item to translate into html -->
     <xsl:template match = "itemizedlist">
