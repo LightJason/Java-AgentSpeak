@@ -21,11 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.string;
+package org.lightjason.agentspeak.action.buildin.graph;
 
+import edu.uci.ics.jung.graph.AbstractGraph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -35,39 +35,30 @@ import java.util.List;
 
 
 /**
- * action to replace all occurence within a string.
- * The action replaces the first argument with the second argument
- * on each string beginning at the third argument and returns
- * all replaced strings, the action never fails
+ * adds a vertex to the graph.
+ * The action adds a vertex to the graph, so
+ * the first argument is the vertex and all
+ * other arguments are graphs, the action never fails
  *
- * @code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" ); @endcode
- * @note the first argument of the action be defined as a regular expression
- * @see https://en.wikipedia.org/wiki/Regular_expression
+ * @code graph/addvertex( Value, Graph1, [Graph2, [Graph3]] ); @endcode
  */
-public final class CReplace extends IBuildinAction
+public final class CAddVertex extends IBuildinAction
 {
-
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 2;
     }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
-        final String l_search = p_argument.get( 0 ).<String>raw();
-        final String l_replace = p_argument.get( 1 ).<String>raw();
-
         CCommon.flatcollection( p_argument )
-               .skip( 2 )
-               .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+               .skip( 1 )
+               .map( ITerm::<AbstractGraph<Object, Object>>raw )
+               .forEach( i -> i.addVertex( p_argument.get( 0 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
-
 }

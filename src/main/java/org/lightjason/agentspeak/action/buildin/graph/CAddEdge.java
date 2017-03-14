@@ -21,53 +21,51 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.string;
+package org.lightjason.agentspeak.action.buildin.graph;
 
+import edu.uci.ics.jung.graph.AbstractGraph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * action to replace all occurence within a string.
- * The action replaces the first argument with the second argument
- * on each string beginning at the third argument and returns
- * all replaced strings, the action never fails
+ * adds an edge to the graph.
+ * The action adds to each graph the pair
+ * of vertices, so the first two arguments
+ * are the vertices, all other arguments are
+ * graphs, the action fails on wrong input
  *
- * @code [A|B] = string/replace( "search", "replace with", "this is a search string", "this is another string" ); @endcode
- * @note the first argument of the action be defined as a regular expression
- * @see https://en.wikipedia.org/wiki/Regular_expression
+ * @code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 ); @endcode
  */
-public final class CReplace extends IBuildinAction
+public final class CAddEdge extends IBuildinAction
 {
-
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 1;
     }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
-        final String l_search = p_argument.get( 0 ).<String>raw();
-        final String l_replace = p_argument.get( 1 ).<String>raw();
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 4 )
+            return CFuzzyValue.from( false );
 
-        CCommon.flatcollection( p_argument )
-               .skip( 2 )
-               .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        l_arguments.stream()
+                   .skip( 3 )
+                   .parallel()
+                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
+                   .forEach( i -> i.addEdge( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw(), l_arguments.get( 2 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
-
 }
