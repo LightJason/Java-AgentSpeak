@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * the action never fails
  *
  * @note returned list of neighbors is unmodifyable
- * @code [N1|N2] = graph/neighbors( "this is a vertex", Graph1, Graph2 ); @endcode
+ * @code [N1|N2] = graph/neighbors( Vertex, Graph1, Graph2 ); @endcode
  */
 public final class CNeighbors extends IBuildinAction
 {

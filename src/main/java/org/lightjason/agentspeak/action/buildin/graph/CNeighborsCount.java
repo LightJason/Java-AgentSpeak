@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * argument is the vertex, all other graphs,
  * the action never fails
  *
- * @code [C1|C2] = graph/neighborscount( "this is a vertex", Graph1, Graph2 ); @endcode
+ * @code [C1|C2] = graph/neighborscount( Vertex, Graph1, Graph2 ); @endcode
  */
 public final class CNeighborsCount extends IBuildinAction
 {

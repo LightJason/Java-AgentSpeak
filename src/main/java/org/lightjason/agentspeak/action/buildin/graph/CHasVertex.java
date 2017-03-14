@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * is the value, all other arguments are graphs,
  * the action never fails
  *
- * @code [B1|B2] = graph/hasvertex( "this is a vertex", Graph1, Graph2 ); @endcode
+ * @code [B1|B2] = graph/hasvertex( Vertex, Graph1, Graph2 ); @endcode
  */
 public final class CHasVertex extends IBuildinAction
 {

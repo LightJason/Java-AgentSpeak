@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * the action never fails
  *
  * @note returned list of edges is unmodifyable
- * @code [OE1|OE2] = graph/inedges( "this is a vertex", Graph1, Graph2 ); @endcode
+ * @code [OE1|OE2] = graph/inedges( Vertex, Graph1, Graph2 ); @endcode
  */
 public final class CInEdges extends IBuildinAction
 {
