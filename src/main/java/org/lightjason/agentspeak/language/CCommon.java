@@ -25,10 +25,18 @@ package org.lightjason.agentspeak.language;
 
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.compressors.pack200.Pack200CompressorOutputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
+import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
@@ -38,11 +46,18 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,6 +76,8 @@ public final class CCommon
     private CCommon()
     {
     }
+
+    //--- plan / rule instantiation ----------------------------------------------------------------------------------------------------------------------------
 
     /**
      * updates within an instance context all variables of the stream
@@ -159,9 +176,7 @@ public final class CCommon
         );
     }
 
-
-
-
+    // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
 
     /**
      * consts the variables within a literal
@@ -287,6 +302,23 @@ public final class CCommon
         return p_input.flatMap( i -> recursiveterm( i.orderedvalues() ) );
     }
 
+    /*
+     * recursive flattering of a list structure
+     *
+     * @param p_list any collection type
+     * @return term stream
+     */
+    @SuppressWarnings( "unchecked" )
+    private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
+    {
+        return p_list.stream().flatMap( i -> {
+            final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
+            return l_value instanceof Collection<?>
+                   ? flattenToStream( (Collection<?>) l_value )
+                   : Stream.of( CRawTerm.from( l_value ) );
+        } );
+    }
+
     /**
      * returns the hasing function for term data
      *
@@ -296,6 +328,8 @@ public final class CCommon
     {
         return Hashing.murmur3_32().newHasher();
     }
+
+    // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * calculates the levenshtein distance
@@ -308,7 +342,8 @@ public final class CCommon
      * @return distance
      * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
      */
-    public static double levenshtein( final String p_first, final String p_second, final double p_insertweight, final double p_replaceweight, final double p_deleteweight )
+    public static double levenshtein( final String p_first, final String p_second, final double p_insertweight, final double p_replaceweight,
+                                      final double p_deleteweight )
     {
         // the array of distances
         double[] l_cost = IntStream.range( 0, p_first.length() + 1 ).mapToDouble( i -> i ).toArray();
@@ -348,20 +383,121 @@ public final class CCommon
         return Math.min( Math.min( p_first, p_second ), p_third );
     }
 
-    /*
-     * recursive flattering of a list structure
+
+    /**
+     * normalized-compression-distance
      *
-     * @param p_list any collection type
-     * @return term stream
+     * @param p_compression compression algorithm
+     * @param p_first first string
+     * @param p_second second string
+     * @return distance in [0,1]
      */
-    @SuppressWarnings( "unchecked" )
-    private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
+    public static double ncd( final ECompression p_compression, final String p_first, final String p_second )
     {
-        return p_list.stream().flatMap( i -> {
-            final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
-            return l_value instanceof Collection<?>
-                   ? flattenToStream( (Collection<?>) l_value )
-                   : Stream.of( CRawTerm.from( l_value ) );
-        } );
+        final double l_first = compress( p_compression, p_first );
+        final double l_second = compress( p_compression, p_second );
+        return ( compress( p_compression, p_first + p_second ) - Math.min( l_first, l_second ) ) / Math.max( l_first, l_second );
     }
+
+
+    /**
+     * compression algorithm
+     *
+     * @param p_compression compression algorithm
+     * @param p_input input string
+     * @return number of compression bytes
+     * @warning counting stream returns the correct number of bytes after flushing
+     */
+    private static double compress( final ECompression p_compression, final String p_input )
+    {
+        final DataOutputStream l_counting = new DataOutputStream( new NullOutputStream() );
+
+        try (
+            final InputStream l_input = new ByteArrayInputStream( p_input.getBytes( StandardCharsets.UTF_8 ) );
+            final OutputStream l_compress = p_compression.get( l_counting )
+        )
+        {
+            IOUtils.copy( l_input, l_compress );
+        }
+        catch ( final IOException l_exception )
+        {
+            return 0;
+        }
+
+        return l_counting.size();
+    }
+
+
+    /**
+     * compression algorithm
+     */
+    public enum ECompression
+    {
+        BZIP,
+        GZIP,
+        DEFLATE,
+        PACK200,
+        XZ;
+
+        /**
+         * enum names
+         */
+        private static final Set<String> ALGORITHMS = Collections.unmodifiableSet(
+                                                          Arrays.stream( ECompression.values() )
+                                                                .map( i -> i.name().toUpperCase( Locale.ROOT ) )
+                                                                .collect( Collectors.toSet() )
+                                                      );
+
+        /**
+         * creates a compression stream
+         *
+         * @param p_datastream data-counting stream
+         * @return compression output stream
+         * @throws IOException throws on any io error
+         */
+        public final OutputStream get( final DataOutputStream p_datastream ) throws IOException
+        {
+            switch ( this )
+            {
+                case BZIP : return new BZip2CompressorOutputStream( p_datastream );
+
+                case GZIP : return new GzipCompressorOutputStream( p_datastream );
+
+                case DEFLATE : return new DeflateCompressorOutputStream( p_datastream );
+
+                case PACK200 : return new Pack200CompressorOutputStream( p_datastream );
+
+                case XZ : return new XZCompressorOutputStream( p_datastream );
+
+                default :
+                    throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "unknown", this ) );
+            }
+        }
+
+        /**
+         * returns a compression value
+         *
+         * @param p_value string name
+         * @return compression value
+         */
+        public static ECompression from( final String p_value )
+        {
+            return ECompression.valueOf( p_value.toUpperCase( Locale.ROOT ) );
+        }
+
+
+        /**
+         * checks if a compression exists
+         *
+         * @param p_value compression name
+         * @return existance flag
+         */
+        public static boolean exist( final String p_value )
+        {
+            return ALGORITHMS.contains( p_value.toUpperCase( Locale.ROOT ) );
+        }
+
+    }
+
+
 }
