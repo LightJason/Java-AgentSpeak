@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
 import cern.colt.bitvector.BitMatrix;
-import cern.colt.bitvector.BitVector;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
