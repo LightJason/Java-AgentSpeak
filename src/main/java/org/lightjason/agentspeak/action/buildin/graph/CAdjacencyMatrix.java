@@ -65,6 +65,8 @@ import java.util.stream.Stream;
     [M1|V1|M2|V2] = graph/adjacencymatrix( "dense|sparse", CostMap, Graph1, Graph2 );
     [M3|V3|M4|V4] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
  * @endcode
+ * @note the cost-map does not need an entry for each edge
+ * non-existing edges have got on default zero costs
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
 public final class CAdjacencyMatrix extends IBuildinAction
