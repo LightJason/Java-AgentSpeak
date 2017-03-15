@@ -37,16 +37,16 @@ import java.util.stream.Collectors;
 
 
 /**
- * checks if a graph stores a vertex.
- * The action checks if a value is stored as
- * a vertex within a graph, the first argument
- * is the value, all other arguments are graphs,
- * the action never fails
+ * checks if a vertex is predecessor of another vertex.
+ * The action checks for the first vertex argument
+ * that the second vertex argument is predecessor within
+ * the given graph, the action never fails
  *
- * @code [B1|B2] = graph/hasvertex( Vertex, Graph1, Graph2 ); @endcode
+ * @code [B1|B2|B3] = graph/isneighbor( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
  */
-public final class CHasVertex extends IBuildinAction
+public final class CIsNeighbor extends IBuildinAction
 {
+
     @Override
     public final int minimalArgumentNumber()
     {
@@ -55,18 +55,20 @@ public final class CHasVertex extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 3 )
+            return CFuzzyValue.from( false );
 
         l_arguments.stream()
-                   .skip( 1 )
+                   .skip( 2 )
                    .map( ITerm::<AbstractGraph<Object, Object>>raw )
-                   .map( i -> i.containsVertex( l_arguments.get( 0 ).raw() ) )
+                   .map( i -> i.isNeighbor( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
                    .map( CRawTerm::from )
                    .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
+
 }

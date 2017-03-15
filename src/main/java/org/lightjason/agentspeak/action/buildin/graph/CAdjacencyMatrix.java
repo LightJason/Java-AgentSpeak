@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,20 +54,21 @@ import java.util.stream.Stream;
  * creates from a graph the adjacency matrix.
  * The action converts graphs into a matrix
  * based on a cost-map, the first argument can be
- * a string or a map, if it is a string with dense
- * or sparce it defines the kind of thr returning
- * matrix, if it is not set, a dense matrix is returned,
- * the next argument is a map with edges and values for
- * the costs and all other arguments are graph objects,
+ * a string with dense or sparse for defining the
+ * returned matrix, after that a cost-map cann be set
+ * or a fixed numerical value for defining the cost
+ * of an edge, all other arguments are graphs,
  * for each graph the matrix and vertex list is returned,
  * the action never fails
  *
  * @code
     [M1|V1|M2|V2] = graph/adjacencymatrix( "dense|sparse", CostMap, Graph1, Graph2 );
     [M3|V3|M4|V4] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
+    [M1|V1|M2|V2] = graph/adjacencymatrix( "dense|sparse", 1, Graph1, Graph2 );
+    [M3|V3|M4|V4] = graph/adjacencymatrix( 1, Graph1, Graph2 );
  * @endcode
  * @note the cost-map does not need an entry for each edge
- * non-existing edges have got on default zero costs
+ * non-existing edges have got on default zero costs with 1
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
 public final class CAdjacencyMatrix extends IBuildinAction
@@ -88,24 +90,40 @@ public final class CAdjacencyMatrix extends IBuildinAction
         // get result matrix type
         final EType l_type;
         final int l_skip;
-        if ( ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), String.class ) )
-             && ( l_arguments.get( 0 ).<String>raw().equalsIgnoreCase( "sparse" ) ) )
+        if ( !CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), String.class ) )
         {
-            l_type = EType.SPARSE;
-            l_skip = 1;
+            l_skip = 0;
+            l_type = EType.DENSE;
         }
         else
         {
-            l_type = EType.DENSE;
             l_skip = 1;
+            l_type = l_arguments.get( 0 ).<String>raw().equalsIgnoreCase( "sparse" )
+                     ? EType.SPARSE
+                     : EType.DENSE;
         }
+
+
+        // cost definition
+        final Map<?, Number> l_cost = CCommon.rawvalueAssignableTo( l_arguments.get( l_skip ), Map.class )
+                                      ? l_arguments.get( l_skip ).<Map<?, Number>>raw()
+                                      : Collections.emptyMap();
+
+        final double l_defaultcost = CCommon.rawvalueAssignableTo( l_arguments.get( l_skip ), Number.class )
+                                     ? l_arguments.get( l_skip ).<Number>raw().doubleValue()
+                                     : 1;
 
 
         // create adjcency matrix
         l_arguments.stream()
                    .skip( 1 + l_skip )
                    .map( ITerm::<AbstractGraph<Object, Object>>raw )
-                   .map( i -> CAdjacencyMatrix.apply( i, l_arguments.get( l_skip ).<Map<?, Number>>raw(), l_type ) )
+                   .map( i -> CAdjacencyMatrix.apply(
+                                  i,
+                                  l_arguments.get( l_skip ).<Map<?, Number>>raw(),
+                                  l_defaultcost,
+                                  l_type
+                   ) )
                    .forEach( i -> {
                        p_return.add( CRawTerm.from( i.getLeft() ) );
                        p_return.add( CRawTerm.from( i.getRight() ) );
@@ -122,7 +140,8 @@ public final class CAdjacencyMatrix extends IBuildinAction
      * @param p_type matrix type
      * @return pair of double matrix and vertices
      */
-    private static Pair<DoubleMatrix2D, Collection<?>> apply( final AbstractGraph<Object, Object> p_graph, final Map<?, Number> p_cost, final EType p_type )
+    private static Pair<DoubleMatrix2D, Collection<?>> apply( final AbstractGraph<Object, Object> p_graph, final Map<?, Number> p_cost,
+                                                              final double p_defaultcost, final EType p_type )
     {
         // index map for matching vertex to index position within matrix
         final Map<Object, Integer> l_index = new HashMap<>();
@@ -155,8 +174,11 @@ public final class CAdjacencyMatrix extends IBuildinAction
         // map costs to matrix
         p_graph.getEdges()
                .stream()
-               .map( i -> new ImmutablePair<>( p_graph.getEndpoints( i ), p_cost.getOrDefault( i, 0 ).doubleValue() ) )
-               .forEach( i -> l_matrix.set( l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ), i.getRight() ) );
+               .map( i -> new ImmutablePair<>( p_graph.getEndpoints( i ), p_cost.getOrDefault( i, p_defaultcost ).doubleValue() ) )
+               .forEach( i -> l_matrix.setQuick(
+                                  l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ),
+                                  i.getRight() + l_matrix.getQuick( l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ) )
+               ) );
 
         return new ImmutablePair<>( l_matrix, new ArrayList<>( l_index.keySet() ) );
     }
