@@ -50,7 +50,7 @@ public final class COpposite extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 0;
+        return 1;
     }
 
     @Override
