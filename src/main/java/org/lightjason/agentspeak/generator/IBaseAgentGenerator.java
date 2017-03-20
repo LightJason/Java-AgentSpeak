@@ -44,6 +44,7 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -175,7 +176,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     {
         return IntStream.range( 0, p_number )
                     .parallel()
-                    .mapToObj( i -> this.generatesingle( p_data ) );
+                    .mapToObj( i -> this.generatesingle( p_data ) )
+                    .filter( Objects::nonNull );
     }
 
 }

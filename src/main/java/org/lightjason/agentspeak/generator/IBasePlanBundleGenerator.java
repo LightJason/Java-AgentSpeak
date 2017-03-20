@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.grammar.CParserPlanBundle;
 import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -82,7 +83,8 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
     {
         return IntStream.range( 0, p_number )
                     .parallel()
-                    .mapToObj( i -> this.generatesingle( p_data ) );
+                    .mapToObj( i -> this.generatesingle( p_data ) )
+                    .filter( Objects::nonNull );
     }
 
 }
