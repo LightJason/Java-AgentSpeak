@@ -137,6 +137,7 @@ public final class CAdjacencyMatrix extends IBuildinAction
      *
      * @param p_graph graph
      * @param p_cost map with edges and costs
+     * @param p_defaultcost default cost value (on non-existing map values)
      * @param p_type matrix type
      * @return pair of double matrix and vertices
      */
