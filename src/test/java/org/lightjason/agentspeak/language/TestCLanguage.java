@@ -28,7 +28,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.variable.CConstant;
+import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.stream.Stream;
@@ -154,6 +156,36 @@ public final class TestCLanguage
 
     }
 
+    /**
+     * test realocated variable
+     */
+    @Test
+    public final void relocatevariable()
+    {
+        final IVariable<String> l_variable = new CVariable<>( "V" );
+        final CRelocateVariable<String> l_relocate = new CRelocateVariable<>( l_variable );
+
+        Assert.assertEquals( l_variable.functor(), "V" );
+        Assert.assertEquals( l_relocate.functor(), "V" );
+
+        Assert.assertFalse( l_variable.allocated() );
+        Assert.assertFalse( l_relocate.allocated() );
+
+        Assert.assertTrue( l_variable.hasVariable() );
+        Assert.assertTrue( l_relocate.hasVariable() );
+
+
+        l_relocate.set( "foo" );
+        Assert.assertTrue( l_relocate.allocated() );
+        Assert.assertEquals( l_relocate.raw(), "foo" );
+
+
+        l_relocate.relocate();
+        Assert.assertTrue( l_variable.allocated() );
+        Assert.assertEquals( l_variable.raw(), "foo" );
+
+    }
+
 
     /**
      * main method for testing
@@ -168,6 +200,7 @@ public final class TestCLanguage
         l_test.rawterm();
         l_test.constant();
         l_test.variable();
+        l_test.relocatevariable();
 
         try
         {
