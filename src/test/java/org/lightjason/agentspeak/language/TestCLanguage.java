@@ -28,6 +28,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.variable.CConstant;
+import org.lightjason.agentspeak.language.variable.CVariable;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.stream.Stream;
 
@@ -113,9 +115,43 @@ public final class TestCLanguage
         final ITerm l_constant = new CConstant<>( "V", l_value );
 
         Assert.assertEquals( l_constant.functor(), "V" );
+        Assert.assertTrue( l_constant.hasVariable() );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Number.class ) );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Double.class ) );
         Assert.assertEquals( "number value", l_constant.raw(), l_value, 0 );
+    }
+
+
+    /**
+     * checks the variable structure
+     */
+    @Test
+    public final void variable()
+    {
+        Assert.assertTrue( new CVariable<>( "_" ).any() );
+
+
+        double l_value = Math.random();
+        final IVariable<Number> l_variable = new CVariable<>( "V", l_value );
+
+        Assert.assertEquals( l_variable.functor(), "V" );
+        Assert.assertTrue( l_variable.allocated() );
+        Assert.assertFalse( l_variable.mutex() );
+        Assert.assertTrue( l_variable.hasVariable() );
+        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Number.class ) );
+        Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
+
+
+        Assert.assertEquals( "number value", l_variable.raw(), l_value, 0 );
+
+        l_value = Math.random();
+        l_variable.set( l_value );
+
+        Assert.assertEquals( "number value", l_variable.raw(), l_value, 0 );
+
+        l_variable.set( null );
+        Assert.assertFalse( l_variable.allocated() );
+
     }
 
 
@@ -131,6 +167,7 @@ public final class TestCLanguage
         l_test.literal();
         l_test.rawterm();
         l_test.constant();
+        l_test.variable();
 
         try
         {
