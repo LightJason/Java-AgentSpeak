@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.CRelocateVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
-import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.stream.Stream;
@@ -103,7 +102,7 @@ public final class TestCLanguage
     @Test( expected = RuntimeException.class )
     public final void constantaccess()
     {
-        new CConstant<>( "V", 5 ).set( 10 );
+        new CConstant<>( "CA", 5 ).set( 10 );
     }
 
 
@@ -114,9 +113,9 @@ public final class TestCLanguage
     public final void constant()
     {
         final double l_value = Math.random();
-        final ITerm l_constant = new CConstant<>( "V", l_value );
+        final ITerm l_constant = new CConstant<>( "C", l_value );
 
-        Assert.assertEquals( l_constant.functor(), "V" );
+        Assert.assertEquals( l_constant.functor(), "C" );
         Assert.assertTrue( l_constant.hasVariable() );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Number.class ) );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Double.class ) );
@@ -162,11 +161,11 @@ public final class TestCLanguage
     @Test
     public final void relocatevariable()
     {
-        final IVariable<String> l_variable = new CVariable<>( "V" );
+        final IVariable<String> l_variable = new CVariable<>( "R" );
         final CRelocateVariable<String> l_relocate = new CRelocateVariable<>( l_variable );
 
-        Assert.assertEquals( l_variable.functor(), "V" );
-        Assert.assertEquals( l_relocate.functor(), "V" );
+        Assert.assertEquals( l_variable.functor(), "R" );
+        Assert.assertEquals( l_relocate.functor(), "R" );
 
         Assert.assertFalse( l_variable.allocated() );
         Assert.assertFalse( l_relocate.allocated() );
