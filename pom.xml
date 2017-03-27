@@ -505,7 +505,7 @@
                 <executions>
                     <execution>
                         <id>doxygen</id>
-                        <phase>site</phase>
+                        <phase>post-site</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
