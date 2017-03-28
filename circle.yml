@@ -20,14 +20,17 @@ machine:
         GIT_AUTHOR_EMAIL: info@lightjason.org
         GIT_COMMITTER_NAME: CircleCI
         GIT_COMMITTER_EMAIL: info@lightjason.org
+        DOXYGEN: 1.8.13
+        PATH: doxygen-$DOXYGEN/bin/doxygen:$PATH
 
     java:
         version: oraclejdk8
 
 dependencies:
     pre:
-        - sudo apt-get install doxygen graphviz xsltproc
+        - sudo apt-get install graphviz xsltproc
         - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip saxon.zip saxon9he.jar
+        - wget -O doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-$DOXYGEN.linux.bin.tar.gz && tar -zxf doxygen.tar.gz doxygen-$DOXYGEN/bin/doxygen
 
 test:
     override:
