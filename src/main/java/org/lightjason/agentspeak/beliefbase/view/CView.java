@@ -299,18 +299,18 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         synchronized ( this )
         {
             // add is run here for avoid overwriting view with a new object reference
-            l_view = m_beliefbase.add(
-                        m_beliefbase.viewOrDefault(
-                            l_root,
+            l_view = m_beliefbase.viewOrDefault(
+                        l_root,
 
-                            p_generator == null || p_generator.length == 0
-                            ? null
-                            : p_generator[0].apply( l_root, this )
-                        )
-            );
+                        p_generator == null || p_generator.length == 0
+                        ? null
+                        : p_generator[0].apply( l_root, this )
+                     );
+
+            if ( l_view == null )
+                return Stream.of();
+            m_beliefbase.add( l_view );
         }
-        if ( l_view == null )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notfound", l_root, this.path() ) );
 
         return Stream.concat(
             Stream.of( this ),
