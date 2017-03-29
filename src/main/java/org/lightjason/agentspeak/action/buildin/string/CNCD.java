@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * string, if the first argument matches a compression algorithm ( BZIP |
  * GZIP | DEFLATE | PACK200 | XZ ), it will be used for defining the compression,
  * the next string argument will be the input string and the distances will be
- * calculated between the first and all other arguments, the action fails on wrong input
+ * calculated between the second and all other arguments, the action fails on wrong input
  *
  * @code [A|B] = string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" ); @endcode
  * @see https://en.wikipedia.org/wiki/Normalized_compression_distance

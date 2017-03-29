@@ -41,7 +41,7 @@ import java.util.List;
  * all other arguments are numbers to present the length of the returning string
  * and the action never fails
  *
- * @code [A|B|C] = generic/string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
+ * @code [A|B|C] = string/random( "abdefgXYZUI", 5, 3, 6 ); @endcode
  */
 public final class CRandom extends IBuildinAction
 {

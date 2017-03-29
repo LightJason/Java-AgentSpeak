@@ -38,10 +38,9 @@ import java.util.List;
 
 /**
  * action to encodes a string with Base64.
- * Creates from each string argument the base64 encoded
- * version, the action fails on encoding errors
- *
- * @code [A|B] = generic/string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
+ * The base64 encoded version is created from each string argument.
+ * The action fails on encoding errors.
+ * @code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
  * @see https://en.wikipedia.org/wiki/Base64
  */
 public final class CBase64Encode extends IBuildinAction

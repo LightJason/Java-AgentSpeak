@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * The actions checks the first argument to all other if any
  * matchs for equality, the action never fails
  *
- * @code AnyEqual = generic/bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
+ * @code AnyEqual = bool/anymatch( "this is the test", 123, "this is the test", ["hello", 234] ); @endcode
  * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  */
