@@ -39,11 +39,11 @@ import java.util.List;
 
 /**
  * action to decodes a string with Base64.
- * Creates from each string argument, which is
- * based64 encoded the decoded string version,
- * the action never fails
+ * The decoded string version is created from each string argument, which is
+ * based64 encoded.
+ * The action never fails.
  *
- * @code [A|B] = generic/string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
+ * @code [A|B] = string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
  * @note return null on encoding errors
  * @see https://en.wikipedia.org/wiki/Base64
  */
