@@ -36,11 +36,11 @@ import java.util.List;
 
 /**
  * combines all arguments to a single result with the and-operator.
- * This action uses the logical cpnjunction
+ * This action uses the logical conjunction
  * to combine all logical arguments in a single
  * result, the action never fails
  *
- * @code R = generic/bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * @code R = bool/and( Logical1, [Logical2, Logical3], Logical4 ); @endcode
  * @see https://en.wikipedia.org/wiki/Logical_conjunction
  */
 public final class CAnd extends IBuildinAction
