@@ -32,8 +32,7 @@ test:
 
     post:
         # documentation and test build
-        - mvn site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
-        - mvn coveralls:report -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
+        - mvn site cobertura:cobertura coveralls:report -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
         # transformation classes to website json import
         - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
         - java -jar saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
