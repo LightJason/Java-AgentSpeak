@@ -11,31 +11,28 @@ general:
             - /gh-.*/
             - /binary-.*/
 
+
 machine:
     timezone:
         Europe/Berlin
 
-    environment:
-        GIT_AUTHOR_NAME: CircleCI
-        GIT_AUTHOR_EMAIL: info@lightjason.org
-        GIT_COMMITTER_NAME: CircleCI
-        GIT_COMMITTER_EMAIL: info@lightjason.org
-
     java:
         version: oraclejdk8
+
 
 dependencies:
     pre:
         - sudo apt-get install doxygen graphviz xsltproc
         - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip saxon.zip saxon9he.jar
 
+
 test:
     override:
-        - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
+        - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
 
     post:
         # documentation  build
-        - mvn site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL} -Dbuild.commit=${CIRCLE_SHA1}
+        - mvn site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
         - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
         - java -jar saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
         # create CircleCI reports
