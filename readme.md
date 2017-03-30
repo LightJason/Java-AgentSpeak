@@ -1,6 +1,7 @@
 # LightJason - AgentSpeak(L++)
 
 ![Circle CI](https://circleci.com/gh/LightJason/AgentSpeak.svg?style=shield)
+[![Coverage Status](https://coveralls.io/repos/github/LightJason/AgentSpeak/badge.svg?branch=master)](https://coveralls.io/github/LightJason/AgentSpeak?branch=master)
 
 Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner and Rafael H. Bordini
 a Java 8 implementation has been build-up with parallel execution calls. The version defines an additional [AgentSpeak(L)](https://en.wikipedia.org/wiki/AgentSpeak) grammar based on
