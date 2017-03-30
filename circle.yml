@@ -31,11 +31,11 @@ dependencies:
 
 test:
     override:
-        - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
+        - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
 
     post:
         # documentation  build
-        - mvn site
+        - mvn site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL} -Dbuild.commit=${CIRCLE_SHA1}
         - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
         - java -jar saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
         # create CircleCI reports

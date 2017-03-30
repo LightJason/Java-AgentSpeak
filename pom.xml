@@ -112,6 +112,7 @@
         <!-- will be set outside (build parameter) -->
         <build.number></build.number>
         <build.commit></build.commit>
+        <coverall.token></coverall.token>
     </properties>
 
 
@@ -316,12 +317,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>2.19.1</version>
@@ -425,6 +420,25 @@
                         <reuseForks>true</reuseForks>
                     </configuration>
                     -->
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.7</version>
+                    <configuration>
+                        <format>xml</format>
+                        <format>html</format>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.eluder.coveralls</groupId>
+                    <artifactId>coveralls-maven-plugin</artifactId>
+                    <version>4.3.0</version>
+                    <configuration>
+                        <repoToken>${coverall.token}</repoToken>
+                    </configuration>
                 </plugin>
 
             </plugins>
