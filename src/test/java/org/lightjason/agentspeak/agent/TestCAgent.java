@@ -83,15 +83,18 @@ public final class TestCAgent
 
     /**
      * data provider for defining asl files
-     * @return
+     * @return triple of test-cases (asl file, number of iterations, expected log items)
      */
     @DataProvider
     public static Object[] generate()
     {
         return Stream.of(
-            new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 ),
-            new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 7 )
-            //new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 3, 3 )
+            //new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 ),
+            new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
+            new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
+            new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
+            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 )
         ).toArray();
     }
 
@@ -150,14 +153,13 @@ public final class TestCAgent
     @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args ) throws Exception
     {
-        final TestCAgent l_test = new TestCAgent();
-
         Arrays.stream( TestCAgent.generate() )
+              .parallel()
               .map( i -> (Triple<String,Number,Number>) i )
               .forEach( i -> {
                     try
                     {
-                        l_test.testASLDefault( i );
+                        new TestCAgent().testASLDefault( i );
                     }
                     catch ( final Exception l_exception )
                     {

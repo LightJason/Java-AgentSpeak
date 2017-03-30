@@ -230,7 +230,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- math functions ----------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         MinIdx = math/minindex(RV);
         MaxIdx = math/maxindex(RV);
         InRect = math/shape/inrectangle( 0,0, 4,5,   2,1 );
@@ -317,7 +317,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- hash --------------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         HashMD5 = crypto/hash( "md5", "hallo" );
         HashMurmur = crypto/hash( "murmur3-32", "hallo" );
         HashAdler = crypto/hash( "adler-32", "hallo" );
@@ -331,7 +331,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // ---- crypto (AES & DES) -----------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         DESKey = crypto/createkey( "DES" );
         DESEncrypt = crypto/encrypt( DESKey, "DES uncrypted message");
         DESDecrypt = crypto/decrypt( DESKey, DESEncrypt);
@@ -348,7 +348,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- crypto (RSA) ------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         [ PublicKey1 | PrivateKey1 ] = crypto/createkey( "RSA" );
         [ PublicKey2 | PrivateKey2 ] = crypto/createkey( "RSA" );
 

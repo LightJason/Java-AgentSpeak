@@ -10,7 +10,8 @@
     !testlpmaximize;
     !testlpminimize;
     !testinterpolate;
-    !teststatistic
+    !teststatistic;
+    !testshape
 .
 
 
@@ -123,4 +124,22 @@
 
         generic/print("statistic", SMax, SMin, SCount, SPopVariance, SQuadraticMean, SSecondMom, SStd, SSum, SSumSq, SVar, SMean );
         test/result( success )
+.
+
+
+/**
+ * test shape
+ */
++!testshape <-
+    InRect = math/shape/inrectangle( 0,0, 4,5,   2,1 );
+    test/result( InRect, "in-shape has been failed" );
+
+    InCircle = math/shape/incircle( 2,2,1,  2,1 );
+    test/result( InCircle, "in-circle has been failed" );
+
+    InTriangle = math/shape/intriangle( 350,320,  25,375,  40,55,    160,270 );
+    test/result( InTriangle, "in-triangle has been failed" );
+
+    generic/print("shapes (in)", "", "rectangle", InRect, "circle", InCircle, "triangle", InTriangle)
+
 .
