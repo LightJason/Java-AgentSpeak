@@ -151,7 +151,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- simple arithmetic -------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         Z = 10 * 4 ** 0.5;
         generic/print("simple expression", Z);
         generic/print();
@@ -176,7 +176,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- blas arithmetic ---------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         M = math/blas/matrix/create(2,2);
         math/blas/matrix/set(0,0, 1, M);
         math/blas/matrix/set(0,1, 2, M);
@@ -192,7 +192,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- random ------------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         Distribution = math/statistic/createdistribution( "normal", 20, 100 );
         RV = math/statistic/randomsample( Distribution, 8 );
         generic/print("random", RV);
@@ -215,7 +215,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- restful api (push to beliefbase) ----------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
         +webservice( GH );
 
@@ -246,7 +246,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- statistics --------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         Statistic = math/statistic/createstatistic();
         math/statistic/addstatisticvalue(Statistic, RV, L);
 
@@ -268,7 +268,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- LP solver ---------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         LP1 = math/linearprogram/create( 2, 2, 1, 0 );
         math/linearprogram/valueconstraint( LP1, 1, 1, 0, ">=", 1 );
         math/linearprogram/valueconstraint( LP1, 1, 0, 1, ">=", 1 );
@@ -292,7 +292,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- polynomial interpolation ------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         PI = math/interpolate/create("neville", [-5,1,2,8,14], [7,3,7,4,8]);
         [PIV] = math/interpolate/singleinterpolate( PI, 3 , 5, 10, -3);
 
