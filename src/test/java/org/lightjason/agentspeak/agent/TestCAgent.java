@@ -115,7 +115,10 @@ public final class TestCAgent
             final IAgent<?> l_agent = new CAgentGenerator(
                                           l_stream,
                                           Stream.concat(
-                                              Stream.of( new CTestResult() ),
+                                              Stream.of(
+                                                  new CTestResult(),
+                                                  new CEmptyPrint()
+                                              ),
                                               CCommon.actionsFromPackage()
                                           ).collect( Collectors.toSet() ),
                                           new CVariableBuilder()
@@ -171,6 +174,36 @@ public final class TestCAgent
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * empty print action
+     */
+    private static final class CEmptyPrint extends IBaseAction
+    {
+
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "generic/print" );
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 0;
+        }
+
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                                   final List<ITerm> p_annotation
+        )
+        {
+            return CFuzzyValue.from( true );
+        }
+    }
+
+    /**
+     * test action
+     */
     private final class CTestResult extends IBaseAction
     {
 
