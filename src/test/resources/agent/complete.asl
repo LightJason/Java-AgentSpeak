@@ -161,7 +161,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- string ------------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         SBase64 = string/base64encode( "Base64 encoded string" );
         SReverse = string/reverse( "abcdefg" );
         SUpper = string/upper("AbCdefg");
@@ -203,7 +203,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- date / time -------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         [Hour | Minute | Second | Nano ] = datetime/time();
         [Year | Month | Day | DayOfWeek | DayOfYear] = datetime/date();
         Zone = datetime/zoneid();
@@ -304,7 +304,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- boolean operators -------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         BAnd = bool/and( true, false, true );
         BOr  = bool/or( true, false, false );
         BXor = bool/xor( true, false, true, false );
@@ -443,7 +443,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         $myfunction("fooooooo");
         $fibonacci(8, FIB);
 

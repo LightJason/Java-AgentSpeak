@@ -94,7 +94,8 @@ public final class TestCAgent
             new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
             new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
             new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 )
+            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 10 )
         ).toArray();
     }
 
