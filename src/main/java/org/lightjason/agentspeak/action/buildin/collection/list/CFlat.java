@@ -25,34 +25,25 @@ package org.lightjason.agentspeak.action.buildin.collection.list;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns a flat concated list of any term data.
- * The arguments of this action are nested lists and the action transfer all nested structures
- * to a straight list, the action fails never
+ * unflats any list structure.
+ * All action arguments are list values which
+ * will be unflatten and all elements will be
+ * returned in single instances, the action
+ * never fails never
  *
- * @code L = collection/list/flatconcat( [1, 2, [3,4]], [[1,2],[7,8]] ); @endcode
+ * @code [A|B|C] = collections/list/flat( 1, [2,[3,4]] ); @endcode
  */
-public final class CFlatConcat extends IBuildinAction
+public final class CFlat extends IBuildinAction
 {
-    /**
-     * ctor
-     */
-    public CFlatConcat()
-    {
-        super( 3 );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {
@@ -64,9 +55,7 @@ public final class CFlatConcat extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_list = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-        p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
+        CCommon.flatcollection( p_argument ).forEach( p_return::add );
         return CFuzzyValue.from( true );
     }
-
 }
