@@ -21,10 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.list;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,23 +31,22 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns an element of the list by the index.
- * The first argument is a list object and all other
- * arguments are index values, so the action returns
- * the elements, the action fails never
+ * returns for each argument the underlying type.
+ * The actions returns for each argument the data type
+ * as a string name, the action never fails
  *
- * @code [V1|V2] = collection/list/get( L, 2, 7 ); @endcode
+ * @code [T1|T2] = generic/type/type( A, B );
  */
-public final class CGet extends IBuildinAction
+public final class CType extends IBuildinAction
 {
+
     /**
      * ctor
      */
-    public CGet()
+    public CType()
     {
         super( 3 );
     }
@@ -56,25 +54,14 @@ public final class CGet extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        final List<?> l_list = l_arguments.get( 0 ).<List<?>>raw();
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( i -> i.<Number>raw().intValue() )
-                   .map( l_list::get )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
+        p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::from ).forEach(  p_return::add );
         return CFuzzyValue.from( true );
     }
-
 }
