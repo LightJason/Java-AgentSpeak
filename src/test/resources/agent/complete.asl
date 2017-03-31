@@ -151,7 +151,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- simple arithmetic -------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         Z = 10 * 4 ** 0.5;
         generic/print("simple expression", Z);
         generic/print();
@@ -161,7 +161,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- string ------------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         SBase64 = string/base64encode( "Base64 encoded string" );
         SReverse = string/reverse( "abcdefg" );
         SUpper = string/upper("AbCdefg");
@@ -176,7 +176,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- blas arithmetic ---------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         M = math/blas/matrix/create(2,2);
         math/blas/matrix/set(0,0, 1, M);
         math/blas/matrix/set(0,1, 2, M);
@@ -192,7 +192,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- random ------------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         Distribution = math/statistic/createdistribution( "normal", 20, 100 );
         RV = math/statistic/randomsample( Distribution, 8 );
         generic/print("random", RV);
@@ -203,7 +203,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- date / time -------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         [Hour | Minute | Second | Nano ] = datetime/time();
         [Year | Month | Day | DayOfWeek | DayOfYear] = datetime/date();
         Zone = datetime/zoneid();
@@ -215,7 +215,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- restful api (push to beliefbase) ----------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
         +webservice( GH );
 
@@ -230,7 +230,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- math functions ----------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         MinIdx = math/minindex(RV);
         MaxIdx = math/maxindex(RV);
         InRect = math/shape/inrectangle( 0,0, 4,5,   2,1 );
@@ -246,7 +246,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- statistics --------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         Statistic = math/statistic/createstatistic();
         math/statistic/addstatisticvalue(Statistic, RV, L);
 
@@ -268,7 +268,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- LP solver ---------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         LP1 = math/linearprogram/create( 2, 2, 1, 0 );
         math/linearprogram/valueconstraint( LP1, 1, 1, 0, ">=", 1 );
         math/linearprogram/valueconstraint( LP1, 1, 0, 1, ">=", 1 );
@@ -292,7 +292,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- polynomial interpolation ------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         PI = math/interpolate/create("neville", [-5,1,2,8,14], [7,3,7,4,8]);
         [PIV] = math/interpolate/singleinterpolate( PI, 3 , 5, 10, -3);
 
@@ -304,7 +304,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- boolean operators -------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         BAnd = bool/and( true, false, true );
         BOr  = bool/or( true, false, false );
         BXor = bool/xor( true, false, true, false );
@@ -317,7 +317,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- hash --------------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         HashMD5 = crypto/hash( "md5", "hallo" );
         HashMurmur = crypto/hash( "murmur3-32", "hallo" );
         HashAdler = crypto/hash( "adler-32", "hallo" );
@@ -331,7 +331,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // ---- crypto (AES & DES) -----------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         DESKey = crypto/createkey( "DES" );
         DESEncrypt = crypto/encrypt( DESKey, "DES uncrypted message");
         DESDecrypt = crypto/decrypt( DESKey, DESEncrypt);
@@ -348,7 +348,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- crypto (RSA) ------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         [ PublicKey1 | PrivateKey1 ] = crypto/createkey( "RSA" );
         [ PublicKey2 | PrivateKey2 ] = crypto/createkey( "RSA" );
 
@@ -443,7 +443,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- rule execution ----------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         $myfunction("fooooooo");
         $fibonacci(8, FIB);
 

@@ -23,21 +23,29 @@
 
 package org.lightjason.agentspeak.agent;
 
-import com.codepoetics.protonpack.StreamUtils;
-import com.google.common.collect.Multiset;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
+import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
-import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -45,101 +53,106 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
-
 
 /**
  * test agent structure
  */
+@RunWith( DataProviderRunner.class )
 public final class TestCAgent
 {
     /**
-     * list with default (non-working) actions
+     * enable printing of test-data
      */
-    private static final Map<IAction, Double> ACTIONS;
+    private static final boolean PRINTENABLE = true;
     /**
-     * map with all testing asl
+     * list with successful plans
      */
-    private static final Map<String, String> ASL = StreamUtils.zip(
-
-        Stream.of(
-            "src/test/resources/agent/complete.asl"
-        ),
-
-        Stream.of(
-            "full-test agent"
-        ),
-
-        AbstractMap.SimpleImmutableEntry::new
-
-    ).collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) );
+    private final List<Pair<Boolean, String>> m_testlog = Collections.synchronizedList( new ArrayList<>() );
 
     static
     {
         // disable logger
         LogManager.getLogManager().reset();
-
-        // create actions
-        final Random l_random = new Random();
-        ACTIONS = CCommon.actionsFromPackage().collect( Collectors.toMap( i -> i, j -> (double) l_random.nextInt( 15 ) ) );
     }
 
     /**
-     * asl parsing test
+     * data provider for defining asl files
+     * @return triple of test-cases (asl file, number of iterations, expected log items)
      */
-    @Test
-    public final void testASLManual()
+    @DataProvider
+    public static Object[] generate()
     {
-        ASL.forEach( ( i, j ) -> {
-            final Pair<Boolean, String> l_result = testAgentManual( i, j );
-            assertTrue( l_result.getRight(), l_result.getLeft() );
-            System.out.println( l_result.getValue() );
-        } );
+        return Stream.of(
+            new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
+            /*
+            new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
+            new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
+            new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
+            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 14 )
+            */
+        ).toArray();
     }
+
 
     /**
      * test for default generators and configuration
+     *
+     * @throws Exception on any error
      */
     @Test
-    public final void testASLDefault()
+    @UseDataProvider( "generate" )
+    public final void testASLDefault( final Triple<String, Number, Number> p_asl ) throws Exception
     {
-        final Set<String> l_result = ASL.entrySet()
-                                        .stream()
-                                        .map( i -> {
-                                            try
-                                            (
-                                                final InputStream l_stream = new FileInputStream( i.getKey() );
-                                            )
-                                            {
-                                                new CAgentGenerator(
-                                                    l_stream,
-                                                    ACTIONS.keySet(),
-                                                    IAggregation.EMPTY,
-                                                    Collections.emptySet(),
-                                                    new CVariableBuilder()
-                                                ).generatesingle().call();
-                                                return null;
-                                            }
-                                            catch ( final Exception l_exception )
-                                            {
-                                                return MessageFormat.format( "{0}: {1}", i.getValue(), l_exception );
-                                            }
-                                        } )
-                                        .filter( Objects::nonNull )
-                                        .collect( Collectors.toSet() );
+        try
+        (
+            final InputStream l_stream = new FileInputStream( p_asl.getLeft() );
+        )
+        {
+            final IAgent<?> l_agent = new CAgentGenerator(
+                                          l_stream,
+                                          Stream.concat(
+                                              PRINTENABLE
+                                              ? Stream.of( new CTestResult() )
+                                              : Stream.of( new CTestResult(), new CEmptyPrint() ),
+                                              CCommon.actionsFromPackage()
+                                          ).collect( Collectors.toSet() ),
+                                          new CVariableBuilder()
+                                      ).generatesingle();
 
-        assertTrue( l_result.toString(), l_result.isEmpty() );
+            IntStream.range( 0, p_asl.getMiddle().intValue() )
+                     .forEach( i -> {
+                         try
+                         {
+                             l_agent.call();
+                         }
+                         catch ( final Exception l_exception )
+                         {
+                             Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
+                         }
+                     } );
+        }
+        catch ( final Exception l_exception )
+        {
+            Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
+        }
+
+
+        Assert.assertEquals(  MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );
+        m_testlog.stream()
+                 .filter( i -> !i.getKey() )
+                 .forEach( i -> Assert.assertTrue( MessageFormat.format( "{0} {1}", p_asl.getLeft(), i.getValue() ), false ) );
     }
 
     /**
@@ -148,71 +161,88 @@ public final class TestCAgent
      * @param p_args arguments
      * @throws Exception on parsing exception
      */
+    @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args ) throws Exception
     {
-        final TestCAgent l_test = new TestCAgent();
-
-        l_test.testASLDefault();
-        l_test.testASLManual();
+        Arrays.stream( TestCAgent.generate() )
+              .parallel()
+              .map( i -> (Triple<String, Number, Number>) i )
+              .forEach( i -> {
+                  try
+                  {
+                      new TestCAgent().testASLDefault( i );
+                  }
+                  catch ( final Exception l_exception )
+                  {
+                      l_exception.printStackTrace();
+                  }
+              } );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * static function to run an agent
-     *
-     * @param p_script script path
-     * @param p_name agent name
-     * @return tupel & string
+     * empty print action
      */
-    private static Pair<Boolean, String> testAgentManual( final String p_script, final String p_name )
+    private static final class CEmptyPrint extends IBaseAction
     {
-        final IAgent<?> l_agent;
-        try (
-            final InputStream l_stream = new FileInputStream( p_script );
+
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "generic/print" );
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 0;
+        }
+
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                                   final List<ITerm> p_annotation
         )
         {
-            l_agent = new CAgentGenerator(
-                l_stream,
-                ACTIONS.keySet(),
-                new CAggregation( ACTIONS ),
-                Collections.<IPlanBundle>emptySet(),
-                new CVariableBuilder()
-            ).generatesingle();
-
-            // run 5 cycles
-            IntStream.range( 0, 5 )
-                     .forEach( i ->
-                     {
-                         try
-                         {
-                             l_agent.call();
-                             l_agent.beliefbase().add( CLiteral.from( "counter", Stream.of( CRawTerm.from( i ) ) ) );
-                             l_agent.trigger(
-                                 CTrigger.from( ITrigger.EType.DELETEGOAL, CLiteral.from( "myexternal" ) )
-                             );
-                         }
-                         catch ( final Exception l_exception )
-                         {
-                             assertTrue(
-                                 MessageFormat.format(
-                                     "{0} {1}",
-                                     l_exception.getClass().getName(),
-                                     l_exception.getMessage().isEmpty() ? "" : l_exception.getMessage()
-                                 ).trim(),
-                                 false
-                             );
-                         }
-                     } );
+            return CFuzzyValue.from( true );
         }
-        catch ( final Exception l_exception )
-        {
-            return new ImmutablePair<>( false, MessageFormat.format( "{0} passed with failure: {1}", p_name, l_exception ) );
-        }
-
-        return new ImmutablePair<>( true, MessageFormat.format( "{0} passed successfully in: {1}", p_name, l_agent ) );
     }
 
+    /**
+     * test action
+     */
+    private final class CTestResult extends IBaseAction
+    {
+
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "test/result" );
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 1;
+        }
+
+        @Override
+        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                             final List<ITerm> p_annotation
+        )
+        {
+            m_testlog.add(
+                new ImmutablePair<>(
+                    p_argument.get( 0 ).<Boolean>raw(),
+                    p_argument.size() > 1
+                    ? p_argument.get( 1 ).<String>raw()
+                    : ""
+                )
+            );
+
+            return CFuzzyValue.from( p_argument.get( 0 ).<Boolean>raw() );
+        }
+    }
 
     /**
      * agent class
@@ -230,6 +260,7 @@ public final class TestCAgent
         }
     }
 
+
     /**
      * agent generator class
      */
@@ -241,82 +272,19 @@ public final class TestCAgent
          *
          * @param p_stream input stream
          * @param p_actions set with action
-         * @param p_aggregation aggregation function
-         * @param p_planbundle set with planbundles
          * @param p_variablebuilder variable builder (can be set to null)
          * @throws Exception thrown on error
          */
-        CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                         final IVariableBuilder p_variablebuilder
+        CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IVariableBuilder p_variablebuilder
         ) throws Exception
         {
-            super( p_stream, p_actions, p_aggregation, p_planbundle, p_variablebuilder );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_stream input stream
-         * @param p_actions set with action
-         * @param p_aggregation aggregation function
-         * @param p_variablebuilder variable builder (can be set to null)
-         * @throws Exception thrown on error
-         */
-        CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation,
-                         final IVariableBuilder p_variablebuilder
-        ) throws Exception
-        {
-            super( p_stream, p_actions, p_aggregation, p_variablebuilder );
+            super( p_stream, p_actions, IAggregation.EMPTY, p_variablebuilder );
         }
 
         @Override
         public IAgent<?> generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration );
-        }
-    }
-
-
-
-
-
-
-    /**
-     * aggregation function
-     */
-    private static final class CAggregation implements IAggregation
-    {
-        /**
-         * action & score value
-         */
-        private final Map<IAction, Double> m_actions;
-
-        /**
-         * ctor
-         *
-         * @param p_actions action score map
-         */
-        CAggregation( final Map<IAction, Double> p_actions )
-        {
-            m_actions = p_actions;
-        }
-
-        @Override
-        public final double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score )
-        {
-            return p_score.isEmpty() ? 0 : p_score.stream().mapToDouble( m_actions::get ).sum();
-        }
-
-        @Override
-        public final double evaluate( final Stream<Double> p_values )
-        {
-            return p_values.mapToDouble( i -> i ).sum();
-        }
-
-        @Override
-        public final double error()
-        {
-            return Double.POSITIVE_INFINITY;
         }
     }
 
