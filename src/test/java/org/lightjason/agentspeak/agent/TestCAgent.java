@@ -71,13 +71,13 @@ import java.util.stream.Stream;
 public final class TestCAgent
 {
     /**
-     * list with successful plans
-     */
-    private final List<Pair<Boolean,String>> m_testlog = Collections.synchronizedList( new ArrayList<>() );
-    /**
      * enable printing of test-data
      */
     private static final boolean PRINTENABLE = true;
+    /**
+     * list with successful plans
+     */
+    private final List<Pair<Boolean, String>> m_testlog = Collections.synchronizedList( new ArrayList<>() );
 
     static
     {
@@ -108,6 +108,8 @@ public final class TestCAgent
 
     /**
      * test for default generators and configuration
+     *
+     * @throws Exception on any error
      */
     @Test
     @UseDataProvider( "generate" )
@@ -131,14 +133,14 @@ public final class TestCAgent
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
                      .forEach( i -> {
-                            try
-                            {
-                                l_agent.call();
-                            }
-                            catch ( final Exception l_exception )
-                            {
-                                Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
-                            }
+                         try
+                         {
+                             l_agent.call();
+                         }
+                         catch ( final Exception l_exception )
+                         {
+                             Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
+                         }
                      } );
         }
         catch ( final Exception l_exception )
@@ -164,16 +166,16 @@ public final class TestCAgent
     {
         Arrays.stream( TestCAgent.generate() )
               .parallel()
-              .map( i -> (Triple<String,Number,Number>) i )
+              .map( i -> (Triple<String, Number, Number>) i )
               .forEach( i -> {
-                    try
-                    {
-                        new TestCAgent().testASLDefault( i );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                        l_exception.printStackTrace();
-                    }
+                  try
+                  {
+                      new TestCAgent().testASLDefault( i );
+                  }
+                  catch ( final Exception l_exception )
+                  {
+                      l_exception.printStackTrace();
+                  }
               } );
     }
 
