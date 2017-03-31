@@ -67,7 +67,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
                                                final List<ITerm> p_annotation
     )
     {
-        this.set( CCommon.replaceFromContext( p_context, m_value ), m_righthand.raw() );
+        this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
         return CFuzzyValue.from( true );
     }
 
@@ -107,9 +107,8 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
         if ( p_assignment.size() >= 1 )
             ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.fqnfunctor().toString() );
         if ( p_assignment.size() >= 2 )
-            ( (IVariable<Object>) p_assignment.get( 1 ) ).set( Collections.synchronizedList( p_term.values().collect( Collectors.toList() ) ) );
+            ( (IVariable<Object>) p_assignment.get( 1 ) ).set( p_term.values().collect( Collectors.toList() ) );
         if ( p_assignment.size() >= 3 )
-            ( (IVariable<Object>) p_assignment.get( 2 ) ).set(
-                Collections.synchronizedList( new LinkedList<>( p_term.annotations().collect( Collectors.toList() ) ) ) );
+            ( (IVariable<Object>) p_assignment.get( 2 ) ).set( p_term.annotations().collect( Collectors.toList() ) );
     }
 }

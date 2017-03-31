@@ -74,6 +74,10 @@ public final class TestCAgent
      * list with successful plans
      */
     private final List<Pair<Boolean,String>> m_testlog = Collections.synchronizedList( new ArrayList<>() );
+    /**
+     * enable printing of test-data
+     */
+    private static final boolean PRINTENABLE = true;
 
     static
     {
@@ -90,12 +94,14 @@ public final class TestCAgent
     {
         return Stream.of(
             //new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 ),
+            /*
             new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
             new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
             new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
             new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
             new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 10 )
+            */
+            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 14 )
         ).toArray();
     }
 
@@ -115,10 +121,9 @@ public final class TestCAgent
             final IAgent<?> l_agent = new CAgentGenerator(
                                           l_stream,
                                           Stream.concat(
-                                              Stream.of(
-                                                  new CTestResult(),
-                                                  new CEmptyPrint()
-                                              ),
+                                              PRINTENABLE
+                                              ? Stream.of( new CTestResult() )
+                                              : Stream.of( new CTestResult(), new CEmptyPrint() ),
                                               CCommon.actionsFromPackage()
                                           ).collect( Collectors.toSet() ),
                                           new CVariableBuilder()

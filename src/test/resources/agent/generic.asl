@@ -23,7 +23,8 @@ foo(blub(1),hallo("test")).
     !testdatetime;
     !testbool;
     !teststring;
-    !testunification
+    !testunification;
+    !testdeconstruct
 .
 
 
@@ -121,4 +122,33 @@ foo(blub(1),hallo("test")).
 //        generic/print("unification", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
 
         test/result( success )
+.
+
+
+/**
+ * test the deconstruct operator
+ */
++!testdeconstruct <-
+        [O|P] =.. foo( blub(1), blah(3) );
+        R1 = bool/equal( O, "foo" );
+        test/result( R1, "first deconstruct has been failed" );
+
+        [H|I] = P;
+        [A|C] =.. H;
+        [B|D] =.. I;
+
+        R2 = bool/equal( A, "blub" );
+        R3 = bool/equal( B, "blah" );
+        test/result( R2, "second deconstruct has been failed" );
+        test/result( R3, "third deconstruct has been failed" );
+
+        [X|Y] = generic/type/type( C, D );
+        generic/print(X, Y);
+
+        R4 =  V1 == 1;
+        R5 =  V2 == 3;
+        test/result( R4, "deconstruct first value has been failed" );
+        test/result( R5, "deconstruct second value has been failed" );
+
+        generic/print("deconstruct", O,P,H,I)
 .
