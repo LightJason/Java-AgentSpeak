@@ -93,15 +93,15 @@ public final class TestCAgent
     public static Object[] generate()
     {
         return Stream.of(
-            //new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 ),
+            new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
             /*
             new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
             new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
             new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
             new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
             new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
-            */
             new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 14 )
+            */
         ).toArray();
     }
 
