@@ -39,7 +39,7 @@ import java.util.List;
  * other values are map references, the key-value pair
  * is added and the action never fails
  *
- * @code collection/map/put( "key", "value", MultiMap1, MultiMap2 ); @endcode
+ * @code collection/multimap/put( "key", "value", MultiMap1, MultiMap2 ); @endcode
  */
 public final class CPut extends IBuildinAction
 {

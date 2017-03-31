@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 /**
  * unflats the tuples into variables.
- * All arguments are tupels and each tupel
+ * All arguments are tupels and each tuple
  * will be extract into two variables, the
  * action never fails
  *

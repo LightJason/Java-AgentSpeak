@@ -39,7 +39,7 @@ import java.util.List;
  * Concats all list arguments (and removes the nested structures) and
  * returns a boolean of the empty check, the action fails never
  *
- * @code E = collection/list/isempty( [] ); @endcode
+ * @code E = collection/list/isempty(L); @endcode
  */
 public final class CIsEmpty extends IBuildinAction
 {
