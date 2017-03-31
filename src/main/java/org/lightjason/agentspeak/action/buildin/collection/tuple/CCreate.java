@@ -39,10 +39,10 @@ import java.util.List;
 /**
  * creates a tuple of two elements.
  * The number of arguments must be even and each
- * two elements will be combined into a tupel and
+ * two elements will be combined into a tuple and
  * never fails
  *
- * @code [A|B] = collection/tupel/create("A", "1", ["B", "2"]); @endcode
+ * @code [A|B] = collection/tuple/create("A", "1", ["B", "2"]); @endcode
  */
 public final class CCreate extends IBuildinAction
 {
