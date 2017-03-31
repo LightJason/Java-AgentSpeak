@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +67,7 @@ public final class CUnique extends IBuildinAction
     )
     {
         // first argument list reference
-        final List<?> l_result = new LinkedList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
+        final List<?> l_result = new ArrayList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result

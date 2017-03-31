@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,7 +66,7 @@ public final class CUnion extends IBuildinAction
     )
     {
         // all arguments must be lists
-        final List<?> l_result = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        final List<?> l_result = new ArrayList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result
