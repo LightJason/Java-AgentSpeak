@@ -37,7 +37,7 @@ import java.util.Map;
  * adds an element to all map arguments iif not exists.
  * First argument is a key value, second the value, all
  * other values are map references, the key-value pair
- * is added iif not exists and the action never fails
+ * is added if not exists and the action never fails
  *
  * @code collection/map/putifabsent( "key", "value", Map1, Map2 ); @endcode
  */
