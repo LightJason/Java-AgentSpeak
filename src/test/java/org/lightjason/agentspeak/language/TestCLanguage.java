@@ -121,7 +121,7 @@ public final class TestCLanguage
         Assert.assertTrue( l_constant.hasVariable() );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Number.class ) );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Double.class ) );
-        Assert.assertEquals( "number value", l_constant.raw(), l_value, 0 );
+        Assert.assertEquals( "constant number value", l_constant.raw(), l_value, 0 );
     }
 
 
@@ -145,12 +145,12 @@ public final class TestCLanguage
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
 
 
-        Assert.assertEquals( "number value", l_variable.raw(), l_value, 0 );
+        Assert.assertEquals( "get variable number value", l_variable.raw(), l_value, 0 );
 
         l_value = Math.random();
         l_variable.set( l_value );
 
-        Assert.assertEquals( "number value", l_variable.raw(), l_value, 0 );
+        Assert.assertEquals( "set variable number value", l_variable.raw(), l_value, 0 );
 
         l_variable.set( null );
         Assert.assertFalse( l_variable.allocated() );
@@ -174,12 +174,12 @@ public final class TestCLanguage
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_variable, Double.class ) );
 
 
-        Assert.assertEquals( "number value", l_variable.raw(), l_value, 0 );
+        Assert.assertEquals( "get mutex variable number value", l_variable.raw(), l_value, 0 );
 
         l_value = Math.random();
         l_variable.set( l_value );
 
-        Assert.assertEquals( "number value", l_variable.raw(), l_value, 0 );
+        Assert.assertEquals( "set mutex variable number value", l_variable.raw(), l_value, 0 );
 
         l_variable.set( null );
         Assert.assertFalse( l_variable.allocated() );
@@ -192,13 +192,13 @@ public final class TestCLanguage
     @Test
     public final void relocatevariable()
     {
-        final IVariable<String> l_variable = new CVariable<>( "R" );
+        final IVariable<String> l_variable = new CVariable<>( "RA" );
         final CRelocateVariable<String> l_relocate = new CRelocateVariable<>( l_variable );
 
         Assert.assertFalse( l_relocate.mutex() );
 
-        Assert.assertEquals( l_variable.functor(), "R" );
-        Assert.assertEquals( l_relocate.functor(), "R" );
+        Assert.assertEquals( l_variable.functor(), "RA" );
+        Assert.assertEquals( l_relocate.functor(), "RA" );
 
         Assert.assertFalse( l_variable.allocated() );
         Assert.assertFalse( l_relocate.allocated() );
@@ -207,14 +207,14 @@ public final class TestCLanguage
         Assert.assertTrue( l_relocate.hasVariable() );
 
 
-        l_relocate.set( "foo" );
+        l_relocate.set( "relocated foo" );
         Assert.assertTrue( l_relocate.allocated() );
-        Assert.assertEquals( l_relocate.raw(), "foo" );
+        Assert.assertEquals( l_relocate.raw(), "relocated foo" );
 
 
         l_relocate.relocate();
         Assert.assertTrue( l_variable.allocated() );
-        Assert.assertEquals( l_variable.raw(), "foo" );
+        Assert.assertEquals( l_variable.raw(), "relocated foo" );
     }
 
 
@@ -224,13 +224,13 @@ public final class TestCLanguage
     @Test
     public final void relocatevariablemutex()
     {
-        final IVariable<String> l_variable = new CVariable<>( "R" );
+        final IVariable<String> l_variable = new CVariable<>( "RAM" );
         final CRelocateMutexVariable<String> l_relocate = new CRelocateMutexVariable<>( l_variable );
 
         Assert.assertTrue( l_relocate.mutex() );
 
-        Assert.assertEquals( l_variable.functor(), "R" );
-        Assert.assertEquals( l_relocate.functor(), "R" );
+        Assert.assertEquals( l_variable.functor(), "RAM" );
+        Assert.assertEquals( l_relocate.functor(), "RAM" );
 
         Assert.assertFalse( l_variable.allocated() );
         Assert.assertFalse( l_relocate.allocated() );
@@ -239,14 +239,14 @@ public final class TestCLanguage
         Assert.assertTrue( l_relocate.hasVariable() );
 
 
-        l_relocate.set( "foo" );
+        l_relocate.set( "relocated mutex foo" );
         Assert.assertTrue( l_relocate.allocated() );
-        Assert.assertEquals( l_relocate.raw(), "foo" );
+        Assert.assertEquals( l_relocate.raw(), "relocated mutex foo" );
 
 
         l_relocate.relocate();
         Assert.assertTrue( l_variable.allocated() );
-        Assert.assertEquals( l_variable.raw(), "foo" );
+        Assert.assertEquals( l_variable.raw(), "relocated mutex foo" );
     }
 
 
