@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.bool;
 
-import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -32,14 +31,17 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
  * checks elements of inequality.
- * The actions checks all tupel of arguments of inequality and
- * fails if the unflatten argument number is odd.
+ * The actions checks the first argument
+ * to all others arguments of unequality,
+ * list structures won't be unflaten, but
+ * elementwise compared, the action never fails
  *
  * @code [NE1|NE2] = bool/notequal( "this is equal", "this is equal", [123, "test"] ); @endcode
  * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
@@ -59,14 +61,25 @@ public final class CNotEqual extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 1 )
-            return CFuzzyValue.from( false );
+        if ( CCommon.rawvalueAssignableTo( p_argument.get( 0 ), Collection.class ) )
+        {
 
-        StreamUtils.windowed( l_arguments.stream(), 2 )
-                   .map( i -> !i.get( 0 ).equals( i.get( 1 ) ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+            final Object[] l_argument = p_argument.get( 0 ).<Collection<?>>raw().toArray();
+
+            p_argument.stream()
+                      .skip( 1 )
+                      .map( i -> !( CCommon.rawvalueAssignableTo( i, Collection.class ) && Arrays.equals( l_argument, i.<Collection<?>>raw().toArray() ) ) )
+                      .map( CRawTerm::from )
+                      .forEach( p_return::add );
+
+        }
+        else
+
+            p_argument.stream()
+                      .skip( 1 )
+                      .map( i -> !i.equals( p_argument.get( 0 ) ) )
+                      .map( CRawTerm::from )
+                      .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
