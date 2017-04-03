@@ -84,7 +84,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @note must be thread-safe
      */
-    protected final Map<String, ?> m_storage = new ConcurrentHashMap<>();
+    protected final Map<String, Object> m_storage = new ConcurrentHashMap<>();
     /**
      * execution trigger with content hash
      */
@@ -239,7 +239,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final Map<String, ?> storage()
+    public final Map<String, Object> storage()
     {
         return m_storage;
     }

@@ -132,7 +132,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return storage map
      */
-    Map<String, ?> storage();
+    Map<String, Object> storage();
 
     /**
      * returns an unifier

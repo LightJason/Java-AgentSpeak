@@ -23,17 +23,22 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.buildin.storage.CAdd;
+import org.lightjason.agentspeak.action.buildin.storage.CClear;
+import org.lightjason.agentspeak.action.buildin.storage.CExists;
+import org.lightjason.agentspeak.action.buildin.storage.CRemove;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
@@ -44,10 +49,13 @@ import org.lightjason.agentspeak.language.score.IAggregation;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -104,6 +112,104 @@ public final class TestCActionStorage
 
         Assert.assertEquals( m_context.agent().storage().get( "testnumber" ), 123 );
         Assert.assertEquals( m_context.agent().storage().get( "teststring" ), "foobar" );
+
+
+        new CAdd( "bar" ).execute(
+            m_context,
+            false,
+            Stream.of(
+                CRawTerm.from( "bar" ),
+                CRawTerm.from( 123 )
+            ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertNull( m_context.agent().storage().get( "bar" ) );
+    }
+
+
+    /**
+     * test remove action
+     */
+    @Test
+    public final void testremove()
+    {
+        Assume.assumeNotNull( m_context );
+
+        m_context.agent().storage().put( "foo", 123 );
+
+        final List<ITerm> l_return = new ArrayList<>();
+        new CRemove().execute(
+            m_context,
+            false,
+            Stream.of( CRawTerm.from( "foo" ) ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue( m_context.agent().storage().isEmpty() );
+        Assert.assertNull( m_context.agent().storage().get( "foo" ) );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 123 ) );
+    }
+
+
+    /**
+     * test clear action
+     */
+    @Test
+    public final void testclear()
+    {
+        Assume.assumeNotNull( m_context );
+
+        IntStream.range( 0, 100 ).parallel()
+                 .mapToObj( i -> RandomStringUtils.random( 25 ) )
+                 .forEach( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) );
+
+        Assert.assertEquals( m_context.agent().storage().size(), 100 );
+
+        new CClear().execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue( m_context.agent().storage().isEmpty() );
+    }
+
+
+    /**
+     * test exists action
+     */
+    @Test
+    public final void testexist()
+    {
+        Assume.assumeNotNull( m_context );
+
+        final List<ITerm> l_content = IntStream.range( 0, 100 ).parallel()
+                                               .mapToObj( i -> RandomStringUtils.random( 25 ) )
+                                               .map( i -> {
+                                                   m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) );
+                                                   return i;
+                                               } )
+                                               .map( CRawTerm::from )
+                                               .collect( Collectors.toList() );
+
+        final List<ITerm> l_return = new ArrayList<>();
+        new CExists().execute(
+            m_context,
+            false,
+            l_content,
+            l_return,
+            Collections.emptyList()
+        );
+
+
+        Assert.assertEquals( l_return.size(), 100 );
+        Assert.assertTrue( l_return.stream().allMatch( ITerm::<Boolean>raw ) );
     }
 
 
@@ -120,6 +226,15 @@ public final class TestCActionStorage
 
         l_test.initialize();
         l_test.testadd();
+
+        l_test.initialize();
+        l_test.testremove();
+
+        l_test.initialize();
+        l_test.testclear();
+
+        l_test.initialize();
+        l_test.testexist();
     }
 
 
