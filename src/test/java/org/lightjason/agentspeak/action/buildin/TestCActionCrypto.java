@@ -27,6 +27,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.crypto.CHash;
+import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -76,6 +77,31 @@ public final class TestCActionCrypto
 
 
     /**
+     * test hash exception
+     */
+    @Test( expected = CRuntimeException.class )
+    public final void testhashexception()
+    {
+        new CHash().execute(
+            null,
+            false,
+            Stream.of( CRawTerm.from( "xxx" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+    }
+
+    /**
+     * test key generation
+     */
+    //@Test
+    public final void testcreatekey()
+    {
+
+    }
+
+
+    /**
      * test call
      *
      * @param p_args commandline arguments
@@ -85,6 +111,16 @@ public final class TestCActionCrypto
         final TestCActionCrypto l_test = new TestCActionCrypto();
 
         l_test.testhash();
+
+        try
+        {
+            l_test.testhashexception();
+        }
+        catch ( final CRuntimeException l_exception )
+        {
+
+        }
+
     }
 
 
