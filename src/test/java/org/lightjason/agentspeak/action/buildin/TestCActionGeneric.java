@@ -33,12 +33,14 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * test generic actions
+ */
 public final class TestCActionGeneric
 {
 
@@ -76,6 +78,8 @@ public final class TestCActionGeneric
 
     /**
      * test print action
+     *
+     * @throws UnsupportedEncodingException is thrown on encoding errors
      */
     @Test
     public final void testprint() throws UnsupportedEncodingException
@@ -98,6 +102,7 @@ public final class TestCActionGeneric
      * text call
      *
      * @param p_args arguments
+     * @throws UnsupportedEncodingException is thrown on encoding errors
      */
     public static void main( final String[] p_args ) throws UnsupportedEncodingException
     {

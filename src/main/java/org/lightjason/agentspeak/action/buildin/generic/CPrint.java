@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.generic;
 
-import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.CFormat1D;
 import org.lightjason.agentspeak.action.buildin.math.blas.CFormat2D;
@@ -143,7 +142,7 @@ public final class CPrint extends IBuildinAction
                                                                           .findFirst()
                                                                           .orElse( null );
 
-                           return l_formatter == null ? i.toString() : l_formatter.toString( i );
+                             return l_formatter == null ? i.toString() : l_formatter.toString( i );
                          } )
                          .collect( Collectors.joining( m_seperator ) );
     }
