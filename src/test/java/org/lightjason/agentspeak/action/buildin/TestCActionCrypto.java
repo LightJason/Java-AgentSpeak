@@ -58,20 +58,20 @@ public final class TestCActionCrypto
             ),
 
             ( i, j ) -> {
-                  final List<ITerm> l_return = new ArrayList<>();
+                final List<ITerm> l_return = new ArrayList<>();
 
-                  new CHash().execute(
-                                        null,
-                                        false,
-                                        Stream.of( CRawTerm.from( i ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
-                                        l_return,
-                                        Collections.emptyList()
-                  );
+                new CHash().execute(
+                                      null,
+                                      false,
+                                      Stream.of( CRawTerm.from( i ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
+                                      l_return,
+                                      Collections.emptyList()
+                );
 
-                  Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), j );
-                  return "";
-              } )
-              .forEach( i -> {} );
+                Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), j );
+                return "";
+            } )
+            .forEach( i -> { } );
     }
 
 
