@@ -47,11 +47,13 @@ import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
@@ -264,19 +266,36 @@ public final class CCommon
     }
 
     /**
-     * flats and concat the term list
+     * returns a byte array of a object stream
      *
-     * @param p_input input term list
+     * @param p_input input object list
      * @return byte sequence with UTF-8 encoding
      *
-     * @throws UnsupportedEncodingException is thrown on wrong encoding type
+     * @throws IOException is thrown on initializing error
      */
-    public static byte[] getBytes( final List<ITerm> p_input ) throws UnsupportedEncodingException
+    public static byte[] getBytes( final Stream<?> p_input ) throws IOException
     {
-        final StringBuilder l_result = new StringBuilder();
-        ( flatcollection( p_input ) ).forEach( i -> l_result.append( i.raw().toString() ) );
-        return l_result.toString().getBytes( "UTF-8" );
+        try
+        (
+            final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
+            final ObjectOutput l_object = new ObjectOutputStream( l_output )
+        )
+        {
+            p_input.forEach( i -> {
+                try
+                {
+                    l_object.writeObject( i );
+                }
+                catch ( final IOException l_exception )
+                {
+                    throw new RuntimeException( l_exception );
+                }
+            } );
+
+            return l_output.toByteArray();
+        }
     }
+
 
     /**
      * recursive stream of term values

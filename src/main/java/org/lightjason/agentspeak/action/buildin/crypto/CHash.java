@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.crypto;
 
 import com.google.common.hash.Hashing;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,20 +33,20 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 
 /**
  * hash algorithm.
  * The actions creates a hash values of datasets, the first argument is the name of the hasing algorithm
  * (Adler-32, CRC-32, CRC-32C, Murmur3-32, Murmur3-128, Siphash-2-4, MD2, MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512),
- * for all other arguments a hash value is calculated and the action returns the hash values back, only
- * if the hash algorithm is unknown the action wil fail
+ * for all other unflatten arguments a hash value is calculated and the action returns the hash values back and never fails
  *
  * @code [Hash1 | Hash2 | Hash3] = crypto/hash( "Adler-32 | CRC-32 | CRC-32C | ...", Dataset1, Dataset2, Dataset3 ); @endcode
  * @see https://en.wikipedia.org/wiki/Secure_Hash_Algorithm
@@ -72,17 +73,32 @@ public final class CHash extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        CCommon.flatcollection( p_argument )
+               .skip( 1 )
+               .map( ITerm::raw )
+               .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), bytes( p_context, i ) ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * converts an object to a byte array
+     *
+     * @param p_context execution context
+     * @param p_object object
+     * @return byte array
+     */
+    private static byte[] bytes( final IContext p_context, final Object p_object )
+    {
         try
         {
-            p_return.add( CRawTerm.from(
-                this.hash( p_argument.get( 0 ).<String>raw(), CCommon.getBytes( p_argument.subList( 1, p_argument.size() ) ) )
-            ) );
-
-            return CFuzzyValue.from( true );
+            return CCommon.getBytes( Stream.of( p_object ) );
         }
-        catch ( final UnsupportedEncodingException | NoSuchAlgorithmException l_exception )
+        catch ( final IOException l_exception )
         {
-            return CFuzzyValue.from( false );
+            throw new CRuntimeException( l_exception, p_context );
         }
     }
 
@@ -90,13 +106,12 @@ public final class CHash extends IBuildinAction
     /**
      * runs hashing function with difference between Google Guava hashing and Java default digest
      *
+     * @param p_context execution context
      * @param p_algorithm algorithm name
      * @param p_data byte data representation
      * @return hash value
-     *
-     * @throws NoSuchAlgorithmException on unknown hashing algorithm
      */
-    private String hash( final String p_algorithm, final byte[] p_data ) throws NoSuchAlgorithmException
+    private static String hash( final IContext p_context, final String p_algorithm, final byte[] p_data )
     {
         switch ( p_algorithm.trim().toLowerCase( Locale.ROOT ) )
         {
@@ -119,7 +134,14 @@ public final class CHash extends IBuildinAction
                 return Hashing.sipHash24().newHasher().putBytes( p_data ).hash().toString();
 
             default:
-                return String.format( "%032x", new BigInteger( 1, MessageDigest.getInstance( p_algorithm ).digest( p_data ) ) );
+                try
+                {
+                    return String.format( "%032x", new BigInteger( 1, MessageDigest.getInstance( p_algorithm ).digest( p_data ) ) );
+                }
+                catch ( final NoSuchAlgorithmException l_exception )
+                {
+                    throw new CRuntimeException( l_exception, p_context );
+                }
         }
     }
 
