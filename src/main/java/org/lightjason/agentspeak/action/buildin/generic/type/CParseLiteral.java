@@ -56,7 +56,7 @@ public final class CParseLiteral extends IParse
         }
         catch ( final Exception l_exception )
         {
-            return new AbstractMap.SimpleImmutableEntry<>( false, null );
+            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.from( null ) );
         }
     }
 
