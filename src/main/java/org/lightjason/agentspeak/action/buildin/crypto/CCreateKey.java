@@ -71,7 +71,7 @@ public final class CCreateKey extends IBuildinAction
 
             return CFuzzyValue.from( true );
         }
-        catch ( final NoSuchAlgorithmException l_exception )
+        catch ( final NoSuchAlgorithmException | IllegalArgumentException l_exception )
         {
             return CFuzzyValue.from( false );
         }

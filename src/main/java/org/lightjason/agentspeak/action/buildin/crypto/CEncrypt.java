@@ -45,7 +45,7 @@ import java.util.List;
  * encrypting algorithm.
  * Encrypts a set of datasets, which can be complex objects, the first argument of the action
  * is the encrypting key and all other arguments are datasets, the action returns all encypted
- * datasets and fails if one encryption fails
+ * datasets and fails if one encryption fails or on a wrong algorithm
  *
  * @code [Encypt1 | Encrypt2 | Encypt3] = crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 ); @endcode
  */
@@ -64,9 +64,18 @@ public final class CEncrypt extends IBuildinAction
     )
     {
         final Key l_key = p_argument.get( 0 ).raw();
-        final EAlgorithm l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+        final EAlgorithm l_algorithm;
+        try
+        {
+            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
 
-        return CFuzzyValue.from( p_argument.subList( 1, p_argument.size() ).stream()
+        return CFuzzyValue.from( p_argument.stream()
+                                           .skip( 1 )
                                            .map( i -> SerializationUtils.serialize( i.raw() ) )
                                            .allMatch( i -> {
                                                try
