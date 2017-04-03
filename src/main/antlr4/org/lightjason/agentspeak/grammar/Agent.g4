@@ -35,10 +35,13 @@ import AgentSpeak;
  * initial grammar rule
  **/
 agent :
-    initial_beliefs?
-    initial_goal?
-    logicrules?
-    plans
+    |
+    (
+        initial_beliefs?
+        initial_goal?
+        logicrules?
+        plans
+    )
     ;
 
 /**

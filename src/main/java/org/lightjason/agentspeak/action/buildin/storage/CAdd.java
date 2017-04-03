@@ -88,6 +88,7 @@ public final class CAdd extends IStorage
         return CFuzzyValue.from(
             StreamUtils.windowed(
                 p_argument.stream(),
+                2,
                 2
             ).allMatch( i -> this.add( p_context.agent(), i.get( 0 ).<String>raw(), i.get( 1 ) ) )
         );
