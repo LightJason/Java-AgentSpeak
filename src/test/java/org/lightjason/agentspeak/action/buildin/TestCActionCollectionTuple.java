@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.collection.tuple.CCreate;
+import org.lightjason.agentspeak.action.buildin.collection.tuple.CFlat;
 import org.lightjason.agentspeak.action.buildin.collection.tuple.CSet;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -91,6 +92,32 @@ public final class TestCActionCollectionTuple
 
 
     /**
+     * test tuple flat
+     */
+    @Test
+    public final void testflat()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CFlat().execute(
+            null,
+            false,
+            Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 4 );
+
+        Assert.assertEquals( l_return.get( 0 ).raw(), "foo" );
+        Assert.assertEquals( l_return.get( 1 ).raw(), "bar" );
+
+        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1 );
+        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 2 );
+    }
+
+
+    /**
      * test call
      *
      * @param p_args command-line arguments
@@ -101,6 +128,7 @@ public final class TestCActionCollectionTuple
 
         l_test.testcreate();
         l_test.testset();
+        l_test.testflat();
     }
 
 }

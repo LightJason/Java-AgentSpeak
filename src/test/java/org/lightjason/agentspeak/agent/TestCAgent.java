@@ -73,7 +73,7 @@ public final class TestCAgent
     /**
      * enable printing of test-data
      */
-    private static final boolean PRINTENABLE = true;
+    private static final boolean PRINTENABLE = false;
     /**
      * list with successful plans
      */

@@ -39,9 +39,11 @@ import java.util.List;
 /**
  * creates the complement between lists.
  * The action uses two input arguments \f$ \mathbb{A} \f$ and \f$ \mathbb{B} \f$ and returns a
- * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$, the action fails never
+ * list of all elements which contains \f$ \mathbb{A} \setminus \mathbb{B} \f$, the action fails
+ * on empty lists
  *
  * @code L = collection/list/complement( [1,2,3], [3,4,5] ); @endcode
+ * @see https://en.wikipedia.org/wiki/Complement_(set_theory)
  */
 public final class CComplement extends IBuildinAction
 {
@@ -64,6 +66,9 @@ public final class CComplement extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        if ( ( p_argument.get( 0 ).<List<?>>raw().isEmpty() ) && ( p_argument.get( 1 ).<List<?>>raw().isEmpty() ) )
+            return CFuzzyValue.from( false );
+
         // all arguments must be lists, first argument is the full list
         final Collection<Object> l_result = new LinkedList<>( p_argument.get( 0 ).<Collection<Object>>raw() );
         l_result.removeAll( p_argument.get( 1 ).<Collection<Object>>raw() );

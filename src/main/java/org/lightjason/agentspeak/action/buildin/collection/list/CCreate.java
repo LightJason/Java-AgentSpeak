@@ -31,8 +31,8 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +68,7 @@ public final class CCreate extends IBuildinAction
     )
     {
         final List<?> l_list = p_argument.isEmpty()
-                               ? new LinkedList<>()
+                               ? new ArrayList<>()
                                : CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(

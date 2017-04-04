@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -64,11 +63,9 @@ public final class CGet extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        final List<?> l_list = l_arguments.get( 0 ).<List<?>>raw();
+        final List<?> l_list = p_argument.get( 0 ).<List<?>>raw();
 
-        l_arguments.stream()
-                   .skip( 1 )
+        CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) )
                    .map( i -> i.<Number>raw().intValue() )
                    .map( l_list::get )
                    .map( CRawTerm::from )
