@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.text.MessageFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,6 +73,11 @@ public final class TestCActionCollection
 
             new ImmutablePair<>(
                 Stream.of( CRawTerm.from( Stream.of( 1, "test" ).collect( Collectors.toList() ) ) ).collect( Collectors.toList() ),
+                new int[]{2}
+            ),
+
+            new ImmutablePair<>(
+                Stream.of( CRawTerm.from( new AbstractMap.SimpleEntry<>( "a", 1 ) ) ).collect( Collectors.toList() ),
                 new int[]{2}
             ),
 

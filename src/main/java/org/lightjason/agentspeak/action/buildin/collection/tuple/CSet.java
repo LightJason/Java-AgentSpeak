@@ -23,10 +23,8 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.tuple;
 
-import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -38,45 +36,31 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates a tuple of two elements.
- * The action creates tuples of all unflatten input arguments
- * and fail sif the number if less than two unflatten arguments
+ * sets a value within a tuple.
+ * The action sets the value within the first argument
+ * in each tuple argument, the action never fails
  *
- * @code [A|B] = collection/tuple/create("A", "1", ["B", "2"]); @endcode
+ * @code collection/tuple/set( "value", T1, T2, T3 ); @endcode
  */
-public final class CCreate extends IBuildinAction
+public final class CSet extends IBuildinAction
 {
-    /**
-     * ctor
-     */
-    public CCreate()
-    {
-        super( 3 );
-    }
-
     @Override
-    public final int minimalArgumentNumber()
+    public int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
 
-
-        StreamUtils
-            .windowed( l_arguments.stream().map( ITerm::raw ), 2, 2 )
-            .map( i -> new AbstractMap.SimpleEntry<>( i.get( 0 ), i.get( 1 ) ) )
-            .map( CRawTerm::from )
-            .forEach( p_return::add );
+        l_arguments.stream()
+               .skip( 1 )
+               .map( ITerm::<AbstractMap.Entry<Object, Object>>raw )
+               .forEach( i -> i.setValue( l_arguments.get( 0 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
-
 }
