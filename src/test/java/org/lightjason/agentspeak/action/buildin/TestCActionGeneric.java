@@ -28,6 +28,10 @@ import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.generic.CPrint;
 import org.lightjason.agentspeak.action.buildin.generic.CThrow;
 import org.lightjason.agentspeak.action.buildin.generic.type.CCreateLiteral;
+import org.lightjason.agentspeak.action.buildin.generic.type.CIs;
+import org.lightjason.agentspeak.action.buildin.generic.type.CIsNull;
+import org.lightjason.agentspeak.action.buildin.generic.type.CIsNumeric;
+import org.lightjason.agentspeak.action.buildin.generic.type.CIsString;
 import org.lightjason.agentspeak.action.buildin.generic.type.CParseFloat;
 import org.lightjason.agentspeak.action.buildin.generic.type.CParseInt;
 import org.lightjason.agentspeak.action.buildin.generic.type.CParseLiteral;
@@ -239,6 +243,118 @@ public final class TestCActionGeneric
     }
 
 
+    /**
+     * test "is" action
+     */
+    @Test
+    public final void testis()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CIs().execute(
+            null,
+            false,
+            Stream.of( "test type string", "java.lang.String", "java.lang.Number" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
+
+        l_return.clear();
+
+
+        new CIs().execute(
+            null,
+            false,
+            Stream.of( 123, "java.lang.Number", "java.lang.Integer", "java.lang.Long" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 2 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test "isnull"action
+     */
+    @Test
+    public final void testisnull()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CIsNull().execute(
+            null,
+            false,
+            Stream.of( "test type string", null ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test "isnumeric" action
+     */
+    @Test
+    public final void testisnumeric()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CIsNumeric().execute(
+            null,
+            false,
+            Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 5 );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 3 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 4 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test "isstring" action
+     */
+    @Test
+    public final void testisstring()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CIsString().execute(
+            null,
+            false,
+            Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 7 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 3 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 4 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 5 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 6 ).<Boolean>raw() );
+    }
+
+
 
     /**
      * text call
@@ -252,10 +368,16 @@ public final class TestCActionGeneric
 
         l_test.testprint();
         l_test.testcreateliteral();
+
         l_test.testparseliteral();
         l_test.testparseint();
         l_test.testparsefloat();
+
         l_test.testtype();
+        l_test.testis();
+        l_test.testisnull();
+        l_test.testisnumeric();
+        l_test.testisstring();
 
         try
         {
