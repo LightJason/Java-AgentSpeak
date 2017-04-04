@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -76,8 +77,8 @@ public final class CSize extends IBuildinAction
      */
     private static long size( final ITerm p_term )
     {
-        if ( CCommon.rawvalueAssignableTo( p_term, List.class ) )
-            return p_term.<List<?>>raw().size();
+        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+            return p_term.<Collection<?>>raw().size();
 
         if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
             return p_term.<Map<?, ?>>raw().size();

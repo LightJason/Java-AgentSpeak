@@ -47,8 +47,8 @@ import java.util.stream.Stream;
 /**
  * default behaviour of a beliefbase
  *
- * @todo check reference counting on delete views
  * @tparam T agent type
+ * @todo check reference counting on delete views
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references

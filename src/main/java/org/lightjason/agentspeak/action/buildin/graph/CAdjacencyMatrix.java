@@ -41,7 +41,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,10 +104,6 @@ public final class CAdjacencyMatrix extends IBuildinAction
 
 
         // cost definition
-        final Map<?, Number> l_cost = CCommon.rawvalueAssignableTo( l_arguments.get( l_skip ), Map.class )
-                                      ? l_arguments.get( l_skip ).<Map<?, Number>>raw()
-                                      : Collections.emptyMap();
-
         final double l_defaultcost = CCommon.rawvalueAssignableTo( l_arguments.get( l_skip ), Number.class )
                                      ? l_arguments.get( l_skip ).<Number>raw().doubleValue()
                                      : 1;
