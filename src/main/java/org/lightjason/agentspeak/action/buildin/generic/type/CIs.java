@@ -25,28 +25,24 @@ package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
 /**
  * action to check if a type is a class.
- * The action checks the type of a value
- * if it is assignable to a class type,
- * the first argument is the value, all
- * other values are strings witha full-qualified
- * class name, the action returns for each class
- * name a boolean if it is assignable, the action
- * never fails
+ * The first argument defines a full-qualified Java
+ * class name, and all other arguments are checked if
+ * that are instances of this class, the action fails
+ * if one of the arguments are not an instance of this
+ * class or the class does not exist
  *
- * @code [A|B|C|D] = generic/type( X, "java.lang.String", "java.lang.Number", "java.lang.Double", "java.lang.Long" ); @endcode
+ * @code generic/type( "java.lang.String", X, Y, Z ); @endcode
  */
 public final class CIs extends IBuildinAction
 {
@@ -71,26 +67,22 @@ public final class CIs extends IBuildinAction
     )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final Class<?> l_class;
+        try
+        {
+            l_class = Class.forName( l_arguments.get( 0 ).<String>raw() );
+        }
+        catch ( final ClassNotFoundException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
 
-        l_arguments.stream()
+        return CFuzzyValue.from(
+            l_arguments.stream()
                    .skip( 1 )
-                   .map( ITerm::<String>raw )
-                   .map( i -> {
-                       try
-                       {
-                           return Class.forName( i );
-                       }
-                       catch ( final ClassNotFoundException l_exception )
-                       {
-                           return null;
-                       }
-                   } )
-                   .filter( Objects::nonNull )
-                   .map( i -> i.isAssignableFrom( l_arguments.get( 0 ).raw().getClass() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+                   .map( ITerm::raw )
+                   .allMatch( i -> l_class.isAssignableFrom( i.getClass() ) )
+        );
     }
 
 }

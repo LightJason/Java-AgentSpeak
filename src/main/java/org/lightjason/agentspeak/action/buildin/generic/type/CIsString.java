@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -36,11 +35,10 @@ import java.util.List;
 
 /**
  * action to check if a type is a string.
- * All arguments are check if it is a string,
- * and a boolean flag for each argument is returned,
- * the action never fails
+ * All arguments are checked if all are string values,
+ * the action fails if one of the arguments is not a string
  *
- * @code [A|B|C] generic/type/isstring( "foo", "bar", 123 ); @endcode
+ * @code generic/type/isstring( "foo", "bar", 123 ); @endcode
  */
 public final class CIsString extends IBuildinAction
 {
@@ -64,13 +62,11 @@ public final class CIsString extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
                .map( ITerm::raw )
-               .map( i -> ( i instanceof String ) || ( i instanceof Character ) || ( i instanceof CharSequence) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+               .allMatch( i -> ( i instanceof String ) || ( i instanceof Character ) || ( i instanceof CharSequence ) )
+        );
     }
 
 }

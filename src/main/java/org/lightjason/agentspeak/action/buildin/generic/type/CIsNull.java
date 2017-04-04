@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.generic.type;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -37,10 +36,11 @@ import java.util.Objects;
 
 /**
  * action to check if a value is a null value.
- * The actions checks all arguments if the values
- * are null, the action never fails and returns booleans
+ * All arguments are checked if all are null
+ * values, the action fails if one of the
+ * arguments is not null
  *
- * @code [A|B] = generic/type(X,Y); @endcode
+ * @code generic/type(X,Y); @endcode
  */
 public final class CIsNull extends IBuildinAction
 {
@@ -64,13 +64,11 @@ public final class CIsNull extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::raw )
-               .map( Objects::isNull )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
+                   .map( ITerm::raw )
+                   .allMatch( Objects::isNull )
+        );
     }
 
 }

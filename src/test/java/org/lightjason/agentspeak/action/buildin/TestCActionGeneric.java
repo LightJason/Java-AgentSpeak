@@ -249,35 +249,25 @@ public final class TestCActionGeneric
     @Test
     public final void testis()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CIs().execute(
-            null,
-            false,
-            Stream.of( "test type string", "java.lang.String", "java.lang.Number" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+        Assert.assertFalse(
+            new CIs().execute(
+                null,
+                false,
+                Stream.of( "java.lang.String", "text foo", 123, 88.98 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
-        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
-
-        l_return.clear();
-
-
-        new CIs().execute(
-            null,
-            false,
-            Stream.of( 123, "java.lang.Number", "java.lang.Integer", "java.lang.Long" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+        Assert.assertTrue(
+            new CIs().execute(
+                null,
+                false,
+                Stream.of( "java.lang.Number", 123, 44.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
         );
-
-        Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
-        Assert.assertFalse( l_return.get( 2 ).<Boolean>raw() );
     }
 
 
@@ -287,19 +277,25 @@ public final class TestCActionGeneric
     @Test
     public final void testisnull()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CIsNull().execute(
-            null,
-            false,
-            Stream.of( "test type string", null ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+        Assert.assertFalse(
+            new CIsNull().execute(
+                null,
+                false,
+                Stream.of( "test type string", null ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+        Assert.assertTrue(
+            new CIsNull().execute(
+                null,
+                false,
+                Stream.of( CRawTerm.from( null ) ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 
@@ -309,22 +305,25 @@ public final class TestCActionGeneric
     @Test
     public final void testisnumeric()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CIsNumeric().execute(
-            null,
-            false,
-            Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+        Assert.assertFalse(
+            new CIsNumeric().execute(
+                null,
+                false,
+                Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 5 );
-        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 3 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 4 ).<Boolean>raw() );
+        Assert.assertTrue(
+            new CIsNumeric().execute(
+                null,
+                false,
+                Stream.of( 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 
@@ -334,24 +333,26 @@ public final class TestCActionGeneric
     @Test
     public final void testisstring()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CIsString().execute(
-            null,
-            false,
-            Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+        Assert.assertFalse(
+            new CIsString().execute(
+                null,
+                false,
+                Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
         );
 
-        Assert.assertEquals( l_return.size(), 7 );
-        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
-        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
-        Assert.assertFalse( l_return.get( 3 ).<Boolean>raw() );
-        Assert.assertFalse( l_return.get( 4 ).<Boolean>raw() );
-        Assert.assertFalse( l_return.get( 5 ).<Boolean>raw() );
-        Assert.assertTrue( l_return.get( 6 ).<Boolean>raw() );
+
+        Assert.assertTrue(
+            new CIsString().execute(
+                null,
+                false,
+                Stream.of( "okay 1", 'c', "ok 2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 
