@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -346,7 +345,7 @@ public final class TestCActionCollectionList
             new CSubList().execute(
                 null,
                 false,
-                Collections.emptyList(),
+                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -364,7 +363,7 @@ public final class TestCActionCollectionList
         new CSubList().execute(
             null,
             false,
-            Stream.of( Stream.of( "a", "b", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( Stream.of( "ax", "bx", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -379,9 +378,9 @@ public final class TestCActionCollectionList
 
         Assert.assertEquals( l_return.size(), 3 );
 
-        Assert.assertArrayEquals( l_return.get(0).<List<?>>raw().toArray(), Stream.of( "a", "b" ).toArray() );
-        Assert.assertArrayEquals( l_return.get(1).<List<?>>raw().toArray(), Stream.of( "c", 1 ).toArray() );
-        Assert.assertArrayEquals( l_return.get(2).<List<?>>raw().toArray(), Stream.of( 9 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "ax", "bx" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "c", 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 2 ).<List<?>>raw().toArray(), Stream.of( 9 ).toArray() );
     }
 
 
