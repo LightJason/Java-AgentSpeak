@@ -343,11 +343,11 @@ public final class TestCActionCollectionList
     {
         Assert.assertFalse(
             new CSubList().execute(
-                null,
-                false,
-                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
-                Collections.emptyList()
+                 null,
+                 false,
+                 Stream.of( new ArrayList<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                 Collections.emptyList(),
+                 Collections.emptyList()
             ).value()
         );
     }
@@ -406,6 +406,7 @@ public final class TestCActionCollectionList
         l_test.testrange();
         l_test.testrangeerror();
         l_test.testsublist();
+        l_test.testsublisterror();
 
     }
 

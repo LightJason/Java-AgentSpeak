@@ -71,7 +71,7 @@ public final class CSubList extends IBuildinAction
         final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatcollection( p_argument.stream().skip( 1 ) ) )
                                               .collect( Collectors.toList() );
 
-        if ( l_arguments.size() % 2 == 0 )
+        if ( ( l_arguments.size() % 2 == 0 ) || ( l_arguments.size() < 3 ) )
             return CFuzzyValue.from( false );
 
         StreamUtils.windowed(
