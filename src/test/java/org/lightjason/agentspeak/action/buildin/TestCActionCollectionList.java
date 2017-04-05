@@ -38,10 +38,13 @@ import org.lightjason.agentspeak.action.buildin.collection.list.CRemove;
 import org.lightjason.agentspeak.action.buildin.collection.list.CReverse;
 import org.lightjason.agentspeak.action.buildin.collection.list.CSet;
 import org.lightjason.agentspeak.action.buildin.collection.list.CSubList;
+import org.lightjason.agentspeak.action.buildin.collection.list.CUnique;
+import org.lightjason.agentspeak.action.buildin.collection.list.CZip;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -440,6 +443,101 @@ public final class TestCActionCollectionList
 
 
     /**
+     * test zip action error
+     */
+    @Test
+    public final void testziperror()
+    {
+        Assert.assertFalse(
+            new CZip().execute(
+                null,
+                false,
+                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+
+    /**
+     * test zip action
+     */
+    @Test
+    public final void testzip()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CZip().execute(
+            null,
+            false,
+            IntStream.range( 0, 6 ).boxed().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 3 );
+
+        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getKey(), 0 );
+        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 0 ).getValue(), 3 );
+
+        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getKey(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 1 ).getValue(), 4 );
+
+        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getKey(), 2 );
+        Assert.assertEquals( l_return.get( 0 ).<List<AbstractMap.SimpleEntry<?, ?>>>raw().get( 2 ).getValue(), 5 );
+
+
+
+        new CZip().execute(
+            null,
+            true,
+            Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+
+    }
+
+
+    /**
+     * test unique action
+     */
+    @Test
+    public final void testunique()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CUnique().execute(
+            null,
+            false,
+            Stream.of( 1, 1, 3, 4, 5, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 4 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 1, 3, 4, 5 ).toArray() );
+
+        new CUnique().execute(
+            null,
+            true,
+            Stream.of( 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+    }
+
+
+    /**
      * test call
      *
      * @param p_args command-line arguments
@@ -464,6 +562,9 @@ public final class TestCActionCollectionList
         l_test.testsublisterror();
         l_test.testflat();
         l_test.testflatconcat();
+        l_test.testziperror();
+        l_test.testzip();
+        l_test.testunique();
 
     }
 

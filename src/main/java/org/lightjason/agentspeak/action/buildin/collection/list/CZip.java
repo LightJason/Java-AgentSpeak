@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.collection.list;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -32,7 +33,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.AbstractMap;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,9 +40,10 @@ import java.util.stream.Collectors;
 
 /**
  * creates a list of tuples with elements of two lists.
- * Creates list of tupels of both list arguments
- * \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$ and returns
- * a list of \f$ \langle x_i, y_i \rangle \f$, the action fails never
+ * Creates list of tupels of the first half arguments and the
+ * second half arguments with \f$ \mathbb{X} \f$ and \f$ \mathbb{Y} \f$
+ * and result \f$ \langle x_i, y_i \rangle \f$, the action fails
+ * on an odd number of arguments
  *
  * @code T = collection/list/zip( [1,3,5,7], [2,4,6,8] ); @endcode
  */
@@ -59,7 +60,7 @@ public final class CZip extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -67,9 +68,13 @@ public final class CZip extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
+        final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        if ( l_arguments.size() % 2 == 1 )
+            return CFuzzyValue.from( false );
+
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
-            p_argument.get( 0 ).<Collection<?>>raw().stream(),
-            p_argument.get( 1 ).<Collection<?>>raw().stream(),
+            l_arguments.stream().limit( l_arguments.size() / 2 ),
+            l_arguments.stream().skip( l_arguments.size() / 2 ),
             AbstractMap.SimpleEntry::new
         ).collect( Collectors.toList() );
 

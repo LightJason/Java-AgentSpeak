@@ -65,7 +65,6 @@ public final class CUnique extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument list reference
         final List<?> l_result = new ArrayList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
         p_return.add( CRawTerm.from(
