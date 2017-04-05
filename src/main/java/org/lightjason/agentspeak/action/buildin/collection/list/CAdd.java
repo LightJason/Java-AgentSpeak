@@ -33,20 +33,18 @@ import java.util.List;
 
 
 /**
- * adds an element to the list.
- * Sets an element in each list, the first
- * argument is the index in the liste, the
- * second is the value, all other are list objects,
- * the action fails never
+ * action to add elements to a list.
+ * The action adds the first argument to all
+ * other list arguments, the action never fails
  *
- * @code collection/list/set( 2, "a string value", L1, L2, L3 ); @endcode
+ * @code collection/list/add( Value, L1, L2, L3 ); @endcode
  */
-public final class CSet extends IBuildinAction
+public final class CAdd extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CSet()
+    public CAdd()
     {
         super( 3 );
     }
@@ -54,7 +52,7 @@ public final class CSet extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -63,11 +61,10 @@ public final class CSet extends IBuildinAction
     )
     {
         p_argument.stream()
-                  .skip( 2 )
+                  .skip( 1 )
                   .map( ITerm::<List<Object>>raw )
-                  .forEach( i -> i.set( p_argument.get( 0 ).<Number>raw().intValue(), p_argument.get( 1 ).raw() ) );
+                  .forEach( i -> i.add( p_argument.get( 0 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
-
 }

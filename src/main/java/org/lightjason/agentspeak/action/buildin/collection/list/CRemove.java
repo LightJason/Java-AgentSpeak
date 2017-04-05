@@ -71,7 +71,6 @@ public final class CRemove extends IBuildinAction
         final Set<Integer> l_removed = new HashSet<>();
 
         CCommon.flatcollection( p_argument.stream().skip( 1 ) )
-               .skip( 1 )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
                .map( i -> {
@@ -81,10 +80,15 @@ public final class CRemove extends IBuildinAction
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
-        final List<Object> l_result = IntStream.range( 0, l_list.size() ).boxed().filter( i -> !l_removed.contains( i ) ).map( l_list::get ).collect( Collectors.toList() );
+        final List<Object> l_result = IntStream.range( 0, l_list.size() )
+                                               .boxed()
+                                               .parallel()
+                                               .filter( i -> !l_removed.contains( i ) )
+                                               .map( l_list::get )
+                                               .collect( Collectors.toList() );
 
         l_list.clear();
-        l_list.addAll( l_removed );
+        l_list.addAll( l_result );
 
         return CFuzzyValue.from( true );
     }

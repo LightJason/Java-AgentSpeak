@@ -26,11 +26,13 @@ package org.lightjason.agentspeak.action.buildin;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.action.buildin.collection.list.CAdd;
 import org.lightjason.agentspeak.action.buildin.collection.list.CComplement;
 import org.lightjason.agentspeak.action.buildin.collection.list.CCreate;
 import org.lightjason.agentspeak.action.buildin.collection.list.CGet;
 import org.lightjason.agentspeak.action.buildin.collection.list.CRemove;
 import org.lightjason.agentspeak.action.buildin.collection.list.CReverse;
+import org.lightjason.agentspeak.action.buildin.collection.list.CSet;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -202,26 +204,81 @@ public final class TestCActionCollectionList
     {
         final Random l_random = new Random();
 
-        final List<?> l_list = IntStream.range( 0, l_random.nextInt( 100 ) + 1 ).map( i -> l_random.nextInt() ).boxed().collect( Collectors.toList() );
-        final List<?> l_index = IntStream.range( 0, l_list.size() / 3 ).map( i ->  l_random.nextInt( l_list.size() ) ).boxed().collect( Collectors.toList() );
+        final List<?> l_elements = IntStream.range( 0, l_random.nextInt( 100 ) + 1 ).map( i -> l_random.nextInt() ).boxed().collect( Collectors.toList() );
+        final List<?> l_list = new ArrayList<>( l_elements );
+        final List<Integer> l_index = new ArrayList<>(
+                                        IntStream.range( 0, l_list.size() / 3 )
+                                                 .map( i ->  l_random.nextInt( l_list.size() ) )
+                                                 .boxed()
+                                                 .collect( Collectors.toSet() )
+                                      );
 
-        System.out.println( l_list );
-        System.out.println( l_index );
-
+        final int l_startsize = l_list.size();
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRemove().execute(
             null,
             false,
             Stream.concat(
-                Stream.of( CRawTerm.from( l_list ) ),
-                l_index.stream().map( CRawTerm::from )
-            ).collect( Collectors.toList() ),
+                Stream.of( l_list ),
+                l_index.stream()
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
-        System.out.println( l_return );
+        Assert.assertEquals( l_startsize, l_list.size() + l_index.size() );
+        Assert.assertTrue(
+            l_index.parallelStream()
+                   .map( l_elements::get )
+                   .allMatch( i -> l_return.parallelStream().map( ITerm::<Number>raw ).anyMatch( j -> j.equals( i ) ) )
+        );
+    }
+
+
+    /**
+     * test set action
+     */
+    @Test
+    public final void testset()
+    {
+        final List<?> l_list1 = Stream.of( "" ).collect( Collectors.toList() );
+        final List<?> l_list2 = Stream.of( "abc", 123, true ).collect( Collectors.toList() );
+
+        new CSet().execute(
+            null,
+            false,
+            Stream.of( CRawTerm.from( 0 ), CRawTerm.from( "xxx" ), CRawTerm.from( l_list1 ), CRawTerm.from( l_list2 ) ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_list1.size(), 1 );
+        Assert.assertEquals( l_list1.get( 0 ), "xxx" );
+
+        Assert.assertEquals( l_list2.size(), 3 );
+        Assert.assertEquals( l_list2.get( 0 ), "xxx" );
+    }
+
+
+    /**
+     * test add action
+     */
+    @Test
+    public final void testadd()
+    {
+        final List<?> l_list = new ArrayList<>();
+
+        new CAdd().execute(
+            null,
+            false,
+            Stream.of( CRawTerm.from( "xyz" ), CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_list.size(), 1 );
+        Assert.assertEquals( l_list.get( 0 ), "xyz" );
     }
 
 
@@ -243,6 +300,8 @@ public final class TestCActionCollectionList
         l_test.testget();
         l_test.testreverse();
         l_test.testremove();
+        l_test.testset();
+        l_test.testadd();
 
     }
 
