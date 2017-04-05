@@ -24,11 +24,14 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.collection.list.CAdd;
 import org.lightjason.agentspeak.action.buildin.collection.list.CComplement;
 import org.lightjason.agentspeak.action.buildin.collection.list.CCreate;
+import org.lightjason.agentspeak.action.buildin.collection.list.CFlat;
+import org.lightjason.agentspeak.action.buildin.collection.list.CFlatConcat;
 import org.lightjason.agentspeak.action.buildin.collection.list.CGet;
 import org.lightjason.agentspeak.action.buildin.collection.list.CRange;
 import org.lightjason.agentspeak.action.buildin.collection.list.CRemove;
@@ -385,6 +388,58 @@ public final class TestCActionCollectionList
 
 
     /**
+     * test flat action
+     */
+    @Test
+    public final void testflat()
+    {
+        final Random l_random = new Random();
+
+        final List<ITerm> l_return = new ArrayList<>();
+        final List<?> l_list = IntStream.range( 0, l_random.nextInt( 100 ) + 1 )
+                                        .mapToObj( i -> RandomStringUtils.random( l_random.nextInt( 100 ) + 1 ) )
+                                        .collect( Collectors.toList() );
+
+        new CFlat().execute(
+            null,
+            false,
+            l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), l_list.size() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_list.toArray() );
+    }
+
+
+    /**
+     * test flatconcat action
+     */
+    @Test
+    public final void testflatconcat()
+    {
+        final Random l_random = new Random();
+
+        final List<ITerm> l_return = new ArrayList<>();
+        final List<?> l_list = IntStream.range( 0, l_random.nextInt( 100 ) + 1 )
+                                        .mapToObj( i -> RandomStringUtils.random( l_random.nextInt( 100 ) + 1 ) )
+                                        .collect( Collectors.toList() );
+
+        new CFlatConcat().execute(
+            null,
+            false,
+            l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), l_list.toArray() );
+    }
+
+
+    /**
      * test call
      *
      * @param p_args command-line arguments
@@ -407,6 +462,8 @@ public final class TestCActionCollectionList
         l_test.testrangeerror();
         l_test.testsublist();
         l_test.testsublisterror();
+        l_test.testflat();
+        l_test.testflatconcat();
 
     }
 
