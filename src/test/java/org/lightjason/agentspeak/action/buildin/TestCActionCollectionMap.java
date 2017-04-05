@@ -42,6 +42,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * test action map
+ */
 public final class TestCActionCollectionMap
 {
 
@@ -62,7 +65,7 @@ public final class TestCActionCollectionMap
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).<Map<?,?>>raw().isEmpty() );
+        Assert.assertTrue( l_return.get( 0 ).<Map<?, ?>>raw().isEmpty() );
 
 
         new CCreate().execute(
@@ -74,10 +77,10 @@ public final class TestCActionCollectionMap
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertFalse( l_return.get( 1 ).<Map<?,?>>raw().isEmpty() );
+        Assert.assertFalse( l_return.get( 1 ).<Map<?, ?>>raw().isEmpty() );
 
-        Assert.assertArrayEquals( l_return.get( 1 ).<Map<?,?>>raw().keySet().toArray(), Stream.of( "a", "b" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<Map<?,?>>raw().values().toArray(), Stream.of( 1, 2 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<Map<?, ?>>raw().keySet().toArray(), Stream.of( "a", "b" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<Map<?, ?>>raw().values().toArray(), Stream.of( 1, 2 ).toArray() );
 
 
         new CCreate().execute(
@@ -89,7 +92,7 @@ public final class TestCActionCollectionMap
         );
 
         Assert.assertEquals( l_return.size(), 3 );
-        Assert.assertTrue( l_return.get( 2 ).<Map<?,?>>raw() instanceof ConcurrentHashMap<?,?> );
+        Assert.assertTrue( l_return.get( 2 ).<Map<?, ?>>raw() instanceof ConcurrentHashMap<?, ?> );
     }
 
 
@@ -99,7 +102,7 @@ public final class TestCActionCollectionMap
     @Test
     public final void testkeysvalues()
     {
-        final Map<?,?> l_map = StreamUtils.zip(
+        final Map<?, ?> l_map = StreamUtils.zip(
             Stream.of( "foo", "bar", "yyy", "xxx" ),
             Stream.of( 1, 2, 3, 4 ),
             AbstractMap.SimpleImmutableEntry::new
