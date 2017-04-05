@@ -24,21 +24,27 @@
 package org.lightjason.agentspeak.action.buildin.collection.list;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
- * returns an element of the list by the index.
+ * removes an element of the list by the index.
  * Removes an element by the list index, the first argument is the
- * list object, the second argument is the index, the action fails never
+ * list object, all other element indices which should removed, the
+ * action returns the removed arguments and never fails
  *
- * @code collection/list/remove( L, 3 ); @endcode
+ * @code [A|B|C] = collection/list/remove( L, 3, [4, [5]] ); @endcode
  */
 public final class CRemove extends IBuildinAction
 {
@@ -61,12 +67,25 @@ public final class CRemove extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument list reference, second key-value
-        p_return.add(
-            CRawTerm.from(
-                p_argument.get( 0 ).<List<?>>raw().remove( p_argument.get( 1 ).<Number>raw().intValue() )
-            )
-        );
+        final List<Object> l_list = p_argument.get( 0 ).<List<Object>>raw();
+        final Set<Integer> l_removed = new HashSet<>();
+
+        CCommon.flatcollection( p_argument.stream().skip( 1 ) )
+               .skip( 1 )
+               .map( ITerm::<Number>raw )
+               .map( Number::intValue )
+               .map( i -> {
+                   l_removed.add( i );
+                   return l_list.get( i );
+               } )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
+        final List<Object> l_result = IntStream.range( 0, l_list.size() ).boxed().filter( i -> !l_removed.contains( i ) ).map( l_list::get ).collect( Collectors.toList() );
+
+        l_list.clear();
+        l_list.addAll( l_removed );
+
         return CFuzzyValue.from( true );
     }
 

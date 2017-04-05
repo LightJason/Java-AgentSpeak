@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.collection.list.CComplement;
 import org.lightjason.agentspeak.action.buildin.collection.list.CCreate;
 import org.lightjason.agentspeak.action.buildin.collection.list.CGet;
+import org.lightjason.agentspeak.action.buildin.collection.list.CRemove;
 import org.lightjason.agentspeak.action.buildin.collection.list.CReverse;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -37,6 +38,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -192,6 +194,38 @@ public final class TestCActionCollectionList
     }
 
 
+    /**
+     * test remove action
+     */
+    @Test
+    public final void testremove()
+    {
+        final Random l_random = new Random();
+
+        final List<?> l_list = IntStream.range( 0, l_random.nextInt( 100 ) + 1 ).map( i -> l_random.nextInt() ).boxed().collect( Collectors.toList() );
+        final List<?> l_index = IntStream.range( 0, l_list.size() / 3 ).map( i ->  l_random.nextInt( l_list.size() ) ).boxed().collect( Collectors.toList() );
+
+        System.out.println( l_list );
+        System.out.println( l_index );
+
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CRemove().execute(
+            null,
+            false,
+            Stream.concat(
+                Stream.of( CRawTerm.from( l_list ) ),
+                l_index.stream().map( CRawTerm::from )
+            ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        System.out.println( l_return );
+    }
+
+
+
 
     /**
      * test call
@@ -208,6 +242,7 @@ public final class TestCActionCollectionList
         l_test.testcomplement();
         l_test.testget();
         l_test.testreverse();
+        l_test.testremove();
 
     }
 

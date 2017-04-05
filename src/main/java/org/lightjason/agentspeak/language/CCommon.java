@@ -262,6 +262,18 @@ public final class CCommon
      */
     public static Stream<ITerm> flatcollection( final Collection<? extends ITerm> p_terms )
     {
+        return flattenToStream( p_terms.stream() );
+    }
+
+    /**
+     * flat term-in-term stream into
+     * a straight term list
+     *
+     * @param p_terms term stream
+     * @return flat term stream
+     */
+    public static Stream<ITerm> flatcollection( final Stream<? extends ITerm> p_terms )
+    {
         return flattenToStream( p_terms );
     }
 
@@ -322,18 +334,18 @@ public final class CCommon
     }
 
     /*
-     * recursive flattering of a list structure
+     * recursive flattering of a stream structure
      *
-     * @param p_list any collection type
+     * @param p_list any stream
      * @return term stream
      */
     @SuppressWarnings( "unchecked" )
-    private static Stream<ITerm> flattenToStream( final Collection<?> p_list )
+    private static Stream<ITerm> flattenToStream( final Stream<?> p_stream )
     {
-        return p_list.stream().flatMap( i -> {
+        return p_stream.flatMap( i -> {
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
-                   ? flattenToStream( (Collection<?>) l_value )
+                   ? flattenToStream( ( (Collection<?>) l_value ).stream() )
                    : Stream.of( CRawTerm.from( l_value ) );
         } );
     }
