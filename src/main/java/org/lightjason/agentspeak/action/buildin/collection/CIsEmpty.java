@@ -21,8 +21,9 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.list;
+package org.lightjason.agentspeak.action.buildin.collection;
 
+import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -31,15 +32,18 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * checks a list if empty.
- * Concats all list arguments (and removes the nested structures) and
- * returns a boolean of the empty check, the action fails never
+ * checks a collection is empty.
+ * All arguments are collection elements and for each argument
+ * a boolean flag for empty is returned, on all non-collection
+ * types empty is always false, the action never fails
  *
- * @code E = collection/list/isempty(L); @endcode
+ * @code [A|B|C] = collection/list/isempty(List, Map, MultiMap); @endcode
  */
 public final class CIsEmpty extends IBuildinAction
 {
@@ -62,9 +66,31 @@ public final class CIsEmpty extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // all arguments are list references
-        p_return.add( CRawTerm.from( CCommon.flatcollection( p_argument ).count() == 0 ) );
+        p_argument.stream()
+               .map( CIsEmpty::empty )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
+    }
+
+
+    /**
+     * checks a collection is empty
+     *
+     * @param p_term term value
+     * @return empty flag
+     */
+    private static boolean empty( final ITerm p_term )
+    {
+        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+            return p_term.<Collection<?>>raw().isEmpty();
+
+        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+            return p_term.<Map<?, ?>>raw().isEmpty();
+
+        return CCommon.rawvalueAssignableTo( p_term, Multimap.class ) && p_term.<Multimap<?, ?>>raw().isEmpty();
+
     }
 
 }

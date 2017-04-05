@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import com.google.common.collect.HashMultimap;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.action.buildin.collection.CIsEmpty;
 import org.lightjason.agentspeak.action.buildin.collection.CSize;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -40,6 +42,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -123,6 +126,29 @@ public final class TestCActionCollection
 
 
     /**
+     * test empty action
+     */
+    @Test
+    public final void testempty()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CIsEmpty().execute(
+            null,
+            false,
+            Stream.of( new ArrayList<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 5 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Boolean>raw ).toArray(), new Boolean[]{true, true, true, false, false} );
+    }
+
+
+    /**
      * test call
      *
      * @param p_args command line arguments
@@ -133,5 +159,7 @@ public final class TestCActionCollection
         Arrays.stream( TestCActionCollection.generate() )
               .map( i -> (Pair<List<ITerm>, int[]>) i )
               .forEach( i -> new TestCActionCollection().testsize( i ) );
+
+        new TestCActionCollection().testempty();
     }
 }

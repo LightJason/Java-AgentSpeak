@@ -67,16 +67,17 @@ public final class CZip extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first and second argument list references
         final List<AbstractMap.Entry<?, ?>> l_result = StreamUtils.zip(
             p_argument.get( 0 ).<Collection<?>>raw().stream(),
             p_argument.get( 1 ).<Collection<?>>raw().stream(),
-            AbstractMap.SimpleImmutableEntry::new
+            AbstractMap.SimpleEntry::new
         ).collect( Collectors.toList() );
 
-        p_return.add( CRawTerm.from(
-            p_parallel ? Collections.synchronizedList( l_result ) : l_result
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            )
+        );
 
         return CFuzzyValue.from( true );
     }

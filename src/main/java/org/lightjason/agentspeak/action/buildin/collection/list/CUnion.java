@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * creates the union between lists (not unique).
+ * creates the union between lists.
  * Creates the union of all arguemnts with removing nested
  * structures \f$ \cup X_i \forall i \in \mathbb{N} \f$, the action fails never
  *
@@ -68,9 +68,11 @@ public final class CUnion extends IBuildinAction
         // all arguments must be lists
         final List<?> l_result = new ArrayList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
-        p_return.add( CRawTerm.from(
-            p_parallel ? Collections.synchronizedList( l_result ) : l_result
-        ) );
+        p_return.add(
+            CRawTerm.from(
+                p_parallel ? Collections.synchronizedList( l_result ) : l_result
+            )
+        );
 
         return CFuzzyValue.from( true );
     }

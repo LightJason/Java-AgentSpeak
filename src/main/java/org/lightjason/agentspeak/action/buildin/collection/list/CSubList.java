@@ -23,24 +23,29 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.list;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
  * returns a sublist within the index range.
  * Creates a sublist of an existing list by an index range,
- * first argument is the list object, second the lower-bound,
- * third the upper-bound within the range \f$ [ \text{lower-bound}, \text{upper-bound} ) \f$,
- * the action fails never
+ * first argument is the list object, all other arguments
+ * are tuples of ranges \f$ [ \text{lower-bound}, \text{upper-bound} ) \f$,
+ * the action fails on an wrong number of arguments
  *
- * @code LS = collection/list/get( L, 2, 5 ); @endcode
+ * @code [L1|L2] = collection/list/get( L, 2, 5, [4, 6] ); @endcode
  */
 public final class CSubList extends IBuildinAction
 {
@@ -55,7 +60,7 @@ public final class CSubList extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 1;
     }
 
     @Override
@@ -63,13 +68,22 @@ public final class CSubList extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument set reference, second key-value
-        p_argument.get( 0 ).<List<?>>raw()
-            .subList(
-                p_argument.get( 1 ).<Number>raw().intValue(),
-                p_argument.get( 2 ).<Number>raw().intValue()
-            )
-            .stream()
+        final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatcollection( p_argument.stream().skip( 1 ) ) )
+                                              .collect( Collectors.toList() );
+
+        if ( l_arguments.size() % 2 == 0 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed(
+            l_arguments.stream()
+                       .skip( 1 )
+                       .map( ITerm::<Number>raw )
+                       .map( Number::intValue ),
+            2,
+            2
+        )
+            .map( i -> l_arguments.get( 0 ).<List<?>>raw().subList( i.get( 0 ), i.get( 1 ) ) )
+            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
             .map( CRawTerm::from )
             .forEach( p_return::add );
 

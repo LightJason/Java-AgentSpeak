@@ -30,9 +30,11 @@ import org.lightjason.agentspeak.action.buildin.collection.list.CAdd;
 import org.lightjason.agentspeak.action.buildin.collection.list.CComplement;
 import org.lightjason.agentspeak.action.buildin.collection.list.CCreate;
 import org.lightjason.agentspeak.action.buildin.collection.list.CGet;
+import org.lightjason.agentspeak.action.buildin.collection.list.CRange;
 import org.lightjason.agentspeak.action.buildin.collection.list.CRemove;
 import org.lightjason.agentspeak.action.buildin.collection.list.CReverse;
 import org.lightjason.agentspeak.action.buildin.collection.list.CSet;
+import org.lightjason.agentspeak.action.buildin.collection.list.CSubList;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -282,6 +285,104 @@ public final class TestCActionCollectionList
     }
 
 
+    /**
+     * test range error
+     */
+    @Test
+    public final void testrangeerror()
+    {
+        Assert.assertFalse(
+            new CRange().execute(
+                null,
+                false,
+                Stream.of().map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+
+    /**
+     * test range
+     */
+    @Test
+    public final void testrange()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CRange().execute(
+            null,
+            false,
+            Stream.of( 0, 5, 7, 9 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        new CRange().execute(
+            null,
+            true,
+            Stream.of( 1, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), IntStream.range( 0, 5 ).boxed().toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), IntStream.range( 7, 9 ).boxed().toArray() );
+
+        Assert.assertArrayEquals( l_return.get( 2 ).<List<?>>raw().toArray(), IntStream.range( 1, 7 ).boxed().toArray() );
+        Assert.assertEquals( l_return.get( 2 ).<List<?>>raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+    }
+
+    /**
+     * test sublist error
+     */
+    @Test
+    public final void testsublisterror()
+    {
+        Assert.assertFalse(
+            new CSubList().execute(
+                null,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+    /**
+     * test sublist
+     */
+    @Test
+    public final void testsublist()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CSubList().execute(
+            null,
+            false,
+            Stream.of( Stream.of( "a", "b", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        new CSubList().execute(
+            null,
+            true,
+            Stream.of( Stream.of( 8, 9, 10 ).collect( Collectors.toList() ), 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+
+        Assert.assertArrayEquals( l_return.get(0).<List<?>>raw().toArray(), Stream.of( "a", "b" ).toArray() );
+        Assert.assertArrayEquals( l_return.get(1).<List<?>>raw().toArray(), Stream.of( "c", 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get(2).<List<?>>raw().toArray(), Stream.of( 9 ).toArray() );
+    }
 
 
     /**
@@ -302,6 +403,10 @@ public final class TestCActionCollectionList
         l_test.testremove();
         l_test.testset();
         l_test.testadd();
+        l_test.testrangeerror();
+        l_test.testrange();
+        l_test.testrangeerror();
+        l_test.testsublist();
 
     }
 

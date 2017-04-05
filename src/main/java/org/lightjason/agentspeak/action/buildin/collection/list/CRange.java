@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.list;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -38,11 +40,13 @@ import java.util.stream.IntStream;
 
 /**
  * creates a list with a integer ranged list.
- * Creates a list of integer values within the
+ * The action creates a list of integer values within the
  * range \f$ [\text{argument 1}, \text{argument 2}) \f$,
- * the action fails never
+ * the action need a even number of arguments, for each
+ * tuple a ranged list will be returned, the action fails on
+ * a wrong number of arguments
  *
- * @code L = collection/list/create(0, 10); @endcode
+ * @code [L1|L2] = collection/list/create(0, 10, [2, 9]); @endcode
  */
 public final class CRange extends IBuildinAction
 {
@@ -57,7 +61,7 @@ public final class CRange extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -65,16 +69,24 @@ public final class CRange extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<?> l_result = IntStream.range(
-            p_argument.get( 0 ).<Number>raw().intValue(),
-            p_argument.get( 1 ).<Number>raw().intValue()
-        ).boxed().collect( Collectors.toList() );
+        final List<Integer> l_arguments = CCommon.flatcollection( p_argument )
+                                                 .map( ITerm::<Number>raw )
+                                                 .mapToInt( Number::intValue )
+                                                 .boxed()
+                                                 .collect( Collectors.toList() );
+        if ( ( l_arguments.isEmpty() ) || ( l_arguments.size() % 2 == 1 ) )
+            return CFuzzyValue.from( false );
 
-        p_return.add( CRawTerm.from(
-            p_parallel
-            ? Collections.synchronizedList( l_result )
-            : l_result
-        ) );
+        StreamUtils.windowed(
+            l_arguments.stream(),
+            2,
+            2
+        )
+            .map( i -> IntStream.range( i.get( 0 ), i.get( 1 ) ).boxed().collect( Collectors.toList() ) )
+            .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
+            .map( CRawTerm::from )
+            .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 
