@@ -73,7 +73,7 @@ public final class CCreate extends IBuildinAction
             return CFuzzyValue.from( false );
 
         final Map<Object, Object> l_map = p_parallel ? new ConcurrentHashMap<>() : new HashMap<>();
-        StreamUtils.windowed( l_arguments.stream(), 2 )
+        StreamUtils.windowed( l_arguments.stream(), 2, 2 )
                    .forEach( i -> l_map.put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
         p_return.add( CRawTerm.from( l_map ) );
 
