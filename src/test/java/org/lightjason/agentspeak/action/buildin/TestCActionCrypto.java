@@ -84,7 +84,7 @@ public final class TestCActionCrypto
      */
     @Test
     @UseDataProvider( "generatehash" )
-    public final void testhash( final Pair<String, String[]> p_hash )
+    public final void hash( final Pair<String, String[]> p_hash )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public final class TestCActionCrypto
      * test hash exception
      */
     @Test( expected = CRuntimeException.class )
-    public final void testhashexception()
+    public final void hashexception()
     {
         new CHash().execute(
             null,
@@ -140,7 +140,7 @@ public final class TestCActionCrypto
      */
     @Test
     @UseDataProvider( "generatecrypt" )
-    public final void testcreatekey( final Triple<String, Integer, Integer> p_crypt )
+    public final void createkey( final Triple<String, Integer, Integer> p_crypt )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -160,7 +160,7 @@ public final class TestCActionCrypto
      * test key generation on error call
      */
     @Test
-    public final void testcreatekeyError()
+    public final void createkeyError()
     {
         Assert.assertFalse(
 
@@ -181,7 +181,7 @@ public final class TestCActionCrypto
      */
     @Test
     @UseDataProvider( "generatecrypt" )
-    public final void testencryptdecreypt( final Triple<String, Integer, Integer> p_crypt  )
+    public final void encryptdecreypt( final Triple<String, Integer, Integer> p_crypt  )
     {
         final List<ITerm> l_returnkey = new ArrayList<>();
 
@@ -236,11 +236,11 @@ public final class TestCActionCrypto
     {
         Arrays.stream( TestCActionCrypto.generatehash() )
               .map( i -> (Pair<String, String[]>) i )
-              .forEach( i -> new TestCActionCrypto().testhash( i ) );
+              .forEach( i -> new TestCActionCrypto().hash( i ) );
 
         try
         {
-            new TestCActionCrypto().testhashexception();
+            new TestCActionCrypto().hashexception();
         }
         catch ( final CRuntimeException l_exception )
         {
@@ -248,15 +248,15 @@ public final class TestCActionCrypto
         }
 
 
-        new TestCActionCrypto().testcreatekeyError();
+        new TestCActionCrypto().createkeyError();
 
         Arrays.stream( TestCActionCrypto.generatecrypt() )
               .map( i -> (Triple<String, Integer, Integer>) i )
-              .forEach( i -> new TestCActionCrypto().testcreatekey( i ) );
+              .forEach( i -> new TestCActionCrypto().createkey( i ) );
 
         Arrays.stream( TestCActionCrypto.generatecrypt() )
               .map( i -> (Triple<String, Integer, Integer>) i )
-              .forEach( i -> new TestCActionCrypto().testencryptdecreypt( i ) );
+              .forEach( i -> new TestCActionCrypto().encryptdecreypt( i ) );
     }
 
 

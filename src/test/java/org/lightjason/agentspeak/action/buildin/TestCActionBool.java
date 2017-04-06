@@ -32,6 +32,9 @@ import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.action.buildin.bool.CAllMatch;
 import org.lightjason.agentspeak.action.buildin.bool.CAnd;
 import org.lightjason.agentspeak.action.buildin.bool.CAnyMatch;
+import org.lightjason.agentspeak.action.buildin.bool.CCountFalse;
+import org.lightjason.agentspeak.action.buildin.bool.CCountTrue;
+import org.lightjason.agentspeak.action.buildin.bool.CNot;
 import org.lightjason.agentspeak.action.buildin.bool.COr;
 import org.lightjason.agentspeak.action.buildin.bool.CXor;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -181,6 +184,72 @@ public final class TestCActionBool
 
 
     /**
+     * test count-true
+     */
+    @Test
+    @UseDataProvider( "generate" )
+    public final void counttrue( final List<Boolean> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CCountTrue().execute(
+            null,
+            false,
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3L );
+    }
+
+
+    /**
+     * test count-true
+     */
+    @Test
+    @UseDataProvider( "generate" )
+    public final void countfalse( final List<Boolean> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CCountFalse().execute(
+            null,
+            false,
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3L );
+    }
+
+
+    /**
+     * test not operation
+     */
+    @Test
+    @UseDataProvider( "generate" )
+    public final void not( final List<Boolean> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CNot().execute(
+            null,
+            false,
+            p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 6 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), p_input.stream().map( i -> !i ).toArray() );
+    }
+
+
+    /**
      * main test call
      *
      * @param p_args arguments
@@ -198,6 +267,9 @@ public final class TestCActionBool
                   l_test.anymatch( i );
                   l_test.or( i );
                   l_test.xor( i );
+                  l_test.counttrue( i );
+                  l_test.countfalse( i );
+                  l_test.not( i );
               } );
     }
 }

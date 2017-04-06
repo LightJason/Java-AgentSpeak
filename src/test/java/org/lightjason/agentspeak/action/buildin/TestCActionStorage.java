@@ -93,7 +93,7 @@ public final class TestCActionStorage
      * test add action
      */
     @Test
-    public final void testadd()
+    public final void add()
     {
         Assume.assumeNotNull( m_context );
 
@@ -133,7 +133,7 @@ public final class TestCActionStorage
      * test remove action
      */
     @Test
-    public final void testremove()
+    public final void remove()
     {
         Assume.assumeNotNull( m_context );
 
@@ -159,7 +159,7 @@ public final class TestCActionStorage
      * test clear action
      */
     @Test
-    public final void testclear()
+    public final void clear()
     {
         Assume.assumeNotNull( m_context );
 
@@ -185,7 +185,7 @@ public final class TestCActionStorage
      * test exists action
      */
     @Test
-    public final void testexist()
+    public final void exist()
     {
         Assume.assumeNotNull( m_context );
 
@@ -225,16 +225,16 @@ public final class TestCActionStorage
         final TestCActionStorage l_test = new TestCActionStorage();
 
         l_test.initialize();
-        l_test.testadd();
+        l_test.add();
 
         l_test.initialize();
-        l_test.testremove();
+        l_test.remove();
 
         l_test.initialize();
-        l_test.testclear();
+        l_test.clear();
 
         l_test.initialize();
-        l_test.testexist();
+        l_test.exist();
     }
 
 

@@ -63,7 +63,7 @@ public final class TestCActionGeneric
      * test throw action
      */
     @Test( expected = CRuntimeException.class )
-    public final void testthrowparameter()
+    public final void throwparameter()
     {
         new CThrow().execute(
             null,
@@ -79,7 +79,7 @@ public final class TestCActionGeneric
      * test throw action
      */
     @Test( expected = CRuntimeException.class )
-    public final void testthrow()
+    public final void throwwithoutparameter()
     {
         new CThrow().execute(
             null,
@@ -97,7 +97,7 @@ public final class TestCActionGeneric
      * @throws UnsupportedEncodingException is thrown on encoding errors
      */
     @Test
-    public final void testprint() throws UnsupportedEncodingException
+    public final void print() throws UnsupportedEncodingException
     {
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
@@ -117,7 +117,7 @@ public final class TestCActionGeneric
      * test create literal action
      */
     @Test
-    public final void testcreateliteral()
+    public final void createliteral()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -146,7 +146,7 @@ public final class TestCActionGeneric
      * test parse literal action
      */
     @Test
-    public final void testparseliteral()
+    public final void parseliteral()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -175,7 +175,7 @@ public final class TestCActionGeneric
      * test parse-int action
      */
     @Test
-    public final void testparseint()
+    public final void parseint()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -199,7 +199,7 @@ public final class TestCActionGeneric
      * test parse-float action
      */
     @Test
-    public final void testparsefloat()
+    public final void parsefloat()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -223,7 +223,7 @@ public final class TestCActionGeneric
      * test type action
      */
     @Test
-    public final void testtype()
+    public final void type()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -247,7 +247,7 @@ public final class TestCActionGeneric
      * test "is" action
      */
     @Test
-    public final void testis()
+    public final void is()
     {
         Assert.assertFalse(
             new CIs().execute(
@@ -275,7 +275,7 @@ public final class TestCActionGeneric
      * test "isnull"action
      */
     @Test
-    public final void testisnull()
+    public final void isnull()
     {
         Assert.assertFalse(
             new CIsNull().execute(
@@ -303,7 +303,7 @@ public final class TestCActionGeneric
      * test "isnumeric" action
      */
     @Test
-    public final void testisnumeric()
+    public final void isnumeric()
     {
         Assert.assertFalse(
             new CIsNumeric().execute(
@@ -331,7 +331,7 @@ public final class TestCActionGeneric
      * test "isstring" action
      */
     @Test
-    public final void testisstring()
+    public final void isstring()
     {
         Assert.assertFalse(
             new CIsString().execute(
@@ -367,22 +367,22 @@ public final class TestCActionGeneric
     {
         final TestCActionGeneric l_test = new TestCActionGeneric();
 
-        l_test.testprint();
-        l_test.testcreateliteral();
+        l_test.print();
+        l_test.createliteral();
 
-        l_test.testparseliteral();
-        l_test.testparseint();
-        l_test.testparsefloat();
+        l_test.parseliteral();
+        l_test.parseint();
+        l_test.parsefloat();
 
-        l_test.testtype();
-        l_test.testis();
-        l_test.testisnull();
-        l_test.testisnumeric();
-        l_test.testisstring();
+        l_test.type();
+        l_test.is();
+        l_test.isnull();
+        l_test.isnumeric();
+        l_test.isstring();
 
         try
         {
-            l_test.testthrowparameter();
+            l_test.throwparameter();
         }
         catch ( final CRuntimeException l_exception )
         {
@@ -391,7 +391,7 @@ public final class TestCActionGeneric
 
         try
         {
-            l_test.testthrow();
+            l_test.throwwithoutparameter();
         }
         catch ( final CRuntimeException l_exception )
         {

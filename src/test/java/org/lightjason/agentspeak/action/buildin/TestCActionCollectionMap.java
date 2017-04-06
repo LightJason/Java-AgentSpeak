@@ -60,7 +60,7 @@ public final class TestCActionCollectionMap
      * test map create
      */
     @Test
-    public final void testcreate()
+    public final void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -108,7 +108,7 @@ public final class TestCActionCollectionMap
      * test map keys
      */
     @Test
-    public final void testkeysvalues()
+    public final void keysvalues()
     {
         final Map<?, ?> l_map = StreamUtils.zip(
             Stream.of( "foo", "bar", "yyy", "xxx" ),
@@ -150,7 +150,7 @@ public final class TestCActionCollectionMap
      * test map put
      */
     @Test
-    public final void testput()
+    public final void put()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
@@ -185,7 +185,7 @@ public final class TestCActionCollectionMap
      * test multiple put
      */
     @Test
-    public final void testputmultiple()
+    public final void putmultiple()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
@@ -220,7 +220,7 @@ public final class TestCActionCollectionMap
      * test remove
      */
     @Test
-    public final void testremove()
+    public final void remove()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -247,7 +247,7 @@ public final class TestCActionCollectionMap
      * test get
      */
     @Test
-    public final void testget()
+    public final void get()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -275,7 +275,7 @@ public final class TestCActionCollectionMap
      * test multiple get
      */
     @Test
-    public final void testgetmultiple()
+    public final void getmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -308,13 +308,13 @@ public final class TestCActionCollectionMap
     {
         final TestCActionCollectionMap l_test = new TestCActionCollectionMap();
 
-        l_test.testcreate();
-        l_test.testkeysvalues();
-        l_test.testput();
-        l_test.testputmultiple();
-        l_test.testremove();
-        l_test.testget();
-        l_test.testgetmultiple();
+        l_test.create();
+        l_test.keysvalues();
+        l_test.put();
+        l_test.putmultiple();
+        l_test.remove();
+        l_test.get();
+        l_test.getmultiple();
     }
 
 }

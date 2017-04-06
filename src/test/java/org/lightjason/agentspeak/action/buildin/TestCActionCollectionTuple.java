@@ -49,7 +49,7 @@ public final class TestCActionCollectionTuple
      * test tuple creating
      */
     @Test
-    public final void testcreate()
+    public final void create()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -75,7 +75,7 @@ public final class TestCActionCollectionTuple
      * test tuple set
      */
     @Test
-    public final void testset()
+    public final void set()
     {
         final AbstractMap.Entry<String, String> l_data = new AbstractMap.SimpleEntry<>( "foo", "bar" );
 
@@ -95,7 +95,7 @@ public final class TestCActionCollectionTuple
      * test tuple flat
      */
     @Test
-    public final void testflat()
+    public final void flat()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -126,9 +126,9 @@ public final class TestCActionCollectionTuple
     {
         final TestCActionCollectionTuple l_test = new TestCActionCollectionTuple();
 
-        l_test.testcreate();
-        l_test.testset();
-        l_test.testflat();
+        l_test.create();
+        l_test.set();
+        l_test.flat();
     }
 
 }

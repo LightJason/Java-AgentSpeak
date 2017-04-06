@@ -105,7 +105,7 @@ public final class TestCActionCollection
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void testsize( final Pair<List<ITerm>, int[]> p_input )
+    public final void size( final Pair<List<ITerm>, int[]> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -129,7 +129,7 @@ public final class TestCActionCollection
      * test empty action
      */
     @Test
-    public final void testempty()
+    public final void empty()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -158,8 +158,8 @@ public final class TestCActionCollection
     {
         Arrays.stream( TestCActionCollection.generate() )
               .map( i -> (Pair<List<ITerm>, int[]>) i )
-              .forEach( i -> new TestCActionCollection().testsize( i ) );
+              .forEach( i -> new TestCActionCollection().size( i ) );
 
-        new TestCActionCollection().testempty();
+        new TestCActionCollection().empty();
     }
 }
