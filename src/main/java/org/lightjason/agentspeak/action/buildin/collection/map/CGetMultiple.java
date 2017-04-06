@@ -33,26 +33,21 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
- * returns an element of the map.
- * Returns values of the map which is referenced
- * by the key, the action fails never, the first
- * argument is the map object, all other arguments are
- * the keys
+ * get a value by key from multiple maps.
+ * The action get the key as first argument from
+ * all other map arguments, the action never fails
  *
- * @code V1 = collection/map/get( Map, "key" );
- * [V2|V3] = collection/map/get( Map, "Key1", "Key2" );
- * @endcode
+ * @code [A|B|C] = collection/map/getmultiple( "key", Map1, Map2, Map3 ); @endcode
  */
-public final class CGet extends IBuildinAction
+public final class CGetMultiple extends IBuildinAction
 {
     /**
      * ctor
      */
-    public CGet()
+    public CGetMultiple()
     {
         super( 3 );
     }
@@ -65,14 +60,13 @@ public final class CGet extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
         CCommon.flatcollection( p_argument )
-                   .skip( 1 )
-                   .map( i -> p_argument.get( 0 ).<Map<?, ?>>raw().get( i.raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+               .skip( 1 )
+               .map( i -> i.<Map<?, ?>>raw().get( p_argument.get( 0 ).raw() ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

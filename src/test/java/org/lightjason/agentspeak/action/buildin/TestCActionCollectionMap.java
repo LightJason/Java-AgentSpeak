@@ -27,6 +27,8 @@ import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.collection.map.CCreate;
+import org.lightjason.agentspeak.action.buildin.collection.map.CGet;
+import org.lightjason.agentspeak.action.buildin.collection.map.CGetMultiple;
 import org.lightjason.agentspeak.action.buildin.collection.map.CKeys;
 import org.lightjason.agentspeak.action.buildin.collection.map.CPut;
 import org.lightjason.agentspeak.action.buildin.collection.map.CPutIfAbsent;
@@ -242,6 +244,62 @@ public final class TestCActionCollectionMap
 
 
     /**
+     * test get
+     */
+    @Test
+    public final void testget()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Map<Object, Object> l_map = new HashMap<>();
+
+        l_map.put( "i", 1 );
+        l_map.put( "j", 2 );
+        l_map.put( "k", 3 );
+
+        new CGet().execute(
+            null,
+            false,
+            Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 2 );
+        Assert.assertNull( l_return.get( 2 ).<Number>raw() );
+    }
+
+
+    /**
+     * test multiple get
+     */
+    @Test
+    public final void testgetmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        final Map<Object, Object> l_map1 = new HashMap<>();
+        l_map1.put( "g", 123 );
+
+        final Map<Object, Object> l_map2 = new HashMap<>();
+        l_map2.put( "g", "text" );
+
+        new CGetMultiple().execute(
+            null,
+            false,
+            Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 123 );
+        Assert.assertEquals( l_return.get( 1 ).raw(), "text" );
+    }
+
+
+    /**
      * test call
      *
      * @param p_args command-line
@@ -255,6 +313,8 @@ public final class TestCActionCollectionMap
         l_test.testput();
         l_test.testputmultiple();
         l_test.testremove();
+        l_test.testget();
+        l_test.testgetmultiple();
     }
 
 }
