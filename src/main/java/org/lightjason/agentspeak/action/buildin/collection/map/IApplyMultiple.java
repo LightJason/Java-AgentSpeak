@@ -23,23 +23,54 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 import java.util.Map;
 
 
 /**
- * adds an element to all map arguments.
- * First argument is a key value, second the value, all
- * other values are map references, the key-value pair
- * is added and the action never fails
- *
- * @code collection/map/putmultiple( "key", "value", Map1, Map2 ); @endcode
+ * abstract class for apply any element to multiple maps
  */
-public final class CPutMultiple extends IApplyMultiple
+public abstract class IApplyMultiple extends IBuildinAction
 {
 
-    @Override
-    protected final void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value )
+    /**
+     * ctor
+     */
+    public IApplyMultiple()
     {
-        p_map.put( p_key, p_value );
+        super( 3 );
     }
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 3;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        CCommon.flatstream( p_argument.stream().skip( 2 ) )
+               .forEach( i -> this.apply( i.<Map<Object, Object>>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * apply put operation
+     *
+     * @param p_map map
+     * @param p_key key
+     * @param p_value value
+     */
+    protected abstract void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value );
 }

@@ -27,19 +27,18 @@ import java.util.Map;
 
 
 /**
- * adds an element to all map arguments.
+ * adds an element to all map arguments iif not exists.
  * First argument is a key value, second the value, all
  * other values are map references, the key-value pair
  * is added and the action never fails
  *
  * @code collection/map/putmultiple( "key", "value", Map1, Map2 ); @endcode
  */
-public final class CPutMultiple extends IApplyMultiple
+public final class CPutMultipleIfAbsent extends IApplyMultiple
 {
-
     @Override
     protected final void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value )
     {
-        p_map.put( p_key, p_value );
+        p_map.putIfAbsent( p_key, p_value );
     }
 }

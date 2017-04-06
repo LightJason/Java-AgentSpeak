@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -64,9 +65,12 @@ public final class CRemove extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first argument map reference, second key-value
-        final Map<?, ?> l_map = p_argument.get( 0 ).<Map<?, ?>>raw();
-        p_argument.stream().skip( 1 ).map( i -> l_map.remove( i.raw() ) ).map( CRawTerm::from ).forEach( p_return::add );
+        CCommon.flatstream( p_argument.stream().skip( 1 ) )
+               .map( ITerm::raw )
+               .map( i -> p_argument.get( 0 ).<Map<Object, Object>>raw().remove( i ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
         return CFuzzyValue.from( true );
     }
 

@@ -23,17 +23,8 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
-import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 
 /**
@@ -44,40 +35,13 @@ import java.util.stream.Collectors;
  *
  * @code collection/map/putifabsent( Map, Key1, Value1, [Key2, Value2]); @endcode
  */
-public final class CPutIfAbsent extends IBuildinAction
+public final class CPutIfAbsent extends IApply
 {
-    /**
-     * ctor
-     */
-    public CPutIfAbsent()
-    {
-        super( 3 );
-    }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value )
     {
-        return 3;
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_list.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
-
-        StreamUtils.windowed(
-            l_list.stream()
-                  .skip( 1 ),
-            2,
-            2
-        )
-                   .forEach( i -> l_list.get( 0 ).<Map<Object, Object>>raw().putIfAbsent( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
-
-        return CFuzzyValue.from( true );
+        p_map.putIfAbsent( p_key, p_value );
     }
 
 }

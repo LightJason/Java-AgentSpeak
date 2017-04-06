@@ -23,23 +23,65 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
+import com.codepoetics.protonpack.StreamUtils;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
- * adds an element to all map arguments.
- * First argument is a key value, second the value, all
- * other values are map references, the key-value pair
- * is added and the action never fails
- *
- * @code collection/map/putmultiple( "key", "value", Map1, Map2 ); @endcode
+ * abstract class for any operation
  */
-public final class CPutMultiple extends IApplyMultiple
+public abstract class IApply extends IBuildinAction
 {
 
-    @Override
-    protected final void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value )
+    /**
+     * ctor
+     */
+    public IApply()
     {
-        p_map.put( p_key, p_value );
+        super( 3 );
     }
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_list.size() % 2 == 0 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed(
+            l_list.stream()
+                  .skip( 1 ),
+            2,
+            2
+        )
+                   .forEach( i ->  this.apply( l_list.get( 0 ).<Map<Object, Object>>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * apply put operation
+     *
+     * @param p_map map
+     * @param p_key key
+     * @param p_value value
+     */
+    protected abstract void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value );
 }
