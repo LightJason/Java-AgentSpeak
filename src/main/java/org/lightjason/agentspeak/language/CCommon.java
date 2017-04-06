@@ -272,7 +272,7 @@ public final class CCommon
      * @param p_terms term stream
      * @return flat term stream
      */
-    public static Stream<ITerm> flatcollection( final Stream<? extends ITerm> p_terms )
+    public static Stream<ITerm> flatstream( final Stream<? extends ITerm> p_terms )
     {
         return flattenToStream( p_terms );
     }

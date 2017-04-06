@@ -28,6 +28,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.action.buildin.collection.map.CCreate;
 import org.lightjason.agentspeak.action.buildin.collection.map.CKeys;
+import org.lightjason.agentspeak.action.buildin.collection.map.CPut;
+import org.lightjason.agentspeak.action.buildin.collection.map.CPutIfAbsent;
+import org.lightjason.agentspeak.action.buildin.collection.map.CPutMultiple;
 import org.lightjason.agentspeak.action.buildin.collection.map.CValues;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -35,6 +38,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -139,6 +143,54 @@ public final class TestCActionCollectionMap
 
 
     /**
+     * test map put
+     */
+    @Test
+    public final void testput()
+    {
+        final Map<?, ?> l_map = new HashMap<>();
+
+        new CPutMultiple().execute(
+            null,
+            false,
+            Stream.of( "x", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_map.size(), 1 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "x" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+
+
+        new CPut().execute(
+            null,
+            false,
+            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_map.size(), 3 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "x", "yyy" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 1, 3 ).toArray() );
+
+
+        new CPutIfAbsent().execute(
+            null,
+            false,
+            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_map.size(), 4 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "zz", "x", "yyy" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 4, 1, 3 ).toArray() );
+    }
+
+
+    /**
      * test call
      *
      * @param p_args command-line
@@ -149,6 +201,7 @@ public final class TestCActionCollectionMap
 
         l_test.testcreate();
         l_test.testkeysvalues();
+        l_test.testput();
     }
 
 }

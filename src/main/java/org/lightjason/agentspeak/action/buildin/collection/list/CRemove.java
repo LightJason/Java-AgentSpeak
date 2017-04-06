@@ -70,7 +70,7 @@ public final class CRemove extends IBuildinAction
         final List<Object> l_list = p_argument.get( 0 ).<List<Object>>raw();
         final Set<Integer> l_removed = new HashSet<>();
 
-        CCommon.flatcollection( p_argument.stream().skip( 1 ) )
+        CCommon.flatstream( p_argument.stream().skip( 1 ) )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
                .map( i -> {

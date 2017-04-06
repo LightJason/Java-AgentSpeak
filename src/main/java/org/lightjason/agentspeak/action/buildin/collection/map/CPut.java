@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -31,30 +33,23 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
  * adds an element to all map arguments.
- * First argument is a key value, second the value, all
- * other values are map references, the key-value pair
- * is added and the action never fails
+ * First argument is a map and all other arguments
+ * are key-value pairs, the action fails on wrong
+ * input number
  *
- * @code collection/map/put( "key", "value", Map1, Map2 ); @endcode
+ * @code collection/map/put( Map1, Key1, Value1, [Key2, Value2] ); @endcode
  */
 public final class CPut extends IBuildinAction
 {
-    /**
-     * ctor
-     */
-    public CPut()
-    {
-        super( 3 );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {
-        return 3;
+        return 1;
     }
 
     @Override
@@ -62,12 +57,18 @@ public final class CPut extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        // first key, second value, all other arguments are map references
-        p_argument.stream()
-                  .skip( 2 )
-                  .forEach( i -> i.<Map<Object, Object>>raw().put( p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
+        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_list.size() % 2 == 0 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed(
+            l_list.stream()
+              .skip( 1 ),
+        2,
+        2
+        )
+            .forEach( i -> l_list.get( 0 ).<Map<Object, Object>>raw().put( i.get( 0 ).raw(), i.get( 1 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
-
 }
