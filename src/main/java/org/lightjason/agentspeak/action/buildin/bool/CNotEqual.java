@@ -23,18 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.bool;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 
 /**
  * checks elements of inequality.
@@ -47,41 +35,12 @@ import java.util.List;
  * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
  */
-public final class CNotEqual extends IBuildinAction
+public final class CNotEqual extends CEqual
 {
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final boolean apply( final boolean p_value )
     {
-        return 1;
+        return !super.apply( p_value );
     }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        if ( CCommon.rawvalueAssignableTo( p_argument.get( 0 ), Collection.class ) )
-        {
-
-            final Object[] l_argument = p_argument.get( 0 ).<Collection<?>>raw().toArray();
-
-            p_argument.stream()
-                      .skip( 1 )
-                      .map( i -> !( CCommon.rawvalueAssignableTo( i, Collection.class ) && Arrays.equals( l_argument, i.<Collection<?>>raw().toArray() ) ) )
-                      .map( CRawTerm::from )
-                      .forEach( p_return::add );
-
-        }
-        else
-
-            p_argument.stream()
-                      .skip( 1 )
-                      .map( i -> !i.equals( p_argument.get( 0 ) ) )
-                      .map( CRawTerm::from )
-                      .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
-    }
-
 }

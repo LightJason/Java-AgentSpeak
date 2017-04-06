@@ -34,7 +34,9 @@ import org.lightjason.agentspeak.action.buildin.bool.CAnd;
 import org.lightjason.agentspeak.action.buildin.bool.CAnyMatch;
 import org.lightjason.agentspeak.action.buildin.bool.CCountFalse;
 import org.lightjason.agentspeak.action.buildin.bool.CCountTrue;
+import org.lightjason.agentspeak.action.buildin.bool.CEqual;
 import org.lightjason.agentspeak.action.buildin.bool.CNot;
+import org.lightjason.agentspeak.action.buildin.bool.CNotEqual;
 import org.lightjason.agentspeak.action.buildin.bool.COr;
 import org.lightjason.agentspeak.action.buildin.bool.CXor;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -43,8 +45,11 @@ import org.lightjason.agentspeak.language.ITerm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -250,6 +255,82 @@ public final class TestCActionBool
 
 
     /**
+     * test equal
+     */
+    @Test
+    public final void equal()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CEqual().execute(
+            null,
+            false,
+            Stream.of( l_return, l_return, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
+
+
+        final List<Integer> l_list1 = IntStream.range( 0, 5 ).boxed().collect( Collectors.toList() );
+        final List<Integer> l_list2 = IntStream.range( 0, 5 ).boxed().collect( Collectors.toList() );
+
+        new CEqual().execute(
+            null,
+            false,
+            Stream.of( l_list1, l_list2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
+
+
+        final Map<Integer, Integer> l_map1 = new HashMap<>();
+        l_map1.put( 1, 2 );
+        final Map<Integer, Integer> l_map2 = new HashMap<>();
+        l_map2.put( 1, 1 );
+
+        new CEqual().execute(
+            null,
+            false,
+            Stream.of( l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertFalse( l_return.get( 3 ).<Boolean>raw() );
+    }
+
+    /**
+     * test not-equal
+     */
+    @Test
+    public final void notequal()
+    {
+        final Object l_object = new Object();
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CNotEqual().execute(
+            null,
+            false,
+            Stream.of( l_object, l_object, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+    }
+
+
+    /**
      * main test call
      *
      * @param p_args arguments
@@ -258,6 +339,9 @@ public final class TestCActionBool
     public static void main( final String[] p_args )
     {
         final TestCActionBool l_test = new TestCActionBool();
+
+        l_test.equal();
+        l_test.notequal();
 
         Arrays.stream( TestCActionBool.generate() )
               .map( i -> (List<Boolean>) i )
