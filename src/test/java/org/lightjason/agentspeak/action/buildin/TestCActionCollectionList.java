@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.list.CAdd;
 import org.lightjason.agentspeak.action.buildin.collection.list.CComplement;
 import org.lightjason.agentspeak.action.buildin.collection.list.CCreate;
@@ -57,7 +58,7 @@ import java.util.stream.Stream;
 /**
  * test collection list
  */
-public final class TestCActionCollectionList
+public final class TestCActionCollectionList extends IBaseTest
 {
 
     /**
@@ -544,28 +545,7 @@ public final class TestCActionCollectionList
      */
     public static void main( final String[] p_args )
     {
-        final TestCActionCollectionList l_test = new TestCActionCollectionList();
-
-        l_test.createempty();
-        l_test.createemptysynchronize();
-        l_test.create();
-        l_test.complement();
-        l_test.get();
-        l_test.reverse();
-        l_test.remove();
-        l_test.set();
-        l_test.add();
-        l_test.rangeerror();
-        l_test.range();
-        l_test.rangeerror();
-        l_test.sublist();
-        l_test.sublisterror();
-        l_test.flat();
-        l_test.flatconcat();
-        l_test.ziperror();
-        l_test.zip();
-        l_test.unique();
-
+        new TestCActionCollectionList().invoketest();
     }
 
 }

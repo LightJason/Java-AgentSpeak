@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.buildin.storage.CAdd;
 import org.lightjason.agentspeak.action.buildin.storage.CClear;
@@ -62,7 +63,7 @@ import java.util.stream.Stream;
 /**
  * test action storage
  */
-public final class TestCActionStorage
+public final class TestCActionStorage extends IBaseTest
 {
     /**
      * execution context
@@ -222,19 +223,7 @@ public final class TestCActionStorage
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        final TestCActionStorage l_test = new TestCActionStorage();
-
-        l_test.initialize();
-        l_test.add();
-
-        l_test.initialize();
-        l_test.remove();
-
-        l_test.initialize();
-        l_test.clear();
-
-        l_test.initialize();
-        l_test.exist();
+        new TestCActionStorage().invoketest();
     }
 
 

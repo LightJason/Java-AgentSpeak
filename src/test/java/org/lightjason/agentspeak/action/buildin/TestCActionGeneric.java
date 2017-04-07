@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.generic.CPrint;
 import org.lightjason.agentspeak.action.buildin.generic.CThrow;
 import org.lightjason.agentspeak.action.buildin.generic.type.CCreateLiteral;
@@ -56,7 +57,7 @@ import java.util.stream.Stream;
 /**
  * test generic actions
  */
-public final class TestCActionGeneric
+public final class TestCActionGeneric extends IBaseTest
 {
 
     /**
@@ -365,37 +366,6 @@ public final class TestCActionGeneric
      */
     public static void main( final String[] p_args ) throws UnsupportedEncodingException
     {
-        final TestCActionGeneric l_test = new TestCActionGeneric();
-
-        l_test.print();
-        l_test.createliteral();
-
-        l_test.parseliteral();
-        l_test.parseint();
-        l_test.parsefloat();
-
-        l_test.type();
-        l_test.is();
-        l_test.isnull();
-        l_test.isnumeric();
-        l_test.isstring();
-
-        try
-        {
-            l_test.throwparameter();
-        }
-        catch ( final CRuntimeException l_exception )
-        {
-
-        }
-
-        try
-        {
-            l_test.throwwithoutparameter();
-        }
-        catch ( final CRuntimeException l_exception )
-        {
-
-        }
+        new TestCActionGeneric().invoketest();
     }
 }

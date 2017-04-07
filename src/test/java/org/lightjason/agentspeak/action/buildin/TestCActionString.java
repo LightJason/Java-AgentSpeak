@@ -30,6 +30,7 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Decode;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Encode;
 import org.lightjason.agentspeak.action.buildin.string.CConcat;
@@ -56,7 +57,7 @@ import java.util.stream.Stream;
  * test for string actions
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCActionString
+public final class TestCActionString extends IBaseTest
 {
 
     /**
@@ -309,23 +310,9 @@ public final class TestCActionString
      *
      * @param p_args arguments
      */
-    @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
-        final TestCActionString l_test = new TestCActionString();
-
-        Arrays.stream( TestCActionString.generate() )
-              .map( i -> (List<String>) i )
-              .forEach( i -> {
-                  l_test.base64( i );
-                  l_test.concat( i );
-                  l_test.contains( i );
-                  l_test.lower( i );
-                  l_test.size( i );
-                  l_test.reverse( i );
-                  l_test.random( i );
-                  l_test.upper( i );
-              } );
+        new TestCActionString().invoketest();
     }
 
 }

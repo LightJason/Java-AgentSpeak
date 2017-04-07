@@ -29,6 +29,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CCreate;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -40,7 +41,7 @@ import java.util.List;
 /**
  * test multimap action
  */
-public final class TestCActionCollectionMultimap
+public final class TestCActionCollectionMultimap extends IBaseTest
 {
 
     /**
@@ -92,11 +93,7 @@ public final class TestCActionCollectionMultimap
      */
     public static void main( final String[] p_args )
     {
-        final TestCActionCollectionMultimap l_test = new TestCActionCollectionMultimap();
-
-        l_test.create();
-        l_test.createsynchronized();
-
+        new TestCActionCollectionMultimap().invoketest();
     }
 
 }

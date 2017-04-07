@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.math.CSqrt;
 import org.lightjason.agentspeak.action.buildin.math.CStirling;
 import org.lightjason.agentspeak.action.buildin.math.CSum;
@@ -66,7 +67,10 @@ import org.lightjason.agentspeak.action.buildin.math.CCos;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -77,7 +81,7 @@ import java.util.stream.Stream;
 /**
  * test math functions
  */
-public final class TestCMathFunction
+public final class TestCActionMath extends IBaseTest
 {
 
     /**
@@ -892,6 +896,7 @@ public final class TestCMathFunction
      */
     public static void main( final String[] p_args )
     {
-        //final TestCMathFunction l_test = new TestCMathFunction();
+        new TestCActionMath().invoketest();
     }
+
 }

@@ -34,6 +34,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.crypto.CCreateKey;
 import org.lightjason.agentspeak.action.buildin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.buildin.crypto.CEncrypt;
@@ -54,7 +55,7 @@ import java.util.stream.Stream;
  * test action crypto
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCActionCrypto
+public final class TestCActionCrypto extends IBaseTest
 {
 
     /**
@@ -234,29 +235,7 @@ public final class TestCActionCrypto
     @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
-        Arrays.stream( TestCActionCrypto.generatehash() )
-              .map( i -> (Pair<String, String[]>) i )
-              .forEach( i -> new TestCActionCrypto().hash( i ) );
-
-        try
-        {
-            new TestCActionCrypto().hashexception();
-        }
-        catch ( final CRuntimeException l_exception )
-        {
-
-        }
-
-
-        new TestCActionCrypto().createkeyError();
-
-        Arrays.stream( TestCActionCrypto.generatecrypt() )
-              .map( i -> (Triple<String, Integer, Integer>) i )
-              .forEach( i -> new TestCActionCrypto().createkey( i ) );
-
-        Arrays.stream( TestCActionCrypto.generatecrypt() )
-              .map( i -> (Triple<String, Integer, Integer>) i )
-              .forEach( i -> new TestCActionCrypto().encryptdecreypt( i ) );
+        new TestCActionCrypto().invoketest();
     }
 
 

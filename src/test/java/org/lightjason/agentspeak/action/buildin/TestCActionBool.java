@@ -34,6 +34,7 @@ import org.junit.Assume;
 import org.junit.AssumptionViolatedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.bool.CAllMatch;
 import org.lightjason.agentspeak.action.buildin.bool.CAnd;
 import org.lightjason.agentspeak.action.buildin.bool.CAnyMatch;
@@ -63,7 +64,7 @@ import java.util.stream.Stream;
  * test for boolean actions
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCActionBool
+public final class TestCActionBool extends IBaseTest
 {
 
     /**
@@ -459,29 +460,6 @@ public final class TestCActionBool
     @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
-        final TestCActionBool l_test = new TestCActionBool();
-
-        l_test.equal();
-        l_test.notequal();
-
-        Arrays.stream( TestCActionBool.generate() )
-              .map( i -> (Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>>) i )
-              .forEach( i -> {
-                  try
-                  {
-                      l_test.allmatch( i );
-                      l_test.anymatch( i );
-                      l_test.and( i );
-                      l_test.or( i );
-                      l_test.xor( i );
-                      l_test.not( i );
-                      l_test.counttrue( i );
-                      l_test.countfalse( i );
-                  }
-                  catch ( final AssumptionViolatedException l_ignored )
-                  {
-                      System.out.println( l_ignored.getMessage() );
-                  }
-              } );
+        new TestCActionBool().invoketest();
     }
 }

@@ -32,6 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.CIsEmpty;
 import org.lightjason.agentspeak.action.buildin.collection.CSize;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -52,7 +53,7 @@ import java.util.stream.Stream;
  * test collection action
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCActionCollection
+public final class TestCActionCollection extends IBaseTest
 {
 
     /**
@@ -156,10 +157,6 @@ public final class TestCActionCollection
     @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
-        Arrays.stream( TestCActionCollection.generate() )
-              .map( i -> (Pair<List<ITerm>, int[]>) i )
-              .forEach( i -> new TestCActionCollection().size( i ) );
-
-        new TestCActionCollection().empty();
+        new TestCActionCollection().invoketest();
     }
 }

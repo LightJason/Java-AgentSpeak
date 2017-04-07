@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin;
 import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.map.CCreate;
 import org.lightjason.agentspeak.action.buildin.collection.map.CGet;
 import org.lightjason.agentspeak.action.buildin.collection.map.CGetMultiple;
@@ -53,7 +54,7 @@ import java.util.stream.Stream;
 /**
  * test action map
  */
-public final class TestCActionCollectionMap
+public final class TestCActionCollectionMap extends IBaseTest
 {
 
     /**
@@ -306,15 +307,7 @@ public final class TestCActionCollectionMap
      */
     public static void main( final String[] p_args )
     {
-        final TestCActionCollectionMap l_test = new TestCActionCollectionMap();
-
-        l_test.create();
-        l_test.keysvalues();
-        l_test.put();
-        l_test.putmultiple();
-        l_test.remove();
-        l_test.get();
-        l_test.getmultiple();
+        new TestCActionCollectionMap().invoketest();
     }
 
 }

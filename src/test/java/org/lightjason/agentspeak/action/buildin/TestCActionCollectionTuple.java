@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.tuple.CCreate;
 import org.lightjason.agentspeak.action.buildin.collection.tuple.CFlat;
 import org.lightjason.agentspeak.action.buildin.collection.tuple.CSet;
@@ -42,7 +43,7 @@ import java.util.stream.Stream;
 /**
  * test collection tuple
  */
-public final class TestCActionCollectionTuple
+public final class TestCActionCollectionTuple extends IBaseTest
 {
 
     /**
@@ -124,11 +125,7 @@ public final class TestCActionCollectionTuple
      */
     public static void main( final String[] p_args )
     {
-        final TestCActionCollectionTuple l_test = new TestCActionCollectionTuple();
-
-        l_test.create();
-        l_test.set();
-        l_test.flat();
+        new TestCActionCollectionTuple().invoketest();
     }
 
 }
