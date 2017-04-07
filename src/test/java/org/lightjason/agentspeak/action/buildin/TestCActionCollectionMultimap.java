@@ -60,7 +60,7 @@ public final class TestCActionCollectionMultimap
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof Multimap<?,?> );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof Multimap<?, ?> );
         Assert.assertTrue( l_return.get( 0 ).<Multimap<?, ?>>raw().isEmpty() );
     }
 

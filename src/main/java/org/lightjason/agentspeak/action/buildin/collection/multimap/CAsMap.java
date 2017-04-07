@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
