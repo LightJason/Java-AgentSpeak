@@ -21,58 +21,82 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.multimap;
+package org.lightjason.agentspeak.action.buildin;
+
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
+import com.google.common.collect.Multimaps;
+import org.junit.Assert;
+import org.junit.Test;
+import org.lightjason.agentspeak.action.buildin.collection.multimap.CCreate;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 /**
- * returns the multimap as map.
- * Actions translates multimap objects into map objects,
- * action never fails
- *
- * @code X = collection/multimap/asmap( MultiMap );
- * [A|B] = collection/multimap/asmap( MultiMap1, MultiMap2 );
- * @endcode
+ * test multimap action
  */
-public final class CAsMap extends IBuildinAction
+public final class TestCActionCollectionMultimap
 {
+
     /**
-     * ctor
+     * test create
      */
-    public CAsMap()
+    @Test
+    public final void create()
     {
-        super( 3 );
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CCreate().execute(
+            null,
+            false,
+            Collections.emptyList(),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof Multimap<?,?> );
+        Assert.assertTrue( l_return.get( 0 ).<Multimap<?, ?>>raw().isEmpty() );
     }
 
-    @Override
-    public final int minimalArgumentNumber()
+    /**
+     * test synchronized create
+     */
+    @Test
+    public final void createsynchronized()
     {
-        return 1;
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CCreate().execute(
+            null,
+            true,
+            Collections.emptyList(),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Multimaps.synchronizedSetMultimap( HashMultimap.create() ).getClass() );
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<Multimap<?, ?>>raw )
-               .map( Multimap::asMap )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
 
-        return CFuzzyValue.from( true );
+    /**
+     * test call
+     *
+     * @param p_args command-line arguments
+     */
+    public static void main( final String[] p_args )
+    {
+        final TestCActionCollectionMultimap l_test = new TestCActionCollectionMultimap();
+
+        l_test.create();
+        l_test.createsynchronized();
+
     }
 
 }
