@@ -61,7 +61,7 @@ public final class CErrorListener implements ANTLRErrorListener
 
     @Override
     public void reportAttemptingFullContext( final Parser p_parser, final DFA p_dfa, final int p_startindex, final int p_stopindex,
-                                             final BitSet p_bitSet,
+                                             final BitSet p_bitset,
                                              final ATNConfigSet p_configuration
     )
     {

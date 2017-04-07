@@ -137,19 +137,19 @@ public interface IPath extends Comparable<IPath>
     /**
      * creates a path of the start index until the end
      *
-     * @param p_fromIndex start index
+     * @param p_fromindex start index
      * @return path
      */
-    IPath getSubPath( final int p_fromIndex );
+    IPath getSubPath( final int p_fromindex );
 
     /**
      * creates a path of the indices
      *
-     * @param p_fromIndex start index
-     * @param p_toIndex end index (exclusive) / negative values from the end
+     * @param p_fromindex start index
+     * @param p_toindex end index (exclusive) / negative values from the end
      * @return path
      */
-    IPath getSubPath( final int p_fromIndex, final int p_toIndex );
+    IPath getSubPath( final int p_fromindex, final int p_toindex );
 
     /**
      * returns the last part of the path

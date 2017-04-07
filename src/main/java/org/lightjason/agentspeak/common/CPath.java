@@ -257,20 +257,20 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final IPath getSubPath( final int p_fromIndex )
+    public final IPath getSubPath( final int p_fromindex )
     {
-        return this.getSubPath( p_fromIndex, this.size() );
+        return this.getSubPath( p_fromindex, this.size() );
     }
 
     @Override
-    public final IPath getSubPath( final int p_fromIndex, final int p_toIndex )
+    public final IPath getSubPath( final int p_fromindex, final int p_toindex )
     {
         return new CPath(
-            p_toIndex == 0
+            p_toindex == 0
             ? Stream.of()
             : IntStream.range(
-                p_fromIndex,
-                p_toIndex > 0 ? p_toIndex : this.size() + p_toIndex
+                p_fromindex,
+                p_toindex > 0 ? p_toindex : this.size() + p_toindex
             )
             .mapToObj( m_path::get )
         ).setSeparator( m_separator );

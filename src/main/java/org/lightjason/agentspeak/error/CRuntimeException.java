@@ -103,15 +103,15 @@ public final class CRuntimeException extends RuntimeException implements IContex
      *
      * @param p_message execution message
      * @param p_cause execption cause
-     * @param p_enableSuppression suppression flag
-     * @param p_writableStackTrace stacktrace flag
+     * @param p_enablesuppression suppression flag
+     * @param p_writablestacktrace stacktrace flag
      * @param p_context execution context
      */
-    protected CRuntimeException( final String p_message, final Throwable p_cause, final boolean p_enableSuppression, final boolean p_writableStackTrace,
-                                 final IContext p_context
+    protected CRuntimeException( final String p_message, final Throwable p_cause, final boolean p_enablesuppression,
+                                 final boolean p_writablestacktrace, final IContext p_context
     )
     {
-        super( p_message, p_cause, p_enableSuppression, p_writableStackTrace );
+        super( p_message, p_cause, p_enablesuppression, p_writablestacktrace );
         m_context = p_context;
         LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }

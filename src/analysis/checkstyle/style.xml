@@ -280,11 +280,11 @@
         </module>
 
         <module name = "LocalFinalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9]{2,}$" />
+            <property name = "format" value = "^l_[a-z0-9]{2,}$" />
         </module>
 
         <module name = "LocalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9]{2,}$|i|j" />
+            <property name = "format" value = "^l_[a-z0-9]{2,}$|i|j" />
             <property name = "allowOneCharVarInForLoop" value = "true" />
         </module>
 
@@ -386,7 +386,7 @@
 
         <module name = "ParameterName">
             <!-- lambda expression must defined only one-letter name -->
-            <property name = "format" value = "^((p_[a-zA-Z0-9]{2,})|[a-z])$" />
+            <property name = "format" value = "^((p_[a-z0-9]{2,})|[a-z])$" />
         </module>
 
         <module name = "ParameterNumber">
