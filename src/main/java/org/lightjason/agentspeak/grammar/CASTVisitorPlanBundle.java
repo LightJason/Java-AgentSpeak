@@ -113,7 +113,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     /**
      * set with initial beliefs
      */
-    private final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
+    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
     /**
      * map with plans
      */
@@ -1104,7 +1104,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Set<ILiteral> initialbeliefs()
     {
-        return m_InitialBeliefs;
+        return m_initialbeliefs;
     }
 
     @Override

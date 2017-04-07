@@ -291,7 +291,7 @@
         <!-- <module name = "MagicNumber" /> -->
 
         <module name = "MemberName">
-            <property name = "format" value = "^m_[a-zA-Z0-9]{2,}$" />
+            <property name = "format" value = "^m_[a-z0-9]{2,}$" />
         </module>
 
         <module name = "MethodCount">

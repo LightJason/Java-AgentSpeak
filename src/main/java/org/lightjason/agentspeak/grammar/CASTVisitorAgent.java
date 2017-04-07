@@ -113,11 +113,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     /**
      * initial goal
      */
-    private ILiteral m_InitialGoal;
+    private ILiteral m_initialgoal;
     /**
      * set with initial beliefs
      */
-    private final Set<ILiteral> m_InitialBeliefs = new HashSet<>();
+    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
     /**
      * map with plans
      */
@@ -161,8 +161,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
     {
-        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_InitialBeliefs::add );
-        LOGGER.info( MessageFormat.format( "parsed initial beliefs: {0}", m_InitialBeliefs ) );
+        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
+        LOGGER.info( MessageFormat.format( "parsed initial beliefs: {0}", m_initialbeliefs ) );
         return null;
     }
 
@@ -171,8 +171,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitInitial_goal( final AgentParser.Initial_goalContext p_context )
     {
-        m_InitialGoal = CLiteral.from( (String) this.visitAtom( p_context.atom() ) );
-        LOGGER.info( MessageFormat.format( "parsed initial-goal: {0}", m_InitialGoal ) );
+        m_initialgoal = CLiteral.from( (String) this.visitAtom( p_context.atom() ) );
+        LOGGER.info( MessageFormat.format( "parsed initial-goal: {0}", m_initialgoal ) );
         return null;
     }
 
@@ -1029,7 +1029,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Set<ILiteral> initialbeliefs()
     {
-        return m_InitialBeliefs;
+        return m_initialbeliefs;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1052,7 +1052,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final ILiteral initialgoal()
     {
-        return m_InitialGoal;
+        return m_initialgoal;
     }
 
     /**
