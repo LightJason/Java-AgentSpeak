@@ -21,26 +21,55 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.multimap;
+package org.lightjason.agentspeak.action.buildin.collection;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.buildin.collection.IMapApply;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 
 
 /**
- * adds an element to all map arguments.
- * First argument is a map and all other arguments
- * are key-value pairs, the action fails on wrong
- * input number
- *
- * @code collection/map/put( Map, Key1, Value1, [Key2, Value2] ); @endcode
+ * abstract class for apply any element to multiple maps
  */
-public final class CPut extends IMapApply<Multimap<Object, Object>>
+public abstract class IMapApplyMultiple<T> extends IBuildinAction
 {
 
-    @Override
-    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final Object p_value )
+    /**
+     * ctor
+     */
+    public IMapApplyMultiple()
     {
-        p_instance.put( p_key, p_value );
+        super( 3 );
     }
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 3;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        CCommon.flatstream( p_argument.stream().skip( 2 ) )
+               .forEach( i -> this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * apply put operation
+     *
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_value value
+     */
+    protected abstract void apply( final T p_instance, final Object p_key, final Object p_value );
 }

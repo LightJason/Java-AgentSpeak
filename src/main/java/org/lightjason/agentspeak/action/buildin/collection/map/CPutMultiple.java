@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
+import org.lightjason.agentspeak.action.buildin.collection.IMapApplyMultiple;
+
 import java.util.Map;
 
 
@@ -34,12 +36,12 @@ import java.util.Map;
  *
  * @code collection/map/putmultiple( "key", "value", Map1, Map2 ); @endcode
  */
-public final class CPutMultiple extends IApplyMultiple
+public final class CPutMultiple extends IMapApplyMultiple<Map<Object, Object>>
 {
 
     @Override
-    protected final void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value )
+    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
     {
-        p_map.put( p_key, p_value );
+        p_instance.put( p_key, p_value );
     }
 }

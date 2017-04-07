@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.collection;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
@@ -32,20 +32,19 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
 /**
  * abstract class for any operation
  */
-public abstract class IApply extends IBuildinAction
+public abstract class IMapApply<T> extends IBuildinAction
 {
 
     /**
      * ctor
      */
-    public IApply()
+    public IMapApply()
     {
         super( 3 );
     }
@@ -71,7 +70,7 @@ public abstract class IApply extends IBuildinAction
             2,
             2
         )
-                   .forEach( i ->  this.apply( l_list.get( 0 ).<Map<Object, Object>>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
+                   .forEach( i ->  this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
@@ -79,9 +78,10 @@ public abstract class IApply extends IBuildinAction
     /**
      * apply put operation
      *
-     * @param p_map map
+     * @param p_instance object instance
      * @param p_key key
      * @param p_value value
      */
-    protected abstract void apply( final Map<Object, Object> p_map, final Object p_key, final Object p_value );
+    protected abstract void apply( final T p_instance, final Object p_key, final Object p_value );
 }
+
