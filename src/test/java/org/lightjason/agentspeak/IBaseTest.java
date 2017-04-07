@@ -33,7 +33,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 
 /**
@@ -47,12 +46,12 @@ public abstract class IBaseTest
      */
     protected final void invoketest()
     {
-       final Optional<Method> l_before = this.before();
+        final Optional<Method> l_before = this.before();
 
-       Arrays.stream( this.getClass().getMethods() )
-                     .filter( i -> i.getAnnotation( Test.class ) != null )
-                     .filter( i -> i.getAnnotation( Ignore.class ) == null )
-                     .forEach( i -> this.invoke( i, l_before ) );
+        Arrays.stream( this.getClass().getMethods() )
+              .filter( i -> i.getAnnotation( Test.class ) != null )
+              .filter( i -> i.getAnnotation( Ignore.class ) == null )
+              .forEach( i -> this.invoke( i, l_before ) );
     }
 
     /**
@@ -75,7 +74,12 @@ public abstract class IBaseTest
                 l_arguments = (Object[]) this.getClass().getDeclaredMethod( p_method.getAnnotation( UseDataProvider.class ).value() ).invoke( null );
 
             }
-            catch ( final IllegalAccessException | InvocationTargetException | NoSuchMethodException l_exception )
+            catch ( final InvocationTargetException l_exception )
+            {
+                Assert.assertTrue( l_exception.getTargetException().toString(), false );
+                return;
+            }
+            catch ( final IllegalAccessException | NoSuchMethodException l_exception )
             {
                 Assert.assertTrue( l_exception.toString(), false );
                 return;
@@ -94,22 +98,22 @@ public abstract class IBaseTest
      */
     private void execute( final Method p_method, final Optional<Method> p_before, final Object... p_arguments )
     {
-            try
-            {
-                if (p_before.isPresent() )
-                    p_before.get().invoke( this );
+        try
+        {
+            if ( p_before.isPresent() )
+                p_before.get().invoke( this );
 
-                p_method.invoke( this, p_arguments );
-            }
-            catch ( final InvocationTargetException l_exception )
-            {
-                if ( !p_method.getAnnotation( Test.class ).expected().isInstance( l_exception.getTargetException() ) )
-                    Assert.assertTrue( l_exception.getTargetException().toString(), false );
-            }
-            catch ( final IllegalAccessException l_exception )
-            {
-                Assert.assertTrue( l_exception.toString(), false );
-            }
+            p_method.invoke( this, p_arguments );
+        }
+        catch ( final InvocationTargetException l_exception )
+        {
+            if ( !p_method.getAnnotation( Test.class ).expected().isInstance( l_exception.getTargetException() ) )
+                Assert.assertTrue( l_exception.getTargetException().toString(), false );
+        }
+        catch ( final IllegalAccessException l_exception )
+        {
+            Assert.assertTrue( l_exception.toString(), false );
+        }
     }
 
     /**
@@ -120,9 +124,9 @@ public abstract class IBaseTest
     private Optional<Method> before()
     {
         return Arrays.stream( this.getClass().getMethods() )
-              .filter( i -> i.getAnnotation( Before.class ) != null )
-              .filter( i -> i.getAnnotation( Ignore.class ) == null )
-              .findFirst();
+                     .filter( i -> i.getAnnotation( Before.class ) != null )
+                     .filter( i -> i.getAnnotation( Ignore.class ) == null )
+                     .findFirst();
     }
 
 }
