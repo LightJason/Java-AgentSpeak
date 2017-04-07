@@ -28,9 +28,9 @@ import org.lightjason.agentspeak.action.buildin.collection.IMapApplyMultiple;
 
 
 /**
- * adds an element to all map arguments.
- * First argument is a key value, second the value, all
- * other values are map references, the key-value pair
+ * adds an element to all multimap arguments.
+ * First argument is a key, second the value, all
+ * other values are multimap references, the key-value pair
  * is added and the action never fails
  *
  * @code collection/multimap/put( "key", "value", MultiMap1, MultiMap2 ); @endcode

@@ -28,12 +28,12 @@ import org.lightjason.agentspeak.action.buildin.collection.IMapApply;
 
 
 /**
- * adds an element to all map arguments.
- * First argument is a map and all other arguments
+ * adds an element to all multimap arguments.
+ * First argument is a multimap and all other arguments
  * are key-value pairs, the action fails on wrong
  * input number
  *
- * @code collection/map/put( Map, Key1, Value1, [Key2, Value2] ); @endcode
+ * @code collection/multimap/put( Map, Key1, Value1, [Key2, Value2] ); @endcode
  */
 public final class CPut extends IMapApply<Multimap<Object, Object>>
 {

@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  * adds an element to all map arguments.
- * First argument is a key value, second the value, all
+ * First argument is a key, second the value, all
  * other values are map references, the key-value pair
  * is added and the action never fails
  *
