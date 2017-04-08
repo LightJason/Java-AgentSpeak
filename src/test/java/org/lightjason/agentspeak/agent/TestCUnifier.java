@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.agent;
 
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -44,7 +45,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * test for unification
  */
-public final class TestCUnifier
+public final class TestCUnifier extends IBaseTest
 {
 
     /**
@@ -177,14 +178,7 @@ public final class TestCUnifier
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        final TestCUnifier l_test = new TestCUnifier();
-
-        l_test.testLiteralValueTraversing();
-        l_test.testLiteralAnnotationTraversing();
-        l_test.testLiteralValueSequentialTraversing();
-
-        l_test.testValueHash();
-        l_test.testAnnotationHash();
+        new TestCUnifier().invoketest();
     }
 
 }

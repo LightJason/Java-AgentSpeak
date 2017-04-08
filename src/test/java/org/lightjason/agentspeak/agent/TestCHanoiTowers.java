@@ -68,8 +68,6 @@ public final class TestCHanoiTowers extends IBaseHanoiTowers
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        final TestCHanoiTowers l_hanoi = new TestCHanoiTowers();
-        l_hanoi.initialize();
-        l_hanoi.play();
+        new TestCHanoiTowers().invoketest();
     }
 }

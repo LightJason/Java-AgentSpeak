@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
@@ -65,7 +66,7 @@ import static org.junit.Assert.assertTrue;
  * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
  */
 @SuppressWarnings( "serial" )
-abstract class IBaseHanoiTowers
+abstract class IBaseHanoiTowers extends IBaseTest
 {
     /**
      * agent map

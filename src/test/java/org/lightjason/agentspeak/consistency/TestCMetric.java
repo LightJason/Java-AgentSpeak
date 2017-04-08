@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.consistency;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
@@ -54,7 +55,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * metric tests
  */
-public final class TestCMetric
+public final class TestCMetric extends IBaseTest
 {
     /**
      * literal view generator
@@ -161,23 +162,6 @@ public final class TestCMetric
 
 
     /**
-     * manuell running test
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        final TestCMetric l_test = new TestCMetric();
-
-        l_test.initialize();
-
-        l_test.testSymmetricWeightEquality();
-        l_test.testSymmetricWeightInequality();
-        l_test.testWeightEquality();
-        l_test.testWeightInequality();
-    }
-
-    /**
      * runs the check
      *
      * @param p_message error / successful message
@@ -214,6 +198,20 @@ public final class TestCMetric
         p_literals.forEach( i -> l_agent.beliefbase().generate( m_generator, i.functorpath() ).add( i ) );
         return l_agent;
     }
+
+
+    /**
+     * manuell running test
+     *
+     * @param p_args arguments
+     */
+    public static void main( final String[] p_args )
+    {
+        new TestCMetric().invoketest();
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * agetn class

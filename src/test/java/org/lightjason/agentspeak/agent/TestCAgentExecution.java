@@ -29,6 +29,7 @@ import com.google.common.collect.Multimaps;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -49,7 +50,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertTrue;
@@ -58,7 +59,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * test for agent execution ordering
  */
-public final class TestCAgentExecution
+public final class TestCAgentExecution extends IBaseTest
 {
     /**
      * asl source
@@ -136,18 +137,18 @@ public final class TestCAgentExecution
         // check execution results
         assertTrue(
             MessageFormat.format(  "number of cycles are incorrect, excpected [{0}] contains [{1}]", m_result.asMap().size(), m_log.asMap().size() ),
-            IntStream.range( 0, m_result.asMap().size() ).allMatch( i -> m_log.containsKey( Long.valueOf( i ) ) )
+            LongStream.range( 0, m_result.asMap().size() ).allMatch( m_log::containsKey )
         );
 
         assertTrue(
             MessageFormat.format( "number of log elements during execution are incorrect, expected {0} result {1}", m_result.asMap(), m_log.asMap() ),
-            IntStream.range( 0, m_result.asMap().size() )
-                     .allMatch( i -> m_result.get( Long.valueOf( i ) ).size() == m_log.asMap().getOrDefault( Long.valueOf( i ), Collections.emptyList() ).size() )
+            LongStream.range( 0, m_result.asMap().size() )
+                      .allMatch( i -> m_result.get( i ).size() == m_log.asMap().getOrDefault( i, Collections.emptyList() ).size() )
         );
 
-        IntStream.range( 0, m_result.asMap().size() ).forEach( i -> assertTrue(
-            MessageFormat.format(  "expected result {0} for index {2} is not equal to log {1}", m_result.get( Long.valueOf( i ) ), m_log.get( Long.valueOf( i ) ), i ),
-            m_result.get( Long.valueOf( i ) ).stream().allMatch( j -> m_log.get( Long.valueOf( i ) ).contains( j ) )
+        LongStream.range( 0, m_result.asMap().size() ).forEach( i -> assertTrue(
+            MessageFormat.format( "expected result {0} for index {2} is not equal to log {1}", m_result.get( i ), m_log.get( i ), i ),
+            m_result.get( i ).stream().allMatch( j -> m_log.get( i ).contains( j ) )
         ) );
 
     }
@@ -162,9 +163,7 @@ public final class TestCAgentExecution
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        final TestCAgentExecution l_test = new TestCAgentExecution();
-        l_test.initialize();
-        l_test.executionorder();
+        new TestCAgentExecution().invoketest();
     }
 
 

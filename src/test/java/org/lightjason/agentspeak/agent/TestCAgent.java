@@ -33,6 +33,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.common.CCommon;
@@ -54,7 +55,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -68,7 +68,7 @@ import java.util.stream.Stream;
  * test agent structure
  */
 @RunWith( DataProviderRunner.class )
-public final class TestCAgent
+public final class TestCAgent extends IBaseTest
 {
     /**
      * enable printing of test-data
@@ -161,22 +161,9 @@ public final class TestCAgent
      * @param p_args arguments
      * @throws Exception on parsing exception
      */
-    @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args ) throws Exception
     {
-        Arrays.stream( TestCAgent.generate() )
-              .parallel()
-              .map( i -> (Triple<String, Number, Number>) i )
-              .forEach( i -> {
-                  try
-                  {
-                      new TestCAgent().testASLDefault( i );
-                  }
-                  catch ( final Exception l_exception )
-                  {
-                      l_exception.printStackTrace();
-                  }
-              } );
+        new TestCAgent().invoketest();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

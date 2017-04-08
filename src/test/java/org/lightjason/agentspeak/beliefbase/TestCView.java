@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
@@ -40,7 +41,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * test of beliefbase view
  */
-public final class TestCView
+public final class TestCView extends IBaseTest
 {
 
     /**
@@ -97,10 +98,7 @@ public final class TestCView
      */
     public static void main( final String[] p_args )
     {
-        final TestCView l_test = new TestCView();
-
-        l_test.testTree();
-        l_test.testManual();
+        new TestCView().invoketest();
     }
 
 

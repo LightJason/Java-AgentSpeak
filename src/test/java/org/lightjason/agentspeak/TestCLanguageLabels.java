@@ -65,7 +65,7 @@ import static org.junit.Assume.assumeTrue;
 /**
  * test all resource strings
  */
-public final class TestCLanguageLabels
+public final class TestCLanguageLabels extends IBaseTest
 {
     private static final String CLASSSEPARATOR = ".";
     /**
@@ -295,9 +295,7 @@ public final class TestCLanguageLabels
      */
     public static void main( final String[] p_args ) throws IOException
     {
-        final TestCLanguageLabels l_test = new TestCLanguageLabels();
-        l_test.testTranslation();
-        l_test.testResourceString();
+        new TestCLanguageLabels().invoketest();
     }
 
 

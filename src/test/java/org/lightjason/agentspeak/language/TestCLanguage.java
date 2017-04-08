@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language;
 import com.codepoetics.protonpack.StreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.CMutexVariable;
@@ -40,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * test for language components
  */
-public final class TestCLanguage
+public final class TestCLanguage extends IBaseTest
 {
 
     /**
@@ -257,23 +258,7 @@ public final class TestCLanguage
      */
     public static void main( final String[] p_args )
     {
-        final TestCLanguage l_test = new TestCLanguage();
+        new TestCLanguage().invoketest();
 
-        l_test.literal();
-        l_test.rawterm();
-        l_test.constant();
-        l_test.variable();
-        l_test.variablemutex();
-        l_test.relocatevariable();
-        l_test.relocatevariablemutex();
-
-        try
-        {
-            l_test.constantaccess();
-        }
-        catch ( final RuntimeException l_exception )
-        {
-            // check successfull
-        }
     }
 }
