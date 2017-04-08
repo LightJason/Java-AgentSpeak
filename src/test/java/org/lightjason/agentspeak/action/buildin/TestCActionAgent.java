@@ -24,16 +24,20 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.action.buildin.agent.CAddPlan;
+import org.lightjason.agentspeak.action.buildin.agent.CGetPlan;
 import org.lightjason.agentspeak.action.buildin.agent.CPlanList;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
@@ -60,7 +64,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
+import java.util.stream.Collectors;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -147,6 +153,62 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertTrue( l_return.get( 1 ).<List<?>>raw().get( 0 ) instanceof AbstractMap.Entry<?, ?> );
         Assert.assertEquals( l_return.get( 1 ).<List<AbstractMap.Entry<String, ILiteral>>>raw().get( 0 ).getKey(), l_trigger.getType().sequence() );
         Assert.assertEquals( l_return.get( 1 ).<List<AbstractMap.Entry<String, ILiteral>>>raw().get( 0 ).getValue(), l_trigger.getLiteral() );
+    }
+
+
+    /**
+     * test add plan
+     */
+    @Test
+    public final void addplan()
+    {
+        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplan" ) ) );
+
+        new CAddPlan().execute(
+            m_context,
+            false,
+            Stream.of( l_plan ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( m_context.agent().plans().size(), 1 );
+        Assert.assertArrayEquals( m_context.agent().plans().values().stream().map( Triple::getLeft ).toArray(), Stream.of( l_plan ).toArray() );
+    }
+
+
+    /**
+     * test get plan
+     */
+    @Test
+    public final void getplan()
+    {
+        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplan" ) ) );
+        final List<ITerm> l_return = new ArrayList<>();
+
+
+        new CGetPlan().execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue( l_return.isEmpty() );
+
+
+        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+
+        new CGetPlan().execute(
+            m_context,
+            false,
+            Stream.of( "+!", "testplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        System.out.println( l_return );
     }
 
 
