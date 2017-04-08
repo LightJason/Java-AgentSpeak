@@ -41,7 +41,7 @@ import java.util.List;
  * t and all other arguments will be used for \f$ x_i \f$,
  * the action fails never
  *
- * @code [A|B|C] = math/pow(2, -2, 2, 9); @endcode
+ * @code [A|B|C] = math/pow(2.0, -2.0, 2.0, 9.0); @endcode
  */
 public final class CPow extends IBuildinAction
 {

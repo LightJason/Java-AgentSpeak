@@ -39,7 +39,7 @@ import java.util.List;
  * Calculates the square-root for each
  * unflatten argument \f$ \sqrt{ x_i } \f$
  *
- * @code @endcode
+ * @code [S1|S2] = math/sqrt(2,3); @endcode
  */
 public final class CSqrt extends IBuildinAction
 {
