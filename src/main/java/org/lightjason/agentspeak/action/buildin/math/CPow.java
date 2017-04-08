@@ -41,7 +41,7 @@ import java.util.List;
  * t and all other arguments will be used for \f$ x_i \f$,
  * the action fails never
  *
- * @code [A|B|C] = math/pow(2.0, -2.0, 2.0, 9.0); @endcode
+ * @code [A|B|C] = math/pow(2, -2, 2, 9); @endcode
  */
 public final class CPow extends IBuildinAction
 {
@@ -57,7 +57,7 @@ public final class CPow extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final double l_exponent = p_argument.get( 0 ).raw();
+        final double l_exponent = p_argument.get( 0 ).<Number>raw().doubleValue();
 
         CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) )
                .map( ITerm::<Number>raw )

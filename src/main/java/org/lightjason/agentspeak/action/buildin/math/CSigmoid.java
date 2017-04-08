@@ -43,7 +43,7 @@ import java.util.function.Function;
  * argument, all values beginning at the fourth position will be used for t, so the
  * action returns all values but and is never failing.
  *
- * @code [A | B | C] = math/sigmoid( 1.0, 1.0, 1.0, 10.0, 20.0, 30.0 ); @endcode
+ * @code [A | B | C] = math/sigmoid( 1, 1, 1, 10, 20, 30 ); @endcode
  * @see https://en.wikipedia.org/wiki/Sigmoid_function
  */
 public final class CSigmoid extends IBuildinAction
@@ -60,8 +60,10 @@ public final class CSigmoid extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final Function<Double, Double> l_sigmoid = ( i ) ->
-            p_argument.get( 0 ).<Double>raw() / ( p_argument.get( 1 ).<Double>raw() + Math.exp( -p_argument.get( 2 ).<Double>raw() ) * i );
+        final Function<Double, Double> l_sigmoid = ( i ) -> p_argument.get( 0 ).<Number>raw().doubleValue()
+                                                            / ( p_argument.get( 1 ).<Number>raw().doubleValue()
+                                                                + Math.exp( -p_argument.get( 2 ).<Number>raw().doubleValue() ) * i
+                                                            );
 
         CCommon.flatcollection( p_argument )
                .map( ITerm::<Number>raw )
