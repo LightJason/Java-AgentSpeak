@@ -35,6 +35,8 @@ import java.util.List;
 
 /**
  * abstract class for apply any element to multiple maps
+ *
+ * @tparam T map instance
  */
 public abstract class IMapApplyMultiple<T> extends IBuildinAction
 {
@@ -65,7 +67,7 @@ public abstract class IMapApplyMultiple<T> extends IBuildinAction
     }
 
     /**
-     * apply put operation
+     * apply operation
      *
      * @param p_instance object instance
      * @param p_key key

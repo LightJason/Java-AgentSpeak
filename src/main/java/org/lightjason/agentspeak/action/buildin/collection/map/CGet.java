@@ -23,13 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.action.buildin.collection.IMapGet;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 import java.util.Map;
@@ -46,34 +42,16 @@ import java.util.Map;
  * [V2|V3] = collection/map/get( Map, "Key1", "Key2" );
  * @endcode
  */
-public final class CGet extends IBuildinAction
+public final class CGet extends IMapGet<Map<Object, Object>>
 {
-    /**
-     * ctor
-     */
-    public CGet()
-    {
-        super( 3 );
-    }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return )
     {
-        return 2;
+        p_return.add(
+            CRawTerm.from(
+                p_instance.get( p_key )
+            )
+        );
     }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        CCommon.flatcollection( p_argument )
-                   .skip( 1 )
-                   .map( i -> p_argument.get( 0 ).<Map<?, ?>>raw().get( i.raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
-    }
-
 }

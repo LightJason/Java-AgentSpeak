@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
@@ -31,6 +32,8 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.buildin.agent.CAddPlan;
+import org.lightjason.agentspeak.action.buildin.agent.CBeliefList;
+import org.lightjason.agentspeak.action.buildin.agent.CClearBeliefbase;
 import org.lightjason.agentspeak.action.buildin.agent.CCycleTime;
 import org.lightjason.agentspeak.action.buildin.agent.CGetPlan;
 import org.lightjason.agentspeak.action.buildin.agent.CPlanList;
@@ -67,6 +70,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -274,6 +278,71 @@ public final class TestCActionAgent extends IBaseTest
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
+        );
+    }
+
+
+    /**
+     * test clear-beliefbase
+     */
+    @Test
+    public final void clearbeliefbase()
+    {
+        IntStream.range( 0, 100 )
+                 .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
+                 .map( i -> CLiteral.from( i ) )
+                 .forEach( i -> m_context.agent().beliefbase().add( i ) );
+
+        Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
+
+
+        new CClearBeliefbase().execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( m_context.agent().beliefbase().size(), 0 );
+    }
+
+
+    /**
+     * test belieflist
+     */
+    @Test
+    public final void belieflist()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Set<String> l_list = IntStream.range( 0, 100 )
+                                            .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
+                                            .map( i -> {
+                                                m_context.agent().beliefbase().add( CLiteral.from( i ) );
+                                                return i;
+                                            } )
+                                            .collect( Collectors.toSet() );
+
+        Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
+
+        new CBeliefList().execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            l_return,
+            Collections.emptyList()
+        );
+
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
+
+        Assert.assertTrue(
+            l_return.get( 0 )
+                    .<List<ILiteral>>raw()
+                    .stream()
+                    .map( i -> i.fqnfunctor().toString() )
+                    .allMatch( l_list::contains )
         );
     }
 

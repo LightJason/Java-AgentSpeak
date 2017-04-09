@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 
 /**
  * abstract class for any operation
+ *
+ * @tparam T map instance
  */
 public abstract class IMapApply<T> extends IBuildinAction
 {
@@ -76,7 +78,7 @@ public abstract class IMapApply<T> extends IBuildinAction
     }
 
     /**
-     * apply put operation
+     * apply operation
      *
      * @param p_instance object instance
      * @param p_key key

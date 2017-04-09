@@ -55,7 +55,7 @@ public final class CBeliefList extends IBuildinAction
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -64,9 +64,11 @@ public final class CBeliefList extends IBuildinAction
     )
     {
         final List<ILiteral> l_literal = (
-            p_argument.size() == 1
-            ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
-            : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
+            p_argument.isEmpty()
+            ? p_context.agent().beliefbase().stream()
+            : p_argument.size() == 1
+              ? p_context.agent().beliefbase().stream( CPath.from( p_argument.get( 0 ).<String>raw() ) )
+              : p_context.agent().beliefbase().stream( p_argument.get( 1 ).<Boolean>raw(), CPath.from( p_argument.get( 0 ).<String>raw() ) )
         ).collect( Collectors.toList() );
 
         p_return.add(

@@ -21,34 +21,63 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.collection;
 
-import org.lightjason.agentspeak.action.buildin.collection.IMapGetMultiple;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
- * get a value by key from multiple maps.
- * The action get the key as first argument from
- * all other map arguments, the action never fails
+ * abstract class to get elements of multiple maps
  *
- * @code [A|B|C] = collection/map/getmultiple( "key", Map1, Map2, Map3 ); @endcode
+ * @tparam T
  */
-public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
+public abstract class IMapGetMultiple<T> extends IBuildinAction
 {
 
-    @Override
-    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return )
+    /**
+     * ctor
+     */
+    public IMapGetMultiple()
     {
-        p_return.add(
-            CRawTerm.from(
-                p_instance.get( p_key )
-            )
-        );
+        super( 3 );
     }
+
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        CCommon.flatcollection( p_argument )
+               .skip( 1 )
+               .forEach( i ->  this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_parallel, p_return ) );
+
+        return CFuzzyValue.from( true );
+    }
+
+
+    /**
+     * apply operation
+     *
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_parallel parallel flag
+     * @param p_return return list
+     */
+    protected abstract void apply( final T p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return );
 
 }

@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CAsMap;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CCreate;
+import org.lightjason.agentspeak.action.buildin.collection.multimap.CGet;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CKeys;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CPut;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CValues;
@@ -41,6 +42,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -187,6 +189,34 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         Assert.assertEquals( l_map.size(), 4 );
         Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( 1, 2, 3 ).toArray() );
         Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( "foo", "blub", "yyy", "xxx" ).toArray() );
+    }
+
+
+    /**
+     * test get
+     */
+    @Test
+    public final void get()
+    {
+        final Multimap<Integer, String> l_map = HashMultimap.create();
+        final List<ITerm> l_return = new ArrayList<>();
+
+        l_map.put( 1, "foo" );
+        l_map.put( 1, "bar" );
+        l_map.put( 2, "test string" );
+        l_map.put( 3, "blub" );
+
+        new CGet().execute(
+            null,
+            false,
+            Stream.of( l_map, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<Collection<?>>raw().toArray(), l_map.asMap().get( 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<Collection<?>>raw().toArray(), l_map.asMap().get( 2 ).toArray() );
     }
 
 
