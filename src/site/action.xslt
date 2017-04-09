@@ -33,7 +33,7 @@
 
         <!-- create json object of a class node (only public classes and if the class is an inheritance of IBuildinAction) -->
         <xsl:for-each
-                select = "compounddef[@kind='class' and (not(@abstract) or @abstrac!='yes') and @prot='public' and inheritancegraph/node/label='org.lightjason.agentspeak.action.buildin.IBuildinAction']">
+                select = "compounddef[@kind='class' and @prot='public' and (not(@abstract) or @abstrac!='yes') and inheritancegraph//node/label='org.lightjason.agentspeak.action.buildin.IBuildinAction']">
 
             <!-- replace base package and class prefix, replace :: to / and create lower-case -->
             <xsl:variable name = "name" as = "xs:string">
