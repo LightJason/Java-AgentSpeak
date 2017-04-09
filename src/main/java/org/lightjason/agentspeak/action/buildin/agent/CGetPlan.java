@@ -36,21 +36,25 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 
 /**
- * action to get a plan object.
- * The actions returns a (set of) plan(s),
+ * action to get plan objects.
+ * The actions returns a list of plans of a trigger,
  * the arguments are tuples of a string with the trigger
- * and a string or literal with the plan definition, for
- * each tuple the plan object will returned, the action
- * fails on non-existing plan
+ * sequence (+!, +, -, -!) and a string or literal, the plan name,
+ * for each tuple the plan object will returned within a list, the
+ * action fails on non-existing plan
  *
- * @code [A|B] = agent/getplan( "+!", "myplan(X)", "-!", Literal ); @endcode
+ * @code [L1|L2] = agent/getplan( "+!", "myplan(X)", "-!", Literal ); @endcode
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CGetPlan extends IBuildinAction
@@ -101,16 +105,16 @@ public final class CGetPlan extends IBuildinAction
             return false;
         }
 
-        final ITrigger l_trigger = CTrigger.from( p_trigger, l_literal );
-        if ( !p_agent.plans().containsKey( l_literal ) )
+
+        final Collection<Triple<IPlan, AtomicLong, AtomicLong>> l_plans = p_agent.plans().get( CTrigger.from( p_trigger, l_literal ) );
+        if ( l_plans.isEmpty() )
             return false;
 
-        p_agent.plans()
-               .get( l_trigger )
-               .stream()
-               .map( Triple::getLeft )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
+        p_return.add(
+            CRawTerm.from(
+                l_plans.stream().map( Triple::getLeft ).collect( Collectors.toList() )
+            )
+        );
 
         return true;
     }

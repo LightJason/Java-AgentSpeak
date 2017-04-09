@@ -31,8 +31,10 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.buildin.agent.CAddPlan;
+import org.lightjason.agentspeak.action.buildin.agent.CCycleTime;
 import org.lightjason.agentspeak.action.buildin.agent.CGetPlan;
 import org.lightjason.agentspeak.action.buildin.agent.CPlanList;
+import org.lightjason.agentspeak.action.buildin.agent.CRemovePlan;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
@@ -120,7 +122,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void planlist()
     {
-        final ITrigger l_trigger = CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplan" ) );
+        final ITrigger l_trigger = CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplanlist" ) );
         final IPlan l_plan = new CEmptyPlan( l_trigger );
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -162,7 +164,7 @@ public final class TestCActionAgent extends IBaseTest
     @Test
     public final void addplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testaddplan" ) ) );
 
         new CAddPlan().execute(
             m_context,
@@ -178,12 +180,34 @@ public final class TestCActionAgent extends IBaseTest
 
 
     /**
+     * test cycle-time
+     */
+    @Test
+    public final void cycletime()
+    {
+        this.next();
+
+        final List<ITerm> l_return = new ArrayList<>();
+        new CCycleTime().execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).<Number>raw().longValue() > 0 );
+    }
+
+
+    /**
      * test get plan
      */
     @Test
     public final void getplan()
     {
-        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testplan" ) ) );
+        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testgetplan" ) ) );
         final List<ITerm> l_return = new ArrayList<>();
 
 
@@ -203,12 +227,54 @@ public final class TestCActionAgent extends IBaseTest
         new CGetPlan().execute(
             m_context,
             false,
-            Stream.of( "+!", "testplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "+!", "testgetplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
-        System.out.println( l_return );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
+        Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 1 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( l_plan ).toArray() );
+    }
+
+
+    /**
+     * test remove plan
+     */
+    @Test
+    public final void removeplan()
+    {
+        final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testremoveplan" ) ) );
+        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+
+        Assert.assertTrue(
+            new CRemovePlan().execute(
+                m_context,
+                false,
+                Stream.of( "+!", "testremoveplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+
+    /**
+     * test remove plan error
+     */
+    @Test
+    public final void removeplanerror()
+    {
+        Assert.assertFalse(
+            new CRemovePlan().execute(
+                m_context,
+                false,
+                Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 

@@ -108,7 +108,10 @@ public abstract class IBaseTest
         catch ( final InvocationTargetException l_exception )
         {
             if ( !p_method.getAnnotation( Test.class ).expected().isInstance( l_exception.getTargetException() ) )
-                Assert.assertTrue( l_exception.getTargetException().toString(), false );
+            {
+                l_exception.getTargetException().printStackTrace();
+                Assert.assertTrue( false );
+            }
         }
         catch ( final IllegalAccessException l_exception )
         {
