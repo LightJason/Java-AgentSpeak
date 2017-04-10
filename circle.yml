@@ -19,19 +19,17 @@ machine:
     java:
         version: oraclejdk8
 
-    environment:
-        PATH: "/tmp/doxygen-${DOXYGEN_VERSION}/bin:${PATH}"
-
 
 dependencies:
     pre:
         - sudo apt-get install graphviz xsltproc
-        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip /tmp/saxon.zip /tmp/saxon9he.jar
+        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
         - wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
 
 
 checkout:
     post:
+        - git clean -xdf
         - git fetch -p
         - git gc --prune=now
         - mvn clean dependency:purge-local-repository -DreResolve=false -DactTransitively=true
