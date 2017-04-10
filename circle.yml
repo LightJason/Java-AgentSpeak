@@ -20,14 +20,14 @@ machine:
         version: oraclejdk8
 
     environment:
-        PATH: "/home/ubuntu/doxygen-${DOXYGEN_VERSION}/bin:${PATH}"
+        PATH: "/tmp/doxygen-${DOXYGEN_VERSION}/bin:${PATH}"
 
 
 dependencies:
     pre:
         - sudo apt-get install graphviz xsltproc
-        - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip saxon.zip saxon9he.jar
-        - wget -O doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf doxygen.tar.gz
+        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip /tmp/saxon.zip /tmp/saxon9he.jar
+        - wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
 
 
 checkout:
@@ -46,7 +46,7 @@ test:
         - mvn site coveralls:report -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -Dcoverall.token=${COVERALL_TOKEN}
         # transformation classes to website json import
         - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
-        - java -jar saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
+        - java -jar /tmp/saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
         # create CircleCI reports
         - mkdir -p $CIRCLE_TEST_REPORTS/junit/
         - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
