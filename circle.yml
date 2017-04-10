@@ -19,11 +19,15 @@ machine:
     java:
         version: oraclejdk8
 
+  environment:
+        PATH: "/home/ubuntu/doxygen-${DOXYGEN_VERSION}/bin:${PATH}"
+
 
 dependencies:
     pre:
         - sudo apt-get install doxygen graphviz xsltproc
         - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip saxon.zip saxon9he.jar
+        - wget -O doygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf doxygen.tar.gz
 
 
 checkout:
