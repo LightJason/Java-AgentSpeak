@@ -25,9 +25,15 @@ dependencies:
         - sudo apt-get install doxygen graphviz xsltproc
         - wget -O saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip saxon.zip saxon9he.jar
 
+checkout:
+    post:
+        - git fetch -p
+        - git gc --prune=now
+
 
 test:
     override:
+        - mvn clean dependency:purge-local-repository -DreResolve=false -DactTransitively=true -Dverbose=true
         - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
 
     post:
