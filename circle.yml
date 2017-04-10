@@ -19,7 +19,7 @@ machine:
     java:
         version: oraclejdk8
 
-  environment:
+    environment:
         PATH: "/home/ubuntu/doxygen-${DOXYGEN_VERSION}/bin:${PATH}"
 
 
