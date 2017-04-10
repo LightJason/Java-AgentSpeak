@@ -33,7 +33,7 @@ checkout:
 
 test:
     override:
-        - mvn clean dependency:purge-local-repository -DreResolve=false -DactTransitively=true -Dverbose=true
+        - mvn clean dependency:purge-local-repository -DreResolve=false -DactTransitively=true
         - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
 
     post:
