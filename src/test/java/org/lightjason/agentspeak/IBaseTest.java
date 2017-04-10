@@ -32,7 +32,8 @@ import org.junit.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,7 +47,7 @@ public abstract class IBaseTest
      */
     protected final void invoketest()
     {
-        final Optional<Method> l_before = this.before();
+        final Set<Method> l_before = this.before();
 
         Arrays.stream( this.getClass().getMethods() )
               .filter( i -> i.getAnnotation( Test.class ) != null )
@@ -60,7 +61,7 @@ public abstract class IBaseTest
      * @param p_method method
      * @param p_before before method
      */
-    private void invoke( final Method p_method, final Optional<Method> p_before )
+    private void invoke( final Method p_method, final Set<Method> p_before )
     {
         // method uses a data-provider
         if ( p_method.getAnnotation( UseDataProvider.class ) == null )
@@ -93,15 +94,25 @@ public abstract class IBaseTest
      * invokes the method within the current object context
      *
      * @param p_method method
-     * @param p_before before method or null
+     * @param p_before before method
      * @param p_arguments optional arguments
      */
-    private void execute( final Method p_method, final Optional<Method> p_before, final Object... p_arguments )
+    private void execute( final Method p_method, final Set<Method> p_before, final Object... p_arguments )
     {
         try
         {
-            if ( p_before.isPresent() )
-                p_before.get().invoke( this );
+            if ( !p_before.isEmpty() )
+                p_before.forEach( i -> {
+                    try
+                    {
+                        i.invoke( this );
+                    }
+                    catch ( final IllegalAccessException | InvocationTargetException l_exception )
+                    {
+                        l_exception.printStackTrace();
+                        Assert.assertTrue( false );
+                    }
+                } );
 
             p_method.invoke( this, p_arguments );
         }
@@ -124,12 +135,11 @@ public abstract class IBaseTest
      *
      * @return optional before method
      */
-    private Optional<Method> before()
+    private Set<Method> before()
     {
         return Arrays.stream( this.getClass().getMethods() )
                      .filter( i -> i.getAnnotation( Before.class ) != null )
                      .filter( i -> i.getAnnotation( Ignore.class ) == null )
-                     .findFirst();
+                     .collect( Collectors.toSet() );
     }
-
 }
