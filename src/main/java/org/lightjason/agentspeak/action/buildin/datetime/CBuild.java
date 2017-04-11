@@ -60,7 +60,8 @@ public final class CBuild extends IBuildinAction
     {
         StreamUtils.windowed(
             CCommon.flatcollection( p_argument ),
-        8
+        8,
+            8
         )
                    .map( CBuild::apply )
                    .map( CRawTerm::from )
