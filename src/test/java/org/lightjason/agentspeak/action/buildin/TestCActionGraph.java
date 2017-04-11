@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.graph.CAddEdge;
 import org.lightjason.agentspeak.action.buildin.graph.CAddVertex;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
+import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -127,6 +128,32 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( (long) l_graph.getEndpoints( "foo" ).getSecond(), 2 );
         Assert.assertEquals( (long) l_graph.getEndpoints( "bar" ).getFirst(), 4 );
         Assert.assertEquals( (long) l_graph.getEndpoints( "bar" ).getSecond(), 5 );
+    }
+
+
+    /**
+     * test vertex-count
+     */
+    @Test
+    public final void vertexcount()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        IntStream.range( 0, 5 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        new CVertexCount().execute(
+            null,
+            false,
+            Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), (long) l_graph.getVertexCount() );
     }
 
 
