@@ -24,6 +24,8 @@
 package org.lightjason.agentspeak.action.buildin.datetime;
 
 import com.codepoetics.protonpack.StreamUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Instant;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -35,6 +37,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Stream;
 
 
@@ -65,7 +68,9 @@ public abstract class IBetween extends IBuildinAction
             StreamUtils.windowed(
                 CCommon.flatcollection( p_argument )
                        .map( ITerm::<ZonedDateTime>raw )
+                       .map( i ->  new DateTime( i.toInstant().toEpochMilli(), DateTimeZone.forTimeZone( TimeZone.getTimeZone( i.getZone() ) ) ) )
                        .map( Instant::new ),
+                2,
                 2
             )
         )

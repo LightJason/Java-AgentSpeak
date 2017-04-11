@@ -38,6 +38,8 @@ import java.util.stream.Stream;
  * fails
  *
  * @code [M1|M2] = datetime/minutesbetween( DateTime1, DateTime2, DateTime3, DateTime4 ); @endcode
+ * @note a positive value will be returned iif the first date-time item is before the second one, a negative value
+ * will be returned iif the first date-time item is after the second date-time item
  */
 public final class CMinutesBetween extends IBetween
 {
