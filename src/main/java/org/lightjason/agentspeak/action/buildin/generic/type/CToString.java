@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.buildin.generic.type;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 
@@ -49,7 +48,7 @@ public final class CToString extends ICast
      */
     protected final boolean cast( final ITerm p_value, final List<ITerm> p_return )
     {
-        p_return.add( CRawTerm.from( MessageFormat.format( "{0}", p_value.raw() ) ) );
+        p_return.add( CRawTerm.from( p_value.raw().toString() ) );
         return true;
     }
 
