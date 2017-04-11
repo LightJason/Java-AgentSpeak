@@ -31,7 +31,6 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -91,7 +90,14 @@ public final class TestCActionDateTime extends IBaseTest
     @DataProvider
     public static Object[] generateapplyplus()
     {
-        return Stream.of().toArray();
+        return Stream.of(
+            testcaseapply( new CApplyYears(), "2009-05-04T10:17:13-05:00[America/New_York]", 12, "2021-05-04T10:17:13-04:00[America/New_York]" ),
+            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13-05:00[America/New_York]", 3, "2008-05-07T10:17:13-04:00[America/New_York]" ),
+            testcaseapply( new CApplyHours(), "2009-01-15T10:16:13+00:00[Europe/London]", 120, "2009-01-20T10:16:13Z[Europe/London]" ),
+            testcaseapply( new CApplyMinutes(), "2007-01-15T10:23:13+00:00[Europe/London]", 240, "2007-01-15T14:23:13Z[Europe/London]" ),
+            testcaseapply( new CApplySeconds(), "2006-01-15T10:23:13+00:00[Europe/London]", 7205, "2006-01-15T12:23:18Z[Europe/London]" ),
+            testcaseapply( new CApplyNanoSeconds(), "2005-01-15T10:23:13+00:00[Europe/London]", 15715, "2005-01-15T10:23:13.000015715Z[Europe/London]" )
+        ).toArray();
     }
 
 
@@ -104,7 +110,7 @@ public final class TestCActionDateTime extends IBaseTest
      * @param p_result result time string
      * @return test object
      */
-    private static Object testcaseapply( final IAction p_action,final String p_datetime, final int p_value, final String p_result )
+    private static Object testcaseapply( final IAction p_action, final String p_datetime, final int p_value, final String p_result )
     {
         return new ImmutableTriple<>( p_action, new ImmutablePair<>( ZonedDateTime.parse( p_datetime ), p_value ), p_result );
     }
