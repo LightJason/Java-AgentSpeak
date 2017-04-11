@@ -44,7 +44,7 @@ public abstract class IMapGet<T> extends IBuildinAction
     /**
      * ctor
      */
-    public IMapGet()
+    protected IMapGet()
     {
         super( 3 );
     }

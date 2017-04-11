@@ -44,7 +44,7 @@ public abstract class IMapGetMultiple<T> extends IBuildinAction
     /**
      * ctor
      */
-    public IMapGetMultiple()
+    protected IMapGetMultiple()
     {
         super( 3 );
     }

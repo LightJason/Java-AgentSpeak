@@ -46,7 +46,7 @@ public abstract class IMapApply<T> extends IBuildinAction
     /**
      * ctor
      */
-    public IMapApply()
+    protected IMapApply()
     {
         super( 3 );
     }
