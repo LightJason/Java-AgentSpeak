@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.generic.type.CCreateLiteral;
@@ -111,6 +112,27 @@ public final class TestCActionGenericType extends IBaseTest
                 CRawTerm.from( 666 ),
                 CRawTerm.from( false )
             )
+        );
+    }
+
+
+    /**
+     * test parse literal action with error
+     */
+    @Test
+    @Ignore
+    public final void parseliteralerror()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        Assert.assertFalse(
+            new CParseLiteral().execute(
+                null,
+                false,
+                Stream.of( "main//parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+            ).value()
         );
     }
 
@@ -382,6 +404,25 @@ public final class TestCActionGenericType extends IBaseTest
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof Double );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof Double );
     }
+
+
+    /**
+     * test "tofloat" error
+     */
+    @Test
+    public final void tofloaterror()
+    {
+        Assert.assertFalse(
+            new CToFloat().execute(
+                null,
+                false,
+                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
 
     /**
      * test call
