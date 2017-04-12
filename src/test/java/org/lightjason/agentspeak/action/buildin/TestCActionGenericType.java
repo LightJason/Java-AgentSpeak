@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.generic.type.CCreateLiteral;
@@ -120,7 +119,6 @@ public final class TestCActionGenericType extends IBaseTest
      * test parse literal action with error
      */
     @Test
-    @Ignore
     public final void parseliteralerror()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -129,7 +127,7 @@ public final class TestCActionGenericType extends IBaseTest
             new CParseLiteral().execute(
                 null,
                 false,
-                Stream.of( "main//parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "Main/parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
             ).value()
