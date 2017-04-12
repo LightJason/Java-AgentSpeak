@@ -32,11 +32,12 @@ import java.util.Map;
 
 
 /**
- * get a value by key from multiple maps.
- * The action get the key as first argument from
- * all other map arguments, the action never fails
+ * returns a multiple element of a single map.
+ * The first argument is a map reference and all
+ * other arguments are key values, the action
+ * returns the value of each key and never fails
  *
- * @code [A|B|C] = collection/map/getmultiple( "key", Map1, Map2, Map3 ); @endcode
+ * @code [V1|V2] = collection/map/getmultiple( Map, "key1", "key2" ); @endcode
  */
 public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
 {

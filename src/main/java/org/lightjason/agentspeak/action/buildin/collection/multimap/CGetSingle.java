@@ -21,69 +21,39 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection;
+package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
-import com.codepoetics.protonpack.StreamUtils;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.buildin.collection.IMapGetSingle;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * abstract class for any operation
+ * returns a single element of all multimap elements.
+ * The first argument will be used as key and all
+ * arguments are multimap references, the key will be
+ * returned from each multimap, the action fails never,
  *
- * @tparam T map instance
+ * @code [A|B|C] = collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 ); @endcode
  */
-public abstract class IMapApply<T> extends IBuildinAction
+public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
 {
 
-    /**
-     * ctor
-     */
-    protected IMapApply()
-    {
-        super( 3 );
-    }
-
     @Override
-    public final int minimalArgumentNumber()
+    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return )
     {
-        return 1;
+        p_return.add(
+            CRawTerm.from(
+                p_parallel
+                ? Collections.synchronizedList( new ArrayList<>( p_instance.asMap().get( p_key ) ) )
+                : new ArrayList<>( p_instance.asMap().get( p_key ) )
+            )
+        );
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_list.size() % 2 == 0 )
-            return CFuzzyValue.from( false );
-
-        StreamUtils.windowed(
-            l_list.stream()
-                  .skip( 1 ),
-            2,
-            2
-        )
-                   .forEach( i ->  this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
-
-        return CFuzzyValue.from( true );
-    }
-
-    /**
-     * apply operation
-     *
-     * @param p_instance object instance
-     * @param p_key key
-     * @param p_value value
-     */
-    protected abstract void apply( final T p_instance, final Object p_key, final Object p_value );
 }
-

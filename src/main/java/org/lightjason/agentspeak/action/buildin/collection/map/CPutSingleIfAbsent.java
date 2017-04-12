@@ -21,63 +21,28 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection;
+package org.lightjason.agentspeak.action.buildin.collection.map;
 
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.action.buildin.collection.IMapApplySingle;
 
-import java.util.List;
+import java.util.Map;
 
 
 /**
- * abstract class to get elements of a map
+ * adds an single element pair to all map iif not exists.
+ * First and second argument is a key-value pair, all
+ * other values are map references, the key-value pair
+ * is added to all maps iif not exists and the action never fails
  *
- * @tparam T map instance
+ * @code collection/map/putsingleifabsent( "key", "value", Map1, Map2 ); @endcode
  */
-public abstract class IMapGet<T> extends IBuildinAction
+public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object>>
 {
 
-    /**
-     * ctor
-     */
-    protected IMapGet()
-    {
-        super( 3 );
-    }
-
-
     @Override
-    public final int minimalArgumentNumber()
+    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
     {
-        return 1;
+        p_instance.putIfAbsent( p_key, p_value );
     }
-
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
-    {
-        CCommon.flatcollection( p_argument )
-               .skip( 1 )
-               .forEach( i ->  this.apply( p_argument.get( 0 ).<T>raw(), i.raw(), p_parallel, p_return ) );
-
-        return CFuzzyValue.from( true );
-    }
-
-
-    /**
-     * apply operation
-     *
-     * @param p_instance object instance
-     * @param p_key key
-     * @param p_parallel parallel flag
-     * @param p_return return list
-     */
-    protected abstract void apply( final T p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return );
 
 }

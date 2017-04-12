@@ -24,23 +24,35 @@
 package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.buildin.collection.IMapApply;
+import org.lightjason.agentspeak.action.buildin.collection.IMapGetMultiple;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
- * adds an element to all multimap arguments.
- * First argument is a multimap and all other arguments
- * are key-value pairs, the action fails on wrong
- * input number
+ * returns a multiple element of a single multimap.
+ * The first argument is a multimap reference and all
+ * other arguments are key values, the action
+ * returns the value of each key and never fails
  *
- * @code collection/multimap/put( Map, Key1, Value1, [Key2, Value2] ); @endcode
+ * @code [V1|V2] = collection/multimap/getmultiple( MultiMap, "key1", "key2" ); @endcode
  */
-public final class CPut extends IMapApply<Multimap<Object, Object>>
+public class CGetMultiple extends IMapGetMultiple<Multimap<Object, Object>>
 {
-
     @Override
-    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final Object p_value )
+    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return
+    )
     {
-        p_instance.put( p_key, p_value );
+        p_return.add(
+            CRawTerm.from(
+                p_parallel
+                ? Collections.synchronizedList( new ArrayList<>( p_instance.asMap().get( p_key ) ) )
+                : new ArrayList<>( p_instance.asMap().get( p_key ) )
+            )
+        );
     }
 }

@@ -33,16 +33,17 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CAsMap;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CCreate;
-import org.lightjason.agentspeak.action.buildin.collection.multimap.CGet;
+import org.lightjason.agentspeak.action.buildin.collection.multimap.CGetMultiple;
+import org.lightjason.agentspeak.action.buildin.collection.multimap.CGetSingle;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CKeys;
-import org.lightjason.agentspeak.action.buildin.collection.multimap.CPut;
+import org.lightjason.agentspeak.action.buildin.collection.multimap.CPutMultiple;
+import org.lightjason.agentspeak.action.buildin.collection.multimap.CPutSingle;
 import org.lightjason.agentspeak.action.buildin.collection.multimap.CValues;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -171,42 +172,67 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
 
     /**
-     * test put
+     * test put-single
      */
     @Test
-    public final void put()
+    public final void putsingle()
+    {
+        final Multimap<Integer, String> l_map1 = HashMultimap.create();
+        final Multimap<Integer, String> l_map2 = HashMultimap.create();
+
+        new CPutSingle().execute(
+            null,
+            false,
+            Stream.of( 1, "foo", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_map1.keys().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertArrayEquals( l_map2.keys().toArray(), Stream.of( 1 ).toArray() );
+
+        Assert.assertArrayEquals( l_map1.values().toArray(), Stream.of( "foo" ).toArray() );
+        Assert.assertArrayEquals( l_map1.values().toArray(), Stream.of( "foo" ).toArray() );
+    }
+
+
+    /**
+     * test put-multiple
+     */
+    @Test
+    public final void putmultiple()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
 
-        new CPut().execute(
+        new CPutMultiple().execute(
             null,
             false,
-            Stream.of( l_map, 1, "foo", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, 1, "xxx", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList(),
             Collections.emptyList()
         );
 
         Assert.assertEquals( l_map.size(), 4 );
         Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( 1, 2, 3 ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( "foo", "blub", "yyy", "xxx" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( "xxx", "blub", "yyy", "xxx" ).toArray() );
     }
 
 
     /**
-     * test get
+     * test get-multiple
      */
     @Test
-    public final void get()
+    public final void getmultiple()
     {
         final Multimap<Integer, String> l_map = HashMultimap.create();
         final List<ITerm> l_return = new ArrayList<>();
 
-        l_map.put( 1, "foo" );
+        l_map.put( 1, "yyy" );
         l_map.put( 1, "bar" );
         l_map.put( 2, "test string" );
         l_map.put( 3, "blub" );
 
-        new CGet().execute(
+        new CGetMultiple().execute(
             null,
             false,
             Stream.of( l_map, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
@@ -215,8 +241,36 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<Collection<?>>raw().toArray(), l_map.asMap().get( 1 ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<Collection<?>>raw().toArray(), l_map.asMap().get( 2 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), l_map.asMap().get( 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), l_map.asMap().get( 2 ).toArray() );
+    }
+
+
+    /**
+     * test get-single
+     */
+    @Test
+    public final void getsingle()
+    {
+        final Multimap<Integer, String> l_map1 = HashMultimap.create();
+        final Multimap<Integer, String> l_map2 = HashMultimap.create();
+        final List<ITerm> l_return = new ArrayList<>();
+
+        l_map1.put( 1, "foo" );
+        l_map1.put( 2, "bar" );
+        l_map2.put( 1, "foobar" );
+
+        new CGetSingle().execute(
+            null,
+            false,
+            Stream.of( 1, l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "foo" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "foobar" ).toArray() );
     }
 
 

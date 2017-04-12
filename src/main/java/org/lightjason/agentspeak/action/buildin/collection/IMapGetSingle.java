@@ -21,39 +21,63 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas;
+package org.lightjason.agentspeak.action.buildin.collection;
 
-import cern.colt.matrix.linalg.Algebra;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
 
 
 /**
- * blas algebra operations e.g. inverse, determinate
+ * abstract class to get a single elements of multiple maps
+ *
+ * @tparam T map instance
  */
-public abstract class IAlgebra extends IBuildinAction
+public abstract class IMapGetSingle<T> extends IBuildinAction
 {
 
     /**
-     * algebra reference
-     */
-    public static final Algebra ALGEBRA = Algebra.DEFAULT;
-
-    /**
      * ctor
      */
-    protected IAlgebra()
+    protected IMapGetSingle()
     {
-        super();
+        super( 3 );
     }
 
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        CCommon.flatcollection( p_argument )
+               .skip( 1 )
+               .forEach( i ->  this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_parallel, p_return ) );
+
+        return CFuzzyValue.from( true );
+    }
+
+
     /**
-     * ctor
+     * apply operation
      *
-     * @param p_length length of package parts
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_parallel parallel flag
+     * @param p_return return list
      */
-    protected IAlgebra( final int p_length )
-    {
-        super( p_length );
-    }
+    protected abstract void apply( final T p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return );
 
 }

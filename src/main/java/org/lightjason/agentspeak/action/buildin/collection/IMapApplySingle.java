@@ -21,37 +21,58 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.multimap;
+package org.lightjason.agentspeak.action.buildin.collection;
 
-import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.action.buildin.collection.IMapGet;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
 import java.util.List;
 
 
 /**
- * get a element-list of the multimap by key.
- * The action can return multiple lists of elements by different keys,
- * one key is needed and the action never failing
+ * abstract class for apply a single element to a multiple maps
  *
- * @code [A|B|C] = collection/multimap/get( Map, "key1", "key2", ["key3"] ); @endcode
+ * @tparam T map instance
  */
-public final class CGet extends IMapGet<Multimap<Object, Object>>
+public abstract class IMapApplySingle<T> extends IBuildinAction
 {
 
-    @Override
-    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return )
+    /**
+     * ctor
+     */
+    protected IMapApplySingle()
     {
-        p_return.add(
-            CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedCollection( p_instance.asMap().get( p_key ) )
-                : p_instance.asMap().get( p_key )
-            )
-        );
+        super( 3 );
     }
 
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        CCommon.flatstream( p_argument.stream().skip( 2 ) )
+               .forEach( i -> this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
+
+        return CFuzzyValue.from( true );
+    }
+
+    /**
+     * apply operation
+     *
+     * @param p_instance object instance
+     * @param p_key key
+     * @param p_value value
+     */
+    protected abstract void apply( final T p_instance, final Object p_key, final Object p_value );
 }
+

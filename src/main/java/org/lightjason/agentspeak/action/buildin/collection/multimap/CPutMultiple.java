@@ -26,14 +26,13 @@ package org.lightjason.agentspeak.action.buildin.collection.multimap;
 import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.collection.IMapApplyMultiple;
 
-
 /**
- * adds an element to all multimap arguments.
- * First argument is a key, second the value, all
- * other values are multimap references, the key-value pair
- * is added and the action never fails
+ * adds all elements to a single multimap argument.
+ * First argument is a multimap and all other arguments
+ * are key-value pairs, the action fails on wrong
+ * input number
  *
- * @code collection/multimap/put( "key", "value", MultiMap1, MultiMap2 ); @endcode
+ * @code collection/multimap/putmultiple( MultiMap, Key1, Value1, [Key2, Value2] ); @endcode
  */
 public final class CPutMultiple extends IMapApplyMultiple<Multimap<Object, Object>>
 {

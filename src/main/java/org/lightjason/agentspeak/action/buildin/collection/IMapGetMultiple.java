@@ -34,7 +34,7 @@ import java.util.List;
 
 
 /**
- * abstract class to get elements of multiple maps
+ * abstract class to get a multiple elements of a single maps
  *
  * @tparam T
  */
@@ -64,7 +64,7 @@ public abstract class IMapGetMultiple<T> extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .skip( 1 )
-               .forEach( i ->  this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_parallel, p_return ) );
+               .forEach( i ->  this.apply( p_argument.get( 0 ).<T>raw(), i.raw(), p_parallel, p_return ) );
 
         return CFuzzyValue.from( true );
     }

@@ -29,12 +29,12 @@ import java.util.Map;
 
 
 /**
- * adds an element to all map arguments iif not exists.
- * First argument is a key, second the value, all
- * other values are map references, the key-value pair
- * is added and the action never fails
+ * adds multiple element to a single map iif not exists.
+ * First argument is a map and all other arguments
+ * are key-value pairs, all pars are added to the map,
+ * the action fails on wrong input number
  *
- * @code collection/map/putmultiple( "key", "value", Map1, Map2 ); @endcode
+ * @code collection/map/putmultipleifabsent( Map, Key1, Value1, [Key2, Value2]); @endcode
  */
 public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
 {

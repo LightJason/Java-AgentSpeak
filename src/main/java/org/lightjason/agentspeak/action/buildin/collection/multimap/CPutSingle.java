@@ -21,29 +21,26 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
+package org.lightjason.agentspeak.action.buildin.collection.multimap;
 
-import org.lightjason.agentspeak.action.buildin.collection.IMapApply;
-
-import java.util.Map;
-
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.buildin.collection.IMapApplySingle;
 
 
 /**
- * adds an element to all map arguments iif not exists.
- * First argument is a map and all other arguments
- * are key-value pairs, the action fails on wrong
- * input number
+ * adds an single element to multiple multimap arguments.
+ * First argument is a key, second the value, all
+ * other values are multimap references, the key-value pair
+ * is added to all multimaps and the action never fails
  *
- * @code collection/map/putifabsent( Map, Key1, Value1, [Key2, Value2]); @endcode
+ * @code collection/multimap/putsingle( "key", "value", MultiMap1, MultiMap2 ); @endcode
  */
-public final class CPutIfAbsent extends IMapApply<Map<Object, Object>>
+public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {
 
     @Override
-    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
+    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final Object p_value )
     {
-        p_instance.putIfAbsent( p_key, p_value );
+        p_instance.put( p_key, p_value );
     }
-
 }

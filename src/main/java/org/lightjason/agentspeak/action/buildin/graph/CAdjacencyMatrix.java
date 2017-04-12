@@ -26,12 +26,15 @@ package org.lightjason.agentspeak.action.buildin.graph;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import cern.jet.math.Functions;
 import com.codepoetics.protonpack.StreamUtils;
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
+import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -41,30 +44,31 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
 /**
  * creates from a graph the adjacency matrix.
- * The action converts graphs into a matrix
- * based on a cost-map, the first argument can be
- * a string with dense or sparse for defining the
- * returned matrix, after that a cost-map cann be set
- * or a fixed numerical value for defining the cost
- * of an edge, all other arguments are graphs,
- * for each graph the matrix and vertex list is returned,
- * the action never fails
+ * The action converts graphs into a matrix,
+ * if a string is put on the argument list
+ * it must be "dense|sparse" to define the resulting
+ * matrix, a map defines the costs of an edge, a number
+ * defines the default costs, the ordering of
+ * the arguments is completly independed, for each
+ * graph two arguments will be returned, the
+ * adjacency matrix and the node names and the action
+ * never fails
  *
  * @code
-    [M1|V1|M2|V2] = graph/adjacencymatrix( "dense|sparse", CostMap, Graph1, Graph2 );
-    [M3|V3|M4|V4] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
-    [M1|V1|M2|V2] = graph/adjacencymatrix( "dense|sparse", 1, Graph1, Graph2 );
-    [M3|V3|M4|V4] = graph/adjacencymatrix( 1, Graph1, Graph2 );
+    [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
+    [M3|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
+    [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, 1, Graph2 );
+    [M3|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
  * @endcode
  * @note the cost-map does not need an entry for each edge
  * non-existing edges have got on default zero costs with 1
@@ -82,47 +86,37 @@ public final class CAdjacencyMatrix extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                          final List<ITerm> p_annotation )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
+        // --- filter parameters ---
+        final EType l_type = CCommon.flatcollection( p_argument )
+                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .findFirst()
+                                    .map( ITerm::<String>raw )
+                                    .map( EType::from )
+                                    .orElseGet( () -> EType.SPARSE );
 
-        // get result matrix type
-        final EType l_type;
-        final int l_skip;
-        if ( !CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), String.class ) )
-        {
-            l_skip = 0;
-            l_type = EType.DENSE;
-        }
-        else
-        {
-            l_skip = 1;
-            l_type = l_arguments.get( 0 ).<String>raw().equalsIgnoreCase( "sparse" )
-                     ? EType.SPARSE
-                     : EType.DENSE;
-        }
+        final double l_defaultcost = CCommon.flatcollection( p_argument )
+                                            .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                            .findFirst()
+                                            .map( ITerm::<Number>raw )
+                                            .map( Number::doubleValue )
+                                            .orElseGet( () -> 1D );
 
-
-        // cost definition
-        final double l_defaultcost = CCommon.rawvalueAssignableTo( l_arguments.get( l_skip ), Number.class )
-                                     ? l_arguments.get( l_skip ).<Number>raw().doubleValue()
-                                     : 1;
+        final Map<?, Number> l_costmap = CCommon.flatcollection( p_argument )
+                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                .findFirst()
+                                                .map( ITerm::<Map<?, Number>>raw )
+                                                .orElseGet( Collections::emptyMap );
 
 
-        // create adjcency matrix
-        l_arguments.stream()
-                   .skip( 1 + l_skip )
-                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
-                   .map( i -> CAdjacencyMatrix.apply(
-                                  i,
-                                  l_arguments.get( l_skip ).<Map<?, Number>>raw(),
-                                  l_defaultcost,
-                                  l_type
-                   ) )
-                   .forEach( i -> {
-                       p_return.add( CRawTerm.from( i.getLeft() ) );
-                       p_return.add( CRawTerm.from( i.getRight() ) );
-                   } );
+        // --- filter graphs ---
+        CCommon.flatcollection( p_argument )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+               .map( ITerm::<Graph<Object, Object>>raw )
+               .map( i -> CAdjacencyMatrix.apply( i, l_costmap, l_defaultcost, l_type ) )
+               .forEach( i -> {
+                   p_return.add( CRawTerm.from( i.getLeft() ) );
+                   p_return.add( CRawTerm.from( i.getRight() ) );
+               } );
 
         return CFuzzyValue.from( true );
     }
@@ -136,7 +130,7 @@ public final class CAdjacencyMatrix extends IBuildinAction
      * @param p_type matrix type
      * @return pair of double matrix and vertices
      */
-    private static Pair<DoubleMatrix2D, Collection<?>> apply( final AbstractGraph<Object, Object> p_graph, final Map<?, Number> p_cost,
+    private static Pair<DoubleMatrix2D, Collection<?>> apply( final Graph<Object, Object> p_graph, final Map<?, Number> p_cost,
                                                               final double p_defaultcost, final EType p_type )
     {
         // index map for matching vertex to index position within matrix
@@ -175,6 +169,10 @@ public final class CAdjacencyMatrix extends IBuildinAction
                                   l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ),
                                   i.getRight() + l_matrix.getQuick( l_index.get( i.getLeft().getFirst() ), l_index.get( i.getLeft().getSecond() ) )
                ) );
+
+        // on undirected graphs, add the transposefor cost duplicating
+        if ( p_graph instanceof UndirectedGraph<?, ?> )
+            l_matrix.assign( IAlgebra.ALGEBRA.transpose( l_matrix ).copy(), Functions.plus );
 
         return new ImmutablePair<>( l_matrix, new ArrayList<>( l_index.keySet() ) );
     }

@@ -28,11 +28,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.collection.map.CCreate;
-import org.lightjason.agentspeak.action.buildin.collection.map.CGet;
+import org.lightjason.agentspeak.action.buildin.collection.map.CGetSingle;
 import org.lightjason.agentspeak.action.buildin.collection.map.CGetMultiple;
 import org.lightjason.agentspeak.action.buildin.collection.map.CKeys;
-import org.lightjason.agentspeak.action.buildin.collection.map.CPut;
-import org.lightjason.agentspeak.action.buildin.collection.map.CPutIfAbsent;
+import org.lightjason.agentspeak.action.buildin.collection.map.CPutSingle;
+import org.lightjason.agentspeak.action.buildin.collection.map.CPutSingleIfAbsent;
 import org.lightjason.agentspeak.action.buildin.collection.map.CPutMultiple;
 import org.lightjason.agentspeak.action.buildin.collection.map.CPutMultipleIfAbsent;
 import org.lightjason.agentspeak.action.buildin.collection.map.CRemove;
@@ -148,37 +148,41 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
     /**
-     * test map put
+     * test map putsingle
      */
     @Test
-    public final void put()
+    public final void putsingle()
     {
         final Map<?, ?> l_map = new HashMap<>();
 
-        new CPut().execute(
+        new CPutSingle().execute(
             null,
             false,
-            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "v", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+
             Collections.emptyList(),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 2 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "yyy" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 3 ).toArray() );
+        Assert.assertEquals( l_map.size(), 1 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
 
 
-        new CPutIfAbsent().execute(
+
+
+        new CPutSingleIfAbsent().execute(
             null,
             false,
-            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "v", 666, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+
             Collections.emptyList(),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 3 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "zz", "yyy" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 4, 3 ).toArray() );
+        Assert.assertEquals( l_map.size(), 1 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
     }
 
 
@@ -193,27 +197,27 @@ public final class TestCActionCollectionMap extends IBaseTest
         new CPutMultiple().execute(
             null,
             false,
-            Stream.of( "v", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList(),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertEquals( l_map.size(), 2 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "yyy" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 3 ).toArray() );
 
 
         new CPutMultipleIfAbsent().execute(
             null,
             false,
-            Stream.of( "v", 666, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList(),
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_map.size(), 1 );
-        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "v" ).toArray() );
-        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 1 ).toArray() );
+        Assert.assertEquals( l_map.size(), 3 );
+        Assert.assertArrayEquals( l_map.keySet().toArray(), Stream.of( "xx", "zz", "yyy" ).toArray() );
+        Assert.assertArrayEquals( l_map.values().toArray(), Stream.of( 2, 4, 3 ).toArray() );
     }
 
 
@@ -245,10 +249,10 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
     /**
-     * test get
+     * test get-multiple
      */
     @Test
-    public final void get()
+    public final void getmultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Map<Object, Object> l_map = new HashMap<>();
@@ -257,7 +261,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         l_map.put( "j", 2 );
         l_map.put( "k", 3 );
 
-        new CGet().execute(
+        new CGetMultiple().execute(
             null,
             false,
             Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::from ).collect( Collectors.toList() ),
@@ -273,10 +277,10 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
     /**
-     * test multiple get
+     * test get-single
      */
     @Test
-    public final void getmultiple()
+    public final void getsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -286,7 +290,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         final Map<Object, Object> l_map2 = new HashMap<>();
         l_map2.put( "g", "text" );
 
-        new CGetMultiple().execute(
+        new CGetSingle().execute(
             null,
             false,
             Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),

@@ -25,11 +25,13 @@ package org.lightjason.agentspeak.action.buildin;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.graph.CAddEdge;
 import org.lightjason.agentspeak.action.buildin.graph.CAddVertex;
+import org.lightjason.agentspeak.action.buildin.graph.CAdjacencyMatrix;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -213,6 +215,47 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "a", "b", "c", "d" ).toArray() );
+    }
+
+
+    /**
+     * test adjacency matrix
+     */
+    @Test
+    public final void adjacencymatrix()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "a", 1, 1 );
+        l_graph.addEdge( "b", 1, 2 );
+        l_graph.addEdge( "c", 1, 5 );
+
+        l_graph.addEdge( "d", 2, 3 );
+        l_graph.addEdge( "e", 2, 5 );
+
+        l_graph.addEdge( "f", 3, 4 );
+
+        l_graph.addEdge( "g", 4, 5 );
+        l_graph.addEdge( "h", 4, 6 );
+
+
+
+        System.out.println( l_graph );
+
+        new CAdjacencyMatrix().execute(
+            null,
+            false,
+            Stream.of( 1, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        System.out.println( l_return );
     }
 
 

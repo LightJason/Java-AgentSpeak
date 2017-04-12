@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.collection;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -31,10 +32,11 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
- * abstract class for apply any element to multiple maps
+ * abstract class for apply multiple elements to a single maps
  *
  * @tparam T map instance
  */
@@ -60,8 +62,18 @@ public abstract class IMapApplyMultiple<T> extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatstream( p_argument.stream().skip( 2 ) )
-               .forEach( i -> this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_argument.get( 1 ).raw() ) );
+
+        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_list.size() % 2 == 0 )
+            return CFuzzyValue.from( false );
+
+        StreamUtils.windowed(
+            l_list.stream()
+                  .skip( 1 ),
+            2,
+            2
+        )
+                   .forEach( i ->  this.apply( l_list.get( 0 ).<T>raw(), i.get( 0 ).raw(), i.get( 1 ).raw() ) );
 
         return CFuzzyValue.from( true );
     }

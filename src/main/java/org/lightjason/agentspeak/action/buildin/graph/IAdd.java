@@ -21,28 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.collection.map;
-
-import org.lightjason.agentspeak.action.buildin.collection.IMapApply;
-
-import java.util.Map;
-
+package org.lightjason.agentspeak.action.buildin.graph;
 
 /**
- * adds an element to all map arguments.
- * First argument is a map and all other arguments
- * are key-value pairs, the action fails on wrong
- * input number
- *
- * @code collection/map/put( Map1, Key1, Value1, [Key2, Value2] ); @endcode
+ * add multiple elements to a single graph
  */
-public final class CPut extends IMapApply<Map<Object, Object>>
+public abstract class IAdd
 {
-
-    @Override
-    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
-    {
-        p_instance.put( p_key, p_value );
-    }
-
 }

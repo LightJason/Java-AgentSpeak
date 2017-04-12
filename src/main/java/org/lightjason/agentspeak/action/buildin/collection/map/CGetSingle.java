@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.collection.map;
 
-import org.lightjason.agentspeak.action.buildin.collection.IMapGet;
+import org.lightjason.agentspeak.action.buildin.collection.IMapGetSingle;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -32,17 +32,14 @@ import java.util.Map;
 
 
 /**
- * returns an element of the map.
- * Returns values of the map which is referenced
- * by the key, the action fails never, the first
- * argument is the map object, all other arguments are
- * the keys
+ * returns a single element of all map elements.
+ * The first argument will be used as key and all
+ * arguments are map references, the key will be
+ * returned from each map, the action fails never,
  *
- * @code V1 = collection/map/get( Map, "key" );
- * [V2|V3] = collection/map/get( Map, "Key1", "Key2" );
- * @endcode
+ * @code [A|B|C] = collection/map/getsingle( "key", Map1, Map2, Map3 ); @endcode
  */
-public final class CGet extends IMapGet<Map<Object, Object>>
+public final class CGetSingle extends IMapGetSingle<Map<Object, Object>>
 {
 
     @Override

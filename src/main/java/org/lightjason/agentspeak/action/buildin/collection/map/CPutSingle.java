@@ -21,39 +21,28 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas;
+package org.lightjason.agentspeak.action.buildin.collection.map;
 
-import cern.colt.matrix.linalg.Algebra;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.action.buildin.collection.IMapApplySingle;
+
+import java.util.Map;
 
 
 /**
- * blas algebra operations e.g. inverse, determinate
+ * adds an single element to multiple map arguments.
+ * First argument is a key, second the value, all
+ * other values are map references, the key-value pair
+ * is added to all maps and the action never fails
+ *
+ * @code collection/map/putsingle( "key", "value", Map1, Map2 ); @endcode
  */
-public abstract class IAlgebra extends IBuildinAction
+public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
 {
 
-    /**
-     * algebra reference
-     */
-    public static final Algebra ALGEBRA = Algebra.DEFAULT;
-
-    /**
-     * ctor
-     */
-    protected IAlgebra()
+    @Override
+    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
     {
-        super();
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_length length of package parts
-     */
-    protected IAlgebra( final int p_length )
-    {
-        super( p_length );
+        p_instance.put( p_key, p_value );
     }
 
 }
