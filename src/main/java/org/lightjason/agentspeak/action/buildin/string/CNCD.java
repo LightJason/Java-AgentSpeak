@@ -66,7 +66,7 @@ public final class CNCD extends IBuildinAction
         final int l_skip;
         final CCommon.ECompression l_compression;
 
-        if ( CCommon.ECompression.exist( l_arguments.get( 0 ) ) )
+        if ( ( !l_arguments.isEmpty() ) && ( CCommon.ECompression.exist( l_arguments.get( 0 ) ) ) )
         {
             l_compression = CCommon.ECompression.from( l_arguments.get( 0 ) );
             l_skip = 1;

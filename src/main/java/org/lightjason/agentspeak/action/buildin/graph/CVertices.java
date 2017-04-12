@@ -32,7 +32,10 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 
 /**
@@ -59,6 +62,7 @@ public final class CVertices extends IBuildinAction
         CCommon.flatcollection( p_argument )
                .map( ITerm::<AbstractGraph<?, ?>>raw )
                .map( Hypergraph::getVertices )
+               .map( ArrayList::new )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

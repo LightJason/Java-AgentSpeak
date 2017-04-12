@@ -31,7 +31,9 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.graph.CAddEdge;
 import org.lightjason.agentspeak.action.buildin.graph.CAddVertex;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
+import org.lightjason.agentspeak.action.buildin.graph.CEdges;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
+import org.lightjason.agentspeak.action.buildin.graph.CVertices;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -155,6 +157,64 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), (long) l_graph.getVertexCount() );
     }
+
+
+    /**
+     * test vertices
+     */
+    @Test
+    public final void vertices()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        IntStream.range( 0, 5 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        new CVertices().execute(
+            null,
+            false,
+            Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), IntStream.range( 0, 5 ).boxed().toArray() );
+    }
+
+
+    /**
+     * test edges
+     */
+    @Test
+    public final void edges()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        IntStream.range( 0, 5 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "a", 0, 1 );
+        l_graph.addEdge( "b", 0, 2 );
+        l_graph.addEdge( "c", 1, 3 );
+        l_graph.addEdge( "d", 3, 4 );
+
+        new CEdges().execute(
+            null,
+            false,
+            Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "a", "b", "c", "d" ).toArray() );
+    }
+
 
 
     /**

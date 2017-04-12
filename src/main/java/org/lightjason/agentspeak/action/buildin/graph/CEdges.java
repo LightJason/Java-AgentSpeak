@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,6 +61,7 @@ public final class CEdges extends IBuildinAction
         CCommon.flatcollection( p_argument )
                .map( ITerm::<AbstractGraph<?, ?>>raw )
                .map( Hypergraph::getEdges )
+               .map( ArrayList::new )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

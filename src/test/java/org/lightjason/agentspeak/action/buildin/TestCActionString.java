@@ -355,6 +355,24 @@ public final class TestCActionString extends IBaseTest
 
 
     /**
+     * tets for levenshtein distance error
+     */
+    @Test
+    public final void levenshteinerror()
+    {
+        Assert.assertFalse(
+            new CLevenshtein().execute(
+                null,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+
+    /**
      * test levenshtein distance
      */
     @Test
@@ -410,9 +428,25 @@ public final class TestCActionString extends IBaseTest
         Assert.assertEquals( l_return.get( 3 ).<Number>raw().doubleValue(), 0.12, 0 );
         Assert.assertEquals( l_return.get( 4 ).<Number>raw().doubleValue(), 0.5833333333333334, 0.0001 );
         Assert.assertEquals( l_return.get( 5 ).<Number>raw().doubleValue(), 0, 0 );
-
     }
 
+
+    /**
+     * test normalized compression distance error
+     */
+    @Test
+    public final void ncderror()
+    {
+        Assert.assertFalse(
+            new CNCD().execute(
+                null,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
 
 
     /**
