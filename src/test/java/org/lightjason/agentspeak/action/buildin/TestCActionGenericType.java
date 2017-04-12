@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.action.buildin.generic.type.CIsString;
 import org.lightjason.agentspeak.action.buildin.generic.type.CParseFloat;
 import org.lightjason.agentspeak.action.buildin.generic.type.CParseInt;
 import org.lightjason.agentspeak.action.buildin.generic.type.CParseLiteral;
+import org.lightjason.agentspeak.action.buildin.generic.type.CToFloat;
 import org.lightjason.agentspeak.action.buildin.generic.type.CToInt;
 import org.lightjason.agentspeak.action.buildin.generic.type.CToString;
 import org.lightjason.agentspeak.action.buildin.generic.type.CType;
@@ -360,6 +361,27 @@ public final class TestCActionGenericType extends IBaseTest
     }
 
 
+    /**
+     * test "tofloat"
+     */
+    @Test
+    public final void tofloat()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CToFloat().execute(
+            null,
+            false,
+            Stream.of( 1, 2, 3.2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof Double );
+        Assert.assertTrue( l_return.get( 1 ).raw() instanceof Double );
+        Assert.assertTrue( l_return.get( 2 ).raw() instanceof Double );
+    }
 
     /**
      * test call
