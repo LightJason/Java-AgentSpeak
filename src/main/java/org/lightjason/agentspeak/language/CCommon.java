@@ -425,6 +425,9 @@ public final class CCommon
      */
     public static double ncd( final ECompression p_compression, final String p_first, final String p_second )
     {
+        if ( p_first.equals( p_second ) )
+            return 0;
+
         final double l_first = compress( p_compression, p_first );
         final double l_second = compress( p_compression, p_second );
         return ( compress( p_compression, p_first + p_second ) - Math.min( l_first, l_second ) ) / Math.max( l_first, l_second );

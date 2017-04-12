@@ -35,10 +35,14 @@ import org.lightjason.agentspeak.action.buildin.string.CBase64Decode;
 import org.lightjason.agentspeak.action.buildin.string.CBase64Encode;
 import org.lightjason.agentspeak.action.buildin.string.CConcat;
 import org.lightjason.agentspeak.action.buildin.string.CContains;
+import org.lightjason.agentspeak.action.buildin.string.CEndsWith;
+import org.lightjason.agentspeak.action.buildin.string.CLevenshtein;
 import org.lightjason.agentspeak.action.buildin.string.CLower;
+import org.lightjason.agentspeak.action.buildin.string.CNCD;
 import org.lightjason.agentspeak.action.buildin.string.CRandom;
 import org.lightjason.agentspeak.action.buildin.string.CReverse;
 import org.lightjason.agentspeak.action.buildin.string.CSize;
+import org.lightjason.agentspeak.action.buildin.string.CStartsWith;
 import org.lightjason.agentspeak.action.buildin.string.CUpper;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -302,6 +306,113 @@ public final class TestCActionString extends IBaseTest
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
+
+
+    /**
+     * test starts-with
+     */
+    @Test
+    public final void startswith()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CStartsWith().execute(
+            null,
+            false,
+            Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 2 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test ends-with
+     */
+    @Test
+    public final void endswidth()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CEndsWith().execute(
+            null,
+            false,
+            Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 2 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test levenshtein distance
+     */
+    @Test
+    public final void levenshtein()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CLevenshtein().execute(
+            null,
+            false,
+            Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw().intValue(), 3 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw().intValue(), 5 );
+    }
+
+
+    /**
+     * test normalized compression distance
+     */
+    @Test
+    public final void ncd()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CNCD().execute(
+            null,
+            false,
+            Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw().doubleValue(), 0.04878048780487805, 0.0001 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw().doubleValue(), 0.38333333333333336, 0.0001 );
+        Assert.assertEquals( l_return.get( 2 ).<Number>raw().doubleValue(), 0, 0 );
+
+
+        new CNCD().execute(
+            null,
+            false,
+            Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 6 );
+        Assert.assertEquals( l_return.get( 3 ).<Number>raw().doubleValue(), 0.12, 0 );
+        Assert.assertEquals( l_return.get( 4 ).<Number>raw().doubleValue(), 0.5833333333333334, 0.0001 );
+        Assert.assertEquals( l_return.get( 5 ).<Number>raw().doubleValue(), 0, 0 );
+
+    }
+
 
 
     /**
