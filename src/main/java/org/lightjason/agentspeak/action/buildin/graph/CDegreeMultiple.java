@@ -24,34 +24,35 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.List;
 
 
 /**
- * add multiple edges to a single graph instance.
- * Adds multiple edges to a single graph instance, the first
- * argument is the graph reference, and all other triples
- * are the edges, the first argument of the triple is the
- * edge identifier, the second the start vertex, and the third
- * the end vertex, the action never fails
+ * returns multiple vertex degrees of a single graph.
+ * The action returns for each vertex the degree of the
+ * graph reference within the first argument,
+ * the action never fails
  *
- * @code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 ); @endcode
+ * @code [D1|D2] = graph/degree( Graph, Vertex1, Vertex2 ); @endcode
  */
-public final class CAddEdgeMultiple extends IApplyMultiple
+public final class CDegreeMultiple extends IApplyMultiple
 {
-
     @Override
     protected final int windowsize()
     {
-        return 3;
+        return 1;
     }
 
     @Override
     protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw() );
+        p_return.add(
+            CRawTerm.from(
+                (long) p_graph.degree( p_window.get( 0 ).raw() )
+            )
+        );
     }
-
 }

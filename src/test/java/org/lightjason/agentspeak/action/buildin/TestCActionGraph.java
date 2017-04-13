@@ -35,7 +35,10 @@ import org.lightjason.agentspeak.action.buildin.graph.CAddEdgeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CAddVertexMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CAddVertexSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CAdjacencyMatrix;
+import org.lightjason.agentspeak.action.buildin.graph.CContainsEdge;
+import org.lightjason.agentspeak.action.buildin.graph.CContainsVertex;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
+import org.lightjason.agentspeak.action.buildin.graph.CDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.action.buildin.graph.CVertices;
@@ -140,7 +143,7 @@ public final class TestCActionGraph extends IBaseTest
         new CAddEdgeSingle().execute(
             null,
             false,
-            Stream.of( "foo", 1, 2, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "xy", 1, 2, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList(),
             Collections.emptyList()
         );
@@ -154,8 +157,8 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_graph.getEdgeCount(), 2 );
-        Assert.assertEquals( (long) l_graph.getEndpoints( "foo" ).getFirst(), 1 );
-        Assert.assertEquals( (long) l_graph.getEndpoints( "foo" ).getSecond(), 2 );
+        Assert.assertEquals( (long) l_graph.getEndpoints( "xy" ).getFirst(), 1 );
+        Assert.assertEquals( (long) l_graph.getEndpoints( "xy" ).getSecond(), 2 );
         Assert.assertEquals( (long) l_graph.getEndpoints( "bar" ).getFirst(), 4 );
         Assert.assertEquals( (long) l_graph.getEndpoints( "bar" ).getSecond(), 5 );
     }
@@ -309,6 +312,117 @@ public final class TestCActionGraph extends IBaseTest
             {0, 0, 1, 0, 1, 1}, {1, 1, 0, 1, 0, 0}, {0, 0, 0, 1, 0, 0}} ) );
     }
 
+
+    /**
+     * test contains-edge
+     */
+    @Test
+    public final void containsedge()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new SparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new SparseGraph<>();
+
+        IntStream.range( 1, 5 )
+                 .boxed()
+                 .forEach( i -> {
+                     l_graph1.addVertex( i );
+                     l_graph2.addVertex( i );
+                 } );
+
+        l_graph1.addEdge( "ooo", 1, 2 );
+        l_graph1.addEdge( "xxx", 1, 2 );
+        l_graph1.addEdge( "yyy", 2, 3 );
+
+        l_graph2.addEdge( "yyx", 1, 2 );
+        l_graph2.addEdge( "aaa", 2, 3 );
+
+
+        new CContainsEdge().execute(
+            null,
+            false,
+            Stream.of( "yyy", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test contains-vertex
+     */
+    @Test
+    public final void containsvertex()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new SparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new SparseGraph<>();
+
+        IntStream.range( 1, 5 )
+                 .boxed()
+                 .forEach( l_graph1::addVertex );
+
+        IntStream.range( 5, 10 )
+                 .boxed()
+                 .forEach( l_graph2::addVertex );
+
+        new CContainsVertex().execute(
+            null,
+            false,
+            Stream.of( 5, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
+    }
+
+
+    /**
+     * test degree
+     */
+    @Test
+    public final void degreesingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "a", 1, 1 );
+        l_graph.addEdge( "b", 1, 2 );
+        l_graph.addEdge( "c", 1, 5 );
+
+        l_graph.addEdge( "d", 2, 3 );
+        l_graph.addEdge( "e", 2, 5 );
+
+        l_graph.addEdge( "f", 3, 4 );
+
+        l_graph.addEdge( "g", 4, 5 );
+        l_graph.addEdge( "h", 4, 6 );
+
+
+        new CDegreeMultiple().execute(
+            null,
+            false,
+            Stream.concat(
+                Stream.of( l_graph ),
+                IntStream.range( 1, 7 ).boxed()
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3, 3, 2, 3, 3, 1 ).mapToLong( i -> i ).boxed().toArray() );
+    }
 
 
     /**

@@ -24,12 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 
@@ -42,24 +37,19 @@ import java.util.List;
  *
  * @code graph/addvertex( Vertex, Graph1, [Graph2, [Graph3]] ); @endcode
  */
-public final class CAddVertexSingle extends IBuildinAction
+public final class CAddVertexSingle extends IApplySingle
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
-        return 2;
+        return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        CCommon.flatcollection( p_argument )
-               .skip( 1 )
-               .map( ITerm::<Graph<Object, Object>>raw )
-               .forEach( i -> i.addVertex( p_argument.get( 0 ).raw() ) );
-
-        return CFuzzyValue.from( true );
+        p_graph.addVertex( p_window.get( 0 ).raw() );
     }
+
 }

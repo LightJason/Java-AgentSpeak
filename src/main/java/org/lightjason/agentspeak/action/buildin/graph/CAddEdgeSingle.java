@@ -24,15 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -40,33 +34,23 @@ import java.util.stream.Collectors;
  * The action adds to each graph the first triple
  * (edge identifier, start vertex, end vertex)
  * to all other arguments are graphs, the action
- * fails on wrong input
+ * never fails
  *
  * @code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 ); @endcode
  */
-public final class CAddEdgeSingle extends IBuildinAction
+public final class CAddEdgeSingle extends IApplySingle
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
-        return 1;
+        return 3;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 4 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 3 )
-                   .parallel()
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .forEach( i -> i.addEdge( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw(), l_arguments.get( 2 ).raw() ) );
-
-        return CFuzzyValue.from( true );
+        p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw() );
     }
+
 }

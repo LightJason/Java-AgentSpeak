@@ -23,29 +23,24 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
+import com.codepoetics.protonpack.StreamUtils;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns the degree of a vertex.
- * The action returns for a vertex as first
- * argument the degree on each graph argument,
- * the action fails on wrong input
- *
- * @code [D1|D2] = graph/degree( Vertex, Graph1, Graph2 ); @endcode
+ * apply class for a single graph with multiple elements
  */
-public final class CDegree extends IBuildinAction
+public abstract class IApplyMultiple extends IBuildinAction
 {
+
     @Override
     public final int minimalArgumentNumber()
     {
@@ -54,20 +49,36 @@ public final class CDegree extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation )
+                                               final List<ITerm> p_annotation
+    )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .mapToLong( i -> i.degree( l_arguments.get( 0 ).raw() ) )
-                   .boxed()
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        StreamUtils.windowed(
+            CCommon.flatcollection( p_argument ).skip( 1 ),
+            this.windowsize(),
+            this.windowsize()
+        )
+                   .forEach( i -> this.apply( p_argument.get( 0 ).<Graph<Object, Object>>raw(), i, p_return ) );
 
         return CFuzzyValue.from( true );
     }
+
+
+
+    /**
+     * window size
+     *
+     * @return size
+     */
+    protected abstract int windowsize();
+
+
+    /**
+     * apply call
+     *
+     * @param p_graph graph instance
+     * @param p_window window list
+     * @param p_return return list
+     */
+    protected abstract void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
+
 }

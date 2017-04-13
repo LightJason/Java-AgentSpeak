@@ -24,34 +24,55 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 
 
 /**
- * add multiple edges to a single graph instance.
- * Adds multiple edges to a single graph instance, the first
- * argument is the graph reference, and all other triples
- * are the edges, the first argument of the triple is the
- * edge identifier, the second the start vertex, and the third
- * the end vertex, the action never fails
- *
- * @code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 ); @endcode
+ * apply an element on multiple graphs
  */
-public final class CAddEdgeMultiple extends IApplyMultiple
+public abstract class IApplySingle extends IBuildinAction
 {
 
     @Override
-    protected final int windowsize()
+    public final int minimalArgumentNumber()
     {
-        return 3;
+        return 1;
     }
 
     @Override
-    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
     {
-        p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw() );
+        CCommon.flatcollection( p_argument )
+               .skip( this.skipsize() )
+               .forEach( i -> this.apply( i.<Graph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
+
+        return CFuzzyValue.from( true );
     }
+
+    /**
+     * window size
+     *
+     * @return size
+     */
+    protected abstract int skipsize();
+
+
+    /**
+     * apply call
+     *
+     * @param p_graph graph instance
+     * @param p_window window list
+     * @param p_return return list
+     */
+    protected abstract void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
 
 }
