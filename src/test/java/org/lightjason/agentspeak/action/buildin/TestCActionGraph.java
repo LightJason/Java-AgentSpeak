@@ -318,17 +318,17 @@ public final class TestCActionGraph extends IBaseTest
                  .boxed()
                  .forEach( l_graph::addVertex );
 
-        l_graph.addEdge( "a", 1, 1 );
-        l_graph.addEdge( "b", 1, 2 );
-        l_graph.addEdge( "c", 1, 5 );
+        l_graph.addEdge( "x", 1, 1 );
+        l_graph.addEdge( "y", 1, 2 );
+        l_graph.addEdge( "z", 1, 5 );
 
-        l_graph.addEdge( "d", 2, 3 );
-        l_graph.addEdge( "e", 2, 5 );
+        l_graph.addEdge( "xx", 2, 3 );
+        l_graph.addEdge( "yy", 2, 5 );
 
-        l_graph.addEdge( "f", 3, 4 );
+        l_graph.addEdge( "xxx", 3, 4 );
 
-        l_graph.addEdge( "g", 4, 5 );
-        l_graph.addEdge( "h", 4, 6 );
+        l_graph.addEdge( "xxxx", 4, 5 );
+        l_graph.addEdge( "yyyy", 4, 6 );
 
 
         new CAdjacencyMatrix().execute(
@@ -476,12 +476,12 @@ public final class TestCActionGraph extends IBaseTest
                      l_graph2.addVertex( i );
                  } );
 
-        l_graph1.addEdge( "a", 1, 1 );
-        l_graph1.addEdge( "b", 1, 2 );
-        l_graph1.addEdge( "c", 1, 5 );
+        l_graph1.addEdge( "x", 1, 1 );
+        l_graph1.addEdge( "y", 1, 2 );
+        l_graph1.addEdge( "z", 1, 5 );
 
-        l_graph2.addEdge( "a", 1, 1 );
-        l_graph2.addEdge( "b", 1, 2 );
+        l_graph2.addEdge( "x", 1, 1 );
+        l_graph2.addEdge( "y", 1, 2 );
 
 
         new CDegreeSingle().execute(
