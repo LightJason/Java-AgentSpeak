@@ -40,9 +40,9 @@ import java.util.List;
  * the first argument is the vertex and all
  * other arguments are graphs, the action never fails
  *
- * @code graph/addvertex( Value, Graph1, [Graph2, [Graph3]] ); @endcode
+ * @code graph/addvertex( Vertex, Graph1, [Graph2, [Graph3]] ); @endcode
  */
-public final class CAddVertex extends IBuildinAction
+public final class CAddVertexSingle extends IBuildinAction
 {
     @Override
     public final int minimalArgumentNumber()

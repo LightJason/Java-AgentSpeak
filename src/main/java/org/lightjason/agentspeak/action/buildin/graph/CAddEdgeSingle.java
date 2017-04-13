@@ -23,9 +23,50 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
+import edu.uci.ics.jung.graph.Graph;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+
 /**
- * add multiple elements to a single graph
+ * adds a single edge to the multiple graph.
+ * The action adds to each graph the first triple
+ * (edge identifier, start vertex, end vertex)
+ * to all other arguments are graphs, the action
+ * fails on wrong input
+ *
+ * @code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 ); @endcode
  */
-public abstract class IAdd
+public final class CAddEdgeSingle extends IBuildinAction
 {
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
+
+    @Override
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                               final List<ITerm> p_annotation
+    )
+    {
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 4 )
+            return CFuzzyValue.from( false );
+
+        l_arguments.stream()
+                   .skip( 3 )
+                   .parallel()
+                   .map( ITerm::<Graph<Object, Object>>raw )
+                   .forEach( i -> i.addEdge( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw(), l_arguments.get( 2 ).raw() ) );
+
+        return CFuzzyValue.from( true );
+    }
 }

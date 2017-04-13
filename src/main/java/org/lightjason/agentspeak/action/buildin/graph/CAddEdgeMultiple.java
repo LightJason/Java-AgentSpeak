@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
+import com.codepoetics.protonpack.StreamUtils;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -32,19 +33,19 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * adds an edge to the graph.
- * The action adds to each graph the pair
- * of vertices, so the first two arguments
- * are the vertices, all other arguments are
- * graphs, the action fails on wrong input
+ * add multiple edges to a single graph instance.
+ * Adds multiple edges to a single graph instance, the first
+ * argument is the graph reference, and all other triples
+ * are the edges, the first argument of the triple is the
+ * edge identifier, the second the start vertex, and the third
+ * the end vertex, the action never fails
  *
- * @code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 ); @endcode
+ * @code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 ); @endcode
  */
-public final class CAddEdge extends IBuildinAction
+public final class CAddEdgeMultiple extends IBuildinAction
 {
     @Override
     public final int minimalArgumentNumber()
@@ -57,15 +58,14 @@ public final class CAddEdge extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 4 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 3 )
-                   .parallel()
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .forEach( i -> i.addEdge( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw(), l_arguments.get( 2 ).raw() ) );
+        StreamUtils.windowed(
+            CCommon.flatcollection( p_argument )
+               .skip( 1 )
+               .map( ITerm::raw ),
+               3,
+               3
+        )
+                   .forEach( i -> p_argument.get( 0 ).<Graph<Object, Object>>raw().addEdge( i.get( 0 ), i.get( 1 ), i.get( 2 ) ) );
 
         return CFuzzyValue.from( true );
     }

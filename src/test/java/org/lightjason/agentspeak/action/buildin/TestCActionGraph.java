@@ -23,14 +23,18 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.buildin.graph.CAddEdge;
-import org.lightjason.agentspeak.action.buildin.graph.CAddVertex;
+import org.lightjason.agentspeak.action.buildin.graph.CAddEdgeMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CAddEdgeSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CAddVertexMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CAddVertexSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CAdjacencyMatrix;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
@@ -77,33 +81,56 @@ public final class TestCActionGraph extends IBaseTest
 
 
     /**
-     * test add-vertex
+     * test add-vertex single
      */
     @Test
-    public final void addvertex()
+    public final void addvertexsingle()
     {
-        final Graph<?, ?> l_graph = new SparseGraph<>();
+        final Graph<?, ?> l_graph1 = new SparseGraph<>();
+        final Graph<?, ?> l_graph2 = new SparseGraph<>();
 
         IntStream.range( 0, 5 )
                  .boxed()
                  .forEach( i ->
-                    new CAddVertex().execute(
+                    new CAddVertexSingle().execute(
                         null,
                         false,
-                        Stream.of( i, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                        Stream.of( i, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                         Collections.emptyList(),
                         Collections.emptyList()
                     ) );
 
-        Assert.assertEquals( l_graph.getVertexCount(), 5 );
+        Assert.assertArrayEquals( l_graph1.getVertices().toArray(), IntStream.range( 0, 5 ).boxed().toArray() );
+        Assert.assertArrayEquals( l_graph2.getVertices().toArray(), IntStream.range( 0, 5 ).boxed().toArray() );
     }
 
 
     /**
-     * test add-edge
+     * test add-vertex multiple
      */
     @Test
-    public final void addedge()
+    public final void addvertexmultiple()
+    {
+        final Graph<?, ?> l_graph = new SparseGraph<>();
+
+        new CAddVertexMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, "x", "y", "z" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_graph.getVertices().toArray(), Stream.of( "x", "y", "z" ).toArray() );
+    }
+
+
+
+    /**
+     * test add-edge single
+     */
+    @Test
+    public final void addedgesingle()
     {
         final Graph<Integer, String> l_graph = new SparseGraph<>();
 
@@ -111,7 +138,7 @@ public final class TestCActionGraph extends IBaseTest
                  .boxed()
                  .forEach( l_graph::addVertex );
 
-        new CAddEdge().execute(
+        new CAddEdgeSingle().execute(
             null,
             false,
             Stream.of( "foo", 1, 2, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
@@ -119,7 +146,7 @@ public final class TestCActionGraph extends IBaseTest
             Collections.emptyList()
         );
 
-        new CAddEdge().execute(
+        new CAddEdgeSingle().execute(
             null,
             false,
             Stream.of( "bar", 4, 5, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
@@ -133,6 +160,30 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( (long) l_graph.getEndpoints( "bar" ).getFirst(), 4 );
         Assert.assertEquals( (long) l_graph.getEndpoints( "bar" ).getSecond(), 5 );
     }
+
+
+    /**
+     * test add-edge multiple
+     */
+    @Test
+    public final void addedgemultiple()
+    {
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        l_graph.addVertex( 1 );
+        l_graph.addVertex( 2 );
+
+        new CAddEdgeMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, "foo", 1, 1, "bar", 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_graph.getEdges().toArray(), Stream.of( "bar", "foo" ).toArray() );
+    }
+
 
 
     /**
@@ -244,9 +295,6 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "h", 4, 6 );
 
 
-
-        System.out.println( l_graph );
-
         new CAdjacencyMatrix().execute(
             null,
             false,
@@ -255,7 +303,11 @@ public final class TestCActionGraph extends IBaseTest
             Collections.emptyList()
         );
 
-        System.out.println( l_return );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1, 2, 3, 4, 5, 6 ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw(), new DenseDoubleMatrix2D( new double[][]{{2, 1, 0, 0, 1, 0}, {1, 0, 1, 0, 1, 0}, {0, 1, 0, 1, 0, 0},
+            {0, 0, 1, 0, 1, 1}, {1, 1, 0, 1, 0, 0}, {0, 0, 0, 1, 0, 0}} ) );
     }
 
 
