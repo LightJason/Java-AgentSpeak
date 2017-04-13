@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.action.buildin.graph.CContainsVertex;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
 import org.lightjason.agentspeak.action.buildin.graph.CDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CDegreeSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CDistancePath;
 import org.lightjason.agentspeak.action.buildin.graph.CEdgeCount;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -494,6 +495,38 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 2L ).toArray() );
     }
+
+
+    /**
+     * test distance-path
+     */
+    @Test
+    public final void distancepath()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "m", 1, 2 );
+        l_graph.addEdge( "n", 2, 3 );
+        l_graph.addEdge( "o", 3, 4 );
+        l_graph.addEdge( "p", 2, 6 );
+
+        new CDistancePath().execute(
+            null,
+            false,
+            Stream.of( 2, l_graph, 1, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6D );
+    }
+
 
 
     /**
