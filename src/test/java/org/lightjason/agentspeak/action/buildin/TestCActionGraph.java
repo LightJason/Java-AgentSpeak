@@ -39,6 +39,8 @@ import org.lightjason.agentspeak.action.buildin.graph.CContainsEdge;
 import org.lightjason.agentspeak.action.buildin.graph.CContainsVertex;
 import org.lightjason.agentspeak.action.buildin.graph.CCreate;
 import org.lightjason.agentspeak.action.buildin.graph.CDegreeMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CDegreeSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CEdgeCount;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.action.buildin.graph.CVertices;
@@ -215,6 +217,38 @@ public final class TestCActionGraph extends IBaseTest
 
 
     /**
+     * test edge-count
+     */
+    @Test
+    public final void edgecount()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        IntStream.range( 0, 5 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "a", 0, 1 );
+        l_graph.addEdge( "b", 0, 2 );
+        l_graph.addEdge( "c", 1, 3 );
+        l_graph.addEdge( "d", 3, 4 );
+
+
+        new CEdgeCount().execute(
+            null,
+            false,
+            Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4L );
+    }
+
+
+    /**
      * test vertices
      */
     @Test
@@ -385,10 +419,10 @@ public final class TestCActionGraph extends IBaseTest
 
 
     /**
-     * test degree
+     * test degree multiple
      */
     @Test
-    public final void degreesingle()
+    public final void degreemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -422,6 +456,43 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3, 3, 2, 3, 3, 1 ).mapToLong( i -> i ).boxed().toArray() );
+    }
+
+
+    /**
+     * test degree single
+     */
+    @Test
+    public final void degreesingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new UndirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new UndirectedSparseGraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( i -> {
+                     l_graph1.addVertex( i );
+                     l_graph2.addVertex( i );
+                 } );
+
+        l_graph1.addEdge( "a", 1, 1 );
+        l_graph1.addEdge( "b", 1, 2 );
+        l_graph1.addEdge( "c", 1, 5 );
+
+        l_graph2.addEdge( "a", 1, 1 );
+        l_graph2.addEdge( "b", 1, 2 );
+
+
+        new CDegreeSingle().execute(
+            null,
+            false,
+            Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 2L ).toArray() );
     }
 
 
