@@ -25,8 +25,8 @@ package org.lightjason.agentspeak.action.buildin.graph;
 
 import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.shortestpath.PrimMinimumSpanningTree;
-import edu.uci.ics.jung.graph.AbstractGraph;
 import edu.uci.ics.jung.graph.DelegateTree;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -35,20 +35,22 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
  * creates a minimal spanning tree of a graph.
  * The action creates from each graph argument a spanning
- * tree, if the first argument is a cost-map for edges
- * the numerical values are used for the spanning tree
+ * tree, within the argument list a default cost value
+ * and a cost-matrix can be added, if an adge is not found
+ * on the cost-map the default value is used, the ordering
+ * of the arguments can be completly unordered
  *
  * @code
     [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
-    [SP3|SP4] = graph/spanningtree( CostMap, Graph3, Graph4 );
+    [SP3|SP4] = graph/spanningtree( CostMap, Graph3, 1 Graph4 );
  * @endcode
  */
 public final class CSpanningTree extends IBuildinAction
@@ -63,30 +65,27 @@ public final class CSpanningTree extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
                                                final List<ITerm> p_annotation )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final double l_defaultcost = CCommon.flatcollection( p_argument )
+                                            .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
+                                            .findFirst()
+                                            .map( ITerm::<Number>raw )
+                                            .map( Number::doubleValue )
+                                            .orElseGet( () -> 0D );
 
-        // check if a cost-matrix is given
-        final int l_skip;
-        final PrimMinimumSpanningTree<Object, Object> l_treefactory;
+        final Map<?, Number> l_costmap = CCommon.flatcollection( p_argument )
+                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
+                                                .findFirst()
+                                                .map( ITerm::<Map<?, Number>>raw )
+                                                .orElseGet( Collections::emptyMap );
 
-        if ( !CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Map.class ) )
-        {
-            l_skip = 0;
-            l_treefactory = new PrimMinimumSpanningTree<>( DelegateTree.getFactory() );
-        }
-        else
-        {
-            l_skip = 1;
-            final Map<Object, Number> l_weights = l_arguments.get( 0 ).<Map<Object, Number>>raw();
-            final Function<Object, Double> l_weightfunction = ( e) -> l_weights.getOrDefault( e, 0 ).doubleValue();
-            l_treefactory = new PrimMinimumSpanningTree<>( DelegateTree.getFactory(), l_weightfunction );
-        }
+        final Function<Object, Double> l_weightfunction = ( e ) -> l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();
+        final PrimMinimumSpanningTree<Object, Object> l_treefactory = new PrimMinimumSpanningTree<>( DelegateTree.getFactory(), l_weightfunction );
 
-        // create spanning-tree
-        l_arguments.stream()
-               .skip( l_skip )
-               .map( ITerm::<AbstractGraph<Object, Object>>raw )
-               .map( l_treefactory::apply )
+        // --- filter graphs ---
+        CCommon.flatcollection( p_argument )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
+               .map( ITerm::<Graph<Object, Object>>raw )
+               .map( l_treefactory )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

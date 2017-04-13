@@ -66,9 +66,9 @@ import java.util.stream.Stream;
  *
  * @code
     [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
-    [M3|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
+    [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
     [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, 1, Graph2 );
-    [M3|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
+    [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
  * @endcode
  * @note the cost-map does not need an entry for each edge
  * non-existing edges have got on default zero costs with 1

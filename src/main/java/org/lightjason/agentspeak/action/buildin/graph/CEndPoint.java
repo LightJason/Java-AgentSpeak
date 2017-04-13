@@ -24,7 +24,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -64,7 +64,7 @@ public final class CEndPoint extends IBuildinAction
 
         l_arguments.stream()
                    .skip( 1 )
-                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
+                   .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> i.getEndpoints( l_arguments.get( 0 ).raw() ) )
                    .forEach( i -> {
                        p_return.add( CRawTerm.from( i.getFirst() ) );

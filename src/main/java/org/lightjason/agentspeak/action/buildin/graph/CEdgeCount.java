@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -57,7 +57,7 @@ public final class CEdgeCount extends IBuildinAction
     )
     {
         CCommon.flatcollection( p_argument )
-               .map( ITerm::<AbstractGraph<?, ?>>raw )
+               .map( ITerm::<Graph<?, ?>>raw )
                .mapToLong( Hypergraph::getEdgeCount )
                .boxed()
                .map( CRawTerm::from )

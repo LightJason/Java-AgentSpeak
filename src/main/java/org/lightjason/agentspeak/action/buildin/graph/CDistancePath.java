@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.buildin.graph;
 
 import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -75,7 +75,7 @@ public class CDistancePath extends IBuildinAction
 
         l_arguments.stream()
                    .skip( 3 )
-                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
+                   .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> new DijkstraShortestPath<Object, Object>( i, l_weightfunction ) )
                    .map( i -> i.getDistance( l_arguments.get( 1 ).raw(), l_arguments.get( 2 ).raw() ) )
                    .mapToDouble( Number::doubleValue )

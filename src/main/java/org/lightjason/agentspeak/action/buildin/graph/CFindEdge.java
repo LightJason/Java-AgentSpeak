@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -62,7 +62,7 @@ public final class CFindEdge extends IBuildinAction
 
         l_arguments.stream()
                    .skip( 2 )
-                   .map( ITerm::<AbstractGraph<Object, Object>>raw )
+                   .map( ITerm::<Graph<Object, Object>>raw )
                    .map( i -> i.findEdge( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
                    .map( CRawTerm::from )
                    .forEach( p_return::add );

@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -63,7 +63,7 @@ public final class CRemoveVertex extends IBuildinAction
             && l_arguments.stream()
                           .skip( 1 )
                           .map( ITerm::raw )
-                          .allMatch( i -> l_arguments.get( 0 ).<AbstractGraph<Object, Object>>raw().removeVertex( i ) )
+                          .allMatch( i -> l_arguments.get( 0 ).<Graph<Object, Object>>raw().removeVertex( i ) )
         );
     }
 

@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -57,7 +57,7 @@ public final class CAddVertex extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .skip( 1 )
-               .map( ITerm::<AbstractGraph<Object, Object>>raw )
+               .map( ITerm::<Graph<Object, Object>>raw )
                .forEach( i -> i.addVertex( p_argument.get( 0 ).raw() ) );
 
         return CFuzzyValue.from( true );
