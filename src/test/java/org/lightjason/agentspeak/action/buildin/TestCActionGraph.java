@@ -528,6 +528,35 @@ public final class TestCActionGraph extends IBaseTest
     }
 
 
+    /**
+     * test find-edge
+     */
+    @Test
+    public final void findedge()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "search", 1, 2 );
+        l_graph.addEdge( "notsearch", 1, 2 );
+
+        new CContainsEdge().execute(
+            null,
+            false,
+            Stream.of( "search", l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+    }
+
+
 
     /**
      * test call
