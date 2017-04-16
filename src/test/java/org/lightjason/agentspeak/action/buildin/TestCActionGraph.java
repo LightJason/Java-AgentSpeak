@@ -43,6 +43,8 @@ import org.lightjason.agentspeak.action.buildin.graph.CDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CDistancePath;
 import org.lightjason.agentspeak.action.buildin.graph.CEdgeCount;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
+import org.lightjason.agentspeak.action.buildin.graph.CFindEdgeMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CFindEdgeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.action.buildin.graph.CVertices;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -529,10 +531,43 @@ public final class TestCActionGraph extends IBaseTest
 
 
     /**
-     * test find-edge
+     * test find-edge single
      */
     @Test
-    public final void findedge()
+    public final void findedgesingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new UndirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new UndirectedSparseGraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( i -> {
+                     l_graph1.addVertex( i );
+                     l_graph2.addVertex( i );
+                 } );
+
+        l_graph1.addEdge( "search", 1, 2 );
+        l_graph1.addEdge( "notsearch", 1, 2 );
+        l_graph2.addEdge( "xxx", 1, 2 );
+
+        new CFindEdgeSingle().execute(
+            null,
+            false,
+            Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( "search", "xxx" ).toArray() );
+    }
+
+
+    /**
+     * test find-edge multiple
+     */
+    @Test
+    public final void findedgemultiple()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
@@ -541,19 +576,21 @@ public final class TestCActionGraph extends IBaseTest
                  .boxed()
                  .forEach( l_graph::addVertex );
 
-        l_graph.addEdge( "search", 1, 2 );
-        l_graph.addEdge( "notsearch", 1, 2 );
+        l_graph.addEdge( "edge12", 1, 2 );
+        l_graph.addEdge( "edge23", 2, 3 );
+        l_graph.addEdge( "edge34", 3, 4 );
+        l_graph.addEdge( "edge13", 1, 3 );
+        l_graph.addEdge( "edge24", 2, 4 );
 
-        new CContainsEdge().execute(
+        new CFindEdgeMultiple().execute(
             null,
             false,
-            Stream.of( "search", l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( l_graph, 1, 2, 2, 3, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( "edge12", "edge23", "edge34" ).toArray() );
     }
 
 
