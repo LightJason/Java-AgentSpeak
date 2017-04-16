@@ -23,9 +23,15 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import com.codepoetics.protonpack.StreamUtils;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.apache.commons.math3.primes.Primes;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.math.CACos;
 import org.lightjason.agentspeak.action.buildin.math.CASin;
@@ -67,10 +73,7 @@ import org.lightjason.agentspeak.action.buildin.math.CTanh;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,92 +81,117 @@ import java.util.stream.Stream;
 /**
  * test math functions
  */
+@RunWith( DataProviderRunner.class )
 public final class TestCActionMath extends IBaseTest
 {
+
+    /**
+     * data provider generator
+     * @return data
+     */
+    @DataProvider
+    public static Object[] generate()
+    {
+        return Stream.of( Stream.of( -2, -6, 4, -1, -5, 3, 49, 30, 6, 5, 1.3, 2.8, 9.7, 1, 8, 180 )
+                .collect( Collectors.toList() ) ).toArray();
+    }
+
 
     /**
      * test abs
      */
     @Test
-    public final void abs()
+    @UseDataProvider( "generate" )
+    public final void abs( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CAbs().execute(
                 null,
                 false,
-                Stream.of( -2, -6, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 6.0 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 4.0 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.abs( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+
     }
 
     /**
      * test acos
      */
     @Test
-    public final void acos()
+    @UseDataProvider( "generate" )
+    public final void acos( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CACos().execute(
                 null,
                 false,
-                Stream.of( -1, -5, 3, -3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3.141592653589793 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), Double.NaN );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), Double.NaN );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), Double.NaN );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.acos( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
 
     /**
      * test asin
      */
     @Test
-    public final void asin()
+    @UseDataProvider( "generate" )
+    public final void asin( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CASin().execute(
                 null,
                 false,
-                Stream.of( -1, -5, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), -1.5707963267948966 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), Double.NaN );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), Double.NaN );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.asin( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
 
     /**
      * test atan
      */
     @Test
-    public final void atan()
+    @UseDataProvider( "generate" )
+    public final void atan( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CATan().execute(
                 null,
                 false,
-                Stream.of( -1, -5, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), -0.7853981633974483 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), -1.373400766945016 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1.2490457723982544 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.atan( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
     }
 
     /**
@@ -207,45 +235,49 @@ public final class TestCActionMath extends IBaseTest
 
     }
 
-
     /**
      * test average
      */
     @Test
-    public final void average()
+    @UseDataProvider( "generate" )
+    public final void average( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CAverage().execute(
                 null,
                 false,
-                Stream.of( 1, 3, 9, 10, 11, 12 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 7.666666666666667 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 17.8625 );
+
     }
 
     /**
      * test ceil
      */
     @Test
-    public final void ceil()
+    @UseDataProvider( "generate" )
+    public final void ceil( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCeil().execute(
                 null,
                 false,
-                Stream.of( 1.3, 2.8, 9.7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 3.0 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 10.0 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.ceil( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -253,20 +285,24 @@ public final class TestCActionMath extends IBaseTest
      * test cos
      */
     @Test
-    public final void cos()
+    @UseDataProvider( "generate" )
+    public final void cos( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCos().execute(
                 null,
                 false,
-                Stream.of( 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), -0.9899924966004454 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), -0.6536436208636119 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.cos( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -274,20 +310,24 @@ public final class TestCActionMath extends IBaseTest
      * test cosh
      */
     @Test
-    public final void cosh()
+    @UseDataProvider( "generate" )
+    public final void cosh( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCosh().execute(
                 null,
                 false,
-                Stream.of( 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 10.067661995777765 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 27.308232836016487 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.cosh( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -295,19 +335,25 @@ public final class TestCActionMath extends IBaseTest
      * test degrees
      */
     @Test
-    public final void degrees()
+    @UseDataProvider( "generate" )
+    public final void degrees( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CDegrees().execute(
                 null,
                 false,
-                Stream.of( Math.PI ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 180.0 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.toDegrees( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+
 
     }
 
@@ -315,22 +361,27 @@ public final class TestCActionMath extends IBaseTest
      * test exponential
      */
     @Test
-    public final void exp()
+    @UseDataProvider( "generate" )
+    public final void exp( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CExp().execute(
                 null,
                 false,
-                Stream.of( 1, 8 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2.718281828459045 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 2980.9579870417283 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.exp( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
+
 
     /**
      * test factorial
@@ -360,39 +411,42 @@ public final class TestCActionMath extends IBaseTest
      * test geometricmean
      */
     @Test
-    public final void geometricmean()
+    @UseDataProvider( "generate" )
+    public final void geometricmean( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGeometricMean().execute(
                 null,
                 false,
-                Stream.of( 1, 3, 9, 10, 11, 12 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 5.73662264007279 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 5.7942925477557 );
 
     }
+
 
     /**
      * test harmonicmean
      */
     @Test
-    public final void harmonicmean()
+    @UseDataProvider( "generate" )
+    public final void harmonicmean( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHarmonicMean().execute(
                 null,
                 false,
-                Stream.of( 1, 3, 9, 10, 11, 12 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3.4910373200117544 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 10.687351712676081 );
     }
 
     /**
@@ -400,19 +454,24 @@ public final class TestCActionMath extends IBaseTest
      * l_return is empty???
      */
     @Test
-    public final void hypot()
+    @UseDataProvider( "generate" )
+    public final void hypot( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHypot().execute(
                 null,
                 false,
-                Stream.of( 1, 2, 3, 4, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
+        for ( int i = 0; i < p_input.size() - 1; i++ )
+        {
+            Assert.assertEquals( l_return.get( i ).<Number>raw(), Math.hypot( p_input.get( i ).doubleValue(),
+                                                                        p_input.get( i + 1 ).doubleValue() ) );
+        }
 
     }
 
@@ -420,43 +479,49 @@ public final class TestCActionMath extends IBaseTest
      * test isprime
      */
     @Test
-    public final void isprime()
+    @UseDataProvider( "generate" )
+    public final void isprime( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CIsPrime().execute(
                 null,
                 false,
-                Stream.of( 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), true );
-        Assert.assertEquals( l_return.get( 1 ).<Boolean>raw(), false );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Primes.isPrime( i.intValue() ) ),
+                l_return.stream().map( ITerm::<Boolean>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
-
 
     /**
      * test log
      */
     @Test
-    public final void log()
+    @UseDataProvider( "generate" )
+    public final void log( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLog().execute(
                 null,
                 false,
-                Stream.of( 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.6931471805599453 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1.0986122886681098 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.log( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -464,21 +529,24 @@ public final class TestCActionMath extends IBaseTest
      * test log10
      */
     @Test
-    public final void log10()
+    @UseDataProvider( "generate" )
+    public final void log10( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLog10().execute(
                 null,
                 false,
-                Stream.of( 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.3010299956639812 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.47712125471966244 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.log10( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -486,19 +554,20 @@ public final class TestCActionMath extends IBaseTest
      * test max
      */
     @Test
-    public final void max()
+    @UseDataProvider( "generate" )
+    public final void max( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMax().execute(
                 null,
                 false,
-                Stream.of( 2, 5, 7, 3, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<OptionalDouble>raw(), OptionalDouble.of( 7 ) );
+        Assert.assertEquals( l_return.get( 0 ).<OptionalDouble>raw(), OptionalDouble.of( 180.0 ) );
 
     }
 
@@ -506,19 +575,20 @@ public final class TestCActionMath extends IBaseTest
      * test max index
      */
     @Test
-    public final void maxIndex()
+    @UseDataProvider( "generate" )
+    public final void maxIndex( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMaxIndex().execute(
                 null,
                 false,
-                Stream.of( 5, 6, 7, 8, 1, 2, 3  ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6L );
 
     }
 
@@ -526,19 +596,20 @@ public final class TestCActionMath extends IBaseTest
      * test min
      */
     @Test
-    public final void min()
+    @UseDataProvider( "generate" )
+    public final void min( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMin().execute(
                 null,
                 false,
-                Stream.of( 2, 5, 7, 3, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<OptionalDouble>raw(), OptionalDouble.of( 2 ) );
+        Assert.assertEquals( l_return.get( 0 ).<OptionalDouble>raw(), OptionalDouble.of( -6.0 ) );
 
     }
 
@@ -546,40 +617,45 @@ public final class TestCActionMath extends IBaseTest
      * test min index
      */
     @Test
-    public final void minIndex()
+    @UseDataProvider( "generate" )
+    public final void minIndex( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMinIndex().execute(
                 null,
                 false,
-                Stream.of( 5, 6, 7, 8, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1L );
     }
+
 
     /**
      * test floor
      */
     @Test
-    public final void floor()
+    @UseDataProvider( "generate" )
+    public final void floor( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFloor().execute(
                 null,
                 false,
-                Stream.of( 1.3, 2.8, 9.7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 2.0 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 9.0 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.floor( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -606,24 +682,53 @@ public final class TestCActionMath extends IBaseTest
     }
 
     /**
+     * test nextprime
+     */
+    @Test
+    @Ignore
+    @UseDataProvider( "generate" )
+    public final void nextprime( final List<Number> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CNextPrime().execute(
+                null,
+                false,
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        StreamUtils.zip(
+                p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+
+    }
+
+
+    /**
      * test power
      */
     @Test
-    public final void power()
+    @UseDataProvider( "generate" )
+    public final void power( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPow().execute(
                 null,
                 false,
-                Stream.of( 2.0, -2.0, 9.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 81.0 );
-
+        for ( int i = 1; i < p_input.size(); i++ )
+        {
+            Assert.assertEquals( l_return.get( i - 1 ).<Number>raw(), Math.pow( p_input.get( i ).doubleValue(), p_input.get( 0 ).doubleValue() ) );
+        }
     }
 
     /**
@@ -651,19 +756,24 @@ public final class TestCActionMath extends IBaseTest
      * test radians
      */
     @Test
-    public final void radians()
+    @UseDataProvider( "generate" )
+    public final void radians( final List<Number> p_input  )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRadians().execute(
                 null,
                 false,
-                Stream.of( 180 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3.141592653589793 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.toRadians( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -671,21 +781,24 @@ public final class TestCActionMath extends IBaseTest
      * test round
      */
     @Test
-    public final void round()
+    @UseDataProvider( "generate" )
+    public final void round( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRound().execute(
                 null,
                 false,
-                Stream.of( 5.5, 1.2, 2.7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6L );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 1L );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 3L );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.round( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -693,7 +806,8 @@ public final class TestCActionMath extends IBaseTest
      * test siamoid
      */
     @Test
-    public final void siamoid()
+    @UseDataProvider( "generate" )
+    public final void siamoid( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -718,21 +832,24 @@ public final class TestCActionMath extends IBaseTest
      * test signum
      */
     @Test
-    public final void signum()
+    @UseDataProvider( "generate" )
+    public final void signum( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSignum().execute(
                 null,
                 false,
-                Stream.of( -3, 0, 8  ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), -1.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.0 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1.0 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.signum( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -740,20 +857,24 @@ public final class TestCActionMath extends IBaseTest
      * test sin
      */
     @Test
-    public final void sin()
+    @UseDataProvider( "generate" )
+    public final void sin( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSin().execute(
                 null,
                 false,
-                Stream.of( 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.1411200080598672 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), -0.7568024953079282 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.sin( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -761,21 +882,24 @@ public final class TestCActionMath extends IBaseTest
      * test sinh
      */
     @Test
-    public final void sinh()
+    @UseDataProvider( "generate" )
+    public final void sinh( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSinh().execute(
                 null,
                 false,
-                Stream.of( 3.2, 8, 1.2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 12.245883996565492 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 1490.4788257895502 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1.5094613554121725 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.sinh( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -783,20 +907,24 @@ public final class TestCActionMath extends IBaseTest
      * test tan
      */
     @Test
-    public final void tan()
+    @UseDataProvider( "generate" )
+    public final void tan( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CTan().execute(
                 null,
                 false,
-                Stream.of( Math.PI, 1.2 * Math.PI ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), -1.2246467991473532E-16 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.7265425280053607 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.tan( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -804,21 +932,24 @@ public final class TestCActionMath extends IBaseTest
      * test tanh
      */
     @Test
-    public final void tanh()
+    @UseDataProvider( "generate" )
+    public final void tanh( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CTanh().execute(
                 null,
                 false,
-                Stream.of( 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.7615941559557649 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.9640275800758169 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.9950547536867305 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.tanh( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
@@ -826,19 +957,20 @@ public final class TestCActionMath extends IBaseTest
      * test sum
      */
     @Test
-    public final void sum()
+    @UseDataProvider( "generate" )
+    public final void sum( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSum().execute(
                 null,
                 false,
-                Stream.of( 3, 4, 1, -5, 3, 4, 10, 12 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 32.0 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 285.8 );
 
     }
 
@@ -847,14 +979,15 @@ public final class TestCActionMath extends IBaseTest
      * l_return is empty??
      */
     @Test
-    public final void stirling()
+    @UseDataProvider( "generate" )
+    public final void stirling( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStirling().execute(
                 null,
                 false,
-                Stream.of( 2, 3, 4, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
@@ -867,20 +1000,24 @@ public final class TestCActionMath extends IBaseTest
      * test sqrt
      */
     @Test
-    public final void sqrt()
+    @UseDataProvider( "generate" )
+    public final void sqrt( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSqrt().execute(
                 null,
                 false,
-                Stream.of( 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1.4142135623730951 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 1.7320508075688772 );
+        StreamUtils.zip(
+                p_input.stream().map( i -> Math.sqrt( i.doubleValue() ) ),
+                l_return.stream().map( ITerm::<Number>raw ),
+                AbstractMap.SimpleImmutableEntry::new
+        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
 
     }
 
