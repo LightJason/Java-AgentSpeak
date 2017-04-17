@@ -59,7 +59,7 @@ public final class CHypot extends IBuildinAction
         if ( p_argument.size() % 2 != 0 )
             return CFuzzyValue.from( false );
 
-        StreamUtils.windowed( CCommon.flatcollection( p_argument ), 2 )
+        StreamUtils.windowed( CCommon.flatcollection( p_argument ), 2, 2 )
                    .map( i -> Math.hypot(
                        i.get( 0 ).<Number>raw().doubleValue(),
                        i.get( 1 ).<Number>raw().doubleValue()

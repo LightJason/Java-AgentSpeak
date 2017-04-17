@@ -61,10 +61,11 @@ public final class CStirling extends IBuildinAction
     )
     {
         StreamUtils.windowed(
-            CCommon.flatcollection( p_annotation )
+            CCommon.flatcollection( p_argument )
                    .map( ITerm::<Number>raw )
                    .mapToInt( Number::intValue )
                    .boxed(),
+            2,
             2
         )
                    .map( i -> CombinatoricsUtils.stirlingS2( i.get( 0 ), i.get( 1 ) ) )

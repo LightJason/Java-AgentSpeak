@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -74,7 +75,6 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -92,8 +92,9 @@ public final class TestCActionMath extends IBaseTest
     @DataProvider
     public static Object[] generate()
     {
-        return Stream.of( Stream.of( -2, -6, 4, -1, -5, 3, 49, 30, 6, 5, 1.3, 2.8, 9.7, 1, 8, 180 )
-                .collect( Collectors.toList() ) ).toArray();
+        return Stream.of(
+                Stream.of( -2, -6, 4, -1, -5, 3, 49, 30, 6, 5, 1.3, 2.8, 9.7, 1, 8, 180 ).collect( Collectors.toList() )
+        ).toArray();
     }
 
 
@@ -114,9 +115,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.abs( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.abs( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -136,8 +138,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.acos( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.acos( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -157,8 +161,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.asin( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.asin( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -178,8 +184,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.atan( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.atan( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -198,10 +206,9 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 18851684897584L );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 593775L );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 6L );
 
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 18851684897584L );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 6L );
     }
 
     /**
@@ -220,7 +227,6 @@ public final class TestCActionMath extends IBaseTest
                 l_return,
                 Collections.emptyList()
         );
-
     }
 
     /**
@@ -241,7 +247,6 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 17.8625 );
-
     }
 
     /**
@@ -261,9 +266,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.ceil( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.ceil( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -283,9 +289,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.cos( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.cos( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -305,9 +312,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.cosh( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.cosh( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -327,9 +335,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.toDegrees( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.toDegrees( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -349,9 +358,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.exp( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.exp( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
 
@@ -376,7 +386,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 2L );
         Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 6L );
         Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 24L );
-
     }
 
     /**
@@ -397,7 +406,6 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 5.7942925477557 );
-
     }
 
 
@@ -438,11 +446,14 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        IntStream.range( 0, p_input.size() - 1 )
-                .forEach( i -> Assert.assertEquals( l_return.get( i ).<Number>raw(), Math.hypot( p_input.get( i ).doubleValue(),
-                        p_input.get( i + 1 ).doubleValue() ) ) );
 
-
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Number>raw ).toArray(),
+            StreamUtils.windowed( p_input.stream(), 2, 2 )
+                       .mapToDouble( i -> Math.hypot( i.get( 0 ).doubleValue(), i.get( 1 ).doubleValue() ) )
+                       .boxed()
+                       .toArray()
+        );
     }
 
     /**
@@ -462,9 +473,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Primes.isPrime( i.intValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Boolean>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Primes.isPrime( i.intValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray()
+        );
     }
 
     /**
@@ -484,9 +496,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.log( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.log( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -506,9 +519,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.log10( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.log10( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -550,7 +564,6 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6L );
-
     }
 
     /**
@@ -612,9 +625,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.floor( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.floor( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -636,7 +650,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 13L );
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 149L );
         Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1097L );
-
     }
 
     /**
@@ -657,9 +670,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
 
@@ -680,9 +694,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Number>raw ).toArray(),
-                p_input.stream().skip( 1 ).map( i -> Math.pow( i.doubleValue(), p_input.get( 0 ).doubleValue() ) ).toArray() );
-
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Number>raw ).toArray(),
+            p_input.stream().skip( 1 ).map( i -> Math.pow( i.doubleValue(), p_input.get( 0 ).doubleValue() ) ).toArray()
+        );
     }
 
     /**
@@ -703,7 +718,6 @@ public final class TestCActionMath extends IBaseTest
 
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2L, 2L, 2L ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2L, 2L, 2L, 3L, 5L ).toArray() );
-
     }
 
     /**
@@ -723,9 +737,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.toRadians( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.toRadians( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -745,17 +760,17 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.round( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.round( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
-     * test siamoid
+     * test sigmoid
      */
     @Test
-    @UseDataProvider( "generate" )
-    public final void siamoid( final List<Number> p_input )
+    public final void siamoid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -773,7 +788,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0.2137302715195763 );
         Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 0.11965173462430909 );
         Assert.assertEquals( l_return.get( 5 ).<Number>raw(), 0.08308143571569296 );
-
     }
 
     /**
@@ -793,9 +807,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.signum( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.signum( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -815,9 +830,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.sin( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.sin( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -837,9 +853,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.sinh( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.sinh( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -859,9 +876,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.tan( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.tan( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -881,9 +899,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.tanh( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.tanh( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
     /**
@@ -904,29 +923,25 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 285.8 );
-
     }
 
     /**
      * test stirling
-     * l_return is empty??
      */
     @Test
-    @UseDataProvider( "generate" )
-    public final void stirling( final List<Number> p_input )
+    public final void stirling()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStirling().execute(
                 null,
                 false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
-
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Number>raw ).toArray(), Stream.of( 3L, 966L ).toArray() );
     }
 
     /**
@@ -946,9 +961,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertArrayEquals( p_input.stream().map( i -> Math.sqrt( i.doubleValue() ) ).toArray(),
-                l_return.stream().map( ITerm::<Number>raw ).toArray() );
-
+        Assert.assertArrayEquals(
+            p_input.stream().map( i -> Math.sqrt( i.doubleValue() ) ).toArray(),
+            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        );
     }
 
 
