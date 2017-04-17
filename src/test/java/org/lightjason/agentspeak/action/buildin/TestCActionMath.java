@@ -31,7 +31,6 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.primes.Primes;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -220,6 +219,7 @@ public final class TestCActionMath extends IBaseTest
 
 
     /**
+<<<<<<< HEAD
      * create test case
      *
      * @param p_input input data
@@ -316,25 +316,6 @@ public final class TestCActionMath extends IBaseTest
 
 
     /**
-     * test binomial error
-     */
-    @Test
-    @Ignore
-    public final void binomialerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CBinomial().execute(
-            null,
-            false,
-            Stream.of( 49, 6, 30, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-    }
-
-
-    /**
      * test factorial
      */
     @Test
@@ -355,28 +336,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 2L );
         Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 6L );
         Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 24L );
-    }
-
-
-    /**
-     * test nextprime
-     */
-    @Test
-    public final void nextprime()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CNextPrime().execute(
-            null,
-            false,
-            Stream.of( 12, 144, 1096 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 13L );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 149L );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1097L );
     }
 
 
@@ -405,24 +364,21 @@ public final class TestCActionMath extends IBaseTest
      * test sigmoid
      */
     @Test
-    public final void siamoid()
+    public final void sigmoid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSigmoid().execute(
             null,
             false,
-            Stream.of( 1.0, 1.0, 1.0, 10.0, 20.0, 30.0  ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.7310585786300049 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.7310585786300049 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.7310585786300049 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0.2137302715195763 );
-        Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 0.11965173462430909 );
-        Assert.assertEquals( l_return.get( 5 ).<Number>raw(), 0.08308143571569296 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.9999546021312976 );
+        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.9999999979388463 );
+        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0.9999999999999065 );
     }
 
 
