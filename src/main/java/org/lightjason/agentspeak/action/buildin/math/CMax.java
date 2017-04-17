@@ -32,13 +32,14 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.OptionalDouble;
 
 
 /**
  * action for maximum.
  * The action calculates for all unflatten arguments
  * the maxmimum with \f$ max( x_0, x_1, \ldots, x_i ) \f$,
- * the action never fails
+ * the action fails on wrong input
  *
  * @code Max = math/max( 2, 5, 7, [3, 2] ); @endcode
  */
@@ -56,14 +57,15 @@ public final class CMax extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        p_return.add(
-            CRawTerm.from(
-                CCommon.flatcollection( p_argument )
-                       .map( ITerm::<Number>raw )
-                       .mapToDouble( Number::doubleValue )
-                       .max()
-            )
-        );
+        final OptionalDouble l_value = CCommon.flatcollection( p_argument )
+                                              .map( ITerm::<Number>raw )
+                                              .mapToDouble( Number::doubleValue )
+                                              .max();
+
+        if ( !l_value.isPresent() )
+            return CFuzzyValue.from( false );
+
+        p_return.add( CRawTerm.from( l_value.getAsDouble() ) );
         return CFuzzyValue.from( true );
     }
 }

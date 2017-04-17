@@ -27,13 +27,13 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.buildin.bool.CAllMatch;
 import org.lightjason.agentspeak.action.buildin.bool.CAnd;
 import org.lightjason.agentspeak.action.buildin.bool.CAnyMatch;
@@ -48,7 +48,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +72,7 @@ public final class TestCActionBool extends IBaseTest
     @DataProvider
     public static Object[] generate()
     {
-        return Stream.of(
+        return Stream.concat(
 
             // -- first test-case ---
             testcase(
@@ -93,17 +93,14 @@ public final class TestCActionBool extends IBaseTest
                 ),
 
                 // results for each class test
-                Stream.of(
-
-                    Stream.of( false ),
-                    Stream.of( true ),
-                    Stream.of( false ),
-                    Stream.of( true ),
-                    Stream.of( true ),
-                    Stream.of( false, true, false, true, true, false ),
-                    Stream.of( 3L ),
-                    Stream.of( 3L )
-                )
+                Stream.of( false ),
+                Stream.of( true ),
+                Stream.of( false ),
+                Stream.of( true ),
+                Stream.of( true ),
+                Stream.of( false, true, false, true, true, false ),
+                Stream.of( 3L ),
+                Stream.of( 3L )
             ),
 
 
@@ -128,16 +125,14 @@ public final class TestCActionBool extends IBaseTest
                 ),
 
                 // results for each class test
-                Stream.of(
-                    Stream.of( true ),
-                    Stream.of( true ),
-                    Stream.of( true ),
-                    Stream.of( true ),
-                    Stream.of( false ),
-                    Stream.of( false, false ),
-                    Stream.of( 2L ),
-                    Stream.of( 0L )
-                )
+                Stream.of( true ),
+                Stream.of( true ),
+                Stream.of( true ),
+                Stream.of( true ),
+                Stream.of( false ),
+                Stream.of( false, false ),
+                Stream.of( 2L ),
+                Stream.of( 0L )
             )
 
         ).toArray();
@@ -151,228 +146,45 @@ public final class TestCActionBool extends IBaseTest
      * @param p_classresult result for each class
      * @return test-object
      */
-    private static Object testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Stream<Object>> p_classresult )
+    @SafeVarargs
+    private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
-        return new ImmutablePair<>(
-                                    p_input.collect( Collectors.toList() ),
+        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
 
-                                    StreamUtils.zip(
-                                        p_classes,
-                                        p_classresult.map( i -> i.collect( Collectors.toList() ) ),
-                                        ( i, j ) -> new ImmutablePair<Object, Collection<Object>>( i, j )
-                                    ).collect( Collectors.toMap( i -> i.left, i -> i.right ) )
+        return StreamUtils.zip(
+            p_classes,
+            Arrays.stream( p_classresult ),
+            ( i, j ) -> new ImmutableTriple<>( l_input, i, j )
         );
     }
 
     /**
-     * test all-match
+     * generic test-case
      *
-     * @param p_input test arguments
+     * @param p_input test-case data
+     * @throws IllegalAccessException is thrwon on instantiation error
+     * @throws InstantiationException is thrwon on instantiation error
      */
     @Test
     @UseDataProvider( "generate" )
-    public final void allmatch( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
+    public final void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+    throws IllegalAccessException, InstantiationException
     {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CAllMatch.class );
-        Assume.assumeNotNull( l_expected );
-
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CAllMatch().execute(
+        p_input.getMiddle().newInstance().execute(
             null,
             false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
+            p_input.getLeft(),
             l_return,
             Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
-
-    /**
-     * test any-match
-     *
-     * @param p_input test arguments
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void anymatch( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CAnyMatch.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CAnyMatch().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            p_input.getRight().toArray()
         );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
     }
-
-
-    /**
-     * test and
-     *
-     * @param p_input test arguments
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void and( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CAnd.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CAnd().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
-
-    /**
-     * test or
-     *
-     * @param p_input test arguments
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void or( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( COr.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new COr().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
-
-    /**
-     * test xor
-     *
-     * @param p_input test arguments
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void xor( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CXor.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CXor().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
-
-    /**
-     * test not operation
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void not( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CNot.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CNot().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
-
-    /**
-     * test count-true
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void counttrue( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CCountTrue.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CCountTrue().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
-
-    /**
-     * test count-true
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void countfalse( final Pair<Collection<Boolean>, Map<Class<?>, Collection<Boolean>>> p_input )
-    {
-        final Collection<Boolean> l_expected = p_input.getRight().get( CCountFalse.class );
-        Assume.assumeNotNull( l_expected );
-
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CCountFalse().execute(
-            null,
-            false,
-            p_input.getLeft().stream().map( CRawTerm::from ).map( CRawTerm::<ITerm>raw ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), l_expected.size() );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), l_expected.toArray() );
-    }
-
 
     /**
      * test equal

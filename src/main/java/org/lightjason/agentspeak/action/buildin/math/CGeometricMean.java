@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -56,20 +57,35 @@ public final class CGeometricMean extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final long l_arguments = CCommon.flatcollection( p_argument ).count();
-
         p_return.add(
             CRawTerm.from(
-                Math.pow(
+                CGeometricMean.apply(
+                    CCommon.flatcollection( p_argument ).count(),
                     CCommon.flatcollection( p_argument )
                            .map( ITerm::<Number>raw )
                            .mapToDouble( Number::doubleValue )
-                           .reduce( 1, ( i, j ) -> i * j ), 1.0 / l_arguments
+                           .boxed()
                 )
             )
         );
 
         return CFuzzyValue.from( true );
+    }
+
+
+    /**
+     * calculate geometric-mean
+     *
+     * @param p_count number of elements
+     * @param p_values value stream
+     * @return geometric mean
+     */
+    private static double apply( final double p_count, final Stream<Double> p_values )
+    {
+        return Math.pow(
+            p_values.reduce( 1.0, ( i, j ) -> i * j ),
+            1.0 / p_count
+        );
     }
 
 }

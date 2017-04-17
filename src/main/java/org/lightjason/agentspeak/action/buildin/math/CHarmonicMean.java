@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -56,18 +57,32 @@ public final class CHarmonicMean extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        final double l_arguments = CCommon.flatcollection( p_argument ).count();
-
         p_return.add(
             CRawTerm.from(
-                l_arguments / CCommon.flatcollection( p_argument )
-                                     .map( ITerm::<Number>raw )
-                                     .mapToDouble( Number::doubleValue )
-                                     .map( i -> 1 / i ).sum()
+                CHarmonicMean.apply(
+                    CCommon.flatcollection( p_argument ).count(),
+                    CCommon.flatcollection( p_argument )
+                           .map( ITerm::<Number>raw )
+                           .mapToDouble( Number::doubleValue )
+                           .boxed()
+                )
             )
         );
 
         return CFuzzyValue.from( true );
+    }
+
+
+    /**
+     * calculate harmonic mean
+     *
+     * @param p_count number of elements
+     * @param p_values value stream
+     * @return harmonic mean
+     */
+    private static double apply( final double p_count, final Stream<Double> p_values )
+    {
+        return p_count / p_values.mapToDouble( i -> 1.0 / i ).sum();
     }
 
 }

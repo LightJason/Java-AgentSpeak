@@ -27,12 +27,15 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.primes.Primes;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.buildin.math.CACos;
 import org.lightjason.agentspeak.action.buildin.math.CASin;
 import org.lightjason.agentspeak.action.buildin.math.CATan;
@@ -73,8 +76,14 @@ import org.lightjason.agentspeak.action.buildin.math.CTanh;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -86,109 +95,204 @@ public final class TestCActionMath extends IBaseTest
 {
 
     /**
-     * data provider generator
+     * data provider generator for single-value tests
      * @return data
      */
     @DataProvider
-    public static Object[] generate()
+    public static Object[] singlevaluegenerate()
     {
-        return Stream.of(
-                Stream.of( -2, -6, 4, -1, -5, 3, 49, 30, 6, 5, 1.3, 2.8, 9.7, 1, 8, 180 ).collect( Collectors.toList() )
+        return Stream.concat(
+
+            singlevaluetestcase(
+
+                Stream.of( 2.5, 9.1, 111.7, 889.9 ),
+
+                Stream.of(
+                    CNextPrime.class
+                ),
+
+                ( i ) -> (long) Primes.nextPrime( i.intValue() )
+            ),
+
+            singlevaluetestcase(
+
+                Stream.of( -2, -6, 4, -1, -5, 3, 49, 30, 6, 5, 1.3, 2.8, 9.7, 1, 8, 180, Math.PI ),
+
+                Stream.of(
+                    CAbs.class,
+                    CACos.class,
+                    CASin.class,
+                    CATan.class,
+                    CCeil.class,
+                    CCos.class,
+                    CCosh.class,
+                    CDegrees.class,
+                    CExp.class,
+                    CIsPrime.class,
+                    CLog.class,
+                    CLog10.class,
+                    CFloor.class,
+                    CRadians.class,
+                    CRound.class,
+                    CSignum.class,
+                    CSin.class,
+                    CSinh.class,
+                    CSqrt.class,
+                    CTan.class,
+                    CTanh.class
+                ),
+
+                ( i ) -> Math.abs( i.doubleValue() ),
+                ( i ) -> Math.acos( i.doubleValue() ),
+                ( i ) -> Math.asin( i.doubleValue() ),
+                ( i ) -> Math.atan( i.doubleValue() ),
+                ( i ) -> Math.ceil( i.doubleValue() ),
+                ( i ) -> Math.cos( i.doubleValue() ),
+                ( i ) -> Math.cosh( i.doubleValue() ),
+                ( i ) -> Math.toDegrees( i.doubleValue() ),
+                ( i ) -> Math.exp( i.doubleValue() ),
+                ( i ) -> Primes.isPrime( i.intValue() ),
+                ( i ) -> Math.log( i.doubleValue() ),
+                ( i ) -> Math.log10( i.doubleValue() ),
+                ( i ) -> Math.floor( i.doubleValue() ),
+                ( i ) -> Math.toRadians( i.doubleValue() ),
+                ( i ) -> Math.round( i.doubleValue() ),
+                ( i ) -> Math.signum( i.doubleValue() ),
+                ( i ) -> Math.sin( i.doubleValue() ),
+                ( i ) -> Math.sinh( i.doubleValue() ),
+                ( i ) -> Math.sqrt( i.doubleValue() ),
+                ( i ) -> Math.tan( i.doubleValue() ),
+                ( i ) -> Math.tanh( i.doubleValue() )
+            )
+
         ).toArray();
     }
 
 
     /**
-     * test abs
+     * data provider generator for aggregation-value tests
+     * @return data
      */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void abs( final List<Number> p_input )
+    @DataProvider
+    public static Object[] aggregationvaluegenerate()
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        final Random l_random = new Random();
 
-        new CAbs().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
+        return aggregationvaluetestcase(
 
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.abs( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
+            IntStream.range( 0, 100 ).boxed().map( i -> l_random.nextGaussian() ),
+
+            Stream.of(
+                CAverage.class,
+                CSum.class,
+                CMin.class,
+                CMax.class
+            ),
+
+            ( i ) -> i.mapToDouble( Number::doubleValue ).average().getAsDouble(),
+            ( i ) -> i.mapToDouble( Number::doubleValue ).sum(),
+            ( i ) -> i.mapToDouble( Number::doubleValue ).min().getAsDouble(),
+            ( i ) -> i.mapToDouble( Number::doubleValue ).max().getAsDouble()
+
+        ).toArray();
     }
+
 
     /**
-     * test acos
+     * create test case
+     *
+     * @param p_input input data
+     * @param p_result result function
+     * @return test-case data
      */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void acos( final List<Number> p_input )
+    @SafeVarargs
+    private static Stream<Object> singlevaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
+                                                       final Function<Number, ?>... p_result )
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
 
-        new CACos().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.acos( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        return StreamUtils.zip(
+            p_class,
+            Arrays.stream( p_result ),
+            ( i, j ) -> new ImmutableTriple<>( l_input, i, j )
         );
     }
+
 
     /**
-     * test asin
+     * create test case
+     *
+     * @param p_input input data
+     * @param p_result result function
+     * @return test-case data
      */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void asin( final List<Number> p_input )
+    @SafeVarargs
+    private static Stream<Object> aggregationvaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
+                                                            final Function<Stream<Number>, ?>... p_result )
     {
-        final List<ITerm> l_return = new ArrayList<>();
+        final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );
 
-        new CASin().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.asin( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
+        return StreamUtils.zip(
+            p_class,
+            Arrays.stream( p_result ),
+            ( i, j ) -> new ImmutableTriple<>( l_input, i, j )
         );
     }
+
 
     /**
-     * test atan
+     * test all aggregation-value actions
+     *
+     * @throws IllegalAccessException is thrown on instantiation error
+     * @throws InstantiationException is thrown on instantiation error
      */
     @Test
-    @UseDataProvider( "generate" )
-    public final void atan( final List<Number> p_input )
+    @UseDataProvider( "aggregationvaluegenerate" )
+    public final void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
+    throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CATan().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+        p_input.getMiddle().newInstance().execute(
+            null,
+            false,
+            p_input.getLeft(),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).raw(), p_input.getRight().apply( p_input.getLeft().stream().map( ITerm::<Number>raw ) ) );
+    }
+
+
+    /**
+     * test all single-value actions
+     *
+     * @throws IllegalAccessException is thrown on instantiation error
+     * @throws InstantiationException is thrown on instantiation error
+     */
+    @Test
+    @UseDataProvider( "singlevaluegenerate" )
+    public final void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
+    throws IllegalAccessException, InstantiationException
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        p_input.getMiddle().newInstance().execute(
+            null,
+            false,
+            p_input.getLeft(),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.atan( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
+            l_return.stream().map( ITerm::raw ).toArray(),
+            p_input.getLeft().stream().map( ITerm::<Number>raw ).map( p_input.getRight()::apply ).toArray()
         );
     }
+
 
     /**
      * test binomial
@@ -199,17 +303,17 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBinomial().execute(
-                null,
-                false,
-                Stream.of( 49, 30, 6, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( 49, 30, 6, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
-
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 18851684897584L );
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 6L );
     }
+
 
     /**
      * test binomial error
@@ -221,146 +325,11 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBinomial().execute(
-                null,
-                false,
-                Stream.of( 49, 6, 30, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-    }
-
-    /**
-     * test average
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void average( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CAverage().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 17.8625 );
-    }
-
-    /**
-     * test ceil
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void ceil( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CCeil().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.ceil( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test cos
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void cos( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CCos().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.cos( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test cosh
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void cosh( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CCosh().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.cosh( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test degrees
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void degrees( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CDegrees().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.toDegrees( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test exponential
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void exp( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CExp().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.exp( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
+            null,
+            false,
+            Stream.of( 49, 6, 30, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
     }
 
@@ -374,11 +343,11 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFactorial().execute(
-                null,
-                false,
-                Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 120L );
@@ -388,248 +357,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 24L );
     }
 
-    /**
-     * test geometricmean
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void geometricmean( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CGeometricMean().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 5.7942925477557 );
-    }
-
-
-    /**
-     * test harmonicmean
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void harmonicmean( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CHarmonicMean().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 10.687351712676081 );
-    }
-
-    /**
-     * test hypot
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void hypot( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CHypot().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-
-        Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::<Number>raw ).toArray(),
-            StreamUtils.windowed( p_input.stream(), 2, 2 )
-                       .mapToDouble( i -> Math.hypot( i.get( 0 ).doubleValue(), i.get( 1 ).doubleValue() ) )
-                       .boxed()
-                       .toArray()
-        );
-    }
-
-    /**
-     * test isprime
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void isprime( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CIsPrime().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Primes.isPrime( i.intValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Boolean>raw ).toArray()
-        );
-    }
-
-    /**
-     * test log
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void log( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CLog().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.log( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test log10
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void log10( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CLog10().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.log10( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test max
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void max( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CMax().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<OptionalDouble>raw(), OptionalDouble.of( 180.0 ) );
-
-    }
-
-    /**
-     * test max index
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void maxIndex( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CMaxIndex().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6L );
-    }
-
-    /**
-     * test min
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void min( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CMin().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<OptionalDouble>raw(), OptionalDouble.of( -6.0 ) );
-
-    }
-
-    /**
-     * test min index
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void minIndex( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CMinIndex().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1L );
-    }
-
-
-    /**
-     * test floor
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void floor( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CFloor().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.floor( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
 
     /**
      * test nextprime
@@ -640,11 +367,11 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNextPrime().execute(
-                null,
-                false,
-                Stream.of( 12, 144, 1096 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( 12, 144, 1096 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 13L );
@@ -652,53 +379,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1097L );
     }
 
-    /**
-     * test nextprime
-     */
-    @Test
-    @Ignore
-    @UseDataProvider( "generate" )
-    public final void nextprime( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CNextPrime().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-
-    /**
-     * test power
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void power( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CPow().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            l_return.stream().map( ITerm::<Number>raw ).toArray(),
-            p_input.stream().skip( 1 ).map( i -> Math.pow( i.doubleValue(), p_input.get( 0 ).doubleValue() ) ).toArray()
-        );
-    }
 
     /**
      * test primefactors
@@ -709,62 +389,17 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPrimeFactors().execute(
-                null,
-                false,
-                Stream.of( 8, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( 8, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2L, 2L, 2L ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2L, 2L, 2L, 3L, 5L ).toArray() );
     }
 
-    /**
-     * test radians
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void radians( final List<Number> p_input  )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CRadians().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.toRadians( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test round
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void round( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CRound().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.round( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
 
     /**
      * test sigmoid
@@ -775,11 +410,11 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSigmoid().execute(
-                null,
-                false,
-                Stream.of( 1.0, 1.0, 1.0, 10.0, 20.0, 30.0  ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( 1.0, 1.0, 1.0, 10.0, 20.0, 30.0  ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.7310585786300049 );
@@ -790,140 +425,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 5 ).<Number>raw(), 0.08308143571569296 );
     }
 
-    /**
-     * test signum
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void signum( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CSignum().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.signum( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test sin
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void sin( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CSin().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.sin( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test sinh
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void sinh( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CSinh().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.sinh( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test tan
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void tan( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CTan().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.tan( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test tanh
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void tanh( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CTanh().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.tanh( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
-    /**
-     * test sum
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void sum( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CSum().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 285.8 );
-    }
 
     /**
      * test stirling
@@ -934,39 +435,149 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStirling().execute(
-                null,
-                false,
-                Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::<Number>raw ).toArray(), Stream.of( 3L, 966L ).toArray() );
     }
 
+
     /**
-     * test sqrt
+     * test power
      */
     @Test
-    @UseDataProvider( "generate" )
-    public final void sqrt( final List<Number> p_input )
+    public final void pow()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CSqrt().execute(
+        new CPow().execute(
+            null,
+            false,
+            Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( 9.0, 16.0, 0.25 ).toArray()
+        );
+    }
+
+
+    /**
+     * test geometricmean
+     */
+    @Test
+    public final void geometricmean( )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CGeometricMean().execute(
                 null,
                 false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 1.0152139522031014 );
+    }
+
+
+    /**
+     * test harmonicmean
+     */
+    @Test
+    public final void harmonicmean()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CHarmonicMean().execute(
+                null,
+                false,
+                Stream.of( 150, 50 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 75.0 );
+    }
+
+    /**
+     * test hypot
+     */
+    @Test
+    public final void hypot()
+    {
+        final Random l_random = new Random();
+        final List<Double> l_input = IntStream.range( 0, 100 ).mapToDouble( i -> l_random.nextGaussian() ).boxed().collect( Collectors.toList() );
+
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CHypot().execute(
+                null,
+                false,
+                l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertArrayEquals(
-            p_input.stream().map( i -> Math.sqrt( i.doubleValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
+            l_return.stream().map( ITerm::<Number>raw ).toArray(),
+            StreamUtils.windowed( l_input.stream(), 2, 2 )
+                       .mapToDouble( i -> Math.hypot( i.get( 0 ), i.get( 1 ) ) )
+                       .boxed()
+                       .toArray()
         );
     }
 
+
+    /**
+     * test max index
+     */
+    @Test
+    public final void maxIndex()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CMaxIndex().execute(
+                null,
+                false,
+                Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2L );
+    }
+
+    /**
+     * test min index
+     */
+    @Test
+    public final void minIndex()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CMinIndex().execute(
+                null,
+                false,
+                Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3L );
+    }
 
 
     /**
