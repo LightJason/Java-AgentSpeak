@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
-import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -75,6 +74,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -114,11 +114,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.abs( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.abs( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -139,11 +136,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.acos( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.acos( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
     }
 
     /**
@@ -163,11 +157,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.asin( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.asin( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
     }
 
     /**
@@ -187,11 +178,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.atan( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.atan( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
     }
 
     /**
@@ -273,11 +261,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.ceil( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.ceil( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -298,11 +283,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.cos( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.cos( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -323,11 +305,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.cosh( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.cosh( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -348,12 +327,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.toDegrees( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
-
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.toDegrees( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -374,11 +349,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.exp( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.exp( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -451,7 +423,6 @@ public final class TestCActionMath extends IBaseTest
 
     /**
      * test hypot
-     * l_return is empty???
      */
     @Test
     @UseDataProvider( "generate" )
@@ -467,11 +438,10 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        for ( int i = 0; i < p_input.size() - 1; i++ )
-        {
-            Assert.assertEquals( l_return.get( i ).<Number>raw(), Math.hypot( p_input.get( i ).doubleValue(),
-                                                                        p_input.get( i + 1 ).doubleValue() ) );
-        }
+        IntStream.range( 0, p_input.size() - 1 )
+                .forEach( i -> Assert.assertEquals( l_return.get( i ).<Number>raw(), Math.hypot( p_input.get( i ).doubleValue(),
+                        p_input.get( i + 1 ).doubleValue() ) ) );
+
 
     }
 
@@ -492,11 +462,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Primes.isPrime( i.intValue() ) ),
-                l_return.stream().map( ITerm::<Boolean>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Primes.isPrime( i.intValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Boolean>raw ).toArray() );
 
     }
 
@@ -517,11 +484,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.log( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.log( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -542,11 +506,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.log10( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.log10( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -651,11 +612,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.floor( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.floor( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -699,11 +657,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -725,10 +680,9 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        for ( int i = 1; i < p_input.size(); i++ )
-        {
-            Assert.assertEquals( l_return.get( i - 1 ).<Number>raw(), Math.pow( p_input.get( i ).doubleValue(), p_input.get( 0 ).doubleValue() ) );
-        }
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Number>raw ).toArray(),
+                p_input.stream().skip( 1 ).map( i -> Math.pow( i.doubleValue(), p_input.get( 0 ).doubleValue() ) ).toArray() );
+
     }
 
     /**
@@ -769,11 +723,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.toRadians( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.toRadians( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -794,11 +745,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.round( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.round( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -845,11 +793,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.signum( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.signum( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -870,11 +815,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.sin( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.sin( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -895,11 +837,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.sinh( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.sinh( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -920,11 +859,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.tan( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.tan( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -945,11 +881,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.tanh( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.tanh( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
@@ -1013,11 +946,8 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        StreamUtils.zip(
-                p_input.stream().map( i -> Math.sqrt( i.doubleValue() ) ),
-                l_return.stream().map( ITerm::<Number>raw ),
-                AbstractMap.SimpleImmutableEntry::new
-        ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+        Assert.assertArrayEquals( p_input.stream().map( i -> Math.sqrt( i.doubleValue() ) ).toArray(),
+                l_return.stream().map( ITerm::<Number>raw ).toArray() );
 
     }
 
