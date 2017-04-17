@@ -64,6 +64,7 @@ public final class CBinomial extends IBuildinAction
                    .map( ITerm::<Number>raw )
                    .mapToInt( Number::intValue )
                    .boxed(),
+            2,
             2
         )
                    .map( i -> CombinatoricsUtils.binomialCoefficient( i.get( 0 ), i.get( 1 ) ) )
