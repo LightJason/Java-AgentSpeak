@@ -212,24 +212,6 @@ public final class TestCActionMath extends IBaseTest
     }
 
     /**
-     * test binomial error
-     */
-    @Test
-    @Ignore
-    public final void binomialerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CBinomial().execute(
-                null,
-                false,
-                Stream.of( 49, 6, 30, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-    }
-
-    /**
      * test average
      */
     @Test
@@ -551,6 +533,7 @@ public final class TestCActionMath extends IBaseTest
      */
     @Test
     @UseDataProvider( "generate" )
+    @Ignore
     public final void maxIndex( final List<Number> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -563,7 +546,7 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 15L );
     }
 
     /**
@@ -651,31 +634,6 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 149L );
         Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 1097L );
     }
-
-    /**
-     * test nextprime
-     */
-    @Test
-    @Ignore
-    @UseDataProvider( "generate" )
-    public final void nextprime( final List<Number> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CNextPrime().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertArrayEquals(
-            p_input.stream().map( i -> Primes.nextPrime( i.intValue() ) ).toArray(),
-            l_return.stream().map( ITerm::<Number>raw ).toArray()
-        );
-    }
-
 
     /**
      * test power
@@ -770,7 +728,7 @@ public final class TestCActionMath extends IBaseTest
      * test sigmoid
      */
     @Test
-    public final void siamoid()
+    public final void sigmoid()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -782,12 +740,9 @@ public final class TestCActionMath extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0.7310585786300049 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.7310585786300049 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.7310585786300049 );
-        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0.2137302715195763 );
-        Assert.assertEquals( l_return.get( 4 ).<Number>raw(), 0.11965173462430909 );
-        Assert.assertEquals( l_return.get( 5 ).<Number>raw(), 0.08308143571569296 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 0.9999546021312976 );
+        Assert.assertEquals( l_return.get( 2 ).<Number>raw(), 0.9999999979388463 );
+        Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 0.9999999999999065 );
     }
 
     /**
