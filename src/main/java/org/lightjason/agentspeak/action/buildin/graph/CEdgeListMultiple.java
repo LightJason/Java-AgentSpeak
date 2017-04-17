@@ -24,53 +24,36 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns all edges of two vertices.
- * The action returns a list of edges
- * between two vertices, the first two
- * arguments are vertices, all other arguments
- * are graphs and return values are lists,
- * the action never fails
+ * returns all edges of all vertex tuples for a single graph instance.
+ * The first argument is a graph instance and all other arguments are tuples
+ * of vertices, for each tuple a list of all edges between the vertices is
+ * returned, the action never fails
  *
- * @code [L1|L2] = graph/findedgeset( Vertex1, Vertex2, Graph1, Graph2 ); @endcode
+ * @code [L1|L2] = graph/edgelist( Graph, Vertex1, Vertex2, [Vertex3, Vertex4] ); @endcode
  */
-public final class CFindEdgeSet extends IBuildinAction
+public final class CEdgeListMultiple extends IApplyMultiple
 {
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
-        return 1;
+        return 2;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 3 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 2 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.findEdgeSet( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
-                   .map( ArrayList::new )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                new ArrayList<>( p_graph.findEdgeSet( p_window.get( 0 ).raw(), p_window.get( 1 ) .raw() ) )
+            )
+        );
     }
 }

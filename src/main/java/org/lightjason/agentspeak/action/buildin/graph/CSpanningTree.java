@@ -50,7 +50,7 @@ import java.util.Map;
  *
  * @code
     [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
-    [SP3|SP4] = graph/spanningtree( CostMap, Graph3, 1 Graph4 );
+    [SP3|SP4] = graph/spanningtree( CostMap, Graph3, 1, Graph4 );
  * @endcode
  */
 public final class CSpanningTree extends IBuildinAction

@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,6 +43,8 @@ import org.lightjason.agentspeak.action.buildin.graph.CDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CDistancePath;
 import org.lightjason.agentspeak.action.buildin.graph.CEdgeCount;
+import org.lightjason.agentspeak.action.buildin.graph.CEdgeListMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CEdgeListSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CEdges;
 import org.lightjason.agentspeak.action.buildin.graph.CFindEdgeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CFindEdgeSingle;
@@ -591,6 +594,76 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( "edge12", "edge23", "edge34" ).toArray() );
+    }
+
+
+    /**
+     * test edgelist single
+     */
+    @Test
+    public final void edgelistsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new SparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new SparseMultigraph<>();
+
+        IntStream.range( 1, 7 )
+                 .boxed()
+                 .forEach( i -> {
+                     l_graph1.addVertex( i );
+                     l_graph2.addVertex( i );
+                 } );
+
+        l_graph1.addEdge( "edgeA1", 1, 2 );
+        l_graph1.addEdge( "edgeAA1", 1, 2 );
+        l_graph2.addEdge( "edgeA2", 1, 2 );
+        l_graph1.addEdge( "edgeB1", 2, 3 );
+        l_graph2.addEdge( "edgeB2", 3, 4 );
+
+        new CEdgeListSingle().execute(
+            null,
+            false,
+            Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "edgeAA1", "edgeA1" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "edgeA2" ).toArray() );
+    }
+
+
+    /**
+     * test edgelist multiple
+     */
+    @Test
+    public final void edgelistmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseMultigraph<>();
+
+        IntStream.range( 1, 4 )
+                 .boxed()
+                 .forEach( l_graph::addVertex );
+
+        l_graph.addEdge( "o", 1, 2 );
+        l_graph.addEdge( "p", 1, 2 );
+        l_graph.addEdge( "q", 2, 3 );
+        l_graph.addEdge( "r", 2, 3 );
+        l_graph.addEdge( "s", 2, 3 );
+
+        new CEdgeListMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 2, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "p", "o" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "q", "r", "s" ).toArray() );
     }
 
 
