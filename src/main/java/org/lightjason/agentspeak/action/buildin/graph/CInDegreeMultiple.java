@@ -35,7 +35,7 @@ import java.util.List;
  * The action returns for a graph as first argument the in-degree of each
  * vertex argument, the action fails on wrong input
  *
- * @code [D1|D2] = graph/indegreemultiple( Graph, Vertex1, Graph2 ); @endcode
+ * @code [D1|D2] = graph/indegreemultiple( Graph, Vertex1, Vertex2 ); @endcode
  */
 public final class CInDegreeMultiple extends IApplyMultiple
 {
