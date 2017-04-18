@@ -25,52 +25,36 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns of an edge the vertices.
- * The actions returns for each edge argument
- * the connected vertices, the action fails
- * on wrong input
+ * returns of an edge the vertices from each graph instance.
+ * The actions returns for a single edge
+ * the connected vertices of each graph instance,
+ * the action never fails
  *
- * @code [V1|V2|V3|V4] = graph/endpoint( Edge, Graph1, Graph2 ); @endcode
+ * @code [V1|V2|V3|V4] = graph/endpointsingle( Edge, Graph1, Graph2 ); @endcode
  */
-public final class CEndPoint extends IBuildinAction
+public final class CEndPointSingle extends IApplySingle
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.getEndpoints( l_arguments.get( 0 ).raw() ) )
-                   .forEach( i -> {
-                       p_return.add( CRawTerm.from( i.getFirst() ) );
-                       p_return.add( CRawTerm.from( i.getSecond() ) );
-                   } );
-
-        return CFuzzyValue.from( true );
+        p_graph.getEndpoints( p_window.get( 0 ).raw() )
+               .stream()
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
     }
+
 }
