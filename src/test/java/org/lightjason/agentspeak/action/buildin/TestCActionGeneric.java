@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.generic.CPrint;
 import org.lightjason.agentspeak.action.buildin.generic.CThrow;
+import org.lightjason.agentspeak.action.buildin.math.blas.IFormat;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 
@@ -122,14 +123,17 @@ public final class TestCActionGeneric extends IBaseTest
     @Test
     public final void printformatter() throws UnsupportedEncodingException
     {
+        final CPrint.IFormatter<?> l_format1 = new CStringFormatter();
+        final CPrint.IFormatter<?> l_format2 = new CBooleanFormatter();
+
+        Assert.assertFalse( l_format1.equals( l_format2 ) );
+
 
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
-
-
         final CPrint l_print = new CPrint( "-", new PrintStream( l_output, false, "utf-8" ) );
 
-        l_print.formatter().add( new CStringFormatter() );
-        l_print.formatter().add( new CBooleanFormatter() );
+        l_print.formatter().add( l_format1 );
+        l_print.formatter().add( l_format2 );
 
         l_print.execute(
             null,
@@ -140,7 +144,6 @@ public final class TestCActionGeneric extends IBaseTest
         );
 
         Assert.assertEquals( l_output.toString( "utf-8" ), "FOOBAR-1234-yes\n" );
-
     }
 
     /**

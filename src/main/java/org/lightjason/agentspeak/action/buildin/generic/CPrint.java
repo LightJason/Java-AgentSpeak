@@ -178,12 +178,6 @@ public final class CPrint extends IBuildinAction
             return ( p_object != null ) && ( p_object instanceof IFormatter<?> ) && ( this.hashCode() == p_object.hashCode() );
         }
 
-        @Override
-        public final String toString()
-        {
-            return "";
-        }
-
         /**
          * to string
          *
