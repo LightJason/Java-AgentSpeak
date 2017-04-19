@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.generic.CPrint;
 import org.lightjason.agentspeak.action.buildin.generic.CThrow;
-import org.lightjason.agentspeak.action.buildin.math.blas.IFormat;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 

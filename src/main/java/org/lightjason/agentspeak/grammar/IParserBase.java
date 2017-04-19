@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
@@ -82,7 +82,7 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      */
     protected final P parser( final InputStream p_stream ) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
-        final L l_lexer = m_ctorlexer.newInstance( new ANTLRInputStream( p_stream ) );
+        final L l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );
         l_lexer.removeErrorListeners();
         l_lexer.addErrorListener( m_errorlistener );
 
