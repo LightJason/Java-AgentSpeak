@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
@@ -52,6 +53,10 @@ import org.lightjason.agentspeak.action.buildin.graph.CFindEdgeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CFindEdgeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CInDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInDegreeSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CInEdgesMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CInEdgesSingle;
+import org.lightjason.agentspeak.action.buildin.graph.COutDegreeMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.COutDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.action.buildin.graph.CVertices;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -714,6 +719,112 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 1L ).toArray() );
+    }
+
+    /**
+     * test in-edge
+     */
+    @Test
+    public final void inedgessingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new SparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new SparseGraph<>();
+
+        l_graph1.addEdge( "inedge1", 1, 2 );
+        l_graph1.addEdge( "inedge2", 2, 2 );
+        l_graph2.addEdge( "inedge3", 1, 2 );
+
+        new CInEdgesSingle().execute(
+            null,
+            false,
+            Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedge2", "inedge1" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedge3" ).toArray() );
+    }
+
+    /**
+     * test in-edge
+     */
+    @Test
+    public final void inedgesmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        l_graph.addEdge( "inedge3", 1, 2 );
+        l_graph.addEdge( "inedge4", 2, 2 );
+        l_graph.addEdge( "inedge5", 1, 3 );
+
+        new CInEdgesMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedge3", "inedge4" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedge5" ).toArray() );
+    }
+
+
+    /**
+     * test out-degree single
+     */
+    @Test
+    public final void outdegreesingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseGraph<>();
+
+        l_graph1.addEdge( "outdegree1", 1, 2 );
+        l_graph1.addEdge( "outdegree2", 2, 2 );
+        l_graph2.addEdge( "outdegree3", 1, 2 );
+
+        new COutDegreeSingle().execute(
+            null,
+            false,
+            Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 0L ).toArray() );
+    }
+
+
+    /**
+     * test out-degree single
+     */
+    @Test
+    public final void outdegreemultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
+
+        l_graph.addEdge( "outdegree4", 1, 2 );
+        l_graph.addEdge( "outdegree5", 2, 2 );
+        l_graph.addEdge( "outdegree6", 1, 2 );
+
+        new COutDegreeMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 1L ).toArray() );
     }
 
 

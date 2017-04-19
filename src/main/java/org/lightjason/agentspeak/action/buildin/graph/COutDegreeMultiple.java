@@ -21,54 +21,39 @@
  * @endcond
  */
 
-
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns incomming edges of a vertex.
- * The actions returns a list incoming edges
- * of a vertex for each graph argument, the first
- * argument is the vertex, all other graphs,
- * the action never fails
+ * returns the out-degree of each vertex of a single graph instance.
+ * The action returns for a graph instance as first argument the
+ * out-degree of each vertex, the action never fails
  *
- * @code [OE1|OE2] = graph/inedges( Vertex, Graph1, Graph2 ); @endcode
- * @note returned list of edges is unmodifyable
+ * @code [D1|D2] = graph/outdegreemultiple( Graph, Vertex1, Vertex2 ); @endcode
  */
-public final class CInEdges extends IBuildinAction
+public final class COutDegreeMultiple extends IApplyMultiple
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.getInEdges( l_arguments.get( 0 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                (long) p_graph.outDegree( p_window.get( 0 ).raw() )
+            )
+        );
     }
+
 }
