@@ -78,6 +78,22 @@ public final class TestCActionGeneric extends IBaseTest
 
 
     /**
+     * test throw without throwing
+     */
+    @Test
+    public final void thrownot()
+    {
+        new CThrow().execute(
+            null,
+            false,
+            Stream.of( false, "this should not be thrown" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+    }
+
+
+    /**
      * test print action
      *
      * @throws UnsupportedEncodingException is thrown on encoding errors
@@ -98,6 +114,34 @@ public final class TestCActionGeneric extends IBaseTest
         Assert.assertEquals( l_output.toString( "utf-8" ), "foobar-1234-true\n" );
     }
 
+    /**
+     * test print action with formatter
+     *
+     * @throws UnsupportedEncodingException is thrown on encoding errors
+     */
+    @Test
+    public final void printformatter() throws UnsupportedEncodingException
+    {
+
+        final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
+
+
+        final CPrint l_print = new CPrint( "-", new PrintStream( l_output, false, "utf-8" ) );
+
+        l_print.formatter().add( new CStringFormatter() );
+        l_print.formatter().add( new CBooleanFormatter() );
+
+        l_print.execute(
+            null,
+            false,
+            Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_output.toString( "utf-8" ), "FOOBAR-1234-yes\n" );
+
+    }
 
     /**
      * text call
@@ -108,4 +152,45 @@ public final class TestCActionGeneric extends IBaseTest
     {
         new TestCActionGeneric().invoketest();
     }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * test formatter for strings (translate each string to an upper-case string)
+     */
+    private static final class CStringFormatter extends CPrint.IFormatter<String>
+    {
+
+        @Override
+        protected final Class<?> getType()
+        {
+            return String.class;
+        }
+
+        @Override
+        protected final String format( final String p_data )
+        {
+            return p_data.toUpperCase();
+        }
+    }
+
+    /**
+     * test formatter for boolean (translate each boolean to an yes/no string)
+     */
+    private static final class CBooleanFormatter extends CPrint.IFormatter<Boolean>
+    {
+
+        @Override
+        protected final Class<?> getType()
+        {
+            return Boolean.class;
+        }
+
+        @Override
+        protected final String format( final Boolean p_data )
+        {
+            return p_data ? "yes" : "no";
+        }
+    }
+
 }

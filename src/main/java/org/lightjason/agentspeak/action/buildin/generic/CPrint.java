@@ -94,7 +94,7 @@ public final class CPrint extends IBuildinAction
      *
      * @return formatter set
      */
-    public final Set<IFormatter<?>> getFormatter()
+    public final Set<IFormatter<?>> formatter()
     {
         return m_formatter;
     }
@@ -113,22 +113,22 @@ public final class CPrint extends IBuildinAction
     {
         m_stream.println(
             MessageFormat.format(
-                "{0}{1}", this.getString( p_argument ),
+                "{0}{1}", this.format( p_argument ),
                 p_annotation.isEmpty()
                 ? ""
-                : MessageFormat.format( "{0}{1}", m_seperator, this.getString( p_annotation ) )
+                : MessageFormat.format( "{0}{1}", m_seperator, this.format( p_annotation ) )
             )
         );
         return CFuzzyValue.from( true );
     }
 
     /**
-     * string format definition
+     * format definition
      *
      * @param p_argument arguments list
      * @return string
      */
-    private String getString( final Collection<ITerm> p_argument )
+    private String format( final Collection<ITerm> p_argument )
     {
         return p_argument.stream()
                          .map( ITerm::raw )
