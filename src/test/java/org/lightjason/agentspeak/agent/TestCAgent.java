@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,13 +43,10 @@ import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.score.IAggregation;
 import org.lightjason.agentspeak.language.variable.CConstant;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -260,11 +257,10 @@ public final class TestCAgent extends IBaseTest
              */
             CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
             {
-                super( p_stream, p_actions, IAggregation.EMPTY,
-                       ( p_agent, p_runningcontext ) -> Stream.of(
-                           new CConstant<>( "MyConstInt", 123 ),
-                           new CConstant<>( "MyConstString", "here is a test string" )
-                       ) );
+                super( p_stream, p_actions, IAggregation.EMPTY, ( p_agent, p_runningcontext ) -> Stream.of(
+                    new CConstant<>( "MyConstInt", 123 ),
+                    new CConstant<>( "MyConstString", "here is a test string" )
+                ) );
             }
 
             @Override

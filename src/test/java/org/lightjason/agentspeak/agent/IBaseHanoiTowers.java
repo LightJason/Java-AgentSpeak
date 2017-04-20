@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -211,6 +211,9 @@ abstract class IBaseHanoiTowers extends IBaseTest
 
     /**
      * agent generator
+     *
+     * @warning variable builder within anonymous class cannot be defined
+     * with lambda expression, because of stack memory error
      */
     private final class CGenerator extends IBaseAgentGenerator<CAgent>
     {
@@ -239,12 +242,20 @@ abstract class IBaseHanoiTowers extends IBaseTest
                 ).collect( Collectors.toSet() ),
                 IAggregation.EMPTY,
                 Collections.emptySet(),
-                ( p_agent, p_runningcontext ) -> Stream.of(
-                    new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                    new CConstant<>( "TowerCount", m_towernumber ),
-                    new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
-                    new CConstant<>( "SliceCount", m_slicenumber )
-                )
+                new IVariableBuilder()
+                {
+                    @Override
+                    public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext
+                    )
+                    {
+                        return Stream.of(
+                            new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
+                            new CConstant<>( "TowerCount", m_towernumber ),
+                            new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
+                            new CConstant<>( "SliceCount", m_slicenumber )
+                        );
+                    }
+                }
             );
         }
 
@@ -276,7 +287,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
 
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+                                                   final List<ITerm> p_annotation
         )
         {
             m_running.set( false );
