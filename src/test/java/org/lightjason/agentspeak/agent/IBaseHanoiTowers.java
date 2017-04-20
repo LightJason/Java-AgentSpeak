@@ -176,9 +176,43 @@ abstract class IBaseHanoiTowers extends IBaseTest
 
 
     /**
+     * agent class
+     */
+    private class CAgent extends IBaseAgent<CAgent>
+    {
+        /**
+         * id of the agent
+         */
+        private final int m_id;
+
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         * @param p_id id of the agent
+         */
+        CAgent( final IAgentConfiguration<CAgent> p_configuration, final int p_id )
+        {
+            super( p_configuration );
+            m_id = p_id;
+        }
+
+        /**
+         * returns the id of the agent
+         *
+         * @return id
+         */
+        final int id()
+        {
+            return m_id;
+        }
+    }
+
+
+    /**
      * agent generator
      */
-    protected final class CGenerator extends IBaseAgentGenerator<CAgent>
+    private final class CGenerator extends IBaseAgentGenerator<CAgent>
     {
         /**
          * ctor
@@ -205,7 +239,12 @@ abstract class IBaseHanoiTowers extends IBaseTest
                 ).collect( Collectors.toSet() ),
                 IAggregation.EMPTY,
                 Collections.emptySet(),
-                new CVariableBuilder()
+                ( p_agent, p_runningcontext ) -> Stream.of(
+                    new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
+                    new CConstant<>( "TowerCount", m_towernumber ),
+                    new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
+                    new CConstant<>( "SliceCount", m_slicenumber )
+                )
             );
         }
 
@@ -213,7 +252,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
         @SuppressWarnings( "unchecked" )
         public final CAgent generatesingle( final Object... p_data )
         {
-            return new CAgent( (int) p_data[0], m_configuration );
+            return new CAgent( m_configuration, (int) p_data[0] );
         }
     }
 
@@ -368,60 +407,6 @@ abstract class IBaseHanoiTowers extends IBaseTest
             {
                 return CFuzzyValue.from( false );
             }
-        }
-    }
-
-
-    /**
-     * variable builder
-     */
-    private final class CVariableBuilder implements IVariableBuilder
-    {
-
-        @Override
-        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
-        {
-            return Stream.of(
-                new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                new CConstant<>( "TowerCount", m_towernumber ),
-                new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
-                new CConstant<>( "SliceCount", m_slicenumber )
-            );
-        }
-
-    }
-
-
-    /**
-     * agent class
-     */
-    private static class CAgent extends IBaseAgent<CAgent>
-    {
-        /**
-         * id of the agent
-         */
-        private final int m_id;
-
-        /**
-         * ctor
-         *
-         * @param p_id id of the agent
-         * @param p_configuration agent configuration
-         */
-        CAgent( final int p_id, final IAgentConfiguration<CAgent> p_configuration )
-        {
-            super( p_configuration );
-            m_id = p_id;
-        }
-
-        /**
-         * returns the id of the agent
-         *
-         * @return id
-         */
-        final int id()
-        {
-            return m_id;
         }
     }
 

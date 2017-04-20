@@ -37,38 +37,29 @@ import java.util.stream.Collectors;
 
 
 /**
- * returns the number of vertices that are incident to edge.
- * The action returns the number of verticies that are incident
- * to an edge for each graph object
+ * returns the number of vertices that are incident to edge of each graph instance.
+ * The action returns the number of verticies that are incident to a single edge
+ * for each graph object, the action never fails
  *
- * @code [C1|C2] = graph/incidentcount( Edge, Graph1, Graph2 ); @endcode
+ * @code [C1|C2] = graph/incidentcountsingle( Edge, Graph1, Graph2 ); @endcode
  */
-public final class CIncidentCount extends IBuildinAction
+public final class CIncidentCountSingle extends IApplySingle
 {
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .mapToLong( i -> i.getIncidentCount( l_arguments.get( 0 ).raw() ) )
-                   .boxed()
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                (long) p_graph.getIncidentCount( p_window.get( 0 ).raw() )
+            )
+        );
     }
 
 }
