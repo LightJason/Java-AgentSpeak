@@ -33,7 +33,6 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -72,25 +71,23 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public class TestCActionBitMatrix extends IBaseTest
 {
-    private static final BitMatrix m_matrix = new BitMatrix( 2, 2 );
-    private static final BitMatrix m_matrix1 = new BitMatrix( 2, 2 );
-
+    private static BitMatrix s_matrix = new BitMatrix( 2, 2 );
+    private static BitMatrix s_matrix1 = new BitMatrix( 2, 2 );
     /**
      * initialize
      */
     @Before
     public void initialize()
     {
-        m_matrix.put( 0, 1, false );
-        m_matrix.put( 1, 0, false );
-        m_matrix.put( 1, 1, true );
-        m_matrix.put( 0, 0, true );
+        s_matrix.put( 0, 1, false );
+        s_matrix.put( 1, 0, false );
+        s_matrix.put( 1, 1, true );
+        s_matrix.put( 0, 0, true );
 
-        m_matrix1.put( 0, 1, true );
-        m_matrix1.put( 1, 0, true );
-        m_matrix1.put( 1, 1, true );
-        m_matrix1.put( 0, 0, false );
-
+        s_matrix1.put( 0, 1, true );
+        s_matrix1.put( 1, 0, true );
+        s_matrix1.put( 1, 1, true );
+        s_matrix1.put( 0, 0, false );
     }
 
     /**
@@ -102,7 +99,7 @@ public class TestCActionBitMatrix extends IBaseTest
     {
         return testcase(
 
-                Stream.of( m_matrix1 ),
+                Stream.of( s_matrix1 ),
 
                 Stream.of(
                         CColumns.class,
@@ -111,15 +108,17 @@ public class TestCActionBitMatrix extends IBaseTest
                         CCopy.class,
                         CTrueCount.class,
                         CSize.class,
-                        CRows.class
+                        CRows.class,
+                        CNot.class
                 ),
                 Stream.of( 2L ),
                 Stream.of( 1L ),
                 Stream.of( 2L, 2L ),
-                Stream.of( m_matrix1 ),
+                Stream.of( s_matrix1 ),
                 Stream.of( 3L ),
                 Stream.of( 4 ),
-                Stream.of( 2L )
+                Stream.of( 2L ),
+                Stream.of()
 
         ).toArray();
     }
@@ -129,10 +128,25 @@ public class TestCActionBitMatrix extends IBaseTest
      * @return data
      */
     @DataProvider
-    public static Object[] generate()
+    public static Object[] multipleinputgenerator()
     {
-        return Stream.of(
-                Stream.of( m_matrix, m_matrix1 ).collect( Collectors.toList() )
+        return testcase(
+
+                Stream.of( s_matrix, s_matrix1 ),
+
+                Stream.of(
+                        COr.class,
+                        CAnd.class,
+                        CXor.class,
+                        CNAnd.class,
+                        CHammingDistance.class
+                ),
+                Stream.of(),
+                Stream.of(),
+                Stream.of(),
+                Stream.of(),
+                Stream.of( 3L )
+
         ).toArray();
     }
 
@@ -158,7 +172,7 @@ public class TestCActionBitMatrix extends IBaseTest
 
 
     /**
-     * test all single-value actions
+     * test all single-input actions
      *
      * @throws IllegalAccessException is thrown on instantiation error
      * @throws InstantiationException is thrown on instantiation error
@@ -184,6 +198,33 @@ public class TestCActionBitMatrix extends IBaseTest
         );
     }
 
+    /**
+     * test all multiple-input actions
+     *
+     * @throws IllegalAccessException is thrown on instantiation error
+     * @throws InstantiationException is thrown on instantiation error
+     */
+    @Test
+    @UseDataProvider( "multipleinputgenerator" )
+    public final void multipleinputaction( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
+            throws IllegalAccessException, InstantiationException
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        p_input.getMiddle().newInstance().execute(
+                null,
+                false,
+                p_input.getLeft(),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+                l_return.stream().map( ITerm::raw ).toArray(),
+                p_input.getRight().toArray()
+        );
+
+    }
 
     /**
      * test create
@@ -234,159 +275,13 @@ public class TestCActionBitMatrix extends IBaseTest
         new CBoolValue().execute(
                 null,
                 false,
-                Stream.of( m_matrix1, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_matrix1, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
 
-    }
-
-    /**
-     * test and
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void and( final List<BitMatrix> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CAnd().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_matrix1.get( 0, 1 ), false );
-        Assert.assertEquals( m_matrix1.get( 1, 0 ), false );
-        Assert.assertEquals( m_matrix1.get( 1, 1 ), true );
-        Assert.assertEquals( m_matrix1.get( 0, 0 ), false );
-    }
-
-
-    /**
-     * test HammingDistance
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void hammingDistance( final List<BitMatrix> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CHammingDistance().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3L  );
-
-    }
-
-    /**
-     * test nand
-     * not working
-     */
-    // TODO: 4/19/2017  Do not working accurately; https://en.wikipedia.org/wiki/NAND_logic
-    @Test
-    @UseDataProvider( "generate" )
-    @Ignore
-    public final void nand( final List<BitMatrix> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CNAnd().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_matrix1.get( 0, 1 ), true );
-        Assert.assertEquals( m_matrix1.get( 1, 0 ), true );
-        Assert.assertEquals( m_matrix1.get( 1, 1 ), false );
-        Assert.assertEquals( m_matrix1.get( 0, 0 ), true );
-
-    }
-
-    /**
-     * test not
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void not( final List<BitMatrix> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CNot().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_matrix1.get( 0, 1 ), false );
-        Assert.assertEquals( m_matrix1.get( 1, 0 ), false );
-        Assert.assertEquals( m_matrix1.get( 1, 1 ), false );
-        Assert.assertEquals( m_matrix1.get( 0, 0 ), true );
-    }
-
-    /**
-     * test or
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void or( final List<BitMatrix> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new COr().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_matrix1.get( 0, 1 ), true );
-        Assert.assertEquals( m_matrix1.get( 1, 0 ), true );
-        Assert.assertEquals( m_matrix1.get( 1, 1 ), true );
-        Assert.assertEquals( m_matrix1.get( 0, 0 ), true );
-    }
-
-    /**
-     * test xor
-     */
-    @Test
-    @UseDataProvider( "generate" )
-    public final void xor( final List<BitMatrix> p_input )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CXor().execute(
-                null,
-                false,
-                p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_matrix1.get( 0, 1 ), true );
-        Assert.assertEquals( m_matrix1.get( 1, 0 ), true );
-        Assert.assertEquals( m_matrix1.get( 1, 1 ), false );
-        Assert.assertEquals( m_matrix1.get( 0, 0 ), true );
     }
 
     /**
@@ -438,7 +333,7 @@ public class TestCActionBitMatrix extends IBaseTest
         new CNumericValue().execute(
                 null,
                 false,
-                Stream.of( m_matrix, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_matrix, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
