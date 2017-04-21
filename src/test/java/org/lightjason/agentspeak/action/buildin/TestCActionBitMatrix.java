@@ -108,8 +108,8 @@ public class TestCActionBitMatrix extends IBaseTest
                         CCopy.class,
                         CTrueCount.class,
                         CSize.class,
-                        CRows.class,
-                        CNot.class
+                        CNot.class,
+                        CRows.class
                 ),
                 Stream.of( 2L ),
                 Stream.of( 1L ),
