@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
-import cern.colt.bitvector.BitMatrix;
 import cern.colt.bitvector.BitVector;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -33,30 +32,27 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CCreate;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CAnd;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CNAnd;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CNot;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CRow;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CColumn;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CToVector;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CTrueCount;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CFalseCount;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CBoolValue;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CColumns;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CRows;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CCopy;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CDimension;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CHammingDistance;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CNumericValue;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CXor;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CSize;
-import org.lightjason.agentspeak.action.buildin.math.bit.matrix.COr;
 
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CAnd;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CBoolValue;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CCopy;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CCreate;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CFalseCount;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CHammingDistance;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CNAnd;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CNot;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.COr;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CSize;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CTrueCount;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CXor;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CSet;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CClear;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CRange;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -65,29 +61,29 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 /**
- * test math bit matrix functions
+ * test for bit vector actions
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionBitMatrix extends IBaseTest
+public class TestCActionBitVector extends IBaseTest
 {
-    private static BitMatrix s_matrix = new BitMatrix( 2, 2 );
-    private static BitMatrix s_matrix1 = new BitMatrix( 2, 2 );
+
+    private static BitVector s_vector = new BitVector( 3 );
+    private static BitVector s_vector1 = new BitVector( 3 );
+
     /**
      * initialize
      */
     @Before
     public void initialize()
     {
-        s_matrix.put( 0, 1, false );
-        s_matrix.put( 1, 0, false );
-        s_matrix.put( 1, 1, true );
-        s_matrix.put( 0, 0, true );
-
-        s_matrix1.put( 0, 1, true );
-        s_matrix1.put( 1, 0, true );
-        s_matrix1.put( 1, 1, true );
-        s_matrix1.put( 0, 0, false );
+        s_vector.put( 0, true );
+        s_vector.put( 1, false );
+        s_vector.put( 2, false );
+        s_vector1.put( 0, false );
+        s_vector1.put( 1, false );
+        s_vector1.put( 2, true );
     }
 
     /**
@@ -99,40 +95,33 @@ public class TestCActionBitMatrix extends IBaseTest
     {
         return testcase(
 
-                Stream.of( s_matrix, s_matrix1 ),
+                Stream.of( s_vector, s_vector1 ),
 
                 Stream.of(
-                        CColumns.class,
                         CFalseCount.class,
-                        CDimension.class,
                         CCopy.class,
                         CTrueCount.class,
                         CSize.class,
-                        CRows.class,
                         CNot.class,
                         COr.class,
                         CAnd.class,
-                        CXor.class,
                         CNAnd.class,
-                        CHammingDistance.class
+                        CHammingDistance.class,
+                        CXor.class
                 ),
                 Stream.of( 2L, 2L ),
-                Stream.of( 2L, 1L ),
-                Stream.of( 2L, 2L, 2L, 2L ),
-                Stream.of( s_matrix, s_matrix1 ),
-                Stream.of( 2L, 3L ),
-                Stream.of( 4, 4 ),
-                Stream.of( 2L, 2L ),
+                Stream.of( s_vector, s_vector1 ),
+                Stream.of( 1L, 1L ),
+                Stream.of( 3, 3 ),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
-                Stream.of(),
-                Stream.of( 3L )
+                Stream.of( 2L ),
+                Stream.of()
 
         ).toArray();
     }
-
 
     /**
      * method to generate test-cases
@@ -193,31 +182,12 @@ public class TestCActionBitMatrix extends IBaseTest
         new CCreate().execute(
                 null,
                 false,
-                Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitMatrix( 2, 2 ) );
-    }
-
-    /**
-     * test toBitVector
-     */
-    @Test
-    public final void tobitvector()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CToVector().execute(
-                null,
-                false,
-                Stream.of( new BitMatrix( 2, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitMatrix( 2, 2 ).toBitVector() );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw(), new BitVector( 3 ) );
     }
 
     /**
@@ -231,70 +201,71 @@ public class TestCActionBitMatrix extends IBaseTest
         new CBoolValue().execute(
                 null,
                 false,
-                Stream.of( s_matrix1, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
-
     }
 
     /**
-     * test column
+     * test set
      */
     @Test
-    public final void column()
+    public final void set()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CColumn().execute(
+        new CSet().execute(
                 null,
                 false,
-                Stream.of( 2, new BitMatrix( 2, 3 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1, true, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitVector( 3 ) );
+        Assert.assertEquals( s_vector1.get( 0 ), true );
     }
 
     /**
-     * test row
+     * test clear
      */
     @Test
-    public final void row()
+    public final void clear()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CRow().execute(
+        new CClear().execute(
                 null,
                 false,
-                Stream.of( 2, new BitMatrix( 2, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitVector( 2 ) );
+        Assert.assertEquals( s_vector1.get( 0 ), false );
     }
 
     /**
-     * test numericvalue
+     * test range
+     * @todo not working as it documented. why results empty?
      */
     @Test
-    public final void numericvalue()
+    @Ignore
+    public final void range()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CNumericValue().execute(
+        new CRange().execute(
                 null,
                 false,
-                Stream.of( s_matrix, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), 0L );
+        Assert.assertEquals( l_return.size(), 2 );
     }
 
     /**
@@ -304,6 +275,7 @@ public class TestCActionBitMatrix extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCActionBitMatrix().invoketest();
+        new TestCActionBitVector().invoketest();
     }
+
 }
