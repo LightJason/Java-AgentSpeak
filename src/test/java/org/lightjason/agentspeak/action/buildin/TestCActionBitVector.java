@@ -234,12 +234,13 @@ public class TestCActionBitVector extends IBaseTest
         new CSet().execute(
                 null,
                 false,
-                Stream.of( s_vector1, true, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
         Assert.assertEquals( l_return.size(), 0 );
         Assert.assertEquals( s_vector1.get( 0 ), true );
+        Assert.assertEquals( s_vector1.get( 1 ), true );
     }
 
     /**
@@ -329,7 +330,6 @@ public class TestCActionBitVector extends IBaseTest
 
     /**
      * test toblas
-     * @todo need to check if the resulted values are correct
      */
     @Test
     public final void toblas()
@@ -346,6 +346,13 @@ public class TestCActionBitVector extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
+
+        final DoubleMatrix1D l_blas = l_return.get( 0 ).raw();
+        Assert.assertEquals( l_blas.size(), 3 );
+
+        Assert.assertEquals( l_blas.getQuick( 0 ), 0L, 0L );
+        Assert.assertEquals( l_blas.getQuick( 1 ), 0L, 0L );
+        Assert.assertEquals( l_blas.getQuick( 2 ), 1L, 0L );
     }
 
     /**
