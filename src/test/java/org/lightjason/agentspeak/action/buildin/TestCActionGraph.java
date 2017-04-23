@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -55,6 +55,7 @@ import org.lightjason.agentspeak.action.buildin.graph.CInDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CInEdgesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInEdgesSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -825,6 +826,32 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 1L ).toArray() );
+    }
+
+
+    /**
+     * test incident-count single
+     */
+    @Test
+    public final void incidentcountsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new SparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new SparseGraph<>();
+
+        l_graph1.addEdge( "incident1", 1, 2 );
+        l_graph2.addEdge( "incident1", 1, 2 );
+
+        new CIncidentCountSingle().execute(
+            null,
+            false,
+            Stream.of( "incident1", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 2L ).toArray() );
     }
 
 

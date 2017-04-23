@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -176,9 +176,46 @@ abstract class IBaseHanoiTowers extends IBaseTest
 
 
     /**
-     * agent generator
+     * agent class
      */
-    protected final class CGenerator extends IBaseAgentGenerator<CAgent>
+    private class CAgent extends IBaseAgent<CAgent>
+    {
+        /**
+         * id of the agent
+         */
+        private final int m_id;
+
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         * @param p_id id of the agent
+         */
+        CAgent( final IAgentConfiguration<CAgent> p_configuration, final int p_id )
+        {
+            super( p_configuration );
+            m_id = p_id;
+        }
+
+        /**
+         * returns the id of the agent
+         *
+         * @return id
+         */
+        final int id()
+        {
+            return m_id;
+        }
+    }
+
+
+    /**
+     * agent generator
+     *
+     * @warning variable builder within anonymous class cannot be defined
+     * with lambda expression, because of stack memory error
+     */
+    private final class CGenerator extends IBaseAgentGenerator<CAgent>
     {
         /**
          * ctor
@@ -205,7 +242,20 @@ abstract class IBaseHanoiTowers extends IBaseTest
                 ).collect( Collectors.toSet() ),
                 IAggregation.EMPTY,
                 Collections.emptySet(),
-                new CVariableBuilder()
+                new IVariableBuilder()
+                {
+                    @Override
+                    public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext
+                    )
+                    {
+                        return Stream.of(
+                            new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
+                            new CConstant<>( "TowerCount", m_towernumber ),
+                            new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
+                            new CConstant<>( "SliceCount", m_slicenumber )
+                        );
+                    }
+                }
             );
         }
 
@@ -213,7 +263,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
         @SuppressWarnings( "unchecked" )
         public final CAgent generatesingle( final Object... p_data )
         {
-            return new CAgent( (int) p_data[0], m_configuration );
+            return new CAgent( m_configuration, (int) p_data[0] );
         }
     }
 
@@ -237,7 +287,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
 
         @Override
         public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+                                                   final List<ITerm> p_annotation
         )
         {
             m_running.set( false );
@@ -368,60 +418,6 @@ abstract class IBaseHanoiTowers extends IBaseTest
             {
                 return CFuzzyValue.from( false );
             }
-        }
-    }
-
-
-    /**
-     * variable builder
-     */
-    private final class CVariableBuilder implements IVariableBuilder
-    {
-
-        @Override
-        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
-        {
-            return Stream.of(
-                new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                new CConstant<>( "TowerCount", m_towernumber ),
-                new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
-                new CConstant<>( "SliceCount", m_slicenumber )
-            );
-        }
-
-    }
-
-
-    /**
-     * agent class
-     */
-    private static class CAgent extends IBaseAgent<CAgent>
-    {
-        /**
-         * id of the agent
-         */
-        private final int m_id;
-
-        /**
-         * ctor
-         *
-         * @param p_id id of the agent
-         * @param p_configuration agent configuration
-         */
-        CAgent( final int p_id, final IAgentConfiguration<CAgent> p_configuration )
-        {
-            super( p_configuration );
-            m_id = p_id;
-        }
-
-        /**
-         * returns the id of the agent
-         *
-         * @return id
-         */
-        final int id()
-        {
-            return m_id;
         }
     }
 

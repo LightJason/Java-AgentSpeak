@@ -21,57 +21,39 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
+package org.lightjason.agentspeak.action.buildin.graph;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.AbstractMatrix2D;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
 
 
 /**
- * returns the row number of a matrix.
- * Reads the row number of each input matrix and returns
- * the value, the action never fails.
+ * returns the number of vertices that are incident to edge of each graph instance.
+ * The action returns the number of verticies that are incident to a single edge
+ * for each graph object, the action never fails
  *
- * @code [C1|C2] = math/blas/matrix/rows(M1,M2); @endcode
+ * @code [C1|C2] = graph/incidentcountsingle( Edge, Graph1, Graph2 ); @endcode
  */
-public final class CRows extends IBuildinAction
+public final class CIncidentCountSingle extends IApplySingle
 {
-    /**
-     * ctor
-     */
-    public CRows()
-    {
-        super( 4 );
-    }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        // arguments are matrix objects
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .mapToLong( AbstractMatrix2D::rows )
-               .boxed()
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                (long) p_graph.getIncidentCount( p_window.get( 0 ).raw() )
+            )
+        );
     }
+
 }

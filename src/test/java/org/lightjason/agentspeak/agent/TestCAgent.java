@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -43,13 +43,10 @@ import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.score.IAggregation;
 import org.lightjason.agentspeak.language.variable.CConstant;
-import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -120,15 +117,14 @@ public final class TestCAgent extends IBaseTest
             final InputStream l_stream = new FileInputStream( p_asl.getLeft() );
         )
         {
-            final IAgent<?> l_agent = new CAgentGenerator(
+            final IAgent<?> l_agent = new CAgent.CAgentGenerator(
                                           l_stream,
                                           Stream.concat(
                                               PRINTENABLE
                                               ? Stream.of( new CTestResult() )
                                               : Stream.of( new CTestResult(), new CEmptyPrint() ),
                                               CCommon.actionsFromPackage()
-                                          ).collect( Collectors.toSet() ),
-                                          new CVariableBuilder()
+                                          ).collect( Collectors.toSet() )
                                       ).generatesingle();
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
@@ -241,51 +237,37 @@ public final class TestCAgent extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
+        private CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
         {
             super( p_configuration );
         }
-    }
-
-
-    /**
-     * agent generator class
-     */
-    private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
-    {
 
         /**
-         * ctor
-         *
-         * @param p_stream input stream
-         * @param p_actions set with action
-         * @param p_variablebuilder variable builder (can be set to null)
-         * @throws Exception thrown on error
+         * agent generator class
          */
-        CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IVariableBuilder p_variablebuilder
-        ) throws Exception
+        private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
         {
-            super( p_stream, p_actions, IAggregation.EMPTY, p_variablebuilder );
-        }
 
-        @Override
-        public IAgent<?> generatesingle( final Object... p_data )
-        {
-            return new CAgent( m_configuration );
-        }
-    }
+            /**
+             * ctor
+             *
+             * @param p_stream input stream
+             * @param p_actions set with action
+             * @throws Exception thrown on error
+             */
+            CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+            {
+                super( p_stream, p_actions, IAggregation.EMPTY, ( p_agent, p_runningcontext ) -> Stream.of(
+                    new CConstant<>( "MyConstInt", 123 ),
+                    new CConstant<>( "MyConstString", "here is a test string" )
+                ) );
+            }
 
-
-    /**
-     * variable builder
-     */
-    private static final class CVariableBuilder implements IVariableBuilder
-    {
-
-        @Override
-        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
-        {
-            return Stream.of( new CConstant<>( "MyConstInt", 123 ), new CConstant<>( "MyConstString", "here is a test string" ) );
+            @Override
+            public IAgent<?> generatesingle( final Object... p_data )
+            {
+                return new CAgent( m_configuration );
+            }
         }
 
     }

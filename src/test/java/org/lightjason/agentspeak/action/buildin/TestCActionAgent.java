@@ -4,7 +4,7 @@
  * # LGPL License                                                                       #
  * #                                                                                    #
  * # This file is part of the LightJason AgentSpeak(L++)                                #
- * # Copyright (c) 2015-16, LightJason (info@lightjason.org)                            #
+ * # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU Lesser General Public License as                     #
  * # published by the Free Software Foundation, either version 3 of the                 #
@@ -102,7 +102,7 @@ public final class TestCActionAgent extends IBaseTest
     public void initialize() throws Exception
     {
         m_context = new CContext(
-            new CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet(), IAggregation.EMPTY ).generatesingle(),
+            new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet(), IAggregation.EMPTY ).generatesingle(),
             new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "contextplan" ) ) ),
             Collections.emptyList()
         );
@@ -389,31 +389,32 @@ public final class TestCActionAgent extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        CAgent( final IAgentConfiguration<CAgent> p_configuration )
+        private CAgent( final IAgentConfiguration<CAgent> p_configuration )
         {
             super( p_configuration );
         }
-    }
 
-    /**
-     * agent generator
-     */
-    private static final class CGenerator extends IBaseAgentGenerator<CAgent>
-    {
 
-        CGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                    final IAggregation p_aggregation ) throws Exception
+
+        /**
+         * agent generator
+         */
+        private static final class CGenerator extends IBaseAgentGenerator<CAgent>
         {
-            super( p_stream, p_actions, p_aggregation );
+
+            CGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation ) throws Exception
+            {
+                super( p_stream, p_actions, p_aggregation );
+            }
+
+            @Override
+            public final CAgent generatesingle( final Object... p_data )
+            {
+                return new CAgent( m_configuration );
+            }
         }
 
-        @Override
-        public final CAgent generatesingle( final Object... p_data )
-        {
-            return new CAgent( m_configuration );
-        }
     }
-
 
     /**
      * empty plan
