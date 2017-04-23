@@ -198,7 +198,11 @@ public class TestCActionBitMatrix extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitMatrix( 2, 2 ) );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitMatrix );
+        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().size(), 4 );
+        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().rows(), 2 );
+        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().columns(), 2 );
     }
 
     /**
@@ -212,32 +216,21 @@ public class TestCActionBitMatrix extends IBaseTest
         new CToVector().execute(
                 null,
                 false,
-                Stream.of( new BitMatrix( 2, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitMatrix( 2, 2 ).toBitVector() );
-    }
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 4 );
 
-    /**
-     * test boolean value
-     */
-    @Test
-    public final void boolValue()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
+        final BitVector l_bitvector = l_return.get( 0 ).raw();
 
-        new CBoolValue().execute(
-                null,
-                false,
-                Stream.of( s_matrix1, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
-        );
-
-        Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
-
+        Assert.assertEquals( l_bitvector.get( 0 ), true );
+        Assert.assertEquals( l_bitvector.get( 1 ), true );
+        Assert.assertEquals( l_bitvector.get( 2 ), true );
+        Assert.assertEquals( l_bitvector.get( 3 ), false );
     }
 
     /**
@@ -251,12 +244,19 @@ public class TestCActionBitMatrix extends IBaseTest
         new CColumn().execute(
                 null,
                 false,
-                Stream.of( 2, new BitMatrix( 2, 3 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitVector( 3 ) );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 2 );
+
+        final BitVector l_bitvector = l_return.get( 0 ).raw();
+
+        Assert.assertEquals( l_bitvector.get( 0 ), true );
+        Assert.assertEquals( l_bitvector.get( 1 ), true );
     }
 
     /**
@@ -270,12 +270,19 @@ public class TestCActionBitMatrix extends IBaseTest
         new CRow().execute(
                 null,
                 false,
-                Stream.of( 2, new BitMatrix( 2, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), new BitVector( 2 ) );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 2 );
+
+        final BitVector l_bitvector = l_return.get( 0 ).raw();
+
+        Assert.assertEquals( l_bitvector.get( 0 ), true );
+        Assert.assertEquals( l_bitvector.get( 1 ), true );
     }
 
     /**
@@ -295,6 +302,25 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw(), 0L );
+    }
+
+    /**
+     * test boolean value
+     */
+    @Test
+    public final void boolValue()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CBoolValue().execute(
+                null,
+                false,
+                Stream.of( s_matrix1, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
     }
 
     /**

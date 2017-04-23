@@ -187,7 +187,9 @@ public class TestCActionBitVector extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw(), new BitVector( 3 ) );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 3 );
     }
 
     /**
