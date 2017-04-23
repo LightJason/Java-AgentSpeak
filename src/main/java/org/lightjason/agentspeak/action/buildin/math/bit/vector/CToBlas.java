@@ -35,9 +35,9 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -93,8 +93,7 @@ public final class CToBlas extends IBuildinAction
                 l_arguments.stream()
                            .limit( l_limit )
                            .map( ITerm::<BitVector>raw )
-                           .map( BitVector::elements )
-                           .map( i -> Arrays.stream( i ).mapToDouble( j -> j ).toArray() )
+                           .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
                            .map( DenseDoubleMatrix1D::new )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
@@ -106,8 +105,7 @@ public final class CToBlas extends IBuildinAction
                 l_arguments.stream()
                            .limit( l_limit )
                            .map( ITerm::<BitVector>raw )
-                           .map( BitVector::elements )
-                           .map( i -> Arrays.stream( i ).mapToDouble( j -> j ).toArray() )
+                           .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
                            .map( SparseDoubleMatrix1D::new )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
