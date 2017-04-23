@@ -71,8 +71,18 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public class TestCActionBitMatrix extends IBaseTest
 {
+    /**
+     * testing matrix
+     * @note static because of usage in data-provider and test-initialize
+     */
     private static BitMatrix s_matrix = new BitMatrix( 2, 2 );
+    /**
+     * testing matrix
+     * @note static because of usage in data-provider and test-initialize
+     */
     private static BitMatrix s_matrix1 = new BitMatrix( 2, 2 );
+
+
     /**
      * initialize
      */

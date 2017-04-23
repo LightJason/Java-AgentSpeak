@@ -68,9 +68,17 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public class TestCActionBitVector extends IBaseTest
 {
-
+    /**
+     * testing vector
+     * @note static because of usage in data-provider and test-initialize
+     */
     private static BitVector s_vector = new BitVector( 3 );
+    /**
+     * testing matrix
+     * @note static because of usage in data-provider and test-initialize
+     */
     private static BitVector s_vector1 = new BitVector( 3 );
+
 
     /**
      * initialize
@@ -252,7 +260,7 @@ public class TestCActionBitVector extends IBaseTest
 
     /**
      * test range
-     * @todo not working as it documented. why results empty?
+     * @bug not working as it documented. why results empty?
      */
     @Test
     @Ignore
