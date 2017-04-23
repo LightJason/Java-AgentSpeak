@@ -32,43 +32,34 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * returns a list of incident vertices of an edge.
- * The action returns for the first edge argument
- * the incident vertices in each graph argument,
- * the action never fails
+ * returns a list of incident vertices of an edge of each graph instance.
+ * The action returns for the first edge argument the incident vertices
+ * of each graph argument, the action never fails
  *
  * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
- * @note the return argument is an unmodifyable list
  */
-public final class CIncidentVertices extends IBuildinAction
+public final class CIncidentVerticesSingle extends IApplySingle
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.getIncidentVertices( l_arguments.get( 0 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) )
+            )
+        );
     }
-
 }
