@@ -21,11 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math.bit.vector;
+package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
-import cern.colt.bitvector.BitVector;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.SparseDoubleMatrix1D;
+import cern.colt.bitvector.BitMatrix;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.language.CCommon;
@@ -41,13 +42,13 @@ import java.util.stream.IntStream;
 
 
 /**
- * converts the bit vector to a blas vector.
- * The action converts the bit vector to a blas vector,
+ * converts the bit matrix to a blas matrix.
+ * The action converts the bit matrix to a blas matrix,
  * the last argument can be "dense" or "sparse", all
- * other arguments are bit vectors and the actions
+ * other arguments are bit matrices and the actions
  * never fails
  *
- * @code [A|B] = math/bit/vector/toblas( BitVector1, BitVector2, "dense | sparse" ); @endcode
+ * @code [A|B] = math/bit/matrix/toblas( BitMatrix1, BitMatrix2, "dense | sparse" ); @endcode
  */
 public final class CToBlas extends IBuildinAction
 {
@@ -80,10 +81,9 @@ public final class CToBlas extends IBuildinAction
         {
             case DENSE:
                 l_arguments.stream()
-                           .filter( i -> CCommon.rawvalueAssignableTo( i, BitVector.class ) )
-                           .map( ITerm::<BitVector>raw )
-                           .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
-                           .map( DenseDoubleMatrix1D::new )
+                           .filter( i -> CCommon.rawvalueAssignableTo( i, BitMatrix.class ) )
+                           .map( ITerm::<BitMatrix>raw )
+                           .map( i -> CToBlas.tomatrix( i, new DenseDoubleMatrix2D( i.rows(), i.columns() ) ) )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
 
@@ -92,10 +92,9 @@ public final class CToBlas extends IBuildinAction
 
             case SPARSE:
                 l_arguments.stream()
-                           .filter( i -> CCommon.rawvalueAssignableTo( i, BitVector.class ) )
-                           .map( ITerm::<BitVector>raw )
-                           .map( i -> IntStream.range( 0, i.size() ).boxed().mapToDouble( j -> i.getQuick( j ) ? 1 : 0 ).toArray() )
-                           .map( SparseDoubleMatrix1D::new )
+                           .filter( i -> CCommon.rawvalueAssignableTo( i, BitMatrix.class ) )
+                           .map( ITerm::<BitMatrix>raw )
+                           .map( i -> CToBlas.tomatrix( i, new SparseDoubleMatrix2D( i.rows(), i.columns() ) ) )
                            .map( CRawTerm::from )
                            .forEach( p_return::add );
 
@@ -105,5 +104,21 @@ public final class CToBlas extends IBuildinAction
 
                 return CFuzzyValue.from( false );
         }
+    }
+
+
+    /**
+     * converts the bit matrix to the blas matrix
+     *
+     * @param p_source bit matrix
+     * @param p_target blas matrix
+     * @return blas matrix
+     */
+    private static DoubleMatrix2D tomatrix( final BitMatrix p_source, final DoubleMatrix2D p_target )
+    {
+        IntStream.range( 0, p_source.rows() )
+                 .forEach( r -> IntStream.range( 0, p_source.columns() ).forEach( c -> p_target.setQuick( r, c, p_source.getQuick( r, c ) ? 1 : 0 ) ) );
+
+        return p_target;
     }
 }
