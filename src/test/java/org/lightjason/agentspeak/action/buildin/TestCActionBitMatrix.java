@@ -235,7 +235,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
         Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 4 );
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
@@ -263,7 +263,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
         Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 2 );
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
@@ -289,7 +289,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
         Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 2 );
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
@@ -354,7 +354,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
 
         final DoubleMatrix2D l_blas = l_return.get( 0 ).raw();
 
