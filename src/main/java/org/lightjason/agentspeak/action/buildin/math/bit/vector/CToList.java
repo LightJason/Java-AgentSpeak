@@ -32,10 +32,10 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -70,7 +70,7 @@ public final class CToList extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<BitVector>raw )
-               .map( i -> Arrays.stream( i.elements() ).boxed().collect( Collectors.toList() ) )
+               .map( i -> IntStream.range( 0, i.size() ).boxed().map( j -> i.getQuick( j ) ? 1L : 0L ).collect( Collectors.toList() ) )
                .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
                .map( CRawTerm::from )
                .forEach( p_return::add );

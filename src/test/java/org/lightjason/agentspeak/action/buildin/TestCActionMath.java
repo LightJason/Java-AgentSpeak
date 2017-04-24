@@ -201,6 +201,7 @@ public final class TestCActionMath extends IBaseTest
      * create test case
      *
      * @param p_input input data
+     * @param p_class action class
      * @param p_result result function
      * @return test-case data
      */
@@ -219,10 +220,10 @@ public final class TestCActionMath extends IBaseTest
 
 
     /**
-<<<<<<< HEAD
      * create test case
      *
      * @param p_input input data
+     * @param p_class action class
      * @param p_result result function
      * @return test-case data
      */
@@ -242,6 +243,8 @@ public final class TestCActionMath extends IBaseTest
 
     /**
      * test all aggregation-value actions
+     *
+     * @param p_input test data
      *
      * @throws IllegalAccessException is thrown on instantiation error
      * @throws InstantiationException is thrown on instantiation error
@@ -268,6 +271,8 @@ public final class TestCActionMath extends IBaseTest
 
     /**
      * test all single-value actions
+     *
+     * @param p_input test data
      *
      * @throws IllegalAccessException is thrown on instantiation error
      * @throws InstantiationException is thrown on instantiation error

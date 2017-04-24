@@ -63,7 +63,7 @@ public final class CSize extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_annotation )
+        CCommon.flatcollection( p_argument )
                .map( ITerm::<AbstractMatrix>raw )
                .mapToLong( AbstractMatrix::size )
                .boxed()

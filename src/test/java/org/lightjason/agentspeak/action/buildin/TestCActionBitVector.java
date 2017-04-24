@@ -33,7 +33,6 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -93,6 +92,7 @@ public class TestCActionBitVector extends IBaseTest
         s_vector.put( 0, true );
         s_vector.put( 1, false );
         s_vector.put( 2, false );
+
         s_vector1.put( 0, false );
         s_vector1.put( 1, false );
         s_vector1.put( 2, true );
@@ -265,10 +265,8 @@ public class TestCActionBitVector extends IBaseTest
 
     /**
      * test range
-     * @bug not working as it documented. why results empty?
      */
     @Test
-    @Ignore
     public final void range()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -281,7 +279,8 @@ public class TestCActionBitVector extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw(), s_vector1 );
     }
 
     /**
@@ -305,10 +304,8 @@ public class TestCActionBitVector extends IBaseTest
 
     /**
      * test toList
-     * @bug not working as it documented. why the list size is 1?
      */
     @Test
-    @Ignore
     public final void tolist()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -322,10 +319,8 @@ public class TestCActionBitVector extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
-
-        final List<Number> l_tolist = l_return.get( 0 ).raw();
-        Assert.assertEquals( l_tolist.size(), 3 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 1L, 0L, 0L ).toArray() );
     }
 
     /**

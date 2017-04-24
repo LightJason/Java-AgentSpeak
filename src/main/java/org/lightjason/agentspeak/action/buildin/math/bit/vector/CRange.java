@@ -69,7 +69,7 @@ public final class CRange extends IBuildinAction
     )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() % 2 == 1 )
+        if ( l_arguments.size() % 2 == 0 )
             return CFuzzyValue.from( false );
 
         StreamUtils.windowed(
@@ -78,6 +78,7 @@ public final class CRange extends IBuildinAction
                        .map( ITerm::<Number>raw )
                        .mapToInt( Number::intValue )
                        .boxed(),
+            2,
             2
         ).map( i -> l_arguments.get( 0 ).<BitVector>raw().partFromTo( i.get( 0 ), i.get( 1 ) ) )
                    .map( CRawTerm::from )

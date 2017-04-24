@@ -30,6 +30,7 @@ import cern.jet.math.Functions;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
@@ -44,9 +45,8 @@ import java.util.function.BiFunction;
  * The action calculates elementwise different
  * operations (plus, plus-absolute, minus, multiply, divide),
  * all arguments are triples of matrix-operator-matrix|scalar,
- * and the operation is assigned to the left-side matrix, the
- * action fails on assigning problems
- * @code math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]); @endcode
+ * the action fails on assigning problems
+ * @code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]); @endcode
  *
  */
 public class CElementWise extends IBuildinAction
@@ -66,25 +66,26 @@ public class CElementWise extends IBuildinAction
         return CFuzzyValue.from(
                 StreamUtils.windowed(
                 CCommon.flatcollection( p_argument ),
-            3
-            ).parallel().allMatch( i -> {
+            3,
+                3
+            ).allMatch( i -> {
 
                 switch ( i.get( 1 ).<String>raw().trim() )
                 {
                     case "+" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.plus, ( n, m ) -> n + m );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.plus, ( n, m ) -> n + m, p_return );
 
                     case "|+|" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 1 ),  Functions.plusAbs, ( n, m ) -> Math.abs( n + m ) );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ),  Functions.plusAbs, ( n, m ) -> Math.abs( n + m ), p_return );
 
                     case "-" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.minus, ( n, m ) -> n - m );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.minus, ( n, m ) -> n - m, p_return );
 
                     case "*" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.mult, ( n, m ) -> n * m );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.mult, ( n, m ) -> n * m, p_return );
 
                     case "/" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 1 ), Functions.div, ( n, m ) -> n / m );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.div, ( n, m ) -> n / m, p_return );
 
                     default:
                         return false;
@@ -102,28 +103,32 @@ public class CElementWise extends IBuildinAction
      * @param p_right matrix or scalar value argument
      * @param p_matrixfunction function for matrix-matrix operation
      * @param p_scalarfunction scalar function for value
+     * @param p_return return list
      * @return successful executed
      * @note DoubleMatrix1D and DoubleMatrix2D does not use an equal
      * super class for defining the assign method, so code must be
      * created twice for each type
      */
     private static boolean apply( final ITerm p_left, final ITerm p_right,
-                                  final DoubleDoubleFunction p_matrixfunction, final BiFunction<Double, Double, Double> p_scalarfunction )
+                                  final DoubleDoubleFunction p_matrixfunction, final BiFunction<Double, Double, Double> p_scalarfunction,
+                                  final List<ITerm> p_return )
     {
         // operation for matrix
         if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix2D.class ) )
         {
-            final DoubleMatrix2D l_assign = p_left.<DoubleMatrix2D>raw();
+            final DoubleMatrix2D l_assign = p_left.<DoubleMatrix2D>raw().copy();
 
             if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix2D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix2D>raw(), p_matrixfunction );
+                p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
                 l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }
         }
@@ -131,17 +136,19 @@ public class CElementWise extends IBuildinAction
         // operation for vector
         if ( CCommon.rawvalueAssignableTo( p_left, DoubleMatrix1D.class ) )
         {
-            final DoubleMatrix1D l_assign = p_left.<DoubleMatrix1D>raw();
+            final DoubleMatrix1D l_assign = p_left.<DoubleMatrix1D>raw().copy();
 
             if ( CCommon.rawvalueAssignableTo( p_right, DoubleMatrix1D.class ) )
             {
                 l_assign.assign( p_right.<DoubleMatrix1D>raw(), p_matrixfunction );
+                p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
                 l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }
         }

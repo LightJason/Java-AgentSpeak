@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.buildin;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 
@@ -60,10 +59,8 @@ public class TestCActionBlas extends IBaseTest
 
     /**
      * test size
-     * @bug l_return is empty
      */
     @Test
-    @Ignore
     public final void size()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -77,6 +74,7 @@ public class TestCActionBlas extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4L );
     }
 
     /**
@@ -86,7 +84,6 @@ public class TestCActionBlas extends IBaseTest
     public final void multiply()
     {
         final List<ITerm> l_return = new ArrayList<>();
-        final Double[][] l_result = {{22.0, 10.0}, {30.0, 14.0}};
 
         new CMultiply().execute(
                 null,
@@ -100,20 +97,17 @@ public class TestCActionBlas extends IBaseTest
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
 
         final DoubleMatrix2D l_blas = l_return.get( 0 ).raw();
-        Assert.assertArrayEquals( l_blas.toArray(), l_result );
+        Assert.assertArrayEquals( l_blas.toArray(), new double[][]{{22.0, 10.0}, {30.0, 14.0}} );
 
     }
 
     /**
      * test elementwise
-     * @bug nor working as documented, matrix addition is not performed
      */
     @Test
-    @Ignore
     public final void elementWise()
     {
         final List<ITerm> l_return = new ArrayList<>();
-        final Double[][] l_result = {{4.0, 8.0}, {6.0, 9.0}};
 
         new CElementWise().execute(
                 null,
@@ -123,8 +117,8 @@ public class TestCActionBlas extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( m_matrix.toArray(), l_result );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
     }
 
 
