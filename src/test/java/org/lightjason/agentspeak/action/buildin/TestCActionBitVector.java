@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import cern.colt.bitvector.BitVector;
+import cern.colt.matrix.DoubleMatrix1D;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -53,6 +54,9 @@ import org.lightjason.agentspeak.action.buildin.math.bit.vector.CXor;
 import org.lightjason.agentspeak.action.buildin.math.bit.vector.CSet;
 import org.lightjason.agentspeak.action.buildin.math.bit.vector.CClear;
 import org.lightjason.agentspeak.action.buildin.math.bit.vector.CRange;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CNumericValue;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CToList;
+import org.lightjason.agentspeak.action.buildin.math.bit.vector.CToBlas;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -230,12 +234,13 @@ public class TestCActionBitVector extends IBaseTest
         new CSet().execute(
                 null,
                 false,
-                Stream.of( s_vector1, true, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
         Assert.assertEquals( l_return.size(), 0 );
         Assert.assertEquals( s_vector1.get( 0 ), true );
+        Assert.assertEquals( s_vector1.get( 1 ), true );
     }
 
     /**
@@ -277,6 +282,75 @@ public class TestCActionBitVector extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
+    }
+
+    /**
+     * test numericvalue
+     */
+    @Test
+    public final void numericvalue()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CNumericValue().execute(
+                null,
+                false,
+                Stream.of( s_vector, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
+    }
+
+    /**
+     * test toList
+     * @bug not working as it documented. why the list size is 1?
+     */
+    @Test
+    @Ignore
+    public final void tolist()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CToList().execute(
+                null,
+                false,
+                Stream.of( s_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
+
+        final List<Number> l_tolist = l_return.get( 0 ).raw();
+        Assert.assertEquals( l_tolist.size(), 3 );
+    }
+
+    /**
+     * test toblas
+     */
+    @Test
+    public final void toblas()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CToBlas().execute(
+                null,
+                false,
+                Stream.of( s_vector1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
+
+        final DoubleMatrix1D l_blas = l_return.get( 0 ).raw();
+        Assert.assertEquals( l_blas.size(), 3 );
+
+        Assert.assertArrayEquals( l_blas.toArray(), Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), 0 );
     }
 
     /**
