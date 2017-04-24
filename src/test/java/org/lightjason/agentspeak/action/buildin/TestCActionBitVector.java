@@ -339,7 +339,7 @@ public class TestCActionBitVector extends IBaseTest
         new CToBlas().execute(
                 null,
                 false,
-                Stream.of( s_vector1, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_vector1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
@@ -350,9 +350,7 @@ public class TestCActionBitVector extends IBaseTest
         final DoubleMatrix1D l_blas = l_return.get( 0 ).raw();
         Assert.assertEquals( l_blas.size(), 3 );
 
-        Assert.assertEquals( l_blas.getQuick( 0 ), 0L, 0L );
-        Assert.assertEquals( l_blas.getQuick( 1 ), 0L, 0L );
-        Assert.assertEquals( l_blas.getQuick( 2 ), 1L, 0L );
+        Assert.assertArrayEquals( l_blas.toArray(), Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), 0 );
     }
 
     /**
