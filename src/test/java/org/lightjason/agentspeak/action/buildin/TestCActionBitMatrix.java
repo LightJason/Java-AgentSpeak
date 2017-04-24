@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin;
 
 import cern.colt.bitvector.BitMatrix;
 import cern.colt.bitvector.BitVector;
+import cern.colt.matrix.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -56,7 +57,7 @@ import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CNumericValue;
 import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CXor;
 import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CSize;
 import org.lightjason.agentspeak.action.buildin.math.bit.matrix.COr;
-
+import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CToBlas;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -64,6 +65,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * test math bit matrix functions
@@ -209,7 +212,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitMatrix );
+        assertTrue( l_return.get( 0 ).raw() instanceof BitMatrix );
         Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().size(), 4 );
         Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().rows(), 2 );
         Assert.assertEquals( l_return.get( 0 ).<BitMatrix>raw().columns(), 2 );
@@ -232,7 +235,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
         Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 4 );
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
@@ -260,7 +263,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
         Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 2 );
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
@@ -286,7 +289,7 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
+        assertTrue( l_return.get( 0 ).raw() instanceof BitVector );
         Assert.assertEquals( l_return.get( 0 ).<BitVector>raw().size(), 2 );
 
         final BitVector l_bitvector = l_return.get( 0 ).raw();
@@ -331,6 +334,32 @@ public class TestCActionBitMatrix extends IBaseTest
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
+    }
+
+     /**
+     * test toblas
+     */
+    @Test
+    public final void toblas()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Double[][] l_result = {{0.0, 1.0}, {1.0, 1.0}};
+
+        new CToBlas().execute(
+                null,
+                false,
+                Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
+                Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
+
+        final DoubleMatrix2D l_blas = l_return.get( 0 ).raw();
+
+        Assert.assertEquals( l_blas.size(), 4 );
+        Assert.assertArrayEquals( l_blas.toArray(), l_result );
     }
 
     /**
