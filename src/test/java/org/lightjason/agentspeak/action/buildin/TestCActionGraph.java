@@ -56,6 +56,7 @@ import org.lightjason.agentspeak.action.buildin.graph.CInDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CInEdgesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInEdgesSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesSingle;
@@ -855,6 +856,31 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 2L ).toArray() );
+    }
+
+
+    /**
+     * test incident-count single
+     */
+    @Test
+    public final void incidentcountmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        l_graph.addEdge( "incident1", 1, 2 );
+        l_graph.addEdge( "incident2", 1, 2 );
+
+        new CIncidentCountMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, "incident1", "incident2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 0L ).toArray() );
     }
 
 
