@@ -37,6 +37,7 @@ import java.util.List;
  * never fails
  *
  * @code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 ); @endcode
+ * @bug graph & hypergraph uses equal calls, so addEdge is ambiguous
  */
 public final class CAddEdgeSingle extends IApplySingle
 {
