@@ -23,11 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.prolog;
 
-import alice.tuprolog.MalformedGoalException;
-import alice.tuprolog.Prolog;
-import alice.tuprolog.Term;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
