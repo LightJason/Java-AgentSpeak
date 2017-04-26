@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.AbstractGraph;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -49,7 +49,7 @@ public final class CFindEdgeSingle extends IApplySingle
     }
 
     @Override
-    protected void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected void apply( final AbstractGraph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.from(
