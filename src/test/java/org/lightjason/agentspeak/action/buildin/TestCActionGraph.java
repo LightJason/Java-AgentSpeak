@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
@@ -55,7 +56,10 @@ import org.lightjason.agentspeak.action.buildin.graph.CInDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CInEdgesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CInEdgesSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesSingle;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -852,6 +856,86 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 2L ).toArray() );
+    }
+
+
+    /**
+     * test incident-count single
+     */
+    @Test
+    public final void incidentcountmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new SparseGraph<>();
+
+        l_graph.addEdge( "incident1", 1, 2 );
+        l_graph.addEdge( "incident2", 1, 2 );
+
+        new CIncidentCountMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, "incident1", "incident2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 0L ).toArray() );
+    }
+
+
+    /**
+     * test incident-vertices single
+     */
+    @Test
+    public final void incidentverticessingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new SparseGraph<>();
+
+        l_graph1.addEdge( "incidentA", 2, 1 );
+        l_graph2.addEdge( "incidentA", 1, 2 );
+
+        new CIncidentVerticesSingle().execute(
+            null,
+            false,
+            Stream.of( "incidentA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1, 2 ).toArray() );
+    }
+
+
+    /**
+     * test incident-vertices multiple
+     */
+    @Test
+    public final void incidentverticesmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "incidentA", 2, 1 );
+        l_graph.addEdge( "incidentB", 3, 2 );
+        l_graph.addEdge( "incidentC", 5, 6 );
+        l_graph.addEdge( "incidentD", 7, 6 );
+
+        new CIncidentVerticesMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, "incidentA", "incidentB" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 3, 2 ).toArray() );
     }
 
 
