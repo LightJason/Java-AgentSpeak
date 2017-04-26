@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.AbstractGraph;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.List;
@@ -38,7 +38,6 @@ import java.util.List;
  * the end vertex, the action never fails
  *
  * @code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 ); @endcode
- * @bug graph & hypergraph uses equal calls, so addEdge is ambiguous
  */
 public final class CAddEdgeMultiple extends IApplyMultiple
 {
@@ -50,7 +49,7 @@ public final class CAddEdgeMultiple extends IApplyMultiple
     }
 
     @Override
-    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected final void apply( final AbstractGraph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
         p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw() );
     }

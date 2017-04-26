@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import com.codepoetics.protonpack.StreamUtils;
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.AbstractGraph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -37,6 +37,7 @@ import java.util.List;
 
 /**
  * apply class for a single graph with multiple elements
+ * @note graph type must be set to AbstractGraph because of ambiguous method call in Graph and HyperGraph interface
  */
 public abstract class IApplyMultiple extends IBuildinAction
 {
@@ -57,7 +58,7 @@ public abstract class IApplyMultiple extends IBuildinAction
             this.windowsize(),
             this.windowsize()
         )
-                   .forEach( i -> this.apply( p_argument.get( 0 ).<Graph<Object, Object>>raw(), i, p_return ) );
+                   .forEach( i -> this.apply( p_argument.get( 0 ).<AbstractGraph<Object, Object>>raw(), i, p_return ) );
 
         return CFuzzyValue.from( true );
     }
@@ -74,11 +75,10 @@ public abstract class IApplyMultiple extends IBuildinAction
 
     /**
      * apply call
-     *
-     * @param p_graph graph instance
+     *  @param p_graph graph instance
      * @param p_window window list
      * @param p_return return list
      */
-    protected abstract void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
+    protected abstract void apply( final AbstractGraph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
 
 }
