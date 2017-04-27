@@ -341,11 +341,7 @@ public class TestCActionBitVector extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
-
-        final DoubleMatrix1D l_blas = l_return.get( 0 ).raw();
-        Assert.assertEquals( l_blas.size(), 3 );
-
-        Assert.assertArrayEquals( l_blas.toArray(), Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), 0 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), 0 );
     }
 
     /**

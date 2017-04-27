@@ -96,8 +96,7 @@ public class TestCActionBlas extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
 
-        final DoubleMatrix2D l_blas = l_return.get( 0 ).raw();
-        Assert.assertArrayEquals( l_blas.toArray(), new double[][]{{22.0, 10.0}, {30.0, 14.0}} );
+        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{22.0, 10.0}, {30.0, 14.0}} );
 
     }
 
