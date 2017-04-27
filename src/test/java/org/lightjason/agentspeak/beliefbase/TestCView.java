@@ -60,7 +60,6 @@ public final class TestCView extends IBaseTest
                  .forEach( i -> l_beliefbase.generate( l_gen, i.functorpath() ).add( i ) );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
-        System.out.println( l_beliefbase );
     }
 
 
@@ -87,7 +86,6 @@ public final class TestCView extends IBaseTest
 
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), 6 );
-        System.out.println( l_beliefbase );
     }
 
 

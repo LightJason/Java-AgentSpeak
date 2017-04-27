@@ -54,7 +54,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception on parsing exception
      */
     @Test
-    public final void testLiteralValueTraversing() throws Exception
+    public final void literalvaluetraversing() throws Exception
     {
         final Set<ILiteral> l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
@@ -69,7 +69,6 @@ public final class TestCUnifier extends IBaseTest
 
         final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
-        System.out.println( MessageFormat.format( "literal [{0}] value traversing: {1}", l_literal, l_result ) );
     }
 
 
@@ -79,7 +78,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exeception
      */
     @Test
-    public final void testLiteralValueSequentialTraversing() throws Exception
+    public final void literalvaluesequentialtraversing() throws Exception
     {
         final Stack<ILiteral> l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
@@ -97,7 +96,6 @@ public final class TestCUnifier extends IBaseTest
             l_literal.orderedvalues( CPath.from( "first" ) ).map( i -> i.equals( l_test.pop() ) ).allMatch( i -> i )
             && l_test.isEmpty()
         );
-        System.out.println( MessageFormat.format( "literal [{0}] value sequential traversing: {1}", l_literal, l_test ) );
     }
 
     /**
@@ -106,14 +104,13 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void testLiteralAnnotationTraversing() throws Exception
+    public final void literalannotationtraversing() throws Exception
     {
 
         final ILiteral l_literal = CLiteral.parse( "foo()[ first(1), first(2), first(foo('hallo')), second('test') ]" );
 
         final List<ITerm> l_result = l_literal.annotations( CPath.from( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), 3 );
-        System.out.println( MessageFormat.format( "literal [{0}] annotation traversing: {1}", l_literal, l_result ) );
     }
 
     /**
@@ -122,7 +119,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void testValueHash() throws Exception
+    public final void valuehash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
@@ -134,8 +131,6 @@ public final class TestCUnifier extends IBaseTest
             l_first.valuehash(),
             l_second.valuehash()
         );
-        System.out.println( MessageFormat.format( "literal value hash of [{0}] is equal [{1}]", l_first, l_first.valuehash() ) );
-
 
         final ILiteral l_third = CLiteral.parse( "foo()" );
         final ILiteral l_fourth = CLiteral.parse( "hallo()" );
@@ -144,7 +139,6 @@ public final class TestCUnifier extends IBaseTest
             l_third.valuehash(),
             l_fourth.valuehash()
         );
-        System.out.println( MessageFormat.format( "literal value hash of [{0}] is inequal [{1}]", l_third, l_fourth ) );
     }
 
 
@@ -154,7 +148,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void testAnnotationHash() throws Exception
+    public final void annotationhash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[anno(1),xvalue('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
@@ -163,10 +157,6 @@ public final class TestCUnifier extends IBaseTest
             MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second, l_first.annotationhash() ),
             l_first.annotationhash(), l_second.annotationhash()
         );
-        System.out.println( MessageFormat
-                                .format( "literal annotation hash of [{0}] and [{1}] are inequal [{2} / {3}]", l_first, l_second, l_first.annotationhash(),
-                                         l_second.annotationhash()
-                                ) );
     }
 
 

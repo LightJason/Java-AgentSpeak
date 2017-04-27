@@ -158,7 +158,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
     {
         while ( m_running.get() )
         {
-            System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
+            //System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
                     .forEach( j -> {
@@ -229,16 +229,17 @@ abstract class IBaseHanoiTowers extends IBaseTest
             super(
                 p_stream,
                 Stream.concat(
-                    CCommon.actionsFromPackage(),
                     Stream.concat(
                         Stream.of(
                             new CTowerPush( 0.33 ),
                             new CTowerPop(),
                             new CTowerSize(),
-                            new CStop()
+                            new CStop(),
+                            new CEmptyPrint()
                         ),
                         p_action
-                    )
+                    ),
+                    CCommon.actionsFromPackage()
                 ).collect( Collectors.toSet() ),
                 IAggregation.EMPTY,
                 Collections.emptySet(),
@@ -264,6 +265,33 @@ abstract class IBaseHanoiTowers extends IBaseTest
         public final CAgent generatesingle( final Object... p_data )
         {
             return new CAgent( m_configuration, (int) p_data[0] );
+        }
+    }
+
+    /**
+     * empty print action
+     */
+    private static final class CEmptyPrint extends IBaseAction
+    {
+
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "generic/print" );
+        }
+
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 0;
+        }
+
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
+                                                   final List<ITerm> p_annotation
+        )
+        {
+            return CFuzzyValue.from( true );
         }
     }
 
