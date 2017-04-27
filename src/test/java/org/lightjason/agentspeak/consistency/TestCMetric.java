@@ -43,7 +43,6 @@ import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -182,7 +181,6 @@ public final class TestCMetric extends IBaseTest
             p_filter.apply( this.getAgent( p_belief2 ) )
         );
         assertEquals( p_message, p_excepted, l_value, p_delta );
-        System.out.println( MessageFormat.format( "{0} value: {1}", p_message, l_value ) );
     }
 
 

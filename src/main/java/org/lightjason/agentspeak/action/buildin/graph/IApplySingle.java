@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.buildin.graph;
 
-import edu.uci.ics.jung.graph.AbstractGraph;
+import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,7 +36,6 @@ import java.util.List;
 
 /**
  * apply an element on multiple graphs
- * @note graph type must be set to AbstractGraph because of ambiguous method call in Graph and HyperGraph interface
  */
 public abstract class IApplySingle extends IBuildinAction
 {
@@ -54,7 +53,7 @@ public abstract class IApplySingle extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .skip( this.skipsize() )
-               .forEach( i -> this.apply( i.<AbstractGraph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
+               .forEach( i -> this.apply( i.<Graph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
 
         return CFuzzyValue.from( true );
     }
@@ -73,6 +72,6 @@ public abstract class IApplySingle extends IBuildinAction
      * @param p_window window list
      * @param p_return return list
      */
-    protected abstract void apply( final AbstractGraph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
+    protected abstract void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
 
 }

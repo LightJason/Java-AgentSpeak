@@ -69,7 +69,6 @@ public final class TestCUnifier extends IBaseTest
 
         final List<ITerm> l_result = l_literal.values( CPath.from( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), l_test.size() );
-        System.out.println( MessageFormat.format( "literal [{0}] value traversing: {1}", l_literal, l_result ) );
     }
 
 
@@ -97,7 +96,6 @@ public final class TestCUnifier extends IBaseTest
             l_literal.orderedvalues( CPath.from( "first" ) ).map( i -> i.equals( l_test.pop() ) ).allMatch( i -> i )
             && l_test.isEmpty()
         );
-        System.out.println( MessageFormat.format( "literal [{0}] value sequential traversing: {1}", l_literal, l_test ) );
     }
 
     /**
@@ -113,7 +111,6 @@ public final class TestCUnifier extends IBaseTest
 
         final List<ITerm> l_result = l_literal.annotations( CPath.from( "first" ) ).collect( Collectors.toList() );
         assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), 3 );
-        System.out.println( MessageFormat.format( "literal [{0}] annotation traversing: {1}", l_literal, l_result ) );
     }
 
     /**
@@ -134,8 +131,6 @@ public final class TestCUnifier extends IBaseTest
             l_first.valuehash(),
             l_second.valuehash()
         );
-        System.out.println( MessageFormat.format( "literal value hash of [{0}] is equal [{1}]", l_first, l_first.valuehash() ) );
-
 
         final ILiteral l_third = CLiteral.parse( "foo()" );
         final ILiteral l_fourth = CLiteral.parse( "hallo()" );
@@ -144,7 +139,6 @@ public final class TestCUnifier extends IBaseTest
             l_third.valuehash(),
             l_fourth.valuehash()
         );
-        System.out.println( MessageFormat.format( "literal value hash of [{0}] is inequal [{1}]", l_third, l_fourth ) );
     }
 
 
