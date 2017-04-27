@@ -89,7 +89,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric weight metric equality
      */
     @Test
-    public final void testSymmetricWeightEquality()
+    public final void symmetricweightequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -107,7 +107,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric weight metric inequality
      */
     @Test
-    public final void testSymmetricWeightInequality()
+    public final void symmetricweightinequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -125,7 +125,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric metric equality
      */
     @Test
-    public final void testWeightEquality()
+    public final void weightequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -144,7 +144,7 @@ public final class TestCMetric extends IBaseTest
      * test symmetric metric equality
      */
     @Test
-    public final void testWeightInequality()
+    public final void weightinequality()
     {
         Assume.assumeNotNull( m_literals );
         Assume.assumeFalse( "testing literals are empty", m_literals.isEmpty() );
@@ -177,8 +177,8 @@ public final class TestCMetric extends IBaseTest
     )
     {
         final double l_value = p_metric.apply(
-            p_filter.apply( this.getAgent( p_belief1 ) ),
-            p_filter.apply( this.getAgent( p_belief2 ) )
+            p_filter.apply( this.agent( p_belief1 ) ),
+            p_filter.apply( this.agent( p_belief2 ) )
         );
         assertEquals( p_message, p_excepted, l_value, p_delta );
     }
@@ -190,7 +190,7 @@ public final class TestCMetric extends IBaseTest
      * @param p_literals literal collection
      * @return agent
      */
-    private IAgent<IAgent<?>> getAgent( final Collection<ILiteral> p_literals )
+    private IAgent<IAgent<?>> agent( final Collection<ILiteral> p_literals )
     {
         final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
         p_literals.forEach( i -> l_agent.beliefbase().generate( m_generator, i.functorpath() ).add( i ) );

@@ -54,7 +54,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception on parsing exception
      */
     @Test
-    public final void testLiteralValueTraversing() throws Exception
+    public final void literalvaluetraversing() throws Exception
     {
         final Set<ILiteral> l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
@@ -78,7 +78,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exeception
      */
     @Test
-    public final void testLiteralValueSequentialTraversing() throws Exception
+    public final void literalvaluesequentialtraversing() throws Exception
     {
         final Stack<ILiteral> l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
@@ -104,7 +104,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void testLiteralAnnotationTraversing() throws Exception
+    public final void literalannotationtraversing() throws Exception
     {
 
         final ILiteral l_literal = CLiteral.parse( "foo()[ first(1), first(2), first(foo('hallo')), second('test') ]" );
@@ -119,7 +119,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void testValueHash() throws Exception
+    public final void valuehash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
@@ -148,7 +148,7 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void testAnnotationHash() throws Exception
+    public final void annotationhash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[anno(1),xvalue('test')]" );
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
@@ -157,10 +157,6 @@ public final class TestCUnifier extends IBaseTest
             MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second, l_first.annotationhash() ),
             l_first.annotationhash(), l_second.annotationhash()
         );
-        System.out.println( MessageFormat
-                                .format( "literal annotation hash of [{0}] and [{1}] are inequal [{2} / {3}]", l_first, l_second, l_first.annotationhash(),
-                                         l_second.annotationhash()
-                                ) );
     }
 
 
