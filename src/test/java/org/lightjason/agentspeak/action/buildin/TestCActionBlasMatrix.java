@@ -103,16 +103,6 @@ public class TestCActionBlasMatrix extends IBaseTest
     private static DoubleMatrix2D s_matrix1 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
 
     /**
-     * testing matrix
-     */
-    private DoubleMatrix2D m_matrix = new DenseDoubleMatrix2D( 2, 2 );
-
-    /**
-     * testing symmetric matrix
-     */
-    private DoubleMatrix2D m_matrix1 = new DenseDoubleMatrix2D( new double[][]{{1, 7}, {7, 4}} );
-
-    /**
      * data provider generator
      * @return data
      */
@@ -180,7 +170,6 @@ public class TestCActionBlasMatrix extends IBaseTest
     /**
      * test all input actions
      *
-     * @note I guess CDeterminant results should be (2.0, 4.0).
      * @throws IllegalAccessException is thrown on instantiation error
      * @throws InstantiationException is thrown on instantiation error
      */
@@ -392,7 +381,6 @@ public class TestCActionBlasMatrix extends IBaseTest
 
     /**
      * test solve
-     * @note it can be {{1.0, -5.0},{0.0, 2.0}}
      */
     @Test
     public final void solve()
@@ -415,34 +403,45 @@ public class TestCActionBlasMatrix extends IBaseTest
     }
 
     /**
-     * test assign
+     * test assign scalar
      */
     @Test
-    public final void assign()
+    public final void assignscalar()
     {
+        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CAssign().execute(
                 null,
                 false,
-                Stream.of( 2, m_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( m_matrix.toArray(), new DenseDoubleMatrix2D( new double[][]{{2.0, 2.0}, {2.0, 2.0}} ).toArray() );
+        Assert.assertArrayEquals( l_matrix.toArray(), new double[][]{{2.0, 2.0}, {2.0, 2.0}} );
+    }
+
+    /**
+     * test assign matrix
+     */
+    @Test
+    public final void assignmatrix()
+    {
+        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
+        final List<ITerm> l_return = new ArrayList<>();
 
         new CAssign().execute(
-                null,
-                false,
-                Stream.of( s_matrix1, m_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( s_matrix1, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( s_matrix1.toArray(), m_matrix.toArray() );
+        Assert.assertArrayEquals( s_matrix1.toArray(), l_matrix.toArray() );
     }
 
     /**
@@ -490,7 +489,6 @@ public class TestCActionBlasMatrix extends IBaseTest
 
     /**
      * test invert
-     * @note I guess it should be {{-0.25, 0.5},{0.75, -0.5}}
      */
     @Test
     public final void invert()
@@ -568,10 +566,8 @@ public class TestCActionBlasMatrix extends IBaseTest
 
     /**
      * test copy
-     * @bug CCopy results empty list
      */
     @Test
-    @Ignore
     public final void copy()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -601,7 +597,7 @@ public class TestCActionBlasMatrix extends IBaseTest
         new CGraphLaplacian().execute(
                 null,
                 false,
-                Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( new DenseDoubleMatrix2D( new double[][]{{1, 7}, {7, 4}} ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );

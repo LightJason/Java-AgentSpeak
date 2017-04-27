@@ -32,7 +32,6 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -79,10 +78,6 @@ public class TestCActionBlasVector extends IBaseTest
      */
     private static DoubleMatrix1D s_vector1 = new DenseDoubleMatrix1D( new double[]{8, 6, 2, 1} );
 
-    /**
-     * testing vector
-     */
-    private DoubleMatrix1D m_vector = new DenseDoubleMatrix1D( 4 );
 
     /**
      * data provider generator
@@ -183,18 +178,19 @@ public class TestCActionBlasVector extends IBaseTest
     @Test
     public final void set()
     {
+        final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSet().execute(
                 null,
                 false,
-                Stream.of( 0, 6.0, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 0, 6.0, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_vector.get( 0 ), 6, 0 );
+        Assert.assertEquals( l_vector.get( 0 ), 6, 0 );
     }
 
     /**
@@ -221,35 +217,49 @@ public class TestCActionBlasVector extends IBaseTest
     }
 
     /**
-     * test assign
+     * test assign scalar
      */
     @Test
-    public final void assign()
+    public final void assignscalar()
     {
+        final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
         final List<ITerm> l_return = new ArrayList<>();
 
         new CAssign().execute(
                 null,
                 false,
-                Stream.of( 2, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( m_vector.toArray(), Stream.of( 2, 2, 2, 2 ).mapToDouble( i -> i ).toArray(), 0 );
+        Assert.assertArrayEquals( l_vector.toArray(), Stream.of( 2, 2, 2, 2 ).mapToDouble( i -> i ).toArray(), 0 );
+
+
+    }
+
+    /**
+     * test assign vector
+     */
+    @Test
+    public final void assignvector()
+    {
+        final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
+        final List<ITerm> l_return = new ArrayList<>();
 
         new CAssign().execute(
-                null,
-                false,
-                Stream.of( s_vector1, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+            null,
+            false,
+            Stream.of( s_vector1, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( m_vector.toArray(), s_vector1.toArray(), 0 );
+        Assert.assertArrayEquals( l_vector.toArray(), s_vector1.toArray(), 0 );
     }
+
 
     /**
      * test get
@@ -274,10 +284,8 @@ public class TestCActionBlasVector extends IBaseTest
 
     /**
      * test copy
-     * @bug CCopy results empty list
      */
     @Test
-    @Ignore
     public final void copy()
     {
         final List<ITerm> l_return = new ArrayList<>();

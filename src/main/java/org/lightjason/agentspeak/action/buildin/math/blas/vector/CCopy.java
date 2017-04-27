@@ -64,7 +64,7 @@ public final class CCopy extends IBuildinAction
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_annotation )
+        CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix1D>raw )
                .map( DoubleMatrix1D::copy )
                .map( CRawTerm::from )
