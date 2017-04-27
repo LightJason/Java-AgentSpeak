@@ -104,15 +104,13 @@ public class TestCActionBlasMatrix extends IBaseTest
 
     /**
      * testing matrix
-     * @note static because of usage in data-provider
      */
-    private static DoubleMatrix2D s_matrix2 = new DenseDoubleMatrix2D( 2, 2 );
+    private DoubleMatrix2D m_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
     /**
      * testing symmetric matrix
-     * @note static because of usage in data-provider
      */
-    private static DoubleMatrix2D s_matrix3 = new DenseDoubleMatrix2D( new double[][]{{1, 7}, {7, 4}} );
+    private DoubleMatrix2D m_matrix1 = new DenseDoubleMatrix2D( new double[][]{{1, 7}, {7, 4}} );
 
     /**
      * data provider generator
@@ -436,24 +434,24 @@ public class TestCActionBlasMatrix extends IBaseTest
         new CAssign().execute(
                 null,
                 false,
-                Stream.of( 2, s_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 2, m_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( s_matrix2.toArray(), l_result );
+        Assert.assertArrayEquals( m_matrix.toArray(), l_result );
 
         new CAssign().execute(
                 null,
                 false,
-                Stream.of( s_matrix1, s_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( s_matrix1, m_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( s_matrix1.toArray(), s_matrix2.toArray() );
+        Assert.assertArrayEquals( s_matrix1.toArray(), m_matrix.toArray() );
     }
 
     /**
@@ -612,7 +610,7 @@ public class TestCActionBlasMatrix extends IBaseTest
         new CGraphLaplacian().execute(
                 null,
                 false,
-                Stream.of( s_matrix3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
