@@ -50,7 +50,7 @@ public final class CAddEdgeSingle extends IApplySingle
     @Override
     protected final void apply( final AbstractGraph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw() );
+        p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw(), p_graph.getDefaultEdgeType() );
     }
 
 }
