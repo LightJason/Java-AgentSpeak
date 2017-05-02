@@ -21,54 +21,41 @@
  * @endcond
  */
 
-
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns the number neighbors of a vertex.
- * The actions returns the number of neighbors of
- * a vertex for each graph argument, the first
- * argument is the vertex, all other graphs,
- * the action never fails
+ * returns the neighbors of a vertex of each graph instance.
+ * The actions returns a list of neighbors of a vertex for
+ * each graph argument, the first argument is the vertex,
+ * all other graphs, the action never fails
  *
- * @code [C1|C2] = graph/neighborscount( Vertex, Graph1, Graph2 ); @endcode
+ * @code [N1|N2] = graph/neighborssingle( Vertex, Graph1, Graph2 ); @endcode
  */
-public final class CNeighborsCount extends IBuildinAction
+public final class CNeighborsSingle extends IApplySingle
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int skipsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    protected void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .mapToLong( i -> i.getNeighborCount( l_arguments.get( 0 ).raw() ) )
-                   .boxed()
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                new ArrayList<>( p_graph.getNeighbors( p_window.get( 0 ).raw() ) )
+            )
+        );
     }
+
 }

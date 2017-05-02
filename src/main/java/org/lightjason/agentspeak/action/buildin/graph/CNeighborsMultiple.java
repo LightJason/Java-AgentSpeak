@@ -24,51 +24,36 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * checks if a vertex is predecessor of another vertex.
- * The action checks for the first vertex argument
- * that the second vertex argument is predecessor within
- * the given graph, the action never fails
+ * returns the neighbors of each vertex of single graph instance.
+ * The actions returns a list of neighbors of each vertex for
+ * a single graph argument, the first argument is the graph,
+ * all other vertices, the action never fails
  *
- * @code [B1|B2|B3] = graph/ispredecessor( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
+ * @code [N1|N2] = graph/neighborsmultiple( Graph, Vertex1, Vertex2 ); @endcode
  */
-public final class CIsPredecessor extends IBuildinAction
+public final class CNeighborsMultiple extends IApplyMultiple
 {
-
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 3 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 2 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.isPredecessor( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                new ArrayList<>( p_graph.getNeighbors( p_window.get( 0 ).raw() ) )
+            )
+        );
     }
-
 }
