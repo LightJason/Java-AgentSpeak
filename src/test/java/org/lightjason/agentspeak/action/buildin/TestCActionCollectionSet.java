@@ -70,6 +70,27 @@ public final class TestCActionCollectionSet extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 0 ).<Set<?>>raw().toArray(), Stream.of( 1, 2 ).toArray() );
     }
 
+    /**
+     * test create synchronized
+     */
+    @Test
+    public final void createsynchronized()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CCreate().execute(
+            null,
+            true,
+            Stream.of( 10, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedSet( Collections.emptySet() ).getClass() );
+        Assert.assertArrayEquals( l_return.get( 0 ).<Set<?>>raw().toArray(), Stream.of( 20, 10 ).toArray() );
+    }
+
 
     /**
      * test add
