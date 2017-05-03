@@ -47,7 +47,7 @@ public final class CIsNeighborSingle extends IApplySingle
     }
 
     @Override
-    protected final void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.from(

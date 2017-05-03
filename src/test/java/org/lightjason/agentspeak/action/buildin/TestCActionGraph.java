@@ -60,6 +60,8 @@ import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIsIncidentMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CIsIncidentSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CIsNeighborMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIsNeighborSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CIsPredecessorMultiple;
@@ -68,6 +70,8 @@ import org.lightjason.agentspeak.action.buildin.graph.CIsSuccessorMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIsSuccessorSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CNeighborsCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CNeighborsCountSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CNeighborsMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CNeighborsSingle;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -1155,11 +1159,11 @@ public final class TestCActionGraph extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
 
-        l_graph.addEdge( "isneighbor1", 2, 1 );
-        l_graph.addEdge( "isneighbor2", 3, 1 );
-        l_graph.addEdge( "isneighbor1", 2, 1 );
-        l_graph.addEdge( "isneighbor2", 3, 1 );
-        l_graph.addEdge( "isneighbor3", 4, 1 );
+        l_graph.addEdge( "isneighbor10", 2, 1 );
+        l_graph.addEdge( "isneighbor20", 3, 1 );
+        l_graph.addEdge( "isneighbor10", 2, 1 );
+        l_graph.addEdge( "isneighbor20", 3, 1 );
+        l_graph.addEdge( "isneighbor30", 4, 1 );
 
         new CIsNeighborMultiple().execute(
             null,
@@ -1174,6 +1178,127 @@ public final class TestCActionGraph extends IBaseTest
             Stream.of( true, false, false ).toArray()
         );
     }
+
+
+    /**
+     * test neigbors single
+     */
+    @Test
+    public final void neigborssingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "isneighbor1", 2, 1 );
+        l_graph1.addEdge( "isneighbor2", 3, 1 );
+        l_graph2.addEdge( "isneighbor1", 2, 1 );
+        l_graph2.addEdge( "isneighbor2", 3, 1 );
+        l_graph2.addEdge( "isneighbor3", 4, 1 );
+
+        new CNeighborsSingle().execute(
+            null,
+            false,
+            Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 3 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2, 3, 4 ).toArray() );
+    }
+
+
+    /**
+     * test neigbors multiple
+     */
+    @Test
+    public final void neigborsmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "neighbors1", 2, 1 );
+        l_graph.addEdge( "neighbors2", 3, 1 );
+        l_graph.addEdge( "neighbors1", 2, 1 );
+        l_graph.addEdge( "neighbors2", 3, 1 );
+        l_graph.addEdge( "neighbors3", 4, 1 );
+
+        new CNeighborsMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 3, 4 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1 ).toArray() );
+    }
+
+
+    /**
+     * test is-incident single
+     */
+    @Test
+    public final void isincidentsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "isincident1", 2, 1 );
+        l_graph1.addEdge( "isincident2", 3, 1 );
+        l_graph2.addEdge( "isincident1", 2, 1 );
+        l_graph2.addEdge( "isincident2", 3, 1 );
+        l_graph2.addEdge( "isincident3", 4, 1 );
+
+        new CIsIncidentSingle().execute(
+            null,
+            false,
+            Stream.of( 1, "isincident2", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( true, true ).toArray()
+        );
+    }
+
+
+    /**
+     * test is-incident multiple
+     */
+    @Test
+    public final void isincidentmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "isincident10", 2, 1 );
+        l_graph.addEdge( "isincident20", 3, 1 );
+        l_graph.addEdge( "isincident10", 2, 1 );
+        l_graph.addEdge( "isincident20", 3, 1 );
+        l_graph.addEdge( "isincident30", 4, 1 );
+
+        new CIsIncidentMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, "isincident10", 2, "isincident20" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( true, false ).toArray()
+        );
+    }
+
 
 
     /**
