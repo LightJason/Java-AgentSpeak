@@ -60,6 +60,18 @@ import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CIncidentVerticesSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIsIncidentMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CIsIncidentSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIsNeighborMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CIsNeighborSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIsPredecessorMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CIsPredecessorSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CIsSuccessorMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CIsSuccessorSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CNeighborsCountMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CNeighborsCountSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CNeighborsMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CNeighborsSingle;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -936,6 +948,355 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 3, 2 ).toArray() );
+    }
+
+
+    /**
+     * test is-successor single
+     */
+    @Test
+    public final void issuccessorsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "successor1", 2, 1 );
+        l_graph2.addEdge( "successor2", 1, 2 );
+
+        new CIsSuccessorSingle().execute(
+            null,
+            false,
+            Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray(),
+            Stream.of( false, true ).toArray()
+        );
+    }
+
+    /**
+     * test is-successor multiple
+     */
+    @Test
+    public final void issuccesormultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "successor1", 2, 1 );
+        l_graph.addEdge( "successor2", 3, 1 );
+
+        new CIsSuccessorMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 2, 3, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray(),
+            Stream.of( false, true ).toArray()
+        );
+    }
+
+
+    /**
+     * test is-predecessor single
+     */
+    @Test
+    public final void ispredecessorsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "predecessor1", 2, 1 );
+        l_graph2.addEdge( "predecessor2", 1, 2 );
+
+        new CIsPredecessorSingle().execute(
+            null,
+            false,
+            Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray(),
+            Stream.of( true, false ).toArray()
+        );
+    }
+
+    /**
+     * test is-predecessor multiple
+     */
+    @Test
+    public final void ispredecessormultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "predecessor1", 2, 1 );
+        l_graph.addEdge( "predecessor2", 3, 1 );
+
+        new CIsPredecessorMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 2, 3, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray(),
+            Stream.of( true, false ).toArray()
+        );
+    }
+
+
+    /**
+     * test neighborscount single
+     */
+    @Test
+    public final void neighborscountsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "neighborcount1", 2, 1 );
+        l_graph1.addEdge( "neighborcount2", 3, 1 );
+        l_graph2.addEdge( "neighborcount1", 2, 1 );
+        l_graph2.addEdge( "neighborcount2", 3, 1 );
+        l_graph2.addEdge( "neighborcount3", 4, 1 );
+
+        new CNeighborsCountSingle().execute(
+            null,
+            false,
+            Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Number>raw ).map( Number::longValue ).toArray(),
+            Stream.of( 2L, 3L ).toArray()
+        );
+    }
+
+
+    /**
+     * test neighborscount single
+     */
+    @Test
+    public final void neighborscountmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "neighborcount1", 2, 1 );
+        l_graph.addEdge( "neighborcount2", 3, 1 );
+        l_graph.addEdge( "neighborcount3", 5, 3 );
+        l_graph.addEdge( "neighborcount4", 4, 1 );
+
+        new CNeighborsCountMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Number>raw ).map( Number::longValue ).toArray(),
+            Stream.of( 3L, 2L ).toArray()
+        );
+    }
+
+
+    /**
+     * test is-neighbor single
+     */
+    @Test
+    public final void isneighborsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "isneighbor1", 2, 1 );
+        l_graph1.addEdge( "isneighbor2", 3, 1 );
+        l_graph2.addEdge( "isneighbor1", 2, 1 );
+        l_graph2.addEdge( "isneighbor2", 3, 1 );
+        l_graph2.addEdge( "isneighbor3", 4, 1 );
+
+        new CIsNeighborSingle().execute(
+            null,
+            false,
+            Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray(),
+            Stream.of( true, true ).toArray()
+        );
+    }
+
+
+    /**
+     * test is-neighbor multiple
+     */
+    @Test
+    public final void isneighbormultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "isneighbor10", 2, 1 );
+        l_graph.addEdge( "isneighbor20", 3, 1 );
+        l_graph.addEdge( "isneighbor10", 2, 1 );
+        l_graph.addEdge( "isneighbor20", 3, 1 );
+        l_graph.addEdge( "isneighbor30", 4, 1 );
+
+        new CIsNeighborMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 2, 3, 4, 3, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::<Boolean>raw ).toArray(),
+            Stream.of( true, false, false ).toArray()
+        );
+    }
+
+
+    /**
+     * test neigbors single
+     */
+    @Test
+    public final void neigborssingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "isneighbor1", 2, 1 );
+        l_graph1.addEdge( "isneighbor2", 3, 1 );
+        l_graph2.addEdge( "isneighbor1", 2, 1 );
+        l_graph2.addEdge( "isneighbor2", 3, 1 );
+        l_graph2.addEdge( "isneighbor3", 4, 1 );
+
+        new CNeighborsSingle().execute(
+            null,
+            false,
+            Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 3 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2, 3, 4 ).toArray() );
+    }
+
+
+    /**
+     * test neigbors multiple
+     */
+    @Test
+    public final void neigborsmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "neighbors1", 2, 1 );
+        l_graph.addEdge( "neighbors2", 3, 1 );
+        l_graph.addEdge( "neighbors1", 2, 1 );
+        l_graph.addEdge( "neighbors2", 3, 1 );
+        l_graph.addEdge( "neighbors3", 4, 1 );
+
+        new CNeighborsMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 3, 4 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1 ).toArray() );
+    }
+
+
+    /**
+     * test is-incident single
+     */
+    @Test
+    public final void isincidentsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "isincident1", 2, 1 );
+        l_graph1.addEdge( "isincident2", 3, 1 );
+        l_graph2.addEdge( "isincident1", 2, 1 );
+        l_graph2.addEdge( "isincident2", 3, 1 );
+        l_graph2.addEdge( "isincident3", 4, 1 );
+
+        new CIsIncidentSingle().execute(
+            null,
+            false,
+            Stream.of( 1, "isincident2", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( true, true ).toArray()
+        );
+    }
+
+
+    /**
+     * test is-incident multiple
+     */
+    @Test
+    public final void isincidentmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "isincident10", 2, 1 );
+        l_graph.addEdge( "isincident20", 3, 1 );
+        l_graph.addEdge( "isincident10", 2, 1 );
+        l_graph.addEdge( "isincident20", 3, 1 );
+        l_graph.addEdge( "isincident30", 4, 1 );
+
+        new CIsIncidentMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, "isincident10", 2, "isincident20" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( true, false ).toArray()
+        );
     }
 
 

@@ -21,44 +21,73 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.graph;
+package org.lightjason.agentspeak.action.buildin.collection;
 
-import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.language.CRawTerm;
+import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * returns a list of incident vertices of an edge of each graph instance.
- * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * clears all elements of the collection.
+ * The action removes all elements of each collection arguments,
+ * the action fails on a non-collection argument
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * @code collection/clear( Map, MultiMap, Set, List ); @endcode
  */
-public final class CIncidentVerticesSingle extends IApplySingle
+public final class CClear extends IBuildinAction
 {
-
     @Override
-    protected final int skipsize()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return, final List<ITerm> p_annotation )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
-
-        p_return.add(
-            CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( l_return )
-                : l_return
-            )
+        return CFuzzyValue.from(
+            p_argument.parallelStream()
+                  .allMatch( CClear::clear )
         );
     }
+
+    /**
+     * clears element
+     *
+     * @param p_term term
+     * @return clearing successful
+     */
+    private static boolean clear( final ITerm p_term )
+    {
+        if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
+        {
+            p_term.<Collection<?>>raw().clear();
+            return true;
+        }
+
+        if ( CCommon.rawvalueAssignableTo( p_term, Map.class ) )
+        {
+            p_term.<Map<?, ?>>raw().clear();
+            return true;
+        }
+
+        if ( CCommon.rawvalueAssignableTo( p_term, Multimap.class ) )
+        {
+            p_term.<Multimap<?, ?>>raw().clear();
+            return true;
+        }
+
+        return false;
+    }
+
 }

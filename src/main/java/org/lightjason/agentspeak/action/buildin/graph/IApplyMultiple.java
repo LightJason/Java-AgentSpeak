@@ -57,7 +57,7 @@ public abstract class IApplyMultiple extends IBuildinAction
             this.windowsize(),
             this.windowsize()
         )
-                   .forEach( i -> this.apply( p_argument.get( 0 ).<Graph<Object, Object>>raw(), i, p_return ) );
+                   .forEach( i -> this.apply( p_parallel, p_argument.get( 0 ).<Graph<Object, Object>>raw(), i, p_return ) );
 
         return CFuzzyValue.from( true );
     }
@@ -74,10 +74,11 @@ public abstract class IApplyMultiple extends IBuildinAction
 
     /**
      * apply call
+     * @param p_parallel parallel execution
      * @param p_graph graph instance
      * @param p_window window list
      * @param p_return return list
      */
-    protected abstract void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
+    protected abstract void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
 
 }

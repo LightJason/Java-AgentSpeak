@@ -33,13 +33,14 @@ import java.util.List;
 
 
 /**
- * returns a list of incident vertices of an edge of each graph instance.
- * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * returns the neighbors of a vertex of each graph instance.
+ * The actions returns a list of neighbors of a vertex for
+ * each graph argument, the first argument is the vertex,
+ * all other graphs, the action never fails
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * @code [N1|N2] = graph/neighborssingle( Vertex, Graph1, Graph2 ); @endcode
  */
-public final class CIncidentVerticesSingle extends IApplySingle
+public final class CNeighborsSingle extends IApplySingle
 {
 
     @Override
@@ -49,9 +50,9 @@ public final class CIncidentVerticesSingle extends IApplySingle
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
+        final List<?> l_return = new ArrayList<>( p_graph.getNeighbors( p_window.get( 0 ).raw() ) );
 
         p_return.add(
             CRawTerm.from(
@@ -61,4 +62,5 @@ public final class CIncidentVerticesSingle extends IApplySingle
             )
         );
     }
+
 }

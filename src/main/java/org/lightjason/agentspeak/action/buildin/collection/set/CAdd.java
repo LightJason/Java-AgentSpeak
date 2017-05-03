@@ -21,44 +21,52 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.graph;
+package org.lightjason.agentspeak.action.buildin.collection.set;
 
-import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 
 /**
- * returns a list of incident vertices of an edge of each graph instance.
- * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * adds an element to the set.
+ * The action adds all arguments to the set (overwrites existing),
+ * the action never fails
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * @code collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]); @endcode
  */
-public final class CIncidentVerticesSingle extends IApplySingle
+public final class CAdd extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CAdd()
+    {
+        super( 3 );
+    }
 
     @Override
-    protected final int skipsize()
+    public final int minimalArgumentNumber()
     {
         return 1;
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return, final List<ITerm> p_annotation )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
+        final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 
-        p_return.add(
-            CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( l_return )
-                : l_return
-            )
-        );
+        CCommon.flatstream( p_argument.stream().skip( 1 ) )
+               .map( ITerm::raw )
+               .forEach( l_set::add );
+
+        return CFuzzyValue.from( true );
     }
 }

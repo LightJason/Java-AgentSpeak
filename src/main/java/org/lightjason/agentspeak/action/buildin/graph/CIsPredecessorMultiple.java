@@ -27,37 +27,30 @@ import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 /**
- * returns a list of incident vertices of an edge of each graph instance.
- * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * checks all vertex tuples if the first part the predecessor of the second on a single graph instance.
+ * The action checks for the first graph argument if the first part of all vertex tuples
+ * a predecessor of the second part, the action never fails
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * @code [B1|B2|B3] = graph/ispredecessormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, Vertex6]] ); @endcode
  */
-public final class CIncidentVerticesSingle extends IApplySingle
+public final class CIsPredecessorMultiple extends IApplyMultiple
 {
-
     @Override
-    protected final int skipsize()
+    protected final int windowsize()
     {
-        return 1;
+        return 2;
     }
 
     @Override
     protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
-
         p_return.add(
             CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( l_return )
-                : l_return
+                p_graph.isPredecessor( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );
     }

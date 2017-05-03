@@ -22,9 +22,8 @@
  */
 
 
-package org.lightjason.agentspeak.action.buildin.graph;
+package org.lightjason.agentspeak.action.buildin.collection.set;
 
-import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -34,21 +33,27 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 
 /**
- * returns the neighbors of a vertex.
- * The actions returns a list of neighbors of
- * a vertex for each graph argument, the first
- * argument is the vertex, all other graphs,
- * the action never fails
+ * checks elements are containing in set.
+ * The action checks the first argument, which is a set,
+ * that all other arguments are contained, the action never
+ * fails
  *
- * @code [N1|N2] = graph/neighbors( Vertex, Graph1, Graph2 ); @endcode
- * @note returned list of neighbors is unmodifyable
+ * @code [E1|E2|E3] = collection/set/contains( Set, "1", [1, 2] ); @endcode
  */
-public final class CNeighbors extends IBuildinAction
+public final class CContains extends IBuildinAction
 {
+    /**
+     * ctor
+     */
+    public CContains()
+    {
+        super( 3 );
+    }
+
     @Override
     public final int minimalArgumentNumber()
     {
@@ -56,18 +61,16 @@ public final class CNeighbors extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return, final List<ITerm> p_annotation )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.getNeighbors( l_arguments.get( 0 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        CCommon.flatstream( p_argument.stream().skip( 1 ) )
+               .map( ITerm::raw )
+               .map( l_set::contains )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }

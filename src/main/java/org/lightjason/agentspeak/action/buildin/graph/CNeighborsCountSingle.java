@@ -27,19 +27,18 @@ import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 /**
- * returns a list of incident vertices of an edge of each graph instance.
- * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * returns the number neighbors of a vertex of each graph instance.
+ * The actions returns the number of neighbors of a vertex for
+ * each graph argument, the first argument is the vertex, all
+ * other graphs, the action never fails
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * @code [C1|C2] = graph/neighborscountsingle( Vertex, Graph1, Graph2 ); @endcode
  */
-public final class CIncidentVerticesSingle extends IApplySingle
+public final class CNeighborsCountSingle extends IApplySingle
 {
 
     @Override
@@ -51,14 +50,11 @@ public final class CIncidentVerticesSingle extends IApplySingle
     @Override
     protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
-
         p_return.add(
             CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( l_return )
-                : l_return
+                (long) p_graph.getNeighborCount( p_window.get( 0 ).raw() )
             )
         );
     }
+
 }

@@ -53,7 +53,7 @@ public abstract class IApplySingle extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .skip( this.skipsize() )
-               .forEach( i -> this.apply( i.<Graph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
+               .forEach( i -> this.apply( p_parallel, i.<Graph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
 
         return CFuzzyValue.from( true );
     }
@@ -68,10 +68,11 @@ public abstract class IApplySingle extends IBuildinAction
 
     /**
      * apply call
+     * @param p_parallel parallel execution
      * @param p_graph graph instance
      * @param p_window window list
      * @param p_return return list
      */
-    protected abstract void apply( final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
+    protected abstract void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return );
 
 }

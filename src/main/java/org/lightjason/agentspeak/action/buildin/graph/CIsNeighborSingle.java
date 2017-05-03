@@ -27,38 +27,33 @@ import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 /**
- * returns a list of incident vertices of an edge of each graph instance.
- * The action returns for the first edge argument the incident vertices
- * of each graph argument, the action never fails
+ * checks if a vertex is neighbor of another vertex of each graph instance.
+ * The action checks for the first vertex argument that the second vertex
+ * argument is a neighbor of all graph instances, the action never fails
  *
- * @code [L1|L2] = graph/incidentvertices( Edge, Graph1, Graph2 ); @endcode
+ * @code [B1|B2|B3] = graph/isneighborsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
  */
-public final class CIncidentVerticesSingle extends IApplySingle
+public final class CIsNeighborSingle extends IApplySingle
 {
 
     @Override
     protected final int skipsize()
     {
-        return 1;
+        return 2;
     }
 
     @Override
     protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<?> l_return = new ArrayList<>( p_graph.getIncidentVertices( p_window.get( 0 ).raw() ) );
-
         p_return.add(
             CRawTerm.from(
-                p_parallel
-                ? Collections.synchronizedList( l_return )
-                : l_return
+                p_graph.isNeighbor( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
             )
         );
     }
+
 }

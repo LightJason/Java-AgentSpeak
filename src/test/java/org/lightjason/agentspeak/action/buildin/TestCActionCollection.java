@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -33,6 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.buildin.collection.CClear;
 import org.lightjason.agentspeak.action.buildin.collection.CIsEmpty;
 import org.lightjason.agentspeak.action.buildin.collection.CSize;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -44,7 +47,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -126,7 +132,7 @@ public final class TestCActionCollection extends IBaseTest
 
 
     /**
-     * test empty action
+     * test empty
      */
     @Test
     public final void empty()
@@ -144,7 +150,35 @@ public final class TestCActionCollection extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 5 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Boolean>raw ).toArray(), new Boolean[]{true, true, true, false, false} );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::<Boolean>raw ).toArray(), Stream.of( true, true, true, false, false ).toArray() );
+    }
+
+
+    /**
+     * test clear
+     */
+    @Test
+    public final void clear()
+    {
+        final List<Integer> l_list = IntStream.range( 0, 10 ).boxed().collect( Collectors.toList() );
+        final Set<Integer> l_set = IntStream.range( 10, 20 ).boxed().collect( Collectors.toSet() );
+        final Map<Integer, Integer> l_map = StreamUtils.windowed( IntStream.range( 100, 120 ).boxed(), 2 )
+                                                       .collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) );
+
+        final Multimap<Integer, Integer> l_multimap = HashMultimap.create();
+        IntStream.range( 0, 5 ).forEach( i -> IntStream.range( i, i + 5 ).forEach( j -> l_map.put( i, j ) ) );
+
+        new CClear().execute(
+            null,
+            false,
+            Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue( l_list.isEmpty() );
+        Assert.assertTrue( l_set.isEmpty() );
+        Assert.assertTrue( l_map.isEmpty() );
     }
 
 

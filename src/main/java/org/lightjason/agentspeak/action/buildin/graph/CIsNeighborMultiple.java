@@ -24,51 +24,34 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * checks if a vertex and an edge incident.
- * The actions checks for the first vertex argument
- * and the second egde argument if both are incident
- * within all graphs
+ * checks all vertex tuple, if the first part is a neighbor of the second one of a single graph instance.
+ * The action checks for the graph instance, that the first part of each vertex tuple is the neighbor
+ * of the second part of the tuple, the action never fails
  *
- * @code [B1|B2] = graph/isincident( Vertex, Edge, Graph1, Graph2 ); @endcode
+ * @code [B1|B2|B3] = graph/isneighbormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, vertex6]] ); @endcode
  */
-public final class CIsIncident extends IBuildinAction
+public final class CIsNeighborMultiple extends IApplyMultiple
 {
-
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
-        return 1;
+        return 2;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 3 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 2 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.isIncident( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_return.add(
+            CRawTerm.from(
+                p_graph.isNeighbor( p_window.get( 0 ).raw(), p_window.get( 1 ).raw() )
+            )
+        );
     }
-
 }
