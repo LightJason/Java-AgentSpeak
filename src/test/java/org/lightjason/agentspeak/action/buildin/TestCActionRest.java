@@ -45,19 +45,45 @@ import java.util.stream.Stream;
  */
 public final class TestCActionRest extends IBaseTest
 {
-
     /**
-     * tets json list
+     * test json list with single argument
      */
     @Test
-    public final void jsonlist()
+    public final void jsonlistsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonList().execute(
             null,
             false,
-            Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist", "item" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist" )
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+
+        Assert.assertFalse( l_return.isEmpty() );
+        Assert.assertTrue( l_return.stream().map( ITerm::raw ).allMatch( i -> i instanceof ILiteral ) );
+        Assert.assertTrue( l_return.stream().map( ITerm::<ILiteral>raw ).map( ITerm::functor ).allMatch( i -> i.equals( "testjsonlist" ) ) );
+    }
+
+
+    /**
+     * test json list with multiple argument
+     */
+    @Test
+    public final void jsonlistmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CJsonList().execute(
+            null,
+            false,
+            Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist", "item" )
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -70,10 +96,10 @@ public final class TestCActionRest extends IBaseTest
 
 
     /**
-     * test json object
+     * test json object with single argument
      */
     @Test
-    public final void jsonobject()
+    public final void jsonobjectsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -81,7 +107,8 @@ public final class TestCActionRest extends IBaseTest
             null,
             false,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject" )
-                  .map( CRawTerm::from ).collect( Collectors.toList() ),
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -93,17 +120,48 @@ public final class TestCActionRest extends IBaseTest
 
 
     /**
-     * test xml object
+     * test json object with multiple arguments
      */
     @Test
-    public final void xmlobject()
+    public final void jsonobjectmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CJsonObject().execute(
+            null,
+            false,
+            Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject", "loc" )
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
+        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonobject" );
+        Assert.assertTrue( l_return.get( 0 ).<ILiteral>raw().values().findFirst().isPresent() );
+        Assert.assertEquals(
+            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
+            "loc"
+        );
+    }
+
+
+    /**
+     * test xml object with single argument
+     */
+    @Test
+    public final void xmlobjectsingle()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CXMLObject().execute(
             null,
             false,
-            Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml" )
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -111,6 +169,35 @@ public final class TestCActionRest extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
         Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testxml" );
+    }
+
+
+    /**
+     * test xml object with single argument
+     */
+    @Test
+    public final void xmlobjectmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CXMLObject().execute(
+            null,
+            false,
+            Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml", "ncd" )
+                  .map( CRawTerm::from )
+                  .collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
+        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testxml" );
+        Assert.assertTrue( l_return.get( 0 ).<ILiteral>raw().values().findFirst().isPresent() );
+        Assert.assertEquals(
+            l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
+            "ncd"
+        );
     }
 
 

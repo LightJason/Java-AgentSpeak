@@ -68,7 +68,7 @@ public final class CJsonList extends IBaseRest
             else
                 p_return.add(
                     IBaseRest.baseliteral(
-                        p_argument.subList( 1, p_argument.size() - 1 ).stream().map( ITerm::<String>raw ),
+                        p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
                         l_data.stream()
                               .map( i -> CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( (Map<String, ?>) i ) ) )
                     )
