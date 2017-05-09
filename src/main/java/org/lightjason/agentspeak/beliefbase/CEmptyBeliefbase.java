@@ -42,7 +42,7 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
     /**
      * singleton instance
      */
-    public static final IBeliefbase<?> INSTANCE = new CEmptyBeliefbase<>();
+    private static final IBeliefbase<?> INSTANCE = new CEmptyBeliefbase<>();
 
 
     /**
@@ -140,5 +140,17 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
     public final String toString()
     {
         return super.toString();
+    }
+
+    /**
+     * return instance
+     *
+     * @tparam T agent type
+     * @return type instance of empty beliefbase
+     */
+    @SuppressWarnings( "unchecked" )
+    public static <T extends IAgent<?>> IBeliefbase<T> instance()
+    {
+        return (IBeliefbase<T>) INSTANCE;
     }
 }

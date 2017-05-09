@@ -45,6 +45,26 @@ import java.util.stream.Stream;
  */
 public final class TestCActionRest extends IBaseTest
 {
+
+    /**
+     * test json list error
+     */
+    @Test
+    public final void jsonlisterror()
+    {
+        Assert.assertFalse(
+            new CJsonList().execute(
+                null,
+                false,
+                Stream.of( "jsonlist", "testjsonlist" )
+                      .map( CRawTerm::from )
+                      .collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
     /**
      * test json list with single argument
      */
@@ -92,6 +112,26 @@ public final class TestCActionRest extends IBaseTest
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof ILiteral );
         Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "testjsonlist" );
         Assert.assertFalse( l_return.get( 0 ).<ILiteral>raw().values().map( ITerm::functor ).noneMatch( i -> i.equals( "item" ) ) );
+    }
+
+
+    /**
+     * test json object error
+     */
+    @Test
+    public final void jsonobjecterror()
+    {
+        Assert.assertFalse(
+            new CJsonObject().execute(
+                null,
+                false,
+                Stream.of( "jsonobject", "testjsonobject" )
+                      .map( CRawTerm::from )
+                      .collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 
@@ -144,6 +184,26 @@ public final class TestCActionRest extends IBaseTest
         Assert.assertEquals(
             l_return.get( 0 ).<ILiteral>raw().values().findFirst().map( ITerm::functor ).orElseThrow( IllegalArgumentException::new ),
             "loc"
+        );
+    }
+
+
+    /**
+     * test xml object error
+     */
+    @Test
+    public final void xmlobjecterror()
+    {
+        Assert.assertFalse(
+            new CXMLObject().execute(
+                null,
+                false,
+                Stream.of( "xmlobject", "testxml" )
+                      .map( CRawTerm::from )
+                      .collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
         );
     }
 
