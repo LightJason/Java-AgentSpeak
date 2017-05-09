@@ -72,6 +72,8 @@ import org.lightjason.agentspeak.action.buildin.graph.CNeighborsCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CNeighborsCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CNeighborsMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CNeighborsSingle;
+import org.lightjason.agentspeak.action.buildin.graph.COppositeMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.COppositeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutDegreeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -600,6 +602,23 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "edgeAA1", "edgeA1" ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "edgeA2" ).toArray() );
+
+
+        l_return.clear();
+
+        new CEdgeListSingle().execute(
+            null,
+            true,
+            Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "edgeAA1", "edgeA1" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "edgeA2" ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( l_return.get( 1 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
     }
 
 
@@ -629,6 +648,23 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "p", "o" ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "q", "r", "s" ).toArray() );
+
+
+        l_return.clear();
+
+        new CEdgeListMultiple().execute(
+            null,
+            true,
+            Stream.of( l_graph, 1, 2, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "p", "o" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "q", "r", "s" ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( l_return.get( 1 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
     }
 
 
@@ -748,9 +784,9 @@ public final class TestCActionGraph extends IBaseTest
         final Graph<Integer, String> l_graph1 = new SparseGraph<>();
         final Graph<Integer, String> l_graph2 = new SparseGraph<>();
 
-        l_graph1.addEdge( "inedge1", 1, 2 );
-        l_graph1.addEdge( "inedge2", 2, 2 );
-        l_graph2.addEdge( "inedge3", 1, 2 );
+        l_graph1.addEdge( "inedgesingle1", 1, 2 );
+        l_graph1.addEdge( "inedgesingle2", 2, 2 );
+        l_graph2.addEdge( "inedgesingle3", 1, 2 );
 
         new CInEdgesSingle().execute(
             null,
@@ -761,9 +797,27 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedge2", "inedge1" ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedge3" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedgesingle1", "inedgesingle2" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedgesingle3" ).toArray() );
+
+
+        l_return.clear();
+
+        new CInEdgesSingle().execute(
+            null,
+            true,
+            Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedgesingle1", "inedgesingle2" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedgesingle3" ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( l_return.get( 1 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
     }
+
 
     /**
      * test in-edge
@@ -789,6 +843,23 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedge3", "inedge4" ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedge5" ).toArray() );
+
+
+        l_return.clear();
+
+        new CInEdgesMultiple().execute(
+            null,
+            true,
+            Stream.of( l_graph, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "inedge3", "inedge4" ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "inedge5" ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( l_return.get( 1 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
     }
 
 
@@ -906,13 +977,13 @@ public final class TestCActionGraph extends IBaseTest
         final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
         final Graph<Integer, String> l_graph2 = new SparseGraph<>();
 
-        l_graph1.addEdge( "incidentA", 2, 1 );
-        l_graph2.addEdge( "incidentA", 1, 2 );
+        l_graph1.addEdge( "incidentsingleA", 2, 1 );
+        l_graph2.addEdge( "incidentsingleA", 1, 2 );
 
         new CIncidentVerticesSingle().execute(
             null,
             false,
-            Stream.of( "incidentA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "incidentsingleA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -920,6 +991,23 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1, 2 ).toArray() );
+
+
+        l_return.clear();
+
+        new CIncidentVerticesSingle().execute(
+            null,
+            true,
+            Stream.of( "incidentsingleA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 1, 2 ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( l_return.get( 1 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
     }
 
 
@@ -948,6 +1036,23 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 3, 2 ).toArray() );
+
+
+        l_return.clear();
+
+        new CIncidentVerticesMultiple().execute(
+            null,
+            true,
+            Stream.of( l_graph, "incidentA", "incidentB" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2, 1 ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 3, 2 ).toArray() );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
+        Assert.assertEquals( l_return.get( 1 ).raw().getClass(), Collections.synchronizedList( Collections.emptyList() ).getClass() );
     }
 
 
@@ -1297,6 +1402,56 @@ public final class TestCActionGraph extends IBaseTest
             l_return.stream().map( ITerm::raw ).toArray(),
             Stream.of( true, false ).toArray()
         );
+    }
+
+    /**
+     * test opposite single
+     */
+    @Test
+    public final void oppositesingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph1 = new DirectedSparseMultigraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseMultigraph<>();
+
+        l_graph1.addEdge( "opposite", 2, 1 );
+        l_graph2.addEdge( "opposite", 3, 1 );
+
+        new COppositeSingle().execute(
+            null,
+            false,
+            Stream.of( 1, "opposite", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2, 3 ).toArray() );
+    }
+
+
+    /**
+     * test opposite multiple
+     */
+    @Test
+    public final void oppositemultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseMultigraph<>();
+
+        l_graph.addEdge( "opposite1", 2, 1 );
+        l_graph.addEdge( "opposite2", 3, 4 );
+
+        new COppositeMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, "opposite1", 3, "opposite2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2, 4 ).toArray() );
     }
 
 
