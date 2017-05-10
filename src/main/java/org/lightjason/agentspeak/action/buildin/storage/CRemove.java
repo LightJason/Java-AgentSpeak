@@ -88,8 +88,8 @@ public final class CRemove extends IStorage
     )
     {
         CCommon.flatcollection( p_argument )
-           .map( ITerm::<String>raw )
-           .forEach( i -> this.remove( p_context.agent(), i, p_return ) );
+               .map( ITerm::<String>raw )
+               .forEach( i -> this.remove( p_context.agent(), i, p_return ) );
 
         return CFuzzyValue.from( true );
     }

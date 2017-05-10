@@ -97,6 +97,9 @@ public abstract class IStorage extends IBuildinAction
      * @param p_keys keys
      * @return boolean stream with forbidden check
      */
-    public final Stream<Boolean> forbiddenkeys( final String... p_keys ) { return this.forbiddenkeys( Arrays.stream( p_keys ) ); }
+    public final Stream<Boolean> forbiddenkeys( final String... p_keys )
+    {
+        return this.forbiddenkeys( Arrays.stream( p_keys ) );
+    }
 
 }

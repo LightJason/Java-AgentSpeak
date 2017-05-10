@@ -137,19 +137,19 @@ public final class TestCActionStorage extends IBaseTest
     {
         Assume.assumeNotNull( m_context );
 
-        m_context.agent().storage().put( "foo", 123 );
+        m_context.agent().storage().put( "xxx", 123 );
 
         final List<ITerm> l_return = new ArrayList<>();
         new CRemove().execute(
             m_context,
             false,
-            Stream.of( "foo" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
 
         Assert.assertTrue( m_context.agent().storage().isEmpty() );
-        Assert.assertNull( m_context.agent().storage().get( "foo" ) );
+        Assert.assertNull( m_context.agent().storage().get( "xxx" ) );
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 123 ) );
     }
