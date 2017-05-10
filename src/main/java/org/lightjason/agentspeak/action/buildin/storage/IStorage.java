@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,7 +42,18 @@ public abstract class IStorage extends IBuildinAction
     /**
      * set with forbidden keys
      */
-    protected final Set<String> m_forbidden;
+    protected final Function<String, Boolean> m_resolver;
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver of forbidden keys
+     * @warning resolver will be triggered in parallel
+     */
+    protected IStorage( final Function<String, Boolean> p_resolver )
+    {
+        m_resolver = p_resolver;
+    }
 
     /**
      * ctor
@@ -64,16 +76,27 @@ public abstract class IStorage extends IBuildinAction
      */
     protected IStorage( final Stream<String> p_fordbidden )
     {
-        m_forbidden = p_fordbidden.collect( Collectors.toCollection( ConcurrentSkipListSet::new ) );
+        final Set<String> l_names = p_fordbidden.collect( Collectors.toCollection( ConcurrentSkipListSet::new ) );
+        m_resolver = l_names::contains;
     }
 
     /**
-     * returns the set with forbidden keys
+     * returns a stream which keys are forbidden
      *
-     * @return set with keys
+     * @param p_keys key name stream
+     * @return boolean stream with forbidden check
      */
-    public final Set<String> forbiddenkeys()
+    public final Stream<Boolean> forbiddenkeys( final Stream<String> p_keys )
     {
-        return m_forbidden;
+        return p_keys.map( m_resolver );
     }
+
+    /**
+     * returns a stream which keys are forbidden
+     *
+     * @param p_keys keys
+     * @return boolean stream with forbidden check
+     */
+    public final Stream<Boolean> forbiddenkeys( final String... p_keys ) { return this.forbiddenkeys( Arrays.stream( p_keys ) ); }
+
 }

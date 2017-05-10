@@ -31,19 +31,30 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
 /**
  * adds or overwrites an element in the agent-storage.
  * The action adds all tuples into the storage, the arguments
- * are tuples of a name and any value, if the key is forbidden
- * or the arguments number is odd, the action fails
+ * are tuples of a name and any value, the action never fails
  *
  * @code storage/add( "foo", X, "bar", Y ); @endcode
  */
 public final class CAdd extends IStorage
 {
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CAdd( final Function<String, Boolean> p_resolver )
+    {
+        super( p_resolver );
+    }
+
     /**
      * ctor
      *
@@ -75,14 +86,13 @@ public final class CAdd extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from(
-            StreamUtils.windowed(
-                p_argument.stream(),
-                2,
-                2
-            ).allMatch( i -> this.add( p_context.agent(), i.get( 0 ).<String>raw(), i.get( 1 ) ) )
-        );
+        StreamUtils.windowed(
+            p_argument.stream(),
+            2,
+            2
+        ).forEach( i -> this.add( p_context.agent(), i.get( 0 ).<String>raw(), i.get( 1 ) ) );
 
+        return CFuzzyValue.from( true );
     }
 
     /**
@@ -91,15 +101,13 @@ public final class CAdd extends IStorage
      * @param p_agent agent
      * @param p_key key
      * @param p_value value
-     * @return boolean flag if the item is not forbidden
      */
-    private boolean add( final IAgent<?> p_agent, final String p_key, final ITerm p_value )
+    private void add( final IAgent<?> p_agent, final String p_key, final ITerm p_value )
     {
-        if ( m_forbidden.contains( p_key ) )
-            return false;
+        if ( m_resolver.apply( p_key ) )
+            return;
 
         p_agent.storage().put( p_key, p_value.raw() );
-        return true;
     }
 
 }

@@ -29,19 +29,31 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
 /**
  * removes all elements of the storage.
  * The action removes all elements from the storage
- * except the elements wich are forbidden, the action,
+ * except the elements wich are forbidden, the action
  * never fails
  *
  * @code storage/clear(); @endcode
  */
 public final class CClear extends IStorage
 {
+
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CClear( final Function<String, Boolean> p_resolver )
+    {
+        super( p_resolver );
+    }
+
     /**
      * ctor
      *
@@ -74,7 +86,7 @@ public final class CClear extends IStorage
     )
     {
         p_context.agent().storage().keySet().parallelStream()
-                 .filter( i -> !m_forbidden.contains( i ) )
+                 .filter( i -> !m_resolver.apply( i ) )
                  .forEach( i -> p_context.agent().storage().remove( i ) );
 
         return CFuzzyValue.from( true );

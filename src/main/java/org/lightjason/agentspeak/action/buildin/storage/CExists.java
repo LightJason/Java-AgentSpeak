@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
@@ -43,6 +44,16 @@ import java.util.stream.Stream;
  */
 public final class CExists extends IStorage
 {
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CExists( final Function<String, Boolean> p_resolver )
+    {
+        super( p_resolver );
+    }
+
     /**
      * ctor
      *
@@ -76,7 +87,7 @@ public final class CExists extends IStorage
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> ( !m_forbidden.contains( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
+               .map( i -> ( !m_resolver.apply( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

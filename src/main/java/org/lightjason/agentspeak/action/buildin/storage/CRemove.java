@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 
@@ -39,13 +40,22 @@ import java.util.stream.Stream;
  * removes an element by name from the storage.
  * The actions removes any value from the storage
  * which is referenced by the key and returns the
- * value, the action fails on forbidden key or non
- * exisiting elements
+ * value, the action never fails
  *
  * @code [A|B] = storage/remove("foo", "bar"); @endcode
  */
 public final class CRemove extends IStorage
 {
+    /**
+     * ctor
+     *
+     * @param p_resolver resolver function
+     */
+    public CRemove( final Function<String, Boolean> p_resolver )
+    {
+        super( p_resolver );
+    }
+
     /**
      * ctor
      *
@@ -77,11 +87,11 @@ public final class CRemove extends IStorage
                                                final List<ITerm> p_annotation
     )
     {
-        return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
-               .map( ITerm::<String>raw )
-               .allMatch( i -> this.remove( p_context.agent(), i, p_return ) )
-        );
+        CCommon.flatcollection( p_argument )
+           .map( ITerm::<String>raw )
+           .forEach( i -> this.remove( p_context.agent(), i, p_return ) );
+
+        return CFuzzyValue.from( true );
     }
 
 
@@ -91,19 +101,17 @@ public final class CRemove extends IStorage
      * @param p_agent agent
      * @param p_key key
      * @param p_return return arguments
-     * @return boolean flag if the item is not forbidden and is exists
      */
-    private boolean remove( final IAgent<?> p_agent, final String p_key, final List<ITerm> p_return )
+    private void remove( final IAgent<?> p_agent, final String p_key, final List<ITerm> p_return )
     {
-        if ( ( m_forbidden.contains( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )
-            return false;
+        if ( ( m_resolver.apply( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )
+            return;
 
         p_return.add(
             CRawTerm.from(
                 p_agent.storage().remove( p_key )
             )
         );
-        return true;
     }
 
 }
