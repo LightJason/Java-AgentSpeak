@@ -107,6 +107,7 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
+        Assert.assertEquals( m_context.agent().storage().size(), 2 );
         Assert.assertEquals( m_context.agent().storage().get( "testnumber" ), 123 );
         Assert.assertEquals( m_context.agent().storage().get( "teststring" ), "foobar" );
     }
@@ -125,7 +126,27 @@ public final class TestCActionStorage extends IBaseTest
             Collections.emptyList()
         );
 
+        Assert.assertEquals( m_context.agent().storage().size(), 0 );
         Assert.assertNull( m_context.agent().storage().get( "bar" ) );
+    }
+
+
+    /**
+     * test add action with forbidden key strean
+     */
+    @Test
+    public final void addwithkeystrean()
+    {
+        new CAdd( Stream.of( "abc" ) ).execute(
+            m_context,
+            false,
+            Stream.of( "abc", 123 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( m_context.agent().storage().size(), 0 );
+        Assert.assertNull( m_context.agent().storage().get( "abc" ) );
     }
 
 
@@ -152,6 +173,32 @@ public final class TestCActionStorage extends IBaseTest
         Assert.assertNull( m_context.agent().storage().get( "xxx" ) );
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 123 ) );
+    }
+
+
+    /**
+     * test clear action without keys
+     */
+    @Test
+    public final void clearwithoutkeys()
+    {
+        Assume.assumeNotNull( m_context );
+
+        IntStream.range( 0, 100 ).parallel()
+                 .mapToObj( i -> RandomStringUtils.random( 25 ) )
+                 .forEach( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) );
+
+        Assert.assertEquals( m_context.agent().storage().size(), 100 );
+
+        new CClear().execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertTrue( m_context.agent().storage().isEmpty() );
     }
 
 
@@ -183,28 +230,29 @@ public final class TestCActionStorage extends IBaseTest
 
 
     /**
-     * test clear action without keys
+     * test remove action without key stream
      */
     @Test
-    public final void clearwithoutkeys()
+    public final void removewithkeystream()
     {
         Assume.assumeNotNull( m_context );
 
-        IntStream.range( 0, 100 ).parallel()
-                 .mapToObj( i -> RandomStringUtils.random( 25 ) )
-                 .forEach( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) );
+        m_context.agent().storage().put( "xx", 189 );
+        m_context.agent().storage().put( "yy", 267 );
 
-        Assert.assertEquals( m_context.agent().storage().size(), 100 );
-
-        new CClear().execute(
+        final List<ITerm> l_return = new ArrayList<>();
+        new CRemove( Stream.of( "xx" ) ).execute(
             m_context,
             false,
-            Collections.emptyList(),
-            Collections.emptyList(),
+            Stream.of( "xx", "yy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
             Collections.emptyList()
         );
 
-        Assert.assertTrue( m_context.agent().storage().isEmpty() );
+        Assert.assertEquals( m_context.agent().storage().size(), 1 );
+        Assert.assertNotNull( m_context.agent().storage().get( "xx" ) );
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).<Integer>raw(), Integer.valueOf( 267 ) );
     }
 
 
@@ -236,10 +284,37 @@ public final class TestCActionStorage extends IBaseTest
 
 
     /**
+     * test clear action with key stream
+     */
+    @Test
+    public final void clearwithkeystream()
+    {
+        Assume.assumeNotNull( m_context );
+
+        IntStream.range( 0, 100 ).parallel()
+                 .forEach( i -> m_context.agent().storage().put( MessageFormat.format( "value {0}", i ), i ) );
+
+        Assert.assertEquals( m_context.agent().storage().size(), 100 );
+
+        new CClear( Stream.of( "value 7", "value 23", "value 91" ) ).execute(
+            m_context,
+            false,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( m_context.agent().storage().size(), 3 );
+        Assert.assertArrayEquals( m_context.agent().storage().keySet().toArray(), Stream.of( "value 7", "value 23", "value 91" ).toArray() );
+        Assert.assertArrayEquals( m_context.agent().storage().values().toArray(), Stream.of(  7, 23, 91 ).toArray() );
+    }
+
+
+    /**
      * test exists action without keys
      */
     @Test
-    public final void existwithoutkeys()
+    public final void existswithoutkeys()
     {
         Assume.assumeNotNull( m_context );
 
@@ -261,6 +336,84 @@ public final class TestCActionStorage extends IBaseTest
         Assert.assertEquals( l_return.size(), 100 );
         Assert.assertTrue( l_return.stream().allMatch( ITerm::<Boolean>raw ) );
     }
+
+
+    /**
+     * test exists action with keys
+     */
+    @Test
+    public final void existswithkeys()
+    {
+        Assume.assumeNotNull( m_context );
+
+        m_context.agent().storage().put( "value 9", 5 );
+        m_context.agent().storage().put( "value 7", 5 );
+
+        final List<ITerm> l_return = new ArrayList<>();
+        new CExists( "value 9", "value 77", "57" ).execute(
+            m_context,
+            false,
+            Stream.of( "value 9", "value 7", "value 23", "value 77", "57", "123" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( false, true, false, false, false, false ).toArray()
+        );
+    }
+
+
+    /**
+     * test exists action with key stream
+     */
+    @Test
+    public final void existswithkeystream()
+    {
+        Assume.assumeNotNull( m_context );
+
+        m_context.agent().storage().put( "value 33", 5 );
+        m_context.agent().storage().put( "value 177", 5 );
+        m_context.agent().storage().put( "value 23", 19 );
+
+        final List<ITerm> l_return = new ArrayList<>();
+        new CExists( Stream.of( "value 33", "value 88", "23" ) ).execute(
+            m_context,
+            false,
+            Stream.of( "value 33", "value 177", "value 23", "value 137" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( false, true, true, false ).toArray()
+        );
+    }
+
+
+
+    /**
+     * test for checking minimal arguments
+     */
+    @Test
+    public final void arguments()
+    {
+        Assert.assertArrayEquals(
+
+            Stream.of(
+                new CAdd().minimalArgumentNumber(),
+                new CClear().minimalArgumentNumber(),
+                new CExists().minimalArgumentNumber(),
+                new CRemove().minimalArgumentNumber()
+            ).toArray(),
+
+            Stream.of( 1, 0, 1, 1 ).toArray()
+
+        );
+    }
+
 
 
     /**
