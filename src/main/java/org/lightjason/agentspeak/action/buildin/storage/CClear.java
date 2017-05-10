@@ -28,9 +28,8 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -43,15 +42,6 @@ import java.util.List;
  */
 public final class CClear extends IStorage
 {
-
-    /**
-     * ctor
-     */
-    public CClear()
-    {
-        super();
-    }
-
     /**
      * ctor
      *
@@ -59,15 +49,15 @@ public final class CClear extends IStorage
      */
     public CClear( final String... p_forbidden )
     {
-        super( Arrays.asList( p_forbidden ) );
+        super( p_forbidden );
     }
 
     /**
      * ctor
      *
-     * @param p_fordbidden forbidden keys
+     * @param p_fordbidden stream with borbidden keys
      */
-    public CClear( final Collection<String> p_fordbidden )
+    public CClear( final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
     }

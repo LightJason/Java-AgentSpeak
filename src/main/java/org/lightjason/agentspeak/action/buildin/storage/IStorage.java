@@ -25,10 +25,11 @@ package org.lightjason.agentspeak.action.buildin.storage;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,10 +45,16 @@ public abstract class IStorage extends IBuildinAction
 
     /**
      * ctor
+     *
+     * @param p_forbidden forbidden keys
      */
-    protected IStorage()
+    protected IStorage( final String... p_forbidden )
     {
-        m_forbidden = Collections.<String>emptySet();
+        this(
+            ( p_forbidden == null ) || ( p_forbidden.length == 0 )
+            ? Stream.of()
+            : Arrays.stream( p_forbidden )
+        );
     }
 
     /**
@@ -55,9 +62,9 @@ public abstract class IStorage extends IBuildinAction
      *
      * @param p_fordbidden forbidden keys
      */
-    protected IStorage( final Collection<String> p_fordbidden )
+    protected IStorage( final Stream<String> p_fordbidden )
     {
-        m_forbidden = new ConcurrentSkipListSet<>( p_fordbidden );
+        m_forbidden = p_fordbidden.collect( Collectors.toCollection( ConcurrentSkipListSet::new ) );
     }
 
     /**
@@ -65,7 +72,7 @@ public abstract class IStorage extends IBuildinAction
      *
      * @return set with keys
      */
-    public final Set<String> getForbiddenKeys()
+    public final Set<String> forbiddenkeys()
     {
         return m_forbidden;
     }

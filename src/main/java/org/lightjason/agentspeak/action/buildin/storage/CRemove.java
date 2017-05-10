@@ -31,9 +31,8 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -47,15 +46,6 @@ import java.util.List;
  */
 public final class CRemove extends IStorage
 {
-
-    /**
-     * ctor
-     */
-    public CRemove()
-    {
-        super();
-    }
-
     /**
      * ctor
      *
@@ -63,15 +53,15 @@ public final class CRemove extends IStorage
      */
     public CRemove( final String... p_forbidden )
     {
-        super( Arrays.asList( p_forbidden ) );
+        super( p_forbidden );
     }
 
     /**
      * ctor
      *
-     * @param p_fordbidden forbidden keys
+     * @param p_fordbidden stream with borbidden keys
      */
-    public CRemove( final Collection<String> p_fordbidden )
+    public CRemove( final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -88,7 +78,7 @@ public final class CRemove extends IStorage
     )
     {
         return CFuzzyValue.from(
-        CCommon.flatcollection( p_argument )
+            CCommon.flatcollection( p_argument )
                .map( ITerm::<String>raw )
                .allMatch( i -> this.remove( p_context.agent(), i, p_return ) )
         );
