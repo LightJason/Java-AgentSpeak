@@ -80,6 +80,8 @@ import org.lightjason.agentspeak.action.buildin.graph.COutEdgesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutEdgesSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CPredecessorCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CPredecessorCountSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CRemoveEdgeMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CRemoveEdgeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountMultiple;
@@ -1754,6 +1756,61 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 1L ).toArray() );
+    }
+
+
+    /**
+     * test remove edge single
+     */
+    @Test
+    public final void removeedgesingle()
+    {
+        final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseGraph<>();
+
+        l_graph1.addEdge( "removeedgesingle1", 1, 5 );
+        l_graph1.addEdge( "removeedgesingle2", 1, 7 );
+        l_graph1.addEdge( "removeedgesingle3", 1, 3 );
+
+        l_graph2.addEdge( "removeedgesingle1", 1, 2 );
+        l_graph2.addEdge( "removeedgesingle5", 1, 9 );
+
+        new CRemoveEdgeSingle().execute(
+            null,
+            false,
+            Stream.of( "removeedgesingle1", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_graph1.getEdges().toArray(), Stream.of( "removeedgesingle2", "removeedgesingle3" ).toArray() );
+        Assert.assertArrayEquals( l_graph2.getEdges().toArray(), Stream.of( "removeedgesingle5" ).toArray() );
+    }
+
+
+    /**
+     * test remove edge multiple
+     */
+    @Test
+    public final void removeedgemultiple()
+    {
+        final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
+
+        l_graph.addEdge( "removeedgesingle1", 1, 5 );
+        l_graph.addEdge( "removeedgesingle2", 1, 7 );
+        l_graph.addEdge( "removeedgesingle3", 1, 3 );
+        l_graph.addEdge( "removeedgesingle4", 5, 3 );
+        l_graph.addEdge( "removeedgesingle5", 5, 7 );
+
+        new CRemoveEdgeMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, "removeedgesingle2", "removeedgesingle5" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_graph.getEdges().toArray(), Stream.of( "removeedgesingle1", "removeedgesingle4", "removeedgesingle3" ).toArray() );
     }
 
 

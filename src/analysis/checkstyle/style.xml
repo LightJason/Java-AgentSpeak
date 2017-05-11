@@ -134,7 +134,7 @@
         <!-- <module name = "CatchParameterName" /> -->
 
         <module name = "ClassDataAbstractionCoupling">
-            <property name = "max" value = "60" />
+            <property name = "max" value = "65" />
         </module>
 
         <!-- <module name="ClassFanOutComplexity"/> -->
