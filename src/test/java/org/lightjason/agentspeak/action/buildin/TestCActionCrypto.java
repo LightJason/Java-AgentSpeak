@@ -43,6 +43,8 @@ import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.crypto.KeyGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,6 +78,27 @@ public final class TestCActionCrypto extends IBaseTest
                     ImmutablePair::new
         ).toArray();
     }
+
+
+    /**
+     * test wrong algorithm
+     *
+     * @throws NoSuchAlgorithmException is thrown on key generator error
+     */
+    @Test
+    public final void wrongalgorithm() throws NoSuchAlgorithmException
+    {
+        Assert.assertFalse(
+            new CEncrypt().execute(
+                null,
+                false,
+                Stream.of( KeyGenerator.getInstance( "HmacSHA1" ).generateKey() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
 
     /**
      * test hashing

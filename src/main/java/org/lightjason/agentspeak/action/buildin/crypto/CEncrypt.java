@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.crypto;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -34,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -74,28 +76,46 @@ public final class CEncrypt extends IBuildinAction
             return CFuzzyValue.from( false );
         }
 
-        return CFuzzyValue.from( p_argument.stream()
-                                           .skip( 1 )
-                                           .map( i -> SerializationUtils.serialize( i.raw() ) )
-                                           .allMatch( i -> {
-                                               try
-                                               {
-                                                   p_return.add(
-                                                       CRawTerm.from(
-                                                           Base64.getEncoder().encodeToString(
-                                                               l_algorithm.getEncryptCipher( l_key ).doFinal( i )
-                                                           )
-                                                       )
-                                                   );
-                                                   return true;
-                                               }
-                                               catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                                    | BadPaddingException | IllegalBlockSizeException l_exception )
-                                               {
-                                                   return false;
-                                               }
-                                           } )
+        return CFuzzyValue.from(
+                   CCommon.flatstream( p_argument.stream().skip( 1 ) )
+                          .map( ITerm::<Serializable>raw )
+                          .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
         );
     }
+
+
+    /**
+     * encrypts a datatset
+     *
+     * @param p_algorithm algorithm
+     * @param p_key key
+     * @param p_dataset dataset
+     * @param p_return return argument
+     * @return successful execution
+     */
+    private static boolean encrypt( final EAlgorithm p_algorithm, final Key p_key, final Serializable p_dataset, final List<ITerm> p_return )
+    {
+        try
+        {
+            p_return.add(
+                CRawTerm.from(
+                    Base64.getEncoder().encodeToString(
+                        p_algorithm.getEncryptCipher( p_key ).doFinal(
+                            SerializationUtils.serialize( p_dataset )
+                        )
+                    )
+                )
+            );
+
+            return true;
+        }
+        catch ( final IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException l_exception )
+        {
+            return false;
+        }
+    }
+
+
+
 
 }
