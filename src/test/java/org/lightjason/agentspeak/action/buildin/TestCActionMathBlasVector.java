@@ -63,7 +63,7 @@ import static org.junit.Assert.assertTrue;
  * test math blas vector functions
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionBlasVector extends IBaseTest
+public class TestCActionMathBlasVector extends IBaseTest
 {
 
     /**
@@ -332,6 +332,6 @@ public class TestCActionBlasVector extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCActionBlasVector().invoketest();
+        new TestCActionMathBlasVector().invoketest();
     }
 }

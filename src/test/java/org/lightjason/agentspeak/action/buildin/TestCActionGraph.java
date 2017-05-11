@@ -80,6 +80,10 @@ import org.lightjason.agentspeak.action.buildin.graph.COutEdgesMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.COutEdgesSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CPredecessorCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CPredecessorCountSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountMultiple;
+import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.action.buildin.graph.CVertices;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -1636,6 +1640,120 @@ public final class TestCActionGraph extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 2L ).toArray() );
+    }
+
+
+    /**
+     * test remove vertex multiple
+     */
+    @Test
+    public final void vertexremovemultiple()
+    {
+        final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
+
+        l_graph.addVertex( 5 );
+        l_graph.addVertex( 3 );
+        l_graph.addEdge( "vertexremovemultiple", 1, 2 );
+
+        new CRemoveVertexMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 3, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+
+        Assert.assertEquals( l_graph.getEdgeCount(), 0 );
+        Assert.assertArrayEquals( l_graph.getVertices().toArray(), Stream.of( 2 ).toArray() );
+    }
+
+
+    /**
+     * test remove vertex single
+     */
+    @Test
+    public final void vertextremovesingle()
+    {
+        final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseGraph<>();
+
+        l_graph1.addVertex( 5 );
+        l_graph1.addVertex( 3 );
+        l_graph1.addEdge( "vertexremovesingle", 5, 7 );
+        l_graph2.addVertex( 5 );
+        l_graph2.addVertex( 7 );
+        l_graph2.addEdge( "vertexremovesingle", 7, 1 );
+
+        new CRemoveVertexSingle().execute(
+            null,
+            false,
+            Stream.of( 5, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_graph1.getEdgeCount(), 0 );
+        Assert.assertEquals( l_graph2.getEdgeCount(), 1 );
+
+        Assert.assertArrayEquals( l_graph1.getVertices().toArray(), Stream.of( 3, 7 ).toArray() );
+        Assert.assertArrayEquals( l_graph2.getVertices().toArray(), Stream.of( 1, 7 ).toArray() );
+    }
+
+
+    /**
+     * test successor count single
+     */
+    @Test
+    public final void successorcountsingle()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        final Graph<Integer, String> l_graph1 = new DirectedSparseGraph<>();
+        final Graph<Integer, String> l_graph2 = new DirectedSparseGraph<>();
+
+        l_graph1.addEdge( "successorcountsingle1", 1, 5 );
+        l_graph1.addEdge( "successorcountsingle2", 1, 7 );
+        l_graph1.addEdge( "successorcountsingle3", 1, 3 );
+
+        l_graph2.addEdge( "successorcountsingle4", 1, 2 );
+        l_graph2.addEdge( "successorcountsingle5", 1, 9 );
+
+        new CSuccessorCountSingle().execute(
+            null,
+            false,
+            Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 2L ).toArray() );
+    }
+
+
+    /**
+     * test successor count multiple
+     */
+    @Test
+    public final void successorcountmultiple()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new DirectedSparseGraph<>();
+
+        l_graph.addEdge( "successorcountmultiple1", 1, 5 );
+        l_graph.addEdge( "successorcountmultiple2", 1, 7 );
+        l_graph.addEdge( "successorcountmultiple3", 1, 3 );
+        l_graph.addEdge( "successorcountmultiple4", 3, 5 );
+
+        new CSuccessorCountMultiple().execute(
+            null,
+            false,
+            Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 1L ).toArray() );
     }
 
 

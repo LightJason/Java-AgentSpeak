@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 /**
  * test math blas functions
  */
-public class TestCActionBlas extends IBaseTest
+public class TestCActionMathBlas extends IBaseTest
 {
     /**
      * testing matrix
@@ -128,6 +128,6 @@ public class TestCActionBlas extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCActionBlas().invoketest();
+        new TestCActionMathBlas().invoketest();
     }
 }

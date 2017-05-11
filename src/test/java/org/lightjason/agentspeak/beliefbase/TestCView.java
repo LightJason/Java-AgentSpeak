@@ -52,12 +52,12 @@ public final class TestCView extends IBaseTest
     {
         final int l_max = 1000;
         final IView<IAgent<?>> l_beliefbase = new CBeliefbasePersistent<>( new CMultiStorage<>() ).create( "root" );
-        final IViewGenerator<IAgent<?>> l_gen = new CGenerator();
+        final IViewGenerator<IAgent<?>> l_generator = new CGenerator();
 
         IntStream.range( 0, l_max )
                  .boxed()
                  .map( i -> CLiteral.from( RandomStringUtils.random( 12, "~abcdefghijklmnopqrstuvwxyz/".toCharArray() ) ) )
-                 .forEach( i -> l_beliefbase.generate( l_gen, i.functorpath() ).add( i ) );
+                 .forEach( i -> l_beliefbase.generate( l_generator, i.functorpath() ).add( i ) );
 
         assertEquals( "number of beliefs is incorrect", l_beliefbase.size(), l_max );
     }

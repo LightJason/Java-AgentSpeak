@@ -87,7 +87,7 @@ import static org.junit.Assert.assertTrue;
  * test math blas matrix functions
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionBlasMatrix extends IBaseTest
+public class TestCActionMathBlasMatrix extends IBaseTest
 {
 
     /**
@@ -619,6 +619,6 @@ public class TestCActionBlasMatrix extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCActionBlasMatrix().invoketest();
+        new TestCActionMathBlasMatrix().invoketest();
     }
 }
