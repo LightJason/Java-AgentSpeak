@@ -39,11 +39,13 @@ import org.lightjason.agentspeak.action.buildin.crypto.CCreateKey;
 import org.lightjason.agentspeak.action.buildin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.buildin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.buildin.crypto.CHash;
+import org.lightjason.agentspeak.action.buildin.crypto.EAlgorithm;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.crypto.KeyGenerator;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,12 +90,57 @@ public final class TestCActionCrypto extends IBaseTest
     @Test
     public final void wrongalgorithm() throws NoSuchAlgorithmException
     {
+        final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
+
         Assert.assertFalse(
             new CEncrypt().execute(
                 null,
                 false,
-                Stream.of( KeyGenerator.getInstance( "HmacSHA1" ).generateKey() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+
+
+        Assert.assertFalse(
+            new CDecrypt().execute(
+                null,
+                false,
+                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+
+    /**
+     * test decrypt execution array
+     *
+     * @throws NoSuchAlgorithmException is thrown on key generator error
+     */
+    @Test
+    public final void decryptexecutionerror() throws NoSuchAlgorithmException
+    {
+        final Pair<Key, Key> l_key = EAlgorithm.RSA.generateKey();
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CEncrypt().execute(
+            null,
+            false,
+            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertFalse(
+            new CDecrypt().execute(
+                null,
+                false,
+                Stream.of( l_key.getLeft(), l_return.get( 0 ).raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return,
                 Collections.emptyList()
             ).value()
         );
