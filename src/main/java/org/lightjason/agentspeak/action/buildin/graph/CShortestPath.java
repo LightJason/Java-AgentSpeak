@@ -26,62 +26,34 @@ package org.lightjason.agentspeak.action.buildin.graph;
 import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
- * calculates the shortest path of two vertices within graph.
- * The action calculates a path based on a cost-edge-map,
- * so the first argument is a map of edges and numeric cost
- * values, the second and third argument are vertices with
- * start- and end-vertex of the route and all other arguments
- * are graph objects, for each graph object a list of vertices
- * of the route is returned, the action fails on wrong input
+ * calculates the edge list of the shortest path of two vertices within each graph instance.
+ * The ordering of the arguments can be arbitrary, for any graph
+ * instance the edge list of the shortest path is calculated, the first map instance
+ * will be used as weight-map, a tuple of the string "defaultweight"
+ * and a numeric value defines the default weight value of the weight-map
+ * (the default value is zero), a tuple which will not fit this definition
+ * defines the start- and end-vertex, the action fails on wrong input
  *
- * @code [Route1|Route2] = graph/shortestpath( CostMap, StartVertex, EndVertex, Graph1, Graph2 ); @endcode
+ * @code [D1|D2] = graph/shortestpath( StartVertex, EndVertex, Graph1, Graph2 );
+ * [D3|D4] = graph/shortestpath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+ * @endcode
  *
- * @note the cost-map does not need an entry for each edge
- * non-existing edges have got on default zero costs
+ * @note the weight-map does not need an entry for each edge non-existing edges have got on default zero weight
  */
-public final class CShortestPath extends IBuildinAction
+public final class CShortestPath extends IApplyPathAlgorithm
 {
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final Object apply( final List<ITerm> p_vertices, final Graph<Object, Object> p_graph, final Function<Object, Number> p_weightfunction )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 4 )
-            return CFuzzyValue.from( false );
-
-
-        final Map<Object, Number> l_weights = l_arguments.get( 0 ).<Map<Object, Number>>raw();
-        final Function<Object, Number> l_weightfunction = (e) -> l_weights.getOrDefault( e, 0 );
-
-        l_arguments.stream()
-                   .skip( 3 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> new DijkstraShortestPath<Object, Object>( i, l_weightfunction ) )
-                   .map( i -> i.getPath( l_arguments.get( 1 ).raw(), l_arguments.get( 2 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        return new DijkstraShortestPath<Object, Object>( p_graph, p_weightfunction )
+                                   .getPath( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() );
     }
 
 }

@@ -26,95 +26,35 @@ package org.lightjason.agentspeak.action.buildin.graph;
 import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
- * calculates the distance of a route within a graph.
- * The ordering of the arguments can be arbitrary, for
- * any graph instance the distance path is calculated,
- * the first map instance will be used as cost-map,
- * the first argument is used as cost-default value
- * if exists, the first two arguments which are
- * not a map or a graph, will be used as vertex
- * identifier (start & end vertex).
+ * calculates the distance of two vertices within each graph instance.
+ * The ordering of the arguments can be arbitrary, for any graph
+ * instance the distance path is calculated, the first map instance
+ * will be used as weight-map, a tuple of the string "defaultweight"
+ * and a numeric value defines the default weight value of the weight-map
+ * (the default value is zero), a tuple which will not fit this definition
+ * defines the start- and end-vertex, the action fails on wrong input
  *
- * @code [D1|D2] = graph/shortestpath( 3, StartVertex, CostMap, EndVertex, Graph1, Graph2 ); @endcode
+ * @code [D1|D2] = graph/distancepath( StartVertex, EndVertex, Graph1, Graph2 );
+ * [D3|D4] = graph/distancepath( "defaultweight", 3, CostMap, StartVertex, EndVertex, Graph1, Graph2 );
+ * @endcode
  *
- * @note the cost-map does not need an entry for each edge
- * non-existing edges have got on default zero costs
+ * @note the weight-map does not need an entry for each edge non-existing edges have got on default zero weight
  */
-public class CDistancePath extends IBuildinAction
+public class CDistancePath extends IApplyPathAlgorithm
 {
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 1;
-    }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final Object apply( final List<ITerm> p_vertices, final Graph<Object, Object> p_graph, final Function<Object, Number> p_weightfunction )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-
-
-        final int l_skip;
-        final double l_defaultcost;
-        if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Number.class ) )
-        {
-            l_skip = 1;
-            l_defaultcost = l_arguments.get( 0 ).<Number>raw().doubleValue();
-        }
-        else
-        {
-            l_skip = 0;
-            l_defaultcost = 1D;
-        }
-
-
-        final List<Object> l_vertices = l_arguments.stream()
-                                               .skip( l_skip )
-                                               .filter( i -> !CCommon.rawvalueAssignableTo( i, Map.class ) )
-                                               .filter( i -> !CCommon.rawvalueAssignableTo( i, Graph.class ) )
-                                               .limit( 2 )
-                                               .map( ITerm::raw )
-                                               .collect( Collectors.toList() );
-
-        if ( l_vertices.size() != 2 )
-            return CFuzzyValue.from( false );
-
-        final Map<?, Number> l_costmap = CCommon.flatcollection( p_argument )
-                                                .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
-                                                .findFirst()
-                                                .map( ITerm::<Map<?, Number>>raw )
-                                                .orElseGet( Collections::emptyMap );
-
-        final Function<Object, Double> l_weightfunction = ( e ) -> l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();
-
-
-        // --- filter graphs ---
-        CCommon.flatcollection( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
-               .map( ITerm::<Graph<Object, Object>>raw )
-               .map( i -> new DijkstraShortestPath<Object, Object>( i, l_weightfunction ) )
-               .map( i -> i.getDistance( l_vertices.get( 0 ), l_vertices.get( 1 ) ) )
-               .mapToDouble( Number::doubleValue )
-               .boxed()
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        return new DijkstraShortestPath<Object, Object>( p_graph, p_weightfunction )
+                                   .getDistance( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() )
+                                   .doubleValue();
     }
+
 }

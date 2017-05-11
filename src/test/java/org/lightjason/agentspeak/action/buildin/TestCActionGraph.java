@@ -84,6 +84,7 @@ import org.lightjason.agentspeak.action.buildin.graph.CRemoveEdgeMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveEdgeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexSingle;
+import org.lightjason.agentspeak.action.buildin.graph.CShortestPath;
 import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -514,15 +515,15 @@ public final class TestCActionGraph extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
 
-        l_graph.addEdge( "m", 1, 2 );
-        l_graph.addEdge( "n", 2, 3 );
-        l_graph.addEdge( "o", 3, 4 );
-        l_graph.addEdge( "p", 2, 6 );
+        l_graph.addEdge( "ma", 1, 2 );
+        l_graph.addEdge( "na", 2, 3 );
+        l_graph.addEdge( "oa", 3, 4 );
+        l_graph.addEdge( "pa", 2, 6 );
 
         new CDistancePath().execute(
             null,
             false,
-            Stream.of( 2, l_graph, 1, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "defaultweight", 2, l_graph, 1, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return,
             Collections.emptyList()
         );
@@ -530,6 +531,32 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 6D );
     }
+
+    /**
+     * test shortest-path
+     */
+    @Test
+    public final void shortestpath()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
+
+        l_graph.addEdge( "mb", 1, 2 );
+        l_graph.addEdge( "nb", 2, 3 );
+        l_graph.addEdge( "ob", 3, 4 );
+        l_graph.addEdge( "pb", 2, 6 );
+
+        new CShortestPath().execute(
+            null,
+            false,
+            Stream.of( "defaultweight", 2, l_graph, 1, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( "mb", "nb", "ob" ).toArray() );
+    }
+
 
 
     /**
