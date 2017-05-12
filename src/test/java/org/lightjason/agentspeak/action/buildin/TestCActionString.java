@@ -47,6 +47,7 @@ import org.lightjason.agentspeak.action.buildin.string.CUpper;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import java.io.UnsupportedEncodingException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,6 +109,28 @@ public final class TestCActionString extends IBaseTest
             l_result.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+    }
+
+
+    /**
+     * test base64 decode with errors
+     *
+     * @throws UnsupportedEncodingException is thrown on test data encoding
+     */
+    @Test
+    public final void base64decodeerror() throws UnsupportedEncodingException
+    {
+        Assert.assertFalse(
+            new CBase64Decode().execute(
+                null,
+                false,
+                Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
+                      .map( CRawTerm::from )
+                      .collect( Collectors.toList() ),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 

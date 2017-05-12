@@ -31,15 +31,16 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.List;
 
 
 /**
  * action to encodes a string with Base64.
- * The base64 encoded version is created from each string argument.
- * The action fails on encoding errors.
+ * The base64 encoded version is created from each string argument,
+ * the action never fails
+ *
  * @code [A|B] = string/base64encode( "Hello", "AgentSpeak(L++)" ); @endcode
  * @see https://en.wikipedia.org/wiki/Base64
  */
@@ -54,23 +55,15 @@ public final class CBase64Encode extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+                                               final List<ITerm> p_annotation )
     {
-        return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
-                   .map( ITerm::<String>raw )
-                   .allMatch( i -> {
-                       try
-                       {
-                           p_return.add( CRawTerm.from( Base64.getEncoder().encodeToString( i.getBytes( "UTF-8" ) ) ) );
-                           return true;
-                       }
-                       catch ( final UnsupportedEncodingException l_exception )
-                       {
-                           return false;
-                       }
-                   } )
-        );
+        CCommon.flatcollection( p_argument )
+               .map( ITerm::<String>raw )
+               .map( i -> Base64.getEncoder().encodeToString( i.getBytes( Charset.forName( "UTF-8" ) ) ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
+
+        return CFuzzyValue.from( true );
     }
+
 }
