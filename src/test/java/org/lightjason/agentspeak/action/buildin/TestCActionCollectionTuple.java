@@ -71,6 +71,23 @@ public final class TestCActionCollectionTuple extends IBaseTest
         Assert.assertTrue( l_return.get( 1 ).<AbstractMap.Entry<?, Boolean>>raw().getValue() );
     }
 
+    /**
+     * test tuple creating error
+     */
+    @Test
+    public final void createerror()
+    {
+        Assert.assertFalse(
+            new CCreate().execute(
+                null,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
 
     /**
      * test tuple set

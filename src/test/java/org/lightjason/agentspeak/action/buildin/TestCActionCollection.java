@@ -101,6 +101,20 @@ public final class TestCActionCollection extends IBaseTest
                     CRawTerm.from( Stream.of( 1, 2, 3, 3, 4, 4 ).collect( Collectors.toList() )  )
                 ).collect( Collectors.toList() ),
                 new int[]{3, 6}
+            ),
+
+            new ImmutablePair<>(
+                Stream.of( CRawTerm.from(
+                    StreamUtils.windowed( Stream.of( 1, 2, 3, 4 ), 2 ).collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) )
+                ) ).collect( Collectors.toList() ),
+                new int[]{3}
+            ),
+
+            new ImmutablePair<>(
+                Stream.of( CRawTerm.from(
+                    StreamUtils.windowed( Stream.of( 1, 2, 3, 4 ), 2 ).collect( Collectors.toMap( i -> i.get( 0 ), i -> i.get( 1 ) ) )
+                ) ).collect( Collectors.toList() ),
+                new int[]{3}
             )
 
         ).toArray();
