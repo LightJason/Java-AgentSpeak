@@ -175,7 +175,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         if ( p_inspector == null )
             return Stream.of();
 
-        return Arrays.stream( p_inspector ).parallel().map( i -> {
+        return Arrays.stream( p_inspector ).parallel().peek( i -> {
             i.inspectcycle( m_cycle.get() );
             i.inspectsleeping( m_sleepingcycles.get() );
             i.inspectbelief( m_beliefbase.stream().parallel() );
@@ -185,7 +185,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             i.inspectrunningplans( m_runningplans.values().parallelStream() );
             i.inspectstorage( m_storage.entrySet().parallelStream() );
             i.inspectrules( m_rules.values().parallelStream() );
-            return i;
         } );
     }
 

@@ -558,6 +558,42 @@ public final class TestCActionGraph extends IBaseTest
     }
 
 
+    /**
+     * test spanning-tree action
+     */
+    @Test
+    public final void spanningtree()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
+
+        l_graph.addEdge( "edge12", 1, 2 );
+        l_graph.addEdge( "edge26", 2, 6 );
+        l_graph.addEdge( "edge56", 5, 6 );
+        l_graph.addEdge( "edge45", 4, 5 );
+        l_graph.addEdge( "edge34", 3, 4 );
+        l_graph.addEdge( "edge35", 3, 5 );
+        l_graph.addEdge( "edge46", 4, 6 );
+        l_graph.addEdge( "edge24", 2, 4 );
+        l_graph.addEdge( "edge23", 2, 3 );
+        l_graph.addEdge( "edge13", 1, 3 );
+
+
+
+
+        l_graph.addEdge( "edge67", 6, 7 );
+        l_graph.addEdge( "edge710", 7, 10 );
+        l_graph.addEdge( "edge110", 1, 10 );
+        l_graph.addEdge( "edge19", 1, 9 );
+        l_graph.addEdge( "edge79", 7, 9 );
+        l_graph.addEdge( "edge29", 2, 9 );
+        l_graph.addEdge( "edge68", 6, 8 );
+
+
+
+
+    }
+
 
     /**
      * test find-edge single
