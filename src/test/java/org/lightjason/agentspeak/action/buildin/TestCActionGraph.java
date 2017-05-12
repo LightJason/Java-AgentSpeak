@@ -571,30 +571,30 @@ public final class TestCActionGraph extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         final Graph<Integer, String> l_graph = new UndirectedSparseGraph<>();
 
-        l_graph.addEdge( "edge12", 1, 2 );
-        l_graph.addEdge( "edge26", 2, 6 );
-        l_graph.addEdge( "edge56", 5, 6 );
-        l_graph.addEdge( "edge45", 4, 5 );
-        l_graph.addEdge( "edge34", 3, 4 );
-        l_graph.addEdge( "edge35", 3, 5 );
-        l_graph.addEdge( "edge46", 4, 6 );
-        l_graph.addEdge( "edge24", 2, 4 );
-        l_graph.addEdge( "edge23", 2, 3 );
-        l_graph.addEdge( "edge13", 1, 3 );
+        l_graph.addEdge( "spanningtreeedge12", 1, 2 );
+        l_graph.addEdge( "spanningtreeedge26", 2, 6 );
+        l_graph.addEdge( "spanningtreeedge56", 5, 6 );
+        l_graph.addEdge( "spanningtreeedge45", 4, 5 );
+        l_graph.addEdge( "spanningtreeedge34", 3, 4 );
+        l_graph.addEdge( "spanningtreeedge35", 3, 5 );
+        l_graph.addEdge( "spanningtreeedge46", 4, 6 );
+        l_graph.addEdge( "spanningtreeedge24", 2, 4 );
+        l_graph.addEdge( "spanningtreeedge23", 2, 3 );
+        l_graph.addEdge( "spanningtreeedge13", 1, 3 );
 
-        l_graph.addEdge( "edge28", 2, 8 );
-        l_graph.addEdge( "edge78", 7, 8 );
-        l_graph.addEdge( "edge67", 6, 7 );
-        l_graph.addEdge( "edge68", 6, 8 );
+        l_graph.addEdge( "spanningtreeedge28", 2, 8 );
+        l_graph.addEdge( "spanningtreeedge78", 7, 8 );
+        l_graph.addEdge( "spanningtreeedge67", 6, 7 );
+        l_graph.addEdge( "spanningtreeedge68", 6, 8 );
 
-        l_graph.addEdge( "edge89", 8, 9 );
-        l_graph.addEdge( "edge910", 9, 10 );
-        l_graph.addEdge( "edge710", 7, 10 );
-        l_graph.addEdge( "edge79", 7, 9 );
+        l_graph.addEdge( "spanningtreeedge89", 8, 9 );
+        l_graph.addEdge( "spanningtreeedge910", 9, 10 );
+        l_graph.addEdge( "spanningtreeedge710", 7, 10 );
+        l_graph.addEdge( "spanningtreeedge79", 7, 9 );
 
-        l_graph.addEdge( "edge110", 1, 10 );
-        l_graph.addEdge( "edge19", 1, 9 );
-        l_graph.addEdge( "edge29", 2, 9 );
+        l_graph.addEdge( "spanningtreeedge110", 1, 10 );
+        l_graph.addEdge( "spanningtreeedge19", 1, 9 );
+        l_graph.addEdge( "spanningtreeedge29", 2, 9 );
 
         Assert.assertEquals( l_graph.getEdgeCount(), 21 );
         Assert.assertEquals( l_graph.getVertexCount(), 10 );
@@ -608,35 +608,36 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.get( 0 ).<Graph<Integer,String>>raw().getEdges().toArray(),
-            Stream.of( "edge56", "edge45", "edge34", "edge110", "edge28", "edge26", "edge710", "edge29", "edge910" ).toArray()
+            l_return.get( 0 ).<Graph<Integer, String>>raw().getEdges().toArray(),
+            Stream.of( "spanningtreeedge19", "spanningtreeedge710", "spanningtreeedge68", "spanningtreeedge46", "spanningtreeedge24", "spanningtreeedge89",
+                       "spanningtreeedge45", "spanningtreeedge23", "spanningtreeedge67" ).toArray()
         );
 
 
         final Map<Object, Object> l_weight = new HashMap<>();
         StreamUtils.windowed(
             Stream.of(
-                "edge13", 18,
-                "edge23", 10,
-                "edge34", 3,
-                "edge35", 4,
-                "edge24", 9,
-                "edge46", 5,
-                "edge45", 1,
-                "edge56", 4,
-                "edge26", 7,
-                "edge68", 9,
-                "edge67", 9,
-                "edge28", 8,
-                "edge78", 2,
-                "edge79", 4,
-                "edge710", 6,
-                "edge89", 2,
-                "edge910", 3,
-                "edge110", 9,
-                "edge19", 9,
-                "edge29", 9,
-                "edge12", 8
+                "spanningtreeedge13", 18,
+                "spanningtreeedge23", 10,
+                "spanningtreeedge34", 3,
+                "spanningtreeedge35", 4,
+                "spanningtreeedge24", 9,
+                "spanningtreeedge46", 5,
+                "spanningtreeedge45", 1,
+                "spanningtreeedge56", 4,
+                "spanningtreeedge26", 7,
+                "spanningtreeedge68", 9,
+                "spanningtreeedge67", 9,
+                "spanningtreeedge28", 8,
+                "spanningtreeedge78", 2,
+                "spanningtreeedge79", 4,
+                "spanningtreeedge710", 6,
+                "spanningtreeedge89", 2,
+                "spanningtreeedge910", 3,
+                "spanningtreeedge110", 9,
+                "spanningtreeedge19", 9,
+                "spanningtreeedge29", 9,
+                "spanningtreeedge12", 8
             ),
             2,
             2
@@ -651,8 +652,9 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertArrayEquals(
-            l_return.get( 1 ).<Graph<Integer,String>>raw().getEdges().toArray(),
-            Stream.of( "edge12", "edge56", "edge45", "edge34", "edge78", "edge89", "edge28", "edge26", "edge910" ).toArray()
+            l_return.get( 1 ).<Graph<Integer, String>>raw().getEdges().toArray(),
+            Stream.of( "spanningtreeedge910", "spanningtreeedge12", "spanningtreeedge56", "spanningtreeedge45", "spanningtreeedge34", "spanningtreeedge89",
+                       "spanningtreeedge78", "spanningtreeedge26", "spanningtreeedge28" ).toArray()
         );
     }
 
