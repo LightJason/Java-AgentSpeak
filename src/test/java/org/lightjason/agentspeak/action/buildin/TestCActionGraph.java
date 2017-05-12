@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import com.codepoetics.protonpack.StreamUtils;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
@@ -85,6 +86,7 @@ import org.lightjason.agentspeak.action.buildin.graph.CRemoveEdgeSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CRemoveVertexSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CShortestPath;
+import org.lightjason.agentspeak.action.buildin.graph.CSpanningTree;
 import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountMultiple;
 import org.lightjason.agentspeak.action.buildin.graph.CSuccessorCountSingle;
 import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
@@ -94,7 +96,9 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -578,20 +582,78 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "edge23", 2, 3 );
         l_graph.addEdge( "edge13", 1, 3 );
 
-
-
-
+        l_graph.addEdge( "edge28", 2, 8 );
+        l_graph.addEdge( "edge78", 7, 8 );
         l_graph.addEdge( "edge67", 6, 7 );
-        l_graph.addEdge( "edge710", 7, 10 );
-        l_graph.addEdge( "edge110", 1, 10 );
-        l_graph.addEdge( "edge19", 1, 9 );
-        l_graph.addEdge( "edge79", 7, 9 );
-        l_graph.addEdge( "edge29", 2, 9 );
         l_graph.addEdge( "edge68", 6, 8 );
 
+        l_graph.addEdge( "edge89", 8, 9 );
+        l_graph.addEdge( "edge910", 9, 10 );
+        l_graph.addEdge( "edge710", 7, 10 );
+        l_graph.addEdge( "edge79", 7, 9 );
+
+        l_graph.addEdge( "edge110", 1, 10 );
+        l_graph.addEdge( "edge19", 1, 9 );
+        l_graph.addEdge( "edge29", 2, 9 );
+
+        Assert.assertEquals( l_graph.getEdgeCount(), 21 );
+        Assert.assertEquals( l_graph.getVertexCount(), 10 );
+
+        new CSpanningTree().execute(
+            null,
+            false,
+            Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.get( 0 ).<Graph<Integer,String>>raw().getEdges().toArray(),
+            Stream.of( "edge56", "edge45", "edge34", "edge110", "edge28", "edge26", "edge710", "edge29", "edge910" ).toArray()
+        );
 
 
+        final Map<Object, Object> l_weight = new HashMap<>();
+        StreamUtils.windowed(
+            Stream.of(
+                "edge13", 18,
+                "edge23", 10,
+                "edge34", 3,
+                "edge35", 4,
+                "edge24", 9,
+                "edge46", 5,
+                "edge45", 1,
+                "edge56", 4,
+                "edge26", 7,
+                "edge68", 9,
+                "edge67", 9,
+                "edge28", 8,
+                "edge78", 2,
+                "edge79", 4,
+                "edge710", 6,
+                "edge89", 2,
+                "edge910", 3,
+                "edge110", 9,
+                "edge19", 9,
+                "edge29", 9,
+                "edge12", 8
+            ),
+            2,
+            2
+        ).forEach( i -> l_weight.put( i.get( 0 ), i.get( 1 ) ) );
 
+        new CSpanningTree().execute(
+            null,
+            false,
+            Stream.of( l_weight, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertArrayEquals(
+            l_return.get( 1 ).<Graph<Integer,String>>raw().getEdges().toArray(),
+            Stream.of( "edge12", "edge56", "edge45", "edge34", "edge78", "edge89", "edge28", "edge26", "edge910" ).toArray()
+        );
     }
 
 
