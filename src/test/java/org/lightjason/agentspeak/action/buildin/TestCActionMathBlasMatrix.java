@@ -45,6 +45,7 @@ import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CColumnSum;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CColumns;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCopy;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCreate;
+import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CDiagonal;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CDimension;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CIdentity;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CNormalizedGraphLaplacian;
@@ -764,6 +765,43 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                  )
             .allMatch( i -> i )
         );
+    }
+
+
+    /**
+     * test diagonal
+     */
+    @Test
+    public final void diagonal()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final double[] l_data = new double[]{1, 3, 5, 11};
+
+        new CDiagonal().execute(
+            null,
+            false,
+            Stream.of(
+                new DenseDoubleMatrix1D( l_data )
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
+
+        Assert.assertArrayEquals(
+            Arrays.stream( l_data ).boxed().toArray(),
+            IntStream.range( 0, l_result.rows() )
+                     .boxed()
+                     .map( i-> l_result.getQuick( i, i ) )
+                     .toArray()
+        );
+
+        IntStream.range( 0, l_result.rows() )
+                 .forEach( i -> IntStream.range( 0, l_result.columns() )
+                                         .filter( j -> i != j )
+                                         .forEach( j -> Assert.assertEquals( l_result.getQuick( i, j ), 0, 0  ) ) );
     }
 
 
