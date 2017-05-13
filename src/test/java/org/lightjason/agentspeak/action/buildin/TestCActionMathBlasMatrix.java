@@ -27,6 +27,7 @@ import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -34,7 +35,6 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -45,6 +45,7 @@ import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CColumns;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCopy;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCreate;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CDimension;
+import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CNormalizedGraphLaplacian;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CRow;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CRows;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CNonZero;
@@ -79,6 +80,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertTrue;
@@ -584,11 +586,10 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( s_matrix, s_matrix1 ).toArray() );
     }
 
+
     /**
-     * test graphlaplacian
-     * @bug row sums is zero
+     * test graph-laplacian
      */
-    @Ignore
     @Test
     public final void graphlaplacian()
     {
@@ -597,19 +598,71 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CGraphLaplacian().execute(
                 null,
                 false,
-                Stream.of( new DenseDoubleMatrix2D( new double[][]{{1, 7}, {7, 4}} ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of(
+                    new SparseDoubleMatrix2D( new double[][]{
+                        {0, 1, 0, 0, 1, 0},
+                        {1, 0, 1, 0, 1, 0},
+                        {0, 1, 0, 1, 0, 0},
+                        {0, 0, 1, 0, 1, 1},
+                        {1, 1, 0, 1, 0, 0},
+                        {0, 0, 0, 1, 0, 0}
+                    } )
+                ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return,
                 Collections.emptyList()
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
+        final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
 
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().getQuick( 0, 0 )
-                + l_return.get( 0 ).<DoubleMatrix2D>raw().getQuick( 0, 1 ), 0, 0 );
+        IntStream.range( 0, l_result.rows() )
+                 .boxed()
+                 .map( l_result::viewRow )
+                 .mapToDouble( DoubleMatrix1D::zSum )
+                 .forEach( i -> Assert.assertEquals( i, 0, 0 ) );
 
-        Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().getQuick( 1, 0 )
-                + l_return.get( 0 ).<DoubleMatrix2D>raw().getQuick( 1, 1 ), 0, 0 );
+        IntStream.range( 0, l_result.columns() )
+                 .boxed()
+                 .map( l_result::viewColumn )
+                 .mapToDouble( DoubleMatrix1D::zSum )
+                 .forEach( i -> Assert.assertEquals( i, 0, 0 ) );
+    }
+
+
+    /**
+     * test normalized graph-laplacian
+     */
+    @Test
+    public final void normalizedgraphlaplacian()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CNormalizedGraphLaplacian().execute(
+            null,
+            false,
+            Stream.of(
+                new SparseDoubleMatrix2D( new double[][]{
+                    {0, 1, 0, 0, 1, 0},
+                    {1, 0, 1, 0, 1, 0},
+                    {0, 1, 0, 1, 0, 0},
+                    {0, 0, 1, 0, 1, 1},
+                    {1, 1, 0, 1, 0, 0},
+                    {0, 0, 0, 1, 0, 0}
+                } )
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
+
+        IntStream.range( 0, l_result.rows() ).boxed().forEach( i -> Assert.assertEquals( l_result.getQuick( i, i ), 1, 0 ) );
+        IntStream.range( 0, l_result.rows() )
+                 .boxed()
+                 .map( l_result::viewRow )
+                 .mapToDouble( DoubleMatrix1D::zSum )
+                 .forEach( i -> Assert.assertEquals( i, 0, 1e-10 ) );
     }
 
     /**

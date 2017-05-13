@@ -24,8 +24,9 @@
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -35,28 +36,23 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 
 /**
- * creates the normalized graph laplacian.
- * For each input adjacency matrix, the normalized graph
- * ´laplacian is calculated and returned, the action never fails
+ * returns a diagonal matrix.
+ * The action returns for each vector element a
+ * matrix which contains the vetcor elements on
+ * the diagonal line. A string value indicates
+ * a sparse or dense matrix (default sparse),
+ * the action fails never
  *
- * @code [L1|L2] = math/blas/matrix/normalizedgraphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 ); @endcode
- * @see https://en.wikipedia.org/wiki/Laplacian_matrix
+ * @code
+      [D1|D2] = math/blas/matrix/diagonal( Vector1, Vector2 );
+      [D3|D4] = math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
+ * @endcoed
  */
-public final class CNormalizedGraphLaplacian extends IAlgebra
+public final class CDiagonal extends IAlgebra
 {
-
-    /**
-     * ctor
-     */
-    public CNormalizedGraphLaplacian()
-    {
-        super( 4 );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {
@@ -68,18 +64,38 @@ public final class CNormalizedGraphLaplacian extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .map( i -> {
-                   final DoubleMatrix2D l_degree = DoubleFactory2D
-                             .sparse
-                             .diagonal( new DenseDoubleMatrix1D( IntStream.range( 0, i.rows() ).mapToDouble( j -> i.viewRow( j ).cardinality() ).toArray() ) );
+        final EType l_type = CCommon.flatcollection( p_argument )
+                                    .parallel()
+                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .findFirst()
+                                    .map( ITerm::<String>raw )
+                                    .map( EType::from )
+                                    .orElseGet( () -> EType.SPARSE );
 
-                   return ALGEBRA.mult( ALGEBRA.inverse( l_degree ), l_degree.assign( i, ( n, m ) -> n - m ) );
-               } )
+        CCommon.flatcollection( p_argument )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix1D.class ) )
+               .map( ITerm::<DoubleMatrix1D>raw )
+               .map( i  -> generate( i, EType.SPARSE ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
+
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * generates the diagonal matrix
+     *
+     * @param p_elements vector with diagonal elements
+     * @param p_type type of the matrix
+     * @return identity
+     */
+    private static DoubleMatrix2D generate( final DoubleMatrix1D p_elements, final EType p_type )
+    {
+        switch ( p_type )
+        {
+            case DENSE: return DoubleFactory2D.dense.diagonal( p_elements );
+            default: return DoubleFactory2D.sparse.diagonal( p_elements );
+        }
     }
 }

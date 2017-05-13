@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -35,28 +35,23 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 
 /**
- * creates the normalized graph laplacian.
- * For each input adjacency matrix, the normalized graph
- * ´laplacian is calculated and returned, the action never fails
+ * returns the identity matrix.
+ * The action returns the identity matrix multiple
+ * times, the arguments defines the size of each
+ * matrix, a string defines the resulting matrix
+ * type dense or space (default sparse), the
+ * action never fails
  *
- * @code [L1|L2] = math/blas/matrix/normalizedgraphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 ); @endcode
- * @see https://en.wikipedia.org/wiki/Laplacian_matrix
+ * @code
+     [E1|E2] = math/blas/matrix/identity( 2, 3 );
+     [E3|E4] = math/blas/matrix/identity( 2, 3, "dense" );
+ * @endcode
  */
-public final class CNormalizedGraphLaplacian extends IAlgebra
+public final class CIdentity extends IAlgebra
 {
-
-    /**
-     * ctor
-     */
-    public CNormalizedGraphLaplacian()
-    {
-        super( 4 );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {
@@ -68,18 +63,39 @@ public final class CNormalizedGraphLaplacian extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .map( i -> {
-                   final DoubleMatrix2D l_degree = DoubleFactory2D
-                             .sparse
-                             .diagonal( new DenseDoubleMatrix1D( IntStream.range( 0, i.rows() ).mapToDouble( j -> i.viewRow( j ).cardinality() ).toArray() ) );
+        final EType l_type = CCommon.flatcollection( p_argument )
+                                    .parallel()
+                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .findFirst()
+                                    .map( ITerm::<String>raw )
+                                    .map( EType::from )
+                                    .orElseGet( () -> EType.SPARSE );
 
-                   return ALGEBRA.mult( ALGEBRA.inverse( l_degree ), l_degree.assign( i, ( n, m ) -> n - m ) );
-               } )
+        CCommon.flatcollection( p_argument )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+               .map( ITerm::<Number>raw )
+               .map( Number::intValue )
+               .map( i  -> generate( i, EType.SPARSE ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
+    }
+
+
+    /**
+     * generates the identitiy matrix
+     *
+     * @param p_size size of the matrix
+     * @param p_type type of the matrix
+     * @return identity
+     */
+    private static DoubleMatrix2D generate( final int p_size, final EType p_type )
+    {
+        switch ( p_type )
+        {
+            case DENSE: return DoubleFactory2D.dense.identity( p_size );
+            default: return DoubleFactory2D.sparse.identity( p_size );
+        }
     }
 }

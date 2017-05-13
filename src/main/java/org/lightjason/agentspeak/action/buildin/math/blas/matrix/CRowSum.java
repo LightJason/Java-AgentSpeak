@@ -23,9 +23,11 @@
 
 package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
+import org.lightjason.agentspeak.action.buildin.math.blas.EType;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -39,24 +41,18 @@ import java.util.stream.IntStream;
 
 
 /**
- * creates the normalized graph laplacian.
- * For each input adjacency matrix, the normalized graph
- * ´laplacian is calculated and returned, the action never fails
+ * returns the row-sum of a matrix.
+ * The action returns the row-sum of all matrix objects,
+ * a string value defines a sparse or dense resulting vector,
+ * the action never fails
  *
- * @code [L1|L2] = math/blas/matrix/normalizedgraphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 ); @endcode
- * @see https://en.wikipedia.org/wiki/Laplacian_matrix
+ * @code
+    [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2 );
+    [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
+ * @endcode
  */
-public final class CNormalizedGraphLaplacian extends IAlgebra
+public final class CRowSum extends IAlgebra
 {
-
-    /**
-     * ctor
-     */
-    public CNormalizedGraphLaplacian()
-    {
-        super( 4 );
-    }
-
     @Override
     public final int minimalArgumentNumber()
     {
@@ -68,18 +64,39 @@ public final class CNormalizedGraphLaplacian extends IAlgebra
                                                final List<ITerm> p_annotation
     )
     {
-        CCommon.flatcollection( p_argument )
-               .map( ITerm::<DoubleMatrix2D>raw )
-               .map( i -> {
-                   final DoubleMatrix2D l_degree = DoubleFactory2D
-                             .sparse
-                             .diagonal( new DenseDoubleMatrix1D( IntStream.range( 0, i.rows() ).mapToDouble( j -> i.viewRow( j ).cardinality() ).toArray() ) );
+        final EType l_type = CCommon.flatcollection( p_argument )
+                                    .parallel()
+                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .findFirst()
+                                    .map( ITerm::<String>raw )
+                                    .map( EType::from )
+                                    .orElseGet( () -> EType.DENSE );
 
-                   return ALGEBRA.mult( ALGEBRA.inverse( l_degree ), l_degree.assign( i, ( n, m ) -> n - m ) );
-               } )
+        CCommon.flatcollection( p_argument )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix2D.class ) )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( i -> IntStream.range( 0, i.rows() ).boxed().map( i::viewRow ).mapToDouble( DoubleMatrix1D::zSum ).toArray() )
+               .map( i -> generate( i, l_type ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
+
+    /**
+     * generates a vector
+     *
+     * @param p_value values
+     * @param p_type type
+     * @return vector
+     */
+    private static DoubleMatrix1D generate( final double[] p_value, final EType p_type )
+    {
+        switch ( p_type )
+        {
+            case SPARSE: return new SparseDoubleMatrix1D( p_value );
+            default : return new DenseDoubleMatrix1D( p_value );
+        }
+    }
+
 }

@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -35,15 +35,15 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
  * creates the graph laplacian.
- * For each input matrix, which must be symmetric,
- * the graph laplacian is calculated and returned,
- * the action never fails
+ * For each input adjacency  matrix, the graph laplacian
+ * is calculated and returned, the action never fails
  *
- * @code [L1|L2] = math/blas/matrix/graphlaplacian( SymmetricMatrix1, SymmetricMatrix2 ); @endcode
+ * @code [L1|L2] = math/blas/matrix/graphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 ); @endcode
  * @see https://en.wikipedia.org/wiki/Laplacian_matrix
  */
 public final class CGraphLaplacian extends IAlgebra
@@ -72,8 +72,7 @@ public final class CGraphLaplacian extends IAlgebra
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( i -> DoubleFactory2D
                    .sparse
-                   .identity( Math.max( i.columns(), i.rows() ) )
-                   .assign( Functions.mult( ALGEBRA.trace( i ) ) )
+                   .diagonal( new DenseDoubleMatrix1D( IntStream.range( 0, i.rows() ).mapToDouble( j -> i.viewRow( j ).cardinality() ).toArray() ) )
                    .assign( i, ( n, m ) -> n - m )
                )
                .map( CRawTerm::from )
