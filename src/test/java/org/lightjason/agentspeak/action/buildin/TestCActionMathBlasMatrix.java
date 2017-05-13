@@ -41,12 +41,15 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CColumn;
+import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CColumnSum;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CColumns;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCopy;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCreate;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CDimension;
+import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CIdentity;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CNormalizedGraphLaplacian;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CRow;
+import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CRowSum;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CRows;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CNonZero;
 import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CCondition;
@@ -79,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -664,6 +668,104 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                  .mapToDouble( DoubleMatrix1D::zSum )
                  .forEach( i -> Assert.assertEquals( i, 0, 1e-10 ) );
     }
+
+    /**
+     * test row sum
+     */
+    @Test
+    public final void rowsum()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CRowSum().execute(
+            null,
+            false,
+            Stream.of(
+                new SparseDoubleMatrix2D( new double[][]{
+                    {1, 0, 0, 0, 0, 0},
+                    {1, 2, 0, 0, 0, 0},
+                    {1, 2, 3, 0, 0, 0},
+                    {1, 2, 3, 4, 0, 0},
+                    {1, 2, 3, 4, 5, 0},
+                    {1, 2, 3, -1, -2, -3}
+                } )
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertArrayEquals(
+            Arrays.stream( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray() ).boxed().toArray(),
+            Stream.of( 1D, 3D, 6D, 10D, 15D, 0D ).toArray()
+        );
+    }
+
+
+    /**
+     * test column sum
+     */
+    @Test
+    public final void columsum()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CColumnSum().execute(
+            null,
+            false,
+            Stream.of(
+                new SparseDoubleMatrix2D( new double[][]{
+                    {1, 0, 0, 0, 0, 0},
+                    {1, 2, 0, 0, 0, 0},
+                    {1, 2, 3, 0, 0, 0},
+                    {1, 2, 3, 4, 0, 0},
+                    {1, 2, 3, 4, 5, 0},
+                    {1, 2, 3, -1, -2, -3}
+                } )
+            ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertArrayEquals(
+            Arrays.stream( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray() ).boxed().toArray(),
+            Stream.of( 6D, 10D, 12D, 7D, 3D, -3D ).toArray()
+        );
+    }
+
+
+    /**
+     * test identity
+     */
+    @Test
+    public final void identity()
+    {
+        final int l_size = Math.abs( new Random().nextInt( 98 ) + 2 );
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CIdentity().execute(
+            null,
+            false,
+            Stream.of( l_size ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return,
+            Collections.emptyList()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        final DoubleMatrix2D l_result = l_return.get( 0 ).raw();
+
+        Assert.assertTrue(
+            IntStream.range( 0, l_result.rows() )
+                 .boxed()
+                 .flatMap( i -> IntStream.range( 0, l_result.columns() )
+                                         .boxed()
+                                         .map( j -> i.equals( j ) ? l_result.getQuick( i, j ) == 1D : l_result.getQuick( i, j ) == 0D )
+                 )
+            .allMatch( i -> i )
+        );
+    }
+
 
     /**
      * test call

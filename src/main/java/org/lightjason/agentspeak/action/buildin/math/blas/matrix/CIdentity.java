@@ -72,7 +72,7 @@ public final class CIdentity extends IAlgebra
                                     .orElseGet( () -> EType.SPARSE );
 
         CCommon.flatcollection( p_argument )
-               .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
                .map( i  -> generate( i, EType.SPARSE ) )
