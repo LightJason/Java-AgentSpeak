@@ -44,7 +44,7 @@ public final class CExponentialSelection extends ISelection
 {
 
     @Override
-    protected final List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation )
+    protected final List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument )
     {
         final double l_demand = p_argument.get( 0 ).<Number>raw().doubleValue();
         return p_values.map( i -> Math.exp( i / l_demand ) ).collect( Collectors.toList() );

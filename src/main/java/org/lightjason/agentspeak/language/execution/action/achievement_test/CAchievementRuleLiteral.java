@@ -55,8 +55,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         return CAchievementRuleLiteral.execute( p_context, m_value, m_value.hasAt() );
@@ -80,13 +79,10 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            CCommon.recursiveterm( m_value.orderedvalues() ),
-            CCommon.recursiveliteral( m_value.annotations() )
-        )
-                     .parallel()
-                     .filter( i -> i instanceof IVariable<?> )
-                     .map( i -> (IVariable<?>) i );
+        return CCommon.recursiveterm( m_value.orderedvalues() )
+                      .parallel()
+                      .filter( i -> i instanceof IVariable<?> )
+                      .map( i -> (IVariable<?>) i );
     }
 
     @Override

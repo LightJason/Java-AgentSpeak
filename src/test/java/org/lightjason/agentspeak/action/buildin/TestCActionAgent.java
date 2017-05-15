@@ -134,8 +134,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -149,8 +148,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -174,7 +172,6 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Stream.of( l_plan ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -196,8 +193,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -219,8 +215,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertTrue( l_return.isEmpty() );
@@ -232,8 +227,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Stream.of( "+!", "testgetplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -257,7 +251,6 @@ public final class TestCActionAgent extends IBaseTest
                 m_context,
                 false,
                 Stream.of( "+!", "testremoveplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -275,7 +268,6 @@ public final class TestCActionAgent extends IBaseTest
                 m_context,
                 false,
                 Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -299,7 +291,6 @@ public final class TestCActionAgent extends IBaseTest
         new CClearBeliefbase().execute(
             m_context,
             false,
-            Collections.emptyList(),
             Collections.emptyList(),
             Collections.emptyList()
         );
@@ -329,8 +320,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 

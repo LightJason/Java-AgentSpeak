@@ -58,8 +58,7 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         return p_context.agent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );

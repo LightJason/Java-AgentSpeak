@@ -49,7 +49,6 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,8 +175,7 @@ public final class TestCActionBool extends IBaseTest
             null,
             false,
             p_input.getLeft(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -198,8 +196,7 @@ public final class TestCActionBool extends IBaseTest
             null,
             false,
             Stream.of( l_return, l_return, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -214,8 +211,7 @@ public final class TestCActionBool extends IBaseTest
             null,
             false,
             Stream.of( l_list1, l_list2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -231,8 +227,7 @@ public final class TestCActionBool extends IBaseTest
             null,
             false,
             Stream.of( l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -252,8 +247,7 @@ public final class TestCActionBool extends IBaseTest
             null,
             false,
             Stream.of( l_object, l_object, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );

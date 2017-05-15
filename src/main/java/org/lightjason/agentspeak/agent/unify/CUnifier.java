@@ -113,8 +113,7 @@ public final class CUnifier implements IUnifier
                                                               ),
                                                               false,
                                                               Collections.<ITerm>emptyList(),
-                                                              l_return,
-                                                              Collections.<ITerm>emptyList()
+                                                              l_return
                                                           );
                                                           return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
                                                       } )
@@ -150,8 +149,7 @@ public final class CUnifier implements IUnifier
                                                               ),
                                                               false,
                                                               Collections.<ITerm>emptyList(),
-                                                              l_return,
-                                                              Collections.<ITerm>emptyList()
+                                                              l_return
                                                           );
                                                           return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
                                                       } )
@@ -183,21 +181,6 @@ public final class CUnifier implements IUnifier
                 l_result,
                 p_value.orderedvalues(),
                 p_literal.orderedvalues()
-            ) ) )
-            return Collections.<IVariable<?>>emptySet();
-
-        // try to unify exact or if not possible by recursive on the annotation set
-        if ( !(
-            p_literal.annotationhash() == p_value.annotationhash()
-            ? m_hashbased.unify(
-                l_result,
-                CCommon.recursiveliteral( p_value.annotations() ),
-                CCommon.recursiveliteral( p_literal.annotations() )
-            )
-            : m_recursive.unify(
-                l_result,
-                p_value.annotations(),
-                p_literal.annotations()
             ) ) )
             return Collections.<IVariable<?>>emptySet();
 
@@ -243,7 +226,7 @@ public final class CUnifier implements IUnifier
         return p_agent.beliefbase()
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )
                       .parallel()
-                      .filter( i -> ( i.emptyValues() == p_literal.emptyValues() ) && ( i.emptyAnnotations() == p_literal.emptyAnnotations() ) )
+                      .filter( i -> i.emptyValues() == p_literal.emptyValues() )
                       .map( i -> this.literal( (ILiteral) p_literal.deepcopy(), i ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );

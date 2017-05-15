@@ -55,7 +55,6 @@ public final class TestCActionGeneric extends IBaseTest
             null,
             false,
             Stream.of( true, "test message" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
     }
@@ -71,7 +70,6 @@ public final class TestCActionGeneric extends IBaseTest
             null,
             false,
             Stream.of( true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
     }
@@ -87,7 +85,6 @@ public final class TestCActionGeneric extends IBaseTest
             null,
             false,
             Stream.of( false, "this should not be thrown" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
     }
@@ -107,7 +104,6 @@ public final class TestCActionGeneric extends IBaseTest
             null,
             false,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -138,7 +134,6 @@ public final class TestCActionGeneric extends IBaseTest
             null,
             false,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 

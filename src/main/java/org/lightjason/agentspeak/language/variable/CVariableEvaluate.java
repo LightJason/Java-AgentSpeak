@@ -199,8 +199,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
             p_literal.hasAt(),
             p_literal.negated(),
             p_literal.fqnfunctor(),
-            m_parameter,
-            Collections.<ILiteral>emptyList()
+            m_parameter
         ).unify( p_context );
     }
 

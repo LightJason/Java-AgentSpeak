@@ -185,8 +185,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 p_input.getLeft(),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertArrayEquals(
@@ -207,8 +206,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -230,8 +228,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -258,8 +255,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -284,8 +280,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -310,8 +305,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
@@ -329,8 +323,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
@@ -349,8 +342,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

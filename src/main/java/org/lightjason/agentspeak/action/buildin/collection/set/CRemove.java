@@ -61,7 +61,8 @@ public final class CRemove extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return, final List<ITerm> p_annotation )
+                                               final List<ITerm> p_return
+    )
     {
         final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 

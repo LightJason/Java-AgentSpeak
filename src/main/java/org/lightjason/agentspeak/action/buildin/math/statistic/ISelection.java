@@ -62,9 +62,7 @@ public abstract class ISelection extends IBuildinAction
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
@@ -76,8 +74,7 @@ public abstract class ISelection extends IBuildinAction
                                               .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
                                               .map( Number::doubleValue )
                                               .map( Math::abs ),
-            p_argument.subList( 2, p_argument.size() ),
-            p_annotation
+            p_argument.subList( 2, p_argument.size() )
         );
 
         if ( ( l_items.isEmpty() ) || ( l_items.size() != l_weight.size() ) )
@@ -106,11 +103,9 @@ public abstract class ISelection extends IBuildinAction
      * @param p_items item list
      * @param p_values stream of weights
      * @param p_argument additional arguments
-     * @param p_annotation annotations
      * @return list with weights
      */
-    protected abstract List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation
-    );
+    protected abstract List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument );
 
     /**
      * number of additional parameter

@@ -173,8 +173,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 p_input.getLeft(),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertArrayEquals(
@@ -195,8 +194,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -216,8 +214,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
@@ -235,8 +232,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector1, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
         Assert.assertEquals( l_return.size(), 0 );
         Assert.assertEquals( s_vector1.get( 0 ), true );
@@ -255,8 +251,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( s_vector1.get( 0 ), false );
@@ -275,8 +270,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector1, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -295,8 +289,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
@@ -314,8 +307,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -335,8 +327,7 @@ public class TestCActionMathBitVector extends IBaseTest
                 null,
                 false,
                 Stream.of( s_vector1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

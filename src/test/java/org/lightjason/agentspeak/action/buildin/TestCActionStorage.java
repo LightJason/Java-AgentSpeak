@@ -103,7 +103,6 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of(  "testnumber", 123, "teststring", "foobar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -122,7 +121,6 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "bar", 123 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -141,7 +139,6 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "abc", 123 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -165,8 +162,7 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertTrue( m_context.agent().storage().isEmpty() );
@@ -194,7 +190,6 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -218,8 +213,7 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "foo", "bar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( m_context.agent().storage().size(), 1 );
@@ -245,8 +239,7 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "xx", "yy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( m_context.agent().storage().size(), 1 );
@@ -273,7 +266,6 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -299,7 +291,6 @@ public final class TestCActionStorage extends IBaseTest
         new CClear( Stream.of( "value 7", "value 23", "value 91" ) ).execute(
             m_context,
             false,
-            Collections.emptyList(),
             Collections.emptyList(),
             Collections.emptyList()
         );
@@ -329,8 +320,7 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             l_content,
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 100 );
@@ -354,8 +344,7 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "value 9", "value 7", "value 23", "value 77", "57", "123" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -382,8 +371,7 @@ public final class TestCActionStorage extends IBaseTest
             m_context,
             false,
             Stream.of( "value 33", "value 177", "value 23", "value 137" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals(

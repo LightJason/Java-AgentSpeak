@@ -81,7 +81,6 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -191,8 +190,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 p_input.getLeft(),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertArrayEquals(
@@ -213,8 +211,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 2, 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -236,8 +233,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -260,8 +256,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -284,8 +279,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 2, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -309,8 +303,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 0, 1, 6.0, s_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
@@ -329,8 +322,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -352,8 +344,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -375,8 +366,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 0, 0, 0, 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -398,8 +388,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -422,8 +411,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( 2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
@@ -443,8 +431,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
             null,
             false,
             Stream.of( s_matrix1, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
@@ -463,8 +450,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -484,8 +470,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( "1,2;3,4", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -506,8 +491,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -528,8 +512,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -553,8 +536,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -583,8 +565,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 null,
                 false,
                 Stream.of( s_matrix, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -613,8 +594,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                         {0, 0, 0, 1, 0, 0}
                     } )
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -655,8 +635,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                     {0, 0, 0, 1, 0, 0}
                 } )
             ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -691,8 +670,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                     {1, 2, 3, -1, -2, -3}
                 } )
             ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -724,8 +702,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                     {1, 2, 3, -1, -2, -3}
                 } )
             ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -749,8 +726,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
             null,
             false,
             Stream.of( l_size ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -783,8 +759,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
             Stream.of(
                 new DenseDoubleMatrix1D( l_data )
             ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

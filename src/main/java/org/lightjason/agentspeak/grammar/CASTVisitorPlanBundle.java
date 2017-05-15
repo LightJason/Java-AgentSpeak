@@ -645,22 +645,9 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             p_context.AT() != null,
             p_context.STRONGNEGATION() != null,
             CPath.from( this.visitAtom( p_context.atom() ).toString() ),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
-            (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
+            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
         );
     }
-
-
-
-    @Override
-    public final Object visitLiteralset( final PlanBundleParser.LiteralsetContext p_context )
-    {
-        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
-
-        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
-    }
-
 
 
     @Override

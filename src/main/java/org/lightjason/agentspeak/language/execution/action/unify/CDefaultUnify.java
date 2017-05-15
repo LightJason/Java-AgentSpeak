@@ -70,7 +70,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable" ) );
 
-        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
+        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).anyMatch( i -> i.getValue() > 1 ) )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "uniquevariable" ) );
 
         // count variables
@@ -84,8 +84,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         return p_context.agent().unifier().unify(
@@ -99,10 +98,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
     @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-            CCommon.recursiveliteral( m_value.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
-        );
+        return CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i );
     }
 
 }

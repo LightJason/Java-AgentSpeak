@@ -58,8 +58,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
             null,
             false,
             Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -82,7 +81,6 @@ public final class TestCActionCollectionTuple extends IBaseTest
                 null,
                 false,
                 Collections.emptyList(),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -101,7 +99,6 @@ public final class TestCActionCollectionTuple extends IBaseTest
             null,
             false,
             Stream.of( "blubblub", l_data ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -121,8 +118,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
             null,
             false,
             Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );

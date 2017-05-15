@@ -183,8 +183,7 @@ public final class TestCAgent extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                                   final List<ITerm> p_annotation
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
         )
         {
             return CFuzzyValue.from( true );
@@ -210,8 +209,7 @@ public final class TestCAgent extends IBaseTest
         }
 
         @Override
-        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
         )
         {
             m_testlog.add(

@@ -53,7 +53,8 @@ public final class CClear extends IBuildinAction
 
     @Override
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return, final List<ITerm> p_annotation )
+                                               final List<ITerm> p_return
+    )
     {
         return CFuzzyValue.from(
             p_argument.parallelStream()

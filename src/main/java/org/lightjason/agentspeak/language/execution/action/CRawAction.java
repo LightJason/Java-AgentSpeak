@@ -86,16 +86,14 @@ public final class CRawAction<T> extends IBaseExecution<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         if ( m_value instanceof Boolean )
             return this.getTypedResult( (Boolean) m_value, p_return );
         if ( m_value instanceof IVariable<?> )
             return this.getTypedResult( (IVariable<?>) m_value, p_context, p_return );
         if ( m_value instanceof IExpression )
-            return this.getTypedResult( (IExpression) m_value, p_context, p_parallel, p_argument, p_return, p_annotation );
+            return this.getTypedResult( (IExpression) m_value, p_context, p_parallel, p_argument, p_return );
 
         return this.getTypedResult( m_value, p_return );
     }
@@ -146,16 +144,14 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_parallel paralle execution
      * @param p_argument arguments
      * @param p_return native return
-     * @param p_annotation annotations
      * @return fuzzy-boolean
      */
     private IFuzzyValue<Boolean> getTypedResult( final IExpression p_execution, final IContext p_context, final Boolean p_parallel,
-                                                 final List<ITerm> p_argument, final List<ITerm> p_return,
-                                                 final List<ITerm> p_annotation
+                                                 final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return, p_annotation ).value() ) || ( l_return.isEmpty() ) )
+        if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return ).value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
         return CFuzzyValue.from( l_return.get( 0 ).<Boolean>raw() );

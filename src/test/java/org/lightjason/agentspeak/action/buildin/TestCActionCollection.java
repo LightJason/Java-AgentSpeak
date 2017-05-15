@@ -133,8 +133,7 @@ public final class TestCActionCollection extends IBaseTest
             null,
             false,
             p_input.getLeft(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -159,8 +158,7 @@ public final class TestCActionCollection extends IBaseTest
             Stream.of( new ArrayList<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 5 );
@@ -186,7 +184,6 @@ public final class TestCActionCollection extends IBaseTest
             null,
             false,
             Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 

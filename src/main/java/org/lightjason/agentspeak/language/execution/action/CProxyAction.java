@@ -85,11 +85,9 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
-        return m_execution.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+        return m_execution.execute( p_context, p_parallel, p_argument, p_return );
     }
 
     @Override
@@ -150,10 +148,8 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return,
-                                                   final List<ITerm> p_annotation
-        )
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel,
+                                                   final List<ITerm> p_argument, final List<ITerm> p_return )
         {
             p_return.add( m_value );
             return CFuzzyValue.from( true );
@@ -203,11 +199,6 @@ public final class CProxyAction implements IExecution
          * result order on parallel execution
          */
         private final Map<Integer, IExecution> m_arguments;
-        /**
-         * annotation as map with index for prevent
-         * result order on parallel execution
-         */
-        private final Map<Integer, IExecution> m_annotation;
 
 
         /**
@@ -239,8 +230,6 @@ public final class CProxyAction implements IExecution
             // resolve action arguments and annotation
             m_arguments = Collections.unmodifiableMap(
                 this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions, p_scorecache ) );
-            m_annotation = Collections.unmodifiableMap(
-                this.createSubExecutions( p_literal.annotations().collect( Collectors.toSet() ), p_actions, p_scorecache ) );
         }
 
         @Override
@@ -262,14 +251,12 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
-        )
+        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
         {
             return m_action.execute(
                 p_context, m_parallel,
-                this.subexecute( p_context, m_arguments ), p_return,
-                this.subexecute( p_context, m_annotation )
+                this.subexecute( p_context, m_arguments ),
+                p_return
             );
         }
 
@@ -323,7 +310,7 @@ public final class CProxyAction implements IExecution
 
                         final List<ITerm> l_return = new LinkedList<ITerm>();
                         i.getValue().execute(
-                            p_context, m_parallel, Collections.<ITerm>emptyList(), l_return, Collections.<ITerm>emptyList() );
+                            p_context, m_parallel, Collections.<ITerm>emptyList(), l_return );
                         return l_return.stream();
 
                     } ).collect( Collectors.toList() )

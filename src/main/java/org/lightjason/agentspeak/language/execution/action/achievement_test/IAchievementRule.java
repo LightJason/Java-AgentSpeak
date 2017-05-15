@@ -89,7 +89,6 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
                 i.instantiate( p_context.agent(), l_variables.stream() ),
                 false,
                 Collections.<ITerm>emptyList(),
-                Collections.<ITerm>emptyList(),
                 Collections.<ITerm>emptyList()
             );
 

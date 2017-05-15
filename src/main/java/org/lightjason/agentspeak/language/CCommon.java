@@ -133,8 +133,7 @@ public final class CCommon
     public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( final IUnifier p_unifier, final ITrigger p_source, final ITrigger p_target )
     {
         // filter for avoid duplicated instantiation on non-existing values / annotations
-        if ( !( ( p_source.getLiteral().emptyValues() == p_target.getLiteral().emptyValues() )
-             && ( p_source.getLiteral().emptyAnnotations() == p_target.getLiteral().emptyAnnotations() ) ) )
+        if ( !( p_source.getLiteral().emptyValues() == p_target.getLiteral().emptyValues() ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 
         // unify variables, source trigger literal must be copied
@@ -189,10 +188,7 @@ public final class CCommon
     public static Map<IVariable<?>, Integer> variablefrequency( final ILiteral p_literal )
     {
         return Collections.unmodifiableMap(
-            Stream.concat(
-                recursiveterm( p_literal.orderedvalues() ),
-                recursiveliteral( p_literal.annotations() )
-            )
+            recursiveterm( p_literal.orderedvalues() )
                   .filter( i -> i instanceof IVariable<?> )
                   .map( i -> (IVariable<?>) i )
                   .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )

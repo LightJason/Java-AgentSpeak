@@ -237,7 +237,6 @@ literal :
     ( AT | STRONGNEGATION )?
     atom
     ( LEFTROUNDBRACKET termlist? RIGHTROUNDBRACKET )?
-    ( LEFTANGULARBRACKET literalset? RIGHTANGULARBRACKET )?
     ;
 
 /**
@@ -245,13 +244,6 @@ literal :
  **/
 termlist :
     term ( COMMA term )*
-    ;
-
-/**
- * specified list only with literals and empty clause
- **/
-literalset :
-    literal ( COMMA literal )*
     ;
 
 /**

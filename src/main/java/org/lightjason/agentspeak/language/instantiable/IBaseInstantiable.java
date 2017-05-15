@@ -116,9 +116,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
-    )
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
@@ -146,8 +144,7 @@ public abstract class IBaseInstantiable implements IInstantiable
 
         m_action.stream()
                 .map( i -> {
-                    final IFuzzyValue<Boolean> l_return = i.execute(
-                        p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() );
+                    final IFuzzyValue<Boolean> l_return = i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>() );
                     l_result.add( l_return );
                     return p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return );
                 } )
@@ -168,7 +165,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     private List<IFuzzyValue<Boolean>> executeparallel( final IContext p_context )
     {
         return m_action.parallelStream()
-                       .map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>(), Collections.<ITerm>emptyList() ) )
+                       .map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>() ) )
                        .collect( Collectors.toList() );
     }
 
