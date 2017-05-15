@@ -93,14 +93,14 @@ public final class TestCAgent extends IBaseTest
         return Stream.of(
             //new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
 
-            new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
-            //new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 )
-
-            new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 5 )
+            new ImmutableTriple<>( "src/test/resources/agent/language/crypto.asl", 2, 9 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/math.asl", 2, 10 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/collection.asl", 2, 5 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 14 )
             /*
-            new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 14 )
+            new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 1 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 ),
+
             */
         ).toArray();
     }

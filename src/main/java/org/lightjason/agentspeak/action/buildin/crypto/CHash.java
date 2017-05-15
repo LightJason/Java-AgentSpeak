@@ -24,6 +24,8 @@
 package org.lightjason.agentspeak.action.buildin.crypto;
 
 import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
+import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -33,13 +35,12 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.io.IOException;
-import java.math.BigInteger;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Stream;
 
 
 /**
@@ -74,33 +75,36 @@ public final class CHash extends IBuildinAction
     {
         CCommon.flatcollection( p_argument )
                .skip( 1 )
-               .map( ITerm::raw )
-               .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), bytes( p_context, i ) ) )
+               .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), serialize( i, p_context ) ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
 
+
     /**
-     * converts an object to a byte array
+     * serialize data
      *
+     * @param p_object term object
      * @param p_context execution context
-     * @param p_object object
-     * @return byte array
+     * @return serialized bytes
+     *
+     * @note strings will be serialized always with utf-8 encoding, so comparing with md5sum is possible
      */
-    private static byte[] bytes( final IContext p_context, final Object p_object )
+    private static byte[] serialize( final ITerm p_object, final IContext p_context )
     {
         try
         {
-            return CCommon.getBytes( Stream.of( p_object ) );
+            return CCommon.rawvalueAssignableTo( p_object, String.class )
+                   ? p_object.<String>raw().getBytes( "UTF-8" )
+                   : SerializationUtils.serialize( p_object.<Serializable>raw() );
         }
-        catch ( final IOException l_exception )
+        catch ( final UnsupportedEncodingException l_exception )
         {
             throw new CRuntimeException( l_exception, p_context );
         }
     }
-
 
     /**
      * runs hashing function with difference between Google Guava hashing and Java default digest
@@ -135,7 +139,7 @@ public final class CHash extends IBuildinAction
             default:
                 try
                 {
-                    return String.format( "%032x", new BigInteger( 1, MessageDigest.getInstance( p_algorithm ).digest( p_data ) ) );
+                    return BaseEncoding.base16().encode( MessageDigest.getInstance( p_algorithm ).digest( p_data ) ).toLowerCase( Locale.ROOT );
                 }
                 catch ( final NoSuchAlgorithmException l_exception )
                 {
