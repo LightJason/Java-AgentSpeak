@@ -49,21 +49,21 @@ public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
      *
      * @return type
      */
-    EType getType();
+    EType type();
 
     /**
      * returns the literal of the event
      *
      * @return literal
      */
-    ILiteral getLiteral();
+    ILiteral literal();
 
     /**
      * returns variable number
      *
      * @return number
      */
-    int getVariableSize();
+    int variablesize();
 
     /**
      * returns a hash value over the whole content

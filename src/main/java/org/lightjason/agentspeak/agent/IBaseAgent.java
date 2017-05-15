@@ -323,7 +323,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return CFuzzyValue.from( false );
 
         // check if literal does not store any variables
-        if ( p_trigger.getLiteral().hasVariable() )
+        if ( p_trigger.literal().hasVariable() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
@@ -438,8 +438,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
-            i.getLeft().getLeft().trigger().getLiteral().fqnfunctor(),
-            i.getLeft().getLeft().trigger().getLiteral().unify( i.getRight() )
+            i.getLeft().getLeft().trigger().literal().fqnfunctor(),
+            i.getLeft().getLeft().trigger().literal().unify( i.getRight() )
         ) );
 
         // execute plan and return values and return execution result

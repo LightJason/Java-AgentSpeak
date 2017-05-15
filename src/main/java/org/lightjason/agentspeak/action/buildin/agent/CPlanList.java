@@ -63,7 +63,7 @@ public final class CPlanList extends IBuildinAction
                  .map( i -> i.getLeft().trigger() )
                  .sorted()
                  .distinct()
-                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getType().toString(), i.getLiteral() ) )
+                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.type().toString(), i.literal() ) )
                  .collect( Collectors.toList() );
 
         p_return.add(

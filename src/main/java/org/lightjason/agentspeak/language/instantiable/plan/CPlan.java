@@ -124,7 +124,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         // create delete-goal trigger
         if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
-            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
+            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;
     }
@@ -184,7 +184,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
             super.variables(),
 
-            CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
+            CCommon.recursiveterm( m_triggerevent.literal().orderedvalues() )
                    .filter( i -> i instanceof IVariable<?> )
                    .map( i -> (IVariable<?>) i )
         )
