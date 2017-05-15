@@ -69,19 +69,11 @@ foo(blub(1),hallo("test")).
  */
 +!testbool <-
     BAnd = bool/and( true, false, true );
-    RBAnd = ~BAnd;
-    test/result( RBAnd, "bool-and has been failed" );
+    BAnd = ~BAnd;
+    test/result( BAnd, "bool-and has been failed" );
 
-
-    BOr  = bool/or( true, false, false );
-    test/result( BOr, "bool-or has been failed" );
-
-
-    BXor = bool/xor( true, false, true, false );
-    test/result( BXor, "bool-xor has been failed" );
-
-
-    generic/print("boolean", BAnd, BOr, BXor)
+    test/result( bool/or( true, false, false ), "bool-or has been failed" );
+    test/result( bool/xor( true, false, true, false ), "bool-xor has been failed" )
 .
 
 
@@ -90,32 +82,21 @@ foo(blub(1),hallo("test")).
  */
 +!teststring <-
     SBase64 = string/base64encode( "Base64 encoded string" );
-    RSBase64 = bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" );
-    test/result( RSBase64, "string base64 has been failed" );
-
+    test/result( bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
 
     SReverse = string/reverse( "abcdefg" );
-    RSReverse = bool/equal( SReverse, "gfedcba" );
-    test/result( RSReverse, "string reverse has been failed" );
-
+    test/result( bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
 
     SUpper = string/upper("AbCdefg");
-    RSUpper = bool/equal( SUpper, "ABCDEFG" );
-    test/result( RSUpper, "string upper has been failed" );
-
+    test/result( bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
 
     SLower = string/lower("AbCdefg");
-    RSLower = bool/equal( SLower, "abcdefg" );
-    test/result( RSLower, "string lower has been failed" );
-
+    test/result( bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
 
     SReplace = string/replace( "1", "-", "a1b1defg1xyz1ui" );
-    RSReplace = bool/equal( SReplace, "a-b-defg-xyz-ui" );
-    test/result( RSReplace, "string replace has been failed" );
-
+    test/result( bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
 
     SRand = string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
-
     generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand )
 .
 
@@ -153,25 +134,20 @@ foo(blub(1),hallo("test")).
  */
 +!testdeconstruct <-
         [O|P] =.. foo( blub(1), blah(3) );
-        R1 = bool/equal( O, "foo" );
-        test/result( R1, "first deconstruct has been failed" );
+        generic/print("first deconstruct", O, P);
+        test/result( bool/equal( O, "foo" ), "first deconstruct has been failed" );
 
         [H|I] = P;
         [A|C] =.. H;
         [B|D] =.. I;
 
-        R2 = bool/equal( A, "blub" );
-        R3 = bool/equal( B, "blah" );
-        test/result( R2, "second deconstruct has been failed" );
-        test/result( R3, "third deconstruct has been failed" );
+        generic/print("second deconstruct", H, I, A, C, B, D);
 
-        [X|Y] = generic/type/type( C, D );
-        generic/print(X, Y);
+        test/result( bool/equal( A, "blub" ), "second deconstruct has been failed" );
+        test/result( bool/equal( B, "blah" ), "third deconstruct has been failed" );
 
-        R4 =  V1 == 1;
-        R5 =  V2 == 3;
-        test/result( R4, "deconstruct first value has been failed" );
-        test/result( R5, "deconstruct second value has been failed" );
+        test/result( bool/equal( collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
+        test/result( bool/equal( collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
 
-        generic/print("deconstruct", O,P,H,I)
+        generic/print("deconstruct executed completly")
 .
