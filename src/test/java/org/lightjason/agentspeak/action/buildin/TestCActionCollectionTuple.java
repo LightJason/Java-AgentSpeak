@@ -58,8 +58,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
             null,
             false,
             Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -69,6 +68,22 @@ public final class TestCActionCollectionTuple extends IBaseTest
 
         Assert.assertEquals( l_return.get( 1 ).<AbstractMap.Entry<String, ?>>raw().getKey(), "foobar" );
         Assert.assertTrue( l_return.get( 1 ).<AbstractMap.Entry<?, Boolean>>raw().getValue() );
+    }
+
+    /**
+     * test tuple creating error
+     */
+    @Test
+    public final void createerror()
+    {
+        Assert.assertFalse(
+            new CCreate().execute(
+                null,
+                false,
+                Collections.emptyList(),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 
@@ -84,7 +99,6 @@ public final class TestCActionCollectionTuple extends IBaseTest
             null,
             false,
             Stream.of( "blubblub", l_data ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -104,8 +118,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
             null,
             false,
             Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );

@@ -132,16 +132,15 @@ public final class CCommon
      */
     public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( final IUnifier p_unifier, final ITrigger p_source, final ITrigger p_target )
     {
-        // filter for avoid duplicated instantiation on non-existing values / annotations
-        if ( !( ( p_source.getLiteral().emptyValues() == p_target.getLiteral().emptyValues() )
-             && ( p_source.getLiteral().emptyAnnotations() == p_target.getLiteral().emptyAnnotations() ) ) )
+        // filter for avoid duplicated instantiation on non-existing values
+        if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 
         // unify variables, source trigger literal must be copied
-        final Set<IVariable<?>> l_variables = p_unifier.literal( p_target.getLiteral().deepcopy().<ILiteral>raw(), p_source.getLiteral() );
+        final Set<IVariable<?>> l_variables = p_unifier.literal( p_target.literal().deepcopy().<ILiteral>raw(), p_source.literal() );
 
         // check for completely unification (of all variables)
-        return l_variables.size() == CCommon.variablefrequency( p_target.getLiteral() ).size()
+        return l_variables.size() == CCommon.variablefrequency( p_target.literal() ).size()
                ? new ImmutablePair<>( true, l_variables )
                : new ImmutablePair<>( false, Collections.emptySet() );
     }
@@ -189,10 +188,7 @@ public final class CCommon
     public static Map<IVariable<?>, Integer> variablefrequency( final ILiteral p_literal )
     {
         return Collections.unmodifiableMap(
-            Stream.concat(
-                recursiveterm( p_literal.orderedvalues() ),
-                recursiveliteral( p_literal.annotations() )
-            )
+            recursiveterm( p_literal.orderedvalues() )
                   .filter( i -> i instanceof IVariable<?> )
                   .map( i -> (IVariable<?>) i )
                   .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )

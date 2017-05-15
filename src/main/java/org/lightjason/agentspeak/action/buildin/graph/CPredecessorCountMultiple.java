@@ -24,47 +24,34 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * removes edges from a graph.
- * The action removes edges from a graph, the first
- * argument is the graph all other arguments are edges,
- * fails if an edge cannot removed
+ * returns the number of predecessors of any vertex in a single graph instance.
+ * The action returns for any vertex argument the number of predecessors on
+ * a single graph instance, the action never fails
  *
- * @code graph/removeedge( Graph, Edge1, Edge2 ); @endcode
+ * @code [C1|C2] = graph/predecessorcountmultiple( Graph, Vertex1, Vertex2 ); @endcode
  */
-public final class CRemoveEdge extends IBuildinAction
+public final class CPredecessorCountMultiple extends IApplyMultiple
 {
-
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-
-        return CFuzzyValue.from(
-            l_arguments.size() >= 2
-            && l_arguments.stream()
-                          .skip( 1 )
-                          .map( ITerm::raw )
-                          .allMatch( i -> l_arguments.get( 0 ).<Graph<Object, Object>>raw().removeEdge( i ) )
+        p_return.add(
+            CRawTerm.from(
+                (long) p_graph.getPredecessorCount( p_window.get( 0 ).raw() )
+            )
         );
     }
-
 }

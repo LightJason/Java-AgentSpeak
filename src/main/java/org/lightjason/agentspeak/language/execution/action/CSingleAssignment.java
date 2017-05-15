@@ -62,13 +62,12 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         final List<ITerm> l_return = new LinkedList<>();
         final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute(
-            p_context, p_parallel, Collections.emptyList(), l_return, Collections.emptyList() );
+            p_context, p_parallel, Collections.emptyList(), l_return );
         if ( ( !l_rightreturn.value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 

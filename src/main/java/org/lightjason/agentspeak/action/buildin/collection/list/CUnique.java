@@ -61,8 +61,7 @@ public final class CUnique extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         final List<?> l_result = new ArrayList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );

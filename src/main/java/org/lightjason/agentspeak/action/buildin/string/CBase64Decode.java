@@ -40,8 +40,7 @@ import java.util.List;
 /**
  * action to decodes a string with Base64.
  * The decoded string version is created from each string argument, which is
- * based64 encoded.
- * The action never fails.
+ * based64 encoded, the action fails on decoding error.
  *
  * @code [A|B] = string/base64decode( "aGVsbG8=", "QWdlbnRTcGVhayhMKysp" ); @endcode
  * @note return null on encoding errors
@@ -57,34 +56,38 @@ public final class CBase64Decode extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        return CFuzzyValue.from(
+            CCommon.flatcollection( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> CBase64Decode.from( Base64.getDecoder().decode( i.getBytes( Charset.forName( "UTF-8" ) ) ) ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+               .allMatch( i -> CBase64Decode.apply( i, p_return ) )
+        );
     }
 
     /**
-     * create a string with enconding
+     * create a string with encoding
      *
-     * @param p_character byte character
-     * @return string or null on error
+     * @param p_string byte character
+     * @param p_return return list
+     * @return boolean successful run
      */
-    private static String from( final byte[] p_character )
+    private static boolean apply( final String p_string, final List<ITerm> p_return )
     {
         try
         {
-            return new String( p_character, "UTF-8" );
+            p_return.add(
+                CRawTerm.from(
+                    new String( Base64.getDecoder().decode( p_string.getBytes( Charset.forName( "UTF-8" ) ) ), "UTF-8" )
+                )
+            );
+
+            return true;
         }
-        catch ( final UnsupportedEncodingException l_exception )
+        catch ( final IllegalArgumentException | UnsupportedEncodingException l_exception )
         {
-            return null;
+            return false;
         }
     }
 

@@ -56,7 +56,6 @@ public final class TestCLanguage extends IBaseTest
         Assert.assertEquals( l_emptyliteral.fqnfunctor(), CPath.from( "foo/bar" ) );
         Assert.assertFalse( l_emptyliteral.hasAt() );
         Assert.assertTrue( l_emptyliteral.emptyValues() );
-        Assert.assertTrue( l_emptyliteral.emptyAnnotations() );
 
 
 
@@ -66,7 +65,6 @@ public final class TestCLanguage extends IBaseTest
         Assert.assertEquals( l_valueliteral.fqnfunctor(), CPath.from( "foo/value" ) );
         Assert.assertFalse( l_valueliteral.hasAt() );
         Assert.assertFalse( l_valueliteral.emptyValues() );
-        Assert.assertTrue( l_valueliteral.emptyAnnotations() );
 
         Assert.assertTrue(
             StreamUtils.zip(

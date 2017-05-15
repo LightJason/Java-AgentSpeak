@@ -69,8 +69,7 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -81,8 +80,7 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of(  "a", 1, "b", 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -96,8 +94,7 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             true,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -124,16 +121,14 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         new CValues().execute(
             null,
             false,
             Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
@@ -160,7 +155,6 @@ public final class TestCActionCollectionMap extends IBaseTest
             false,
             Stream.of( "v", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
 
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -176,7 +170,6 @@ public final class TestCActionCollectionMap extends IBaseTest
             false,
             Stream.of( "v", 666, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
 
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -198,7 +191,6 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -211,7 +203,6 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -238,8 +229,7 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of( l_map, "a", "z" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_map.size(), 1 );
@@ -265,8 +255,7 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -294,8 +283,7 @@ public final class TestCActionCollectionMap extends IBaseTest
             null,
             false,
             Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );

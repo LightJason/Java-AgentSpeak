@@ -61,8 +61,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
@@ -106,7 +105,5 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
             ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.fqnfunctor().toString() );
         if ( p_assignment.size() >= 2 )
             ( (IVariable<Object>) p_assignment.get( 1 ) ).set( p_term.values().collect( Collectors.toList() ) );
-        if ( p_assignment.size() >= 3 )
-            ( (IVariable<Object>) p_assignment.get( 2 ) ).set( p_term.annotations().collect( Collectors.toList() ) );
     }
 }

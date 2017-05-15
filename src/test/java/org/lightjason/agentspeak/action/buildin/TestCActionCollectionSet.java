@@ -61,8 +61,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             null,
             false,
             Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -82,8 +81,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             null,
             true,
             Stream.of( 10, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -104,7 +102,6 @@ public final class TestCActionCollectionSet extends IBaseTest
             null,
             false,
             Stream.of( l_set, 1, 5, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -124,8 +121,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             null,
             false,
             Stream.of( l_set, "foo", 1, "bar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( true, true, false ).toArray() );
@@ -144,8 +140,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             null,
             false,
             Stream.of( l_set, "foo", 1, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( true, true, false ).toArray() );
@@ -165,8 +160,7 @@ public final class TestCActionCollectionSet extends IBaseTest
             null,
             false,
             Stream.of( l_set ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

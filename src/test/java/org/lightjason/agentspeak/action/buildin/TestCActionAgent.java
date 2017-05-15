@@ -134,8 +134,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -143,22 +142,21 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 0 );
 
 
-        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
 
         new CPlanList().execute(
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof List<?> );
         Assert.assertEquals( l_return.get( 1 ).<List<?>>raw().size(), 1 );
         Assert.assertTrue( l_return.get( 1 ).<List<?>>raw().get( 0 ) instanceof AbstractMap.Entry<?, ?> );
-        Assert.assertEquals( l_return.get( 1 ).<List<AbstractMap.Entry<String, ILiteral>>>raw().get( 0 ).getKey(), l_trigger.getType().sequence() );
-        Assert.assertEquals( l_return.get( 1 ).<List<AbstractMap.Entry<String, ILiteral>>>raw().get( 0 ).getValue(), l_trigger.getLiteral() );
+        Assert.assertEquals( l_return.get( 1 ).<List<AbstractMap.Entry<String, ILiteral>>>raw().get( 0 ).getKey(), l_trigger.type().sequence() );
+        Assert.assertEquals( l_return.get( 1 ).<List<AbstractMap.Entry<String, ILiteral>>>raw().get( 0 ).getValue(), l_trigger.literal() );
     }
 
 
@@ -174,7 +172,6 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Stream.of( l_plan ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
 
@@ -196,8 +193,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -219,21 +215,19 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertTrue( l_return.isEmpty() );
 
 
-        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
 
         new CGetPlan().execute(
             m_context,
             false,
             Stream.of( "+!", "testgetplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -250,14 +244,13 @@ public final class TestCActionAgent extends IBaseTest
     public final void removeplan()
     {
         final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testremoveplan" ) ) );
-        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
 
         Assert.assertTrue(
             new CRemovePlan().execute(
                 m_context,
                 false,
                 Stream.of( "+!", "testremoveplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -275,7 +268,6 @@ public final class TestCActionAgent extends IBaseTest
                 m_context,
                 false,
                 Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -299,7 +291,6 @@ public final class TestCActionAgent extends IBaseTest
         new CClearBeliefbase().execute(
             m_context,
             false,
-            Collections.emptyList(),
             Collections.emptyList(),
             Collections.emptyList()
         );
@@ -329,8 +320,7 @@ public final class TestCActionAgent extends IBaseTest
             m_context,
             false,
             Collections.emptyList(),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
@@ -438,19 +428,19 @@ public final class TestCActionAgent extends IBaseTest
         }
 
         @Override
-        public final ITrigger getTrigger()
+        public final ITrigger trigger()
         {
             return m_trigger;
         }
 
         @Override
-        public final Collection<IAnnotation<?>> getAnnotations()
+        public final Collection<IAnnotation<?>> annotations()
         {
             return m_annotation.values();
         }
 
         @Override
-        public final List<IExecution> getBodyActions()
+        public final List<IExecution> body()
         {
             return Collections.emptyList();
         }

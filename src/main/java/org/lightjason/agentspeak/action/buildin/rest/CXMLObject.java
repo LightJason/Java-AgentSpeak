@@ -47,8 +47,7 @@ import java.util.Map;
 public class CXMLObject extends IBaseRest
 {
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         try
@@ -58,7 +57,7 @@ public class CXMLObject extends IBaseRest
                 p_argument.size() == 2
                 ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
                 : IBaseRest.baseliteral(
-                    p_argument.subList( 1, p_argument.size() ).stream().map( ITerm::<String>raw ),
+                    p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
                     flatterm( l_data )
                 )
             );

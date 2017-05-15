@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.crypto;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -59,34 +60,56 @@ public final class CDecrypt extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         final Key l_key = p_argument.get( 0 ).raw();
-        final EAlgorithm l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+        final EAlgorithm l_algorithm;
+        try
+        {
+            l_algorithm = EAlgorithm.from( l_key.getAlgorithm() );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
 
-        return CFuzzyValue.from( p_argument.subList( 1, p_argument.size() ).stream()
-                                           .map( i -> Base64.getDecoder().decode( i.<String>raw() ) )
-                                           .allMatch( i -> {
-                                               try
-                                               {
-                                                   p_return.add(
-                                                        CRawTerm.from(
-                                                            SerializationUtils.deserialize(
-                                                                l_algorithm.getDecryptCipher( l_key ).doFinal( i )
-                                                            )
-                                                        )
-                                                   );
-                                                   return true;
-                                               }
-                                               catch ( final NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException
-                                                      | BadPaddingException | IllegalBlockSizeException l_exception )
-                                               {
-                                                   return false;
-                                               }
-                                           } )
+        return CFuzzyValue.from(
+                   CCommon.flatstream( p_argument.stream().skip( 1 ) )
+                          .map( ITerm::<String>raw )
+                          .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
         );
+    }
+
+    /**
+     * decrypt
+     *
+     * @param p_algorithm algorithm
+     * @param p_key key
+     * @param p_dataset base64 encoded dataset
+     * @param p_return return argument
+     * @return successful execution
+     */
+    private static boolean decrypt( final EAlgorithm p_algorithm, final Key p_key, final String p_dataset, final List<ITerm> p_return )
+    {
+        try
+        {
+            p_return.add(
+                CRawTerm.from(
+                    SerializationUtils.deserialize(
+                        p_algorithm.getDecryptCipher( p_key ).doFinal(
+                            Base64.getDecoder().decode( p_dataset )
+                        )
+                    )
+                )
+            );
+
+            return true;
+        }
+        catch ( final IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException l_exception )
+        {
+            return false;
+        }
     }
 
 }

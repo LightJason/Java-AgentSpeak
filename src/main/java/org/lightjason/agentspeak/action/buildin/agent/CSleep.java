@@ -52,9 +52,7 @@ public final class CSleep extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         return CFuzzyValue.from(
             p_context.agent().sleep(
@@ -63,7 +61,7 @@ public final class CSleep extends IBuildinAction
                 ? p_argument.get( 0 ).<Number>raw().longValue()
                 : Long.MAX_VALUE,
 
-                p_annotation.size() > 1
+                p_argument.size() > 1
                 ? p_argument.subList( 1, p_argument.size() ).stream()
                 : Stream.of()
 

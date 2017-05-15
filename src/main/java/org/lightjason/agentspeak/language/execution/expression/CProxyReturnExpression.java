@@ -58,12 +58,10 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
 
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         final List<ITerm> l_returnarguments = new LinkedList<>();
-        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, l_returnarguments, p_annotation );
+        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, l_returnarguments );
 
         // compare returning arguments, on empty return execution result, otherwise return arguments
         if ( l_returnarguments.isEmpty() )

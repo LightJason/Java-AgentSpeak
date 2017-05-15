@@ -54,17 +54,16 @@ public final class CPlanList extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         final List<?> l_list = p_context.agent()
                  .plans()
                  .values()
                  .stream()
-                 .map( i -> i.getLeft().getTrigger() )
+                 .map( i -> i.getLeft().trigger() )
                  .sorted()
                  .distinct()
-                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getType().toString(), i.getLiteral() ) )
+                 .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.type().toString(), i.literal() ) )
                  .collect( Collectors.toList() );
 
         p_return.add(

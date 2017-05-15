@@ -104,13 +104,11 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         // run initialization
         final List<ITerm> l_initialization = new LinkedList<>();
-        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization, p_annotation ).value() )
+        if ( !m_initialize.execute( p_context, p_parallel, p_argument, l_initialization ).value() )
             return CFuzzyValue.from( false );
 
         // run lambda expression
@@ -175,8 +173,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
                     l_localcontext.getLeft(),
                     m_parallel,
                     Collections.<ITerm>emptyList(),
-                    new LinkedList<>(),
-                    Collections.<ITerm>emptyList()
+                    new LinkedList<>()
                 ) );
             return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
 
@@ -198,8 +195,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
             l_localcontext.getMiddle().set( i.raw() );
             m_body.forEach(
                 j -> j.execute(
-                    l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>(),
-                    Collections.<ITerm>emptyList()
+                    l_localcontext.getLeft(), m_parallel, Collections.<ITerm>emptyList(), new LinkedList<>()
                 ) );
             return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
 

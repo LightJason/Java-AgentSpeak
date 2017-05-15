@@ -69,8 +69,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( "functor", "stringvalue", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -98,8 +97,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( "main/parsefunctor( \"hello\", 666, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -128,8 +126,7 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "Main/parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
             ).value()
         );
     }
@@ -147,8 +144,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( "666", "123", "-123", "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -171,8 +167,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( "732.489", "64.091248", "-78129.01", "foo" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -195,8 +190,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( new ArrayList<>(), 123L, "test value", new HashSet<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -218,7 +212,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "java.lang.String", "text foo", 123, 88.98 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -228,7 +221,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "java.lang.Number", 123, 44.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -246,7 +238,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "test type string", null ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -256,7 +247,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( CRawTerm.from( null ) ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -274,7 +264,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -284,7 +273,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -302,7 +290,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -313,7 +300,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "okay 1", 'c', "ok 2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -332,8 +318,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( 1, 2.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 2L ).toArray() );
@@ -350,7 +335,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -369,8 +353,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( "", 123, 5.5, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -393,8 +376,7 @@ public final class TestCActionGenericType extends IBaseTest
             null,
             false,
             Stream.of( 1, 2, 3.2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -415,7 +397,6 @@ public final class TestCActionGenericType extends IBaseTest
                 null,
                 false,
                 Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );

@@ -66,7 +66,7 @@ public final class CRulePlaceholder implements IRule
 
 
     @Override
-    public final ILiteral getIdentifier()
+    public final ILiteral identifier()
     {
         return m_id;
     }
@@ -86,8 +86,7 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         return CFuzzyValue.from( false );

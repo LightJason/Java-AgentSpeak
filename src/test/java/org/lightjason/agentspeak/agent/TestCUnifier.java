@@ -93,24 +93,9 @@ public final class TestCUnifier extends IBaseTest
 
         assertTrue(
             MessageFormat.format( "literal sequential traversing in {0} is wrong for {1}", l_literal, l_test ),
-            l_literal.orderedvalues( CPath.from( "first" ) ).map( i -> i.equals( l_test.pop() ) ).allMatch( i -> i )
+            l_literal.orderedvalues( CPath.from( "first" ) ).allMatch( i -> i.equals( l_test.pop() ) )
             && l_test.isEmpty()
         );
-    }
-
-    /**
-     * traversion of literal annotation content
-     *
-     * @throws Exception parser exception
-     */
-    @Test
-    public final void literalannotationtraversing() throws Exception
-    {
-
-        final ILiteral l_literal = CLiteral.parse( "foo()[ first(1), first(2), first(foo('hallo')), second('test') ]" );
-
-        final List<ITerm> l_result = l_literal.annotations( CPath.from( "first" ) ).collect( Collectors.toList() );
-        assertEquals( MessageFormat.format( "literal traversing in {0} is wrong", l_literal ), l_result.size(), 3 );
     }
 
     /**
@@ -138,24 +123,6 @@ public final class TestCUnifier extends IBaseTest
             MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.valuehash() ),
             l_third.valuehash(),
             l_fourth.valuehash()
-        );
-    }
-
-
-    /**
-     * literal annotation
-     *
-     * @throws Exception parser exception
-     */
-    @Test
-    public final void annotationhash() throws Exception
-    {
-        final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[anno(1),xvalue('test')]" );
-        final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[foo(13),valuenew('test2')]" );
-
-        assertNotEquals(
-            MessageFormat.format( "literal annotation hash of [{0}] and [{1}] are equal [{2}]", l_first, l_second, l_first.annotationhash() ),
-            l_first.annotationhash(), l_second.annotationhash()
         );
     }
 

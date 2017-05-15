@@ -47,6 +47,7 @@ import org.lightjason.agentspeak.action.buildin.string.CUpper;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import java.io.UnsupportedEncodingException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,16 +92,14 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         new CBase64Decode().execute(
             null,
             false,
                       l_return,
-                      l_result,
-                      Collections.emptyList()
+                      l_result
         );
 
         StreamUtils.zip(
@@ -108,6 +107,27 @@ public final class TestCActionString extends IBaseTest
             l_result.stream().map( ITerm::<String>raw ),
             AbstractMap.SimpleImmutableEntry::new
         ).forEach( i -> Assert.assertEquals( i.getKey(), i.getValue() ) );
+    }
+
+
+    /**
+     * test base64 decode with errors
+     *
+     * @throws UnsupportedEncodingException is thrown on test data encoding
+     */
+    @Test
+    public final void base64decodeerror() throws UnsupportedEncodingException
+    {
+        Assert.assertFalse(
+            new CBase64Decode().execute(
+                null,
+                false,
+                Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
+                      .map( CRawTerm::from )
+                      .collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
+        );
     }
 
 
@@ -126,8 +146,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals(
@@ -155,8 +174,7 @@ public final class TestCActionString extends IBaseTest
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream()
             ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertTrue(
@@ -181,8 +199,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
@@ -209,8 +226,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
@@ -237,8 +253,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
@@ -268,8 +283,7 @@ public final class TestCActionString extends IBaseTest
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream().mapToInt( String::length ).boxed()
             ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         StreamUtils.zip(
@@ -295,8 +309,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
@@ -320,8 +333,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -343,8 +355,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -365,7 +376,6 @@ public final class TestCActionString extends IBaseTest
                 null,
                 false,
                 Collections.emptyList(),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -384,8 +394,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -406,8 +415,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -420,8 +428,7 @@ public final class TestCActionString extends IBaseTest
             null,
             false,
             Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 6 );
@@ -441,7 +448,6 @@ public final class TestCActionString extends IBaseTest
             new CNCD().execute(
                 null,
                 false,
-                Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()

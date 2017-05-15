@@ -42,8 +42,6 @@ import java.util.List;
  * values
  *
  * @code L = generic/type/createliteral( "literal/functor/with/path", 123, "value" ); @endcode
- *
- * @todo add annotation generating
  */
 public final class CCreateLiteral extends IBuildinAction
 {
@@ -62,8 +60,7 @@ public final class CCreateLiteral extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         p_return.add(

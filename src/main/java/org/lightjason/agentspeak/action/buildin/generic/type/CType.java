@@ -38,7 +38,7 @@ import java.util.List;
  * The actions returns for each argument the data type
  * as a string name, the action never fails
  *
- * @code [T1|T2] = generic/type/type( A, B );
+ * @code [T1|T2] = generic/type/type( A, B ); @endcode
  */
 public final class CType extends IBuildinAction
 {
@@ -58,8 +58,7 @@ public final class CType extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         p_argument.stream().map( ITerm::raw ).map( i -> i.getClass().getCanonicalName() ).map(  CRawTerm::from ).forEach(  p_return::add );
         return CFuzzyValue.from( true );

@@ -58,13 +58,11 @@ public final class CPlanStatistic extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         return CFuzzyValue.from(
             CCommon.flatcollection( p_argument )
-                   .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().getTrigger(), p_context.agent(), p_return ) )
+                   .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().trigger(), p_context.agent(), p_return ) )
         );
     }
 

@@ -110,7 +110,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
+        p_rules.stream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
     }
 
     // --- start rules -----------------------------------------------------------------------------------------------------------------------------------------
@@ -242,20 +242,8 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
             p_context.AT() != null,
             p_context.STRONGNEGATION() != null,
             CPath.from( this.visitAtom( p_context.atom() ).toString() ),
-            (Collection<ITerm>) this.visitTermlist( p_context.termlist() ),
-            (Collection<ILiteral>) this.visitLiteralset( p_context.literalset() )
+            (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
         );
-    }
-
-
-
-    @Override
-    public final Object visitLiteralset( final TypeParser.LiteralsetContext p_context )
-    {
-        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_LIST;
-
-        return p_context.literal().stream().map( i -> this.visitLiteral( i ) ).filter( i -> i != null ).collect( Collectors.toList() );
     }
 
 

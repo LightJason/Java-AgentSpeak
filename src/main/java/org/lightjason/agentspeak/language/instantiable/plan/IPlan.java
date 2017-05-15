@@ -45,21 +45,21 @@ public interface IPlan extends IInstantiable
      *
      * @return trigger event
      */
-    ITrigger getTrigger();
+    ITrigger trigger();
 
     /**
      * return unmodifieable annotation set
      *
      * @return set with annotation
      */
-    Collection<IAnnotation<?>> getAnnotations();
+    Collection<IAnnotation<?>> annotations();
 
     /**
      * returns unmodifieable list with plan actions
      *
      * @return action list;
      */
-    List<IExecution> getBodyActions();
+    List<IExecution> body();
 
     /**
      * execute the plan condition

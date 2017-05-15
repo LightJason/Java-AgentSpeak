@@ -53,34 +53,11 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     Stream<ITerm> orderedvalues( final IPath... p_path );
 
     /**
-     * returns a stream over annotation items
-     *
-     * @param p_path optional filtering annotation names (filtering all
-     * annotations on the same level not within)
-     * @return stream
-     */
-    Stream<ILiteral> annotations( final IPath... p_path );
-
-    /**
      * check for empty values
      *
      * @return empty flag
      */
     boolean emptyValues();
-
-    /**
-     * check for empty annotations
-     *
-     * @return empty flag
-     */
-    boolean emptyAnnotations();
-
-    /**
-     * returns the hash of the annotations
-     *
-     * @return hash
-     */
-    int annotationhash();
 
     /**
      * returns the hash of the value

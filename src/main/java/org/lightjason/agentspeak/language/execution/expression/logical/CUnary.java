@@ -58,12 +58,11 @@ public final class CUnary extends IBaseUnary
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
+        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 

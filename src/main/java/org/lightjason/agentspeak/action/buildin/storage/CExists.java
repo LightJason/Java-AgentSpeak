@@ -30,9 +30,9 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
@@ -44,13 +44,14 @@ import java.util.List;
  */
 public final class CExists extends IStorage
 {
-
     /**
      * ctor
+     *
+     * @param p_resolver resolver function
      */
-    public CExists()
+    public CExists( final Function<String, Boolean> p_resolver )
     {
-        super();
+        super( p_resolver );
     }
 
     /**
@@ -60,15 +61,15 @@ public final class CExists extends IStorage
      */
     public CExists( final String... p_forbidden )
     {
-        super( Arrays.asList( p_forbidden ) );
+        super( p_forbidden );
     }
 
     /**
      * ctor
      *
-     * @param p_fordbidden forbidden keys
+     * @param p_fordbidden stream with borbidden keys
      */
-    public CExists( final Collection<String> p_fordbidden )
+    public CExists( final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -80,13 +81,12 @@ public final class CExists extends IStorage
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<String>raw )
-               .map( i -> ( !m_forbidden.contains( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
+               .map( i -> ( !m_resolver.apply( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

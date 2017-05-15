@@ -68,7 +68,7 @@ public final class CRule extends IBaseInstantiable implements IRule
     }
 
     @Override
-    public final ILiteral getIdentifier()
+    public final ILiteral identifier()
     {
         return m_id;
     }
@@ -83,7 +83,7 @@ public final class CRule extends IBaseInstantiable implements IRule
                                        i instanceof CRulePlaceholder
                                        // create a full deep-copy of the literal for avoid indeterminisitic
                                        // behaviour on rule unification
-                                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
+                                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
                                        : i
             ).collect( Collectors.toList() )
         );
@@ -95,7 +95,6 @@ public final class CRule extends IBaseInstantiable implements IRule
     {
         return (Stream<IVariable<?>>) Stream.of(
             CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-            CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
             super.variables()
         )
                                             .reduce( Stream::concat )

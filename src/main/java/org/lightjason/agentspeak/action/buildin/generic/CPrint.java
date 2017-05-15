@@ -107,18 +107,9 @@ public final class CPrint extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
-        m_stream.println(
-            MessageFormat.format(
-                "{0}{1}", this.format( p_argument ),
-                p_annotation.isEmpty()
-                ? ""
-                : MessageFormat.format( "{0}{1}", m_seperator, this.format( p_annotation ) )
-            )
-        );
+        m_stream.println( MessageFormat.format( "{0}", this.format( p_argument ) ) );
         return CFuzzyValue.from( true );
     }
 

@@ -24,47 +24,33 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * removes vertices from a graph.
- * The action removes vertices from a graph, the first
- * argument is the graph all other arguments are vertices,
- * fails if a vertex cannot removed
+ * removes edges from any graph instance.
+ * The action removes any edge from a single
+ * graph instace, the first argument is the
+ * graph all other arguments are edges, the
+ * action never fails
  *
- * @code graph/removevertex( Graph, Vertex1, Vertex2 ); @endcode
+ * @code graph/removeedgemultiple( Graph, Edge1, Edge2 ); @endcode
  */
-public final class CRemoveVertex extends IBuildinAction
+public final class CRemoveEdgeMultiple extends IApplyMultiple
 {
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-
-        return CFuzzyValue.from(
-            l_arguments.size() >= 2
-            && l_arguments.stream()
-                          .skip( 1 )
-                          .map( ITerm::raw )
-                          .allMatch( i -> l_arguments.get( 0 ).<Graph<Object, Object>>raw().removeVertex( i ) )
-        );
+        p_graph.removeEdge( p_window.get( 0 ).raw() );
     }
 
 }

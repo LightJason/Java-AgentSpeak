@@ -28,15 +28,15 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
  * removes all elements of the storage.
  * The action removes all elements from the storage
- * except the elements wich are forbidden, the action,
+ * except the elements wich are forbidden, the action
  * never fails
  *
  * @code storage/clear(); @endcode
@@ -46,10 +46,12 @@ public final class CClear extends IStorage
 
     /**
      * ctor
+     *
+     * @param p_resolver resolver function
      */
-    public CClear()
+    public CClear( final Function<String, Boolean> p_resolver )
     {
-        super();
+        super( p_resolver );
     }
 
     /**
@@ -59,15 +61,15 @@ public final class CClear extends IStorage
      */
     public CClear( final String... p_forbidden )
     {
-        super( Arrays.asList( p_forbidden ) );
+        super( p_forbidden );
     }
 
     /**
      * ctor
      *
-     * @param p_fordbidden forbidden keys
+     * @param p_fordbidden stream with borbidden keys
      */
-    public CClear( final Collection<String> p_fordbidden )
+    public CClear( final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -79,12 +81,11 @@ public final class CClear extends IStorage
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         p_context.agent().storage().keySet().parallelStream()
-                 .filter( i -> !m_forbidden.contains( i ) )
+                 .filter( i -> !m_resolver.apply( i ) )
                  .forEach( i -> p_context.agent().storage().remove( i ) );
 
         return CFuzzyValue.from( true );

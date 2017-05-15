@@ -44,7 +44,7 @@ public final class CLinearSelection extends ISelection
 {
 
     @Override
-    protected final List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument, final List<ITerm> p_annotation )
+    protected final List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument )
     {
         return p_values.collect( Collectors.toList() );
     }

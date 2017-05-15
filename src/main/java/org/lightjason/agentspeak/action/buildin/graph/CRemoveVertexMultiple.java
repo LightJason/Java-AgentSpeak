@@ -24,50 +24,31 @@
 package org.lightjason.agentspeak.action.buildin.graph;
 
 import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * returns the opposit of a vertex and edge.
- * The action returns the opposite vertex, with
- * the first argument is a vertex, the second an edge
- * an all other arguments are graphs, the action
- * never fails
+ * removes any vertices from a single graph instance.
+ * The action removes from the first graph argument all vertices,
+ * the action never fails
  *
- * @code [V1|V2] = graph/opposite( Vertex, Edge, Graph1, Graph2 ); @endcode
+ * @code graph/removevertexmultiple( Graph, Vertex1, Vertex2 ); @endcode
  */
-public final class COpposite extends IBuildinAction
+public final class CRemoveVertexMultiple extends IApplyMultiple
 {
+
     @Override
-    public final int minimalArgumentNumber()
+    protected final int windowsize()
     {
         return 1;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 3 )
-            return CFuzzyValue.from( false );
-
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.getOpposite( l_arguments.get( 0 ).raw(), l_arguments.get( 1 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        p_graph.removeVertex( p_window.get( 0 ).raw() );
     }
+
 }

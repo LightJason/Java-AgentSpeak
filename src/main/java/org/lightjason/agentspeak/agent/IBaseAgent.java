@@ -154,9 +154,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // initial plans and rules
         p_configuration.plans().parallelStream()
-                       .forEach( i -> m_plans.put( i.getTrigger(), new ImmutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
+                       .forEach( i -> m_plans.put( i.trigger(), new ImmutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
         p_configuration.rules().parallelStream()
-                       .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
+                       .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
 
         if ( p_configuration.initialgoal() != null )
             m_trigger.put( p_configuration.initialgoal().contenthash(), p_configuration.initialgoal() );
@@ -175,7 +175,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         if ( p_inspector == null )
             return Stream.of();
 
-        return Arrays.stream( p_inspector ).parallel().map( i -> {
+        return Arrays.stream( p_inspector ).parallel().peek( i -> {
             i.inspectcycle( m_cycle.get() );
             i.inspectsleeping( m_sleepingcycles.get() );
             i.inspectbelief( m_beliefbase.stream().parallel() );
@@ -185,7 +185,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             i.inspectrunningplans( m_runningplans.values().parallelStream() );
             i.inspectstorage( m_storage.entrySet().parallelStream() );
             i.inspectrules( m_rules.values().parallelStream() );
-            return i;
         } );
     }
 
@@ -324,7 +323,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return CFuzzyValue.from( false );
 
         // check if literal does not store any variables
-        if ( p_trigger.getLiteral().hasVariable() )
+        if ( p_trigger.literal().hasVariable() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "literalvariable", p_trigger ) );
 
         // run plan immediatly and return
@@ -404,7 +403,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                            .parallelStream()
 
                            // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
-                           .map( j -> new ImmutablePair<>( j, CCommon.unifytrigger( m_unifier, i, j.getLeft().getTrigger() ) ) )
+                           .map( j -> new ImmutablePair<>( j, CCommon.unifytrigger( m_unifier, i, j.getLeft().trigger() ) ) )
                            .filter( j -> j.getRight().getLeft() )
 
                            // initialize context
@@ -439,14 +438,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
-            i.getLeft().getLeft().getTrigger().getLiteral().fqnfunctor(),
-            i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
+            i.getLeft().getLeft().trigger().literal().fqnfunctor(),
+            i.getLeft().getLeft().trigger().literal().unify( i.getRight() )
         ) );
 
         // execute plan and return values and return execution result
         return p_execution.parallelStream().map( i -> {
 
-            final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null, null );
+            final IFuzzyValue<Boolean> l_result = i.getLeft().getLeft().execute( i.getRight(), false, null, null );
             if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
                 // increment successful runs
                 i.getLeft().getMiddle().getAndIncrement();

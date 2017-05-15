@@ -41,16 +41,16 @@ import java.util.Map;
 
 
 /**
- * creates a minimal spanning tree of a graph.
+ * creates a minimal spanning tree of any graph instance.
  * The action creates from each graph argument a spanning
- * tree, within the argument list a default cost value
- * and a cost-matrix can be added, if an adge is not found
- * on the cost-map the default value is used, the ordering
- * of the arguments can be completly unordered
+ * tree, the first map instance will be used as weight-map,
+ * a tuple of the string "defaultweight" and a numeric value
+ * defines the default weight value of the weight-map
+ * (the default value is zero), the action never fails
  *
  * @code
     [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
-    [SP3|SP4] = graph/spanningtree( CostMap, Graph3, 1, Graph4 );
+    [SP3|SP4] = graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
  * @endcode
  */
 public final class CSpanningTree extends IBuildinAction
@@ -62,8 +62,7 @@ public final class CSpanningTree extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         final double l_defaultcost = CCommon.flatcollection( p_argument )
                                             .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )

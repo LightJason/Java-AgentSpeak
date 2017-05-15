@@ -37,7 +37,6 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +44,7 @@ import java.util.stream.Stream;
 /**
  * test math blas functions
  */
-public class TestCActionBlas extends IBaseTest
+public class TestCActionMathBlas extends IBaseTest
 {
     /**
      * testing matrix
@@ -69,8 +68,7 @@ public class TestCActionBlas extends IBaseTest
                 null,
                 false,
                 Stream.of( m_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -89,8 +87,7 @@ public class TestCActionBlas extends IBaseTest
                 null,
                 false,
                 Stream.of( m_matrix, m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -112,8 +109,7 @@ public class TestCActionBlas extends IBaseTest
                 null,
                 false,
                 Stream.of( m_matrix, "+", m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -128,6 +124,6 @@ public class TestCActionBlas extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCActionBlas().invoketest();
+        new TestCActionMathBlas().invoketest();
     }
 }

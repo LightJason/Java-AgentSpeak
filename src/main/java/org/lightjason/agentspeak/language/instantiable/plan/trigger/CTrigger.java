@@ -72,7 +72,7 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = CCommon.variablefrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) p_literal.values().count() ^ (int) p_literal.annotations().count();
+        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) p_literal.values().count();
         m_contenthash = m_event.hashCode() ^ m_literal.hashCode();
     }
 
@@ -107,19 +107,19 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final EType getType()
+    public final EType type()
     {
         return m_event;
     }
 
     @Override
-    public final ILiteral getLiteral()
+    public final ILiteral literal()
     {
         return m_literal;
     }
 
     @Override
-    public final int getVariableSize()
+    public final int variablesize()
     {
         return m_variables;
     }

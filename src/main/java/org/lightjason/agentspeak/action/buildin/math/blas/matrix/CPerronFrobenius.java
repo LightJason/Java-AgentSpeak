@@ -50,7 +50,7 @@ import java.util.stream.IntStream;
  * are squared matrices, the returning arguments are the eigenvector for each matrix, the
  * action never fails
  *
- * @code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3);
+ * @code [E1|E2|E3] = math/blas/matrix/perronfrobenius(5, M1, M2, M3); @endcode
  * @see https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
  */
 public final class CPerronFrobenius extends IAlgebra
@@ -71,12 +71,10 @@ public final class CPerronFrobenius extends IAlgebra
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         final Random l_random = ThreadLocalRandom.current();
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_annotation ).collect( Collectors.toList() );
+        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
         // create eigenvectors
         final List<DoubleMatrix1D> l_eigenvector = IntStream

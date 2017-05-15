@@ -100,33 +100,31 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     }
 
     @Override
-    public final ITrigger getTrigger()
+    public final ITrigger trigger()
     {
         return m_triggerevent;
     }
 
     @Override
-    public final Collection<IAnnotation<?>> getAnnotations()
+    public final Collection<IAnnotation<?>> annotations()
     {
         return m_annotation.values();
     }
 
     @Override
-    public final List<IExecution> getBodyActions()
+    public final List<IExecution> body()
     {
         return m_action;
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
-        final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+        final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return );
 
         // create delete-goal trigger
         if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
-            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
+            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;
     }
@@ -139,7 +137,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-            m_condition.execute( p_context, false, Collections.emptyList(), l_return, Collections.emptyList() ).value()
+            m_condition.execute( p_context, false, Collections.emptyList(), l_return ).value()
             && ( l_return.size() == 1 )
             ? l_return.get( 0 ).<Boolean>raw()
             : false
@@ -186,11 +184,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
             super.variables(),
 
-            CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
-                   .filter( i -> i instanceof IVariable<?> )
-                   .map( i -> (IVariable<?>) i ),
-
-            CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
+            CCommon.recursiveterm( m_triggerevent.literal().orderedvalues() )
                    .filter( i -> i instanceof IVariable<?> )
                    .map( i -> (IVariable<?>) i )
         )

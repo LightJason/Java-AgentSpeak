@@ -21,11 +21,14 @@
  * @endcond
  */
 
+package org.lightjason.agentspeak.action.buildin.math.blas.matrix;
 
-package org.lightjason.agentspeak.action.buildin.graph;
-
-import edu.uci.ics.jung.graph.Graph;
-import org.lightjason.agentspeak.action.buildin.IBuildinAction;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
+import org.lightjason.agentspeak.action.buildin.math.blas.EType;
+import org.lightjason.agentspeak.action.buildin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -34,20 +37,21 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
- * returns outgoing edges of a vertex.
- * The actions returns a list outgoing edges
- * of a vertex for each graph argument, the first
- * argument is the vertex, all other graphs,
+ * returns the row-sum of a matrix.
+ * The action returns the row-sum of all matrix objects,
+ * a string value defines a sparse or dense resulting vector,
  * the action never fails
  *
- * @code [OE1|OE2] = graph/outedges( Vertex, Graph1, Graph2 ); @endcode
- * @note returned list of edges is unmodifyable
+ * @code
+    [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2 );
+    [S1|S2] = math/blas/matrix/rowsum( Matrix1, Matrix2, "sparse" );
+ * @endcode
  */
-public final class COutEdges extends IBuildinAction
+public final class CRowSum extends IAlgebra
 {
     @Override
     public final int minimalArgumentNumber()
@@ -56,19 +60,42 @@ public final class COutEdges extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final EType l_type = CCommon.flatcollection( p_argument )
+                                    .parallel()
+                                    .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
+                                    .findFirst()
+                                    .map( ITerm::<String>raw )
+                                    .map( EType::from )
+                                    .orElseGet( () -> EType.DENSE );
 
-        l_arguments.stream()
-                   .skip( 1 )
-                   .map( ITerm::<Graph<Object, Object>>raw )
-                   .map( i -> i.getOutEdges( l_arguments.get( 0 ).raw() ) )
-                   .map( CRawTerm::from )
-                   .forEach( p_return::add );
+        CCommon.flatcollection( p_argument )
+               .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix2D.class ) )
+               .map( ITerm::<DoubleMatrix2D>raw )
+               .map( i -> IntStream.range( 0, i.rows() ).boxed().map( i::viewRow ).mapToDouble( DoubleMatrix1D::zSum ).toArray() )
+               .map( i -> generate( i, l_type ) )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
     }
+
+    /**
+     * generates a vector
+     *
+     * @param p_value values
+     * @param p_type type
+     * @return vector
+     */
+    private static DoubleMatrix1D generate( final double[] p_value, final EType p_type )
+    {
+        switch ( p_type )
+        {
+            case SPARSE: return new SparseDoubleMatrix1D( p_value );
+            default : return new DenseDoubleMatrix1D( p_value );
+        }
+    }
+
 }

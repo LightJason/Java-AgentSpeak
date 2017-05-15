@@ -39,10 +39,14 @@ import org.lightjason.agentspeak.action.buildin.crypto.CCreateKey;
 import org.lightjason.agentspeak.action.buildin.crypto.CDecrypt;
 import org.lightjason.agentspeak.action.buildin.crypto.CEncrypt;
 import org.lightjason.agentspeak.action.buildin.crypto.CHash;
+import org.lightjason.agentspeak.action.buildin.crypto.EAlgorithm;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.crypto.KeyGenerator;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +81,68 @@ public final class TestCActionCrypto extends IBaseTest
         ).toArray();
     }
 
+
+    /**
+     * test wrong algorithm
+     *
+     * @throws NoSuchAlgorithmException is thrown on key generator error
+     */
+    @Test
+    public final void wrongalgorithm() throws NoSuchAlgorithmException
+    {
+        final Key l_key = KeyGenerator.getInstance( "HmacSHA1" ).generateKey();
+
+        Assert.assertFalse(
+            new CEncrypt().execute(
+                null,
+                false,
+                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
+        );
+
+
+        Assert.assertFalse(
+            new CDecrypt().execute(
+                null,
+                false,
+                Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
+        );
+    }
+
+
+    /**
+     * test decrypt execution array
+     *
+     * @throws NoSuchAlgorithmException is thrown on key generator error
+     */
+    @Test
+    public final void decryptexecutionerror() throws NoSuchAlgorithmException
+    {
+        final Pair<Key, Key> l_key = EAlgorithm.RSA.generateKey();
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CEncrypt().execute(
+            null,
+            false,
+            Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertFalse(
+            new CDecrypt().execute(
+                null,
+                false,
+                Stream.of( l_key.getLeft(), l_return.get( 0 ).raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+            ).value()
+        );
+    }
+
+
     /**
      * test hashing
      *
@@ -92,8 +158,7 @@ public final class TestCActionCrypto extends IBaseTest
                               null,
                               false,
                               Stream.of( CRawTerm.from( p_hash.getLeft() ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
-                              l_return,
-                              Collections.emptyList()
+                              l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), p_hash.getRight() );
@@ -110,7 +175,6 @@ public final class TestCActionCrypto extends IBaseTest
             null,
             false,
             Stream.of( CRawTerm.from( "xxx" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
-            Collections.emptyList(),
             Collections.emptyList()
         );
     }
@@ -148,8 +212,7 @@ public final class TestCActionCrypto extends IBaseTest
             null,
             false,
             Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), p_crypt.getMiddle().intValue() );
@@ -168,7 +231,6 @@ public final class TestCActionCrypto extends IBaseTest
                 null,
                 false,
                 Stream.of( CRawTerm.from( "test" ) ).collect( Collectors.toList() ),
-                Collections.emptyList(),
                 Collections.emptyList()
             ).value()
         );
@@ -189,8 +251,7 @@ public final class TestCActionCrypto extends IBaseTest
             null,
             false,
             Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
-            l_returnkey,
-            Collections.emptyList()
+            l_returnkey
         );
 
         Assert.assertEquals( l_returnkey.size(), p_crypt.getMiddle().intValue() );
@@ -202,8 +263,7 @@ public final class TestCActionCrypto extends IBaseTest
             null,
             false,
             Stream.of( l_returnkey.get( 0 ), CRawTerm.from( "test string" ), CRawTerm.from( 12345 ) ).collect( Collectors.toList() ),
-            l_returnencrypt,
-            Collections.emptyList()
+            l_returnencrypt
         );
 
 
@@ -213,8 +273,7 @@ public final class TestCActionCrypto extends IBaseTest
             null,
             false,
             Stream.concat( Stream.of( l_returnkey.get( p_crypt.getRight() ) ), l_returnencrypt.stream() ).collect( Collectors.toList() ),
-            l_return,
-            Collections.emptyList()
+            l_return
         );
 
 
