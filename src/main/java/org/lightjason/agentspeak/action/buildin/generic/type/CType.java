@@ -38,7 +38,7 @@ import java.util.List;
  * The actions returns for each argument the data type
  * as a string name, the action never fails
  *
- * @code [T1|T2] = generic/type/type( A, B );
+ * @code [T1|T2] = generic/type/type( A, B ); @endcode
  */
 public final class CType extends IBuildinAction
 {

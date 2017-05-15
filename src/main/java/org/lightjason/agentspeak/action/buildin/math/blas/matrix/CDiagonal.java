@@ -49,7 +49,7 @@ import java.util.List;
  * @code
       [D1|D2] = math/blas/matrix/diagonal( Vector1, Vector2 );
       [D3|D4] = math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
- * @endcoed
+ * @endcode
  */
 public final class CDiagonal extends IAlgebra
 {
