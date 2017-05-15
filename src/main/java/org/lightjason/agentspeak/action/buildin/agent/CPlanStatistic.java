@@ -62,7 +62,7 @@ public final class CPlanStatistic extends IBuildinAction
     {
         return CFuzzyValue.from(
             CCommon.flatcollection( p_argument )
-                   .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().getTrigger(), p_context.agent(), p_return ) )
+                   .allMatch( i -> CPlanStatistic.statistic( i.<IPlan>raw().trigger(), p_context.agent(), p_return ) )
         );
     }
 

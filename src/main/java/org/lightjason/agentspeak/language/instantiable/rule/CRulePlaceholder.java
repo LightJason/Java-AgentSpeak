@@ -66,7 +66,7 @@ public final class CRulePlaceholder implements IRule
 
 
     @Override
-    public final ILiteral getIdentifier()
+    public final ILiteral identifier()
     {
         return m_id;
     }

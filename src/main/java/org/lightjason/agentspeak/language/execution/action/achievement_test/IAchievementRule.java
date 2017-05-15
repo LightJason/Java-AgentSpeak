@@ -82,7 +82,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
         ).map( i -> {
 
             // instantiate variables by unification of the rule literal
-            final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal( i.getIdentifier(), l_unified );
+            final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal( i.identifier(), l_unified );
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(

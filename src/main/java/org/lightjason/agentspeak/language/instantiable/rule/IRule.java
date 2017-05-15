@@ -40,7 +40,7 @@ public interface IRule extends IInstantiable
      *
      * @return literal
      */
-    ILiteral getIdentifier();
+    ILiteral identifier();
 
     /**
      * replaces all placeholder objects and reinstantiate object

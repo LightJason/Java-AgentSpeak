@@ -53,9 +53,6 @@ import java.util.stream.Stream;
 
 /**
  * proxy action to encapsulate all actions
- *
- * @note inner annotations cannot be used on the
- * grammer definition, so the inner annotations are ignored
  */
 public final class CProxyAction implements IExecution
 {
@@ -226,8 +223,7 @@ public final class CProxyAction implements IExecution
 
             p_scorecache.add( m_action );
 
-
-            // resolve action arguments and annotation
+            // resolve action arguments
             m_arguments = Collections.unmodifiableMap(
                 this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions, p_scorecache ) );
         }

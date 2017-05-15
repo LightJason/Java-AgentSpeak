@@ -132,7 +132,7 @@ public final class CCommon
      */
     public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( final IUnifier p_unifier, final ITrigger p_source, final ITrigger p_target )
     {
-        // filter for avoid duplicated instantiation on non-existing values / annotations
+        // filter for avoid duplicated instantiation on non-existing values
         if ( !( p_source.getLiteral().emptyValues() == p_target.getLiteral().emptyValues() ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 

@@ -154,9 +154,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
         // initial plans and rules
         p_configuration.plans().parallelStream()
-                       .forEach( i -> m_plans.put( i.getTrigger(), new ImmutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
+                       .forEach( i -> m_plans.put( i.trigger(), new ImmutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
         p_configuration.rules().parallelStream()
-                       .forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
+                       .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
 
         if ( p_configuration.initialgoal() != null )
             m_trigger.put( p_configuration.initialgoal().contenthash(), p_configuration.initialgoal() );
@@ -403,7 +403,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                            .parallelStream()
 
                            // tries to unify trigger literal and filter of valid unification (returns set of unified variables)
-                           .map( j -> new ImmutablePair<>( j, CCommon.unifytrigger( m_unifier, i, j.getLeft().getTrigger() ) ) )
+                           .map( j -> new ImmutablePair<>( j, CCommon.unifytrigger( m_unifier, i, j.getLeft().trigger() ) ) )
                            .filter( j -> j.getRight().getLeft() )
 
                            // initialize context
@@ -438,8 +438,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
-            i.getLeft().getLeft().getTrigger().getLiteral().fqnfunctor(),
-            i.getLeft().getLeft().getTrigger().getLiteral().unify( i.getRight() )
+            i.getLeft().getLeft().trigger().getLiteral().fqnfunctor(),
+            i.getLeft().getLeft().trigger().getLiteral().unify( i.getRight() )
         ) );
 
         // execute plan and return values and return execution result

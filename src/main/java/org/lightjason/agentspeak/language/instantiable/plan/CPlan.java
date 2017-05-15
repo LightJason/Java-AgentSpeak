@@ -100,19 +100,19 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     }
 
     @Override
-    public final ITrigger getTrigger()
+    public final ITrigger trigger()
     {
         return m_triggerevent;
     }
 
     @Override
-    public final Collection<IAnnotation<?>> getAnnotations()
+    public final Collection<IAnnotation<?>> annotations()
     {
         return m_annotation.values();
     }
 
     @Override
-    public final List<IExecution> getBodyActions()
+    public final List<IExecution> body()
     {
         return m_action;
     }

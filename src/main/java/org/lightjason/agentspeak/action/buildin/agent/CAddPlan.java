@@ -59,7 +59,7 @@ public final class CAddPlan extends IBuildinAction
                .parallel()
                .map( ITerm::<IPlan>raw )
                .map( i -> new ImmutableTriple<>( i, new AtomicLong(), new AtomicLong(  ) ) )
-               .forEach( i -> p_context.agent().plans().put( i.getLeft().getTrigger(), i ) );
+               .forEach( i -> p_context.agent().plans().put( i.getLeft().trigger(), i ) );
 
         return CFuzzyValue.from( true );
     }

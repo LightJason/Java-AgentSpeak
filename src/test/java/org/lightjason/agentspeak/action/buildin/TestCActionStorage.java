@@ -180,7 +180,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         Assume.assumeNotNull( m_context );
 
-        IntStream.range( 0, 100 ).parallel()
+        IntStream.range( 0, 100 )
                  .mapToObj( i -> RandomStringUtils.random( 25 ) )
                  .forEach( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) );
 
@@ -257,7 +257,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         Assume.assumeNotNull( m_context );
 
-        IntStream.range( 0, 100 ).parallel()
+        IntStream.range( 0, 100 )
                  .forEach( i -> m_context.agent().storage().put( MessageFormat.format( "value {0}", i ), i ) );
 
         Assert.assertEquals( m_context.agent().storage().size(), 100 );
@@ -283,7 +283,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         Assume.assumeNotNull( m_context );
 
-        IntStream.range( 0, 100 ).parallel()
+        IntStream.range( 0, 100 )
                  .forEach( i -> m_context.agent().storage().put( MessageFormat.format( "value {0}", i ), i ) );
 
         Assert.assertEquals( m_context.agent().storage().size(), 100 );
@@ -309,7 +309,7 @@ public final class TestCActionStorage extends IBaseTest
     {
         Assume.assumeNotNull( m_context );
 
-        final List<ITerm> l_content = IntStream.range( 0, 100 ).parallel()
+        final List<ITerm> l_content = IntStream.range( 0, 100 )
                                                .mapToObj( i -> RandomStringUtils.random( 25 ) )
                                                .peek( i -> m_context.agent().storage().put( i, RandomStringUtils.random( 5 ) ) )
                                                .map( CRawTerm::from )

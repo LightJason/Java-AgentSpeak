@@ -110,7 +110,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.getIdentifier().fqnfunctor(), i ) );
+        p_rules.stream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
     }
 
     // --- start rules -----------------------------------------------------------------------------------------------------------------------------------------

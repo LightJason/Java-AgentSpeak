@@ -42,8 +42,6 @@ import java.util.List;
  * values
  *
  * @code L = generic/type/createliteral( "literal/functor/with/path", 123, "value" ); @endcode
- *
- * @todo add annotation generating
  */
 public final class CCreateLiteral extends IBuildinAction
 {

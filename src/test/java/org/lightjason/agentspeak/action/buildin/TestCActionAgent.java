@@ -142,7 +142,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 0 );
 
 
-        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
 
         new CPlanList().execute(
             m_context,
@@ -221,7 +221,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertTrue( l_return.isEmpty() );
 
 
-        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
 
         new CGetPlan().execute(
             m_context,
@@ -244,7 +244,7 @@ public final class TestCActionAgent extends IBaseTest
     public final void removeplan()
     {
         final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testremoveplan" ) ) );
-        m_context.agent().plans().put( l_plan.getTrigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
 
         Assert.assertTrue(
             new CRemovePlan().execute(
@@ -428,19 +428,19 @@ public final class TestCActionAgent extends IBaseTest
         }
 
         @Override
-        public final ITrigger getTrigger()
+        public final ITrigger trigger()
         {
             return m_trigger;
         }
 
         @Override
-        public final Collection<IAnnotation<?>> getAnnotations()
+        public final Collection<IAnnotation<?>> annotations()
         {
             return m_annotation.values();
         }
 
         @Override
-        public final List<IExecution> getBodyActions()
+        public final List<IExecution> body()
         {
             return Collections.emptyList();
         }
