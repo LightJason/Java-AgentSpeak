@@ -107,19 +107,19 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final EType getType()
+    public final EType type()
     {
         return m_event;
     }
 
     @Override
-    public final ILiteral getLiteral()
+    public final ILiteral literal()
     {
         return m_literal;
     }
 
     @Override
-    public final int getVariableSize()
+    public final int variablesize()
     {
         return m_variables;
     }
