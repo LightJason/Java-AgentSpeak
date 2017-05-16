@@ -23,16 +23,12 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.math.statistic.CCreateDistribution;
 import org.lightjason.agentspeak.action.buildin.math.statistic.CCreateStatistic;
@@ -57,7 +53,6 @@ import java.util.stream.Stream;
 /**
  * test for statistics actions
  */
-@RunWith( DataProviderRunner.class )
 public class TestCActionStatistics extends IBaseTest
 {
     /**
@@ -81,22 +76,6 @@ public class TestCActionStatistics extends IBaseTest
         s_statistics.addValue( 2 );
         s_statistics.addValue( 5 );
         s_statistics.addValue( 3 );
-    }
-
-    /**
-     * data provider generator
-     * @return data
-     */
-    @DataProvider
-    public static Object[] generator()
-    {
-        return Stream.of(
-                Stream.of(
-                    CRawTerm.from( Stream.of( "a", "b", "c" ).collect( Collectors.toList() ) ),
-                    CRawTerm.from( Stream.of( 0.5, 0.7, 0.9 ).collect( Collectors.toList() )  ),
-                    CRawTerm.from( 2 )
-            ).collect( Collectors.toList() )
-        ).toArray();
     }
 
     /**
@@ -187,25 +166,16 @@ public class TestCActionStatistics extends IBaseTest
         new CMultipleStatisticValue().execute(
                 null,
                 false,
-                Stream.of( s_statistics, "sum", "variance", "mean", "max", "geometricmean", "min", "count", "populationvariance",
+                Stream.of( s_statistics, "sum", "variance", "mean", "max", "geometricmean", "min", "populationvariance",
                 "quadraticmean", "secondmoment", "standarddeviation", "sumlog", "sumsquare" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 13 );
-        Assert.assertEquals( s_statistics.getSum(), l_return.get( 0 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getVariance(), l_return.get( 1 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getMean(), l_return.get( 2 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getMax(), l_return.get( 3 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getGeometricMean(), l_return.get( 4 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getMin(), l_return.get( 5 ).raw(), 0 );
-        Assert.assertEquals( l_return.get( 6 ).<Double>raw(), s_statistics.getN(), 0 );
-        Assert.assertEquals( s_statistics.getPopulationVariance(), l_return.get( 7 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getQuadraticMean(), l_return.get( 8 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getSecondMoment(), l_return.get( 9 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getStandardDeviation(), l_return.get( 10 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getSumOfLogs(), l_return.get( 11 ).raw(), 0 );
-        Assert.assertEquals( s_statistics.getSumsq(), l_return.get( 12 ).raw(), 0 );
+        Assert.assertEquals( l_return.size(), 12 );
+        Assert.assertArrayEquals( Stream.of( s_statistics.getSum(), s_statistics.getVariance(), s_statistics.getMean(), s_statistics.getMax(),
+                s_statistics.getGeometricMean(), s_statistics.getMin(), s_statistics.getPopulationVariance(), s_statistics.getQuadraticMean(),
+                s_statistics.getSecondMoment(), s_statistics.getStandardDeviation(), s_statistics.getSumOfLogs(), s_statistics.getSumsq() ).toArray(),
+                l_return.stream().map( ITerm::raw ).toArray() );
 
     }
 
@@ -260,54 +230,53 @@ public class TestCActionStatistics extends IBaseTest
         new CSingleStatisticValue().execute(
                 null,
                 false,
-                Stream.of( "sum", s_statistics, s_statistics1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "count", s_statistics, s_statistics1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( s_statistics.getSum(), l_return.get( 0 ).raw(), 0 );
-        Assert.assertEquals( s_statistics1.getSum(), l_return.get( 1 ).raw(), 0 );
+        Assert.assertEquals( s_statistics.getN(), l_return.get( 0 ).<Double>raw(), 0 );
+        Assert.assertEquals( s_statistics1.getN(), l_return.get( 1 ).<Double>raw(), 0 );
     }
 
     /**
      * test exponential selection
      */
     @Test
-    @UseDataProvider( "generator" )
-    public final void exponentialselection( final List<ITerm> p_input )
+    public final void exponentialselection()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CExponentialSelection().execute(
                 null,
                 false,
-                p_input,
+                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( 3.0, 8.9 ).collect( Collectors.toList() ), 3.0, 2 )
+                        .map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).<String>raw() instanceof String );
+        Assert.assertEquals( l_return.get( 0 ).<String>raw(), "c" );
     }
 
     /**
-     * test exponential and linear selection
+     * test linear selection
      */
     @Test
-    @UseDataProvider( "generator" )
-    public final void linearselection( final List<ITerm> p_input )
+    public final void linearselection()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLinearSelection().execute(
                 null,
                 false,
-                p_input,
+                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( 0.0, 0.9 ).collect( Collectors.toList() ), 2 )
+                        .map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        System.out.println( l_return.get( 0 ).<String>raw() );
-        Assert.assertTrue( l_return.get( 0 ).<String>raw() instanceof String );
+        Assert.assertEquals( l_return.get( 0 ).<String>raw(), "c" );
     }
 
     /**
