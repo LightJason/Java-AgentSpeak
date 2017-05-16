@@ -139,7 +139,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- literal accessing -------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         [O|P] =.. foo( blub(1), blah(3) );
         [H|I] = P;
         generic/print("deconstruct", O,P,H,I);

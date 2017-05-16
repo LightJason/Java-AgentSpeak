@@ -71,10 +71,10 @@ public final class TestCActionCrypto extends IBaseTest
     {
         return StreamUtils.zip(
                     Stream.of( "adler-32", "crc-32", "crc-32c", "murmur3-32", "murmur3-128", "siphash-2-4" ),
-                    Stream.of( new String[]{"9506c33d", "911c63b0"}, new String[]{"70550e9a", "29369833"},
-                               new String[]{"fb586372", "4411bf68"}, new String[]{"6646ef59", "08b9852d"},
-                               new String[]{"fda6cb9eb3bfe1f087bafbe8c697f128", "f4459439308d1248efc0532fb4cd6d79"},
-                               new String[]{"67f4455bf3dc5366", "82ee572bf0a0dde4"}
+                    Stream.of( new String[]{"7804c01a", "911c63b0"}, new String[]{"45154713", "29369833"},
+                               new String[]{"387e0716", "4411bf68"}, new String[]{"306202a8", "08b9852d"},
+                               new String[]{"636cc4ff5f7ed59b51f29d6d949b4709", "f4459439308d1248efc0532fb4cd6d79"},
+                               new String[]{"4f27c08e5981bc5a", "82ee572bf0a0dde4"}
                     ),
 
                     ImmutablePair::new

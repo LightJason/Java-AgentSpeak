@@ -21,19 +21,19 @@
  * @endcond
  */
 
-hallo(123)[abc(8),value('xxxx')].
-hallo(666)[abc(8)].
-hallo(123).
-hallo("foo").
-hallo(1111).
-hallo(600).
-hallo(999).
-hallo(900).
-hallo(888).
-hallo(777).
-hallo(700).
-hallo(foo(3)).
-foo(blub(1),hallo("test")).
+hello(123).
+hello(666).
+hello(123).
+hello("foo").
+hello(1111).
+hello(600).
+hello(999).
+hello(900).
+hello(888).
+hello(777).
+hello(700).
+hello(foo(3)).
+foo(blub(1),hello("test")).
 
 
 
@@ -69,19 +69,11 @@ foo(blub(1),hallo("test")).
  */
 +!testbool <-
     BAnd = bool/and( true, false, true );
-    RBAnd = ~BAnd;
-    test/result( RBAnd, "bool-and has been failed" );
+    BAnd = ~BAnd;
+    test/result( BAnd, "bool-and has been failed" );
 
-
-    BOr  = bool/or( true, false, false );
-    test/result( BOr, "bool-or has been failed" );
-
-
-    BXor = bool/xor( true, false, true, false );
-    test/result( BXor, "bool-xor has been failed" );
-
-
-    generic/print("boolean", BAnd, BOr, BXor)
+    test/result( bool/or( true, false, false ), "bool-or has been failed" );
+    test/result( bool/xor( true, false, true, false ), "bool-xor has been failed" )
 .
 
 
@@ -90,32 +82,21 @@ foo(blub(1),hallo("test")).
  */
 +!teststring <-
     SBase64 = string/base64encode( "Base64 encoded string" );
-    RSBase64 = bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" );
-    test/result( RSBase64, "string base64 has been failed" );
-
+    test/result( bool/equal( SBase64, "QmFzZTY0IGVuY29kZWQgc3RyaW5n" ), "string base64 has been failed" );
 
     SReverse = string/reverse( "abcdefg" );
-    RSReverse = bool/equal( SReverse, "gfedcba" );
-    test/result( RSReverse, "string reverse has been failed" );
-
+    test/result( bool/equal( SReverse, "gfedcba" ), "string reverse has been failed" );
 
     SUpper = string/upper("AbCdefg");
-    RSUpper = bool/equal( SUpper, "ABCDEFG" );
-    test/result( RSUpper, "string upper has been failed" );
-
+    test/result( bool/equal( SUpper, "ABCDEFG" ), "string upper has been failed" );
 
     SLower = string/lower("AbCdefg");
-    RSLower = bool/equal( SLower, "abcdefg" );
-    test/result( RSLower, "string lower has been failed" );
-
+    test/result( bool/equal( SLower, "abcdefg" ), "string lower has been failed" );
 
     SReplace = string/replace( "1", "-", "a1b1defg1xyz1ui" );
-    RSReplace = bool/equal( SReplace, "a-b-defg-xyz-ui" );
-    test/result( RSReplace, "string replace has been failed" );
-
+    test/result( bool/equal( SReplace, "a-b-defg-xyz-ui" ), "string replace has been failed" );
 
     SRand = string/random( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 20 );
-
     generic/print("string", SBase64, "--", SReverse, "--", SUpper, "--", SLower, "--", SReplace, "--", SRand )
 .
 
@@ -126,10 +107,29 @@ foo(blub(1),hallo("test")).
 +!testunification <-
 
         // unify default
-        >>hallo( UN1 ) << true;
-        >>foo( UN4, UN5 ) << true;
-        >>foo( blub( UN6 ), hallo( UN7 ) ) << true;
-        >>foo( blub(1), hallo( UN8 ) ) << true;
+        >>hello( UN1 );
+        generic/print( "first unification", UN1 );
+        test/result( bool/equal( UN1, "foo" ), "first unification has been failed" );
+
+        // unify subitem
+        >>foo( blub(1), hello( UN2 ) );
+        generic/print( "second unification", UN2 );
+        test/result( bool/equal( UN2, "test" ), "second unification has been failed" );
+
+        // unify two items
+        >>foo( blub( UN3a ), hello( UN3b ) ) << true;
+        generic/print( "third unification", UN3a, UN3b );
+        test/result( bool/equal( UN3a, 1 ), "third unification first part has been failed" );
+        test/result( bool/equal( UN3b, "test" ), "third unification first part has been failed" );
+
+        // unify by parsing literal
+        // @bug unification creates NPE
+        UN4data = generic/type/parseliteral( "foo(12345)" )
+        //>>( foo(UN4data), UN4 ) << true;
+
+        //>>foo( UN2, UN3 ) << true;
+        //generic/print("----> unification", UN4data )
+
 /*
         // unify with expression
         >>( hallo( UN2 ), generic/type/isstring(UN2) ) << true;
@@ -144,7 +144,7 @@ foo(blub(1),hallo("test")).
 */
 //        generic/print("unification", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
 
-        test/result( success )
+        //test/result( success )
 .
 
 
@@ -153,25 +153,20 @@ foo(blub(1),hallo("test")).
  */
 +!testdeconstruct <-
         [O|P] =.. foo( blub(1), blah(3) );
-        R1 = bool/equal( O, "foo" );
-        test/result( R1, "first deconstruct has been failed" );
+        generic/print("first deconstruct", O, P);
+        test/result( bool/equal( O, "foo" ), "first deconstruct has been failed" );
 
         [H|I] = P;
         [A|C] =.. H;
         [B|D] =.. I;
 
-        R2 = bool/equal( A, "blub" );
-        R3 = bool/equal( B, "blah" );
-        test/result( R2, "second deconstruct has been failed" );
-        test/result( R3, "third deconstruct has been failed" );
+        generic/print("second deconstruct", H, I, A, C, B, D);
 
-        [X|Y] = generic/type/type( C, D );
-        generic/print(X, Y);
+        test/result( bool/equal( A, "blub" ), "second deconstruct has been failed" );
+        test/result( bool/equal( B, "blah" ), "third deconstruct has been failed" );
 
-        R4 =  V1 == 1;
-        R5 =  V2 == 3;
-        test/result( R4, "deconstruct first value has been failed" );
-        test/result( R5, "deconstruct second value has been failed" );
+        test/result( bool/equal( collection/list/get(C, 0), 1 ), "deconstruct first value has been failed" );
+        test/result( bool/equal( collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
 
-        generic/print("deconstruct", O,P,H,I)
+        generic/print("deconstruct executed completly")
 .
