@@ -34,7 +34,7 @@
             <item name="PlanBundle" href="rrd-output/html/org/lightjason/agentspeak/grammar/PlanBundle.g4/index.htm"/>
         </menu>
         <menu name="Source Documentation">
-            <item name="Source Documentation" href="sources/index.html"/>
+            <item name="Source Documentation" href="sources/"/>
             <item name="Repository" href="http://github.com/LightJason/AgentSpeak" />
             <item name="OpenHub" href="http://www.openhub.net/p/LightJason-AgentSpeak"/>
             <item name="Coveralls.io" href="https://coveralls.io/github/LightJason/AgentSpeak"/>
