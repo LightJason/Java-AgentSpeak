@@ -71,10 +71,7 @@ public final class CVariableUnify extends CDefaultUnify
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
-        final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal(
-            m_value,
-            CCommon.replaceFromContext( p_context, m_constraint ).raw()
-        );
+        final Set<IVariable<?>> l_variables = p_context.agent().unifier().literal( m_value, CCommon.replaceFromContext( p_context, m_constraint ).raw() );
         if ( l_variables.size() != m_variablenumber )
             return CFuzzyValue.from( false );
 

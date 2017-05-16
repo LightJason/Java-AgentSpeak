@@ -45,6 +45,8 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -63,11 +65,16 @@ import static org.junit.Assert.assertTrue;
 /**
  * abstract test for playing towers of hanoi
  *
+ * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
  * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
  */
 @SuppressWarnings( "serial" )
 abstract class IBaseHanoiTowers extends IBaseTest
 {
+    /**
+     * enable printing of test-data
+     */
+    private static final boolean PRINTENABLE = Files.exists( Paths.get(  "agentprinting.conf" ) );
     /**
      * agent map
      */
@@ -158,7 +165,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
     {
         while ( m_running.get() )
         {
-            //System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
+            if ( PRINTENABLE )
+                System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
                     .forEach( j -> {
@@ -234,10 +242,12 @@ abstract class IBaseHanoiTowers extends IBaseTest
                             new CTowerPush( 0.33 ),
                             new CTowerPop(),
                             new CTowerSize(),
-                            new CStop(),
-                            new CEmptyPrint()
+                            new CStop()
                         ),
-                        p_action
+                        Stream.concat(
+                            p_action,
+                            PRINTENABLE ? Stream.of() : Stream.of( new CEmptyPrint() )
+                        )
                     ),
                     CCommon.actionsFromPackage()
                 ).collect( Collectors.toSet() ),

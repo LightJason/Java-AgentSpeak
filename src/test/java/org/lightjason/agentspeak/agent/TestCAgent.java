@@ -31,6 +31,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -50,6 +51,8 @@ import org.lightjason.agentspeak.language.variable.CConstant;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +66,8 @@ import java.util.stream.Stream;
 
 /**
  * test agent structure
+ *
+ * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
@@ -70,11 +75,11 @@ public final class TestCAgent extends IBaseTest
     /**
      * enable printing of test-data
      */
-    private static final boolean PRINTENABLE = false;
+    private static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
     /**
      * list with successful plans
      */
-    private final List<Pair<Boolean, String>> m_testlog = Collections.synchronizedList( new ArrayList<>() );
+    private List<Pair<Boolean, String>> m_testlog;
 
     static
     {
@@ -90,18 +95,26 @@ public final class TestCAgent extends IBaseTest
     public static Object[] generate()
     {
         return Stream.of(
-            new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
-            /*
-            new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
-            new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
-            new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 14 )
-            */
+            //new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
+
+            new ImmutableTriple<>( "src/test/resources/agent/language/crypto.asl", 2, 9 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/math.asl", 2, 10 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/collection.asl", 2, 5 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 18 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 )
+
+            //new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 1 )
         ).toArray();
     }
 
+    /**
+     * return list initialize
+     */
+    @Before
+    public final void initialize()
+    {
+        m_testlog = Collections.synchronizedList( new ArrayList<>() );
+    }
 
     /**
      * test for default generators and configuration

@@ -112,10 +112,10 @@ public final class TestCAgentExecution extends IBaseTest
 
 
         // define execution results
-        m_result.put( Long.valueOf( 0 ), "main" );
-        m_result.put( Long.valueOf( 1 ), "first" );
-        m_result.put( Long.valueOf( 1 ), "second" );
-        m_result.put( Long.valueOf( 2 ), "single" );
+        m_result.put( 0L, "main" );
+        m_result.put( 1L, "first" );
+        m_result.put( 1L, "second" );
+        m_result.put( 2L, "single" );
     }
 
     /**
