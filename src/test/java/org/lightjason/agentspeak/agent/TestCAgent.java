@@ -75,7 +75,7 @@ public final class TestCAgent extends IBaseTest
     /**
      * enable printing of test-data
      */
-    private static final boolean PRINTENABLE = Files.exists( Paths.get("agentprinting.conf" ) );
+    private static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
     /**
      * list with successful plans
      */

@@ -74,7 +74,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
     /**
      * enable printing of test-data
      */
-    private static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
+    private static final boolean PRINTENABLE = Files.exists( Paths.get(  "agentprinting.conf" ) );
     /**
      * agent map
      */
@@ -165,7 +165,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
     {
         while ( m_running.get() )
         {
-            if (PRINTENABLE)
+            if ( PRINTENABLE )
                 System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
