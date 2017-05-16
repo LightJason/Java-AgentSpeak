@@ -30,8 +30,8 @@
         <menu ref="modules" />
         <menu ref="reports"/>
         <menu name="Grammar">
-            <item name="Agent" href="rrd-output/html/org/lightjason/agentspeak/grammar/Agent.g4/index.htm"/>
-            <item name="PlanBundle" href="rrd-output/html/org/lightjason/agentspeak/grammar/PlanBundle.g4/index.htm"/>
+            <item name="Agent" href="rrd-output/html/org/lightjason/agentspeak/grammar/Agent.g4/"/>
+            <item name="PlanBundle" href="rrd-output/html/org/lightjason/agentspeak/grammar/PlanBundle.g4/"/>
         </menu>
         <menu name="Source Documentation">
             <item name="Source Documentation" href="sources/"/>
