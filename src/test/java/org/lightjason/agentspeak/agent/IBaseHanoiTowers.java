@@ -65,6 +65,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * abstract test for playing towers of hanoi
  *
+ * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
  * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
  */
 @SuppressWarnings( "serial" )
