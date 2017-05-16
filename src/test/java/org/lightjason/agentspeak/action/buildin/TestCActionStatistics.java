@@ -49,7 +49,6 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,8 +111,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -133,8 +131,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( s_statistics ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( s_statistics.getSum(), 0, 0 );
@@ -153,8 +150,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( "normal", 20, 10 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -173,8 +169,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( s_statistics1, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
@@ -194,8 +189,7 @@ public class TestCActionStatistics extends IBaseTest
                 false,
                 Stream.of( s_statistics, "sum", "variance", "mean", "max", "geometricmean", "min", "count", "populationvariance",
                 "quadraticmean", "secondmoment", "standarddeviation", "sumlog", "sumsquare" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 13 );
@@ -227,8 +221,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::from  ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -248,8 +241,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -269,8 +261,7 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of( "sum", s_statistics, s_statistics1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -279,11 +270,11 @@ public class TestCActionStatistics extends IBaseTest
     }
 
     /**
-     * test exponential and linear selection
+     * test exponential selection
      */
     @Test
     @UseDataProvider( "generator" )
-    public final void selection( final List<ITerm> p_input )
+    public final void exponentialselection( final List<ITerm> p_input )
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -291,21 +282,32 @@ public class TestCActionStatistics extends IBaseTest
                 null,
                 false,
                 p_input,
-                l_return,
-                Collections.emptyList()
+                l_return
         );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ).<String>raw() instanceof String );
+    }
+
+    /**
+     * test exponential and linear selection
+     */
+    @Test
+    @UseDataProvider( "generator" )
+    public final void linearselection( final List<ITerm> p_input )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
 
         new CLinearSelection().execute(
                 null,
                 false,
                 p_input,
-                l_return,
-                Collections.emptyList()
+                l_return
         );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.size(), 1 );
+        System.out.println( l_return.get( 0 ).<String>raw() );
         Assert.assertTrue( l_return.get( 0 ).<String>raw() instanceof String );
-        Assert.assertTrue( l_return.get( 1 ).<String>raw() instanceof String );
     }
 
     /**
