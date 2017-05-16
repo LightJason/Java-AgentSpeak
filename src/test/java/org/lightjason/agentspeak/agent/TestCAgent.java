@@ -66,6 +66,8 @@ import java.util.stream.Stream;
 
 /**
  * test agent structure
+ *
+ * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
