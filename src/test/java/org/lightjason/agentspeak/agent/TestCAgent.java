@@ -51,6 +51,8 @@ import org.lightjason.agentspeak.language.variable.CConstant;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,7 +73,7 @@ public final class TestCAgent extends IBaseTest
     /**
      * enable printing of test-data
      */
-    private static final boolean PRINTENABLE = true;
+    private static final boolean PRINTENABLE = Files.exists( Paths.get("agentprinting.conf" ) );
     /**
      * list with successful plans
      */
