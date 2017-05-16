@@ -96,12 +96,10 @@ public final class TestCAgent extends IBaseTest
             new ImmutableTriple<>( "src/test/resources/agent/language/crypto.asl", 2, 9 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/math.asl", 2, 10 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/collection.asl", 2, 5 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 15 )
-            /*
-            new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 18 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 )
 
-            */
+            //new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 1 )
         ).toArray();
     }
 

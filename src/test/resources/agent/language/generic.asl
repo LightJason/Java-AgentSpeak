@@ -21,19 +21,19 @@
  * @endcond
  */
 
-hallo(123).
-hallo(666).
-hallo(123).
-hallo("foo").
-hallo(1111).
-hallo(600).
-hallo(999).
-hallo(900).
-hallo(888).
-hallo(777).
-hallo(700).
-hallo(foo(3)).
-foo(blub(1),hallo("test")).
+hello(123).
+hello(666).
+hello(123).
+hello("foo").
+hello(1111).
+hello(600).
+hello(999).
+hello(900).
+hello(888).
+hello(777).
+hello(700).
+hello(foo(3)).
+foo(blub(1),hello("test")).
 
 
 
@@ -107,10 +107,29 @@ foo(blub(1),hallo("test")).
 +!testunification <-
 
         // unify default
-        >>hallo( UN1 ) << true;
-        >>foo( UN4, UN5 ) << true;
-        >>foo( blub( UN6 ), hallo( UN7 ) ) << true;
-        >>foo( blub(1), hallo( UN8 ) ) << true;
+        >>hello( UN1 );
+        generic/print( "first unification", UN1 );
+        test/result( bool/equal( UN1, "foo" ), "first unification has been failed" );
+
+        // unify subitem
+        >>foo( blub(1), hello( UN2 ) );
+        generic/print( "second unification", UN2 );
+        test/result( bool/equal( UN2, "test" ), "second unification has been failed" );
+
+        // unify two items
+        >>foo( blub( UN3a ), hello( UN3b ) ) << true;
+        generic/print( "third unification", UN3a, UN3b );
+        test/result( bool/equal( UN3a, 1 ), "third unification first part has been failed" );
+        test/result( bool/equal( UN3b, "test" ), "third unification first part has been failed" );
+
+        // unify by parsing literal
+        // @bug unification creates NPE
+        UN4data = generic/type/parseliteral( "foo(12345)" )
+        //>>( foo(UN4data), UN4 ) << true;
+
+        //>>foo( UN2, UN3 ) << true;
+        //generic/print("----> unification", UN4data )
+
 /*
         // unify with expression
         >>( hallo( UN2 ), generic/type/isstring(UN2) ) << true;
@@ -125,7 +144,7 @@ foo(blub(1),hallo("test")).
 */
 //        generic/print("unification", UN1, UN2, UN3, "   ", UN4, UN5, "   ", UN6, UN7, UN8, "   ", UN9, "   ", UN10, UN11 );
 
-        test/result( success )
+        //test/result( success )
 .
 
 
