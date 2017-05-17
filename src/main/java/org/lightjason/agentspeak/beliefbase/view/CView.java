@@ -120,7 +120,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     public final IView<T> add( final Stream<ILiteral> p_literal )
     {
         p_literal.parallel()
-            .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );
+                 .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );
         return this;
     }
 
