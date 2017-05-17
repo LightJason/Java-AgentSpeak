@@ -53,19 +53,17 @@ import java.util.stream.Stream;
 /**
  * test for statistics actions
  */
-public class TestCActionStatistics extends IBaseTest
+public class TestCActionMathStatistics extends IBaseTest
 {
     /**
      * testing statistic
-     * @note static because of usage in test-initialize
      */
-    private static SummaryStatistics s_statistics = new SummaryStatistics();
+    private SummaryStatistics m_statistics = new SummaryStatistics();
 
     /**
      * testing statistic
-     * @note static because of usage in test-initialize
      */
-    private static SummaryStatistics s_statistics1 = new SummaryStatistics();
+    private SummaryStatistics m_statistics1 = new SummaryStatistics();
 
     /**
      * initialize
@@ -73,9 +71,9 @@ public class TestCActionStatistics extends IBaseTest
     @Before
     public void initialize()
     {
-        s_statistics.addValue( 2 );
-        s_statistics.addValue( 5 );
-        s_statistics.addValue( 3 );
+        m_statistics.addValue( 2 );
+        m_statistics.addValue( 5 );
+        m_statistics.addValue( 3 );
     }
 
     /**
@@ -109,11 +107,11 @@ public class TestCActionStatistics extends IBaseTest
         new CClearStatistic().execute(
                 null,
                 false,
-                Stream.of( s_statistics ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_statistics ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( s_statistics.getSum(), 0, 0 );
+        Assert.assertEquals( m_statistics.getSum(), 0, 0 );
         Assert.assertEquals( l_return.size(), 0 );
     }
 
@@ -147,12 +145,12 @@ public class TestCActionStatistics extends IBaseTest
         new CAddStatisticValue().execute(
                 null,
                 false,
-                Stream.of( s_statistics1, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_statistics1, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( s_statistics1.getSum(), 6, 0 );
+        Assert.assertEquals( m_statistics1.getSum(), 6, 0 );
     }
 
     /**
@@ -166,15 +164,15 @@ public class TestCActionStatistics extends IBaseTest
         new CMultipleStatisticValue().execute(
                 null,
                 false,
-                Stream.of( s_statistics, "sum", "variance", "mean", "max", "geometricmean", "min", "populationvariance",
+                Stream.of( m_statistics, "sum", "variance", "mean", "max", "geometricmean", "min", "populationvariance",
                 "quadraticmean", "secondmoment", "standarddeviation", "sumlog", "sumsquare" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 12 );
-        Assert.assertArrayEquals( Stream.of( s_statistics.getSum(), s_statistics.getVariance(), s_statistics.getMean(), s_statistics.getMax(),
-                s_statistics.getGeometricMean(), s_statistics.getMin(), s_statistics.getPopulationVariance(), s_statistics.getQuadraticMean(),
-                s_statistics.getSecondMoment(), s_statistics.getStandardDeviation(), s_statistics.getSumOfLogs(), s_statistics.getSumsq() ).toArray(),
+        Assert.assertArrayEquals( Stream.of( m_statistics.getSum(), m_statistics.getVariance(), m_statistics.getMean(), m_statistics.getMax(),
+                m_statistics.getGeometricMean(), m_statistics.getMin(), m_statistics.getPopulationVariance(), m_statistics.getQuadraticMean(),
+                m_statistics.getSecondMoment(), m_statistics.getStandardDeviation(), m_statistics.getSumOfLogs(), m_statistics.getSumsq() ).toArray(),
                 l_return.stream().map( ITerm::raw ).toArray() );
 
     }
@@ -196,7 +194,7 @@ public class TestCActionStatistics extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
-        Assert.assertEquals( l_return.get( 0 ).<List>raw().size(), 3 );
+        Assert.assertEquals( l_return.get( 0 ).<List<Number>>raw().size(), 3 );
     }
 
     /**
@@ -216,7 +214,7 @@ public class TestCActionStatistics extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List );
-        Assert.assertEquals( l_return.get( 0 ).<List>raw().size(), 5 );
+        Assert.assertEquals( l_return.get( 0 ).<List<Number>>raw().size(), 5 );
     }
 
     /**
@@ -230,13 +228,13 @@ public class TestCActionStatistics extends IBaseTest
         new CSingleStatisticValue().execute(
                 null,
                 false,
-                Stream.of( "count", s_statistics, s_statistics1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "count", m_statistics, m_statistics1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( s_statistics.getN(), l_return.get( 0 ).<Double>raw(), 0 );
-        Assert.assertEquals( s_statistics1.getN(), l_return.get( 1 ).<Double>raw(), 0 );
+        Assert.assertEquals( m_statistics.getN(), l_return.get( 0 ).<Double>raw(), 0 );
+        Assert.assertEquals( m_statistics1.getN(), l_return.get( 1 ).<Double>raw(), 0 );
     }
 
     /**
@@ -250,13 +248,14 @@ public class TestCActionStatistics extends IBaseTest
         new CExponentialSelection().execute(
                 null,
                 false,
-                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( 3.0, 8.9 ).collect( Collectors.toList() ), 3.0, 2 )
+                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( -2.7, 8.9 ).collect( Collectors.toList() ), 3.0, 2 )
                         .map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<String>raw(), "c" );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof String );
+        Assert.assertEquals( l_return.get( 0 ).<String>raw().length(), 1 );
     }
 
     /**
@@ -270,13 +269,14 @@ public class TestCActionStatistics extends IBaseTest
         new CLinearSelection().execute(
                 null,
                 false,
-                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( 0.0, 0.9 ).collect( Collectors.toList() ), 2 )
+                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( 0.2, 0.9 ).collect( Collectors.toList() ), 2 )
                         .map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<String>raw(), "c" );
+        Assert.assertTrue( l_return.get( 0 ).raw() instanceof String );
+        Assert.assertEquals( l_return.get( 0 ).<String>raw().length(), 1 );
     }
 
     /**
@@ -286,6 +286,7 @@ public class TestCActionStatistics extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCActionStatistics().invoketest();
+        new TestCActionMathStatistics().invoketest();
     }
+
 }
