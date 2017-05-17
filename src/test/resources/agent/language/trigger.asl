@@ -27,36 +27,12 @@
  * base test
  */
 +!test <-
-    !testxmlobject;
-    !testjsonobject;
-    !testjsonlist
+    +addbelief( 123 );
+    +addbelief( "data" )
 .
 
 
-+!testjsonlist <-
-    GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
-    +webservice( GH )
-.
-
-
-
-+!testjsonobject <-
-    GO = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
-    +webservice( GO )
-.
-
-
-+!testxmlobject <-
-    WP = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
-    +webservice( WP )
-.
-
-
-+webservice(X) <-
-    [_|D] =.. X;
-    D = collection/list/get(D, 0);
-    [N] =.. D;
-
-    generic/print( N );
++addbelief( X ) <-
+    generic/print( X );
     test/result( success )
 .
