@@ -62,20 +62,20 @@ import java.util.stream.Stream;
  * test math blas vector functions
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionMathBlasVector extends IBaseTest
+public final class TestCActionMathBlasVector extends IBaseTest
 {
 
     /**
      * testing vector
      * @note static because of usage in data-provider
      */
-    private static DoubleMatrix1D s_vector = new DenseDoubleMatrix1D( new double[]{2, 5, 3, 8} );
+    private static final DoubleMatrix1D VECTOR1 = new DenseDoubleMatrix1D( new double[]{2, 5, 3, 8} );
 
     /**
      * testing vector
      * @note static because of usage in data-provider
      */
-    private static DoubleMatrix1D s_vector1 = new DenseDoubleMatrix1D( new double[]{8, 6, 2, 1} );
+    private static final DoubleMatrix1D VECTOR2 = new DenseDoubleMatrix1D( new double[]{8, 6, 2, 1} );
 
 
     /**
@@ -87,7 +87,7 @@ public class TestCActionMathBlasVector extends IBaseTest
     {
         return testcase(
 
-                Stream.of( s_vector, s_vector1 ),
+                Stream.of( VECTOR1, VECTOR2 ),
 
                 Stream.of(
                         CNonZero.class,
@@ -95,7 +95,7 @@ public class TestCActionMathBlasVector extends IBaseTest
                         CDotProduct.class
                 ),
                 Stream.of( 4L, 4L ),
-                Stream.of( s_vector.zSum(), s_vector1.zSum() ),
+                Stream.of( VECTOR1.zSum(), VECTOR2.zSum() ),
                 Stream.of( 60.0 )
 
         ).toArray();
@@ -207,7 +207,7 @@ public class TestCActionMathBlasVector extends IBaseTest
         new CToList().execute(
                 null,
                 false,
-                Stream.of( s_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -252,12 +252,12 @@ public class TestCActionMathBlasVector extends IBaseTest
         new CAssign().execute(
             null,
             false,
-            Stream.of( s_vector1, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( VECTOR2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( l_vector.toArray(), s_vector1.toArray(), 0 );
+        Assert.assertArrayEquals( l_vector.toArray(), VECTOR2.toArray(), 0 );
     }
 
 
@@ -272,7 +272,7 @@ public class TestCActionMathBlasVector extends IBaseTest
         new CGet().execute(
                 null,
                 false,
-                Stream.of( s_vector, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -292,12 +292,12 @@ public class TestCActionMathBlasVector extends IBaseTest
         new CCopy().execute(
                 null,
                 false,
-                Stream.of( s_vector, s_vector1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR1, VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( s_vector, s_vector1 ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( VECTOR1, VECTOR2 ).toArray() );
     }
 
     /**
