@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * test math shape functions
  *
- * @todo test again
+ * @todo test results for all actions again
  */
 public final class TestCActionMathShape extends IBaseTest
 {
