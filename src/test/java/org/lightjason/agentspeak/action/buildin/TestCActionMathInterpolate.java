@@ -23,10 +23,12 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
-import org.apache.commons.math3.analysis.function.Exp;
-import org.apache.commons.math3.analysis.function.Sqrt;
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionNewtonForm;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 
@@ -49,6 +51,16 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestCActionMathInterpolate extends IBaseTest
 {
+    /**
+     * testing polynomial
+     */
+    private PolynomialSplineFunction m_linearpolynomial = new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} );
+
+    /**
+     * testing polynomial
+     */
+    private PolynomialFunctionLagrangeForm m_nevillepolynomial = new NevilleInterpolator().interpolate( new double[]{2, 3, 8}, new double[]{11, 13, 20} );
+
     /**
      * test create
      */
@@ -85,29 +97,19 @@ public class TestCActionMathInterpolate extends IBaseTest
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        assertTrue( l_return.get( 0 ).raw() instanceof Object );
-        assertTrue( l_return.get( 1 ).raw() instanceof Object );
-        assertTrue( l_return.get( 2 ).raw() instanceof Object );
-        assertTrue( l_return.get( 3 ).raw() instanceof Object );
-    }
-
-    /**
-     * test create error
-     * @bug NumberIsTooSmallException
-     */
-    @Test
-    @Ignore
-    public final void createError()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
         new CCreate().execute(
                 null,
                 false,
-                Stream.of( "loess", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "loess", 42, 65, 78, 87, 100, 150, 300, 400, 500, 41, 63, 82, 98, 110, 200, 400, 600, 800 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
+
+        Assert.assertEquals( l_return.size(), 5 );
+        assertTrue( l_return.get( 0 ).raw() instanceof PolynomialSplineFunction );
+        assertTrue( l_return.get( 1 ).raw() instanceof PolynomialFunctionNewtonForm );
+        assertTrue( l_return.get( 2 ).raw() instanceof PolynomialFunctionLagrangeForm );
+        assertTrue( l_return.get( 3 ).raw() instanceof PolynomialSplineFunction );
+        assertTrue( l_return.get( 4 ).raw() instanceof PolynomialSplineFunction );
     }
 
     /**
@@ -121,12 +123,12 @@ public class TestCActionMathInterpolate extends IBaseTest
         new CSingleInterpolate().execute(
                 null,
                 false,
-                Stream.of( new Sqrt(), 5, 10 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_linearpolynomial, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Object>raw(), 2.23606797749979 );
-        Assert.assertEquals( l_return.get( 1 ).<Object>raw(), 3.1622776601683795 );
+        Assert.assertEquals( l_return.get( 0 ).<Object>raw(), 11.0 );
+        Assert.assertEquals( l_return.get( 1 ).<Object>raw(), 11.666666666666666 );
     }
 
     /**
@@ -140,12 +142,12 @@ public class TestCActionMathInterpolate extends IBaseTest
         new CMultipleInterpolate().execute(
                 null,
                 false,
-                Stream.of( 5, new Exp(), new Sqrt() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 5, m_linearpolynomial, m_nevillepolynomial ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Object>raw(), 148.4131591025766 );
-        Assert.assertEquals( l_return.get( 1 ).<Object>raw(), 2.23606797749979 );
+        Assert.assertEquals( l_return.get( 0 ).<Object>raw(), 12.333333333333334 );
+        Assert.assertEquals( l_return.get( 1 ).<Object>raw(), 16.400000000000002 );
     }
 
 
