@@ -28,7 +28,6 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 
@@ -86,10 +85,8 @@ public class TestCActionMathBlas extends IBaseTest
 
     /**
      * test multiply error
-     * @bug l_return size should be 3
      */
     @Test
-    @Ignore
     public final void multiplyerror()
     {
         final List<ITerm> l_return = new ArrayList<>();
