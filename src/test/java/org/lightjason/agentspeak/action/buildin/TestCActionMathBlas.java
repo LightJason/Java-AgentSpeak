@@ -85,6 +85,8 @@ public class TestCActionMathBlas extends IBaseTest
 
     /**
      * test multiply error
+     *
+     * @todo check object returns, on error action must return fail result
      */
     @Test
     public final void multiplyerror()
