@@ -46,6 +46,7 @@ import org.lightjason.agentspeak.action.buildin.math.blas.vector.CDotProduct;
 import org.lightjason.agentspeak.action.buildin.math.blas.vector.CNonZero;
 import org.lightjason.agentspeak.action.buildin.math.blas.vector.CSum;
 import org.lightjason.agentspeak.action.buildin.math.blas.vector.CFromList;
+import org.lightjason.agentspeak.action.buildin.math.blas.vector.CParse;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -56,7 +57,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
 
 /**
  * test math blas vector functions
@@ -164,9 +164,16 @@ public class TestCActionMathBlasVector extends IBaseTest
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
+        new CCreate().execute(
+                null,
+                false,
+                Stream.of( 4, "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
         Assert.assertEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().size(), 2 );
+        Assert.assertEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().size(), 4 );
     }
 
     /**
@@ -294,13 +301,39 @@ public class TestCActionMathBlasVector extends IBaseTest
     }
 
     /**
+     * test parse
+     */
+    @Test
+    public final void parse()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CParse().execute(
+                null,
+                false,
+                Stream.of( "1,2,3", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        new CParse().execute(
+                null,
+                false,
+                Stream.of( "4,3,4", "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), new double[]{1, 2, 3}, 0 );
+        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{4, 3, 4}, 0 );
+    }
+
+    /**
      * test fromlist
      */
     @Test
     public final void fromlist()
     {
         final List<ITerm> l_return = new ArrayList<>();
-        final DoubleMatrix1D l_result = new DenseDoubleMatrix1D( new double[]{1, 2, 3} );
 
         new CFromList().execute(
                 null,
@@ -309,9 +342,16 @@ public class TestCActionMathBlasVector extends IBaseTest
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix1D );
-        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), l_result.toArray(), 0 );
+        new CFromList().execute(
+                null,
+                false,
+                Stream.of( Stream.of( 4, 3, 4 ).collect( Collectors.toList() ), "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), new double[]{1, 2, 3}, 0 );
+        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{4, 3, 4}, 0 );
     }
 
 
