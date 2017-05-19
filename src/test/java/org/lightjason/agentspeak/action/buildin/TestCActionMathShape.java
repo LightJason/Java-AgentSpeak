@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 
@@ -40,12 +39,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * test math shape functions
+ *
+ * @todo test again
  */
-public class TestCActionMathShape extends IBaseTest
+public final class TestCActionMathShape extends IBaseTest
 {
 
     /**
@@ -64,15 +63,13 @@ public class TestCActionMathShape extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), false );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw()  );
     }
 
     /**
      * test in circle error
-     * @bug l_return size should be 2l_return size should be 2
      */
     @Test
-    @Ignore
     public final void incircleerror()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -103,15 +100,13 @@ public class TestCActionMathShape extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), true );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
     }
 
     /**
      * test in rechtangle error
-     * @bug l_return size should be 2
      */
     @Test
-    @Ignore
     public final void inrechtangleerror()
     {
         final List<ITerm> l_return = new ArrayList<>();
@@ -142,15 +137,13 @@ public class TestCActionMathShape extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).raw(), true );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
     }
 
     /**
      * test in intriangle error
-     * @bug l_return size should be 2
      */
     @Test
-    @Ignore
     public final void intriangleerror()
     {
         final List<ITerm> l_return = new ArrayList<>();

@@ -69,33 +69,33 @@ import java.util.stream.Stream;
  * test for bit vector actions
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionMathBitVector extends IBaseTest
+public final class TestCActionMathBitVector extends IBaseTest
 {
     /**
      * testing vector
      * @note static because of usage in data-provider and test-initialize
      */
-    private static BitVector s_vector = new BitVector( 3 );
+    private static final BitVector VECTOR1 = new BitVector( 3 );
     /**
      * testing matrix
      * @note static because of usage in data-provider and test-initialize
      */
-    private static BitVector s_vector1 = new BitVector( 3 );
+    private static final BitVector VECTOR2 = new BitVector( 3 );
 
 
     /**
      * initialize
      */
     @Before
-    public void initialize()
+    public final void initialize()
     {
-        s_vector.put( 0, true );
-        s_vector.put( 1, false );
-        s_vector.put( 2, false );
+        VECTOR1.put( 0, true );
+        VECTOR1.put( 1, false );
+        VECTOR1.put( 2, false );
 
-        s_vector1.put( 0, false );
-        s_vector1.put( 1, false );
-        s_vector1.put( 2, true );
+        VECTOR2.put( 0, false );
+        VECTOR2.put( 1, false );
+        VECTOR2.put( 2, true );
     }
 
     /**
@@ -107,7 +107,7 @@ public class TestCActionMathBitVector extends IBaseTest
     {
         return testcase(
 
-                Stream.of( s_vector, s_vector1 ),
+                Stream.of( VECTOR1, VECTOR2 ),
 
                 Stream.of(
                         CFalseCount.class,
@@ -122,7 +122,7 @@ public class TestCActionMathBitVector extends IBaseTest
                         CXor.class
                 ),
                 Stream.of( 2L, 2L ),
-                Stream.of( s_vector, s_vector1 ),
+                Stream.of( VECTOR1, VECTOR2 ),
                 Stream.of( 1L, 1L ),
                 Stream.of( 3, 3 ),
                 Stream.of(),
@@ -213,7 +213,7 @@ public class TestCActionMathBitVector extends IBaseTest
         new CBoolValue().execute(
                 null,
                 false,
-                Stream.of( s_vector1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -231,12 +231,12 @@ public class TestCActionMathBitVector extends IBaseTest
         new CSet().execute(
                 null,
                 false,
-                Stream.of( s_vector1, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( s_vector1.get( 0 ), true );
-        Assert.assertEquals( s_vector1.get( 1 ), true );
+        Assert.assertEquals( VECTOR2.get( 0 ), true );
+        Assert.assertEquals( VECTOR2.get( 1 ), true );
     }
 
     /**
@@ -250,11 +250,11 @@ public class TestCActionMathBitVector extends IBaseTest
         new CClear().execute(
                 null,
                 false,
-                Stream.of( s_vector1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( s_vector1.get( 0 ), false );
+        Assert.assertEquals( VECTOR2.get( 0 ), false );
         Assert.assertEquals( l_return.size(), 0 );
     }
 
@@ -269,12 +269,12 @@ public class TestCActionMathBitVector extends IBaseTest
         new CRange().execute(
                 null,
                 false,
-                Stream.of( s_vector1, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw(), s_vector1 );
+        Assert.assertEquals( l_return.get( 0 ).<BitVector>raw(), VECTOR2 );
     }
 
     /**
@@ -288,7 +288,7 @@ public class TestCActionMathBitVector extends IBaseTest
         new CNumericValue().execute(
                 null,
                 false,
-                Stream.of( s_vector, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR1, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -306,7 +306,7 @@ public class TestCActionMathBitVector extends IBaseTest
         new CToList().execute(
                 null,
                 false,
-                Stream.of( s_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -326,7 +326,7 @@ public class TestCActionMathBitVector extends IBaseTest
         new CToBlas().execute(
                 null,
                 false,
-                Stream.of( s_vector1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 

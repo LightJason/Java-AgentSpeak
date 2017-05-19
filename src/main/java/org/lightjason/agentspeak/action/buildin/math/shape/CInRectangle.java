@@ -76,7 +76,7 @@ public final class CInRectangle extends IBuildinAction
         if ( l_arguments.size() < 6 )
             return CFuzzyValue.from( false );
 
-        StreamUtils.windowed( l_arguments.stream().skip( 4 ), 2 )
+        StreamUtils.windowed( l_arguments.stream().skip( 4 ), 2, 2 )
                    // check in order upper-left x-position <= x-value <= buttom-right x-position, upper-left y-position <= y-value <= buttom-right y-position
                    .map( i -> l_arguments.get( 0 ) <= i.get( 0 ) && i.get( 0 ) <= l_arguments.get( 2 )
                          && l_arguments.get( 1 ) <= i.get( 1 ) && i.get( 1 ) <= l_arguments.get( 3 )

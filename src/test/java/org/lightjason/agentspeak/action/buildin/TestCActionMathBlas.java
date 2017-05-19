@@ -46,22 +46,22 @@ import java.util.stream.Stream;
 /**
  * test math blas functions
  */
-public class TestCActionMathBlas extends IBaseTest
+public final class TestCActionMathBlas extends IBaseTest
 {
     /**
      * testing matrix
      */
-    private DoubleMatrix2D m_matrix = new DenseDoubleMatrix2D( new double[][]{{2, 6}, {3, 8}} );
+    private static final DoubleMatrix2D MATRIX1 = new DenseDoubleMatrix2D( new double[][]{{2, 6}, {3, 8}} );
 
     /**
      * testing matrix
      */
-    private DoubleMatrix2D m_matrix1 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
+    private static final DoubleMatrix2D MATRIX2 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
 
     /**
      * testing vector
      */
-    private DoubleMatrix1D m_vector = new DenseDoubleMatrix1D( new double[]{2, 5} );
+    private static final DoubleMatrix1D VECTOR = new DenseDoubleMatrix1D( new double[]{2, 5} );
 
 
     /**
@@ -75,7 +75,7 @@ public class TestCActionMathBlas extends IBaseTest
         new CSize().execute(
                 null,
                 false,
-                Stream.of( m_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -96,7 +96,7 @@ public class TestCActionMathBlas extends IBaseTest
         new CMultiply().execute(
                 null,
                 false,
-                Stream.of( m_matrix, m_matrix1, m_matrix, m_vector, m_vector, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, MATRIX2, MATRIX1, VECTOR, VECTOR, VECTOR ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -114,21 +114,21 @@ public class TestCActionMathBlas extends IBaseTest
         new CMultiply().execute(
                 null,
                 false,
-                Stream.of( m_matrix, m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         new CMultiply().execute(
                 null,
                 false,
-                Stream.of( m_matrix, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, VECTOR ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         new CMultiply().execute(
                 null,
                 false,
-                Stream.of( m_vector, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( VECTOR, VECTOR ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -151,8 +151,9 @@ public class TestCActionMathBlas extends IBaseTest
         new CElementWise().execute(
                 null,
                 false,
-                Stream.of( m_matrix, "+", m_matrix1, m_matrix, "+", 5, m_matrix, "-", 5, m_matrix, "*", 5, m_matrix, "/", 2,
-                        m_matrix, "|+|", m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, "+", MATRIX2, MATRIX1, "+", 5, MATRIX1, "-", 5, MATRIX1, "*", 5, MATRIX1, "/", 2,
+                           MATRIX1, "|+|", MATRIX2
+                ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 

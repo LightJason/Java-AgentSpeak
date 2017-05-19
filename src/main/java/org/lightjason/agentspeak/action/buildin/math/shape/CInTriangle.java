@@ -74,8 +74,8 @@ public final class CInTriangle extends IBuildinAction
         if ( l_arguments.size() < 8 )
             return CFuzzyValue.from( false );
 
-        StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2 )
-                   .map( i -> {
+        StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
+                   .peek( i -> {
                        i.add(
                            l_arguments.get( 1 ) * l_arguments.get( 4 )
                            - l_arguments.get( 0 ) * l_arguments.get( 5 )
@@ -89,8 +89,6 @@ public final class CInTriangle extends IBuildinAction
                            + ( l_arguments.get( 1 ) - l_arguments.get( 3 ) ) * i.get( 0 )
                            + ( l_arguments.get( 2 ) - l_arguments.get( 0 ) ) * i.get( 1 )
                        );
-
-                       return i;
                    } )
                    .map( i -> ( i.get( 2 ) > 0 ) && ( i.get( 3 ) > 0 )
                               && ( i.get( 2 ) + i.get( 3 ) < -l_arguments.get( 3 ) * l_arguments.get( 4 )

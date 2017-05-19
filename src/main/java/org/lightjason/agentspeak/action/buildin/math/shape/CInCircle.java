@@ -76,7 +76,7 @@ public final class CInCircle extends IBuildinAction
             return CFuzzyValue.from( false );
 
 
-        StreamUtils.windowed( l_arguments.stream().skip( 3 ), 2 )
+        StreamUtils.windowed( l_arguments.stream().skip( 3 ), 2, 2 )
                    .map( i -> Math.hypot( i.get( 0 ) - l_arguments.get( 0 ), i.get( 1 ) - l_arguments.get( 1 ) ) <= Math.pow( l_arguments.get( 2 ), 2 ) )
                    .map( CRawTerm::from )
                    .forEach( p_return::add );
