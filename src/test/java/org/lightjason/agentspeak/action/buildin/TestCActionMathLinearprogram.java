@@ -55,13 +55,13 @@ public class TestCActionMathLinearprogram extends IBaseTest
      * testing linear program
      */
     private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram =
-            new ImmutablePair( new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
+            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
 
     /**
      * testing linear program
      */
     private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram1 =
-            new ImmutablePair( new LinearObjectiveFunction( new double[]{2, 3}, 5.0 ), new HashSet<LinearConstraint>() );
+            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{2, 3}, 5.0 ), new HashSet<LinearConstraint>() );
 
     /**
      * test create
@@ -79,7 +79,7 @@ public class TestCActionMathLinearprogram extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).<ImmutablePair>raw().getLeft() instanceof LinearObjectiveFunction );
+        assertTrue( l_return.get( 0 ).<ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getLeft() instanceof LinearObjectiveFunction );
     }
 
     /**
@@ -91,7 +91,7 @@ public class TestCActionMathLinearprogram extends IBaseTest
     public final void equationconstraint()
     {
         final List<ITerm> l_return = new ArrayList<>();
-        LinearConstraint l_result = new LinearConstraint( new double[]{2, 7, 12}, 19.0, Relationship.EQ, new double[]{1, 2, 3}, 5.0 );
+        final LinearConstraint l_result = new LinearConstraint( new double[]{2, 7, 12}, 19.0, Relationship.EQ, new double[]{1, 2, 3}, 5.0 );
 
         new CEquationConstraint().execute(
                 null,
