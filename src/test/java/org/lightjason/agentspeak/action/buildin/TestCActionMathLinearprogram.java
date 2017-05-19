@@ -28,6 +28,7 @@ import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.apache.commons.math3.optim.linear.Relationship;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
@@ -60,8 +61,32 @@ public class TestCActionMathLinearprogram extends IBaseTest
     /**
      * testing linear program
      */
-    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram1 =
-            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{2, 3}, 5.0 ), new HashSet<LinearConstraint>() );
+    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogrammin =
+            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{-2, 15}, 0.0 ), new HashSet<LinearConstraint>() );
+
+    /**
+     * testing linear program
+     */
+    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogrammax =
+            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{3, 5}, 0.0 ), new HashSet<LinearConstraint>() );
+
+    /**
+     * initialize
+     */
+    @Before
+    public void initialize()
+    {
+        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {-6, 8}, Relationship.GEQ, 3 ) );
+        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.GEQ, 11 ) );
+        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {1, 0}, Relationship.GEQ, 0 ) );
+        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
+
+        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {2, 8}, Relationship.LEQ, 13 ) );
+        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.LEQ, 11 ) );
+        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {1, 0}, Relationship.GEQ, 0 ) );
+        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
+    }
+
 
     /**
      * test create
@@ -110,25 +135,6 @@ public class TestCActionMathLinearprogram extends IBaseTest
     }
 
     /**
-     * test solve error
-     * @bug unbound solution exception
-     */
-    @Test
-    @Ignore
-    public final void solveerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CSolve().execute(
-                null,
-                false,
-                Stream.of( m_linearprogram1, "maximize" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-    }
-
-    /**
      * test solve
      */
     @Test
@@ -139,12 +145,19 @@ public class TestCActionMathLinearprogram extends IBaseTest
         new CSolve().execute(
                 null,
                 false,
-                Stream.of( m_linearprogram1, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 5.0, 2, 0.0, 0.0 ).toArray() );
+        new CSolve().execute(
+                null,
+                false,
+                Stream.of( m_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 30.38235294117647, 2, 2.676470588235294,
+                2.3823529411764706, 12.333333333333332, 2, 2.4047619047619047, 1.0238095238095237 ).toArray() );
 
     }
 
