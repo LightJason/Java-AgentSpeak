@@ -61,7 +61,7 @@ public class TestCActionMathLinearprogram extends IBaseTest
      * testing linear program
      */
     private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram1 =
-            new ImmutablePair( new LinearObjectiveFunction( new double[]{2, 3}, 3.0 ), new HashSet<LinearConstraint>() );
+            new ImmutablePair( new LinearObjectiveFunction( new double[]{2, 3}, 5.0 ), new HashSet<LinearConstraint>() );
 
     /**
      * test create
@@ -122,7 +122,7 @@ public class TestCActionMathLinearprogram extends IBaseTest
         new CSolve().execute(
                 null,
                 false,
-                Stream.of( m_linearprogram1, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_linearprogram1, "maximize" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -144,10 +144,7 @@ public class TestCActionMathLinearprogram extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 4 );
-        System.out.print( l_return.get( 0 ).<Number>raw() );
-        System.out.print( l_return.get( 1 ).<Number>raw() );
-        System.out.print( l_return.get( 2 ).<Number>raw() );
-        System.out.print( l_return.get( 3 ).<Number>raw() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 5.0, 2, 0.0, 0.0 ).toArray() );
 
     }
 
