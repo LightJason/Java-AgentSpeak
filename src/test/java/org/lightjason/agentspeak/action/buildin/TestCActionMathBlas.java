@@ -23,9 +23,12 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 
@@ -57,6 +60,12 @@ public class TestCActionMathBlas extends IBaseTest
     private DoubleMatrix2D m_matrix1 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
 
     /**
+     * testing vector
+     */
+    private DoubleMatrix1D m_vector = new DenseDoubleMatrix1D( new double[]{2, 5} );
+
+
+    /**
      * test size
      */
     @Test
@@ -76,6 +85,26 @@ public class TestCActionMathBlas extends IBaseTest
     }
 
     /**
+     * test multiply error
+     * @bug l_return size should be 3
+     */
+    @Test
+    @Ignore
+    public final void multiplyerror()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CMultiply().execute(
+                null,
+                false,
+                Stream.of( m_matrix, m_matrix1, m_matrix, m_vector, m_vector, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
+    }
+
+    /**
      * test multiply
      */
     @Test
@@ -90,10 +119,25 @@ public class TestCActionMathBlas extends IBaseTest
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof DoubleMatrix2D );
+        new CMultiply().execute(
+                null,
+                false,
+                Stream.of( m_matrix, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        new CMultiply().execute(
+                null,
+                false,
+                Stream.of( m_vector, m_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 3 );
 
         Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{22.0, 10.0}, {30.0, 14.0}} );
+        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{34.0, 46.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 10.0}, {10.0, 25.0}} );
 
     }
 
@@ -108,12 +152,19 @@ public class TestCActionMathBlas extends IBaseTest
         new CElementWise().execute(
                 null,
                 false,
-                Stream.of( m_matrix, "+", m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_matrix, "+", m_matrix1, m_matrix, "+", 5, m_matrix, "-", 5, m_matrix, "*", 5, m_matrix, "/", 2,
+                        m_matrix, "|+|", m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.size(), 6 );
         Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
+        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{7.0, 11.0}, {8.0, 13.0}} );
+        Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{-3.0, 1.0}, {-2.0, 3.0}} );
+        Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{10.0, 30.0}, {15.0, 40.0}} );
+        Assert.assertArrayEquals( l_return.get( 4 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{1.0, 3.0}, {1.5, 4.0}} );
+        Assert.assertArrayEquals( l_return.get( 5 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
+
     }
 
 
