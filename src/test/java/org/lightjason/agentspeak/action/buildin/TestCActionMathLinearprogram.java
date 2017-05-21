@@ -28,11 +28,9 @@ import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.apache.commons.math3.optim.linear.Relationship;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-
 import org.lightjason.agentspeak.action.buildin.math.linearprogram.CCreate;
 import org.lightjason.agentspeak.action.buildin.math.linearprogram.CSolve;
 import org.lightjason.agentspeak.action.buildin.math.linearprogram.CValueConstraint;
@@ -55,38 +53,8 @@ public class TestCActionMathLinearprogram extends IBaseTest
     /**
      * testing linear program
      */
-    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram =
-            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
-
-    /**
-     * testing linear program
-     */
-    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogrammin =
-            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{-2, 15}, 0.0 ), new HashSet<LinearConstraint>() );
-
-    /**
-     * testing linear program
-     */
-    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogrammax =
-            new ImmutablePair<>( new LinearObjectiveFunction( new double[]{3, 5}, 0.0 ), new HashSet<LinearConstraint>() );
-
-    /**
-     * initialize
-     */
-    @Before
-    public void initialize()
-    {
-        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {-6, 8}, Relationship.GEQ, 3 ) );
-        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.GEQ, 11 ) );
-        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {1, 0}, Relationship.GEQ, 0 ) );
-        m_linearprogrammin.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
-
-        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {2, 8}, Relationship.LEQ, 13 ) );
-        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.LEQ, 11 ) );
-        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {1, 0}, Relationship.GEQ, 0 ) );
-        m_linearprogrammax.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
-    }
-
+    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram = new ImmutablePair<>(
+            new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
 
     /**
      * test create
@@ -108,6 +76,26 @@ public class TestCActionMathLinearprogram extends IBaseTest
     }
 
     /**
+     * test value constraint
+     */
+    @Test
+    public final void valueconstraint()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CValueConstraint().execute(
+                null,
+                false,
+                Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
+        Assert.assertEquals( 11.0,  m_linearprogram.getRight().iterator().next().getValue(), 0 );
+    }
+
+
+    /**
      * test equation constraint
      * @bug in getcoefficients
      */
@@ -125,65 +113,67 @@ public class TestCActionMathLinearprogram extends IBaseTest
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
         Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
-
-        Assert.assertEquals( l_result.getValue(),  m_linearprogram.getRight().iterator().next().getValue(), 0 );
-        Assert.assertEquals( l_result.getRelationship(), m_linearprogram.getRight().iterator().next().getRelationship() );
-        Assert.assertEquals( l_result.getCoefficients(),  m_linearprogram.getRight().iterator().next().getCoefficients() );
+        Assert.assertArrayEquals( Stream.of( l_result.getValue(), l_result.getRelationship(), l_result.getCoefficients() ).toArray(),
+                Stream.of( m_linearprogram.getRight().iterator().next().getValue(), m_linearprogram.getRight().iterator().next().getRelationship(),
+                        m_linearprogram.getRight().iterator().next().getCoefficients() ).toArray() );
 
     }
 
     /**
-     * test solve
+     * test solve maximum
      */
     @Test
-    public final void solve()
+    public final void solveMaximize()
     {
         final List<ITerm> l_return = new ArrayList<>();
+        final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammax = new ImmutablePair<>(
+                new LinearObjectiveFunction( new double[]{3, 5}, 0.0 ), new HashSet<LinearConstraint>() );
+
+        l_linearprogrammax.getRight().add( new LinearConstraint( new double[] {2, 8}, Relationship.LEQ, 13 ) );
+        l_linearprogrammax.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.LEQ, 11 ) );
+        l_linearprogrammax.getRight().add( new LinearConstraint( new double[] {1, 0}, Relationship.GEQ, 0 ) );
+        l_linearprogrammax.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
+
 
         new CSolve().execute(
                 null,
                 false,
-                Stream.of( m_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 12.333333333333332, 2,
+                2.4047619047619047, 1.0238095238095237 ).toArray() );
+
+    }
+
+    /**
+     * test solve minimize
+     */
+    @Test
+    public final void solveMinimize()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammin =
+                new ImmutablePair<>( new LinearObjectiveFunction( new double[]{-2, 15}, 0.0 ), new HashSet<LinearConstraint>() );
+
+        l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {-6, 8}, Relationship.GEQ, 3 ) );
+        l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.GEQ, 11 ) );
+        l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {1, 0}, Relationship.GEQ, 0 ) );
+        l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
+
         new CSolve().execute(
                 null,
                 false,
-                Stream.of( m_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 30.38235294117647, 2, 2.676470588235294,
-                2.3823529411764706, 12.333333333333332, 2, 2.4047619047619047, 1.0238095238095237 ).toArray() );
+                2.3823529411764706 ).toArray() );
 
     }
-
-    /**
-     * test value constraint
-     */
-    @Test
-    public final void valueconstraint()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CValueConstraint().execute(
-                null,
-                false,
-                Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
-
-        Assert.assertEquals( 11.0,  m_linearprogram.getRight().iterator().next().getValue(), 0 );
-    }
-
-
-
 
     /**
      * test call
