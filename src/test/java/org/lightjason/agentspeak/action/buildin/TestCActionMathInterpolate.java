@@ -51,15 +51,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestCActionMathInterpolate extends IBaseTest
 {
-    /**
-     * testing polynomial
-     */
-    private PolynomialSplineFunction m_linearpolynomial = new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} );
-
-    /**
-     * testing polynomial
-     */
-    private PolynomialFunctionLagrangeForm m_nevillepolynomial = new NevilleInterpolator().interpolate( new double[]{2, 3, 8}, new double[]{11, 13, 20} );
 
     /**
      * test create
@@ -123,12 +114,13 @@ public class TestCActionMathInterpolate extends IBaseTest
         new CSingleInterpolate().execute(
                 null,
                 false,
-                Stream.of( m_linearpolynomial, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ), 3, 4
+                ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Object>raw(), 11.0 );
-        Assert.assertEquals( l_return.get( 1 ).<Object>raw(), 11.666666666666666 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 11.0 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 11.666666666666666 );
     }
 
     /**
@@ -142,12 +134,14 @@ public class TestCActionMathInterpolate extends IBaseTest
         new CMultipleInterpolate().execute(
                 null,
                 false,
-                Stream.of( 5, m_linearpolynomial, m_nevillepolynomial ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 5, new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ),
+                        new NevilleInterpolator().interpolate( new double[]{2, 3, 8}, new double[]{11, 13, 20} )
+                ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( l_return.get( 0 ).<Object>raw(), 12.333333333333334 );
-        Assert.assertEquals( l_return.get( 1 ).<Object>raw(), 16.400000000000002 );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 12.333333333333334 );
+        Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 16.400000000000002 );
     }
 
 
