@@ -84,26 +84,6 @@ public final class TestCActionMathBlas extends IBaseTest
     }
 
     /**
-     * test multiply error
-     *
-     * @todo check object returns, on error action must return fail result
-     */
-    @Test
-    public final void multiplyerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CMultiply().execute(
-                null,
-                false,
-                Stream.of( MATRIX1, MATRIX2, MATRIX1, VECTOR, VECTOR, VECTOR ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 3 );
-    }
-
-    /**
      * test multiply
      */
     @Test
@@ -114,30 +94,15 @@ public final class TestCActionMathBlas extends IBaseTest
         new CMultiply().execute(
                 null,
                 false,
-                Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, MATRIX2, MATRIX1, VECTOR, VECTOR, VECTOR, VECTOR, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        new CMultiply().execute(
-                null,
-                false,
-                Stream.of( MATRIX1, VECTOR ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        new CMultiply().execute(
-                null,
-                false,
-                Stream.of( VECTOR, VECTOR ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 3 );
-
+        Assert.assertEquals( l_return.size(), 4 );
         Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{22.0, 10.0}, {30.0, 14.0}} );
         Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{34.0, 46.0}, 0 );
         Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 10.0}, {10.0, 25.0}} );
-
+        Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix1D>raw().toArray(), new double[]{14.0, 11.0}, 0 );
     }
 
     /**
@@ -152,21 +117,23 @@ public final class TestCActionMathBlas extends IBaseTest
                 null,
                 false,
                 Stream.of( MATRIX1, "+", MATRIX2, MATRIX1, "+", 5, MATRIX1, "-", 5, MATRIX1, "*", 5, MATRIX1, "/", 2,
-                           MATRIX1, "|+|", MATRIX2
+                           MATRIX1, "|+|", MATRIX2, MATRIX1, "-", MATRIX2, MATRIX1, "*", MATRIX2, MATRIX1, "|+|", -9
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 6 );
+        Assert.assertEquals( l_return.size(), 9 );
         Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
         Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{7.0, 11.0}, {8.0, 13.0}} );
         Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{-3.0, 1.0}, {-2.0, 3.0}} );
         Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{10.0, 30.0}, {15.0, 40.0}} );
         Assert.assertArrayEquals( l_return.get( 4 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{1.0, 3.0}, {1.5, 4.0}} );
         Assert.assertArrayEquals( l_return.get( 5 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 8.0}, {6.0, 9.0}} );
+        Assert.assertArrayEquals( l_return.get( 6 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{0.0, 4.0}, {0.0, 7.0}} );
+        Assert.assertArrayEquals( l_return.get( 7 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{4.0, 12.0}, {9.0, 8.0}} );
+        Assert.assertArrayEquals( l_return.get( 8 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{7.0, 3.0}, {6.0, 1.0}} );
 
     }
-
 
     /**
      * test call
