@@ -68,6 +68,7 @@ public final class CMultiply extends IAlgebra
         return CFuzzyValue.from(
             StreamUtils.windowed(
                 CCommon.flatcollection( p_argument ),
+                2,
                 2
             ).parallel().allMatch( i -> {
 
