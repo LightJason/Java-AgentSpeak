@@ -93,20 +93,20 @@ import static org.junit.Assert.assertTrue;
  * test math blas matrix functions
  */
 @RunWith( DataProviderRunner.class )
-public class TestCActionMathBlasMatrix extends IBaseTest
+public final class TestCActionMathBlasMatrix extends IBaseTest
 {
 
     /**
      * testing matrix
      * @note static because of usage in data-provider
      */
-    private static DoubleMatrix2D s_matrix = new DenseDoubleMatrix2D( new double[][]{{2, 6}, {3, 8}} );
+    private static final DoubleMatrix2D MATRIX1 = new DenseDoubleMatrix2D( new double[][]{{2, 6}, {3, 8}} );
 
     /**
      * testing matrix
      * @note static because of usage in data-provider
      */
-    private static DoubleMatrix2D s_matrix1 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
+    private static final DoubleMatrix2D MATRIX2 = new DenseDoubleMatrix2D( new double[][]{{2, 2}, {3, 1}} );
 
     /**
      * data provider generator
@@ -117,7 +117,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
     {
         return testcase(
 
-                Stream.of( s_matrix, s_matrix1 ),
+                Stream.of( MATRIX1, MATRIX2 ),
 
                 Stream.of(
                         CColumns.class,
@@ -145,7 +145,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
                 Stream.of( 10.63014581273465, 4.242640687119285 ),
                 Stream.of( 11.0000, 4.0000 ),
                 Stream.of( 2L, 2L ),
-                Stream.of( s_matrix.zSum(), s_matrix1.zSum() ),
+                Stream.of( MATRIX1.zSum(), MATRIX2.zSum() ),
                 Stream.of( 10.0, 3.0 )
 
         ).toArray();
@@ -182,7 +182,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
     @Test
     @UseDataProvider( "generator" )
     public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-            throws IllegalAccessException, InstantiationException
+    throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -232,7 +232,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CColumn().execute(
                 null,
                 false,
-                Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -255,7 +255,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CRow().execute(
                 null,
                 false,
-                Stream.of( 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -278,7 +278,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CPower().execute(
                 null,
                 false,
-                Stream.of( 2, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 2, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -302,12 +302,12 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CSet().execute(
                 null,
                 false,
-                Stream.of( 0, 1, 6.0, s_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 0, 1, 6.0, MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( s_matrix.get( 0, 1 ), 6, 0 );
+        Assert.assertEquals( MATRIX1.get( 0, 1 ), 6, 0 );
     }
 
     /**
@@ -321,7 +321,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CToList().execute(
                 null,
                 false,
-                Stream.of( s_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -343,7 +343,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CTranspose().execute(
                 null,
                 false,
-                Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -365,7 +365,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CSubMatrix().execute(
                 null,
                 false,
-                Stream.of( 0, 0, 0, 1, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 0, 0, 0, 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -387,7 +387,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CSolve().execute(
                 null,
                 false,
-                Stream.of( s_matrix, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -430,12 +430,12 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CAssign().execute(
             null,
             false,
-            Stream.of( s_matrix1, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( MATRIX2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertArrayEquals( s_matrix1.toArray(), l_matrix.toArray() );
+        Assert.assertArrayEquals( MATRIX2.toArray(), l_matrix.toArray() );
     }
 
     /**
@@ -449,7 +449,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CGet().execute(
                 null,
                 false,
-                Stream.of( s_matrix1, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX2, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -490,7 +490,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CInvert().execute(
                 null,
                 false,
-                Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -511,7 +511,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CEigen().execute(
                 null,
                 false,
-                Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -535,7 +535,7 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CSingularValue().execute(
                 null,
                 false,
-                Stream.of( s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
@@ -564,12 +564,12 @@ public class TestCActionMathBlasMatrix extends IBaseTest
         new CCopy().execute(
                 null,
                 false,
-                Stream.of( s_matrix, s_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( s_matrix, s_matrix1 ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( MATRIX1, MATRIX2 ).toArray() );
     }
 
 
