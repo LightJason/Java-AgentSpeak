@@ -45,8 +45,10 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -245,17 +247,19 @@ public class TestCActionMathStatistics extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CExponentialSelection().execute(
-                null,
-                false,
-                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( -2.7, 8.9 ).collect( Collectors.toList() ), 3.0, 2 )
-                        .map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
+        IntStream.range( 0, 40 )
+                .forEach( i ->
+                        new CExponentialSelection().execute(
+                                null,
+                                false,
+                                Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 6.5, 3.5 ).collect( Collectors.toList() ), 2.5 )
+                                        .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                l_return
+                        ) );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof String );
-        Assert.assertEquals( l_return.get( 0 ).<String>raw().length(), 1 );
+        Assert.assertTrue( Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "b" )
+                <= Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "a" ) );
+
     }
 
     /**
@@ -266,17 +270,20 @@ public class TestCActionMathStatistics extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CLinearSelection().execute(
-                null,
-                false,
-                Stream.of( Stream.of( "b", "c" ).collect( Collectors.toList() ), Stream.of( 0.2, 0.9 ).collect( Collectors.toList() ), 2 )
-                        .map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
+        IntStream.range( 0, 40 )
+                .forEach( i ->
+                        new CLinearSelection().execute(
+                                null,
+                                false,
+                                Stream.of( Stream.of( "c", "d" ).collect( Collectors.toList() ), Stream.of( 3, 7 ).collect( Collectors.toList() ) )
+                                        .map( CRawTerm::from ).collect( Collectors.toList() ),
+                                l_return
+        ) );
 
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).raw() instanceof String );
-        Assert.assertEquals( l_return.get( 0 ).<String>raw().length(), 1 );
+        Assert.assertTrue( Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "c" )
+                <= Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "d" ) );
+
+
     }
 
     /**
