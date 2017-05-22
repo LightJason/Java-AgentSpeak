@@ -53,6 +53,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -183,16 +184,14 @@ public final class TestCActionMathBlasVector extends IBaseTest
     public final void set()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
-        final List<ITerm> l_return = new ArrayList<>();
 
         new CSet().execute(
                 null,
                 false,
                 Stream.of( 0, 6.0, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+                Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
         Assert.assertEquals( l_vector.get( 0 ), 6, 0 );
     }
 
@@ -225,19 +224,15 @@ public final class TestCActionMathBlasVector extends IBaseTest
     public final void assignscalar()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
-        final List<ITerm> l_return = new ArrayList<>();
 
         new CAssign().execute(
                 null,
                 false,
                 Stream.of( 2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+                Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
         Assert.assertArrayEquals( l_vector.toArray(), Stream.of( 2, 2, 2, 2 ).mapToDouble( i -> i ).toArray(), 0 );
-
-
     }
 
     /**
@@ -247,16 +242,14 @@ public final class TestCActionMathBlasVector extends IBaseTest
     public final void assignvector()
     {
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
-        final List<ITerm> l_return = new ArrayList<>();
 
         new CAssign().execute(
             null,
             false,
             Stream.of( VECTOR2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+            Collections.emptyList()
         );
 
-        Assert.assertEquals( l_return.size(), 0 );
         Assert.assertArrayEquals( l_vector.toArray(), VECTOR2.toArray(), 0 );
     }
 

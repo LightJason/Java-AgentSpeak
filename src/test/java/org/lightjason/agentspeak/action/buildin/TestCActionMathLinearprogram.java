@@ -43,8 +43,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * test math linear program functions
  */
@@ -93,8 +91,6 @@ public class TestCActionMathLinearprogram extends IBaseTest
     @Test
     public final void valueconstraint()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
         new CValueConstraint().execute(
                 null,
                 false,
@@ -143,11 +139,13 @@ public class TestCActionMathLinearprogram extends IBaseTest
      * test solve maximum
      */
     @Test
-    public final void solveMaximize()
+    public final void solvemaximize()
     {
         final List<ITerm> l_return = new ArrayList<>();
         final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammax = new ImmutablePair<>(
-                new LinearObjectiveFunction( new double[]{3, 5}, 0.0 ), new HashSet<LinearConstraint>() );
+                new LinearObjectiveFunction( new double[]{3, 5}, 0.0 ),
+                new HashSet<LinearConstraint>()
+        );
 
         l_linearprogrammax.getRight().add( new LinearConstraint( new double[] {2, 8}, Relationship.LEQ, 13 ) );
         l_linearprogrammax.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.LEQ, 11 ) );
@@ -162,20 +160,23 @@ public class TestCActionMathLinearprogram extends IBaseTest
                 l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 12.333333333333332, 2,
-                2.4047619047619047, 1.0238095238095237 ).toArray() );
-
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( 12.333333333333332, 2, 2.4047619047619047, 1.0238095238095237 ).toArray()
+        );
     }
 
     /**
      * test solve minimize
      */
     @Test
-    public final void solveMinimize()
+    public final void solveminimize()
     {
         final List<ITerm> l_return = new ArrayList<>();
-        final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammin =
-                new ImmutablePair<>( new LinearObjectiveFunction( new double[]{-2, 15}, 0.0 ), new HashSet<LinearConstraint>() );
+        final ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> l_linearprogrammin = new ImmutablePair<>(
+            new LinearObjectiveFunction( new double[]{-2, 15}, 0.0 ),
+            new HashSet<LinearConstraint>()
+        );
 
         l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {-6, 8}, Relationship.GEQ, 3 ) );
         l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {5, -1}, Relationship.GEQ, 11 ) );
@@ -189,9 +190,10 @@ public class TestCActionMathLinearprogram extends IBaseTest
                 l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 30.38235294117647, 2, 2.676470588235294,
-                2.3823529411764706 ).toArray() );
-
+        Assert.assertArrayEquals(
+            l_return.stream().map( ITerm::raw ).toArray(),
+            Stream.of( 30.38235294117647, 2, 2.676470588235294, 2.3823529411764706 ).toArray()
+        );
     }
 
     /**

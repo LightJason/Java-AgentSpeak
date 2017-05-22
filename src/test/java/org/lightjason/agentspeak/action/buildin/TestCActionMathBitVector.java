@@ -226,15 +226,13 @@ public final class TestCActionMathBitVector extends IBaseTest
     @Test
     public final void set()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
         new CSet().execute(
                 null,
                 false,
                 Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+                Collections.emptyList()
         );
-        Assert.assertEquals( l_return.size(), 0 );
+
         Assert.assertEquals( VECTOR2.get( 0 ), true );
         Assert.assertEquals( VECTOR2.get( 1 ), true );
     }
@@ -245,17 +243,14 @@ public final class TestCActionMathBitVector extends IBaseTest
     @Test
     public final void clear()
     {
-        final List<ITerm> l_return = new ArrayList<>();
-
         new CClear().execute(
                 null,
                 false,
                 Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+                Collections.emptyList()
         );
 
         Assert.assertEquals( VECTOR2.get( 0 ), false );
-        Assert.assertEquals( l_return.size(), 0 );
     }
 
     /**
