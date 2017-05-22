@@ -83,7 +83,8 @@ public class TestCActionMathLinearprogram extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        assertTrue( l_return.get( 0 ).<ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getLeft() instanceof LinearObjectiveFunction );
+        Assert.assertNotNull( l_return.get( 0 ).<ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getLeft() );
+        Assert.assertTrue( l_return.get( 0 ).<ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().isEmpty() );
     }
 
     /**
