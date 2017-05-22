@@ -41,8 +41,6 @@ import java.util.stream.Stream;
 
 /**
  * test math shape functions
- *
- * @todo test results for all actions again
  */
 public final class TestCActionMathShape extends IBaseTest
 {
@@ -58,30 +56,13 @@ public final class TestCActionMathShape extends IBaseTest
         new CInCircle().execute(
                 null,
                 false,
-                Stream.of( 1, 1, 1, 2, 2.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw()  );
-    }
-
-    /**
-     * test in circle error
-     */
-    @Test
-    public final void incircleerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CInCircle().execute(
-                null,
-                false,
-                Stream.of( 1, 1, 1, 2, 2.5, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertFalse( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }
 
     /**
@@ -95,30 +76,13 @@ public final class TestCActionMathShape extends IBaseTest
         new CInRectangle().execute(
                 null,
                 false,
-                Stream.of( 0, 0, 100, 100, 40, 55 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
-    }
-
-    /**
-     * test in rechtangle error
-     */
-    @Test
-    public final void inrechtangleerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CInRectangle().execute(
-                null,
-                false,
-                Stream.of( 10, 100, 100, 200, 40, 55, 100, 112 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
     }
 
     /**
@@ -132,30 +96,13 @@ public final class TestCActionMathShape extends IBaseTest
         new CInTriangle().execute(
                 null,
                 false,
-                Stream.of( 250, 220, 25, 275, 40, 55, 60, 170 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
-    }
-
-    /**
-     * test in intriangle error
-     */
-    @Test
-    public final void intriangleerror()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CInTriangle().execute(
-                null,
-                false,
-                Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 40, 100 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertTrue( l_return.get( 0 ).<Boolean>raw() );
+        Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
     }
 
     /**
