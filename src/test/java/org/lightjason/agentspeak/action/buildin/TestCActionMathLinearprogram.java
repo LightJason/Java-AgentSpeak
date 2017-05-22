@@ -28,7 +28,7 @@ import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
 import org.apache.commons.math3.optim.linear.Relationship;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.buildin.math.linearprogram.CCreate;
@@ -53,8 +53,19 @@ public class TestCActionMathLinearprogram extends IBaseTest
     /**
      * testing linear program
      */
-    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram = new ImmutablePair<>(
-            new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
+    private ImmutablePair<LinearObjectiveFunction, Collection<LinearConstraint>> m_linearprogram;
+
+
+    /**
+     * initialize
+     */
+    @Before
+    public final void initialize()
+    {
+        m_linearprogram = new ImmutablePair<>( new LinearObjectiveFunction( new double[]{}, 0.0 ), new HashSet<LinearConstraint>() );
+    }
+
+
 
     /**
      * test create
@@ -87,7 +98,7 @@ public class TestCActionMathLinearprogram extends IBaseTest
                 null,
                 false,
                 Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+                Collections.emptyList()
         );
 
         Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
@@ -97,27 +108,34 @@ public class TestCActionMathLinearprogram extends IBaseTest
 
     /**
      * test equation constraint
-     * @bug in getcoefficients
      */
     @Test
-    @Ignore
     public final void equationconstraint()
     {
-        final List<ITerm> l_return = new ArrayList<>();
         final LinearConstraint l_result = new LinearConstraint( new double[]{2, 7, 12}, 19.0, Relationship.EQ, new double[]{1, 2, 3}, 5.0 );
 
         new CEquationConstraint().execute(
                 null,
                 false,
-                Stream.of( m_linearprogram, 2.0, 7.0, 12.0, 19.0, "=", 1.0, 2.0, 3.0, 5.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+                Stream.of( m_linearprogram, 2, 7, 12, 19.0, "=", 1, 2, 3, 5.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
         );
 
-        Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
-        Assert.assertArrayEquals( Stream.of( l_result.getValue(), l_result.getRelationship(), l_result.getCoefficients() ).toArray(),
-                Stream.of( m_linearprogram.getRight().iterator().next().getValue(), m_linearprogram.getRight().iterator().next().getRelationship(),
-                        m_linearprogram.getRight().iterator().next().getCoefficients() ).toArray() );
 
+        Assert.assertEquals( m_linearprogram.getRight().size(), 1 );
+        Assert.assertArrayEquals(
+            Stream.of(
+                l_result.getValue(),
+                l_result.getRelationship(),
+                l_result.getCoefficients()
+            ).toArray(),
+
+            Stream.of(
+                m_linearprogram.getRight().iterator().next().getValue(),
+                m_linearprogram.getRight().iterator().next().getRelationship(),
+                m_linearprogram.getRight().iterator().next().getCoefficients()
+            ).toArray()
+        );
     }
 
     /**

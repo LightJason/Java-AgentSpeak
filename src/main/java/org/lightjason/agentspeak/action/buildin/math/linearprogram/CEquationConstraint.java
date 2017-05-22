@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.buildin.math.linearprogram;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.optim.linear.LinearConstraint;
 import org.apache.commons.math3.optim.linear.LinearObjectiveFunction;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -36,7 +36,6 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 /**
@@ -49,10 +48,9 @@ import java.util.stream.IntStream;
  *
  * The first arguments is the LP object, the following arguments are the \f$ c_i \f$ values, after that the \f$ c_{const} \f$ value must be added, in the middle
  * of the arguments the relation symbol (\f$ = \f$, \f$ \geq \f$ or \f$ \leq \f$) must be set as string, after that all \f$ r_i \f$
- * elements must be set and the last argument is the \f$ r_{const} \f$, the action never fails
+ * elements must be set and the last argument is the \f$ r_{const} \f$, the action fails on wrong input
  *
  * @code math/linearprogram/equationconstraint( LP, [2,7,[7,12,[19]]], "<", [1,2],3,5 ) @endcode
- * @warning the action throws an exception if the relation symbol is not found
  * @see https://en.wikipedia.org/wiki/Linear_programming
  * @see http://commons.apache.org/proper/commons-math/userguide/optimization.html
  */
@@ -79,41 +77,49 @@ public final class CEquationConstraint extends IConstraint
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
-        // first search the relation symbol and create splitting lists
-        final int l_index = IntStream.range( 1, l_arguments.size() )
-                                     .boxed()
-                                     .mapToInt( i -> CCommon.rawvalueAssignableTo( l_arguments.get( i ), String.class ) ? i : -1 )
-                                     .filter( i -> i > -1 )
-                                     .findFirst()
-                                     .orElseThrow( () -> new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon
-                                                                                            .languagestring( this, "relation" ) ) );
+        // create left-hand-side and right-hand-side with operator lists
+        final List<Number> l_lhs = StreamUtils.takeWhile( l_arguments.stream().skip( 1 ), i -> !CCommon.rawvalueAssignableTo( i, String.class ) )
+                                              .map( ITerm::<Number>raw )
+                                              .collect( Collectors.toList() );
 
+        final List<ITerm> l_rhs = l_arguments.stream()
+                                             .skip( l_lhs.size() + 1 )
+                                             .collect( Collectors.toList() );
 
-        // create linear constraint based on an equation
+        // test content
+        if ( ( l_lhs.size() < 2 ) || ( l_rhs.size() < 3 ) || ( !CCommon.rawvalueAssignableTo( l_rhs.get( 0 ), String.class ) ) )
+            return CFuzzyValue.from( false );
+
+        // create constraint
         l_arguments.get( 0 ).<Pair<LinearObjectiveFunction, Collection<LinearConstraint>>>raw().getRight().add(
             new LinearConstraint(
 
                 // c_i values
-                l_arguments.stream()
-                           .limit( l_index - 2 )
-                           .skip( 1 )
-                           .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                           .toArray(),
+                l_lhs.stream()
+                     .limit( l_lhs.size() - 1 )
+                     .mapToDouble( Number::doubleValue )
+                     .toArray(),
 
                 // c_const value
-                l_arguments.get( l_index - 1 ).<Number>raw().doubleValue(),
+                l_lhs.get( l_lhs.size() - 1 )
+                     .doubleValue(),
 
                 // relation symbol
-                this.getRelation( p_argument.get( l_index ).<String>raw() ),
+                this.getRelation( l_rhs.get( 0 ).<String>raw() ),
 
                 // r_i values
-                l_arguments.stream()
-                           .skip( l_index + 2 )
-                           .mapToDouble( i -> i.<Number>raw().doubleValue() )
-                           .toArray(),
+                l_rhs.stream()
+                     .limit( l_rhs.size() - 1 )
+                     .skip( 1 )
+                     .map( ITerm::<Number>raw )
+                     .mapToDouble( Number::doubleValue )
+                     .toArray(),
 
                 // r_const value
-                l_arguments.get( p_argument.size() - 1 ).<Number>raw().doubleValue()
+                l_rhs.get( l_rhs.size() - 1 )
+                     .<Number>raw()
+                     .doubleValue()
+
             )
         );
 
