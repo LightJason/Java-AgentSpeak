@@ -74,13 +74,13 @@ public final class TestCActionGenericType extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals(
-                l_return.get( 0 ).<ILiteral>raw(),
-                CLiteral.from(
-                        "functor",
-                        CRawTerm.from( "stringvalue" ),
-                        CRawTerm.from( 1234 ),
-                        CRawTerm.from( true )
-                )
+            l_return.get( 0 ).<ILiteral>raw(),
+            CLiteral.from(
+                    "functor",
+                    CRawTerm.from( "stringvalue" ),
+                    CRawTerm.from( 1234 ),
+                    CRawTerm.from( true )
+            )
         );
     }
 
@@ -94,21 +94,21 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParseLiteral().execute(
-                null,
-                false,
-                Stream.of( "main/parsefunctor( \"hello\", 666, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            null,
+            false,
+            Stream.of( "main/parsefunctor( \"hello\", 666, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals(
-                l_return.get( 0 ).<ILiteral>raw(),
-                CLiteral.from(
-                        "main/parsefunctor",
-                        CRawTerm.from( "hello" ),
-                        CRawTerm.from( 666 ),
-                        CRawTerm.from( false )
-                )
+            l_return.get( 0 ).<ILiteral>raw(),
+            CLiteral.from(
+                    "main/parsefunctor",
+                    CRawTerm.from( "hello" ),
+                    CRawTerm.from( 666 ),
+                    CRawTerm.from( false )
+            )
         );
     }
 
@@ -122,12 +122,12 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertFalse(
-                new CParseLiteral().execute(
-                        null,
-                        false,
-                        Stream.of( "Main/parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        l_return
-                ).value()
+            new CParseLiteral().execute(
+                null,
+                false,
+                Stream.of( "Main/parsefunctor( hello, XXXXX, false )" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
     }
 
@@ -164,10 +164,10 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParseFloat().execute(
-                null,
-                false,
-                Stream.of( "732.489", "64.091248", "-78129.01", "foo" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            null,
+            false,
+            Stream.of( "732.489", "64.091248", "-78129.01", "foo" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -187,10 +187,10 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CType().execute(
-                null,
-                false,
-                Stream.of( new ArrayList<>(), 123L, "test value", new HashSet<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            null,
+            false,
+            Stream.of( new ArrayList<>(), 123L, "test value", new HashSet<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -208,21 +208,21 @@ public final class TestCActionGenericType extends IBaseTest
     public final void is()
     {
         Assert.assertFalse(
-                new CIs().execute(
-                        null,
-                        false,
-                        Stream.of( "java.lang.String", "text foo", 123, 88.98 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIs().execute(
+                null,
+                false,
+                Stream.of( "java.lang.String", "text foo", 123, 88.98 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
         Assert.assertTrue(
-                new CIs().execute(
-                        null,
-                        false,
-                        Stream.of( "java.lang.Number", 123, 44.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIs().execute(
+                null,
+                false,
+                Stream.of( "java.lang.Number", 123, 44.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
     }
 
@@ -234,21 +234,21 @@ public final class TestCActionGenericType extends IBaseTest
     public final void isnull()
     {
         Assert.assertFalse(
-                new CIsNull().execute(
-                        null,
-                        false,
-                        Stream.of( "test type string", null ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIsNull().execute(
+                null,
+                false,
+                Stream.of( "test type string", null ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
         Assert.assertTrue(
-                new CIsNull().execute(
-                        null,
-                        false,
-                        Stream.of( CRawTerm.from( null ) ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIsNull().execute(
+                null,
+                false,
+                Stream.of( CRawTerm.from( null ) ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
     }
 
@@ -260,21 +260,21 @@ public final class TestCActionGenericType extends IBaseTest
     public final void isnumeric()
     {
         Assert.assertFalse(
-                new CIsNumeric().execute(
-                        null,
-                        false,
-                        Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIsNumeric().execute(
+                null,
+                false,
+                Stream.of( "test type string", 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
         Assert.assertTrue(
-                new CIsNumeric().execute(
-                        null,
-                        false,
-                        Stream.of( 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIsNumeric().execute(
+                null,
+                false,
+                Stream.of( 123, 77L, 112.123, 44.5f ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
     }
 
@@ -286,22 +286,22 @@ public final class TestCActionGenericType extends IBaseTest
     public final void isstring()
     {
         Assert.assertFalse(
-                new CIsString().execute(
-                        null,
-                        false,
-                        Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIsString().execute(
+                null,
+                false,
+                Stream.of( "test foobar", 123, "string again", true, new Object(), 77.8, 'a' ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
 
 
         Assert.assertTrue(
-                new CIsString().execute(
-                        null,
-                        false,
-                        Stream.of( "okay 1", 'c', "ok 2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CIsString().execute(
+                null,
+                false,
+                Stream.of( "okay 1", 'c', "ok 2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
     }
 
@@ -315,10 +315,10 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToInt().execute(
-                null,
-                false,
-                Stream.of( 1, 2.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            null,
+            false,
+            Stream.of( 1, 2.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 2L ).toArray() );
@@ -331,12 +331,12 @@ public final class TestCActionGenericType extends IBaseTest
     public final void tointerror()
     {
         Assert.assertFalse(
-                new CToInt().execute(
-                        null,
-                        false,
-                        Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CToInt().execute(
+                null,
+                false,
+                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
     }
 
@@ -350,10 +350,10 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToString().execute(
-                null,
-                false,
-                Stream.of( "", 123, 5.5, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            null,
+            false,
+            Stream.of( "", 123, 5.5, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -373,10 +373,10 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToFloat().execute(
-                null,
-                false,
-                Stream.of( 1, 2, 3.2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            null,
+            false,
+            Stream.of( 1, 2, 3.2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -393,12 +393,12 @@ public final class TestCActionGenericType extends IBaseTest
     public final void tofloaterror()
     {
         Assert.assertFalse(
-                new CToFloat().execute(
-                        null,
-                        false,
-                        Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                        Collections.emptyList()
-                ).value()
+            new CToFloat().execute(
+                null,
+                false,
+                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
+            ).value()
         );
     }
 

@@ -74,7 +74,7 @@ public final class CDiagonal extends IAlgebra
         CCommon.flatcollection( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix1D.class ) )
                .map( ITerm::<DoubleMatrix1D>raw )
-               .map( i  -> generate( i, EType.SPARSE ) )
+               .map( i  -> generate( i, l_type ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
