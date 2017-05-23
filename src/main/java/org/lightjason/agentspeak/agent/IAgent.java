@@ -58,6 +58,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_inspector inspector object
      * @return inspector stream or empty stream
      */
+    @SuppressWarnings( "unchecked" )
     <N extends IInspector> Stream<N> inspect( final N... p_inspector );
 
     /**

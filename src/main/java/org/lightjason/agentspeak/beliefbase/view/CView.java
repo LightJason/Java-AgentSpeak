@@ -142,6 +142,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Override
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     public final IView<T> add( final IView<T>... p_view )
     {
         Arrays.stream( p_view )
@@ -289,6 +290,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @return view stream
      */
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     private final Stream<IView<T>> walkdown( final IPath p_path, final IViewGenerator<T>... p_generator )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) )

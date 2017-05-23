@@ -75,6 +75,7 @@ public final class CIntersection implements IFuzzyOperator<Boolean>
 
     @Override
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     public final IFuzzyValue<Boolean> result( final IFuzzyValue<Boolean>... p_values )
     {
         return Arrays.stream( p_values ).collect( this );

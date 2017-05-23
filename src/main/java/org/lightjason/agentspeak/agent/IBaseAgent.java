@@ -170,6 +170,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Override
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
     {
         if ( p_inspector == null )

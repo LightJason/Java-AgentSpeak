@@ -112,6 +112,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
      * @return test-object
      */
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     private static Stream<Object> testcase( final Stream<Object> p_input, final Stream<Class<?>> p_classes, final Stream<Object>... p_classresult )
     {
         final List<ITerm> l_input = p_input.map( CRawTerm::from ).collect( Collectors.toList() );

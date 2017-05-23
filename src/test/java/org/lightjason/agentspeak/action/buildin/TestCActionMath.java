@@ -205,6 +205,7 @@ public final class TestCActionMath extends IBaseTest
      * @return test-case data
      */
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     private static Stream<Object> singlevaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
                                                        final Function<Number, ?>... p_result )
     {
@@ -227,6 +228,7 @@ public final class TestCActionMath extends IBaseTest
      * @return test-case data
      */
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     private static Stream<Object> aggregationvaluetestcase( final Stream<Number> p_input, final Stream<Class<? extends IAction>> p_class,
                                                             final Function<Stream<Number>, ?>... p_result )
     {
