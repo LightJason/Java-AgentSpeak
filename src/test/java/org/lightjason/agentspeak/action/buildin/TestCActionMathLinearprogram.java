@@ -46,7 +46,7 @@ import java.util.stream.Stream;
 /**
  * test math linear program functions
  */
-public class TestCActionMathLinearprogram extends IBaseTest
+public final class TestCActionMathLinearprogram extends IBaseTest
 {
     /**
      * testing linear program
