@@ -52,10 +52,10 @@ public final class TestCActionGeneric extends IBaseTest
     public final void throwparameter()
     {
         new CThrow().execute(
-            null,
-            false,
-            Stream.of( true, "test message" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList()
+                null,
+                false,
+                Stream.of( true, "test message" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
         );
     }
 
@@ -67,10 +67,10 @@ public final class TestCActionGeneric extends IBaseTest
     public final void throwwithoutparameter()
     {
         new CThrow().execute(
-            null,
-            false,
-            Stream.of( true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList()
+                null,
+                false,
+                Stream.of( true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
         );
     }
 
@@ -82,10 +82,10 @@ public final class TestCActionGeneric extends IBaseTest
     public final void thrownot()
     {
         new CThrow().execute(
-            null,
-            false,
-            Stream.of( false, "this should not be thrown" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList()
+                null,
+                false,
+                Stream.of( false, "this should not be thrown" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
         );
     }
 
@@ -101,10 +101,10 @@ public final class TestCActionGeneric extends IBaseTest
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
         new CPrint( "-", new PrintStream( l_output, false, "utf-8" ) ).execute(
-            null,
-            false,
-            Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList()
+                null,
+                false,
+                Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
         );
 
         Assert.assertEquals( l_output.toString( "utf-8" ), "foobar-1234-true\n" );
@@ -131,10 +131,10 @@ public final class TestCActionGeneric extends IBaseTest
         l_print.formatter().add( l_format2 );
 
         l_print.execute(
-            null,
-            false,
-            Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            Collections.emptyList()
+                null,
+                false,
+                Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Collections.emptyList()
         );
 
         Assert.assertEquals( l_output.toString( "utf-8" ), "FOOBAR-1234-yes\n" );
