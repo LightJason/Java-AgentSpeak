@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 /**
  * test for statistics actions
  */
-public class TestCActionMathStatistics extends IBaseTest
+public final class TestCActionMathStatistics extends IBaseTest
 {
     /**
      * testing statistic
@@ -71,7 +71,7 @@ public class TestCActionMathStatistics extends IBaseTest
      * initialize
      */
     @Before
-    public void initialize()
+    public final void initialize()
     {
         m_summarystatistic1 = new SummaryStatistics();
         m_summarystatistic2 = new SummaryStatistics();

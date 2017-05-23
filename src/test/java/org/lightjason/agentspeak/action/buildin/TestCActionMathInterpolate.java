@@ -49,7 +49,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * test for math interpolate
  */
-public class TestCActionMathInterpolate extends IBaseTest
+public final class TestCActionMathInterpolate extends IBaseTest
 {
 
     /**
@@ -114,7 +114,8 @@ public class TestCActionMathInterpolate extends IBaseTest
         new CSingleInterpolate().execute(
                 null,
                 false,
-                Stream.of( new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ), 3, 4
+                Stream.of(
+                    new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ), 3, 4
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
@@ -134,11 +135,14 @@ public class TestCActionMathInterpolate extends IBaseTest
         new CMultipleInterpolate().execute(
                 null,
                 false,
-                Stream.of( 5, new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ),
-                        new NevilleInterpolator().interpolate( new double[]{2, 3, 8}, new double[]{11, 13, 20} )
+                Stream.of(
+                    5,
+                    new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ),
+                    new NevilleInterpolator().interpolate( new double[]{2, 3, 8}, new double[]{11, 13, 20} )
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
+
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 12.333333333333334 );
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 16.400000000000002 );
