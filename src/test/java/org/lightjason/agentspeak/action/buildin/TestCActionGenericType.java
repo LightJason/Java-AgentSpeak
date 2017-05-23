@@ -66,20 +66,20 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreateLiteral().execute(
-            null,
-            false,
-            Stream.of( "functor", "stringvalue", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+                null,
+                false,
+                Stream.of( "functor", "stringvalue", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertEquals(
             l_return.get( 0 ).<ILiteral>raw(),
             CLiteral.from(
-                "functor",
-                CRawTerm.from( "stringvalue" ),
-                CRawTerm.from( 1234 ),
-                CRawTerm.from( true )
+                    "functor",
+                    CRawTerm.from( "stringvalue" ),
+                    CRawTerm.from( 1234 ),
+                    CRawTerm.from( true )
             )
         );
     }
@@ -104,10 +104,10 @@ public final class TestCActionGenericType extends IBaseTest
         Assert.assertEquals(
             l_return.get( 0 ).<ILiteral>raw(),
             CLiteral.from(
-                "main/parsefunctor",
-                CRawTerm.from( "hello" ),
-                CRawTerm.from( 666 ),
-                CRawTerm.from( false )
+                    "main/parsefunctor",
+                    CRawTerm.from( "hello" ),
+                    CRawTerm.from( 666 ),
+                    CRawTerm.from( false )
             )
         );
     }
@@ -141,10 +141,10 @@ public final class TestCActionGenericType extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParseInt().execute(
-            null,
-            false,
-            Stream.of( "666", "123", "-123", "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
+                null,
+                false,
+                Stream.of( "666", "123", "-123", "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );

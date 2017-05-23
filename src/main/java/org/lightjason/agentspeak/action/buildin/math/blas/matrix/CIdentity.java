@@ -74,7 +74,7 @@ public final class CIdentity extends IAlgebra
                .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
-               .map( i  -> generate( i, EType.SPARSE ) )
+               .map( i  -> generate( i, l_type ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

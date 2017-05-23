@@ -157,7 +157,6 @@ public final class TestCActionGeneric extends IBaseTest
      */
     private static final class CStringFormatter extends CPrint.IFormatter<String>
     {
-
         @Override
         protected final Class<?> getType()
         {
@@ -176,7 +175,6 @@ public final class TestCActionGeneric extends IBaseTest
      */
     private static final class CBooleanFormatter extends CPrint.IFormatter<Boolean>
     {
-
         @Override
         protected final Class<?> getType()
         {
