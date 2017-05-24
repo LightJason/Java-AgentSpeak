@@ -289,7 +289,7 @@ public final class TestCActionMathStatistics extends IBaseTest
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
-        IntStream.range( 0, 5000 )
+        IntStream.range( 0, 6500 )
                  .parallel()
                  .forEach( i ->
                                new CExponentialSelection().execute(
@@ -322,7 +322,7 @@ public final class TestCActionMathStatistics extends IBaseTest
     {
         final List<ITerm> l_return = Collections.synchronizedList( new ArrayList<>() );
 
-        IntStream.range( 0, 5000 )
+        IntStream.range( 0, 6500 )
                  .parallel()
                  .forEach( i ->
                         new CLinearSelection().execute(
@@ -336,13 +336,13 @@ public final class TestCActionMathStatistics extends IBaseTest
         Assert.assertEquals(
             (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "c" ) / l_return.size(),
             0.3,
-            0.01
+            0.05
         );
 
         Assert.assertEquals(
             (double) Collections.frequency( l_return.stream().map( ITerm::raw ).collect( Collectors.toList() ), "d" ) / l_return.size(),
             0.7,
-            0.01
+            0.05
         );
     }
 
