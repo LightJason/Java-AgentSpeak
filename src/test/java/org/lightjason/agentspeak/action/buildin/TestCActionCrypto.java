@@ -136,7 +136,7 @@ public final class TestCActionCrypto extends IBaseTest
             new CDecrypt().execute(
                 null,
                 false,
-                Stream.of( l_key.getLeft(), l_return.get( 0 ).raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
