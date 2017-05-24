@@ -118,18 +118,26 @@ public final class TestCActionMathBlas extends IBaseTest
     }
 
     /**
-     * test elementwise
+     * test elementwise for matrix
      */
     @Test
-    public final void elementWise()
+    public final void elementwisematrix()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CElementWise().execute(
                 null,
                 false,
-                Stream.of( m_matrix1, "+", m_matrix2, m_matrix1, "+", 5, m_matrix1, "-", 5, m_matrix1, "*", 5, m_matrix1, "/", 2,
-                           m_matrix1, "|+|", m_matrix2, m_matrix1, "-", m_matrix2, m_matrix1, "*", m_matrix2, m_matrix1, "|+|", -9
+                Stream.of(
+                    m_matrix1, "+", m_matrix2,
+                    m_matrix1, "+", 5,
+                    m_matrix1, "-", 5,
+                    m_matrix1, "*", 5,
+                    m_matrix1, "/", 2,
+                    m_matrix1, "|+|", m_matrix2,
+                    m_matrix1, "-", m_matrix2,
+                    m_matrix1, "*", m_matrix2,
+                    m_matrix1, "|+|", -9
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
@@ -146,6 +154,43 @@ public final class TestCActionMathBlas extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 8 ).<DoubleMatrix2D>raw().toArray(), new double[][]{{7.0, 3.0}, {6.0, 1.0}} );
 
     }
+
+    /**
+     * test elementwise for vector
+     */
+    @Test
+    public final void elementwisevector()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CElementWise().execute(
+                null,
+                false,
+                Stream.of(
+                    m_vector, "+", m_vector,
+                    m_vector, "+", 5,
+                    m_vector, "-", 5,
+                    m_vector, "*", 5,
+                    m_vector, "/", 2,
+                    m_vector, "-", m_vector,
+                    m_vector, "*", m_vector,
+                    m_vector, "|+|", -5
+                ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 8 );
+        Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), new double[]{4.0, 10.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{7.0, 10.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 2 ).<DoubleMatrix1D>raw().toArray(), new double[]{-3.0, 0.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 3 ).<DoubleMatrix1D>raw().toArray(), new double[]{10.0, 25.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 4 ).<DoubleMatrix1D>raw().toArray(), new double[]{1.0, 2.5}, 0 );
+        Assert.assertArrayEquals( l_return.get( 5 ).<DoubleMatrix1D>raw().toArray(), new double[]{0.0, 0.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 6 ).<DoubleMatrix1D>raw().toArray(), new double[]{4.0, 25.0}, 0 );
+        Assert.assertArrayEquals( l_return.get( 7 ).<DoubleMatrix1D>raw().toArray(), new double[]{3.0, 0.0}, 0 );
+
+    }
+
 
     /**
      * test call
