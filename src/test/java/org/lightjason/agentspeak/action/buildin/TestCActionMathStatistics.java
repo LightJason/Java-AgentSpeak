@@ -58,14 +58,14 @@ import java.util.stream.Stream;
 public final class TestCActionMathStatistics extends IBaseTest
 {
     /**
-     * testing statistic
+     * testing summary statistic
      */
-    private SummaryStatistics m_summarystatistic1;
+    private SummaryStatistics m_summarystatistic;
 
     /**
-     * testing statistic
+     * testing descriptive statistic
      */
-    private SummaryStatistics m_summarystatistic2;
+    private DescriptiveStatistics m_descriptivestatistic;
 
     /**
      * initialize
@@ -73,12 +73,12 @@ public final class TestCActionMathStatistics extends IBaseTest
     @Before
     public final void initialize()
     {
-        m_summarystatistic1 = new SummaryStatistics();
-        m_summarystatistic2 = new SummaryStatistics();
+        m_summarystatistic = new SummaryStatistics();
+        m_descriptivestatistic = new DescriptiveStatistics();
 
-        m_summarystatistic1.addValue( 2 );
-        m_summarystatistic1.addValue( 5 );
-        m_summarystatistic1.addValue( 3 );
+        m_summarystatistic.addValue( 2 );
+        m_summarystatistic.addValue( 5 );
+        m_summarystatistic.addValue( 3 );
     }
 
     /**
@@ -112,11 +112,12 @@ public final class TestCActionMathStatistics extends IBaseTest
         new CClearStatistic().execute(
                 null,
                 false,
-                Stream.of( m_summarystatistic1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( m_summarystatistic1.getSum(), 0, 0 );
+        Assert.assertEquals( m_summarystatistic.getSum(), 0, 0 );
+        Assert.assertEquals( m_descriptivestatistic.getSum(), 0, 0 );
         Assert.assertEquals( l_return.size(), 0 );
     }
 
@@ -150,40 +151,69 @@ public final class TestCActionMathStatistics extends IBaseTest
         new CAddStatisticValue().execute(
                 null,
                 false,
-                Stream.of( m_summarystatistic2, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
+
         Assert.assertEquals( l_return.size(), 0 );
-        Assert.assertEquals( m_summarystatistic2.getSum(), 6, 0 );
+        Assert.assertEquals( m_descriptivestatistic.getN(), 3, 0 );
+        Assert.assertEquals( m_summarystatistic.getN(), 6 );
     }
 
     /**
-     * test multiple statistics value
+     * test multiple statistics value of summary
      */
     @Test
-    public final void multiplestatisticvalue()
+    public final void summarymultiplestatisticvalue()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultipleStatisticValue().execute(
                 null,
                 false,
-                Stream.of( m_summarystatistic1, "sum", "variance", "mean", "max", "geometricmean", "min", "populationvariance",
+                Stream.of( m_summarystatistic, "variance", "mean", "max", "geometricmean", "populationvariance",
                            "quadraticmean", "secondmoment", "standarddeviation", "sumlog", "sumsquare" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 12 );
+        Assert.assertEquals( l_return.size(), 10 );
         Assert.assertArrayEquals(
             Stream.of(
-                m_summarystatistic1.getSum(), m_summarystatistic1.getVariance(), m_summarystatistic1.getMean(), m_summarystatistic1.getMax(),
-                m_summarystatistic1.getGeometricMean(), m_summarystatistic1.getMin(), m_summarystatistic1.getPopulationVariance(),
-                m_summarystatistic1.getQuadraticMean(), m_summarystatistic1.getSecondMoment(), m_summarystatistic1.getStandardDeviation(),
-                m_summarystatistic1.getSumOfLogs(), m_summarystatistic1.getSumsq()
+                m_summarystatistic.getVariance(), m_summarystatistic.getMean(), m_summarystatistic.getMax(), m_summarystatistic.getGeometricMean(),
+                m_summarystatistic.getPopulationVariance(), m_summarystatistic.getQuadraticMean(), m_summarystatistic.getSecondMoment(),
+                m_summarystatistic.getStandardDeviation(), m_summarystatistic.getSumOfLogs(), m_summarystatistic.getSumsq()
             ).toArray(),
 
             l_return.stream().map( ITerm::raw ).toArray()
+        );
+    }
+
+    /**
+     * test multiple statistics value of descriptive
+     */
+    @Test
+    public final void descriptivemultiplestatisticvalue()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CMultipleStatisticValue().execute(
+                null,
+                false,
+                Stream.of( m_descriptivestatistic, "variance", "mean", "max", "geometricmean", "populationvariance",
+                    "quadraticmean", "standarddeviation", "sumsquare", "kurtiosis" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 9 );
+        Assert.assertArrayEquals(
+                Stream.of(
+                        m_descriptivestatistic.getVariance(), m_descriptivestatistic.getMean(), m_descriptivestatistic.getMax(), m_descriptivestatistic.getGeometricMean(),
+                        m_descriptivestatistic.getPopulationVariance(), m_descriptivestatistic.getQuadraticMean(), m_descriptivestatistic.getStandardDeviation(),
+                        m_descriptivestatistic.getSumsq(), m_descriptivestatistic.getKurtosis()
+                ).toArray(),
+
+                l_return.stream().map( ITerm::raw ).toArray()
         );
     }
 
@@ -238,13 +268,13 @@ public final class TestCActionMathStatistics extends IBaseTest
         new CSingleStatisticValue().execute(
                 null,
                 false,
-                Stream.of( "count", m_summarystatistic1, m_summarystatistic2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertEquals( m_summarystatistic1.getN(), l_return.get( 0 ).<Double>raw(), 0 );
-        Assert.assertEquals( m_summarystatistic2.getN(), l_return.get( 1 ).<Double>raw(), 0 );
+        Assert.assertEquals( m_summarystatistic.getMin(), l_return.get( 0 ).<Double>raw(), 0 );
+        Assert.assertEquals( m_descriptivestatistic.getMin(), l_return.get( 1 ).<Double>raw(), 0 );
     }
 
     /**
