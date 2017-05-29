@@ -155,9 +155,24 @@ public final class TestCActionMathStatistics extends IBaseTest
                 null,
                 false,
                 Stream.of(
-                        "normal", 20, 10, "beta", 20, 10, "cauchy", 10, 20, "CHISQUARE", 10, "EXPONENTIAL", 5, "F", 2, 6,
-                        "GAMMA", 6, 9, "GUMBLE", 2, 7, "LAPLACE", 20, 18, "LEVY", 15, 20, "LOGISTIC", 10, 17, "LOGNORMAL", 12, 14,
-                        "NAKAGAMI", 20, 18, "PARETO", 20, 10, "T", 10, "TRIANGULAR", 10, 15, 20, "UNIFORM", 10, 25, "WEIBULL", 10, 23
+                        "normal", 20, 10,
+                        "beta", 20, 10,
+                        "cauchy", 10, 20,
+                        "CHISQUARE", 10,
+                        "EXPONENTIAL", 5,
+                        "F", 2, 6,
+                        "GAMMA", 6, 9,
+                        "GUMBLE", 2, 7,
+                        "LAPLACE", 20, 18,
+                        "LEVY", 15, 20,
+                        "LOGISTIC", 10, 17,
+                        "LOGNORMAL", 12, 14,
+                        "NAKAGAMI", 20, 18,
+                        "PARETO", 20, 10,
+                        "T", 10,
+                        "TRIANGULAR", 10, 15, 20,
+                        "UNIFORM", 10, 25,
+                        "WEIBULL", 10, 23
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
