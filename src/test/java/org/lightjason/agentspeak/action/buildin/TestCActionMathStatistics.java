@@ -23,7 +23,24 @@
 
 package org.lightjason.agentspeak.action.buildin;
 
+import org.apache.commons.math3.distribution.NakagamiDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.LaplaceDistribution;
+import org.apache.commons.math3.distribution.BetaDistribution;
+import org.apache.commons.math3.distribution.ChiSquaredDistribution;
+import org.apache.commons.math3.distribution.CauchyDistribution;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.apache.commons.math3.distribution.TDistribution;
+import org.apache.commons.math3.distribution.ParetoDistribution;
+import org.apache.commons.math3.distribution.WeibullDistribution;
+import org.apache.commons.math3.distribution.FDistribution;
+import org.apache.commons.math3.distribution.TriangularDistribution;
+import org.apache.commons.math3.distribution.GammaDistribution;
+import org.apache.commons.math3.distribution.LevyDistribution;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
+import org.apache.commons.math3.distribution.GumbelDistribution;
+import org.apache.commons.math3.distribution.LogisticDistribution;
+import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.junit.Assert;
@@ -95,10 +112,18 @@ public final class TestCActionMathStatistics extends IBaseTest
                 Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
+        new CCreateStatistic().execute(
+                null,
+                true,
+                Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                l_return
+        );
 
-        Assert.assertEquals( l_return.size(), 2 );
+        Assert.assertEquals( l_return.size(), 4 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof SummaryStatistics );
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof DescriptiveStatistics );
+        Assert.assertTrue( l_return.get( 2 ).raw() instanceof SummaryStatistics );
+        Assert.assertTrue( l_return.get( 3 ).raw() instanceof DescriptiveStatistics );
     }
 
     /**
@@ -129,12 +154,48 @@ public final class TestCActionMathStatistics extends IBaseTest
         new CCreateDistribution().execute(
                 null,
                 false,
-                Stream.of( "normal", 20, 10 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+                Stream.of(
+                        "normal", 20, 10,
+                        "beta", 20, 10,
+                        "cauchy", 10, 20,
+                        "CHISQUARE", 10,
+                        "EXPONENTIAL", 5,
+                        "F", 2, 6,
+                        "GAMMA", 6, 9,
+                        "GUMBLE", 2, 7,
+                        "LAPLACE", 20, 18,
+                        "LEVY", 15, 20,
+                        "LOGISTIC", 10, 17,
+                        "LOGNORMAL", 12, 14,
+                        "NAKAGAMI", 20, 18,
+                        "PARETO", 20, 10,
+                        "T", 10,
+                        "TRIANGULAR", 10, 15, 20,
+                        "UNIFORM", 10, 25,
+                        "WEIBULL", 10, 23
+                ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.size(), 18 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof NormalDistribution );
+        Assert.assertTrue( l_return.get( 1 ).raw() instanceof BetaDistribution );
+        Assert.assertTrue( l_return.get( 2 ).raw() instanceof CauchyDistribution );
+        Assert.assertTrue( l_return.get( 3 ).raw() instanceof ChiSquaredDistribution );
+        Assert.assertTrue( l_return.get( 4 ).raw() instanceof ExponentialDistribution );
+        Assert.assertTrue( l_return.get( 5 ).raw() instanceof FDistribution );
+        Assert.assertTrue( l_return.get( 6 ).raw() instanceof GammaDistribution );
+        Assert.assertTrue( l_return.get( 7 ).raw() instanceof GumbelDistribution );
+        Assert.assertTrue( l_return.get( 8 ).raw() instanceof LaplaceDistribution );
+        Assert.assertTrue( l_return.get( 9 ).raw() instanceof LevyDistribution );
+        Assert.assertTrue( l_return.get( 10 ).raw() instanceof LogisticDistribution );
+        Assert.assertTrue( l_return.get( 11 ).raw() instanceof LogNormalDistribution );
+        Assert.assertTrue( l_return.get( 12 ).raw() instanceof NakagamiDistribution );
+        Assert.assertTrue( l_return.get( 13 ).raw() instanceof ParetoDistribution );
+        Assert.assertTrue( l_return.get( 14 ).raw() instanceof TDistribution );
+        Assert.assertTrue( l_return.get( 15 ).raw() instanceof TriangularDistribution );
+        Assert.assertTrue( l_return.get( 16 ).raw() instanceof UniformRealDistribution );
+        Assert.assertTrue( l_return.get( 17 ).raw() instanceof WeibullDistribution );
     }
 
     /**
