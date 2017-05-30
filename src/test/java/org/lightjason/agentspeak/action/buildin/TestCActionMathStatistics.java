@@ -96,6 +96,9 @@ public final class TestCActionMathStatistics extends IBaseTest
         m_summarystatistic.addValue( 2 );
         m_summarystatistic.addValue( 5 );
         m_summarystatistic.addValue( 3 );
+        m_descriptivestatistic.addValue( 3 );
+        m_descriptivestatistic.addValue( 4 );
+        m_descriptivestatistic.addValue( 5 );
     }
 
     /**
@@ -211,7 +214,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                 Collections.emptyList()
         );
 
-        Assert.assertEquals( m_descriptivestatistic.getN(), 3, 0 );
+        Assert.assertEquals( m_descriptivestatistic.getN(), 6, 0 );
         Assert.assertEquals( m_summarystatistic.getN(), 6 );
     }
 
@@ -268,19 +271,19 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "max", "geometricmean",
                     "populationvariance", "quadraticmean",
                     "standarddeviation", "sumsquare",
-                    "kurtiosis"
+                    "kurtiosis", "count", "sum"
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
         );
 
-        Assert.assertEquals( l_return.size(), 9 );
+        Assert.assertEquals( l_return.size(), 11 );
         Assert.assertArrayEquals(
                 Stream.of(
                         m_descriptivestatistic.getVariance(), m_descriptivestatistic.getMean(),
                         m_descriptivestatistic.getMax(), m_descriptivestatistic.getGeometricMean(),
                         m_descriptivestatistic.getPopulationVariance(), m_descriptivestatistic.getQuadraticMean(),
                         m_descriptivestatistic.getStandardDeviation(), m_descriptivestatistic.getSumsq(),
-                        m_descriptivestatistic.getKurtosis()
+                        m_descriptivestatistic.getKurtosis(), (double) m_descriptivestatistic.getN(), m_descriptivestatistic.getSum()
                 ).toArray(),
 
                 l_return.stream().map( ITerm::raw ).toArray()
