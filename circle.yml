@@ -74,7 +74,7 @@ deployment:
             - git checkout --orphan gh-pages
             - mv -f /tmp/site/* .
             - echo -e 'general:\n    branches:\n        ignore:\n            - /.*/\n' > circle.yml
-            - echo -e '*.*\n!.gitignore\n!circle.yml\n!*.htm*\n!*.css\n!*.js\n!*.png\n!*.gif\n!*.svg\n!*.json\n' > .gitignore
+            - echo -e '*.*\n!.gitignore\n!circle.yml\n!*.htm*\n!*.css\n!*.js\n!*.png\n!*.gif\n!*.svg\n!*.json\n!*.g4\n' > .gitignore
             - git add --all .
             - git commit -m "current documentation"
             - git push origin gh-pages
