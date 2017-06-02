@@ -88,8 +88,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
-        m_events.remove( p_view );
-        m_storage.removeSingleElement( p_view.name() );
+        m_storage.removeSingleElement( this.removeinternal( p_view ).name() );
         return p_view;
     }
 
@@ -146,11 +145,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
         m_storage
             .streamMultiElements()
             .parallel()
-            .forEach(
-                i -> m_events
-                    .keySet()
-                    .forEach( j -> m_events.put( j, CTrigger.from( ITrigger.EType.DELETEBELIEF, i ) ) )
-            );
+            .forEach( i -> this.event( ITrigger.EType.DELETEBELIEF, i ) );
 
         m_storage.streamSingleElements().parallel().forEach( i -> i.clear() );
         m_storage.clear();
