@@ -62,6 +62,7 @@ public final class CTrigger implements ITrigger
      *
      * @param p_event type
      * @param p_literal literal with unified variables
+     * @bug #25 hash values are equal of beliefs with different values
      */
     @SuppressWarnings( "unchecked" )
     public CTrigger( final EType p_event, final ILiteral p_literal )
