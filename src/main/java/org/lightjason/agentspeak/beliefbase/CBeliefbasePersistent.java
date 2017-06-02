@@ -29,7 +29,6 @@ import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Collection;
@@ -73,9 +72,9 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
     @Override
     public final ILiteral add( final ILiteral p_literal )
     {
-        if ( m_storage.putMultiElement( p_literal.functor(), p_literal ) )
-            super.add( p_literal );
-        return p_literal;
+        return m_storage.putMultiElement( p_literal.functor(), p_literal )
+               ? super.add( p_literal )
+               : p_literal;
     }
 
     @Override
@@ -88,16 +87,16 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
-        m_storage.removeSingleElement( this.removeinternal( p_view ).name() );
+        m_storage.removeSingleElement( this.internalremove( p_view ).name() );
         return p_view;
     }
 
     @Override
     public final ILiteral remove( final ILiteral p_literal )
     {
-        if ( m_storage.removeMultiElement( p_literal.functor(), p_literal ) )
-            super.remove( p_literal );
-        return p_literal;
+        return m_storage.removeMultiElement( p_literal.functor(), p_literal )
+               ? super.remove( p_literal )
+               : p_literal;
     }
 
     @Override

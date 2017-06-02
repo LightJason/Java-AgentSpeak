@@ -72,7 +72,7 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = CCommon.variablefrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) p_literal.values().count();
+        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) m_literal.values().count();
         m_contenthash = m_event.hashCode() ^ m_literal.hashCode();
     }
 

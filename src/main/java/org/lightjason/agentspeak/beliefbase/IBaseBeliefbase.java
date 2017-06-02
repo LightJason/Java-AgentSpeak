@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.beliefbase;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.Sets;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.CView;
@@ -41,9 +40,8 @@ import java.lang.ref.ReferenceQueue;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -119,7 +117,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
     @Override
     public Stream<ITrigger> trigger( final IView<T> p_view )
     {
-        return this.getAndClearTrigger( p_view ).parallel();
+        return this.cleartrigger( p_view );
     }
 
 
@@ -133,6 +131,8 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
     {
         final ITrigger l_trigger = CTrigger.from( p_event, p_literal );
         m_views.parallelStream().forEach( i -> m_events.put( i, l_trigger ) );
+
+        System.out.println( p_literal + "   " + p_literal.hashCode() + "   " + m_events.values() + "   " + l_trigger.hashCode() );
         return p_literal;
     }
 
@@ -142,7 +142,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view view to remove
      * @return view
      */
-    protected final IView<T> removeinternal( final IView<T> p_view )
+    protected final IView<T> internalremove( final IView<T> p_view )
     {
         m_views.remove( p_view );
         m_events.removeAll( p_view );
@@ -168,9 +168,8 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view trigger of this view
      * @return set with trigger values
      */
-    protected final Stream<ITrigger> getAndClearTrigger( final IView<T> p_view )
+    protected final Stream<ITrigger> cleartrigger( final IView<T> p_view )
     {
-
         return m_events.removeAll( p_view ).stream();
     }
 
