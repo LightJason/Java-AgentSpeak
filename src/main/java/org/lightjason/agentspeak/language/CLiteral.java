@@ -222,7 +222,7 @@ public final class CLiteral implements ILiteral
                  : m_orderedvalues.stream()
                                   .filter( i -> i.fqnfunctor().equals( p_path[0] ) )
                                   .filter( i -> i instanceof ILiteral )
-                                  .flatMap( i -> ( (ILiteral) i ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
+                                  .flatMap( i -> ( i.<ILiteral>raw() ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
     @Override
