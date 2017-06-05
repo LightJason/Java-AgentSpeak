@@ -159,7 +159,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                        .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
 
         if ( p_configuration.initialgoal() != null )
-            m_trigger.put( p_configuration.initialgoal().contenthash(), p_configuration.initialgoal() );
+            m_trigger.put( p_configuration.initialgoal().structurehash(), p_configuration.initialgoal() );
     }
 
     @Override
@@ -334,7 +334,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
         synchronized ( this )
         {
-            m_trigger.putIfAbsent( p_trigger.contenthash(), p_trigger );
+            m_trigger.putIfAbsent( p_trigger.structurehash(), p_trigger );
         }
         return CFuzzyValue.from( true );
     }
@@ -485,7 +485,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                                     CLiteral.from( "wakeup", i )
                                 ) )
 
-            ).forEach( i -> m_trigger.put( i.contenthash(), i ) );
+            ).forEach( i -> m_trigger.put( i.structurehash(), i ) );
 
             m_sleepingterm.clear();
         }

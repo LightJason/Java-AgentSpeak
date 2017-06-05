@@ -126,7 +126,7 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final int contenthash()
+    public final int structurehash()
     {
         return m_contenthash;
     }

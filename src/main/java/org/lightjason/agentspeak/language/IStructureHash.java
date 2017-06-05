@@ -23,72 +23,19 @@
 
 package org.lightjason.agentspeak.language;
 
-import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.execution.IContext;
-
-import java.util.stream.Stream;
-
 
 /**
- * literal interface
- *
- * @note closed world assumption, no negation marker needed
+ * structure hash definition
  */
-public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>, Comparable<ILiteral>
+public interface IStructureHash
 {
 
     /**
-     * returns a stream over value items
+     * returns a hash value which defines
+     * a hash ove rthe structure
      *
-     * @param p_path optional filtering value names
-     * (filtering values within values)
-     * @return stream
+     * @return structure hash value
      */
-    Stream<ITerm> values( final IPath... p_path );
-
-    /**
-     * returns a stream over the ordered values
-     * in sequential ordering
-     */
-    Stream<ITerm> orderedvalues( final IPath... p_path );
-
-    /**
-     * check for empty values
-     *
-     * @return empty flag
-     */
-    boolean emptyValues();
-
-    /**
-     * getter of the literal for the negation
-     *
-     * @return negated flag
-     */
-    boolean negated();
-
-    /**
-     * returns if the literal has an @ prefix
-     *
-     * @return prefix is set
-     */
-    boolean hasAt();
-
-    /**
-     * unifies variables if exists
-     *
-     * @param p_context current execution context
-     * @return new literal instance with unified variables
-     *
-     * @note un-unifyable variables passwd into the result literal
-     */
-    ILiteral unify( final IContext p_context );
-
-    /**
-     * allocate all variables with the current context
-     *
-     * @param p_context current execution context
-     * @return literal with replaced variable
-     */
-    ILiteral allocate( final IContext p_context );
+    int structurehash();
 
 }
