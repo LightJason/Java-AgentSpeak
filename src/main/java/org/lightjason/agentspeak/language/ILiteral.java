@@ -60,11 +60,12 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     boolean emptyValues();
 
     /**
-     * returns the hash of the value
+     * returns the hash of the
+     * structure of the literal
      *
      * @return hash
      */
-    int valuehash();
+    int structurehash();
 
     /**
      * getter of the literal for the negation

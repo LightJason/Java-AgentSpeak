@@ -110,19 +110,19 @@ public final class TestCUnifier extends IBaseTest
         final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
 
         assertEquals(
-            MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.valuehash(),
-                                  l_second.valuehash()
+            MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.structurehash(),
+                                  l_second.structurehash()
             ),
-            l_first.valuehash(),
-            l_second.valuehash()
+            l_first.structurehash(),
+            l_second.structurehash()
         );
 
         final ILiteral l_third = CLiteral.parse( "foo()" );
         final ILiteral l_fourth = CLiteral.parse( "hallo()" );
         assertNotEquals(
-            MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.valuehash() ),
-            l_third.valuehash(),
-            l_fourth.valuehash()
+            MessageFormat.format( "literal value hash of [{0}] and [{1}] are equal [{2}]", l_third, l_fourth, l_third.structurehash() ),
+            l_third.structurehash(),
+            l_fourth.structurehash()
         );
     }
 

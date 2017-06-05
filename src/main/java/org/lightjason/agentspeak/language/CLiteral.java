@@ -50,7 +50,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -94,9 +93,9 @@ public final class CLiteral implements ILiteral
      */
     private final int m_hash;
     /**
-     * hash of the values
+     * hash of the structure
      */
-    private final int m_valuehash;
+    private final int m_structurehash;
 
 
     /**
@@ -136,11 +135,11 @@ public final class CLiteral implements ILiteral
         final String l_functor = p_functor.getPath();
 
         final Hasher l_valuehasher = CCommon.getTermHashing();
-        m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).forEach( i -> l_valuehasher.putInt( i.<ILiteral>raw().valuehash() ) );
+        m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).forEach( i -> l_valuehasher.putInt( i.<ILiteral>raw().structurehash() ) );
         l_valuehasher.putBoolean( m_negated );
         l_valuehasher.putString( l_functor, Charsets.UTF_8 );
 
-        m_valuehash = l_valuehasher.hash().asInt();
+        m_structurehash = l_valuehasher.hash().asInt();
     }
 
     /**
@@ -233,9 +232,9 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final int valuehash()
+    public final int structurehash()
     {
-        return m_valuehash;
+        return m_structurehash;
     }
 
     @Override
