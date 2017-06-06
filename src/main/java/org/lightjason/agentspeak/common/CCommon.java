@@ -279,10 +279,7 @@ public final class CCommon
         return Stream.concat(
             Arrays.stream( p_class.getDeclaredMethods() )
                   .parallel()
-                  .map( i -> {
-                      i.setAccessible( true );
-                      return i;
-                  } )
+                  .peek( i -> i.setAccessible( true ) )
                   .filter( i -> !Modifier.isAbstract( i.getModifiers() ) )
                   .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
                   .filter( i -> !Modifier.isNative( i.getModifiers() ) )
