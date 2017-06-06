@@ -25,8 +25,6 @@ package org.lightjason.agentspeak.agent;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
@@ -38,7 +36,6 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -50,6 +47,8 @@ public final class TestCPropertyAgent extends IBaseTest
 
     /**
      * test beliefs exists
+     *
+     * @throws Exception is thrown on intialization error
      */
     @Test
     public final void belieflist() throws Exception
