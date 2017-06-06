@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -96,7 +97,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * map with all existing plans and successful / fail runs
      */
-    protected final Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( HashMultimap.create() );
+    protected final Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> m_plans = Multimaps.synchronizedMultimap( TreeMultimap.create(  ) );
     /**
      * curent agent cycle
      */
