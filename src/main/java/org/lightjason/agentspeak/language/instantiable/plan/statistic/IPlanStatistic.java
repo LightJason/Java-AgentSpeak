@@ -39,6 +39,13 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
     IPlan plan();
 
     /**
+     * returns the number of executions
+     *
+     * @return number of executions
+     */
+    long count();
+
+    /**
      * returns number of successful execution
      *
      * @return number of executions

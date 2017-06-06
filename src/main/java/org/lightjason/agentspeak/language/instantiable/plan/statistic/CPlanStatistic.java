@@ -66,6 +66,12 @@ public final class CPlanStatistic implements IPlanStatistic
     }
 
     @Override
+    public final long count()
+    {
+        return m_fail.get() + m_successful.get();
+    }
+
+    @Override
     public final long successful()
     {
         return m_successful.get();
@@ -74,7 +80,10 @@ public final class CPlanStatistic implements IPlanStatistic
     @Override
     public final double successfulratio()
     {
-        return (double) m_successful.get() / ( m_successful.get() + m_fail.get() );
+        final double l_sum = m_successful.get() + m_fail.get();
+        return l_sum == 0
+               ? 0
+               : m_successful.get() / l_sum;
     }
 
     @Override
@@ -86,7 +95,10 @@ public final class CPlanStatistic implements IPlanStatistic
     @Override
     public final double failratio()
     {
-        return (double) m_fail.get() / ( m_successful.get() + m_fail.get() );
+        final double l_sum = m_successful.get() + m_fail.get();
+        return l_sum == 0
+               ? 0
+               : m_fail.get() / l_sum;
     }
 
     @Override

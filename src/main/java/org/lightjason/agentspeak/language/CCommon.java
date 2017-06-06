@@ -41,7 +41,7 @@ import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -145,31 +145,26 @@ public final class CCommon
     /**
      * instantiate a plan with context and plan-specific variables
      *
-     * @param p_plan plan
-     * @param p_fail fail runs
-     * @param p_success successful runs
+     * @param p_planstatistic plan statistic for instatiation
      * @param p_agent agent
      * @param p_variables instantiated variables
-     * @return pair of plan and context object
+     * @return pair of planstatistic and context
      */
-    public static Pair<IPlan, IContext> instantiateplan( final IPlan p_plan, final double p_fail, final double p_success,
-                                                          final IAgent<?> p_agent, final Set<IVariable<?>> p_variables
-    )
+    public static Pair<IPlanStatistic, IContext> instantiateplan( final IPlanStatistic p_planstatistic, final IAgent<?> p_agent, final Set<IVariable<?>> p_variables )
     {
-        final double l_sum = p_success + p_fail;
-        return new ImmutablePair<>( p_plan, p_plan.instantiate(
+        return new ImmutablePair<>( p_planstatistic, p_planstatistic.plan().instantiate(
             p_agent,
             Stream.concat(
                 p_variables.stream(),
                 Stream.of(
                     // execution count
-                    new CConstant<>( "PlanSuccessful", p_success ),
-                    new CConstant<>( "PlanFail", p_fail ),
-                    new CConstant<>( "PlanRuns", l_sum ),
+                    new CConstant<>( "PlanSuccessful", p_planstatistic.successful() ),
+                    new CConstant<>( "PlanFail", p_planstatistic.fail() ),
+                    new CConstant<>( "PlanRuns", p_planstatistic.count() ),
 
                     // execution ratio
-                    new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : p_success / l_sum ),
-                    new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : p_fail / l_sum )
+                    new CConstant<>( "PlanSuccessfulRatio", p_planstatistic.successfulratio() ),
+                    new CConstant<>( "PlanFailRatio", p_planstatistic.failratio() )
                 ) ) )
         );
     }

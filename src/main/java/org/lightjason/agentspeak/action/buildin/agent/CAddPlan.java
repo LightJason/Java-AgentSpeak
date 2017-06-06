@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.agent;
 
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -31,9 +30,9 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -58,8 +57,8 @@ public final class CAddPlan extends IBuildinAction
         CCommon.flatcollection( p_argument )
                .parallel()
                .map( ITerm::<IPlan>raw )
-               .map( i -> new ImmutableTriple<>( i, new AtomicLong(), new AtomicLong(  ) ) )
-               .forEach( i -> p_context.agent().plans().put( i.getLeft().trigger(), i ) );
+               .map( CPlanStatistic::from )
+               .forEach( i -> p_context.agent().plans().put( i.plan().trigger(), i ) );
 
         return CFuzzyValue.from( true );
     }
