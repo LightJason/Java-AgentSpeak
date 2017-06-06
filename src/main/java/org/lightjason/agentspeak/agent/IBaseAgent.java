@@ -32,7 +32,6 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.beliefbase.view.IView;
@@ -49,6 +48,7 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
@@ -156,11 +156,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         m_fuzzy = p_configuration.fuzzy();
 
         // initial plans and rules
-        p_configuration.plans().parallelStream()
-                       .forEach( i -> m_plans.put( i.trigger(), new ImmutableTriple<>( i, new AtomicLong( 0 ), new AtomicLong( 0 ) ) ) );
-        p_configuration.rules().parallelStream()
-                       .forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
+        p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );
+        p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
         if ( p_configuration.initialgoal() != null )
             m_trigger.put( p_configuration.initialgoal().structurehash(), p_configuration.initialgoal() );
     }
