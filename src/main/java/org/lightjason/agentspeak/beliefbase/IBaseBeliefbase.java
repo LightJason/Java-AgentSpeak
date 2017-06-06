@@ -129,8 +129,6 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
     {
         final ITrigger l_trigger = CTrigger.from( p_event, p_literal );
         m_views.parallelStream().forEach( i -> m_events.put( i, l_trigger ) );
-
-        System.out.println( p_literal + "   " + p_literal.hashCode() + "   " + m_events.values() + "   " + l_trigger.hashCode() );
         return p_literal;
     }
 
