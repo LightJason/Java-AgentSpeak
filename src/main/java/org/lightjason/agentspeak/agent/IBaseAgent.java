@@ -101,8 +101,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * map with all existing plans and successful / fail runs
      */
     protected final Multimap<ITrigger, IPlanStatistic> m_plans = Multimaps.synchronizedMultimap(
-                                                                    TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() )
-    );
+                                                                    TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
     /**
      * curent agent cycle
      */
@@ -185,13 +184,11 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return Arrays.stream( p_inspector ).parallel().peek( i -> {
             i.inspectcycle( m_cycle.get() );
             i.inspectsleeping( m_sleepingcycles.get() );
-            i.inspectbelief( m_beliefbase.stream().parallel() );
-            i.inspectplans( m_plans.entries().parallelStream().map( j -> new ImmutableTriple<>( j.getValue().getLeft(), j.getValue().getMiddle().get(),
-                                                                                                j.getValue().getRight().get()
-            ) ) );
-            i.inspectrunningplans( m_runningplans.values().parallelStream() );
-            i.inspectstorage( m_storage.entrySet().parallelStream() );
-            i.inspectrules( m_rules.values().parallelStream() );
+            i.inspectbelief( m_beliefbase.stream() );
+            i.inspectplans( m_plans.values().stream() );
+            i.inspectrunningplans( m_runningplans.values().stream() );
+            i.inspectstorage( m_storage.entrySet().stream() );
+            i.inspectrules( m_rules.values().stream() );
         } );
     }
 
@@ -269,7 +266,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> plans()
+    public final Multimap<ITrigger, IPlanStatistic> plans()
     {
         return m_plans;
     }

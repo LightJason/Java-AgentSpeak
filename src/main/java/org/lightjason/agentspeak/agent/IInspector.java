@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.agent;
 import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import java.util.Map;
@@ -64,7 +65,7 @@ public interface IInspector
      *
      * @param p_value plan stream
      */
-    void inspectplans( final Stream<Triple<IPlan, Long, Long>> p_value );
+    void inspectplans( final Stream<IPlanStatistic> p_value );
 
     /**
      * inspect rules

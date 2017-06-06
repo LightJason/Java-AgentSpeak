@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.score.IAggregation;
@@ -162,7 +163,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return plan map
      */
-    Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> plans();
+    Multimap<ITrigger, IPlanStatistic> plans();
 
     /**
      * return fuzzy operator
