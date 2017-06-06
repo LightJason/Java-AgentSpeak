@@ -159,7 +159,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         p_configuration.plans().parallelStream().forEach( i -> m_plans.put( i.trigger(), CPlanStatistic.from( i ) ) );
         p_configuration.rules().parallelStream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
         if ( p_configuration.initialgoal() != null )
-            m_trigger.put( p_configuration.initialgoal().structurehash(), p_configuration.initialgoal() );
+            m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
     }
 
     @Override
@@ -332,8 +332,9 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // add trigger for the next cycle must be synchronized to avoid indeterministic state during execution
         synchronized ( this )
         {
-            m_trigger.putIfAbsent( p_trigger.structurehash(), p_trigger );
+            m_trigger.putIfAbsent( p_trigger.hashCode(), p_trigger );
         }
+
         return CFuzzyValue.from( true );
     }
 
