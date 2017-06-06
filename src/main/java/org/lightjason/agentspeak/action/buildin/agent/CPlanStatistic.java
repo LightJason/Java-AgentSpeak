@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.action.buildin.agent;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
@@ -33,11 +32,11 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -76,12 +75,12 @@ public final class CPlanStatistic extends IBuildinAction
      */
     private static boolean statistic( final ITrigger p_trigger, final IAgent<?> p_agent, final List<ITerm> p_return )
     {
-        final Collection<Triple<IPlan, AtomicLong, AtomicLong>> l_plans = p_agent.plans().get( p_trigger );
+        final Collection<IPlanStatistic> l_plans = p_agent.plans().get( p_trigger );
         if ( l_plans.isEmpty() )
             return false;
 
-        final long l_success = l_plans.parallelStream().mapToLong( i -> i.getMiddle().get() ).sum();
-        final long l_fail = l_plans.parallelStream().mapToLong( i -> i.getRight().get() ).sum();
+        final long l_success = l_plans.parallelStream().mapToLong( IPlanStatistic::successful ).sum();
+        final long l_fail = l_plans.parallelStream().mapToLong( IPlanStatistic::fail ).sum();
 
         p_return.add( CRawTerm.from( l_success ) );
         p_return.add( CRawTerm.from( l_fail ) );

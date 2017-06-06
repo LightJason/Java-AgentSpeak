@@ -115,6 +115,9 @@ public final class TestCAgentExecution extends IBaseTest
         m_result.put( 0L, "main" );
         m_result.put( 1L, "first" );
         m_result.put( 1L, "second" );
+        m_result.put( 1L, "twovalues equal type" );
+        m_result.put( 1L, "twovalues different type" );
+        m_result.put( 1L, "twovalues with literal" );
         m_result.put( 2L, "single" );
     }
 

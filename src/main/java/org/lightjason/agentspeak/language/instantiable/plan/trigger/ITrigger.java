@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IShallowCopy;
+import org.lightjason.agentspeak.language.IStructureHash;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
  * and number of arguments are equal, otherwise unification is used
  * to define the literal variables
  */
-public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
+public interface ITrigger extends IStructureHash, IShallowCopy<ITrigger>, Comparable<ITrigger>
 {
 
     /**
@@ -64,12 +65,6 @@ public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
      * @return number
      */
     int variablesize();
-
-    /**
-     * returns a hash value over the whole content
-     * @return content hash value
-     */
-    int contenthash();
 
 
 

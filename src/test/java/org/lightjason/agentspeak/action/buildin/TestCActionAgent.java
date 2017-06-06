@@ -24,8 +24,6 @@
 package org.lightjason.agentspeak.action.buildin;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,6 +51,8 @@ import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.score.IAggregation;
@@ -67,7 +67,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -142,7 +141,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<List<?>>raw().size(), 0 );
 
 
-        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         new CPlanList().execute(
             m_context,
@@ -176,7 +175,10 @@ public final class TestCActionAgent extends IBaseTest
         );
 
         Assert.assertEquals( m_context.agent().plans().size(), 1 );
-        Assert.assertArrayEquals( m_context.agent().plans().values().stream().map( Triple::getLeft ).toArray(), Stream.of( l_plan ).toArray() );
+        Assert.assertArrayEquals(
+            m_context.agent().plans().values().stream().map( IPlanStatistic::plan ).toArray(),
+            Stream.of( l_plan ).toArray()
+        );
     }
 
 
@@ -221,7 +223,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertTrue( l_return.isEmpty() );
 
 
-        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         new CGetPlan().execute(
             m_context,
@@ -244,7 +246,7 @@ public final class TestCActionAgent extends IBaseTest
     public final void removeplan()
     {
         final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testremoveplan" ) ) );
-        m_context.agent().plans().put( l_plan.trigger(), new ImmutableTriple<>( l_plan, new AtomicLong(), new AtomicLong() ) );
+        m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         Assert.assertTrue(
             new CRemovePlan().execute(

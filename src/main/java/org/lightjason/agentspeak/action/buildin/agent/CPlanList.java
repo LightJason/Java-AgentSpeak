@@ -60,7 +60,7 @@ public final class CPlanList extends IBuildinAction
                  .plans()
                  .values()
                  .stream()
-                 .map( i -> i.getLeft().trigger() )
+                 .map( i -> i.plan().trigger() )
                  .sorted()
                  .distinct()
                  .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.type().toString(), i.literal() ) )

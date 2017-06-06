@@ -82,7 +82,7 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
     @Override
     public final boolean putMultiElement( final String p_key, final N p_value )
     {
-        return !p_value.equals( m_multielements.put( p_key, p_value ) );
+        return m_multielements.put( p_key, p_value );
     }
 
     @Override

@@ -50,7 +50,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -94,9 +93,9 @@ public final class CLiteral implements ILiteral
      */
     private final int m_hash;
     /**
-     * hash of the values
+     * hash of the structure
      */
-    private final int m_valuehash;
+    private final int m_structurehash;
 
 
     /**
@@ -122,24 +121,25 @@ public final class CLiteral implements ILiteral
         m_orderedvalues = Collections.unmodifiableList( new ArrayList<>( p_values ) );
 
         // calculates hash value
-        m_hash = m_functor.hashCode()
-                 ^ IntStream.range( 0, m_orderedvalues.size() ).boxed().mapToInt( i -> ( i + 1 ) * m_orderedvalues.get( i ).hashCode() ).sum()
-                 ^ ( m_negated ? 0 : 55529 )
-                 ^ ( m_at ? 0 : 8081 );
+        m_hash = Stream.concat(
+            m_orderedvalues.stream().map( Object::hashCode ),
+            Stream.of(
+                m_functor.hashCode(),
+                m_negated ? 0 : 55529,
+                m_at ? 0 : 8081
+            )
+        ).reduce( 0, ( i, j ) -> i ^ j );
 
 
         // calculates the structure hash value (Murmur3) of the value definition
-        // functor will be added iif no literal data exists ( hasher must be existing twice )
         final String l_functor = p_functor.getPath();
 
         final Hasher l_valuehasher = CCommon.getTermHashing();
-        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_valuehasher.putInt( ( (ILiteral) i ).valuehash() ) ).count() == 0 )
-        {
-            l_valuehasher.putBoolean( m_negated );
-            l_valuehasher.putString( l_functor, Charsets.UTF_8 );
-        }
+        m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).forEach( i -> l_valuehasher.putInt( i.<ILiteral>raw().structurehash() ) );
+        l_valuehasher.putBoolean( m_negated );
+        l_valuehasher.putString( l_functor, Charsets.UTF_8 );
 
-        m_valuehash = l_valuehasher.hash().asInt();
+        m_structurehash = l_valuehasher.hash().asInt();
     }
 
     /**
@@ -222,7 +222,7 @@ public final class CLiteral implements ILiteral
                  : m_orderedvalues.stream()
                                   .filter( i -> i.fqnfunctor().equals( p_path[0] ) )
                                   .filter( i -> i instanceof ILiteral )
-                                  .flatMap( i -> ( (ILiteral) i ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
+                                  .flatMap( i -> ( i.<ILiteral>raw() ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
     @Override
@@ -232,9 +232,9 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final int valuehash()
+    public final int structurehash()
     {
-        return m_valuehash;
+        return m_structurehash;
     }
 
     @Override

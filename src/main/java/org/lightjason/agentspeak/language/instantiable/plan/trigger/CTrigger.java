@@ -55,13 +55,14 @@ public final class CTrigger implements ITrigger
     /**
      * content hashcode
      */
-    private final int m_contenthash;
+    private final int m_structurehash;
 
     /**
      * ctor
      *
      * @param p_event type
      * @param p_literal literal with unified variables
+     * @bug #25 hash values are equal of beliefs with different values
      */
     @SuppressWarnings( "unchecked" )
     public CTrigger( final EType p_event, final ILiteral p_literal )
@@ -72,8 +73,8 @@ public final class CTrigger implements ITrigger
         m_event = p_event;
         m_literal = p_literal;
         m_variables = CCommon.variablefrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) p_literal.values().count();
-        m_contenthash = m_event.hashCode() ^ m_literal.hashCode();
+        m_hashcode = m_event.hashCode() ^ m_literal.hashCode();
+        m_structurehash = m_event.hashCode() ^ m_literal.structurehash();
     }
 
     /**
@@ -125,9 +126,9 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final int contenthash()
+    public final int structurehash()
     {
-        return m_contenthash;
+        return m_structurehash;
     }
 
     @Override

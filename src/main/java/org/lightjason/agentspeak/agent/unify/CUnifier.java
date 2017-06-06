@@ -171,7 +171,7 @@ public final class CUnifier implements IUnifier
 
         // try to unify exact or if not possible by recursive on the value set
         if ( !(
-            p_literal.valuehash() == p_value.valuehash()
+            p_literal.structurehash() == p_value.structurehash()
             ? m_hashbased.unify(
                 l_result,
                 CCommon.recursiveterm( p_value.orderedvalues() ),

@@ -21,74 +21,71 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language;
+package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 
-import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.execution.IContext;
-
-import java.util.stream.Stream;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 
 
 /**
- * literal interface
- *
- * @note closed world assumption, no negation marker needed
+ * plan statistic
  */
-public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>, Comparable<ILiteral>
+public interface IPlanStatistic extends Comparable<IPlanStatistic>
 {
+    /**
+     * plan reference
+     *
+     * @return plan
+     */
+    IPlan plan();
 
     /**
-     * returns a stream over value items
+     * returns the number of executions
      *
-     * @param p_path optional filtering value names
-     * (filtering values within values)
-     * @return stream
+     * @return number of executions
      */
-    Stream<ITerm> values( final IPath... p_path );
+    long count();
 
     /**
-     * returns a stream over the ordered values
-     * in sequential ordering
+     * returns number of successful execution
+     *
+     * @return number of executions
      */
-    Stream<ITerm> orderedvalues( final IPath... p_path );
+    long successful();
 
     /**
-     * check for empty values
+     * returns the ratio of successful execution
      *
-     * @return empty flag
+     * @return ratio
      */
-    boolean emptyValues();
+    double successfulratio();
 
     /**
-     * getter of the literal for the negation
+     * returns number of failed execution
      *
-     * @return negated flag
+     * @return number of executions
      */
-    boolean negated();
+    long fail();
 
     /**
-     * returns if the literal has an @ prefix
+     * returns the ratio of failed executions
      *
-     * @return prefix is set
+     * @return ratio
      */
-    boolean hasAt();
+    double failratio();
 
     /**
-     * unifies variables if exists
+     * increments the successful executions
      *
-     * @param p_context current execution context
-     * @return new literal instance with unified variables
-     *
-     * @note un-unifyable variables passwd into the result literal
+     * @return self reference
      */
-    ILiteral unify( final IContext p_context );
+    IPlanStatistic incrementsuccessful();
 
     /**
-     * allocate all variables with the current context
+     * increments the failed executions
      *
-     * @param p_context current execution context
-     * @return literal with replaced variable
+     * @return self reference
      */
-    ILiteral allocate( final IContext p_context );
+    IPlanStatistic incrementfail();
+
 
 }

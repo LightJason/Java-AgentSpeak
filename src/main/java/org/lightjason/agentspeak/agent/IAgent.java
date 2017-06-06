@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.agent;
 
 import com.google.common.collect.Multimap;
-import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
@@ -33,14 +32,13 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.score.IAggregation;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 
@@ -162,7 +160,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return plan map
      */
-    Multimap<ITrigger, Triple<IPlan, AtomicLong, AtomicLong>> plans();
+    Multimap<ITrigger, IPlanStatistic> plans();
 
     /**
      * return fuzzy operator

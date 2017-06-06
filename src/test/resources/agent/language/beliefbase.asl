@@ -21,74 +21,21 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language;
-
-import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.language.execution.IContext;
-
-import java.util.stream.Stream;
-
+!test.
 
 /**
- * literal interface
- *
- * @note closed world assumption, no negation marker needed
+ * base test
  */
-public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>, Comparable<ILiteral>
-{
++!test <-
 
-    /**
-     * returns a stream over value items
-     *
-     * @param p_path optional filtering value names
-     * (filtering values within values)
-     * @return stream
-     */
-    Stream<ITerm> values( final IPath... p_path );
+    +belief(1);
+    +belief(2);
+    +belief(3);
+    +belief(3)
+.
 
-    /**
-     * returns a stream over the ordered values
-     * in sequential ordering
-     */
-    Stream<ITerm> orderedvalues( final IPath... p_path );
 
-    /**
-     * check for empty values
-     *
-     * @return empty flag
-     */
-    boolean emptyValues();
-
-    /**
-     * getter of the literal for the negation
-     *
-     * @return negated flag
-     */
-    boolean negated();
-
-    /**
-     * returns if the literal has an @ prefix
-     *
-     * @return prefix is set
-     */
-    boolean hasAt();
-
-    /**
-     * unifies variables if exists
-     *
-     * @param p_context current execution context
-     * @return new literal instance with unified variables
-     *
-     * @note un-unifyable variables passwd into the result literal
-     */
-    ILiteral unify( final IContext p_context );
-
-    /**
-     * allocate all variables with the current context
-     *
-     * @param p_context current execution context
-     * @return literal with replaced variable
-     */
-    ILiteral allocate( final IContext p_context );
-
-}
++belief(N) <-
+   generic/print(N);
+   test/result( success )
+.

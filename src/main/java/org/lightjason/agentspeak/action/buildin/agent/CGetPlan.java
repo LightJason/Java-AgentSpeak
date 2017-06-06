@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.buildin.agent;
 
 import com.codepoetics.protonpack.StreamUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.lang3.tuple.Triple;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
@@ -36,13 +35,12 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 
@@ -103,14 +101,13 @@ public final class CGetPlan extends IBuildinAction
             return false;
         }
 
-
-        final Collection<Triple<IPlan, AtomicLong, AtomicLong>> l_plans = p_agent.plans().get( CTrigger.from( p_trigger, l_literal ) );
+        final Collection<IPlanStatistic> l_plans = p_agent.plans().get( CTrigger.from( p_trigger, l_literal ) );
         if ( l_plans.isEmpty() )
             return false;
 
         p_return.add(
             CRawTerm.from(
-                l_plans.stream().map( Triple::getLeft ).collect( Collectors.toList() )
+                l_plans.stream().map( IPlanStatistic::plan ).collect( Collectors.toList() )
             )
         );
 
