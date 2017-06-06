@@ -33,9 +33,16 @@
 
 
 +!main <-
-    log("main");
-    !multiple("first");
-    !multiple("second")
+    log( "main" );
+
+    !multiple( "first" );
+    !multiple( "second" );
+
+    !twovaluesequaltype( 1, 2 );
+    !twovaluesdiffenttype( 5, "test" );
+
+    L = generic/type/parseliteral( "twovaluesliteral(5, foo(3))" );
+    !L
 .
 
 +!multiple(X) <-
@@ -47,3 +54,9 @@
     log("single");
     stop
 .
+
++!twovaluesequaltype(X,Y) <- log("twovalues equal type").
+
++!twovaluesdiffenttype(N,M) <- log("twovalues different type").
+
++!twovaluesliteral(X, foo(Y)) <- log("twovalues with literal").
