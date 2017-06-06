@@ -104,10 +104,10 @@ public final class TestCUnifier extends IBaseTest
      * @throws Exception parser exception
      */
     @Test
-    public final void valuehash() throws Exception
+    public final void structurehash() throws Exception
     {
         final ILiteral l_first = CLiteral.parse( "foo(sub(3),sub(X),test(1235),data(value('data string')))[ann(1),value('test')]" );
-        final ILiteral l_second = CLiteral.parse( "another(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
+        final ILiteral l_second = CLiteral.parse( "foo(sub(3),sub(X),test(123),data(value('data string another value')))[ann(13),value('test2')]" );
 
         assertEquals(
             MessageFormat.format( "literal value hash of [{0}] and [{1}] is [{2} / {3}] inequal", l_first, l_second, l_first.structurehash(),
