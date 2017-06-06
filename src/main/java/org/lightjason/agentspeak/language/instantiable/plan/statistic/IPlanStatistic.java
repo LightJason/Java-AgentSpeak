@@ -21,29 +21,64 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language;
+package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 
-
-import java.util.Comparator;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 
 
 /**
- * structure hash definition
+ * plan statistic
  */
-public interface IStructureHash
+public interface IPlanStatistic extends Comparable<IPlanStatistic>
 {
     /**
-     * comparator
+     * plan reference
+     *
+     * @return plan
      */
-    Comparator<IStructureHash> COMPARATOR = ( p_first, p_second ) -> Integer.compare( p_first.structurehash(), p_second.structurehash() );
-
+    IPlan plan();
 
     /**
-     * returns a hash value which defines
-     * a hash ove rthe structure
+     * returns number of successful execution
      *
-     * @return structure hash value
+     * @return number of executions
      */
-    int structurehash();
+    long successful();
+
+    /**
+     * returns the ratio of successful execution
+     *
+     * @return ratio
+     */
+    double successfulratio();
+
+    /**
+     * returns number of failed execution
+     *
+     * @return number of executions
+     */
+    long fail();
+
+    /**
+     * returns the ratio of failed executions
+     *
+     * @return ratio
+     */
+    double failratio();
+
+    /**
+     * increments the successful executions
+     *
+     * @return self reference
+     */
+    IPlanStatistic incrementsuccessful();
+
+    /**
+     * increments the failed executions
+     *
+     * @return self reference
+     */
+    IPlanStatistic incrementfail();
+
 
 }
