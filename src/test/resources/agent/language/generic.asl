@@ -46,7 +46,7 @@ foo(blub(1),hello("test")).
     !testdatetime;
     !testbool;
     !teststring;
-    //!testunification
+    !testunification;
     !testdeconstruct
 .
 

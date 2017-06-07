@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -84,13 +85,14 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         return p_context.agent().unifier().unify(
             p_context,
             m_value,
-            m_variablenumber
+            m_variablenumber,
+            IExpression.EMPTY,
+            m_parallel
         );
     }
 

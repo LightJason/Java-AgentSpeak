@@ -23,7 +23,15 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -31,5 +39,24 @@ import org.lightjason.agentspeak.language.execution.IExecution;
  */
 public interface IExpression extends IExecution
 {
+    /**
+     * empty expression, is always true
+     */
+    IExpression EMPTY = new IExpression()
+    {
+        @Override
+        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Override
+        public final Stream<IVariable<?>> variables()
+        {
+            return Stream.empty();
+        }
+    };
+
 
 }

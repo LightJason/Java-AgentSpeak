@@ -82,18 +82,6 @@ public final class CUnifier implements IUnifier
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables )
-    {
-        // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variables );
-        if ( l_variables.isEmpty() )
-            return CFuzzyValue.from( false );
-
-        CCommon.updatecontext( p_context, l_variables.get( 0 ).parallelStream() );
-        return CFuzzyValue.from( true );
-    }
-
-    @Override
     public final Set<IVariable<?>> unify( final ILiteral p_literal, final ILiteral p_value )
     {
         final Set<IVariable<?>> l_result = new HashSet<>();
@@ -118,8 +106,7 @@ public final class CUnifier implements IUnifier
 
     @Override
     public IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables, final IExpression p_expression,
-                                       final boolean p_parallel
-    )
+                                       final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variables );

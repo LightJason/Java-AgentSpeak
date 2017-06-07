@@ -50,12 +50,12 @@ public final class CExpressionUnify extends CDefaultUnify
      *
      * @param p_parallel parallel execution
      * @param p_literal literal
-     * @param p_constraint expression
+     * @param p_expression expression
      */
-    public CExpressionUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_constraint )
+    public CExpressionUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_expression )
     {
         super( p_parallel, p_literal );
-        m_expression = p_constraint;
+        m_expression = p_expression;
     }
 
 
@@ -66,8 +66,7 @@ public final class CExpressionUnify extends CDefaultUnify
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         return p_context.agent().unifier().unify( p_context, m_value, m_variablenumber, m_expression, m_parallel );
     }

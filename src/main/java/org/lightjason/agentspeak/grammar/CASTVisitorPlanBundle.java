@@ -381,7 +381,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             return new CExpressionUnify(
                 p_context.AT() != null,
                 (ILiteral) this.visitLiteral( p_context.literal() ),
-                (IExpression) l_constraint
+                l_constraint == null ? IExpression.EMPTY : (IExpression) l_constraint
             );
 
         if ( l_constraint instanceof IVariable<?> )
