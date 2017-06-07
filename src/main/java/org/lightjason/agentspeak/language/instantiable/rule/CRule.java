@@ -81,8 +81,7 @@ public final class CRule extends IBaseInstantiable implements IRule
             m_id,
             m_action.stream().map( i ->
                                        i instanceof CRulePlaceholder
-                                       // create a full deep-copy of the literal for avoid indeterminisitic
-                                       // behaviour on rule unification
+                                       // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
                                        ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
                                        : i
             ).collect( Collectors.toList() )
@@ -93,8 +92,9 @@ public final class CRule extends IBaseInstantiable implements IRule
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
+        return CCommon.streamconcat(
             super.variables(),
+            m_annotation.values().stream().flatMap( IAnnotation::variables ),
             CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
         );
     }
