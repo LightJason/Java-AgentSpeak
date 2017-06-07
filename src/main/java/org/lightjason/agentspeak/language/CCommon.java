@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language;
 
-import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
@@ -106,7 +105,6 @@ public final class CCommon
         Stream.of(
             p_variable,
             p_agent.variablebuilder().generate( p_agent, p_instance ),
-            Stream.of( new CConstant<>( "Score", p_instance.score( p_agent ) ) ),
             Stream.of( new CConstant<>( "Cycle", p_agent.cycle() ) )
         ).reduce( Stream::concat )
               .orElseGet( Stream::<IVariable<?>>empty )
@@ -153,20 +151,12 @@ public final class CCommon
      */
     public static Pair<IPlanStatistic, IContext> instantiateplan( final IPlanStatistic p_planstatistic, final IAgent<?> p_agent, final Set<IVariable<?>> p_variables )
     {
-        return new ImmutablePair<>( p_planstatistic, p_planstatistic.plan().instantiate(
-            p_agent,
-            Stream.concat(
-                p_variables.stream(),
-                Stream.of(
-                    // execution count
-                    new CConstant<>( "PlanSuccessful", p_planstatistic.successful() ),
-                    new CConstant<>( "PlanFail", p_planstatistic.fail() ),
-                    new CConstant<>( "PlanRuns", p_planstatistic.count() ),
-
-                    // execution ratio
-                    new CConstant<>( "PlanSuccessfulRatio", p_planstatistic.successfulratio() ),
-                    new CConstant<>( "PlanFailRatio", p_planstatistic.failratio() )
-                ) ) )
+        return new ImmutablePair<>(
+            p_planstatistic,
+            p_planstatistic.plan().instantiate(
+                p_agent,
+                Stream.concat( p_variables.stream(), p_planstatistic.variables() )
+            )
         );
     }
 
@@ -180,6 +170,7 @@ public final class CCommon
      * @return concated stream
      */
     @SafeVarargs
+    @SuppressWarnings( "varargs" )
     public static <T> Stream<T> streamconcat( final Stream<T>... p_streams )
     {
         return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );

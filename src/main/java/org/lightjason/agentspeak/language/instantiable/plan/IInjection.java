@@ -32,9 +32,7 @@ import java.util.stream.Stream;
 
 /**
  * aggregation interface of score values
- * @deprecated obsolet
  */
-@Deprecated
 public interface IInjection
 {
 

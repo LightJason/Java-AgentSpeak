@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language.execution.action;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
@@ -129,12 +128,6 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     public final boolean equals( final Object p_object )
     {
         return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return 0;
     }
 
     @Override

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -70,12 +69,6 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
             p_return.addAll( l_returnarguments );
 
         return l_return;
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return m_execution.score( p_agent );
     }
 
     @Override

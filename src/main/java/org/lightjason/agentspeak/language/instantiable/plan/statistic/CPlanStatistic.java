@@ -25,9 +25,12 @@
 package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.variable.CConstant;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 
 /**
@@ -113,6 +116,20 @@ public final class CPlanStatistic implements IPlanStatistic
     {
         m_fail.incrementAndGet();
         return this;
+    }
+
+    @Override
+    public final Stream<IVariable<?>> variables()
+    {
+        return Stream.of(
+            new CConstant<>( "PlanSuccessful", m_successful.get() ),
+            new CConstant<>( "PlanFail", m_fail.get() ),
+            new CConstant<>( "PlanRuns", m_successful.get() + m_fail.get() ),
+
+            // execution ratio
+            new CConstant<>( "PlanSuccessfulRatio", this.successfulratio() ),
+            new CConstant<>( "PlanFailRatio", this.failratio() )
+        );
     }
 
     @Override

@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
@@ -50,12 +48,6 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     {
         super( p_type );
         m_immediately = p_immediately;
-    }
-
-    @Override
-    public double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
     @Override

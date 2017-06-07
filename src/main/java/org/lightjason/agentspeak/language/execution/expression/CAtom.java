@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -65,12 +64,6 @@ public class CAtom implements IExpression
         final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
         p_return.add( CRawTerm.from( l_term.raw() ).throwNotAllocated( l_term.fqnfunctor().toString() ) );
         return CFuzzyValue.from( true );
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return 0;
     }
 
     @Override

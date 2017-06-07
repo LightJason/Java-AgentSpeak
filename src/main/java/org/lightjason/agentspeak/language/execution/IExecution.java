@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -48,16 +47,6 @@ public interface IExecution
      * @return fuzzy boolean
      */
     IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return );
-
-    /**
-     * returns the scoring value of the execution structure
-     *
-     * @param p_agent agent for which calculates the score value
-     * @return score value
-     * @deprecated obsolete
-     */
-    @Deprecated
-    double score( final IAgent<?> p_agent );
 
     /**
      * returns a stream with all used variables

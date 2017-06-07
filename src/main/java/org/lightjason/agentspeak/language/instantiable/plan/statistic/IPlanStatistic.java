@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import java.util.stream.Stream;
 
 
 /**
@@ -86,6 +89,14 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      * @return self reference
      */
     IPlanStatistic incrementfail();
+
+    /**
+     * returns a stream with variables of
+     * the internal data
+     *
+     * @return variable stream
+     */
+    Stream<IVariable<?>> variables();
 
 
 }

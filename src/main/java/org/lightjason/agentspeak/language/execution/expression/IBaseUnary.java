@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -72,12 +71,6 @@ public abstract class IBaseUnary implements IUnaryExpression
     public final EOperator operator()
     {
         return m_operator;
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return 0;
     }
 
     @Override

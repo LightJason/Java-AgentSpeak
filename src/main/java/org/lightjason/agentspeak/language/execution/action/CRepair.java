@@ -66,10 +66,7 @@ public class CRepair extends IBaseExecution<IExecution>
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            m_value.variables(),
-            m_fallback.variables()
-        );
+        return Stream.concat( m_value.variables(), m_fallback.variables() );
     }
 
     @Override

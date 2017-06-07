@@ -63,7 +63,6 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 #### <a name="planinternal">Internals Constants</a>
  
 * The plan has got additional [constant variables](#variable), that are added in the context condition (values are calculated before plan execution is started)
-    * _Score_ returns the current score-value of the plan
     * _PlanFail_ stores the number of fail runs and _PlanFailRatio_ normalized value in [0,1]
     * _PlanSuccessful_ stores the number of successful runs and _PlanSuccessfulRatio_ normalized value in [0,1] 
     * _PlanRuns_ number of runs of the plan (fail + successful runs)

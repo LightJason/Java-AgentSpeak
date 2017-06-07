@@ -93,12 +93,6 @@ public final class CRulePlaceholder implements IRule
     }
 
     @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return 0;
-    }
-
-    @Override
     public final Stream<IVariable<?>> variables()
     {
         return Stream.<IVariable<?>>empty();

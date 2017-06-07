@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
@@ -88,13 +87,6 @@ public final class CProxyAction implements IExecution
     }
 
     @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, m_scoringcache );
-    }
-
-
-    @Override
     public final Stream<IVariable<?>> variables()
     {
         return m_execution.variables();
@@ -150,12 +142,6 @@ public final class CProxyAction implements IExecution
         {
             p_return.add( m_value );
             return CFuzzyValue.from( true );
-        }
-
-        @Override
-        public final double score( final IAgent<?> p_agent )
-        {
-            return 0;
         }
 
         @Override
@@ -257,12 +243,6 @@ public final class CProxyAction implements IExecution
         }
 
         @Override
-        public final double score( final IAgent<?> p_agent )
-        {
-            return 0;
-        }
-
-        @Override
         public final Stream<IVariable<?>> variables()
         {
             return m_action.variables();
@@ -283,10 +263,19 @@ public final class CProxyAction implements IExecution
         {
             // convert collection to list and build map with indices
             final List<? extends ITerm> l_elements = new LinkedList<>( p_elements );
-            return IntStream.range( 0, l_elements.size() ).boxed().collect( Collectors.toMap( i -> i, i -> {
-                final ITerm l_term = l_elements.get( i );
-                return l_term instanceof ILiteral ? new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache ) : new CTermWrapper<>( l_term );
-            } ) );
+            return IntStream.range( 0, l_elements.size() )
+                            .boxed()
+                            .collect(
+                                Collectors.toMap(
+                                    i -> i,
+                                    i -> {
+                                        final ITerm l_term = l_elements.get( i );
+                                        return l_term instanceof ILiteral
+                                               ? new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache )
+                                               : new CTermWrapper<>( l_term );
+                                    }
+                                )
+                            );
         }
 
         /**

@@ -109,9 +109,6 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            m_righthand.variables(),
-            m_value.stream()
-        );
+        return Stream.concat( m_righthand.variables(), m_value.stream() );
     }
 }

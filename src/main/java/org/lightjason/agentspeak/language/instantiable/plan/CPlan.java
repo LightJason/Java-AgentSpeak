@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.instantiable.plan;
 
 import org.apache.commons.lang3.StringUtils;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -154,22 +153,6 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             m_triggerevent,
             m_condition == null ? "" : MessageFormat.format( " |- {0}", m_condition ),
             StringUtils.join( m_action, "; " )
-        );
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate(
-            Stream.concat(
-                Stream.of( super.score( p_agent ) ),
-                Stream.of(
-                    m_annotation.containsKey( IAnnotation.EType.SCORE )
-                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).value() ).doubleValue()
-                    : 0
-                )
-            )
         );
     }
 

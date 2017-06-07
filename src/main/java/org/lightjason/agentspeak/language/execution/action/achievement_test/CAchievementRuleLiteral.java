@@ -23,17 +23,14 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -59,20 +56,6 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     )
     {
         return CAchievementRuleLiteral.execute( p_context, m_value, m_value.hasAt() );
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        // rules can create a cyclic reference so on calculate the score value
-        // a cyclic reference must be ignored
-        final Collection<IRule> l_rules = p_agent.rules().get( m_value.fqnfunctor() );
-        return l_rules == null
-               ? p_agent.aggregation().error()
-               : l_rules.parallelStream()
-                        .filter( this::equals )
-                        .mapToDouble( i -> i.score( p_agent ) )
-                        .sum();
     }
 
     @Override

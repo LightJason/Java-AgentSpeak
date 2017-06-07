@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
@@ -61,12 +60,6 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
     public final String toString()
     {
         return MessageFormat.format( "${0}", m_value );
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return 0;
     }
 
     @Override

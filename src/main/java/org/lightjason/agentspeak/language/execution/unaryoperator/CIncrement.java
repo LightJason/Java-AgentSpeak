@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.unaryoperator;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -80,12 +78,6 @@ public final class CIncrement<T extends Number> implements IOperator<T>
             l_variable.set( (T) Integer.valueOf( l_variable.<Number>raw().intValue() + 1 ) );
 
         return CFuzzyValue.from( true );
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
     }
 
     @Override

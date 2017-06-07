@@ -89,21 +89,6 @@ public abstract class IBaseInstantiable implements IInstantiable
     }
 
     @Override
-    public double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate(
-            Stream.concat(
-                m_action.parallelStream().mapToDouble( i -> i.score( p_agent ) ).boxed(),
-                Stream.of(
-                    m_annotation.containsKey( IAnnotation.EType.SCORE )
-                    ? m_annotation.get( IAnnotation.EType.SCORE ).<Double>value()
-                    : Double.valueOf( 0 )
-                )
-            )
-        );
-    }
-
-    @Override
     public final IContext instantiate( final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
     {
         return CCommon.instantiate( this, p_agent, p_variable );

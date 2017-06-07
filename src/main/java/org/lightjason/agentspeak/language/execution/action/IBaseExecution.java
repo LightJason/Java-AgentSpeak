@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.execution.IExecution;
@@ -79,15 +77,9 @@ public abstract class IBaseExecution<T> implements IExecution
     }
 
     @Override
-    public double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
-    }
-
-    @Override
     public Stream<IVariable<?>> variables()
     {
-        return Stream.<IVariable<?>>empty();
+        return Stream.empty();
     }
 
     @Override

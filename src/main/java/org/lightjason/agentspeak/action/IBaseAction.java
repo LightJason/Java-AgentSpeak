@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.action;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.stream.Stream;
@@ -52,12 +50,6 @@ public abstract class IBaseAction implements IAction
     public final String toString()
     {
         return this.name().toString();
-    }
-
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of( this ) );
     }
 
     @Override
