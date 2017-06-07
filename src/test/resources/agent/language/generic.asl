@@ -21,17 +21,17 @@
  * @endcond
  */
 
+
 hello(123).
-hello(666).
-hello(123).
-hello("foo").
-hello(1111).
 hello(600).
-hello(999).
-hello(900).
-hello(888).
-hello(777).
+hello(666).
 hello(700).
+hello(777).
+hello(888).
+hello(900).
+hello(999).
+hello(1111).
+hello("foo").
 hello(foo(3)).
 foo(blub(1),hello("test")).
 
@@ -43,11 +43,11 @@ foo(blub(1),hello("test")).
  * base test
  */
 +!test <-
-    !testdatetime;
-    !testbool;
-    !teststring;
-    !testunification;
-    !testdeconstruct
+    //!testdatetime;
+    //!testbool;
+    //!teststring;
+    !testunification
+    //!testdeconstruct
 .
 
 
@@ -105,13 +105,11 @@ foo(blub(1),hello("test")).
  * test unification
  */
 +!testunification <-
-
-/*
         // unify default
         >>hello( UN1 );
         generic/print( "first unification", UN1 );
-        test/result( bool/equal( UN1, "foo" ), "first unification has been failed" );
-
+        test/result( bool/equal( UN1, "foo" ), "first unification has been failed" )
+/*
         // unify subitem
         >>foo( blub(1), hello( UN2 ) );
         generic/print( "second unification", UN2 );
@@ -122,7 +120,7 @@ foo(blub(1),hello("test")).
         generic/print( "third unification", UN3a, UN3b );
         test/result( bool/equal( UN3a, 1 ), "third unification first part has been failed" );
         test/result( bool/equal( UN3b, "test" ), "third unification first part has been failed" );
-*/
+
         // unify by parsing literal
         // @bug unification creates NPE
         generic/print("xxxx");
@@ -134,7 +132,6 @@ foo(blub(1),hello("test")).
         //>>foo( UN2, UN3 ) << true;
         //generic/print("----> unification", UN4data )
 
-/*
         // unify with expression
         >>( hallo( UN2 ), generic/type/isstring(UN2) ) << true;
         @>>( hallo( UN3 ), generic/type/isnumeric(UN3) && (UN3 > 200) ) << true;

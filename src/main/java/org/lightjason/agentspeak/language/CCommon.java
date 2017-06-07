@@ -87,7 +87,7 @@ public final class CCommon
      */
     public static IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
+        p_unifiedvariables.parallel().forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
         return p_context;
     }
 

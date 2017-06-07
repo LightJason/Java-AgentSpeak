@@ -105,31 +105,23 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables, final IExpression p_expression,
-                                       final boolean p_parallel )
+    public IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables,
+                                       final IExpression p_expression, final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 
+        System.out.println( "---> " + l_variables );
+
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
-                                                      .filter( i -> {
-                                                          final List<ITerm> l_return = new LinkedList<>();
-                                                          p_expression.execute(
-                                                              CCommon.updatecontext(
-                                                                  p_context.duplicate(),
-                                                                  i.parallelStream()
-                                                              ),
-                                                              false,
-                                                              Collections.emptyList(),
-                                                              l_return
-                                                          );
-                                                          return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
-                                                      } )
+                                                      .filter( i -> evaluateexpression( p_expression, p_context.duplicate(), i ) )
                                                       .findFirst()
-                                                      .orElse( Collections.<IVariable<?>>emptySet() );
+                                                      .orElse( Collections.emptySet() );
+
+        System.out.println( "---> " + l_result );
 
         // if no match
         if ( l_result.isEmpty() )
@@ -137,6 +129,26 @@ public final class CUnifier implements IUnifier
 
         CCommon.updatecontext( p_context, l_result.parallelStream() );
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * evaluate expression
+     *
+     * @param p_expression expression
+     * @param p_context execution context (mostly a new instance)
+     * @param p_variables current variables
+     * @return boolean for correct evaluation
+     */
+    private static boolean evaluateexpression( final IExpression p_expression, final IContext p_context, final Set<IVariable<?>> p_variables )
+    {
+        final List<ITerm> l_return = new LinkedList<>();
+        p_expression.execute(
+            CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
+            false,
+            Collections.emptyList(),
+            l_return
+        );
+        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
     }
 
     /**
