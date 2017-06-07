@@ -63,7 +63,7 @@ public final class CSleep extends IBuildinAction
 
                 p_argument.size() > 1
                 ? p_argument.subList( 1, p_argument.size() ).stream()
-                : Stream.of()
+                : Stream.empty()
 
             ).sleeping()
         );

@@ -174,7 +174,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
     {
         if ( p_inspector == null )
-            return Stream.of();
+            return Stream.empty();
 
         return Arrays.stream( p_inspector ).parallel().peek( i -> {
             i.inspectcycle( m_cycle.get() );

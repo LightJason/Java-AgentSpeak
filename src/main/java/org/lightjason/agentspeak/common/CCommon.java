@@ -196,7 +196,7 @@ public final class CCommon
     public static Stream<IAction> actionsFromAgentClass( final Class<?>... p_class )
     {
         return p_class == null || p_class.length == 0
-               ? Stream.of()
+               ? Stream.empty()
                : Arrays.stream( p_class )
                        .parallel()
                        .filter( IAgent.class::isAssignableFrom )

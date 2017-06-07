@@ -55,13 +55,13 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
     @Override
     public final Stream<ILiteral> streamLiteral()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override
     public final Stream<IView<T>> streamView()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

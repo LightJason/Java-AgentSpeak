@@ -56,7 +56,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     @Override
     public Stream<ILiteral> streamLiteral()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override
@@ -99,7 +99,7 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
     @Override
     public final Stream<IView<T>> streamView()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

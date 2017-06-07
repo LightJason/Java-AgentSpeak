@@ -267,7 +267,7 @@ public final class CPath implements IPath
     {
         return new CPath(
             p_toindex == 0
-            ? Stream.of()
+            ? Stream.empty()
             : IntStream.range(
                 p_fromindex,
                 p_toindex > 0 ? p_toindex : this.size() + p_toindex

@@ -310,7 +310,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                      );
 
             if ( l_view == null )
-                return Stream.of();
+                return Stream.empty();
             m_beliefbase.add( l_view );
         }
 

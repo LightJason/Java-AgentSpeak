@@ -101,7 +101,7 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
     @Override
     public final Stream<M> streamSingleElements()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
     @Override

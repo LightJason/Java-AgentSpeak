@@ -64,7 +64,7 @@ public abstract class IStorage extends IBuildinAction
     {
         this(
             ( p_forbidden == null ) || ( p_forbidden.length == 0 )
-            ? Stream.of()
+            ? Stream.empty()
             : Arrays.stream( p_forbidden )
         );
     }
