@@ -33,7 +33,7 @@ import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -125,7 +125,7 @@ public final class TestCPropertyAgent extends IBaseTest
              */
             CAgentGenerator( final String p_asl ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet(), IAggregation.EMPTY );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), Collections.emptySet(), IInjection.EMPTY );
             }
 
             @Override

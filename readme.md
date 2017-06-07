@@ -92,7 +92,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
 * The following annotation can be used
-    * ```@Score``` adds an individual score value
+    * ```@Constant( AnyValue, 5 )``` creates the given constant variable
     * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the [actions](#action) can fail)
     * ```@Parallel``` all items will be run in parallel
  

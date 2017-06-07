@@ -30,7 +30,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.util.Collection;
 
@@ -63,7 +63,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return aggregate function
      */
-    IAggregation aggregation();
+    IInjection aggregation();
 
     /**
      * returns the unifier function

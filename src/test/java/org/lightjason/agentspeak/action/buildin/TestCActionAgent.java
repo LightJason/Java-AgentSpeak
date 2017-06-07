@@ -55,7 +55,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -101,7 +101,7 @@ public final class TestCActionAgent extends IBaseTest
     public void initialize() throws Exception
     {
         m_context = new CContext(
-            new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet(), IAggregation.EMPTY ).generatesingle(),
+            new CAgent.CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet(), IInjection.EMPTY ).generatesingle(),
             new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "contextplan" ) ) ),
             Collections.emptyList()
         );
@@ -394,7 +394,7 @@ public final class TestCActionAgent extends IBaseTest
         private static final class CGenerator extends IBaseAgentGenerator<CAgent>
         {
 
-            CGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation ) throws Exception
+            CGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IInjection p_aggregation ) throws Exception
             {
                 super( p_stream, p_actions, p_aggregation );
             }

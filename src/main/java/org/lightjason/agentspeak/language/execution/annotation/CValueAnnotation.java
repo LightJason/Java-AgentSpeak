@@ -29,23 +29,29 @@ import java.text.MessageFormat;
 /**
  * number annotation
  */
-public final class CNumberAnnotation<T extends Number> extends IBaseAnnotation<T>
+public final class CValueAnnotation<T> extends IBaseAnnotation<T>
 {
+    /**
+     * name of the annotation
+     */
+    private final String m_name;
+
     /**
      * ctor
      *
      * @param p_type type
      * @param p_data number
      */
-    public CNumberAnnotation( final EType p_type, final T p_data )
+    public CValueAnnotation( final EType p_type, final String p_name, final T p_data )
     {
         super( p_type, p_data );
+        m_name = p_name;
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}({1})", m_type, m_value );
+        return MessageFormat.format( "{0}({1}, {1})", m_type, m_name, m_value );
     }
 
 }

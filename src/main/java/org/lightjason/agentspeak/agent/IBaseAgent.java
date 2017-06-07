@@ -53,7 +53,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -126,7 +126,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * aggregation function
      */
-    private final IAggregation m_aggregation;
+    private final IInjection m_aggregation;
     /**
      * variable builder
      */
@@ -273,7 +273,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final IAggregation aggregation()
+    public final IInjection aggregation()
     {
         return m_aggregation;
     }

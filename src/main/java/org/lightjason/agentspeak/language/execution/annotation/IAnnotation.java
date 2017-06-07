@@ -54,12 +54,14 @@ public interface IAnnotation<T>
     boolean valueAssignableTo( final Class<?>... p_class );
 
 
+
+
     /**
      * annotation types
      */
     enum EType
     {
-        SCORE( "@Score" ),
+        CONSTANT( "@Constant" ),
         ATOMIC( "@Atomic" ),
         PARALLEL( "@Parallel" );
 

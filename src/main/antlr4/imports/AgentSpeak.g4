@@ -113,16 +113,18 @@ annotation_atom :
  * annotation (with parameter)
  **/
 annotation_literal :
-    AT annotation_numeric_literal
+    AT annotation_value_literal
     ;
 
 /**
- * annotations (with numerical parameter)
+ * annotations (with any parameter)
  **/
-annotation_numeric_literal :
-    SCORE
+annotation_value_literal :
+    CONSTANT
     LEFTROUNDBRACKET
-    number
+    variableatom
+    COMMA
+    ( number | string )
     RIGHTROUNDBRACKET
     ;
 

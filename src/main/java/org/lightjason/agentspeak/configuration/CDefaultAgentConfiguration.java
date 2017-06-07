@@ -39,7 +39,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -73,7 +73,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * instance of the aggregate function
      */
-    protected final IAggregation m_aggregation;
+    protected final IInjection m_aggregation;
     /**
      * instance of agent plans
      */
@@ -105,7 +105,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         this(
             new CBoolFuzzy<>(), Collections.emptyList(),
             Collections.emptySet(), Collections.emptySet(),
-            null, new CUnifier(), IAggregation.EMPTY
+            null, new CUnifier(), IInjection.EMPTY
         );
     }
 
@@ -122,7 +122,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
+                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IInjection p_aggregation
     )
     {
         this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, IVariableBuilder.EMPTY );
@@ -142,7 +142,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
+                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IInjection p_aggregation,
                                        final IVariableBuilder p_variablebuilder
     )
     {
@@ -179,7 +179,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     }
 
     @Override
-    public final IAggregation aggregation()
+    public final IInjection aggregation()
     {
         return m_aggregation;
     }

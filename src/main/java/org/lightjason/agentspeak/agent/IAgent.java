@@ -35,7 +35,7 @@ import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -174,7 +174,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return aggregation function
      */
-    IAggregation aggregation();
+    IInjection aggregation();
 
     /**
      * returns the variable builder function

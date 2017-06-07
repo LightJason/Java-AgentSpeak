@@ -231,7 +231,7 @@ variable_evaluate :
 
 /**
  * clause represent a literal structure existing
- * atom, optional argument, optional annotations
+ * atom, optional argument
  **/
 literal :
     ( AT | STRONGNEGATION )?
@@ -247,7 +247,7 @@ termlist :
     ;
 
 /**
- * list with head-tail-annotation definition
+ * list with head-tail-notation definition
  **/
 variablelist :
     LEFTANGULARBRACKET
@@ -270,6 +270,13 @@ atom :
  **/
 variable :
     AT?
+    variableatom
+    ;
+
+/**
+ * name structure of a variable
+ **/
+variableatom:
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT | SLASH )*
     ;

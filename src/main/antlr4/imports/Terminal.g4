@@ -77,7 +77,7 @@ RIGHTSHIFT                 : '>>';
  **/
 PARALLEL                   : 'parallel';
 ATOMIC                     : 'atomic';
-SCORE                      : 'score';
+CONSTANT                   : 'constant';
 
 
 /**

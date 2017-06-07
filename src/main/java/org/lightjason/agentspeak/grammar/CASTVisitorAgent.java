@@ -58,7 +58,7 @@ import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
 import org.lightjason.agentspeak.language.execution.annotation.CAtomAnnotation;
-import org.lightjason.agentspeak.language.execution.annotation.CNumberAnnotation;
+import org.lightjason.agentspeak.language.execution.annotation.CValueAnnotation;
 import org.lightjason.agentspeak.language.execution.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.expression.CAtom;
 import org.lightjason.agentspeak.language.execution.expression.CProxyReturnExpression;
@@ -304,12 +304,23 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     @Override
-    public final Object visitAnnotation_numeric_literal( final AgentParser.Annotation_numeric_literalContext p_context )
+    public Object visitAnnotation_value_literal( final AgentParser.Annotation_value_literalContext p_context )
     {
-        if ( p_context.SCORE() != null )
-            return new CNumberAnnotation<>( IAnnotation.EType.SCORE, ( (Number) this.visitNumber( p_context.number() ) ).doubleValue() );
+        if ( p_context.number() != null )
+            return new CValueAnnotation<>(
+                IAnnotation.EType.CONSTANT,
+                (String) this.visitVariableatom( p_context.variableatom() ),
+                ( (Number) this.visitNumber( p_context.number() ) ).doubleValue()
+            );
 
-        throw new CIllegalArgumentException( CCommon.languagestring( this, "numberannotation", p_context.getText() ) );
+        if ( p_context.string() != null )
+            return new CValueAnnotation<>(
+                IAnnotation.EType.CONSTANT,
+                (String) this.visitVariableatom( p_context.variableatom() ),
+                p_context.string().getText()
+            );
+
+        throw new CIllegalArgumentException( CCommon.languagestring( this, "valueannotation", p_context.getText() ) );
     }
 
     @Override
@@ -744,7 +755,15 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitVariable( final AgentParser.VariableContext p_context )
     {
-        return p_context.AT() == null ? new CVariable<>( p_context.getText() ) : new CMutexVariable<>( p_context.getText() );
+        return p_context.AT() == null
+               ? new CVariable<>( (String) this.visitVariableatom( p_context.variableatom() ) )
+               : new CMutexVariable<>( (String) this.visitVariableatom( p_context.variableatom() ) );
+    }
+
+    @Override
+    public final Object visitVariableatom( final AgentParser.VariableatomContext p_context )
+    {
+        return p_context.getText();
     }
 
     @Override

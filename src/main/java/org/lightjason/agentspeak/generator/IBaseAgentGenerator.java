@@ -39,7 +39,7 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -76,7 +76,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
+    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IInjection p_aggregation )
     throws Exception
     {
         this( p_stream, p_actions, p_aggregation,
@@ -95,7 +95,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation,
+                                final IInjection p_aggregation,
                                 final IVariableBuilder p_variablebuilder
     )
     throws Exception
@@ -114,7 +114,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
+                                final IInjection p_aggregation, final Set<IPlanBundle> p_planbundle,
                                 final IVariableBuilder p_variablebuilder
     )
     throws Exception
@@ -156,7 +156,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     protected IAgentConfiguration<T> configuration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                                     final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                                     final ILiteral p_initialgoal, final IUnifier p_unifier,
-                                                    final IAggregation p_aggregation,
+                                                    final IInjection p_aggregation,
                                                     final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(

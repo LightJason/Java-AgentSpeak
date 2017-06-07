@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.score;
+package org.lightjason.agentspeak.language.instantiable.plan;
 
 import com.google.common.collect.Multiset;
 import org.lightjason.agentspeak.action.IAction;
@@ -32,14 +32,16 @@ import java.util.stream.Stream;
 
 /**
  * aggregation interface of score values
+ * @deprecated obsolet
  */
-public interface IAggregation
+@Deprecated
+public interface IInjection
 {
 
     /**
      * empty aggreation class
      */
-    IAggregation EMPTY = new IAggregation()
+    IInjection EMPTY = new IInjection()
     {
         @Override
         public final double evaluate( final IAgent<?> p_agent, final Multiset<IAction> p_score )
