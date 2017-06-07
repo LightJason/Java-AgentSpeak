@@ -293,9 +293,8 @@ public final class CProxyAction implements IExecution
                 (Collection<? extends ITerm>) ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
                     .flatMap( i -> {
 
-                        final List<ITerm> l_return = new LinkedList<ITerm>();
-                        i.getValue().execute(
-                            p_context, m_parallel, Collections.<ITerm>emptyList(), l_return );
+                        final List<ITerm> l_return = new LinkedList<>();
+                        i.getValue().execute( p_context, m_parallel, Collections.emptyList(), l_return );
                         return l_return.stream();
 
                     } ).collect( Collectors.toList() )

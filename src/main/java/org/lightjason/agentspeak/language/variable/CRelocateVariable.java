@@ -91,8 +91,8 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CRelocateVariable<T>( m_functor, m_relocate, m_value )
-               : new CRelocateVariable<T>( p_prefix[0].append( m_functor ), m_relocate, m_value );
+               ? new CRelocateVariable<>( m_functor, m_relocate, m_value )
+               : new CRelocateVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
     @Override

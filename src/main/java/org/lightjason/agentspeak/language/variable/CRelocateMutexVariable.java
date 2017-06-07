@@ -90,8 +90,8 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CRelocateMutexVariable<T>( m_functor, m_relocate, m_value )
-               : new CRelocateMutexVariable<T>( p_prefix[0].append( m_functor ), m_relocate, m_value );
+               ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value )
+               : new CRelocateMutexVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
     @Override

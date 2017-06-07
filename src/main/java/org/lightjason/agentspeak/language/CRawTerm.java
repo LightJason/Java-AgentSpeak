@@ -96,7 +96,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
      */
     public static <N> CRawTerm<N> from( final N p_value )
     {
-        return new CRawTerm<N>( p_value );
+        return new CRawTerm<>( p_value );
     }
 
 

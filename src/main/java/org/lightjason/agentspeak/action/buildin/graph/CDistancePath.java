@@ -52,7 +52,7 @@ public class CDistancePath extends IApplyPathAlgorithm
     @Override
     protected final Object apply( final List<ITerm> p_vertices, final Graph<Object, Object> p_graph, final Function<Object, Number> p_weightfunction )
     {
-        return new DijkstraShortestPath<Object, Object>( p_graph, p_weightfunction )
+        return new DijkstraShortestPath<>( p_graph, p_weightfunction )
                                    .getDistance( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() )
                                    .doubleValue();
     }

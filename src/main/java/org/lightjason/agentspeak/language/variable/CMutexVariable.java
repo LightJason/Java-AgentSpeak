@@ -122,15 +122,15 @@ public class CMutexVariable<T> extends CVariable<T>
     public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CMutexVariable<T>( m_functor, m_value )
-               : new CMutexVariable<T>( p_prefix[0].append( m_functor ), m_value );
+               ? new CMutexVariable<>( m_functor, m_value )
+               : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value );
     }
 
 
     @Override
     public IVariable<T> shallowcopysuffix()
     {
-        return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
+        return new CMutexVariable<>( m_functor.getSuffix(), m_value );
     }
 
     @Override

@@ -129,7 +129,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      */
     public static <N> IFuzzyValueMutable<N> from( final N p_value )
     {
-        return new CFuzzyValueMutable<N>( p_value );
+        return new CFuzzyValueMutable<>( p_value );
     }
 
     /**
@@ -143,7 +143,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      */
     public static <N> IFuzzyValueMutable<N> from( final N p_value, final double p_fuzzy )
     {
-        return new CFuzzyValueMutable<N>( p_value, p_fuzzy );
+        return new CFuzzyValueMutable<>( p_value, p_fuzzy );
     }
 
 }

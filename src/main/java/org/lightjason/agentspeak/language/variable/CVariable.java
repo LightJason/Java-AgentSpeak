@@ -202,21 +202,21 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CVariable<T>( m_functor, m_value )
-               : new CVariable<T>( p_prefix[0].append( m_functor ), m_value );
+               ? new CVariable<>( m_functor, m_value )
+               : new CVariable<>( p_prefix[0].append( m_functor ), m_value );
     }
 
 
     @Override
     public IVariable<T> shallowcopysuffix()
     {
-        return new CVariable<T>( m_functor.getSuffix(), m_value );
+        return new CVariable<>( m_functor.getSuffix(), m_value );
     }
 
     @Override
     public ITerm deepcopy( final IPath... p_prefix )
     {
-        return new CVariable<T>(
+        return new CVariable<>(
             ( p_prefix == null ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
@@ -227,7 +227,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public ITerm deepcopysuffix()
     {
-        return new CVariable<T>( m_functor.getSuffix(), new Cloner().deepClone( m_value ) );
+        return new CVariable<>( m_functor.getSuffix(), new Cloner().deepClone( m_value ) );
     }
 
     /**
