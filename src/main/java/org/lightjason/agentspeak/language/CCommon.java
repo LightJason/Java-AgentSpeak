@@ -104,7 +104,7 @@ public final class CCommon
         final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
         CCommon.streamconcat(
             p_variable,
-            p_agent.variablebuilder().generate( p_agent, p_instance ),
+            p_agent.variablebuilder().apply( p_agent, p_instance ),
             Stream.of( new CConstant<>( "Cycle", p_agent.cycle() ) )
         )
                .peek( l_variables::remove )

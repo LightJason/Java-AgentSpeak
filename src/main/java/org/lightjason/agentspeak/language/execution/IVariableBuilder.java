@@ -27,31 +27,21 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 
 /**
  * interface for a variable builder which is
  * called on each plan / rule execution
+ *
+ * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
  */
-public interface IVariableBuilder
+public interface IVariableBuilder extends BiFunction<IAgent<?>, IInstantiable, Stream<IVariable<?>>>
 {
     /**
      * empty variable builder
      */
     IVariableBuilder EMPTY = ( p_agent, p_runningcontext ) -> Stream.empty();
-
-    /**
-     * returns a set of variables / constants
-     * which are pushed to the plan / rule
-     * execution
-     *
-     * @param p_agent agent which is run
-     * @param p_runningcontext plan or rule
-     * @return variable stream
-     *
-     * @warning returning variable can be manipulate direct by the agent and generation must be thread-safe
-     */
-    Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext );
 
 }

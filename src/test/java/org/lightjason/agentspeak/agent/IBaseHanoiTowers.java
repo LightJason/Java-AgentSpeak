@@ -224,6 +224,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private final class CGenerator extends IBaseAgentGenerator<CAgent>
     {
+
         /**
          * ctor
          *
@@ -254,14 +255,14 @@ abstract class IBaseHanoiTowers extends IBaseTest
                 new IVariableBuilder()
                 {
                     @Override
-                    public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext
+                    public final Stream<IVariable<?>> apply( final IAgent<?> p_agent, final IInstantiable p_instantiable
                     )
                     {
                         return Stream.of(
                             new CConstant<>( "MyID", p_agent.<CAgent>raw().id() ),
-                            new CConstant<>( "TowerCount", m_towernumber ),
-                            new CConstant<>( "TowerMaxIndex", m_towernumber - 1 ),
-                            new CConstant<>( "SliceCount", m_slicenumber )
+                            new CConstant<>( "TowerCount", IBaseHanoiTowers.this.m_towernumber ),
+                            new CConstant<>( "TowerMaxIndex", IBaseHanoiTowers.this.m_towernumber - 1 ),
+                            new CConstant<>( "SliceCount", IBaseHanoiTowers.this.m_slicenumber )
                         );
                     }
                 }
