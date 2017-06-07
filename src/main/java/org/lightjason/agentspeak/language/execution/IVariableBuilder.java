@@ -39,15 +39,7 @@ public interface IVariableBuilder
     /**
      * empty variable builder
      */
-    IVariableBuilder EMPTY = new IVariableBuilder()
-    {
-        @Override
-        public final Stream<IVariable<?>> generate( final IAgent<?> p_agent, final IInstantiable p_runningcontext )
-        {
-            return Stream.<IVariable<?>>empty();
-        }
-
-    };
+    IVariableBuilder EMPTY = ( p_agent, p_runningcontext ) -> Stream.empty();
 
     /**
      * returns a set of variables / constants

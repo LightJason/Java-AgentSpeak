@@ -59,14 +59,7 @@ public final class CConsistency implements IConsistency
     /**
      * function for inverting probability
      */
-    private static final DoubleFunction PROBABILITYINVERT = new DoubleFunction()
-    {
-        @Override
-        public double apply( final double p_value )
-        {
-            return 1 - p_value;
-        }
-    };
+    private static final DoubleFunction PROBABILITYINVERT = p_value -> 1 - p_value;
     /**
      * algorithm to calculate stationary probability
      **/

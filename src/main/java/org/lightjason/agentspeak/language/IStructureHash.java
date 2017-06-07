@@ -35,7 +35,7 @@ public interface IStructureHash
     /**
      * comparator
      */
-    Comparator<IStructureHash> COMPARATOR = ( p_first, p_second ) -> Integer.compare( p_first.structurehash(), p_second.structurehash() );
+    Comparator<IStructureHash> COMPARATOR = Comparator.comparingInt( IStructureHash::structurehash );
 
 
     /**
