@@ -39,7 +39,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -71,10 +70,6 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     protected final ITrigger m_initialgoal;
     /**
-     * instance of the aggregate function
-     */
-    protected final IInjection m_aggregation;
-    /**
      * instance of agent plans
      */
     protected final Set<IPlan> m_plans;
@@ -105,7 +100,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         this(
             new CBoolFuzzy<>(), Collections.emptyList(),
             Collections.emptySet(), Collections.emptySet(),
-            null, new CUnifier(), IInjection.EMPTY
+            null, new CUnifier()
         );
     }
 
@@ -118,14 +113,13 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_rules rules
      * @param p_initialgoal initial goal
      * @param p_unifier unifier component
-     * @param p_aggregation aggregation function
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IInjection p_aggregation
+                                       final ILiteral p_initialgoal, final IUnifier p_unifier
     )
     {
-        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, IVariableBuilder.EMPTY );
+        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, IVariableBuilder.EMPTY );
     }
 
     /**
@@ -136,18 +130,16 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_plans plans
      * @param p_rules rules
      * @param p_initialgoal initial goal
-     * @param p_aggregation aggregation function
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
     public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
                                        final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IInjection p_aggregation,
+                                       final ILiteral p_initialgoal, final IUnifier p_unifier,
                                        final IVariableBuilder p_variablebuilder
     )
     {
         m_unifier = p_unifier;
-        m_aggregation = p_aggregation;
         m_fuzzy = p_fuzzy;
         m_variablebuilder = p_variablebuilder;
 
@@ -176,12 +168,6 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     public final ITrigger initialgoal()
     {
         return m_initialgoal;
-    }
-
-    @Override
-    public final IInjection aggregation()
-    {
-        return m_aggregation;
     }
 
     @Override
@@ -235,10 +221,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         ).trim();
 
         return MessageFormat.format(
-            "{0} ( unifier: {1} / aggregation {2} / {3} {4} )",
+            "{0} ( unifier: {1} / {2} {3} )",
             super.toString(),
             m_unifier,
-            m_aggregation,
             m_fuzzy,
             l_elements.isEmpty() ? "" : l_elements
         ).trim();

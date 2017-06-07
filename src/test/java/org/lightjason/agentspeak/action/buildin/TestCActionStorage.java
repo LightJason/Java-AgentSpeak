@@ -45,7 +45,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -85,7 +84,7 @@ public final class TestCActionStorage extends IBaseTest
     public final void initialize() throws Exception
     {
         m_context = new CContext(
-            new CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet(), IInjection.EMPTY ).generatesingle(),
+            new CGenerator( new ByteArrayInputStream( "".getBytes( StandardCharsets.UTF_8 ) ), Collections.emptySet() ).generatesingle(),
             new CPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "nothing" ) ), Collections.emptyList(), Collections.emptySet() ),
             Collections.emptyList()
         );
@@ -473,12 +472,11 @@ public final class TestCActionStorage extends IBaseTest
          *
          * @param p_stream asl stream
          * @param p_actions actions
-         * @param p_aggregation aggregation
          * @throws Exception is thrown on any error
          */
-        CGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IInjection p_aggregation ) throws Exception
+        CGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
         {
-            super( p_stream, p_actions, p_aggregation );
+            super( p_stream, p_actions );
         }
 
         @Override

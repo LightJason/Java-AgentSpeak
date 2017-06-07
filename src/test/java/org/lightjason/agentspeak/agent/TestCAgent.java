@@ -46,7 +46,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 import org.lightjason.agentspeak.language.variable.CConstant;
 
 import java.io.FileInputStream;
@@ -271,7 +270,7 @@ public final class TestCAgent extends IBaseTest
              */
             CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
             {
-                super( p_stream, p_actions, IInjection.EMPTY, ( p_agent, p_runningcontext ) -> Stream.of(
+                super( p_stream, p_actions, ( p_agent, p_runningcontext ) -> Stream.of(
                     new CConstant<>( "MyConstInt", 123 ),
                     new CConstant<>( "MyConstString", "here is a test string" )
                 ) );

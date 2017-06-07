@@ -30,7 +30,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.util.Collection;
 
@@ -56,14 +55,6 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      * @return initial goal literal
      */
     ITrigger initialgoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IInjection aggregation();
 
     /**
      * returns the unifier function

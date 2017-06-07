@@ -53,7 +53,6 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -124,10 +123,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      */
     private final IUnifier m_unifier;
     /**
-     * aggregation function
-     */
-    private final IInjection m_aggregation;
-    /**
      * variable builder
      */
     private final IVariableBuilder m_variablebuilder;
@@ -151,7 +146,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // initialize agent
         m_unifier = p_configuration.unifier();
         m_beliefbase = p_configuration.beliefbase();
-        m_aggregation = p_configuration.aggregation();
         m_variablebuilder = p_configuration.variablebuilder();
         m_fuzzy = p_configuration.fuzzy();
 
@@ -270,12 +264,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public final IFuzzy<Boolean, T> fuzzy()
     {
         return m_fuzzy;
-    }
-
-    @Override
-    public final IInjection aggregation()
-    {
-        return m_aggregation;
     }
 
     @Override

@@ -38,7 +38,6 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.IInjection;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
@@ -251,7 +250,6 @@ abstract class IBaseHanoiTowers extends IBaseTest
                     ),
                     CCommon.actionsFromPackage()
                 ).collect( Collectors.toSet() ),
-                IInjection.EMPTY,
                 Collections.emptySet(),
                 new IVariableBuilder()
                 {
