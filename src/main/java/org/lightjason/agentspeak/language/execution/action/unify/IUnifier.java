@@ -46,7 +46,7 @@ public interface IUnifier
      *
      * @note check input literal and result of correct unification
      */
-    Set<IVariable<?>> literal( final ILiteral p_literal, final ILiteral p_value );
+    Set<IVariable<?>> unify( final ILiteral p_literal, final ILiteral p_value );
 
     /**
      * unifies a literal - first found literal matches within the beliefbase
@@ -56,7 +56,6 @@ public interface IUnifier
      * @param p_variables number of unified variables
      */
     IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables );
-
 
     /**
      * unifies a literal - checks all possible literals with the given expression, first expression

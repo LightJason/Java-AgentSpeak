@@ -94,6 +94,29 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
+    public final Set<IVariable<?>> unify( final ILiteral p_literal, final ILiteral p_value )
+    {
+        final Set<IVariable<?>> l_result = new HashSet<>();
+
+        // try to unify exact or if not possible by recursive on the value set
+        if ( !(
+            p_literal.structurehash() == p_value.structurehash()
+            ? m_hashbased.unify(
+                l_result,
+                CCommon.recursiveterm( p_value.orderedvalues() ),
+                CCommon.recursiveterm( p_literal.orderedvalues() )
+            )
+            : m_recursive.unify(
+                l_result,
+                p_value.orderedvalues(),
+                p_literal.orderedvalues()
+            ) ) )
+            return Collections.<IVariable<?>>emptySet();
+
+        return l_result;
+    }
+
+    @Override
     public IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables, final IExpression p_expression,
                                        final boolean p_parallel
     )
@@ -142,29 +165,6 @@ public final class CUnifier implements IUnifier
         return p_parallel ? p_stream.parallel() : p_stream;
     }
 
-    @Override
-    public final Set<IVariable<?>> literal( final ILiteral p_literal, final ILiteral p_value )
-    {
-        final Set<IVariable<?>> l_result = new HashSet<>();
-
-        // try to unify exact or if not possible by recursive on the value set
-        if ( !(
-            p_literal.structurehash() == p_value.structurehash()
-            ? m_hashbased.unify(
-                l_result,
-                CCommon.recursiveterm( p_value.orderedvalues() ),
-                CCommon.recursiveterm( p_literal.orderedvalues() )
-            )
-            : m_recursive.unify(
-                l_result,
-                p_value.orderedvalues(),
-                p_literal.orderedvalues()
-            ) ) )
-            return Collections.<IVariable<?>>emptySet();
-
-        return l_result;
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -173,7 +173,7 @@ public final class CUnifier implements IUnifier
     @Override
     public final int hashCode()
     {
-        return m_hashbased.hashCode() + m_recursive.hashCode();
+        return m_hashbased.hashCode() ^ m_recursive.hashCode();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ public final class CUnifier implements IUnifier
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )
                       .parallel()
                       .filter( i -> i.emptyValues() == p_literal.emptyValues() )
-                      .map( i -> this.literal( (ILiteral) p_literal.deepcopy(), i ) )
+                      .map( i -> this.unify( (ILiteral) p_literal.deepcopy(), i ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }
