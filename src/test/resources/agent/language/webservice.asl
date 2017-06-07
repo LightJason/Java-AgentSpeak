@@ -33,30 +33,40 @@
 .
 
 
+/**
+ * test webservice via json list
+ **/
 +!testjsonlist <-
     GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
     +webservice( GH )
 .
 
 
-
+/**
+ * test webservice via json object
+ **/
 +!testjsonobject <-
     GO = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
     +webservice( GO )
 .
 
 
+/**
+ * test webservice via xml object
+ **/
 +!testxmlobject <-
     WP = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
     +webservice( WP )
 .
 
 
+/**
+ * add trigger
+ **/
 +webservice(X) <-
     [_|D] =.. X;
     D = collection/list/get(D, 0);
     [N] =.. D;
 
-    generic/print( N );
-    test/result( success )
+    test/result( bool/or( bool/equal( N, "elements" ), bool/equal( N, "schemalocation" ), bool/equal( N, "location" ) ) )
 .

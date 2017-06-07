@@ -27,12 +27,26 @@
  * base test
  */
 +!test <-
-    +addbelief( 123 );
-    +addbelief( "data" )
+
+    +belief(1);
+    +belief(2);
+    +belief(3);
+    +belief(3);
+
+    !goaltrigger
 .
 
 
-+addbelief( X ) <-
-    generic/print( X );
-    test/result( success )
+/**
+ * add trigger
+ **/
++belief(N)
+   : N == 1 <- test/result( success )
+   : N == 2 <- test/result( success )
+   : N == 3 <- test/result( success )
 .
+
+/**
+ * goal trigger
+ **/
++!goaltrigger <- test/result( success ).
