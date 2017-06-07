@@ -199,7 +199,6 @@ public final class CUnifier implements IUnifier
     {
         return p_agent.beliefbase()
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )
-                      .parallel()
                       .filter( i -> i.emptyValues() == p_literal.emptyValues() )
                       .map( i -> this.unify( (ILiteral) p_literal.deepcopy(), i ) )
                       .filter( i -> p_variablenumber == i.size() )
