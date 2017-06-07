@@ -53,33 +53,22 @@ public interface IUnifier
      *
      * @param p_context running context
      * @param p_literal literal with variables (creates a deep-copy)
-     * @param p_variablenumber number of unified variables
+     * @param p_variables number of unified variables
      */
-    IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber );
+    IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables );
 
 
     /**
-     * unifies a literal in parallel - checks all possible literals in parallel with the given expression, first expression
+     * unifies a literal - checks all possible literals with the given expression, first expression
      * which finish successful is the result
      *
      * @param p_context running context
      * @param p_literal literal with variables (creates a deep-copy)
-     * @param p_variablenumber number of unified variables
-     * @param p_constraint expression
+     * @param p_variables number of unified variables
+     * @param p_expression expression
+     * @param p_parallel parallel executon
      * @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> parallel( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
-
-    /**
-     * unifies a literal in sequential - checks all possible literals in sequential with the given expression, first expression
-     * which finish successful is the result
-     *
-     * @param p_context running context
-     * @param p_literal literal with variables (creates a deep-copy)
-     * @param p_variablenumber number of unified variables
-     * @param p_constraint expression
-     * @return boolean if a unify can be done
-     */
-    IFuzzyValue<Boolean> sequential( final IContext p_context, final ILiteral p_literal, final long p_variablenumber, final IExpression p_constraint );
+    IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables, final IExpression p_expression, final boolean p_parallel );
 
 }

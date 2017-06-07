@@ -69,9 +69,7 @@ public final class CExpressionUnify extends CDefaultUnify
     public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
-        return m_parallel
-               ? p_context.agent().unifier().parallel( p_context, m_value, m_variablenumber, m_expression )
-               : p_context.agent().unifier().sequential( p_context, m_value, m_variablenumber, m_expression );
+        return p_context.agent().unifier().unify( p_context, m_value, m_variablenumber, m_expression, m_parallel );
     }
 
     @Override

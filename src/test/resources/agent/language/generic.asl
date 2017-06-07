@@ -46,7 +46,7 @@ foo(blub(1),hello("test")).
     !testdatetime;
     !testbool;
     !teststring;
-    //!testunification;
+    //!testunification
     !testdeconstruct
 .
 
@@ -106,6 +106,7 @@ foo(blub(1),hello("test")).
  */
 +!testunification <-
 
+/*
         // unify default
         >>hello( UN1 );
         generic/print( "first unification", UN1 );
@@ -121,11 +122,14 @@ foo(blub(1),hello("test")).
         generic/print( "third unification", UN3a, UN3b );
         test/result( bool/equal( UN3a, 1 ), "third unification first part has been failed" );
         test/result( bool/equal( UN3b, "test" ), "third unification first part has been failed" );
-
+*/
         // unify by parsing literal
         // @bug unification creates NPE
-        UN4data = generic/type/parseliteral( "foo(12345)" )
-        //>>( foo(UN4data), UN4 ) << true;
+        generic/print("xxxx");
+        UN4data = generic/type/parseliteral( "foo(12345)" );
+        >>( foo(UN4data), UN4 );
+
+        generic/print("--->", UN4data, UN4 )
 
         //>>foo( UN2, UN3 ) << true;
         //generic/print("----> unification", UN4data )

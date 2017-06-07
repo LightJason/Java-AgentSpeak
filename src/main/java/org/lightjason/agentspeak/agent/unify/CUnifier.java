@@ -41,6 +41,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -81,10 +82,10 @@ public final class CUnifier implements IUnifier
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variablenumber )
+    public final IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variablenumber );
+        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 
@@ -93,17 +94,17 @@ public final class CUnifier implements IUnifier
     }
 
     @Override
-    public final IFuzzyValue<Boolean> parallel( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
-                                                final IExpression p_expression
+    public IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables, final IExpression p_expression,
+                                       final boolean p_parallel
     )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variablenumber );
+        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 
         // otherwise the expression must be checked, first match will be used
-        final Set<IVariable<?>> l_result = l_variables.parallelStream()
+        final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
                                                       .filter( i -> {
                                                           final List<ITerm> l_return = new LinkedList<>();
                                                           p_expression.execute(
@@ -112,7 +113,7 @@ public final class CUnifier implements IUnifier
                                                                   i.parallelStream()
                                                               ),
                                                               false,
-                                                              Collections.<ITerm>emptyList(),
+                                                              Collections.emptyList(),
                                                               l_return
                                                           );
                                                           return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
@@ -128,40 +129,17 @@ public final class CUnifier implements IUnifier
         return CFuzzyValue.from( true );
     }
 
-    @Override
-    public final IFuzzyValue<Boolean> sequential( final IContext p_context, final ILiteral p_literal, final long p_variablenumber,
-                                                  final IExpression p_expression
-    )
+    /**
+     * execute stream in parallel
+     *
+     * @param p_stream stream
+     * @param p_parallel parallel
+     * @tparam T stream elements
+     * @return modified stream
+     */
+    private static <T> Stream<T> parallelstream( final Stream<T> p_stream, final boolean p_parallel )
     {
-        // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variablenumber );
-        if ( l_variables.isEmpty() )
-            return CFuzzyValue.from( false );
-
-        // otherwise the expression must be checked, first match will be used
-        final Set<IVariable<?>> l_result = l_variables.stream()
-                                                      .filter( i -> {
-                                                          final List<ITerm> l_return = new LinkedList<>();
-                                                          p_expression.execute(
-                                                              CCommon.updatecontext(
-                                                                  p_context.duplicate(),
-                                                                  i.parallelStream()
-                                                              ),
-                                                              false,
-                                                              Collections.<ITerm>emptyList(),
-                                                              l_return
-                                                          );
-                                                          return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
-                                                      } )
-                                                      .findFirst()
-                                                      .orElse( Collections.<IVariable<?>>emptySet() );
-
-        // if no match
-        if ( l_result.isEmpty() )
-            return CFuzzyValue.from( false );
-
-        CCommon.updatecontext( p_context, l_result.parallelStream() );
-        return CFuzzyValue.from( true );
+        return p_parallel ? p_stream.parallel() : p_stream;
     }
 
     @Override

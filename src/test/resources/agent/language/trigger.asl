@@ -30,15 +30,19 @@
 
     +belief(1);
     +belief(2);
+
     +belief(3);
     +belief(3);
 
-    !goaltrigger
+    +delbelief("test");
+
+    !goaltrigger;
+    !errortrigger
 .
 
 
 /**
- * add trigger
+ * add belief trigger
  **/
 +belief(N)
    : N == 1 <- test/result( success )
@@ -47,6 +51,27 @@
 .
 
 /**
+ * delete belief trigger
+ **/
++delbelief(X) <- test/result( bool/equal( X, "test" ) ); -delbelief(X).
+
+/**
+ * delete belief
+ **/
+-delbelief(X) <- test/result( bool/equal( X, "test" ) ).
+
+
+/**
  * goal trigger
  **/
 +!goaltrigger <- test/result( success ).
+
+/**
+ * error trigger
+ **/
++!errortrigger <- test/result( success ); fail.
+
+/**
+ * error trigger
+ **/
+-!errortrigger <- test/result( success ).
