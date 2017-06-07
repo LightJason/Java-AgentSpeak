@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.language.execution.action.unify;
 
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -56,6 +58,9 @@ public final class CExpressionUnify extends CDefaultUnify
     {
         super( p_parallel, p_literal );
         m_expression = p_expression;
+
+        if ( m_expression == null )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "noexpression", p_literal ) );
     }
 
 
