@@ -113,21 +113,17 @@ public final class CUnifier implements IUnifier
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
 
-        System.out.println( "---> " + l_variables );
-
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
-                                                      .filter( i -> evaluateexpression( p_expression, p_context.duplicate(), i ) )
+                                                      .filter( i -> evaluateexpression( p_expression, p_context, i ) )
                                                       .findFirst()
                                                       .orElse( Collections.emptySet() );
-
-        System.out.println( "---> " + l_result );
 
         // if no match
         if ( l_result.isEmpty() )
             return CFuzzyValue.from( false );
 
-        CCommon.updatecontext( p_context, l_result.parallelStream() );
+        CCommon.updatecontext( p_context, l_result.stream() );
         return CFuzzyValue.from( true );
     }
 
@@ -135,7 +131,7 @@ public final class CUnifier implements IUnifier
      * evaluate expression
      *
      * @param p_expression expression
-     * @param p_context execution context (mostly a new instance)
+     * @param p_context execution context (will be duplicated)
      * @param p_variables current variables
      * @return boolean for correct evaluation
      */
@@ -148,6 +144,7 @@ public final class CUnifier implements IUnifier
             Collections.emptyList(),
             l_return
         );
+
         return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
     }
 
