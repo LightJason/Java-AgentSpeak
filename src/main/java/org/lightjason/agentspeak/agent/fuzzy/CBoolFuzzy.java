@@ -24,11 +24,11 @@
 package org.lightjason.agentspeak.agent.fuzzy;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.fuzzy.defuzzification.CCrisp;
-import org.lightjason.agentspeak.language.execution.fuzzy.defuzzification.IDefuzzification;
-import org.lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyOperator;
-import org.lightjason.agentspeak.language.execution.fuzzy.operator.bool.CComplement;
-import org.lightjason.agentspeak.language.execution.fuzzy.operator.bool.CIntersection;
+import org.lightjason.agentspeak.language.fuzzy.defuzzification.CCrisp;
+import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CComplement;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CIntersection;
 
 import java.text.MessageFormat;
 

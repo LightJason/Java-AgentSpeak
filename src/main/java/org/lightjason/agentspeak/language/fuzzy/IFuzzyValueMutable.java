@@ -21,25 +21,38 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy.operator;
-
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+package org.lightjason.agentspeak.language.fuzzy;
 
 
 /**
- * fuzzy complement
+ * interface for a mutable fuzzy value
  *
  * @tparam T fuzzy type
  */
-public interface IFuzzyComplement<T>
+public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
 {
 
     /**
-     * creates the complement of a fuzzy value
+     * sets the fuzzy value
      *
-     * @param p_value value
-     * @return complement value
+     * @param p_value new value
+     * @return self reference
      */
-    IFuzzyValue<T> complement( final IFuzzyValue<T> p_value );
+    IFuzzyValueMutable<T> value( final T p_value );
+
+    /**
+     * sets the weight
+     *
+     * @param p_value weight
+     * @return self reference
+     */
+    IFuzzyValueMutable<T> fuzzy( final double p_value );
+
+    /**
+     * returns an immutable instance of the object
+     *
+     * @return immutable instance
+     */
+    IFuzzyValue<T> immutable();
 
 }

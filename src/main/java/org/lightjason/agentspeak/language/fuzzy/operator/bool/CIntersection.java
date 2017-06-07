@@ -21,12 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy.operator.bool;
+package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValueMutable;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValueMutable;
-import org.lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyOperator;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValueMutable;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,27 +38,27 @@ import java.util.function.Supplier;
 
 
 /**
- * fuzzy-boolean disjunction / union
+ * fuzzy-boolean conjunction / intersection
  */
-public final class CUnion implements IFuzzyOperator<Boolean>
+public final class CIntersection implements IFuzzyOperator<Boolean>
 {
 
     @Override
     public final Supplier<IFuzzyValueMutable<Boolean>> supplier()
     {
-        return CUnion::factory;
+        return CIntersection::factory;
     }
 
     @Override
     public final BiConsumer<IFuzzyValueMutable<Boolean>, IFuzzyValue<Boolean>> accumulator()
     {
-        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
+        return ( i, j ) -> i.fuzzy( Math.min( i.fuzzy(), j.fuzzy() ) ).value( i.value() && j.value() );
     }
 
     @Override
     public final BinaryOperator<IFuzzyValueMutable<Boolean>> combiner()
     {
-        return ( i, j ) -> i.fuzzy( Math.max( i.fuzzy(), j.fuzzy() ) ).value( i.value() || j.value() );
+        return ( i, j ) -> i.fuzzy( Math.min( i.fuzzy(), j.fuzzy() ) ).value( i.value() && j.value() );
     }
 
     @Override
@@ -88,7 +88,7 @@ public final class CUnion implements IFuzzyOperator<Boolean>
      */
     private static IFuzzyValueMutable<Boolean> factory()
     {
-        return CFuzzyValueMutable.from( false, 0 );
+        return CFuzzyValueMutable.from( true, 1 );
     }
 
 }

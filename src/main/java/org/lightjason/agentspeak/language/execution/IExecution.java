@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import java.util.List;

@@ -21,11 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy.defuzzification;
+package org.lightjason.agentspeak.language.fuzzy.defuzzification;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyComplement;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyComplement;
 
 
 /**

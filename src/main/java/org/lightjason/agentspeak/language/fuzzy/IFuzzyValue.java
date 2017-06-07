@@ -21,38 +21,36 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy;
 
 
 /**
- * interface for a mutable fuzzy value
+ * result for an immutable fuzzy value
  *
  * @tparam T fuzzy type
  */
-public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
+public interface IFuzzyValue<T>
 {
+    /**
+     * returns the result
+     *
+     * @return value
+     */
+    T value();
 
     /**
-     * sets the fuzzy value
+     * returns the fuzziness
      *
-     * @param p_value new value
-     * @return self reference
+     * @return fuzzy value in [0,1]
      */
-    IFuzzyValueMutable<T> value( final T p_value );
+    double fuzzy();
 
     /**
-     * sets the weight
+     * checkes assignable of the value
      *
-     * @param p_value weight
-     * @return self reference
+     * @param p_class class
+     * @return assignable (on null always true)
      */
-    IFuzzyValueMutable<T> fuzzy( final double p_value );
-
-    /**
-     * returns an immutable instance of the object
-     *
-     * @return immutable instance
-     */
-    IFuzzyValue<T> immutable();
+    boolean valueAssignableTo( final Class<?>... p_class );
 
 }

@@ -21,36 +21,37 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy;
+package org.lightjason.agentspeak.language.fuzzy.defuzzification;
+
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * result for an immutable fuzzy value
+ * defuzzification interface
  *
  * @tparam T fuzzy type
+ * @tparam S agent type
+ * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IFuzzyValue<T>
+public interface IDefuzzification<T, S extends IAgent<?>>
 {
-    /**
-     * returns the result
-     *
-     * @return value
-     */
-    T value();
 
     /**
-     * returns the fuzziness
+     * runs the defuzzyification algorithm
      *
-     * @return fuzzy value in [0,1]
+     * @param p_value fuzzy value
+     * @return native value
      */
-    double fuzzy();
+    T defuzzify( final IFuzzyValue<T> p_value );
 
     /**
-     * checkes assignable of the value
+     * update of the internal defuzzification
+     * structure on the agent-cycle
      *
-     * @param p_class class
-     * @return assignable (on null always true)
+     * @param p_agent agent object
+     * @return agent reference
      */
-    boolean valueAssignableTo( final Class<?>... p_class );
+    S update( final S p_agent );
 
 }

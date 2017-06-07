@@ -28,8 +28,8 @@ import org.lightjason.agentspeak.action.buildin.math.blas.CFormat1D;
 import org.lightjason.agentspeak.action.buildin.math.blas.CFormat2D;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import java.io.PrintStream;
 import java.text.MessageFormat;

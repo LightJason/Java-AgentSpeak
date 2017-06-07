@@ -21,21 +21,29 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy.operator.bool;
+package org.lightjason.agentspeak.language.fuzzy.operator;
 
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.operator.IFuzzyComplement;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
+
+import java.util.stream.Collector;
 
 
 /**
- * fuzzy-boolean complement
+ * defines a fuzzy t-norm
+ *
+ * @tparam T fuzzy type
  */
-public final class CComplement implements IFuzzyComplement<Boolean>
+public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
 {
-    @Override
-    public final IFuzzyValue<Boolean> complement( final IFuzzyValue<Boolean> p_value )
-    {
-        return CFuzzyValue.from( !p_value.value(), 1 - p_value.fuzzy() );
-    }
+
+    /**
+     * calculates for a array of values the result
+     *
+     * @param p_values values
+     * @return result value
+     */
+    @SuppressWarnings( "unchecked" )
+    IFuzzyValue<T> result( final IFuzzyValue<T>... p_values );
+
 }

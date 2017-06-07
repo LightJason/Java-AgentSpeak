@@ -21,37 +21,21 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy.defuzzification;
+package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyComplement;
 
 
 /**
- * defuzzification interface
- *
- * @tparam T fuzzy type
- * @tparam S agent type
- * @see https://en.wikipedia.org/wiki/Defuzzification
+ * fuzzy-boolean complement
  */
-public interface IDefuzzification<T, S extends IAgent<?>>
+public final class CComplement implements IFuzzyComplement<Boolean>
 {
-
-    /**
-     * runs the defuzzyification algorithm
-     *
-     * @param p_value fuzzy value
-     * @return native value
-     */
-    T defuzzify( final IFuzzyValue<T> p_value );
-
-    /**
-     * update of the internal defuzzification
-     * structure on the agent-cycle
-     *
-     * @param p_agent agent object
-     * @return agent reference
-     */
-    S update( final S p_agent );
-
+    @Override
+    public final IFuzzyValue<Boolean> complement( final IFuzzyValue<Boolean> p_value )
+    {
+        return CFuzzyValue.from( !p_value.value(), 1 - p_value.fuzzy() );
+    }
 }

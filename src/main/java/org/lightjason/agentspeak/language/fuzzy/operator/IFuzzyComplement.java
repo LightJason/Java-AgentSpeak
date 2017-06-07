@@ -21,29 +21,25 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.fuzzy.operator;
+package org.lightjason.agentspeak.language.fuzzy.operator;
 
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValueMutable;
-
-import java.util.stream.Collector;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 
 /**
- * defines a fuzzy t-norm
+ * fuzzy complement
  *
  * @tparam T fuzzy type
  */
-public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValueMutable<T>, IFuzzyValue<T>>
+public interface IFuzzyComplement<T>
 {
 
     /**
-     * calculates for a array of values the result
+     * creates the complement of a fuzzy value
      *
-     * @param p_values values
-     * @return result value
+     * @param p_value value
+     * @return complement value
      */
-    @SuppressWarnings( "unchecked" )
-    IFuzzyValue<T> result( final IFuzzyValue<T>... p_values );
+    IFuzzyValue<T> complement( final IFuzzyValue<T> p_value );
 
 }
