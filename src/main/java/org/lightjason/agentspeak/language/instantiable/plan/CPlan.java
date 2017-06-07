@@ -174,22 +174,13 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return (Stream<IVariable<?>>) Stream.of(
-            m_condition != null
-            ? m_condition.variables()
-            : Stream.<IVariable<?>>empty(),
-
+        return CCommon.streamconcat(
+            m_condition != null ? m_condition.variables() : Stream.empty(),
             super.variables(),
-
-            CCommon.recursiveterm( m_triggerevent.literal().orderedvalues() )
-                   .filter( i -> i instanceof IVariable<?> )
-                   .map( i -> (IVariable<?>) i )
-        )
-                                            .reduce( Stream::concat )
-                                            .orElseGet( Stream::<IVariable<?>>empty );
+            CCommon.recursiveterm( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+        );
     }
 
 }

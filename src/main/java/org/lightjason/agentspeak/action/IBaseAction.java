@@ -63,7 +63,7 @@ public abstract class IBaseAction implements IAction
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Stream.<IVariable<?>>empty();
+        return Stream.empty();
     }
 
 }

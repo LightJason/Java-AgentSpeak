@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
@@ -170,6 +171,19 @@ public final class CCommon
     }
 
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * concat multiple streams
+     *
+     * @param p_streams streams
+     * @tparam T any value type
+     * @return concated stream
+     */
+    @SafeVarargs
+    public static <T> Stream<T> streamconcat( final Stream<T>... p_streams )
+    {
+        return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );
+    }
 
     /**
      * consts the variables within a literal

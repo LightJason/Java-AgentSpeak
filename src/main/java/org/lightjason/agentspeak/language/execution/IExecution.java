@@ -54,7 +54,9 @@ public interface IExecution
      *
      * @param p_agent agent for which calculates the score value
      * @return score value
+     * @deprecated obsolete
      */
+    @Deprecated
     double score( final IAgent<?> p_agent );
 
     /**
