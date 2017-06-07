@@ -102,16 +102,13 @@ public final class CCommon
     public static IContext instantiate( final IInstantiable p_instance, final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
     {
         final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
-        Stream.of(
+        CCommon.streamconcat(
             p_variable,
             p_agent.variablebuilder().generate( p_agent, p_instance ),
             Stream.of( new CConstant<>( "Cycle", p_agent.cycle() ) )
-        ).reduce( Stream::concat )
-              .orElseGet( Stream::<IVariable<?>>empty )
-              .forEach( i -> {
-                  l_variables.remove( i );
-                  l_variables.add( i );
-              } );
+        )
+               .peek( l_variables::remove )
+               .forEach( l_variables::add );
 
         return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
     }
@@ -124,7 +121,7 @@ public final class CCommon
      * @param p_unifier unifier
      * @param p_source input trigger (with values)
      * @param p_target trigger (of a plan / rule)
-     * @return  pair of valid unification and unified variables
+     * @return pair of valid unification and unified variables
      */
     public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( final IUnifier p_unifier, final ITrigger p_source, final ITrigger p_target )
     {

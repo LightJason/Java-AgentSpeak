@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.annotation;
+package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
 import java.util.Arrays;
 
@@ -52,18 +52,6 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     {
         m_value = p_value;
         m_type = p_type;
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_type.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return ( p_object != null ) && ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

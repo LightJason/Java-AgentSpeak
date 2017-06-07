@@ -57,9 +57,9 @@ import org.lightjason.agentspeak.language.execution.action.achievement_test.CTes
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
-import org.lightjason.agentspeak.language.execution.annotation.CAtomAnnotation;
-import org.lightjason.agentspeak.language.execution.annotation.CValueAnnotation;
-import org.lightjason.agentspeak.language.execution.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.expression.CAtom;
 import org.lightjason.agentspeak.language.execution.expression.CProxyReturnExpression;
 import org.lightjason.agentspeak.language.execution.expression.EOperator;

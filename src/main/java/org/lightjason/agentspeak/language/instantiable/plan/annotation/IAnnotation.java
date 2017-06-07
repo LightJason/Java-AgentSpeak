@@ -21,37 +21,80 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.annotation;
+package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
-import java.text.MessageFormat;
+
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import java.util.stream.Stream;
 
 
 /**
- * number annotation
+ * annotation interface
+ *
+ * @tparam T annotation data type
  */
-public final class CValueAnnotation<T> extends IBaseAnnotation<T>
+public interface IAnnotation<T>
 {
     /**
-     * name of the annotation
+     * returns the type of the annotation
+     *
+     * @return type
      */
-    private final String m_name;
+    EType id();
 
     /**
-     * ctor
+     * returns the data of the annotation if exists
      *
-     * @param p_type type
-     * @param p_data number
+     * @return data or null
      */
-    public CValueAnnotation( final EType p_type, final String p_name, final T p_data )
-    {
-        super( p_type, p_data );
-        m_name = p_name;
-    }
+    <N> N value();
 
-    @Override
-    public final String toString()
+    /**
+     * checkes assignable of the value
+     *
+     * @param p_class class
+     * @return assignable (on null always true)
+     */
+    boolean valueAssignableTo( final Class<?>... p_class );
+
+    /**
+     * returns a stream of variables
+     *
+     * @return variabel stream
+     */
+    Stream<IVariable<?>> variables();
+
+
+    /**
+     * annotation types
+     */
+    enum EType
     {
-        return MessageFormat.format( "{0}({1}, {1})", m_type, m_name, m_value );
+        CONSTANT( "@Constant" ),
+        ATOMIC( "@Atomic" ),
+        PARALLEL( "@Parallel" );
+
+        /**
+         * text name of the enum
+         */
+        private final String m_name;
+
+        /**
+         * ctor
+         *
+         * @param p_name text name
+         */
+        EType( final String p_name )
+        {
+            m_name = p_name;
+        }
+
+        @Override
+        public final String toString()
+        {
+            return m_name;
+        }
     }
 
 }

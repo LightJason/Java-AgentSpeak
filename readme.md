@@ -146,8 +146,8 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 * If more than one ```action-term-annotation``` is needs to be added, they have to be ordered according to the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
 * To annotate multiple actions/terms brackets ```(```,```)``` can be used. See the following examples
 * Examples
-    * ```@>>( foo(X), X > 1 ) && Score > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Score > 0.5```)
-    * ```>>foo(X) && X > 1 && Score > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
+    * ```@>>( foo(X), X > 1 ) && Value > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Value > 0.5```)
+    * ```>>foo(X) && X > 1 && Value > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
 
 
 ## <a name="graphic">Graphical Representation</a> 

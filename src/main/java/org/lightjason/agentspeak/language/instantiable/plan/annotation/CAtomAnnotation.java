@@ -21,7 +21,12 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.annotation;
+package org.lightjason.agentspeak.language.instantiable.plan.annotation;
+
+
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import java.util.stream.Stream;
 
 
 /**
@@ -44,5 +49,23 @@ public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
     public final String toString()
     {
         return m_type.toString();
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_type.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
+    @Override
+    public final Stream<IVariable<?>> variables()
+    {
+        return Stream.empty();
     }
 }

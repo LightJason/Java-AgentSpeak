@@ -28,7 +28,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.annotation.IAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
@@ -162,6 +162,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         return CCommon.streamconcat(
             m_condition != null ? m_condition.variables() : Stream.empty(),
             super.variables(),
+            m_annotation.values().stream().flatMap( IAnnotation::variables ),
             CCommon.recursiveterm( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
         );
     }
