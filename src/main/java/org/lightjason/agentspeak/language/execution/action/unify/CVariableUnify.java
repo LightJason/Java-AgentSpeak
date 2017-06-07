@@ -60,7 +60,7 @@ public final class CVariableUnify extends CDefaultUnify
         super( p_parallel, p_literal );
         m_variable = p_variable;
 
-        if ( p_variable == null )
+        if ( m_variable == null )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable", p_literal ) );
     }
 
