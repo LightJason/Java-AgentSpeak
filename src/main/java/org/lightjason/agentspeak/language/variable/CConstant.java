@@ -88,15 +88,15 @@ public final class CConstant<T> extends CVariable<T>
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CConstant<T>( m_functor, m_value )
-               : new CConstant<T>( p_prefix[0].append( m_functor ), m_value );
+               ? new CConstant<>( m_functor, m_value )
+               : new CConstant<>( p_prefix[0].append( m_functor ), m_value );
     }
 
 
     @Override
     public final IVariable<T> shallowcopysuffix()
     {
-        return new CConstant<T>( m_functor.getSuffix(), m_value );
+        return new CConstant<>( m_functor.getSuffix(), m_value );
     }
 
 }

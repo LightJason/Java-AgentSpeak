@@ -102,7 +102,7 @@ public final class CCommon
 
         final List<IExpression> l_expression = new LinkedList<>();
         l_expression.add( p_lefthandside );
-        p_righthandside.forEach( l_expression::add );
+        p_righthandside.addAll( l_expression );
 
         // only left-hand-side is existing
         if ( l_expression.size() == 1 )

@@ -369,7 +369,7 @@ public final class CConsistency implements IConsistency
             final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();
             return l_eigen.getV().viewColumn(
                 IntStream.range( 0, l_eigenvalues.length - 1 ).parallel()
-                         .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).getAsInt()
+                         .reduce( ( i, j ) -> l_eigenvalues[i] < l_eigenvalues[j] ? j : i ).orElse( 0 )
             );
         }
 

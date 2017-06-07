@@ -70,7 +70,7 @@ public final class CPath implements IPath
     public CPath( final IPath p_path, final String... p_varargs )
     {
         this( p_path );
-        Arrays.stream( p_varargs ).forEach( m_path::add );
+        m_path.addAll( Arrays.asList( p_varargs ) );
         this.normalize();
     }
 
@@ -343,7 +343,7 @@ public final class CPath implements IPath
     {
         final List<String> l_path = Stream.concat( p_path.stream(), m_path.stream() ).collect( Collectors.toList() );
         m_path.clear();
-        l_path.forEach( m_path::add );
+        m_path.addAll( l_path );
         return this;
     }
 
@@ -422,7 +422,7 @@ public final class CPath implements IPath
 
         // clear internal path and add optimized path
         m_path.clear();
-        l_backremove.forEach( m_path::add );
+        m_path.addAll( l_backremove );
     }
 
     /**
