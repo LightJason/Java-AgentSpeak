@@ -82,24 +82,27 @@ public final class CUnifier implements IUnifier
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public final Set<IVariable<?>> unify( final ILiteral p_literal, final ILiteral p_value )
+    public final Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
     {
+        if ( ( p_source == null ) || ( p_target == null ) )
+            return Collections.emptySet();
+
         final Set<IVariable<?>> l_result = new HashSet<>();
 
         // try to unify exact or if not possible by recursive on the value set
         if ( !(
-            p_literal.structurehash() == p_value.structurehash()
+            p_target.structurehash() == p_source.structurehash()
             ? m_hashbased.unify(
                 l_result,
-                CCommon.recursiveterm( p_value.orderedvalues() ),
-                CCommon.recursiveterm( p_literal.orderedvalues() )
+                CCommon.recursiveterm( p_source.orderedvalues() ),
+                CCommon.recursiveterm( p_target.orderedvalues() )
             )
             : m_recursive.unify(
                 l_result,
-                p_value.orderedvalues(),
-                p_literal.orderedvalues()
+                p_source.orderedvalues(),
+                p_target.orderedvalues()
             ) ) )
-            return Collections.<IVariable<?>>emptySet();
+            return Collections.emptySet();
 
         return l_result;
     }
@@ -112,8 +115,6 @@ public final class CUnifier implements IUnifier
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
-
-        System.out.println( this.getClass() + " -> " + l_variables );
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
@@ -202,7 +203,7 @@ public final class CUnifier implements IUnifier
         return p_agent.beliefbase()
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )
                       .filter( i -> i.emptyValues() == p_literal.emptyValues() )
-                      .map( i -> this.unify( (ILiteral) p_literal.deepcopy(), i ) )
+                      .map( i -> this.unify( i, (ILiteral) p_literal.deepcopy() ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }

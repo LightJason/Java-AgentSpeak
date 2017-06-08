@@ -155,7 +155,11 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitBelief( final PlanBundleParser.BeliefContext p_context )
     {
-        return this.visitLiteral( p_context.literal() );
+        if (p_context.literal() == null)
+            return null;
+
+        m_initialbeliefs.add( (ILiteral) this.visitLiteral( p_context.literal() ) );
+        return null;
     }
 
     @Override

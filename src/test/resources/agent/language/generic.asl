@@ -108,27 +108,26 @@ foo(blub(1),hello("test")).
         // unify default
         >>hello( UN1 );
         generic/print( "first unification", UN1 );
-        test/result( bool/equal( UN1, 123 ), "first unification has been failed" )
-/*
+        test/result( bool/equal( UN1, 123 ), "first unification has been failed" );
+
         // unify subitem
         >>foo( blub(1), hello( UN2 ) );
         generic/print( "second unification", UN2 );
         test/result( bool/equal( UN2, "test" ), "second unification has been failed" );
 
         // unify two items
-        >>foo( blub( UN3a ), hello( UN3b ) ) << true;
+        >>foo( blub( UN3a ), hello( UN3b ) );
         generic/print( "third unification", UN3a, UN3b );
         test/result( bool/equal( UN3a, 1 ), "third unification first part has been failed" );
         test/result( bool/equal( UN3b, "test" ), "third unification first part has been failed" );
 
         // unify by parsing literal
-        // @bug unification creates NPE
-        generic/print("xxxx");
-        UN4data = generic/type/parseliteral( "foo(12345)" );
-        >>( foo(UN4data), UN4 );
+        Literal = generic/type/parseliteral( "foo(12345)" );
+        >>( foo(UN4), Literal );
+        generic/print( "forth unification", UN4 );
+        test/result( bool/equal( UN4, 12345 ), "forth unification first part has been failed" )
 
-        generic/print("--->", UN4data, UN4 )
-
+/*
         //>>foo( UN2, UN3 ) << true;
         //generic/print("----> unification", UN4data )
 

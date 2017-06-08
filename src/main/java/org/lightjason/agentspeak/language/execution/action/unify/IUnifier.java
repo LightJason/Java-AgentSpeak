@@ -40,13 +40,13 @@ public interface IUnifier
     /**
      * unifies a literal
      *
-     * @param p_literal literal with variables (creates a deep-copy)
-     * @param p_value source literal with values
+     * @param p_source source literal (with data)
+     * @param p_target target literal (with variables)
      * @return set with allocated variables
      *
      * @note check input literal and result of correct unification
      */
-    Set<IVariable<?>> unify( final ILiteral p_literal, final ILiteral p_value );
+    Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target );
 
     /**
      * unifies a literal - checks all possible literals with the given expression, first expression

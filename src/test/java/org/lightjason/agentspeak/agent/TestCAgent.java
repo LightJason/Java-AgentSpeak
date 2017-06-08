@@ -101,7 +101,7 @@ public final class TestCAgent extends IBaseTest
             //new ImmutableTriple<>( "src/test/resources/agent/language/collection.asl", 2, 5 ),
             // unifcation bug - should be 18 tests -> new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 14 )
 
-            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 1 )
+            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 5 )
             //new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 ),
             //new ImmutableTriple<>( "src/test/resources/agent/language/trigger.asl", 3, 8 ),
             //new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 3 )
@@ -140,8 +140,6 @@ public final class TestCAgent extends IBaseTest
                                               CCommon.actionsFromPackage()
                                           ).collect( Collectors.toSet() )
                                       ).generatesingle();
-
-            System.out.println( this.getClass() + " -> " + l_agent.beliefbase().stream().collect( Collectors.toList() ) );
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
                      .forEach( i -> {
