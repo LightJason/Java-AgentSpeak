@@ -227,21 +227,11 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         // build path relative to this view
         final IPath l_path = this.path().getSubPath( 1 );
-        return ( p_path == null ) || ( p_path.length == 0 )
-
-               ?
-               Stream.concat(
-                   m_beliefbase.streamLiteral().parallel().map( i -> i.shallowcopy( l_path ) ),
-                   m_beliefbase.streamView().parallel().flatMap( i -> i.stream().parallel().map( j -> j.shallowcopy( l_path ) )
-                   )
-               )
-
-               :
-               Arrays.stream( p_path )
-                     .parallel()
-                     .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() )
-                                        .parallelStream()
-                                        .map( j -> j.shallowcopy( l_path ) ) );
+        return ( ( p_path == null ) || ( p_path.length == 0 )
+               ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
+               : Arrays.stream( p_path )
+                       .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() ).stream() )
+        ).map( i -> i.shallowcopy( l_path ) );
     }
 
     @Override
@@ -249,21 +239,15 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     {
         // build path relative to this view
         final IPath l_path = this.path().getSubPath( 1 );
-        return ( p_path == null ) || ( p_path.length == 0 )
-
+        return ( ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat(
-                    m_beliefbase.streamLiteral().parallel()
-                        .filter( i -> i.negated() == p_negated )
-                        .map( i -> i.shallowcopy( l_path ) ),
-                    m_beliefbase.streamView().parallel().flatMap( i -> i.stream( p_negated ).parallel().map( j -> j.shallowcopy( l_path ) ) )
+                   m_beliefbase.streamLiteral().filter( i -> i.negated() == p_negated ),
+                   m_beliefbase.streamView().flatMap( i -> i.stream( p_negated ) )
                )
-
                : Arrays.stream( p_path )
-                    .parallel()
-                    .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() )
-                                       .parallelStream()
-                                       .filter( j -> j.negated() == p_negated )
-                                       .map( j -> j.shallowcopy( l_path ) ) );
+                       .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() ).stream() )
+                       .filter( j -> j.negated() == p_negated )
+        ).map( i -> i.shallowcopy( l_path ) );
     }
 
     @Override

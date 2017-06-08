@@ -27,6 +27,8 @@ import org.lightjason.agentspeak.agent.IAgent;
 
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -48,7 +50,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
     /**
      * map with elements
      **/
-    private final Map<String, N> m_multielements = new ConcurrentHashMap<>();
+    private final Map<String, N> m_multielements = Collections.synchronizedMap( new LinkedHashMap<>() );
     /**
      * map with single elements
      **/
