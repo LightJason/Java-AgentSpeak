@@ -131,13 +131,15 @@ foo(blub(1),hello("test")).
         >>foo( UN5a, UN5b );
         generic/print( "fifth unification", UN5a, UN5b );
         test/result( bool/equal( generic/type/tostring(UN5a), "blub[1]" ), "fifth unification first part has been failed" );
-        test/result( bool/equal( generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" )
+        test/result( bool/equal( generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
+
+
+        // unify with expression
+        //>>( hello( UN2 ), generic/type/isstring(UN2) ) << true;
+
+        >>( hello( UN3 ), generic/type/isnumeric(UN3) && (UN3 > 200) )
 
 /*
-        // unify with expression
-        >>( hallo( UN2 ), generic/type/isstring(UN2) ) << true;
-        @>>( hallo( UN3 ), generic/type/isnumeric(UN3) && (UN3 > 200) ) << true;
-
         // unify variable (I is defined on the deconstruct call on top)
         >>( blah(UN9), I ) << true;
 

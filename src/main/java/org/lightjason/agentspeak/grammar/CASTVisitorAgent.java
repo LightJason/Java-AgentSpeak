@@ -776,9 +776,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             EOperator.OR,
             (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
             p_context.expression() != null
-            ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
-                Collectors.toList() )
-            : Collections.<IExpression>emptyList()
+            ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
+            : Collections.emptyList()
         );
     }
 
@@ -795,9 +794,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             EOperator.AND,
             (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),
             p_context.expression() != null
-            ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
-                Collectors.toList() )
-            : Collections.<IExpression>emptyList()
+            ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
+            : Collections.emptyList()
         );
     }
 
@@ -809,9 +807,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                 EOperator.XOR,
                 (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),
                 p_context.expression() != null
-                ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect(
-                    Collectors.toList() )
-                : Collections.<IExpression>emptyList()
+                ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
+                : Collections.emptyList()
             );
 
         if ( p_context.expression_logical_negation() != null )
