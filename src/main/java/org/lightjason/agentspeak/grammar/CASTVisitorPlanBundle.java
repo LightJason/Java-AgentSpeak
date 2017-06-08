@@ -89,6 +89,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     /**
      * set with initial beliefs
      */
-    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
+    private final Set<ILiteral> m_initialbeliefs = new LinkedHashSet<>();
     /**
      * map with plans
      */
@@ -131,13 +132,10 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
      * ctor
      *
      * @param p_actions set with actions
-     * @param p_rules set with rules
      */
-    public CASTVisitorPlanBundle( final Set<IAction> p_actions, final Set<IRule> p_rules )
+    public CASTVisitorPlanBundle( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions.keySet(), m_rules.keySet() ) );
     }
 

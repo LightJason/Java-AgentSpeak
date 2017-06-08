@@ -109,9 +109,11 @@ public final class CUnifier implements IUnifier
                                        final IExpression p_expression, final boolean p_parallel )
     {
         // get all possible variables
-        final List<Set<IVariable<?>>> l_variables = this.unify( p_context.agent(), p_literal, p_variables );
+        final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );
         if ( l_variables.isEmpty() )
             return CFuzzyValue.from( false );
+
+        System.out.println( this.getClass() + " -> " + l_variables );
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
@@ -195,7 +197,7 @@ public final class CUnifier implements IUnifier
      * @return list of literal sets
      **/
     @SuppressWarnings( "unchecked" )
-    private List<Set<IVariable<?>>> unify( final IAgent<?> p_agent, final ILiteral p_literal, final long p_variablenumber )
+    private List<Set<IVariable<?>>> variables( final IAgent<?> p_agent, final ILiteral p_literal, final long p_variablenumber )
     {
         return p_agent.beliefbase()
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )

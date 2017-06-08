@@ -56,7 +56,7 @@ public final class CParserAgent extends IParserBase<IASTVisitorAgent, AgentLexer
     @Override
     public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, Collections.<IRule>emptySet() );
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions );
         l_visitor.visit( this.parser( p_stream ).agent() );
         return l_visitor;
     }

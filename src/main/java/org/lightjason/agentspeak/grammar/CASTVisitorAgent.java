@@ -89,6 +89,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +118,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     /**
      * set with initial beliefs
      */
-    private final Set<ILiteral> m_initialbeliefs = new HashSet<>();
+    private final Set<ILiteral> m_initialbeliefs = new LinkedHashSet<>();
     /**
      * map with plans
      */
@@ -135,13 +136,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
      * ctor
      *
      * @param p_actions set with actions
-     * @param p_rules set with rules
      */
-    public CASTVisitorAgent( final Set<IAction> p_actions, final Set<IRule> p_rules )
+    public CASTVisitorAgent( final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
-        p_rules.stream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );
-
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions.keySet(), m_rules.keySet() ) );
     }
 
@@ -161,7 +159,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
     {
-        p_context.belief().parallelStream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
+        p_context.belief().stream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
+        System.out.println( this.getClass() + " -> " + m_initialbeliefs );
+
         LOGGER.info( MessageFormat.format( "parsed initial beliefs: {0}", m_initialbeliefs ) );
         return null;
     }

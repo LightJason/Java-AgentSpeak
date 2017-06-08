@@ -45,6 +45,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -143,10 +144,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         m_fuzzy = p_fuzzy;
         m_variablebuilder = p_variablebuilder;
 
-        m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
-
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
+        m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
         m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
 
         LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
@@ -156,7 +156,11 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     public IView<T> beliefbase()
     {
         final IView<T> l_beliefbase = new CBeliefbasePersistent<T>( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
-        m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
+
+        System.out.println( this.getClass() + "-> " + m_initialbeliefs );
+        m_initialbeliefs.forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
+
+        System.out.println( this.getClass() + " -> " + l_beliefbase.stream().collect( Collectors.toList() ) );
 
         // clear all events of the initial beliefs
         l_beliefbase.trigger();

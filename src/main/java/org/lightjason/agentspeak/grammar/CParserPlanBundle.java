@@ -56,7 +56,7 @@ public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, 
     @Override
     public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, Collections.<IRule>emptySet() );
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions );
         l_visitor.visit( this.parser( p_stream ).planbundle() );
         return l_visitor;
     }

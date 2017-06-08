@@ -141,7 +141,7 @@ public final class TestCAgent extends IBaseTest
                                           ).collect( Collectors.toSet() )
                                       ).generatesingle();
 
-            System.out.println( l_agent.beliefbase().stream().collect( Collectors.toList() ) );
+            System.out.println( this.getClass() + " -> " + l_agent.beliefbase().stream().collect( Collectors.toList() ) );
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
                      .forEach( i -> {
