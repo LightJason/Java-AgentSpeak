@@ -108,7 +108,7 @@ foo(blub(1),hello("test")).
         // unify default
         >>hello( UN1 );
         generic/print( "first unification", UN1 );
-        test/result( bool/equal( UN1, "foo" ), "first unification has been failed" )
+        test/result( bool/equal( UN1, 123 ), "first unification has been failed" )
 /*
         // unify subitem
         >>foo( blub(1), hello( UN2 ) );

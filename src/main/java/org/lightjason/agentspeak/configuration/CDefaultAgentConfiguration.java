@@ -127,26 +127,26 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * ctor
      *
      * @param p_fuzzy fuzzy operator
-     * @param p_initalbeliefs set with initial beliefs
+     * @param p_initialbeliefs set with initial beliefs
      * @param p_plans plans
      * @param p_rules rules
      * @param p_initialgoal initial goal
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initialbeliefs,
                                        final Set<IPlan> p_plans, final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, final IUnifier p_unifier,
                                        final IVariableBuilder p_variablebuilder
     )
     {
-        m_unifier = p_unifier;
         m_fuzzy = p_fuzzy;
+        m_unifier = p_unifier;
         m_variablebuilder = p_variablebuilder;
 
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
-        m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
+        m_initialbeliefs = Collections.unmodifiableCollection( p_initialbeliefs );
         m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
 
         LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
@@ -156,11 +156,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     public IView<T> beliefbase()
     {
         final IView<T> l_beliefbase = new CBeliefbasePersistent<T>( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
-
-        System.out.println( this.getClass() + "-> " + m_initialbeliefs );
         m_initialbeliefs.forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
-
-        System.out.println( this.getClass() + " -> " + l_beliefbase.stream().collect( Collectors.toList() ) );
 
         // clear all events of the initial beliefs
         l_beliefbase.trigger();

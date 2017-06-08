@@ -160,8 +160,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitInitial_beliefs( final AgentParser.Initial_beliefsContext p_context )
     {
         p_context.belief().stream().map( i -> (ILiteral) this.visitBelief( i ) ).forEach( m_initialbeliefs::add );
-        System.out.println( this.getClass() + " -> " + m_initialbeliefs );
-
         LOGGER.info( MessageFormat.format( "parsed initial beliefs: {0}", m_initialbeliefs ) );
         return null;
     }

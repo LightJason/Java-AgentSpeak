@@ -43,6 +43,7 @@ import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -111,8 +112,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
 
             Stream.concat(
                 l_visitor.initialbeliefs().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.initialbeliefs().stream() )
-            ).collect( Collectors.toSet() ),
+                p_planbundle.stream().flatMap( i -> i.initialbeliefs().stream() )
+            ).collect( Collectors.toCollection( LinkedHashSet::new ) ),
 
             Stream.concat(
                 l_visitor.plans().stream(),
