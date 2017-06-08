@@ -54,11 +54,11 @@ public class CDefaultPlanBundleConfiguration implements IPlanBundleConfiguration
      *
      * @param p_plans plans
      * @param p_rules rules
-     * @param p_initalbeliefs initial beliefs
+     * @param p_initialbeliefs initial beliefs
      */
-    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initalbeliefs )
+    public CDefaultPlanBundleConfiguration( final Set<IPlan> p_plans, final Set<IRule> p_rules, final Set<ILiteral> p_initialbeliefs )
     {
-        m_initialbeliefs = Collections.unmodifiableSet( p_initalbeliefs );
+        m_initialbeliefs = Collections.unmodifiableSet( p_initialbeliefs );
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
     }
