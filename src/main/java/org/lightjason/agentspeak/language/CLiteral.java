@@ -268,7 +268,7 @@ public final class CLiteral implements ILiteral
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final ILiteral unify( final IContext p_context )
+    public final ILiteral unify( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
@@ -290,7 +290,7 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final ILiteral allocate( final IContext p_context )
+    public final ILiteral allocate( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,

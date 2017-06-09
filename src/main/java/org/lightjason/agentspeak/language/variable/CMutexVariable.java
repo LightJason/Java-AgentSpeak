@@ -25,6 +25,9 @@ package org.lightjason.agentspeak.language.variable;
 
 import org.lightjason.agentspeak.common.IPath;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * thread-safe variable
@@ -71,7 +74,7 @@ public class CMutexVariable<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CMutexVariable( final IPath p_functor, final T p_value )
+    public CMutexVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
@@ -118,6 +121,7 @@ public class CMutexVariable<T> extends CVariable<T>
         return super.toString();
     }
 
+    @Nonnull
     @Override
     public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
@@ -126,7 +130,7 @@ public class CMutexVariable<T> extends CVariable<T>
                : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value );
     }
 
-
+    @Nonnull
     @Override
     public IVariable<T> shallowcopysuffix()
     {

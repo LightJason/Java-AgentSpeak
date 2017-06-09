@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -46,12 +47,15 @@ public interface IExecution
      * @param p_return return values
      * @return fuzzy boolean
      */
-    IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return );
+    @Nonnull
+    IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return );
 
     /**
      * returns a stream with all used variables
      *
      * @return variable stream (variables will be cloned on instantiation)
      */
+    @Nonnull
     Stream<IVariable<?>> variables();
 }

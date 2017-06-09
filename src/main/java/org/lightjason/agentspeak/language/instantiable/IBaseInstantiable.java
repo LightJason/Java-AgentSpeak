@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -88,20 +89,24 @@ public abstract class IBaseInstantiable implements IInstantiable
         return ( p_object != null ) && ( p_object instanceof IInstantiable ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
-    public final IContext instantiate( final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
+    public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
         return CCommon.instantiate( this, p_agent, p_variable );
     }
 
+    @Nonnull
     @Override
     public Stream<IVariable<?>> variables()
     {
         return m_action.stream().flatMap( IExecution::variables );
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"

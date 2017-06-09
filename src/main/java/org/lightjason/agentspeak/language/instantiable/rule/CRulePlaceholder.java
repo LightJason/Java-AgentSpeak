@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -65,29 +66,30 @@ public final class CRulePlaceholder implements IRule
     }
 
 
+    @Nonnull
     @Override
     public final ILiteral identifier()
     {
         return m_id;
     }
 
+    @Nonnull
     @Override
-    public final IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules )
+    public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
     {
         return this;
     }
 
+    @Nonnull
     @Override
-    public final IContext instantiate( final IAgent<?> p_agent,
-                                       final Stream<IVariable<?>> p_variable
-    )
+    public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
         return CCommon.instantiate( this, p_agent, p_variable );
     }
 
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.from( false );
     }
@@ -95,7 +97,7 @@ public final class CRulePlaceholder implements IRule
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.<IVariable<?>>empty();
+        return Stream.empty();
     }
 
     @Override

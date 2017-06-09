@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -68,9 +69,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger p_event, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
-        this( p_event, null, p_body, p_annotation );
+        this( p_event, IExpression.EMPTY, p_body, p_annotation );
     }
 
     /**
@@ -81,18 +82,22 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
-    )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition, @Nonnull
+                            final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
         super(
             p_body,
             p_annotation,
-            p_event.hashCode()
-            + ( p_condition == null ? 0 : p_condition.hashCode() )
-            + p_body.stream().mapToInt( Object::hashCode ).sum()
-            + p_annotation.stream().mapToInt( Object::hashCode ).sum()
-        );
 
+            CCommon.streamconcat(
+                Stream.of(
+                    p_event.hashCode(),
+                    p_condition.hashCode()
+                ),
+                p_body.stream().map( Object::hashCode ),
+                p_annotation.stream().map( Object::hashCode )
+            ).reduce( 0, ( i, j ) -> i ^ j )
+        );
 
         m_triggerevent = p_event;
         m_condition = p_condition;

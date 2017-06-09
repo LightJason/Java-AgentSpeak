@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -49,6 +50,7 @@ public interface IVariableEvaluate extends ITerm
      * @param p_context execution context
      * @return unified literal
      */
+    @Nonnull
     ILiteral evaluate( final IContext p_context );
 
 
@@ -57,6 +59,7 @@ public interface IVariableEvaluate extends ITerm
      *
      * @return variable stream (variables will be cloned on instantiation)
      */
+    @Nonnull
     Stream<IVariable<?>> variables();
 
 }

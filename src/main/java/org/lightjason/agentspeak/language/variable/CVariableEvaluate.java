@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +57,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
      *
      * @param p_variable variable
      */
-    public CVariableEvaluate( final IVariable<?> p_variable )
+    public CVariableEvaluate( @Nonnull final IVariable<?> p_variable )
     {
         this( p_variable, Collections.<ITerm>emptyList() );
     }
@@ -67,7 +68,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
      * @param p_variable variable
      * @param p_parameter optional parameter list
      */
-    public CVariableEvaluate( final IVariable<?> p_variable, final List<ITerm> p_parameter )
+    public CVariableEvaluate( @Nonnull final IVariable<?> p_variable, @Nonnull final List<ITerm> p_parameter )
     {
         m_variable = p_variable;
         m_parameter = Collections.unmodifiableList( p_parameter );
@@ -80,6 +81,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return m_variable.mutex();
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final ILiteral evaluate( final IContext p_context )
@@ -98,6 +100,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
         throw new CIllegalStateException();
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()

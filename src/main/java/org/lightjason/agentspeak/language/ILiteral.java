@@ -85,7 +85,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      * @note un-unifyable variables passwd into the result literal
      */
     @Nonnull
-    ILiteral unify( final IContext p_context );
+    ILiteral unify( @Nonnull final IContext p_context );
 
     /**
      * allocate all variables with the current context
@@ -94,6 +94,6 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      * @return literal with replaced variable
      */
     @Nonnull
-    ILiteral allocate( final IContext p_context );
+    ILiteral allocate( @Nonnull final IContext p_context );
 
 }

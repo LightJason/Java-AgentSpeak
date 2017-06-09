@@ -28,6 +28,9 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * class for a mutex relocated variable
@@ -58,7 +61,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
      *  @param p_functor variable name
      * @param p_relocate variable which should be relocated
      */
-    public CRelocateMutexVariable( final IPath p_functor, final IVariable<?> p_relocate )
+    public CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_relocate )
     {
         super( p_functor, p_relocate.raw() );
         m_relocate = p_relocate;
@@ -71,12 +74,13 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
      * @param p_variable referenced variable
      * @param p_value value
      */
-    private CRelocateMutexVariable( final IPath p_functor, final IVariable<?> p_variable, final T p_value )
+    private CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_variable, @Nullable final T p_value )
     {
         super( p_functor, p_value );
         m_relocate = p_variable;
     }
 
+    @Nonnull
     @Override
     public final IVariable<?> relocate()
     {

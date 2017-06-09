@@ -28,6 +28,8 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * interface of logical rule
@@ -40,6 +42,7 @@ public interface IRule extends IInstantiable
      *
      * @return literal
      */
+    @Nonnull
     ILiteral identifier();
 
     /**
@@ -48,6 +51,7 @@ public interface IRule extends IInstantiable
      * @param p_rules full instantiated rules
      * @return new object instance without placeholders
      */
-    IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules );
+    @Nonnull
+    IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules );
 
 }

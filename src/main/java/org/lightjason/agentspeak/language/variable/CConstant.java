@@ -27,6 +27,9 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * constant definition
@@ -52,7 +55,7 @@ public final class CConstant<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CConstant( final String p_functor, final T p_value )
+    public CConstant( @Nonnull final String p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
@@ -62,7 +65,7 @@ public final class CConstant<T> extends CVariable<T>
      *
      * @param p_functor name
      */
-    public CConstant( final IPath p_functor )
+    public CConstant( @Nonnull final IPath p_functor )
     {
         super( p_functor );
     }
@@ -73,11 +76,12 @@ public final class CConstant<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CConstant( final IPath p_functor, final T p_value )
+    public CConstant( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> set( final T p_value )
     {

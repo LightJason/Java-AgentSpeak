@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public interface IPlan extends IInstantiable
      *
      * @return trigger event
      */
+    @Nonnull
     ITrigger trigger();
 
     /**
@@ -52,6 +54,7 @@ public interface IPlan extends IInstantiable
      *
      * @return set with annotation
      */
+    @Nonnull
     Collection<IAnnotation<?>> annotations();
 
     /**
@@ -59,6 +62,7 @@ public interface IPlan extends IInstantiable
      *
      * @return action list;
      */
+    @Nonnull
     List<IExecution> body();
 
     /**
@@ -67,6 +71,7 @@ public interface IPlan extends IInstantiable
      * @param p_context execution context
      * @return execution result
      */
+    @Nonnull
     IFuzzyValue<Boolean> condition( final IContext p_context );
 
 }

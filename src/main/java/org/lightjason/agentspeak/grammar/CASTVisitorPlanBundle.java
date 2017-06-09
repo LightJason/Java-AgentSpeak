@@ -233,7 +233,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitPlandefinition( final PlanBundleParser.PlandefinitionContext p_context )
     {
         return new ImmutablePair<IExpression, List<IExecution>>(
-            p_context.expression() == null ? null
+            p_context.expression() == null ? IExpression.EMPTY
                                            : (IExpression) this.visitExpression( p_context.expression() ),
             (List<IExecution>) this.visitBody( p_context.body() )
         );
@@ -243,7 +243,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     public final Object visitAnnotations( final PlanBundleParser.AnnotationsContext p_context )
     {
         if ( ( p_context == null ) || ( p_context.isEmpty() ) )
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
 
 
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
@@ -254,7 +254,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
         if ( p_context.annotation_literal() != null )
             p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
 
-        return l_annotation.isEmpty() ? Collections.EMPTY_SET : l_annotation;
+        return l_annotation.isEmpty() ? Collections.emptySet() : l_annotation;
     }
 
     @Override

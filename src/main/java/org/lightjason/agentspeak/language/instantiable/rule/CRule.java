@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -56,26 +57,30 @@ public final class CRule extends IBaseInstantiable implements IRule
      * @param p_id literal with signature
      * @param p_action action list
      */
-    public CRule( final ILiteral p_id, final List<IExecution> p_action )
+    public CRule( @Nonnull final ILiteral p_id, @Nonnull final List<IExecution> p_action )
     {
         super(
             p_action,
-            Collections.<IAnnotation<?>>emptySet(),
-            p_id.hashCode()
-            + p_action.stream().mapToInt( Object::hashCode ).sum()
+            Collections.emptySet(),
+            Stream.concat(
+                Stream.of( p_id.hashCode() ),
+                p_action.stream().map( Object::hashCode )
+            ).reduce( 0, ( i, j ) -> i ^ j )
         );
         m_id = p_id;
     }
 
+    @Nonnull
     @Override
     public final ILiteral identifier()
     {
         return m_id;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules )
+    public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
     {
         return new CRule(
             m_id,
@@ -88,6 +93,7 @@ public final class CRule extends IBaseInstantiable implements IRule
         );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
