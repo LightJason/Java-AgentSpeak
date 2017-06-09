@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language;
 
 
+import javax.annotation.Nonnull;
+
+
 /**
  * interface of raw terms
  */
@@ -46,6 +49,7 @@ public interface IRawTerm<T> extends ITerm
      *
      * @throws IllegalStateException on non-allocated
      */
+    @Nonnull
     IRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException;
 
     /**
@@ -66,6 +70,7 @@ public interface IRawTerm<T> extends ITerm
      *
      * @throws IllegalArgumentException on assignable error
      */
+    @Nonnull
     IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

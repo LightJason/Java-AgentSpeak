@@ -41,7 +41,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * generic default parser
  */
-public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P extends Parser> implements IParser<T>
+public abstract class IBaseParser<T extends IASTVisitor, L extends Lexer, P extends Parser> implements IParser<T>
 {
     /**
      * error listener
@@ -63,7 +63,7 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      * @param p_errorlistener listener instance
      * @throws NoSuchMethodException on ctor-method call
      */
-    protected IParserBase( @Nonnull final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
+    protected IBaseParser( @Nonnull final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
     {
         m_errorlistener = p_errorlistener;
         m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );

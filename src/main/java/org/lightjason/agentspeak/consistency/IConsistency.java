@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
@@ -52,6 +53,7 @@ public interface IConsistency extends Callable<IConsistency>
      *
      * @return statistic
      */
+    @Nonnull
     DescriptiveStatistics statistic();
 
     /**
@@ -60,6 +62,7 @@ public interface IConsistency extends Callable<IConsistency>
      * @param p_object new object
      * @return self reference
      */
+    @Nonnull
     IConsistency add( final IAgent<?> p_object );
 
     /**
@@ -68,12 +71,14 @@ public interface IConsistency extends Callable<IConsistency>
      * @param p_object removing object
      * @return self reference
      */
+    @Nonnull
     IConsistency remove( final IAgent<?> p_object );
 
     /**
      * clear
      * @return self reference
      */
+    @Nonnull
     IConsistency clear();
 
     /**
@@ -81,6 +86,7 @@ public interface IConsistency extends Callable<IConsistency>
      *
      * @return metric
      */
+    @Nonnull
     IMetric metric();
 
     /**
@@ -88,6 +94,7 @@ public interface IConsistency extends Callable<IConsistency>
      *
      * @return filter
      */
+    @Nonnull
     IFilter filter();
 
     /**
@@ -95,6 +102,7 @@ public interface IConsistency extends Callable<IConsistency>
      *
      * @return entry with agent and consistency value
      */
+    @Nonnull
     Stream<Map.Entry<IAgent<?>, Double>> stream();
 
 }

@@ -34,12 +34,14 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.grammar.CASTVisitorType;
 import org.lightjason.agentspeak.grammar.CErrorListener;
 import org.lightjason.agentspeak.grammar.IASTVisitorType;
-import org.lightjason.agentspeak.grammar.IParserBase;
+import org.lightjason.agentspeak.grammar.IBaseParser;
 import org.lightjason.agentspeak.grammar.TypeLexer;
 import org.lightjason.agentspeak.grammar.TypeParser;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -49,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -106,7 +109,7 @@ public final class CLiteral implements ILiteral
      * @param p_functor functor of the literal
      * @param p_values initial list of values
      */
-    public CLiteral( final boolean p_at, final boolean p_negated, final IPath p_functor, final Collection<ITerm> p_values )
+    public CLiteral( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Collection<ITerm> p_values )
     {
         m_at = p_at;
         m_negated = p_negated;
@@ -135,7 +138,11 @@ public final class CLiteral implements ILiteral
         final String l_functor = p_functor.getPath();
 
         final Hasher l_valuehasher = CCommon.getTermHashing();
-        m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).forEach( i -> l_valuehasher.putInt( i.<ILiteral>raw().structurehash() ) );
+        m_orderedvalues.stream()
+                       .filter( i -> i instanceof ILiteral )
+                       .map( ITerm::<ILiteral>raw )
+                       .filter( Objects::nonNull )
+                       .forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
         l_valuehasher.putBoolean( m_negated );
         l_valuehasher.putString( l_functor, Charsets.UTF_8 );
 
@@ -149,7 +156,7 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final ITerm... p_values )
+    public static ILiteral from( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
     {
         return from(
             p_functor,
@@ -166,7 +173,7 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final Collection<ITerm> p_values )
+    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Collection<ITerm> p_values )
     {
         return new CLiteral(
             p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
@@ -181,7 +188,7 @@ public final class CLiteral implements ILiteral
      * @param p_values value stream
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final Stream<ITerm> p_values )
+    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Stream<ITerm> p_values )
     {
         return from( p_functor, p_values.collect( Collectors.toList() ) );
     }
@@ -194,11 +201,12 @@ public final class CLiteral implements ILiteral
      *
      * @throws Exception parsing and stream exception
      */
-    public static ILiteral parse( final String p_literal ) throws Exception
+    public static ILiteral parse( @Nonnull final String p_literal ) throws Exception
     {
         return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).literal();
     }
 
+    @Nonnull
     @Override
     public final Stream<ITerm> values( final IPath... p_path )
     {
@@ -211,6 +219,7 @@ public final class CLiteral implements ILiteral
                            .flatMap( i -> ( (ILiteral) i ).values( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
+    @Nonnull
     @Override
     public final Stream<ITerm> orderedvalues( final IPath... p_path )
     {
@@ -222,7 +231,9 @@ public final class CLiteral implements ILiteral
                  : m_orderedvalues.stream()
                                   .filter( i -> i.fqnfunctor().equals( p_path[0] ) )
                                   .filter( i -> i instanceof ILiteral )
-                                  .flatMap( i -> ( i.<ILiteral>raw() ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
+                                  .map( ITerm::<ILiteral>raw )
+                                  .filter( Objects::nonNull )
+                                  .flatMap( i -> i.orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
     @Override
@@ -302,18 +313,21 @@ public final class CLiteral implements ILiteral
         );
     }
 
+    @Nonnull
     @Override
     public final String functor()
     {
         return m_functor.getSuffix();
     }
 
+    @Nonnull
     @Override
     public final IPath functorpath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
+    @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
@@ -339,6 +353,7 @@ public final class CLiteral implements ILiteral
         return ( p_object != null ) && ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
     public final ILiteral shallowcopy( final IPath... p_prefix )
     {
@@ -371,11 +386,12 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final int compareTo( final ILiteral p_literal )
+    public final int compareTo( @Nonnull final ILiteral p_literal )
     {
         return Integer.compare( this.hashCode(), p_literal.hashCode() );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final synchronized ITerm deepcopy( final IPath... p_prefix )
@@ -409,7 +425,7 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    private static final class CParser extends IParserBase<IASTVisitorType, TypeLexer, TypeParser>
+    private static final class CParser extends IBaseParser<IASTVisitorType, TypeLexer, TypeParser>
     {
 
         /**
@@ -421,6 +437,7 @@ public final class CLiteral implements ILiteral
             super( new CErrorListener() );
         }
 
+        @Nonnull
         @Override
         public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
         {

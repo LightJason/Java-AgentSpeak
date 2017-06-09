@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -99,7 +100,8 @@ public final class CConsistency implements IConsistency
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    private CConsistency( final EAlgorithm p_algorithm, final IFilter p_filter, final IMetric p_metric, final int p_iteration, final double p_epsilon )
+    private CConsistency( @Nonnull final EAlgorithm p_algorithm, @Nonnull final IFilter p_filter, @Nonnull final IMetric p_metric,
+                          final int p_iteration, final double p_epsilon )
     {
         m_filter = p_filter;
         m_metric = p_metric;
@@ -114,12 +116,14 @@ public final class CConsistency implements IConsistency
         return m_data.getOrDefault( p_object, 0.0 );
     }
 
+    @Nonnull
     @Override
     public final DescriptiveStatistics statistic()
     {
         return m_statistic;
     }
 
+    @Nonnull
     @Override
     public final IConsistency add( final IAgent<?> p_object )
     {
@@ -179,6 +183,7 @@ public final class CConsistency implements IConsistency
         return this;
     }
 
+    @Nonnull
     @Override
     public final IConsistency remove( final IAgent<?> p_object )
     {
@@ -186,6 +191,7 @@ public final class CConsistency implements IConsistency
         return this;
     }
 
+    @Nonnull
     @Override
     public final IConsistency clear()
     {
@@ -194,18 +200,21 @@ public final class CConsistency implements IConsistency
         return this;
     }
 
+    @Nonnull
     @Override
     public final IMetric metric()
     {
         return m_metric;
     }
 
+    @Nonnull
     @Override
     public final IFilter filter()
     {
         return m_filter;
     }
 
+    @Nonnull
     @Override
     public final Stream<Map.Entry<IAgent<?>, Double>> stream()
     {

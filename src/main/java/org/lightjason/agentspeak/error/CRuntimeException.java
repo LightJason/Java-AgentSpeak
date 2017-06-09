@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.error;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
 
@@ -64,7 +65,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
      * @param p_message execution message
      * @param p_context execution context
      */
-    public CRuntimeException( final String p_message, final IContext p_context )
+    public CRuntimeException( @Nonnull final String p_message, @Nonnull final IContext p_context )
     {
         super( p_message );
         m_context = p_context;
@@ -78,7 +79,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
      * @param p_cause execption cause
      * @param p_context execution context
      */
-    public CRuntimeException( final String p_message, final Throwable p_cause, final IContext p_context )
+    public CRuntimeException( @Nonnull final String p_message, @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
     {
         super( p_message, p_cause );
         m_context = p_context;
@@ -91,7 +92,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
      * @param p_cause execption cause
      * @param p_context execution context
      */
-    public CRuntimeException( final Throwable p_cause, final IContext p_context )
+    public CRuntimeException( @Nonnull final Throwable p_cause, @Nonnull final IContext p_context )
     {
         super( p_cause );
         m_context = p_context;
@@ -116,6 +117,7 @@ public final class CRuntimeException extends RuntimeException implements IContex
         LOGGER.warning( MessageFormat.format( "{0}: {1}", p_message, m_context ) );
     }
 
+    @Nonnull
     @Override
     public final IContext context()
     {

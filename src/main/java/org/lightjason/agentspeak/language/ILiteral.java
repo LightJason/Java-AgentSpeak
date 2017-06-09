@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -44,12 +45,14 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      * (filtering values within values)
      * @return stream
      */
+    @Nonnull
     Stream<ITerm> values( final IPath... p_path );
 
     /**
      * returns a stream over the ordered values
      * in sequential ordering
      */
+    @Nonnull
     Stream<ITerm> orderedvalues( final IPath... p_path );
 
     /**
@@ -81,6 +84,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      *
      * @note un-unifyable variables passwd into the result literal
      */
+    @Nonnull
     ILiteral unify( final IContext p_context );
 
     /**
@@ -89,6 +93,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      * @param p_context current execution context
      * @return literal with replaced variable
      */
+    @Nonnull
     ILiteral allocate( final IContext p_context );
 
 }

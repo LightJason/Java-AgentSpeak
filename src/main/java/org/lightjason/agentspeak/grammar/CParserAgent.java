@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * default agent parser
  */
-public final class CParserAgent extends IParserBase<IASTVisitorAgent, AgentLexer, AgentParser>
+public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer, AgentParser>
 {
     /**
      * set with actions

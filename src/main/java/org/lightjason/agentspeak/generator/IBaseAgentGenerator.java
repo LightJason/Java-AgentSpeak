@@ -40,6 +40,8 @@ import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,9 +77,9 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
     {
-        this( p_stream, p_actions, Collections.<IPlanBundle>emptySet(), IVariableBuilder.EMPTY );
+        this( p_stream, p_actions, Collections.emptySet(), IVariableBuilder.EMPTY );
     }
 
     /**
@@ -88,10 +90,10 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IVariableBuilder p_variablebuilder )
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions, @Nonnull final IVariableBuilder p_variablebuilder )
     throws Exception
     {
-        this( p_stream, p_actions, Collections.<IPlanBundle>emptySet(), p_variablebuilder );
+        this( p_stream, p_actions, Collections.emptySet(), p_variablebuilder );
     }
 
     /**
@@ -103,8 +105,8 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final Set<IPlanBundle> p_planbundle, final IVariableBuilder p_variablebuilder ) throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+                                @Nonnull final Set<IPlanBundle> p_planbundle, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
         m_configuration = this.configuration(
@@ -138,10 +140,10 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @return configuration object
      */
-    protected IAgentConfiguration<T> configuration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                                    final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                                    final ILiteral p_initialgoal, final IUnifier p_unifier,
-                                                    final IVariableBuilder p_variablebuilder )
+    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzy<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+                                                    @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
+                                                    @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                                    @Nonnull final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(
             p_fuzzy,
@@ -154,6 +156,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
         );
     }
 
+    @Nonnull
     @Override
     public final Stream<T> generatemultiple( final int p_number, final Object... p_data )
     {

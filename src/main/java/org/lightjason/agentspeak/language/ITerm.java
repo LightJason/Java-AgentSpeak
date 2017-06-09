@@ -25,6 +25,9 @@ package org.lightjason.agentspeak.language;
 
 import org.lightjason.agentspeak.common.IPath;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * term interface
@@ -37,6 +40,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return functor
      */
+    @Nonnull
     String functor();
 
     /**
@@ -44,6 +48,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return path
      */
+    @Nonnull
     IPath functorpath();
 
     /**
@@ -52,6 +57,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return fqn functor
      */
+    @Nonnull
     IPath fqnfunctor();
 
     /**
@@ -67,6 +73,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      * @tparam raw type
      * @return any type
      */
+    @Nullable
     <T> T raw();
 
 }

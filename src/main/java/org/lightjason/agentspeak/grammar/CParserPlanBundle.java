@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * default planbundle parser
  */
-public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
 {
     /**
      * set with actions
