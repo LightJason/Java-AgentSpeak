@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
@@ -69,10 +70,10 @@ public final class CCreateStatistic extends IBuildinAction
         return 0;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
 
         (
@@ -100,7 +101,8 @@ public final class CCreateStatistic extends IBuildinAction
          * @param p_value string
          * @return enum
          */
-        public static EType from( final String p_value )
+        @Nonnull
+        public static EType from( @Nonnull final String p_value )
         {
             return EType.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
@@ -111,7 +113,8 @@ public final class CCreateStatistic extends IBuildinAction
          * @param p_parallel parallel-safe
          * @return statistic object
          */
-        public final StatisticalSummary generate( final Boolean p_parallel )
+        @Nonnull
+        public final StatisticalSummary generate( @Nonnull final Boolean p_parallel )
         {
             switch ( this )
             {

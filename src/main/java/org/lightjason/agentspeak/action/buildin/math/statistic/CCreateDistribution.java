@@ -62,6 +62,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collections;
@@ -155,10 +156,10 @@ public final class CCreateDistribution extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
@@ -258,7 +259,8 @@ public final class CCreateDistribution extends IBuildinAction
          * @param p_value string
          * @return enum
          */
-        public static EDistribution from( final String p_value )
+        @Nonnull
+        public static EDistribution from( @Nonnull final String p_value )
         {
             return EDistribution.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
@@ -269,7 +271,7 @@ public final class CCreateDistribution extends IBuildinAction
          * @param p_value string name
          * @return exist boolean
          */
-        public static boolean exist( final String p_value )
+        public static boolean exist( @Nonnull final String p_value )
         {
             return NAMES.contains( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
@@ -291,7 +293,8 @@ public final class CCreateDistribution extends IBuildinAction
          * @param p_arguments arguments
          * @return real distribution
          */
-        public final AbstractRealDistribution get( final RandomGenerator p_generator, final double[] p_arguments )
+        @Nonnull
+        public final AbstractRealDistribution get( @Nonnull final RandomGenerator p_generator, final double[] p_arguments )
         {
             switch ( this )
             {
@@ -388,7 +391,8 @@ public final class CCreateDistribution extends IBuildinAction
          * @param p_value string
          * @return enum
          */
-        public static EGenerator from( final String p_value )
+        @Nonnull
+        public static EGenerator from( @Nonnull final String p_value )
         {
             return EGenerator.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
         }
@@ -398,6 +402,7 @@ public final class CCreateDistribution extends IBuildinAction
          *
          * @return generator
          */
+        @Nonnull
         public final RandomGenerator get()
         {
             switch ( this )

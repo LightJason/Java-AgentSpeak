@@ -27,6 +27,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 
@@ -56,7 +57,8 @@ public enum EStatisticValue
      * @param p_value string
      * @return enum
      */
-    public static EStatisticValue from( final String p_value )
+    @Nonnull
+    public static EStatisticValue from( @Nonnull final String p_value )
     {
         return EStatisticValue.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }
@@ -67,7 +69,7 @@ public enum EStatisticValue
      * @param p_statistic statistic object
      * @return statistic value
      */
-    public final double value( final SummaryStatistics p_statistic )
+    public final double value( @Nonnull final SummaryStatistics p_statistic )
     {
         switch ( this )
         {
@@ -121,7 +123,7 @@ public enum EStatisticValue
      * @param p_statistic statistic object
      * @return statistic value
      */
-    public final double value( final DescriptiveStatistics p_statistic )
+    public final double value( @Nonnull final DescriptiveStatistics p_statistic )
     {
         switch ( this )
         {

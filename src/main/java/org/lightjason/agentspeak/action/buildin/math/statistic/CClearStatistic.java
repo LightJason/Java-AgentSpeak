@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -59,10 +60,10 @@ public final class CClearStatistic extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.from(
             CCommon.flatcollection( p_argument )
@@ -85,7 +86,7 @@ public final class CClearStatistic extends IBuildinAction
      * @param p_statistic statistic object
      * @return successful clear
      */
-    private static boolean apply( final SummaryStatistics p_statistic )
+    private static boolean apply( @Nonnull final SummaryStatistics p_statistic )
     {
         p_statistic.clear();
         return true;
@@ -97,7 +98,7 @@ public final class CClearStatistic extends IBuildinAction
      * @param p_statistic statistic object
      * @return successful clear
      */
-    private static boolean apply( final DescriptiveStatistics p_statistic )
+    private static boolean apply( @Nonnull final DescriptiveStatistics p_statistic )
     {
         p_statistic.clear();
         return true;

@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 
@@ -42,6 +43,7 @@ public interface IContext
      *
      * @return agent
      */
+    @Nonnull
     IAgent<?> agent();
 
     /**
@@ -49,6 +51,7 @@ public interface IContext
      *
      * @return instance object plan or rule
      */
+    @Nonnull
     IInstantiable instance();
 
     /**
@@ -56,6 +59,7 @@ public interface IContext
      *
      * @return variable names and their current value
      */
+    @Nonnull
     Map<IPath, IVariable<?>> instancevariables();
 
     /**
@@ -63,6 +67,7 @@ public interface IContext
      *
      * @return shallow-copy of the context
      */
+    @Nonnull
     IContext duplicate();
 
 }
