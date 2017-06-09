@@ -24,10 +24,8 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Set;
 
 

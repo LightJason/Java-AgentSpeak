@@ -32,7 +32,6 @@ import org.lightjason.agentspeak.language.execution.expression.logical.CBinary;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -100,13 +99,12 @@ public final class CCommon
         if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )
             throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "notbinarylogicoperator", p_operator ) );
 
-        final List<IExpression> l_expression = new LinkedList<>();
-        l_expression.add( p_lefthandside );
-        p_righthandside.addAll( l_expression );
+        final List<IExpression> l_expression = Stream.concat( Stream.of( p_lefthandside ), p_righthandside.stream() ).collect( Collectors.toList() );
 
         // only left-hand-side is existing
         if ( l_expression.size() == 1 )
             return l_expression.get( 0 );
+
 
         // otherwise creare concat expression
         while ( l_expression.size() > 1 )

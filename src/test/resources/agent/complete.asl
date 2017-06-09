@@ -121,7 +121,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- collections -------------------------------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         L = collection/list/range(1, 20);
         [ A|B|C| _ |D|E|F|G ] = L;
         Intersect = collection/list/intersect( [1,2,3,4,5], [3,4,5,6,7], [3,8,9,5] );
@@ -386,7 +386,7 @@ myfunction(X) :- generic/print("my logical rule", X).
 
 
         // --- sequential & parallel unification ---------------------------------------------------------------------------------------------------------------
-
+//XXXXXXX
         // unify default
         >>hallo( UN1 ) << true;
         >>foo( UN4, UN5 ) << true;

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase.storage;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;

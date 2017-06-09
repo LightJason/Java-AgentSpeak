@@ -57,9 +57,6 @@ import org.lightjason.agentspeak.language.execution.action.achievement_test.CTes
 import org.lightjason.agentspeak.language.execution.action.unify.CDefaultUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CExpressionUnify;
 import org.lightjason.agentspeak.language.execution.action.unify.CVariableUnify;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.expression.CAtom;
 import org.lightjason.agentspeak.language.execution.expression.CProxyReturnExpression;
 import org.lightjason.agentspeak.language.execution.expression.EOperator;
@@ -74,6 +71,9 @@ import org.lightjason.agentspeak.language.execution.unaryoperator.CDecrement;
 import org.lightjason.agentspeak.language.execution.unaryoperator.CIncrement;
 import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.CValueAnnotation;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.CRule;
@@ -155,7 +155,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitBelief( final PlanBundleParser.BeliefContext p_context )
     {
-        if (p_context.literal() == null)
+        if ( p_context.literal() == null )
             return null;
 
         m_initialbeliefs.add( (ILiteral) this.visitLiteral( p_context.literal() ) );
