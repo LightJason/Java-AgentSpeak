@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.common;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -40,7 +41,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return new path
      */
-    IPath append( final IPath p_path );
+    @Nonnull
+    IPath append( @Nonnull final IPath p_path );
 
     /**
      * appends a string at the current path and returns the new object
@@ -48,7 +50,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path string with path
      * @return new path
      */
-    IPath append( final String p_path );
+    @Nonnull
+    IPath append( @Nonnull final String p_path );
 
     /**
      * removes an element
@@ -56,6 +59,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_index index position
      * @return return the changed object
      */
+    @Nonnull
     IPath remove( final int p_index );
 
     /**
@@ -65,6 +69,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_end end index (exclusive)
      * @return return the changed object
      */
+    @Nonnull
     IPath remove( final int p_start, final int p_end );
 
     /**
@@ -73,7 +78,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean endsWith( final IPath p_path );
+    boolean endsWith( @Nonnull final IPath p_path );
 
     /**
      * check if the path is empty
@@ -88,6 +93,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_index index position (negativ index is element from the end)
      * @return element
      */
+    @Nonnull
     String get( final int p_index );
 
     /**
@@ -96,6 +102,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_separator separator
      * @return string path
      */
+    @Nonnull
     String getPath( final String p_separator );
 
     /**
@@ -103,6 +110,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return string path
      */
+    @Nonnull
     String getPath();
 
     /**
@@ -110,6 +118,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return separator
      */
+    @Nonnull
     String getSeparator();
 
     /**
@@ -118,13 +127,15 @@ public interface IPath extends Comparable<IPath>
      * @param p_separator separator
      * @return path object
      */
-    IPath setSeparator( final String p_separator );
+    @Nonnull
+    IPath setSeparator( @Nonnull final String p_separator );
 
     /**
      * changes all elements to lower-case
      *
      * @return object
      */
+    @Nonnull
     IPath toLower();
 
     /**
@@ -132,6 +143,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return object
      */
+    @Nonnull
     IPath toUpper();
 
     /**
@@ -140,6 +152,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_fromindex start index
      * @return path
      */
+    @Nonnull
     IPath getSubPath( final int p_fromindex );
 
     /**
@@ -149,6 +162,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_toindex end index (exclusive) / negative values from the end
      * @return path
      */
+    @Nonnull
     IPath getSubPath( final int p_fromindex, final int p_toindex );
 
     /**
@@ -156,6 +170,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return string
      */
+    @Nonnull
     String getSuffix();
 
     /**
@@ -164,7 +179,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return return the changed object
      */
-    IPath pushback( final IPath p_path );
+    @Nonnull
+    IPath pushback( @Nonnull final IPath p_path );
 
     /**
      * adds a path at the end
@@ -172,7 +188,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path string path
      * @return return the changed object
      */
-    IPath pushback( final String p_path );
+    @Nonnull
+    IPath pushback( @Nonnull final String p_path );
 
     /**
      * adds a path at the front
@@ -180,7 +197,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path string path
      * @return return the changed object
      */
-    IPath pushfront( final String p_path );
+    @Nonnull
+    IPath pushfront( @Nonnull final String p_path );
 
     /**
      * adds a path to the front of the path
@@ -188,13 +206,15 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return return the changed object
      */
-    IPath pushfront( final IPath p_path );
+    @Nonnull
+    IPath pushfront( @Nonnull final IPath p_path );
 
     /**
      * remove the suffix from the path
      *
      * @return last item of the path
      */
+    @Nonnull
     String removeSuffix();
 
     /**
@@ -202,6 +222,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return return the changed object
      */
+    @Nonnull
     IPath reverse();
 
     /**
@@ -232,6 +253,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return sequential stream
      */
+    @Nonnull
     Stream<String> stream();
 
     /**
@@ -239,6 +261,7 @@ public interface IPath extends Comparable<IPath>
      *
      * @return parallel stream
      */
+    @Nonnull
     Stream<String> parallelStream();
 
 }

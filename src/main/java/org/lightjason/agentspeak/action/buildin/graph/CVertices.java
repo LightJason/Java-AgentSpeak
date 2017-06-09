@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
@@ -40,10 +41,9 @@ import java.util.List;
 /**
  * returns all vertices of a graph.
  * The action returns a list of all vertices
- * for each graph argument
+ * for each graph argument, the action never fails
  *
  * @code [V1|V2] = graph/vertices( Graph1, Graph2 ); @endcode
- * @note the returned vertex list is unmodifyable list
  */
 public final class CVertices extends IBuildinAction
 {
@@ -66,6 +66,6 @@ public final class CVertices extends IBuildinAction
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
-        return null;
+        return CFuzzyValue.from( true );
     }
 }

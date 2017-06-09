@@ -24,6 +24,7 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
@@ -144,6 +145,7 @@ public final class CPlanStatistic implements IPlanStatistic
     }
 
     @Override
+    @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
         return ( p_object != null )
