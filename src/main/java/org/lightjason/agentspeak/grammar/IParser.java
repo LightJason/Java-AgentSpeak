@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.grammar;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
 
 
@@ -40,6 +41,7 @@ public interface IParser<T extends IASTVisitor>
      *
      * @throws Exception thrown on IO errors
      */
+    @Nonnull
     T parse( final InputStream p_stream ) throws Exception;
 
 }

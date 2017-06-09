@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Objects;
@@ -66,7 +67,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_name view name
      * @param p_beliefbase reference to the beliefbase context
      */
-    public CView( final String p_name, final IBeliefbase<T> p_beliefbase )
+    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase<T> p_beliefbase )
     {
         this( p_name, p_beliefbase, null );
     }
@@ -79,12 +80,10 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_parent reference to the parent view
      */
     @SuppressWarnings( "unchecked" )
-    public CView( final String p_name, final IBeliefbase<T> p_beliefbase, final IView<T> p_parent )
+    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase<T> p_beliefbase, final IView<T> p_parent )
     {
-        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+        if ( p_name.isEmpty() )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
-        if ( p_beliefbase == null )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "beliefbaseempty" ) );
 
         m_name = p_name;
         m_beliefbase = p_beliefbase;
@@ -95,6 +94,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     // --- agent operations ------------------------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final Stream<ITrigger> trigger()
     {
@@ -116,6 +116,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     // --- operations ------------------------------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final IView<T> add( final Stream<ILiteral> p_literal )
     {
@@ -130,6 +131,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this.add( Arrays.stream( p_literal ) );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final IView<T> add( final IPath p_path, final IView<T>... p_view )
@@ -140,6 +142,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this;
     }
 
+    @Nonnull
     @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
@@ -160,6 +163,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this;
     }
 
+    @Nonnull
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
@@ -167,6 +171,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this;
     }
 
+    @Nonnull
     @Override
     public final IView<T> remove( final Stream<ILiteral> p_literal )
     {
@@ -181,6 +186,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this.remove( Arrays.stream( p_literal ) );
     }
 
+    @Nonnull
     @Override
     public final IView<T> clear( final IPath... p_path )
     {
@@ -222,6 +228,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     // --- streaming access ------------------------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final Stream<ILiteral> stream( final IPath... p_path )
     {
@@ -234,6 +241,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         ).map( i -> i.shallowcopy( l_path ) );
     }
 
+    @Nonnull
     @Override
     public final Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path )
     {
@@ -250,6 +258,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         ).map( i -> i.shallowcopy( l_path ) );
     }
 
+    @Nonnull
     @Override
     @SafeVarargs
     public final Stream<IView<T>> walk( final IPath p_path, final IViewGenerator<T>... p_generator )
@@ -257,6 +266,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return this.walkdown( p_path, p_generator );
     }
 
+    @Nonnull
     @Override
     public final IView<T> generate( final IViewGenerator<T> p_generator, final IPath... p_paths )
     {
@@ -323,6 +333,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     // --- basic access ----------------------------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final IBeliefbase<T> beliefbase()
     {
@@ -341,6 +352,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return m_beliefbase.size();
     }
 
+    @Nonnull
     @Override
     public final Stream<IView<T>> root()
     {
@@ -350,12 +362,14 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         );
     }
 
+    @Nonnull
     @Override
     public final String name()
     {
         return m_name;
     }
 
+    @Nonnull
     @Override
     public final IPath path()
     {

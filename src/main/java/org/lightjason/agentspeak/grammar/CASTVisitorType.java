@@ -58,6 +58,7 @@ import org.lightjason.agentspeak.language.variable.CMutexVariable;
 import org.lightjason.agentspeak.language.variable.CVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -107,7 +108,7 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
      * @param p_actions set with actions
      * @param p_rules set with rules
      */
-    public CASTVisitorType( final Set<IAction> p_actions, final Set<IRule> p_rules )
+    public CASTVisitorType( @Nonnull final Set<IAction> p_actions, @Nonnull final Set<IRule> p_rules )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
         p_rules.stream().forEach( i -> m_rules.put( i.identifier().fqnfunctor(), i ) );

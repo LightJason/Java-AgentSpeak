@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 
@@ -47,6 +49,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return root view
      */
+    @Nonnull
     IView<T> beliefbase();
 
     /**
@@ -54,6 +57,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return initial goal literal
      */
+    @Nullable
     ITrigger initialgoal();
 
     /**
@@ -61,6 +65,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return unifier
      */
+    @Nonnull
     IUnifier unifier();
 
     /**
@@ -68,6 +73,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return builder
      */
+    @Nonnull
     IVariableBuilder variablebuilder();
 
     /**
@@ -75,6 +81,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return operator object
      */
+    @Nonnull
     IFuzzy<Boolean, T> fuzzy();
 
     /**
@@ -82,6 +89,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return collection of initial beliefs
      */
+    @Nonnull
     Collection<ILiteral> initialbeliefs();
 
 }

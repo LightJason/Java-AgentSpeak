@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CComplement;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CIntersection;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 
 
@@ -63,18 +64,20 @@ public final class CBoolFuzzy<T extends IAgent<?>> implements IFuzzy<Boolean, T>
      * @param p_operator fuzzy operator
      * @param p_defuzzyfication defuzzyfication
      */
-    public CBoolFuzzy( final IFuzzyOperator<Boolean> p_operator, final IDefuzzification<Boolean, T> p_defuzzyfication )
+    public CBoolFuzzy( @Nonnull final IFuzzyOperator<Boolean> p_operator, @Nonnull final IDefuzzification<Boolean, T> p_defuzzyfication )
     {
         m_operator = p_operator;
         m_defuzzyfication = p_defuzzyfication;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyOperator<Boolean> getResultOperator()
     {
         return m_operator;
     }
 
+    @Nonnull
     @Override
     public final IDefuzzification<Boolean, T> getDefuzzyfication()
     {

@@ -31,6 +31,7 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.TokenStream;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -62,7 +63,7 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      * @param p_errorlistener listener instance
      * @throws NoSuchMethodException on ctor-method call
      */
-    protected IParserBase( final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
+    protected IParserBase( @Nonnull final ANTLRErrorListener p_errorlistener ) throws NoSuchMethodException
     {
         m_errorlistener = p_errorlistener;
         m_ctorlexer = this.lexerclass().getConstructor( CharStream.class );
@@ -80,7 +81,7 @@ public abstract class IParserBase<T extends IASTVisitor, L extends Lexer, P exte
      * @throws InvocationTargetException on lexer / parser invocation error
      * @throws InstantiationException on lexer / parser instantiation error
      */
-    protected final P parser( final InputStream p_stream ) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
+    protected final P parser( @Nonnull final InputStream p_stream ) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         final L l_lexer = m_ctorlexer.newInstance( CharStreams.fromStream( p_stream ) );
         l_lexer.removeErrorListeners();

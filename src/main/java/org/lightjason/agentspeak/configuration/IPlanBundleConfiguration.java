@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 
 
@@ -39,6 +40,7 @@ public interface IPlanBundleConfiguration extends IConfiguration
      *
      * @return set with beliefs
      */
+    @Nonnull
     Set<ILiteral> beliefs();
 
 }

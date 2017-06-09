@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
@@ -55,6 +56,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_inspector inspector object
      * @return inspector stream or empty stream
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
     <N extends IInspector> Stream<N> inspect( final N... p_inspector );
 
@@ -67,6 +69,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @note the trigger is ignored iif the agent is sleeping
      */
+    @Nonnull
     IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately );
 
     /**
@@ -74,6 +77,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return beliefbase
      */
+    @Nonnull
     IView<T> beliefbase();
 
     /**
@@ -81,6 +85,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return map with running plans and the instance literal
      */
+    @Nonnull
     Multimap<IPath, ILiteral> runningplans();
 
     /**
@@ -97,6 +102,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_term literal list for wake-up calls
      * @return agent reference
      */
+    @Nonnull
     IAgent<T> sleep( final long p_cycles, final ITerm... p_term );
 
     /**
@@ -106,6 +112,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_term term stream for wake-up calls
      * @return agent reference
      */
+    @Nonnull
     IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_term );
 
     /**
@@ -114,6 +121,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_term any term value which will push into the wake-up plan
      * @return agent reference
      */
+    @Nonnull
     IAgent<T> wakeup( final ITerm... p_term );
 
     /**
@@ -122,6 +130,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @param p_term stream to call wake-up plan
      * @return agent reference
      */
+    @Nonnull
     IAgent<T> wakeup( final Stream<ITerm> p_term );
 
 
@@ -130,6 +139,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return storage map
      */
+    @Nonnull
     Map<String, Object> storage();
 
     /**
@@ -137,6 +147,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return unification algorithm
      */
+    @Nonnull
     IUnifier unifier();
 
     /**
@@ -159,6 +170,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return plan map
      */
+    @Nonnull
     Multimap<ITrigger, IPlanStatistic> plans();
 
     /**
@@ -166,6 +178,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return operator
      */
+    @Nonnull
     IFuzzy<Boolean, T> fuzzy();
 
     /**
@@ -173,6 +186,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return variable builder function
      */
+    @Nonnull
     IVariableBuilder variablebuilder();
 
     /**
@@ -181,6 +195,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return multimap
      */
+    @Nonnull
     Multimap<IPath, IRule> rules();
 
     /**
@@ -189,6 +204,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      *
      * @return specified agent
      */
+    @Nonnull
     <N extends IAgent<?>> N raw();
 
 }

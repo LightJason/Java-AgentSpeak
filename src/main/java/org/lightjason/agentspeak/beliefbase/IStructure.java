@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.beliefbase;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * interface for equal method on views and beliefbases
@@ -58,6 +60,7 @@ public interface IStructure<T extends IAgent<?>>
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls
      */
+    @Nonnull
     T update( final T p_agent );
 
 }

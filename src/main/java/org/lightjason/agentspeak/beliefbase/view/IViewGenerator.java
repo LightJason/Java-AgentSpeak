@@ -32,9 +32,7 @@ import java.util.function.BiFunction;
  * interface for generating non-existing beliefbases views
  *
  * @tparam T agent type
- * @todo add function interface
  */
 public interface IViewGenerator<T extends IAgent<?>> extends BiFunction<String, IView<T>, IView<T>>
 {
-
 }

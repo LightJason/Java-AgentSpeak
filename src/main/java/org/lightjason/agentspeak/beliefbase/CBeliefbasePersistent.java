@@ -26,11 +26,10 @@ package org.lightjason.agentspeak.beliefbase;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.storage.IStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -50,10 +49,8 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
      *
      * @param p_storage storage
      */
-    public CBeliefbasePersistent( final IStorage<ILiteral, IView<T>, T> p_storage )
+    public CBeliefbasePersistent( @Nonnull final IStorage<ILiteral, IView<T>, T> p_storage )
     {
-        if ( p_storage == null )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
         m_storage = p_storage;
     }
 

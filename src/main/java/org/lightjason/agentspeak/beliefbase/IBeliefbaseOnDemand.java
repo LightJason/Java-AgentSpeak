@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -53,18 +54,21 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
         return 0;
     }
 
+    @Nonnull
     @Override
     public Stream<ILiteral> streamLiteral()
     {
         return Stream.empty();
     }
 
+    @Nonnull
     @Override
     public ILiteral add( final ILiteral p_literal )
     {
         return super.add( p_literal );
     }
 
+    @Nonnull
     @Override
     public ILiteral remove( final ILiteral p_literal )
     {
@@ -77,13 +81,14 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
         return false;
     }
 
+    @Nonnull
     @Override
     public Collection<ILiteral> literal( final String p_key )
     {
         return Collections.<ILiteral>emptySet();
     }
 
-
+    @Nonnull
     @Override
     public final IView<T> view( final String p_key )
     {
@@ -102,18 +107,21 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
         return Stream.empty();
     }
 
+    @Nonnull
     @Override
     public final IBeliefbase<T> clear()
     {
         return this;
     }
 
+    @Nonnull
     @Override
     public final IView<T> add( final IView<T> p_view )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
     }
 
+    @Nonnull
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {

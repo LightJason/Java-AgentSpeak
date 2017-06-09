@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
@@ -72,7 +73,7 @@ public final class CUnifier implements IUnifier
      * @param p_hashbased hash-based unification algorithm
      * @param p_recursive recursive-based unification algorithm
      */
-    public CUnifier( final IAlgorithm p_hashbased, final IAlgorithm p_recursive )
+    public CUnifier( @Nonnull final IAlgorithm p_hashbased, @Nonnull final IAlgorithm p_recursive )
     {
         m_hashbased = p_hashbased;
         m_recursive = p_recursive;
@@ -81,6 +82,7 @@ public final class CUnifier implements IUnifier
 
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
     {
@@ -107,9 +109,10 @@ public final class CUnifier implements IUnifier
         return l_result;
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables,
-                                       final IExpression p_expression, final boolean p_parallel )
+    public IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                       @Nonnull final IExpression p_expression, final boolean p_parallel )
     {
         // get all possible variables
         final List<Set<IVariable<?>>> l_variables = this.variables( p_context.agent(), p_literal, p_variables );

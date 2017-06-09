@@ -54,6 +54,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -141,7 +142,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @param p_configuration agent configuration
      */
-    public IBaseAgent( final IAgentConfiguration<T> p_configuration )
+    public IBaseAgent( @Nonnull final IAgentConfiguration<T> p_configuration )
     {
         // initialize agent
         m_unifier = p_configuration.unifier();
@@ -156,12 +157,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             m_trigger.put( p_configuration.initialgoal().hashCode(), p_configuration.initialgoal() );
     }
 
+    @Nonnull
     @Override
     public final IView<T> beliefbase()
     {
         return m_beliefbase;
     }
 
+    @Nonnull
     @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
@@ -181,6 +184,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         } );
     }
 
+    @Nonnull
     @Override
     public final Multimap<IPath, ILiteral> runningplans()
     {
@@ -204,6 +208,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         );
     }
 
+    @Nonnull
     @Override
     public final IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_literal )
     {
@@ -222,6 +227,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         );
     }
 
+    @Nonnull
     @Override
     public final IAgent<T> wakeup( final Stream<ITerm> p_term )
     {
@@ -230,12 +236,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return this;
     }
 
+    @Nonnull
     @Override
     public final Map<String, Object> storage()
     {
         return m_storage;
     }
 
+    @Nonnull
     @Override
     public final IUnifier unifier()
     {
@@ -254,30 +262,35 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_cycle.get();
     }
 
+    @Nonnull
     @Override
     public final Multimap<ITrigger, IPlanStatistic> plans()
     {
         return m_plans;
     }
 
+    @Nonnull
     @Override
     public final IFuzzy<Boolean, T> fuzzy()
     {
         return m_fuzzy;
     }
 
+    @Nonnull
     @Override
     public final IVariableBuilder variablebuilder()
     {
         return m_variablebuilder;
     }
 
+    @Nonnull
     @Override
     public final Multimap<IPath, IRule> rules()
     {
         return m_rules;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final <N extends IAgent<?>> N raw()
@@ -303,6 +316,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         );
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
     {

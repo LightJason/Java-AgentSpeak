@@ -28,6 +28,7 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import org.lightjason.agentspeak.agent.IAgent;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
@@ -55,12 +56,14 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
     private final Map<String, M> m_singleelements = new ConcurrentHashMap<>();
 
 
+    @Nonnull
     @Override
     public final Stream<N> streamMultiElements()
     {
         return m_multielements.values().stream();
     }
 
+    @Nonnull
     @Override
     public final Stream<M> streamSingleElements()
     {
@@ -121,6 +124,7 @@ public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage
         return m_singleelements.getOrDefault( p_key, p_default );
     }
 
+    @Nonnull
     @Override
     public final Collection<N> getMultiElement( final String p_key )
     {

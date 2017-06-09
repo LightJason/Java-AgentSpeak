@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -64,7 +65,7 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
      *
      * @param p_instance object
      */
-    public CClassStorage( final Object p_instance )
+    public CClassStorage( @Nonnull final Object p_instance )
     {
         this( p_instance, i -> i );
     }
@@ -75,7 +76,7 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
      * @param p_instance object
      * @param p_fieldnameformater function to reformat field names
      */
-    public CClassStorage( final Object p_instance, final Function<String, String> p_fieldnameformater )
+    public CClassStorage( @Nonnull final Object p_instance, @Nonnull final Function<String, String> p_fieldnameformater )
     {
         m_instance = p_instance;
         m_fields = Collections.unmodifiableMap(
@@ -89,7 +90,7 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
         );
     }
 
-
+    @Nonnull
     @Override
     public final Stream<ILiteral> streamMultiElements()
     {
@@ -170,6 +171,7 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
         return p_default;
     }
 
+    @Nonnull
     @Override
     public Collection<ILiteral> getMultiElement( final String p_key )
     {

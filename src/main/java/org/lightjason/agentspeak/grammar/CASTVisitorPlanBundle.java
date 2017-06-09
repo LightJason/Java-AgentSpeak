@@ -85,6 +85,7 @@ import org.lightjason.agentspeak.language.variable.CVariableEvaluate;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -133,7 +134,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
      *
      * @param p_actions set with actions
      */
-    public CASTVisitorPlanBundle( final Set<IAction> p_actions )
+    public CASTVisitorPlanBundle( @Nonnull final Set<IAction> p_actions )
     {
         m_actions = p_actions.stream().collect( Collectors.toMap( i -> i.name(), i -> i ) );
         LOGGER.info( MessageFormat.format( "create parser with actions & rules : {0} / {1}", m_actions.keySet(), m_rules.keySet() ) );

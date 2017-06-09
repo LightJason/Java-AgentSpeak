@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.beliefbase.storage;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * default structure of a storage
@@ -32,6 +34,7 @@ import org.lightjason.agentspeak.agent.IAgent;
 public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorage<N, M, T>
 {
 
+    @Nonnull
     @Override
     public T update( final T p_agent )
     {

@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.action.IAction;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
 import java.util.Set;
 
@@ -45,12 +46,13 @@ public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, 
      * @param p_actions agent actions
      * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserPlanBundle( final Set<IAction> p_actions ) throws NoSuchMethodException
+    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;
     }
 
+    @Nonnull
     @Override
     public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {

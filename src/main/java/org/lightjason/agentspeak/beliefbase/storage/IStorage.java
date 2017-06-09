@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.beliefbase.storage;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -45,6 +46,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      *
      * @return multi-element stream
      */
+    @Nonnull
     Stream<N> streamMultiElements();
 
     /**
@@ -52,6 +54,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      *
      * @return single-element stream
      */
+    @Nonnull
     Stream<M> streamSingleElements();
 
     /**
@@ -137,6 +140,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key name
      * @return collection of multi-elements
      */
+    @Nonnull
     Collection<N> getMultiElement( final String p_key );
 
     /**
@@ -157,6 +161,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_agent agent which calls the update
      * @return agent
      */
+    @Nonnull
     T update( final T p_agent );
 
     /**

@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
@@ -70,30 +71,35 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
     private final ReferenceQueue<IView<T>> m_maskreference = new ReferenceQueue<>();
 
 
+    @Nonnull
     @Override
     public final IView<T> create( final String p_name )
     {
         return this.eventreference( new CView<>( p_name, this ) );
     }
 
+    @Nonnull
     @Override
     public final IView<T> create( final String p_name, final IView<T> p_parent )
     {
         return this.eventreference( new CView<>( p_name, this, p_parent ) );
     }
 
+    @Nonnull
     @Override
     public ILiteral add( final ILiteral p_literal )
     {
         return this.event( ITrigger.EType.ADDBELIEF, p_literal );
     }
 
+    @Nonnull
     @Override
     public ILiteral remove( final ILiteral p_literal )
     {
         return this.event( ITrigger.EType.DELETEBELIEF, p_literal );
     }
 
+    @Nonnull
     @Override
     public T update( final T p_agent )
     {
@@ -112,6 +118,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
         return p_agent;
     }
 
+    @Nonnull
     @Override
     public Stream<ITrigger> trigger( final IView<T> p_view )
     {

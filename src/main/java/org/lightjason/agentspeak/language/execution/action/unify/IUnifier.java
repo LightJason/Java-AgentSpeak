@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 
 
@@ -45,7 +46,9 @@ public interface IUnifier
      * @return set with allocated variables
      *
      * @note check input literal and result of correct unification
+     * @todo check nonnull parameter modifier
      */
+    @Nonnull
     Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target );
 
     /**
@@ -59,6 +62,8 @@ public interface IUnifier
      * @param p_parallel parallel executon
      * @return boolean if a unify can be done
      */
-    IFuzzyValue<Boolean> unify( final IContext p_context, final ILiteral p_literal, final long p_variables, final IExpression p_expression, final boolean p_parallel );
+    @Nonnull
+    IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                @Nonnull final IExpression p_expression, final boolean p_parallel );
 
 }

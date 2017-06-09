@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.beliefbase.storage;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -64,12 +65,14 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
         super();
     }
 
+    @Nonnull
     @Override
     public final Stream<N> streamMultiElements()
     {
         return m_multielements.values().stream();
     }
 
+    @Nonnull
     @Override
     public final Stream<M> streamSingleElements()
     {
@@ -130,6 +133,7 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
         return m_singleelements.getOrDefault( p_key, p_default );
     }
 
+    @Nonnull
     @Override
     public final Collection<N> getMultiElement( final String p_key )
     {

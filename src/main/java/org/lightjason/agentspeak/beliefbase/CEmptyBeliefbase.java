@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -64,18 +65,21 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
         return Stream.empty();
     }
 
+    @Nonnull
     @Override
     public final IBeliefbase<T> clear()
     {
         return this;
     }
 
+    @Nonnull
     @Override
     public final IView<T> add( final IView<T> p_view )
     {
         return p_view;
     }
 
+    @Nonnull
     @Override
     public final IView<T> remove( final IView<T> p_view )
     {
@@ -94,6 +98,7 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
         return false;
     }
 
+    @Nonnull
     @Override
     public final IView<T> view( final String p_key )
     {

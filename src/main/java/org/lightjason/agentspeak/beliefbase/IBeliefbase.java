@@ -28,6 +28,8 @@ import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -47,6 +49,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_view mask for events
      * @return set with trigger events
      */
+    @Nonnull
     Stream<ITrigger> trigger( final IView<T> p_view );
 
 
@@ -56,6 +59,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      *
      * @return literal stream
      */
+    @Nonnull
     Stream<ILiteral> streamLiteral();
 
     /**
@@ -63,6 +67,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      *
      * @return view stream
      */
+    @Nonnull
     Stream<IView<T>> streamView();
 
 
@@ -72,6 +77,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      *
      * @return beliefbase reference
      */
+    @Nonnull
     IBeliefbase<T> clear();
 
 
@@ -82,6 +88,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_literal literal without path
      * @return beliefbase reference
      */
+    @Nonnull
     ILiteral add( final ILiteral p_literal );
 
     /**
@@ -90,6 +97,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_view view
      * @return beliefbase reference
      */
+    @Nonnull
     IView<T> add( final IView<T> p_view );
 
 
@@ -100,6 +108,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_literal without path
      * @return beliefbase reference
      */
+    @Nonnull
     ILiteral remove( final ILiteral p_literal );
 
     /**
@@ -108,6 +117,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_view view
      * @return beliefbase reference
      */
+    @Nonnull
     IView<T> remove( final IView<T> p_view );
 
 
@@ -136,6 +146,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the view
      * @return view or null
      */
+    @Nonnull
     IView<T> view( final String p_key );
 
     /**
@@ -144,6 +155,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the literal
      * @return collection of pairs with negated and literal
      */
+    @Nonnull
     Collection<ILiteral> literal( final String p_key );
 
     /**
@@ -153,6 +165,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_default view
      * @return view or default element
      */
+    @Nullable
     IView<T> viewOrDefault( final String p_key, final IView<T> p_default );
 
 
@@ -163,6 +176,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_name name of the view
      * @return created view
      */
+    @Nonnull
     IView<T> create( final String p_name );
 
     /**
@@ -172,6 +186,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_parent parent view
      * @return view
      */
+    @Nonnull
     IView<T> create( final String p_name, final IView<T> p_parent );
 
 }
