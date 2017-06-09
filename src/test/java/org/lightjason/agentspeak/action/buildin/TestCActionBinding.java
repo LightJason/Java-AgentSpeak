@@ -125,9 +125,7 @@ public final class TestCActionBinding extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        public CClassBindingDefault(
-            final IAgentConfiguration<CClassBindingDefault> p_configuration
-        )
+        public CClassBindingDefault( final IAgentConfiguration<CClassBindingDefault> p_configuration )
         {
             super( p_configuration );
         }
@@ -136,8 +134,7 @@ public final class TestCActionBinding extends IBaseTest
          * test binding method
          */
         private void methoddefault()
-        {
-        }
+        {}
     }
 
     /**
@@ -151,9 +148,7 @@ public final class TestCActionBinding extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        public CClassBindingBlacklist(
-            final IAgentConfiguration<CClassBindingBlacklist> p_configuration
-        )
+        public CClassBindingBlacklist( final IAgentConfiguration<CClassBindingBlacklist> p_configuration )
         {
             super( p_configuration );
         }
@@ -162,8 +157,7 @@ public final class TestCActionBinding extends IBaseTest
          * test binding method
          */
         private void methodblacklist()
-        {
-        }
+        {}
     }
 
     /**
@@ -177,9 +171,7 @@ public final class TestCActionBinding extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        public CClassBindingWhitelist(
-            final IAgentConfiguration<CClassBindingWhitelist> p_configuration
-        )
+        public CClassBindingWhitelist( final IAgentConfiguration<CClassBindingWhitelist> p_configuration )
         {
             super( p_configuration );
         }
@@ -188,8 +180,7 @@ public final class TestCActionBinding extends IBaseTest
          * test binding method
          */
         private void methodwhitelist()
-        {
-        }
+        {}
     }
 
 
@@ -205,9 +196,7 @@ public final class TestCActionBinding extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        public CMethodBindingDefault(
-            final IAgentConfiguration<CMethodBindingDefault> p_configuration
-        )
+        public CMethodBindingDefault( final IAgentConfiguration<CMethodBindingDefault> p_configuration )
         {
             super( p_configuration );
         }
@@ -217,15 +206,13 @@ public final class TestCActionBinding extends IBaseTest
          */
         @IAgentActionFilter
         private void methodannotate()
-        {
-        }
+        {}
 
         /**
          * test binding method without annotation
          */
         private void methodnotannotate()
-        {
-        }
+        {}
     }
 
     /**
@@ -240,9 +227,7 @@ public final class TestCActionBinding extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        public CMethodBindingBlacklist(
-            final IAgentConfiguration<CMethodBindingBlacklist> p_configuration
-        )
+        public CMethodBindingBlacklist( final IAgentConfiguration<CMethodBindingBlacklist> p_configuration )
         {
             super( p_configuration );
         }
@@ -252,15 +237,13 @@ public final class TestCActionBinding extends IBaseTest
          */
         @IAgentActionFilter
         private void methodannotate()
-        {
-        }
+        {}
 
         /**
          * test binding method without annotation
          */
         private void methodnotannotate()
-        {
-        }
+        {}
     }
 
 
@@ -276,9 +259,7 @@ public final class TestCActionBinding extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        public CMethodBindingWhitelist(
-            final IAgentConfiguration<CMethodBindingWhitelist> p_configuration
-        )
+        public CMethodBindingWhitelist( final IAgentConfiguration<CMethodBindingWhitelist> p_configuration )
         {
             super( p_configuration );
         }
@@ -288,15 +269,13 @@ public final class TestCActionBinding extends IBaseTest
          */
         @IAgentActionFilter
         private void methodannotate()
-        {
-        }
+        {}
 
         /**
          * test binding method without annotation
          */
         private void methodnotannotate()
-        {
-        }
+        {}
     }
 
 

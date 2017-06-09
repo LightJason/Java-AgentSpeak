@@ -411,7 +411,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             return new CExpressionUnify(
                 p_context.AT() != null,
                 (ILiteral) this.visitLiteral( p_context.literal() ),
-                l_constraint == null ? IExpression.EMPTY : (IExpression) l_constraint
+                (IExpression) l_constraint
             );
 
         if ( l_constraint instanceof IVariable<?> )

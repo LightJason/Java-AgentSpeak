@@ -56,6 +56,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -418,6 +419,7 @@ public final class TestCActionAgent extends IBaseTest
             m_trigger = p_trigger;
         }
 
+        @Nonnull
         @Override
         public final ITrigger trigger()
         {
