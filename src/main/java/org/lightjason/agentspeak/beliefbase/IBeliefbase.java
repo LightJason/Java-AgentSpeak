@@ -146,7 +146,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @param p_key name of the view
      * @return view or null
      */
-    @Nonnull
+    @Nullable
     IView<T> view( final String p_key );
 
     /**

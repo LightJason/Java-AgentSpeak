@@ -82,8 +82,8 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition, @Nonnull
-                            final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
+                  @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
         super(
             p_body,
@@ -103,26 +103,31 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         m_condition = p_condition;
     }
 
+    @Nonnull
     @Override
     public final ITrigger trigger()
     {
         return m_triggerevent;
     }
 
+    @Nonnull
     @Override
     public final Collection<IAnnotation<?>> annotations()
     {
         return m_annotation.values();
     }
 
+    @Nonnull
     @Override
     public final List<IExecution> body()
     {
         return m_action;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return );
 
@@ -133,12 +138,10 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         return l_result;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValue<Boolean> condition( final IContext p_context )
     {
-        if ( m_condition == null )
-            return CFuzzyValue.from( true );
-
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
             m_condition.execute( p_context, false, Collections.emptyList(), l_return ).value()
@@ -161,6 +164,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

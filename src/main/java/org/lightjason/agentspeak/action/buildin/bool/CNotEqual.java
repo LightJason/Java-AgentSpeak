@@ -43,4 +43,5 @@ public final class CNotEqual extends CEqual
     {
         return !super.apply( p_value );
     }
+
 }

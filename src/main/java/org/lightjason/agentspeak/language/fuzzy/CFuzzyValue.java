@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.fuzzy;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
@@ -49,7 +50,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      *
      * @param p_value fuzzy value
      */
-    public CFuzzyValue( final IFuzzyValue<T> p_value )
+    public CFuzzyValue( @Nonnull final IFuzzyValue<T> p_value )
     {
         this( p_value.value(), p_value.fuzzy() );
     }
@@ -59,7 +60,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      *
      * @param p_value value
      */
-    public CFuzzyValue( final T p_value )
+    public CFuzzyValue( @Nonnull final T p_value )
     {
         this( p_value, 1 );
     }
@@ -70,7 +71,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      * @param p_value value
      * @param p_fuzzy fuzzy
      */
-    public CFuzzyValue( final T p_value, final double p_fuzzy )
+    public CFuzzyValue( @Nonnull final T p_value, final double p_fuzzy )
     {
         if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_fuzzy ) );
@@ -79,7 +80,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
         m_value = p_value;
     }
 
-
+    @Nonnull
     @Override
     public final T value()
     {
@@ -95,7 +96,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
     @Override
     public final boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Override
@@ -112,7 +113,8 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      *
      * @tparam N fuzzy type
      */
-    public static <N> IFuzzyValue<N> from( final N p_value )
+    @Nonnull
+    public static <N> IFuzzyValue<N> from( @Nonnull final N p_value )
     {
         return new CFuzzyValue<>( p_value );
     }
@@ -126,7 +128,8 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
      *
      * @tparam N fuzzy type
      */
-    public static <N> IFuzzyValue<N> from( final N p_value, final double p_fuzzy )
+    @Nonnull
+    public static <N> IFuzzyValue<N> from( @Nonnull final N p_value, final double p_fuzzy )
     {
         return new CFuzzyValue<>( p_value, p_fuzzy );
     }

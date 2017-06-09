@@ -31,7 +31,10 @@ import org.lightjason.agentspeak.action.binding.CMethodAction;
 import org.lightjason.agentspeak.action.binding.IAgentAction;
 import org.lightjason.agentspeak.action.binding.IAgentActionFilter;
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,8 +93,7 @@ public final class CCommon
      * private ctor - avoid instantiation
      */
     private CCommon()
-    {
-    }
+    {}
 
     /**
      * returns a logger instance
@@ -99,6 +101,7 @@ public final class CCommon
      * @param p_class class type
      * @return logger
      */
+    @Nonnull
     public static Logger logger( final Class<?> p_class )
     {
         return Logger.getLogger( p_class.getName() );
@@ -109,6 +112,7 @@ public final class CCommon
      *
      * @return list of language pattern
      */
+    @Nonnull
     public static String[] languages()
     {
         return Arrays.stream( PROPERTIES.getString( "translation" ).split( "," ) ).map( i -> i.trim().toLowerCase() ).toArray( String[]::new );
@@ -119,6 +123,7 @@ public final class CCommon
      *
      * @return bundle
      */
+    @Nonnull
     public static ResourceBundle languagebundle()
     {
         return LANGUAGE;
@@ -129,6 +134,7 @@ public final class CCommon
      *
      * @return bundle object
      */
+    @Nonnull
     public static ResourceBundle configuration()
     {
         return PROPERTIES;
@@ -142,6 +148,7 @@ public final class CCommon
      * @param p_package full-qualified package name or empty for default package
      * @return action stream
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromPackage( final String... p_package )
     {
@@ -192,6 +199,7 @@ public final class CCommon
      * @param p_class class list
      * @return action stream
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromAgentClass( final Class<?>... p_class )
     {
@@ -228,7 +236,7 @@ public final class CCommon
      */
     private static boolean actionusable( final IAction p_action )
     {
-        if ( ( p_action.name() == null ) || ( p_action.name().isEmpty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
+        if ( ( p_action.name().isEmpty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
         {
             LOGGER.warning( CCommon.languagestring( CCommon.class, "actionnameempty" ) );
             return false;
@@ -264,6 +272,7 @@ public final class CCommon
      * @param p_root root class
      * @return stream of all methods with inheritance
      */
+    @Nonnull
     private static Stream<Method> methods( final Class<?> p_class, final Class<?> p_root )
     {
         final Pair<Boolean, IAgentAction.EAccess> l_classannotation = CCommon.isActionClass( p_class );
@@ -295,6 +304,7 @@ public final class CCommon
      * @param p_class class for checking
      * @return boolean flag of check result
      */
+    @Nonnull
     private static Pair<Boolean, IAgentAction.EAccess> isActionClass( final Class<?> p_class )
     {
         if ( !p_class.isAnnotationPresent( IAgentAction.class ) )
@@ -342,6 +352,7 @@ public final class CCommon
      * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
+    @Nonnull
     public static URL concaturl( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
     {
         return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
@@ -352,6 +363,7 @@ public final class CCommon
      *
      * @return URL of file or null
      */
+    @Nullable
     public static URL resourceurl()
     {
         return CCommon.class.getClassLoader().getResource( "" );
@@ -366,6 +378,7 @@ public final class CCommon
      * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
+    @Nonnull
     public static URL resourceurl( final String p_file ) throws URISyntaxException, MalformedURLException
     {
         return resourceurl( new File( p_file ) );
@@ -380,11 +393,16 @@ public final class CCommon
      * @throws URISyntaxException is thrown on URI errors
      * @throws MalformedURLException is thrown on malformat
      */
+    @Nonnull
     private static URL resourceurl( final File p_file ) throws URISyntaxException, MalformedURLException
     {
         if ( p_file.exists() )
             return p_file.toURI().normalize().toURL();
-        return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
+
+        final URL l_url = CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) );
+        if ( l_url == null )
+            throw new CIllegalArgumentException( CCommon.languagestring( CCommon.class, "fileurlnull", p_file ) );
+        return l_url.toURI().normalize().toURL();
     }
 
     // --- language operations ---------------------------------------------------------------------------------------------------------------------------------
@@ -399,6 +417,7 @@ public final class CCommon
      *
      * @tparam T object type
      */
+    @Nonnull
     public static <T> String languagestring( final T p_source, final String p_label, final Object... p_parameter )
     {
         return languagestring( p_source.getClass(), p_label, p_parameter );
@@ -412,6 +431,7 @@ public final class CCommon
      * @param p_parameter object array with substitutions
      * @return resource string
      */
+    @Nonnull
     public static String languagestring( final Class<?> p_class, final String p_label, final Object... p_parameter )
     {
         try
@@ -431,6 +451,7 @@ public final class CCommon
      * @param p_label label name of the object
      * @return label name
      */
+    @Nonnull
     private static String languagelabel( final Class<?> p_class, final String p_label )
     {
         return ( p_class.getCanonicalName().toLowerCase( Locale.ROOT ) + "." + p_label.toLowerCase( Locale.ROOT ) ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ).replace(

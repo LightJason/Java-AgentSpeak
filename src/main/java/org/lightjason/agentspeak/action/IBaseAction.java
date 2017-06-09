@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action;
 
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -52,6 +53,7 @@ public abstract class IBaseAction implements IAction
         return this.name().toString();
     }
 
+    @Nonnull
     @Override
     public Stream<IVariable<?>> variables()
     {

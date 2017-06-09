@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -45,14 +46,16 @@ public interface IExpression extends IExecution
      */
     IExpression EMPTY = new IExpression()
     {
+        @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             p_return.add( CRawTerm.from( true ) );
             return CFuzzyValue.from( true );
         }
 
+        @Nonnull
         @Override
         public final Stream<IVariable<?>> variables()
         {

@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
      * @param p_parallel parallel execution
      * @param p_literal literal
      */
-    public CDefaultUnify( final boolean p_parallel, final ILiteral p_literal )
+    public CDefaultUnify( final boolean p_parallel,  @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
         m_parallel = p_parallel;
@@ -84,8 +85,10 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         return MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value );
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute(  @Nonnull final IContext p_context, final boolean p_parallel,
+                                          @Nonnull final List<ITerm> p_argument,  @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().unifier().unify(
             p_context,
@@ -96,6 +99,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()

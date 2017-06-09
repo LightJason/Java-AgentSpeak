@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.collection.map;
 
 import org.lightjason.agentspeak.action.buildin.collection.IMapApplyMultiple;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 
@@ -39,7 +41,7 @@ import java.util.Map;
 public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
 {
     @Override
-    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
+    protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.putIfAbsent( p_key, p_value );
     }

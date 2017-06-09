@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language.fuzzy;
 
 
+import javax.annotation.Nonnull;
+
+
 /**
  * interface for a mutable fuzzy value
  *
@@ -38,6 +41,7 @@ public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
      * @param p_value new value
      * @return self reference
      */
+    @Nonnull
     IFuzzyValueMutable<T> value( final T p_value );
 
     /**
@@ -46,6 +50,7 @@ public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
      * @param p_value weight
      * @return self reference
      */
+    @Nonnull
     IFuzzyValueMutable<T> fuzzy( final double p_value );
 
     /**
@@ -53,6 +58,7 @@ public interface IFuzzyValueMutable<T> extends IFuzzyValue<T>
      *
      * @return immutable instance
      */
+    @Nonnull
     IFuzzyValue<T> immutable();
 
 }

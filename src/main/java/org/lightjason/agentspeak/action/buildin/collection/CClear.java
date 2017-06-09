@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +52,10 @@ public final class CClear extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         return CFuzzyValue.from(
@@ -68,7 +70,7 @@ public final class CClear extends IBuildinAction
      * @param p_term term
      * @return clearing successful
      */
-    private static boolean clear( final ITerm p_term )
+    private static boolean clear( @Nonnull final ITerm p_term )
     {
         if ( CCommon.rawvalueAssignableTo( p_term, Collection.class ) )
         {

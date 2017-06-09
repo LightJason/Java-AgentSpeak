@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -56,14 +57,15 @@ public abstract class IMapGetSingle<T> extends IBuildinAction
         return 1;
     }
 
-
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         CCommon.flatcollection( p_argument )
                .skip( 1 )
-               .forEach( i ->  this.apply( i.<T>raw(), p_argument.get( 0 ).raw(), p_parallel, p_return ) );
+               .forEach( i ->  this.apply( p_parallel, i.<T>raw(), p_argument.get( 0 ).raw(), p_return ) );
 
         return CFuzzyValue.from( true );
     }
@@ -71,12 +73,11 @@ public abstract class IMapGetSingle<T> extends IBuildinAction
 
     /**
      * apply operation
-     *
+     *  @param p_parallel parallel flag
      * @param p_instance object instance
      * @param p_key key
-     * @param p_parallel parallel flag
      * @param p_return return list
      */
-    protected abstract void apply( final T p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return );
+    protected abstract void apply( final boolean p_parallel, @Nonnull final T p_instance, @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return );
 
 }

@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,8 +59,10 @@ public abstract class IMapApplyMultiple<T> extends IBuildinAction
         return 3;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
 
@@ -84,5 +88,5 @@ public abstract class IMapApplyMultiple<T> extends IBuildinAction
      * @param p_key key
      * @param p_value value
      */
-    protected abstract void apply( final T p_instance, final Object p_key, final Object p_value );
+    protected abstract void apply( @Nonnull final T p_instance, @Nonnull final Object p_key, @Nullable final Object p_value );
 }

@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language.fuzzy;
 
 
+import javax.annotation.Nonnull;
+
+
 /**
  * result for an immutable fuzzy value
  *
@@ -36,6 +39,7 @@ public interface IFuzzyValue<T>
      *
      * @return value
      */
+    @Nonnull
     T value();
 
     /**
