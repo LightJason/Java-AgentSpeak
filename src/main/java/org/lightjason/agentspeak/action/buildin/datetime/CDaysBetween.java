@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.datetime;
 import org.joda.time.Days;
 import org.joda.time.Instant;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -44,8 +45,9 @@ import java.util.stream.Stream;
 public final class CDaysBetween extends IBetween
 {
 
+    @Nonnull
     @Override
-    protected final Stream<?> apply( final Stream<List<Instant>> p_datetime )
+    protected final Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
     {
         return p_datetime
                 .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )

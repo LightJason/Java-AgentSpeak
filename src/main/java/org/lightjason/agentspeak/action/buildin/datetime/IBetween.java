@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.TimeZone;
@@ -59,9 +60,10 @@ public abstract class IBetween extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         this.apply(
@@ -86,6 +88,7 @@ public abstract class IBetween extends IBuildinAction
      * @param p_datetime stream with list of date-time elements
      * @return output stream
      */
-    protected abstract Stream<?> apply( final Stream<List<Instant>> p_datetime );
+    @Nonnull
+    protected abstract Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime );
 
 }

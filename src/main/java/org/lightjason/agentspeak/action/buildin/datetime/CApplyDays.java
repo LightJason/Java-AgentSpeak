@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.datetime;
 
 
+import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
@@ -43,14 +44,16 @@ import java.util.stream.Stream;
 public final class CApplyDays extends IPlusMinus
 {
 
+    @Nonnull
     @Override
-    protected final Stream<?> applyminus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected final Stream<?> applyminus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.minusDays( p_value ) );
     }
 
+    @Nonnull
     @Override
-    protected final Stream<?> applyplus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected final Stream<?> applyplus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.plusDays( p_value ) );
     }
