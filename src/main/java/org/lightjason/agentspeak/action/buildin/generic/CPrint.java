@@ -31,10 +31,13 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,12 +84,12 @@ public final class CPrint extends IBuildinAction
      * @param p_stream any byte output stream
      * @param p_formatter formatter elements
      */
-    public CPrint( final String p_seperator, final PrintStream p_stream, final IFormatter<?>... p_formatter )
+    public CPrint( @Nonnull final String p_seperator, @Nonnull final PrintStream p_stream, @Nullable final IFormatter<?>... p_formatter )
     {
         super( 2 );
         m_stream = p_stream;
         m_seperator = p_seperator;
-        m_formatter = new HashSet<>( Arrays.asList( p_formatter ) );
+        m_formatter = p_formatter != null ? new HashSet<>( Arrays.asList( p_formatter ) ) : Collections.emptySet();
     }
 
     /**
@@ -106,8 +109,10 @@ public final class CPrint extends IBuildinAction
         return 0;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         m_stream.println( MessageFormat.format( "{0}", this.format( p_argument ) ) );
         return CFuzzyValue.from( true );
@@ -119,7 +124,8 @@ public final class CPrint extends IBuildinAction
      * @param p_argument arguments list
      * @return string
      */
-    private String format( final Collection<ITerm> p_argument )
+    @Nonnull
+    private String format( @Nonnull final Collection<ITerm> p_argument )
     {
         return p_argument.stream()
                          .map( ITerm::raw )

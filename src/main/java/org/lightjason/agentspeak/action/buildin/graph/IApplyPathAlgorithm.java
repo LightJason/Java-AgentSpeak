@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +55,10 @@ public abstract class IApplyPathAlgorithm extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 3 )
@@ -111,7 +114,8 @@ public abstract class IApplyPathAlgorithm extends IBuildinAction
      * @param p_weightfunction weight function
      * @return result of action
      */
-    protected abstract Object apply( final List<ITerm> p_vertices, final Graph<Object, Object> p_graph, final Function<Object, Number> p_weightfunction );
+    protected abstract Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,
+                                     @Nonnull final Function<Object, Number> p_weightfunction );
 
 
 }

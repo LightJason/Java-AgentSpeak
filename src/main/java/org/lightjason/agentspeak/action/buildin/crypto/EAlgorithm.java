@@ -28,6 +28,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import javax.annotation.Nonnull;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
@@ -63,7 +64,7 @@ public enum EAlgorithm
      * @param p_cipher chipher name
      * @param p_key name of the key
      */
-    EAlgorithm( final String p_cipher, final String p_key )
+    EAlgorithm( @Nonnull final String p_cipher, @Nonnull final String p_key )
     {
         m_cipher = p_cipher;
         m_key = p_key;
@@ -76,6 +77,7 @@ public enum EAlgorithm
      *
      * @throws NoSuchAlgorithmException on algorithm error
      */
+    @Nonnull
     public final Pair<Key, Key> generateKey() throws NoSuchAlgorithmException
     {
         switch ( this )
@@ -103,7 +105,8 @@ public enum EAlgorithm
      * @throws NoSuchAlgorithmException on algorithm error
      * @throws InvalidKeyException on key invalid
      */
-    public final Cipher getEncryptCipher( final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+    @Nonnull
+    public final Cipher getEncryptCipher( @Nonnull final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
     {
         final Cipher l_cipher = Cipher.getInstance( m_cipher );
         l_cipher.init( Cipher.ENCRYPT_MODE, p_key );
@@ -120,7 +123,8 @@ public enum EAlgorithm
      * @throws NoSuchAlgorithmException on algorithm error
      * @throws InvalidKeyException on key invalid
      */
-    public final Cipher getDecryptCipher( final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+    @Nonnull
+    public final Cipher getDecryptCipher( @Nonnull final Key p_key ) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
     {
         final Cipher l_cipher = Cipher.getInstance( m_cipher );
         l_cipher.init( Cipher.DECRYPT_MODE, p_key );
@@ -133,7 +137,8 @@ public enum EAlgorithm
      * @param p_value string value
      * @return enum
      */
-    public static EAlgorithm from( final String p_value )
+    @Nonnull
+    public static EAlgorithm from( @Nonnull final String p_value )
     {
         return EAlgorithm.valueOf( p_value.trim().toUpperCase( Locale.ROOT ) );
     }
