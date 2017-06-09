@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
      * @param p_literal literal
      * @param p_action action
      */
-    public CBeliefAction( final ILiteral p_literal, final EAction p_action )
+    public CBeliefAction( @Nonnull final ILiteral p_literal, @Nonnull final EAction p_action )
     {
         super( p_literal );
         m_action = p_action;
@@ -62,10 +63,10 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
         return MessageFormat.format( "{0}{1}", m_action, m_value );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         switch ( m_action )
         {
@@ -101,7 +102,7 @@ public final class CBeliefAction extends IBaseExecution<ILiteral>
          *
          * @param p_name string represenation
          */
-        EAction( final String p_name )
+        EAction( @Nonnull final String p_name )
         {
             m_name = p_name;
         }

@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -49,7 +50,8 @@ public final class CIncrement<T extends Number> implements IOperator<T>
      *
      * @param p_variable variable
      */
-    public CIncrement( final IVariable<T> p_variable )
+    @Nonnull
+    public CIncrement( @Nonnull final IVariable<T> p_variable )
     {
         m_variable = p_variable;
     }
@@ -60,10 +62,11 @@ public final class CIncrement<T extends Number> implements IOperator<T>
         return m_variable.toString() + "++";
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context,
-                                               final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).throwNotAllocated();
@@ -80,6 +83,7 @@ public final class CIncrement<T extends Number> implements IOperator<T>
         return CFuzzyValue.from( true );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

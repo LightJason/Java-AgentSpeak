@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -50,23 +51,24 @@ public class CAtom implements IExpression
      *
      * @param p_value any atomic value
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
     public <T> CAtom( final T p_value )
     {
         m_value = ( p_value instanceof IVariable<?> ) ? (IVariable<?>) p_value : CRawTerm.from( p_value );
     }
 
-
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
         p_return.add( CRawTerm.from( l_term.raw() ).throwNotAllocated( l_term.fqnfunctor().toString() ) );
         return CFuzzyValue.from( true );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

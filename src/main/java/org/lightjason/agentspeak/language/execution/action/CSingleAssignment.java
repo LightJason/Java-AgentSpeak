@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -54,17 +55,17 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
      * @param p_lefthand left-hand argument (variable)
      * @param p_righthand right-hand argument
      */
-    public CSingleAssignment( final IVariable<?> p_lefthand, final M p_righthand )
+    public CSingleAssignment( @Nonnull final IVariable<?> p_lefthand, @Nonnull final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_return = new LinkedList<>();
         final IFuzzyValue<Boolean> l_rightreturn = m_righthand.execute(
@@ -79,7 +80,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() ^ m_righthand.hashCode();
+        return ( m_value == null ? 0 : m_value.hashCode() ) ^ m_righthand.hashCode();
     }
 
     @Override
@@ -95,6 +96,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
     }
 
     @Override
+    @Nonnull
     public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(

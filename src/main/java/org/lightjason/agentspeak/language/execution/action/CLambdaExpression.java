@@ -34,6 +34,8 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
@@ -76,7 +78,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_iterator iteration variable
      * @param p_body execution body
      */
-    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_iterator, final List<IExecution> p_body )
+    public CLambdaExpression( final boolean p_parallel, @Nonnull final IExecution p_initialize,
+                              @Nonnull final IVariable<?> p_iterator, @Nonnull final List<IExecution> p_body )
     {
         this( p_parallel, p_initialize, p_iterator, null, p_body );
     }
@@ -90,9 +93,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_return return variable
      * @param p_body execution body
      */
-    public CLambdaExpression( final boolean p_parallel, final IExecution p_initialize, final IVariable<?> p_iterator, final IVariable<?> p_return,
-                              final List<IExecution> p_body
-    )
+    public CLambdaExpression( final boolean p_parallel, @Nonnull final IExecution p_initialize, @Nonnull final IVariable<?> p_iterator,
+                              @Nullable final IVariable<?> p_return, @Nonnull final List<IExecution> p_body )
     {
         super( p_iterator );
         m_parallel = p_parallel;
@@ -101,11 +103,11 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         m_body = Collections.unmodifiableList( p_body );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // run initialization
         final List<ITerm> l_initialization = new LinkedList<>();
@@ -132,6 +134,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
@@ -156,7 +159,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_input input list
      * @return return list
      */
-    private List<?> executeSequential( final IContext p_context, final List<ITerm> p_input )
+    @Nonnull
+    private List<?> executeSequential( @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_input )
     {
         final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
 
@@ -181,7 +185,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_input input list
      * @return return list
      */
-    private List<?> executeParallel( final IContext p_context, final List<ITerm> p_input )
+    @Nonnull
+    private List<?> executeParallel( @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_input )
     {
         return CCommon.flatcollection( p_input ).parallel().map( i -> {
 
@@ -203,7 +208,8 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
      * @param p_context local context
      * @return tripel with context, iterator variable and return variable
      */
-    private Triple<IContext, IVariable<?>, IVariable<?>> getLocalContext( final IContext p_context )
+    @Nonnull
+    private Triple<IContext, IVariable<?>, IVariable<?>> getLocalContext( @Nonnull final IContext p_context )
     {
         final IVariable<?> l_iterator = m_value.shallowcopy();
         final IVariable<?> l_return = m_return != null ? m_return.shallowcopy() : null;

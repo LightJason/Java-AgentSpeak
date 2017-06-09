@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,16 +55,17 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
      * @param p_lefthand left-hand variable list
      * @param p_righthand right-hand argument
      */
-    public CDeconstruct( final List<IVariable<?>> p_lefthand, final M p_righthand )
+    @Nonnull
+    public CDeconstruct( @Nonnull final List<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );
         return CFuzzyValue.from( true );
@@ -72,7 +74,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() ^ m_righthand.hashCode();
+        return m_value == null ? 0 : m_value.hashCode() ^ m_righthand.hashCode();
     }
 
     @Override
@@ -87,10 +89,11 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
         return MessageFormat.format( "{0} =.. {1}", m_value, m_righthand );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_value.stream();
+        return m_value == null ? Stream.empty() : m_value.stream();
     }
 
     /**
@@ -100,7 +103,7 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
      * @param p_term term
      */
     @SuppressWarnings( "unchecked" )
-    private void set( final List<ITerm> p_assignment, final ILiteral p_term )
+    private void set( @Nonnull final List<ITerm> p_assignment, @Nonnull final ILiteral p_term )
     {
         if ( p_assignment.size() >= 1 )
             ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.fqnfunctor().toString() );

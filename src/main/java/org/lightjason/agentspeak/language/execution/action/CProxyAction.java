@@ -78,6 +78,7 @@ public final class CProxyAction implements IExecution
         return m_execution.execute( p_parallel, p_context, p_argument, p_return );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
@@ -186,7 +187,7 @@ public final class CProxyAction implements IExecution
          * @param p_literal action literal
          * @param p_actions actions
          */
-        CActionWrapper( final ILiteral p_literal, final Map<IPath, IAction> p_actions )
+        CActionWrapper( @Nonnull final ILiteral p_literal, @Nonnull final Map<IPath, IAction> p_actions )
         {
             // check parallel and inner execution
             m_parallel = p_literal.hasAt();

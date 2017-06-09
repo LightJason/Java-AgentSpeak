@@ -53,7 +53,7 @@ public final class CExpressionUnify extends CDefaultUnify
      * @param p_literal literal
      * @param p_expression expression
      */
-    public CExpressionUnify( final boolean p_parallel,  @Nonnull final ILiteral p_literal,  @Nonnull final IExpression p_expression )
+    public CExpressionUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IExpression p_expression )
     {
         super( p_parallel, p_literal );
         m_expression = p_expression;

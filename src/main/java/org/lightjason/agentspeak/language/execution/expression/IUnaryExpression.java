@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
+import javax.annotation.Nonnull;
+
+
 /**
  * interface of unary expressions
  */
@@ -35,6 +38,7 @@ public interface IUnaryExpression extends IExpression
      *
      * @return expression
      */
+    @Nonnull
     IExpression expression();
 
     /**
@@ -42,6 +46,7 @@ public interface IUnaryExpression extends IExpression
      *
      * @return operator
      */
+    @Nonnull
     EOperator operator();
 
 }

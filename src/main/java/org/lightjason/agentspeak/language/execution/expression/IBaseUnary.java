@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.stream.Stream;
 
@@ -52,7 +53,7 @@ public abstract class IBaseUnary implements IUnaryExpression
      * @param p_operator operator
      * @param p_expression expression
      */
-    protected IBaseUnary( final EOperator p_operator, final IExpression p_expression )
+    protected IBaseUnary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_expression )
     {
         if ( !p_operator.isUnary() )
             throw new CIllegalArgumentException( CCommon.languagestring( IBaseUnary.class, "operator", p_operator ) );
@@ -61,12 +62,14 @@ public abstract class IBaseUnary implements IUnaryExpression
         m_expression = p_expression;
     }
 
+    @Nonnull
     @Override
     public final IExpression expression()
     {
         return m_expression;
     }
 
+    @Nonnull
     @Override
     public final EOperator operator()
     {
@@ -91,6 +94,7 @@ public abstract class IBaseUnary implements IUnaryExpression
         return MessageFormat.format( "{0}({1})", m_operator, m_expression );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

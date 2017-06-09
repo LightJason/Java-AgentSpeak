@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,22 +51,20 @@ public final class CComparable extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CComparable( final EOperator p_operator, final IExpression p_lefthandside,
-                        final IExpression p_righthandside
-    )
+    public CComparable( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
         if ( !m_operator.isComparable() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !this.executearguments( p_context, p_parallel, l_argument ) )
+        if ( !this.executearguments( p_parallel, p_context, l_argument ) )
             return CFuzzyValue.from( false );
 
         switch ( m_operator )
@@ -91,7 +90,7 @@ public final class CComparable extends IBaseBinary
      * @return equality flag
      */
     @SuppressWarnings( "unchecked" )
-    private static boolean checkequal( final ITerm p_value1, final ITerm p_value2 )
+    private static boolean checkequal( @Nonnull final ITerm p_value1, @Nonnull final ITerm p_value2 )
     {
         final Object l_value1 = p_value1.raw();
         final Object l_value2 = p_value2.raw();

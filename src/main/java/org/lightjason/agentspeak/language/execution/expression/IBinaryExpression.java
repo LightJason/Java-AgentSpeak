@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language.execution.expression;
 
 
+import javax.annotation.Nonnull;
+
+
 /**
  * interface of any binary expression type
  */
@@ -35,6 +38,7 @@ public interface IBinaryExpression extends IExpression
      *
      * @return left-hand-side
      */
+    @Nonnull
     IExpression leftHandSide();
 
     /**
@@ -42,6 +46,7 @@ public interface IBinaryExpression extends IExpression
      *
      * @return right-hand-side
      */
+    @Nonnull
     IExpression rightHandSide();
 
     /**
@@ -49,6 +54,7 @@ public interface IBinaryExpression extends IExpression
      *
      * @return operator
      */
+    @Nonnull
     EOperator operator();
 
 }

@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -46,27 +47,30 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
      *
      * @param p_literal literal of the call
      */
-    public CAchievementRuleLiteral( final ILiteral p_literal )
+    public CAchievementRuleLiteral( @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CAchievementRuleLiteral.execute( p_context, m_value, m_value.hasAt() );
+        return CAchievementRuleLiteral.execute( m_value.hasAt(), p_context, m_value );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return CCommon.recursiveterm( m_value.orderedvalues() )
-                      .parallel()
-                      .filter( i -> i instanceof IVariable<?> )
-                      .map( i -> (IVariable<?>) i );
+        return m_value == null
+               ? Stream.empty()
+               : CCommon.recursiveterm( m_value.orderedvalues() )
+                        .parallel()
+                        .filter( i -> i instanceof IVariable<?> )
+                        .map( i -> (IVariable<?>) i );
     }
 
     @Override

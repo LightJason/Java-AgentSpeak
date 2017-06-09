@@ -32,6 +32,8 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -48,11 +50,12 @@ public final class CRawAction<T> extends IBaseExecution<T>
      *
      * @param p_data any object data
      */
-    public CRawAction( final T p_data )
+    public CRawAction( @Nullable final T p_data )
     {
         super( p_data );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
@@ -69,7 +72,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode();
+        return m_value == null ? 0 : m_value.hashCode();
     }
 
     @Override
@@ -81,14 +84,14 @@ public final class CRawAction<T> extends IBaseExecution<T>
     @Override
     public final String toString()
     {
-        return m_value.toString();
+        return m_value == null ? "" : m_value.toString();
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( m_value instanceof Boolean )
             return this.getTypedResult( (Boolean) m_value, p_return );
@@ -107,7 +110,8 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private IFuzzyValue<Boolean> getTypedResult( final Boolean p_execution, final List<ITerm> p_return )
+    @Nonnull
+    private IFuzzyValue<Boolean> getTypedResult( @Nonnull final Boolean p_execution, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( p_execution ) );
         return CFuzzyValue.from( p_execution );
@@ -121,9 +125,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private IFuzzyValue<Boolean> getTypedResult( final IVariable<?> p_execution, final IContext p_context,
-                                                 final List<ITerm> p_return
-    )
+    @Nonnull
+    private IFuzzyValue<Boolean> getTypedResult( @Nonnull final IVariable<?> p_execution, @Nonnull final IContext p_context,
+                                                 @Nonnull final List<ITerm> p_return )
     {
         final IVariable<?> l_value = (IVariable<?>) CCommon.replaceFromContext( p_context, p_execution );
 
@@ -148,8 +152,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private IFuzzyValue<Boolean> getTypedResult( final IExpression p_execution, final IContext p_context, final Boolean p_parallel,
-                                                 final List<ITerm> p_argument, final List<ITerm> p_return
+    @Nonnull
+    private IFuzzyValue<Boolean> getTypedResult( @Nonnull final IExpression p_execution, @Nonnull final IContext p_context,
+                                                 @Nonnull final Boolean p_parallel, @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         final List<ITerm> l_return = new LinkedList<>();
@@ -168,7 +173,8 @@ public final class CRawAction<T> extends IBaseExecution<T>
      * @param p_return native return
      * @return fuzzy-boolean
      */
-    private IFuzzyValue<Boolean> getTypedResult( final T p_execution, final List<ITerm> p_return )
+    @Nonnull
+    private IFuzzyValue<Boolean> getTypedResult( @Nullable final T p_execution, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from( p_execution ) );
         return CFuzzyValue.from( true );
