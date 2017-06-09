@@ -258,8 +258,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            null,
-            false,
+            false, null,
             p_input.getLeft(),
             l_return
         );
@@ -285,8 +284,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            null,
-            false,
+            false, null,
             p_input.getLeft(),
             l_return
         );
@@ -307,8 +305,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBinomial().execute(
-            null,
-            false,
+            false, null,
             Stream.of( 49, 30, 6, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -327,8 +324,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFactorial().execute(
-            null,
-            false,
+            false, null,
             Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -350,8 +346,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPrimeFactors().execute(
-            null,
-            false,
+            false, null,
             Stream.of( 8, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -370,8 +365,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSigmoid().execute(
-            null,
-            false,
+            false, null,
             Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -391,8 +385,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStirling().execute(
-            null,
-            false,
+            false, null,
             Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -410,8 +403,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPow().execute(
-            null,
-            false,
+            false, null,
             Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -432,10 +424,9 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGeometricMean().execute(
-                null,
-                false,
-                Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -452,10 +443,9 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHarmonicMean().execute(
-                null,
-                false,
-                Stream.of( 150, 50 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 150, 50 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -474,10 +464,9 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHypot().execute(
-                null,
-                false,
-                l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -499,10 +488,9 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMaxIndex().execute(
-                null,
-                false,
-                Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -518,10 +506,9 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMinIndex().execute(
-                null,
-                false,
-                Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

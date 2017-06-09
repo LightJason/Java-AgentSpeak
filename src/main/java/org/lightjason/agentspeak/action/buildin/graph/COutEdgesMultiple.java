@@ -27,6 +27,7 @@ import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,8 @@ public final class COutEdgesMultiple extends IApplyMultiple
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_return = new ArrayList<>( p_graph.getOutEdges( p_window.get( 0 ).raw() ) );
 

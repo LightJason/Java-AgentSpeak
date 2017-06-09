@@ -71,10 +71,11 @@ public final class CProxyAction implements IExecution
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return m_execution.execute( p_context, p_parallel, p_argument, p_return );
+        return m_execution.execute( p_parallel, p_context, p_argument, p_return );
     }
 
     @Override
@@ -129,8 +130,9 @@ public final class CProxyAction implements IExecution
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        )
         {
             p_return.add( m_value );
             return CFuzzyValue.from( true );
@@ -224,11 +226,12 @@ public final class CProxyAction implements IExecution
 
         @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        )
         {
             return m_action.execute(
-                p_context, m_parallel,
+                m_parallel, p_context,
                 this.subexecute( p_context, m_arguments ),
                 p_return
             );
@@ -287,7 +290,7 @@ public final class CProxyAction implements IExecution
                     .flatMap( i -> {
 
                         final List<ITerm> l_return = new LinkedList<>();
-                        i.getValue().execute( p_context, m_parallel, Collections.emptyList(), l_return );
+                        i.getValue().execute( m_parallel, p_context, Collections.emptyList(), l_return );
                         return l_return.stream();
 
                     } ).collect( Collectors.toList() )

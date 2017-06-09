@@ -86,8 +86,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
-                i.instantiate( p_context.agent(), l_variables.stream() ),
-                false,
+                false, i.instantiate( p_context.agent(), l_variables.stream() ),
                 Collections.<ITerm>emptyList(),
                 Collections.<ITerm>emptyList()
             );

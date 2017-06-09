@@ -72,7 +72,7 @@ public final class CHash extends IBuildinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {

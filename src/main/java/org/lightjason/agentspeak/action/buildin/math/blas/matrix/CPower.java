@@ -64,7 +64,8 @@ public final class CPower extends IAlgebra
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         final List<ITerm> l_argument = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );

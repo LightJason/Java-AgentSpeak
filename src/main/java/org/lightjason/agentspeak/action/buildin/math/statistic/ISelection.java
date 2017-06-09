@@ -62,7 +62,9 @@ public abstract class ISelection extends IBuildinAction
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
+    )
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element

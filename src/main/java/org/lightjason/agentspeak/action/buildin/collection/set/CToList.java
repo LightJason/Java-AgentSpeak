@@ -62,8 +62,9 @@ public final class CToList extends IBuildinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         p_argument.stream()
                   .map( ITerm::<Set<?>>raw )

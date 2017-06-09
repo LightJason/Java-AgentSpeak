@@ -56,8 +56,9 @@ public final class CAllMatch extends IBuildinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 

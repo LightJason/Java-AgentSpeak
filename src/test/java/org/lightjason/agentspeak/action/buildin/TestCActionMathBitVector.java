@@ -171,10 +171,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-                null,
-                false,
-                p_input.getLeft(),
-                l_return
+            false, null,
+            p_input.getLeft(),
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -192,10 +191,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -212,10 +210,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBoolValue().execute(
-                null,
-                false,
-                Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
@@ -228,10 +225,9 @@ public final class TestCActionMathBitVector extends IBaseTest
     public final void set()
     {
         new CSet().execute(
-                null,
-                false,
-                Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
+            false, null,
+            Stream.of( VECTOR2, true, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
         Assert.assertEquals( VECTOR2.get( 0 ), true );
@@ -245,10 +241,9 @@ public final class TestCActionMathBitVector extends IBaseTest
     public final void clear()
     {
         new CClear().execute(
-                null,
-                false,
-                Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
+            false, null,
+            Stream.of( VECTOR2, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
         Assert.assertEquals( VECTOR2.get( 0 ), false );
@@ -263,10 +258,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRange().execute(
-                null,
-                false,
-                Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( VECTOR2, 0, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -282,10 +276,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNumericValue().execute(
-                null,
-                false,
-                Stream.of( VECTOR1, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( VECTOR1, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
@@ -300,10 +293,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToList().execute(
-                null,
-                false,
-                Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -320,10 +312,9 @@ public final class TestCActionMathBitVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToBlas().execute(
-                null,
-                false,
-                Stream.of( VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

@@ -64,10 +64,12 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
+    )
     {
         final List<ITerm> l_result = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result ).value() )
+        if ( ( !m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ).value() )
              || ( l_result.isEmpty() ) )
             return CFuzzyValue.from( false );
 

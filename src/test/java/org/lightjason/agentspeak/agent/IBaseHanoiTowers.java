@@ -296,7 +296,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             return CFuzzyValue.from( true );
@@ -322,7 +323,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             m_running.set( false );
@@ -350,7 +352,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
@@ -396,7 +399,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
@@ -434,7 +438,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );

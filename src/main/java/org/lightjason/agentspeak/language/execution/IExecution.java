@@ -41,15 +41,16 @@ public interface IExecution
     /**
      * defines a plan-body operation
      *
-     * @param p_context current execution context
      * @param p_parallel parallel execution
+     * @param p_context current execution context
      * @param p_argument parameter of the action
      * @param p_return return values
      * @return fuzzy boolean
      */
     @Nonnull
-    IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return );
+    IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    );
 
     /**
      * returns a stream with all used variables

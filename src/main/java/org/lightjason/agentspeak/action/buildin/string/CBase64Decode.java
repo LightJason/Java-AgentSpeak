@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Base64;
@@ -55,9 +56,10 @@ public final class CBase64Decode extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument,  @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.from(
             CCommon.flatcollection( p_argument )
@@ -73,7 +75,7 @@ public final class CBase64Decode extends IBuildinAction
      * @param p_return return list
      * @return boolean successful run
      */
-    private static boolean apply( final String p_string, final List<ITerm> p_return )
+    private static boolean apply( @Nonnull final String p_string, @Nonnull final List<ITerm> p_return )
     {
         try
         {

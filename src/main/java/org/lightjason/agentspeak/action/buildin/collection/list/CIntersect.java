@@ -63,8 +63,9 @@ public final class CIntersect extends IBuildinAction
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
         final List<?> l_result = CCommon.flatcollection( p_argument )

@@ -54,10 +54,9 @@ public final class TestCActionMathShape extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInCircle().execute(
-                null,
-                false,
-                Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -74,10 +73,9 @@ public final class TestCActionMathShape extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInRectangle().execute(
-                null,
-                false,
-                Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -94,10 +92,9 @@ public final class TestCActionMathShape extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInTriangle().execute(
-                null,
-                false,
-                Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );

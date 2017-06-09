@@ -429,7 +429,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // execute plan and return values and return execution result
         return p_execution.parallelStream().map( i -> {
 
-            final IFuzzyValue<Boolean> l_result = i.getLeft().plan().execute( i.getRight(), false, null, null );
+            final IFuzzyValue<Boolean> l_result = i.getLeft().plan().execute( false, i.getRight(), null, null );
             if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
                 // increment successful runs
                 i.getLeft().incrementsuccessful();

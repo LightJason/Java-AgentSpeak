@@ -30,6 +30,8 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -49,7 +51,7 @@ public final class CExists extends IStorage
      *
      * @param p_resolver resolver function
      */
-    public CExists( final Function<String, Boolean> p_resolver )
+    public CExists( @Nonnull final Function<String, Boolean> p_resolver )
     {
         super( p_resolver );
     }
@@ -59,7 +61,7 @@ public final class CExists extends IStorage
      *
      * @param p_forbidden forbidden keys
      */
-    public CExists( final String... p_forbidden )
+    public CExists( @Nullable final String... p_forbidden )
     {
         super( p_forbidden );
     }
@@ -69,7 +71,7 @@ public final class CExists extends IStorage
      *
      * @param p_fordbidden stream with borbidden keys
      */
-    public CExists( final Stream<String> p_fordbidden )
+    public CExists( @Nonnull final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -80,8 +82,10 @@ public final class CExists extends IStorage
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         CCommon.flatcollection( p_argument )

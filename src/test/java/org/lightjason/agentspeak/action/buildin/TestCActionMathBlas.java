@@ -85,10 +85,9 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
-                null,
-                false,
-                Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -104,10 +103,9 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultiply().execute(
-                null,
-                false,
-                Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -126,9 +124,8 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CElementWise().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     m_matrix1, "+", m_matrix2,
                     m_matrix1, "+", 5,
                     m_matrix1, "-", 5,
@@ -139,7 +136,7 @@ public final class TestCActionMathBlas extends IBaseTest
                     m_matrix1, "*", m_matrix2,
                     m_matrix1, "|+|", -9
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 9 );
@@ -164,9 +161,8 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CElementWise().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     m_vector, "+", m_vector,
                     m_vector, "+", 5,
                     m_vector, "-", 5,
@@ -176,7 +172,7 @@ public final class TestCActionMathBlas extends IBaseTest
                     m_vector, "*", m_vector,
                     m_vector, "|+|", -5
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 8 );

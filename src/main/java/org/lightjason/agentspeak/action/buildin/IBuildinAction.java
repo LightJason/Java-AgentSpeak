@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -74,7 +75,7 @@ public abstract class IBuildinAction extends IBaseAction
         ).toLower();
     }
 
-
+    @Nonnull
     @Override
     public final IPath name()
     {

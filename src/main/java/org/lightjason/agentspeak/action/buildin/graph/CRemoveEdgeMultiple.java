@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.graph;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -48,7 +49,8 @@ public final class CRemoveEdgeMultiple extends IApplyMultiple
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.removeEdge( p_window.get( 0 ).raw() );
     }

@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -51,7 +53,7 @@ public final class CRemove extends IStorage
      *
      * @param p_resolver resolver function
      */
-    public CRemove( final Function<String, Boolean> p_resolver )
+    public CRemove( @Nonnull final Function<String, Boolean> p_resolver )
     {
         super( p_resolver );
     }
@@ -61,7 +63,7 @@ public final class CRemove extends IStorage
      *
      * @param p_forbidden forbidden keys
      */
-    public CRemove( final String... p_forbidden )
+    public CRemove( @Nullable final String... p_forbidden )
     {
         super( p_forbidden );
     }
@@ -71,7 +73,7 @@ public final class CRemove extends IStorage
      *
      * @param p_fordbidden stream with borbidden keys
      */
-    public CRemove( final Stream<String> p_fordbidden )
+    public CRemove( @Nonnull final Stream<String> p_fordbidden )
     {
         super( p_fordbidden );
     }
@@ -82,9 +84,10 @@ public final class CRemove extends IStorage
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<String>raw )
@@ -101,7 +104,7 @@ public final class CRemove extends IStorage
      * @param p_key key
      * @param p_return return arguments
      */
-    private void remove( final IAgent<?> p_agent, final String p_key, final List<ITerm> p_return )
+    private void remove( @Nonnull final IAgent<?> p_agent, @Nonnull final String p_key, @Nonnull final List<ITerm> p_return )
     {
         if ( ( m_resolver.apply( p_key ) ) || ( !p_agent.storage().containsKey( p_key ) ) )
             return;

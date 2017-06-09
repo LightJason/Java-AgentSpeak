@@ -61,7 +61,8 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
     )
     {
         this.set( CCommon.replaceFromContext( p_context, m_value ), CCommon.replaceFromContext( p_context, m_righthand ).raw() );

@@ -86,7 +86,9 @@ public final class CRawAction<T> extends IBaseExecution<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                               final List<ITerm> p_return
+    )
     {
         if ( m_value instanceof Boolean )
             return this.getTypedResult( (Boolean) m_value, p_return );
@@ -151,7 +153,7 @@ public final class CRawAction<T> extends IBaseExecution<T>
     )
     {
         final List<ITerm> l_return = new LinkedList<>();
-        if ( ( !p_execution.execute( p_context, p_parallel, p_argument, l_return ).value() ) || ( l_return.isEmpty() ) )
+        if ( ( !p_execution.execute( p_parallel, p_context, p_argument, l_return ).value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
         return CFuzzyValue.from( l_return.get( 0 ).<Boolean>raw() );

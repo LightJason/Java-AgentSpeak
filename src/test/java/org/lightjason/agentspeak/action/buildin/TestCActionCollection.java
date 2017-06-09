@@ -130,8 +130,7 @@ public final class TestCActionCollection extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
-            null,
-            false,
+            false, null,
             p_input.getLeft(),
             l_return
         );
@@ -153,8 +152,7 @@ public final class TestCActionCollection extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CIsEmpty().execute(
-            null,
-            false,
+            false, null,
             Stream.of( new ArrayList<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -181,8 +179,7 @@ public final class TestCActionCollection extends IBaseTest
         IntStream.range( 0, 5 ).forEach( i -> IntStream.range( i, i + 5 ).forEach( j -> l_map.put( i, j ) ) );
 
         new CClear().execute(
-            null,
-            false,
+            false, null,
             Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );

@@ -126,10 +126,11 @@ public final class CPlan extends IBaseInstantiable implements IPlan
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( @Nonnull final IContext p_context, final boolean p_parallel,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return );
+        final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
 
         // create delete-goal trigger
         if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
@@ -144,7 +145,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     {
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-            m_condition.execute( p_context, false, Collections.emptyList(), l_return ).value()
+            m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
             && ( l_return.size() == 1 )
             ? l_return.get( 0 ).<Boolean>raw()
             : false

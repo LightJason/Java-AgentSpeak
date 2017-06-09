@@ -240,7 +240,8 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             m_running.set( false );
@@ -266,7 +267,8 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
+                                                   final List<ITerm> p_return
         )
         {
             m_log.put( p_context.agent().cycle(), p_argument.get( 0 ).<String>raw()  );

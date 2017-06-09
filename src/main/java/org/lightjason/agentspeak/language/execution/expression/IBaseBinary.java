@@ -83,11 +83,11 @@ public abstract class IBaseBinary implements IBinaryExpression
     protected final boolean executearguments( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument ) throws IllegalArgumentException
     {
         // run left-hand- and right-hand-side argument
-        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_argument ).value() )
+        if ( ( !m_lefthandside.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_argument ).value() )
              || ( p_argument.isEmpty() ) )
             return false;
 
-        if ( ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_argument ).value() )
+        if ( ( !m_righthandside.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_argument ).value() )
              || ( p_argument.isEmpty() ) )
             return false;
 

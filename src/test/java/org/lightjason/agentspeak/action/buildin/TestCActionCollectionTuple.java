@@ -55,8 +55,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -78,8 +77,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
     {
         Assert.assertFalse(
             new CCreate().execute(
-                null,
-                false,
+                false, null,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -96,8 +94,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         final AbstractMap.Entry<String, String> l_data = new AbstractMap.SimpleEntry<>( "foo", "bar" );
 
         new CSet().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "blubblub", l_data ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -115,8 +112,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFlat().execute(
-            null,
-            false,
+            false, null,
             Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

@@ -62,8 +62,8 @@ public final class CIncrement<T extends Number> implements IOperator<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context,
-                                               final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context,
+                                               final List<ITerm> p_argument, final List<ITerm> p_return
     )
     {
         final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).throwNotAllocated();
