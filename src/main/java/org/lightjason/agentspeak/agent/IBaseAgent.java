@@ -33,7 +33,7 @@ import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -130,7 +130,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * fuzzy result collector
      */
-    private final IFuzzy<Boolean, T> m_fuzzy;
+    private final IFuzzyOperatorBundle<Boolean, T> m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -271,7 +271,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzy<Boolean, T> fuzzy()
+    public final IFuzzyOperatorBundle<Boolean, T> fuzzy()
     {
         return m_fuzzy;
     }

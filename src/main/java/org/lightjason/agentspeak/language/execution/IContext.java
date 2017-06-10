@@ -49,7 +49,7 @@ public interface IContext
         @Override
         public final IAgent<?> agent()
         {
-            return null;
+            return IAgent.EMPTY;
         }
 
         @Nonnull
@@ -83,7 +83,7 @@ public interface IContext
         @Override
         public final IAgent<?> agent()
         {
-            return null;
+            return IAgent.EMPTY;
         }
 
         @Nonnull

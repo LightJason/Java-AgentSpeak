@@ -24,7 +24,7 @@
 package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
@@ -82,7 +82,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      * @return operator object
      */
     @Nonnull
-    IFuzzy<Boolean, T> fuzzy();
+    IFuzzyOperatorBundle<Boolean, T> fuzzy();
 
     /**
      * returns the initial beliefs
