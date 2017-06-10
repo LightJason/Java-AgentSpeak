@@ -93,13 +93,13 @@
         </module>
 
         <module name = "AnonInnerLengthCheck">
-            <property name = "max" value = "35" />
+            <property name = "max" value = "200" />
         </module>
 
         <module name = "AnnotationUseStyle" />
 
         <module name = "AnonInnerLength">
-            <property name = "max" value = "50" />
+            <property name = "max" value = "200" />
         </module>
 
         <!-- <module name="ArrayTrailingComma"/> -->

@@ -36,6 +36,202 @@ public interface IPath extends Comparable<IPath>
 {
 
     /**
+     * empty path
+     **/
+    IPath EMPTY = new IPath()
+    {
+        @Nonnull
+        @Override
+        public final IPath append( @Nonnull final IPath p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath append( @Nonnull final String p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath remove( final int p_index )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath remove( final int p_start, final int p_end )
+        {
+            return this;
+        }
+
+        @Override
+        public final boolean endsWith( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean isEmpty()
+        {
+            return true;
+        }
+
+        @Nonnull
+        @Override
+        public final String get( final int p_index )
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final String getPath( final String p_separator )
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final String getPath()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final String getSeparator()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath setSeparator( @Nonnull final String p_separator )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath toLower()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath toUpper()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath getSubPath( final int p_fromindex )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath getSubPath( final int p_fromindex, final int p_toindex )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final String getSuffix()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushback( @Nonnull final IPath p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushback( @Nonnull final String p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushfront( @Nonnull final String p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushfront( @Nonnull final IPath p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final String removeSuffix()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath reverse()
+        {
+            return this;
+        }
+
+        @Override
+        public final int size()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean startsWith( final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean startsWith( final String p_path )
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<String> stream()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<String> parallelStream()
+        {
+            return Stream.empty();
+        }
+
+        @Override
+        public final int compareTo( final IPath p_path )
+        {
+            return Integer.compare( p_path.hashCode(), 0 );
+        }
+    };
+
+    /**
      * appends a path at the current and returns a new object
      *
      * @param p_path path

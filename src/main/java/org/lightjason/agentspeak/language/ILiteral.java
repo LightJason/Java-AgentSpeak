@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.IContext;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
@@ -37,6 +38,132 @@ import java.util.stream.Stream;
  */
 public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>, Comparable<ILiteral>
 {
+    /**
+     * empty literal
+     */
+    ILiteral EMPTY = new ILiteral()
+    {
+        @Nonnull
+        @Override
+        public final Stream<ITerm> values( final IPath... p_path )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ITerm> orderedvalues( final IPath... p_path )
+        {
+            return Stream.empty();
+        }
+
+        @Override
+        public final boolean emptyValues()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean negated()
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean hasAt()
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral unify( @Nonnull final IContext p_context )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral allocate( @Nonnull final IContext p_context )
+        {
+            return this;
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final ILiteral p_literal )
+        {
+            return Integer.compare( p_literal.hashCode(), this.hashCode() );
+        }
+
+        @Nonnull
+        @Override
+        public final String functor()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public IPath functorpath()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public IPath fqnfunctor()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Override
+        public boolean hasVariable()
+        {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        @SuppressWarnings( "unchecked" )
+        public final <T> T raw()
+        {
+            return (T) this;
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopy( final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopysuffix()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral shallowcopy( final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral shallowcopysuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public final int structurehash()
+        {
+            return 0;
+        }
+    };
 
     /**
      * returns a stream over value items

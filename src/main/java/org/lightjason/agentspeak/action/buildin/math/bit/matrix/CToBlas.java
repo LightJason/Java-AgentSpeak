@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -66,10 +67,10 @@ public final class CToBlas extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
         final EType l_type = l_arguments.parallelStream()
@@ -114,7 +115,8 @@ public final class CToBlas extends IBuildinAction
      * @param p_target blas matrix
      * @return blas matrix
      */
-    private static DoubleMatrix2D tomatrix( final BitMatrix p_source, final DoubleMatrix2D p_target )
+    @Nonnull
+    private static DoubleMatrix2D tomatrix( @Nonnull final BitMatrix p_source, @Nonnull final DoubleMatrix2D p_target )
     {
         IntStream.range( 0, p_source.rows() )
                  .forEach( r -> IntStream.range( 0, p_source.columns() ).forEach( c -> p_target.setQuick( r, c, p_source.getQuick( r, c ) ? 1 : 0 ) ) );

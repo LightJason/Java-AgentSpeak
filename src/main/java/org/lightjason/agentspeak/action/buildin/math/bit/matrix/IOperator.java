@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,9 +56,10 @@ public abstract class IOperator extends IBuildinAction
         return 2;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         final List<BitMatrix> l_arguments = CCommon.flatcollection( p_argument )
@@ -79,5 +81,5 @@ public abstract class IOperator extends IBuildinAction
      * @param p_target bit vector which will modifed
      * @param p_source source of modification
      */
-    protected abstract void apply( final BitMatrix p_target, final BitMatrix p_source );
+    protected abstract void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source );
 }

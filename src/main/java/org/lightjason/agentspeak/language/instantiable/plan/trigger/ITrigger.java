@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.instantiable.plan.trigger;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IShallowCopy;
@@ -45,6 +46,56 @@ import java.util.stream.Collectors;
  */
 public interface ITrigger extends IStructureHash, IShallowCopy<ITrigger>, Comparable<ITrigger>
 {
+    /**
+     * empty trigger
+     */
+    ITrigger EMPTY = new ITrigger()
+    {
+
+        @Override
+        public final int structurehash()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final ITrigger shallowcopy( final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ITrigger shallowcopysuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final ITrigger p_trigger )
+        {
+            return Integer.compare( p_trigger.hashCode(), this.hashCode() );
+        }
+
+        @Override
+        public final EType type()
+        {
+            return EType.EMPTY;
+        }
+
+        @Override
+        public final ILiteral literal()
+        {
+            return ILiteral.EMPTY;
+        }
+
+        @Override
+        public final int variablesize()
+        {
+            return 0;
+        }
+    };
 
     /**
      * returns the type of the event
@@ -77,7 +128,8 @@ public interface ITrigger extends IStructureHash, IShallowCopy<ITrigger>, Compar
         ADDBELIEF( "+" ),
         DELETEBELIEF( "-" ),
         ADDGOAL( "+!" ),
-        DELETEGOAL( "-!" );
+        DELETEGOAL( "-!" ),
+        EMPTY( "" );
 
         /**
          * math with elements for intantiation

@@ -26,9 +26,12 @@ package org.lightjason.agentspeak.language.execution;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.Map;
 
 
@@ -37,6 +40,74 @@ import java.util.Map;
  */
 public interface IContext
 {
+    /**
+     * empty context with plan
+     */
+    IContext EMPTYPLAN = new IContext()
+    {
+        @Nonnull
+        @Override
+        public final IAgent<?> agent()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+            return IPlan.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Map<IPath, IVariable<?>> instancevariables()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+            return this;
+        }
+    };
+
+    /**
+     * empty context with rule
+     */
+    IContext EMPTYRULE = new IContext()
+    {
+        @Nonnull
+        @Override
+        public final IAgent<?> agent()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+            return IRule.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Map<IPath, IVariable<?>> instancevariables()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+            return this;
+        }
+    };
+
 
     /**
      * returns the agent of the context

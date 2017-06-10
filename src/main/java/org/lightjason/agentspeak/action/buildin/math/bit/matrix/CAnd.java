@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
 import cern.colt.bitvector.BitMatrix;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * performs the logical and operation to all bit matrices.
@@ -39,7 +41,7 @@ public final class CAnd extends IOperator
 {
 
     @Override
-    protected final void apply( final BitMatrix p_target, final BitMatrix p_source )
+    protected final void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
     {
         p_target.and( p_source );
     }

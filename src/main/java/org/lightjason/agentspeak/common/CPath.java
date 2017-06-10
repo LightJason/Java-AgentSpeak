@@ -51,10 +51,6 @@ public final class CPath implements IPath
 {
     public static final String DEFAULTSEPERATOR = "/";
     /**
-     * empty path
-     **/
-    public static final IPath EMPTY = new CPath();
-    /**
      * list with path parts *
      */
     private final List<String> m_path;

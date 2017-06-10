@@ -78,7 +78,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
         else
         {
             m_value = (T) p_value;
-            m_functor = p_value == null ? CPath.EMPTY : CPath.from( p_value.toString() );
+            m_functor = p_value == null ? IPath.EMPTY : CPath.from( p_value.toString() );
         }
 
         m_hashcode = m_value == null ? super.hashCode() : m_value.hashCode();

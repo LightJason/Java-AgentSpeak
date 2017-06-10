@@ -24,11 +24,20 @@
 package org.lightjason.agentspeak.language.instantiable.rule;
 
 import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -36,6 +45,46 @@ import javax.annotation.Nonnull;
  */
 public interface IRule extends IInstantiable
 {
+    /** empty rule **/
+    IRule EMPTY = new IRule()
+    {
+        @Nonnull
+        @Override
+        public final ILiteral identifier()
+        {
+            return CLiteral.from( "empty" );
+        }
+
+        @Nonnull
+        @Override
+        public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IVariable<?>> variables()
+        {
+            return Stream.empty();
+        }
+    };
+
 
     /**
      * returns the identifier of the rule

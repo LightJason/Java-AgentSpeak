@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
 import cern.colt.bitvector.BitMatrix;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * performs the logical not-and operation to all bit matrices.
@@ -38,8 +40,9 @@ import cern.colt.bitvector.BitMatrix;
 public final class CNAnd extends IOperator
 {
 
+    @Nonnull
     @Override
-    protected final void apply( final BitMatrix p_target, final BitMatrix p_source )
+    protected final void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
     {
         p_target.andNot( p_source );
     }
