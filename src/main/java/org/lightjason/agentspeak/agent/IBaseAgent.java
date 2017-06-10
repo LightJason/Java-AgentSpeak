@@ -33,7 +33,7 @@ import com.google.common.collect.TreeMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -130,7 +130,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * fuzzy result collector
      */
-    private final IFuzzyOperatorBundle<Boolean, T> m_fuzzy;
+    private final IFuzzyBundle<Boolean, T> m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -271,7 +271,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzyOperatorBundle<Boolean, T> fuzzy()
+    public final IFuzzyBundle<Boolean, T> fuzzy()
     {
         return m_fuzzy;
     }
@@ -351,7 +351,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return (T) this;
 
         // update defuzzification
-        m_fuzzy.getDefuzzyfication().update( (T) this );
+        m_fuzzy.getValue().update( (T) this );
 
         // clear running plan- and trigger list and execute elements
         this.execute( this.generateexecutionlist() );
@@ -406,7 +406,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             // create execution context
             .map( i -> CCommon.instantiateplan( i.getLeft().getRight(), this, i.getRight().getRight() ) )
             // check plan-condition
-            .filter( i -> m_fuzzy.getDefuzzyfication().defuzzify( i.getLeft().plan().condition( i.getRight() ) ) )
+            .filter( i -> m_fuzzy.getValue().defuzzify( i.getLeft().plan().condition( i.getRight() ) ) )
             // collectors-call must be toList not toSet because plan-execution can be have equal elements
             // so a set avoid multiple plan-execution
             .collect( Collectors.toList() );
@@ -430,7 +430,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return p_execution.parallelStream().map( i -> {
 
             final IFuzzyValue<Boolean> l_result = i.getLeft().plan().execute( false, i.getRight(), null, null );
-            if ( m_fuzzy.getDefuzzyfication().defuzzify( l_result ) )
+            if ( m_fuzzy.getValue().defuzzify( l_result ) )
                 // increment successful runs
                 i.getLeft().incrementsuccessful();
             else
@@ -438,7 +438,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                 i.getLeft().incrementfail();
 
             return l_result;
-        } ).collect( m_fuzzy.getResultOperator() );
+        } ).collect( m_fuzzy.getKey() );
     }
 
     /**

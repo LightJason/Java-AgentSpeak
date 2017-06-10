@@ -25,9 +25,8 @@ package org.lightjason.agentspeak.language.fuzzy.operator;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
-import javax.annotation.Nonnull;
+import java.util.Map;
 
 
 /**
@@ -35,24 +34,6 @@ import javax.annotation.Nonnull;
  *
  * @tparam S agent type
  */
-public interface IFuzzyOperatorBundle<T, S extends IAgent<?>>
+public interface IFuzzyBundle<T, S extends IAgent<?>> extends Map.Entry<IFuzzyOperator<T>, IDefuzzification<T, S>>
 {
-
-    /**
-     * returns the fuzzy-collector object
-     * to collect results
-     *
-     * @return collector object
-     */
-    @Nonnull
-    IFuzzyOperator<T> getResultOperator();
-
-    /**
-     * returns the defuzzifcator of the agent
-     *
-     * @return defuzzyification
-     */
-    @Nonnull
-    IDefuzzification<T, S> getDefuzzyfication();
-
 }

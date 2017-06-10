@@ -95,7 +95,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
             );
 
             // create rule result with fuzzy- and defuzzificated value and instantiate variable set
-            return new ImmutableTriple<>( p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
+            return new ImmutableTriple<>( p_context.agent().fuzzy().getValue().defuzzify( l_return ), l_return, l_variables );
 
         } )
 
@@ -121,7 +121,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode();
+        return m_value == null ? 0 : m_value.hashCode();
     }
 
     @Override

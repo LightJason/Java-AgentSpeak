@@ -28,7 +28,7 @@ import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
@@ -140,7 +140,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @return configuration object
      */
-    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyOperatorBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                                     @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                                     @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
                                                     @Nonnull final IVariableBuilder p_variablebuilder )

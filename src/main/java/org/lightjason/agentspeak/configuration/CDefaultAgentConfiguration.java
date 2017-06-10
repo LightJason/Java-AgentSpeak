@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
 import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
@@ -86,7 +86,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * fuzzy operator
      */
-    protected final IFuzzyOperatorBundle<Boolean, T> m_fuzzy;
+    protected final IFuzzyBundle<Boolean, T> m_fuzzy;
     /**
      * rules
      */
@@ -116,7 +116,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_initialgoal initial goal
      * @param p_unifier unifier component
      */
-    public CDefaultAgentConfiguration( @Nonnull final IFuzzyOperatorBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                        @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                        @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier
     )
@@ -135,7 +135,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( @Nonnull final IFuzzyOperatorBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initialbeliefs,
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initialbeliefs,
                                        @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
                                        @Nonnull final IVariableBuilder p_variablebuilder
@@ -189,7 +189,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
 
     @Nonnull
     @Override
-    public final IFuzzyOperatorBundle<Boolean, T> fuzzy()
+    public final IFuzzyBundle<Boolean, T> fuzzy()
     {
         return m_fuzzy;
     }

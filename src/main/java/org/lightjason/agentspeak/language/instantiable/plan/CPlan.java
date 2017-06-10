@@ -133,7 +133,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
 
         // create delete-goal trigger
-        if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
+        if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
             p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;

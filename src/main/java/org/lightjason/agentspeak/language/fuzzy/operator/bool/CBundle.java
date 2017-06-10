@@ -27,27 +27,21 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.CCrisp;
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 
 import javax.annotation.Nonnull;
-import java.text.MessageFormat;
+import java.util.AbstractMap;
 
 
 /**
- * boolean fuzzy element
+ * boolean fuzzy bundle
  *
  * @tparam T agent type
  */
-public final class CBundle<T extends IAgent<?>> implements IFuzzyOperatorBundle<Boolean, T>
+@SuppressWarnings( "serial" )
+public final class CBundle<S extends IAgent<?>> extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean, S>>
+    implements IFuzzyBundle<Boolean, S>
 {
-    /**
-     * fuzzy operator
-     */
-    private final IFuzzyOperator<Boolean> m_operator;
-    /**
-     * defuzzyfication
-     */
-    private final IDefuzzification<Boolean, T> m_defuzzyfication;
 
     /**
      * ctor
@@ -60,32 +54,12 @@ public final class CBundle<T extends IAgent<?>> implements IFuzzyOperatorBundle<
     /**
      * ctor
      *
-     * @param p_operator fuzzy operator
-     * @param p_defuzzyfication defuzzyfication
+     * @param p_key fuzzy operator
+     * @param p_value defuzzification
      */
-    public CBundle( @Nonnull final IFuzzyOperator<Boolean> p_operator, @Nonnull final IDefuzzification<Boolean, T> p_defuzzyfication )
+    public CBundle( @Nonnull final IFuzzyOperator<Boolean> p_key, @Nonnull final IDefuzzification<Boolean, S> p_value )
     {
-        m_operator = p_operator;
-        m_defuzzyfication = p_defuzzyfication;
+        super( p_key, p_value );
     }
 
-    @Nonnull
-    @Override
-    public final IFuzzyOperator<Boolean> getResultOperator()
-    {
-        return m_operator;
-    }
-
-    @Nonnull
-    @Override
-    public final IDefuzzification<Boolean, T> getDefuzzyfication()
-    {
-        return m_defuzzyfication;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "defuzzyfication: {0} / fuzzy-operator: {1}", m_defuzzyfication, m_operator );
-    }
 }

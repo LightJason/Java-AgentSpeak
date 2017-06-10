@@ -118,7 +118,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         // if atomic flag if exists use this for return value
         return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
                ? CFuzzyValue.from( true )
-               : l_result.stream().collect( p_context.agent().fuzzy().getResultOperator() );
+               : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
     }
 
     /**
@@ -137,7 +137,7 @@ public abstract class IBaseInstantiable implements IInstantiable
                 .map( i -> {
                     final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() );
                     l_result.add( l_return );
-                    return p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return );
+                    return p_context.agent().fuzzy().getValue().defuzzify( l_return );
                 } )
                 .filter( i -> !i )
                 .findFirst();

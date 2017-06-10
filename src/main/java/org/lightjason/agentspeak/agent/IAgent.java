@@ -25,7 +25,7 @@ package org.lightjason.agentspeak.agent;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperatorBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -164,9 +164,9 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
 
         @Nonnull
         @Override
-        public final IFuzzyOperatorBundle<Boolean, IAgent<?>> fuzzy()
+        public final IFuzzyBundle<Boolean, IAgent<?>> fuzzy()
         {
-            return m_fuzzy;
+            return null;
         }
 
         @Nonnull
@@ -322,7 +322,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return operator
      */
     @Nonnull
-    IFuzzyOperatorBundle<Boolean, T> fuzzy();
+    IFuzzyBundle<Boolean, T> fuzzy();
 
     /**
      * returns the variable builder function
