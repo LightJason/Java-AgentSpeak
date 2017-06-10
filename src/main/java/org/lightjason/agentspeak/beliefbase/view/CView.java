@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase.view;
 
-import com.sun.istack.internal.NotNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.common.CCommon;
@@ -222,7 +221,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
                ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
                : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) )
                      .containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
-        );
+               );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

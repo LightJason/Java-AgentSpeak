@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase.view;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.beliefbase.IStructure;

@@ -29,28 +29,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.agent.TestCAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
-import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.consistency.filter.CAll;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.CSymmetricDifference;
 import org.lightjason.agentspeak.consistency.metric.CWeightedDifference;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
-import org.lightjason.agentspeak.generator.IAgentGenerator;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.variable.CConstant;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
@@ -69,11 +63,11 @@ public final class TestCMetric extends IBaseTest
     /**
      * agent generator
      */
-    private IAgentGenerator<IAgent<?>> m_agentgenerator;
+    private CAgent.CAgentGenerator m_agentgenerator;
     /**
      * literal view generator
      */
-    private IViewGenerator<?> m_generator;
+    private IViewGenerator<CAgent> m_generator;
     /**
      * set with testing literals
      */
@@ -189,9 +183,7 @@ public final class TestCMetric extends IBaseTest
      * @param p_delta delta
      */
     private void check( final String p_message, final IFilter p_filter, final IMetric p_metric, final Collection<ILiteral> p_belief1,
-                        final Collection<ILiteral> p_belief2,
-                        final double p_excepted, final double p_delta
-    )
+                        final Collection<ILiteral> p_belief2, final double p_excepted, final double p_delta )
     {
         final double l_value = p_metric.apply(
             p_filter.apply( this.agent( p_belief1 ) ),
@@ -207,11 +199,11 @@ public final class TestCMetric extends IBaseTest
      * @param p_literals literal collection
      * @return agent
      */
-    private IAgent<?> agent( final Collection<ILiteral> p_literals )
+    private CAgent agent( final Collection<ILiteral> p_literals )
     {
         Assume.assumeNotNull( m_generator );
 
-        final IAgent<?> l_agent = m_agentgenerator.generatesingle();
+        final CAgent l_agent = m_agentgenerator.generatesingle();
         p_literals.forEach( i -> l_agent.beliefbase().generate( m_generator, i.functorpath() ).add( i ) );
         return l_agent;
     }
@@ -233,14 +225,14 @@ public final class TestCMetric extends IBaseTest
     /**
      * agent class
      */
-    private static final class CAgent extends IBaseAgent<IAgent<?>>
+    private static final class CAgent extends IBaseAgent<CAgent>
     {
         /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        private CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
+        private CAgent( final IAgentConfiguration<CAgent> p_configuration )
         {
             super( p_configuration );
         }
@@ -248,7 +240,7 @@ public final class TestCMetric extends IBaseTest
         /**
          * agent generator class
          */
-        private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
+        private static final class CAgentGenerator extends IBaseAgentGenerator<CAgent>
         {
             /**
              * ctor
@@ -261,7 +253,7 @@ public final class TestCMetric extends IBaseTest
             }
 
             @Override
-            public IAgent<?> generatesingle( final Object... p_data )
+            public CAgent generatesingle( final Object... p_data )
             {
                 return new CAgent( m_configuration );
             }
@@ -278,7 +270,7 @@ public final class TestCMetric extends IBaseTest
         @Override
         public final IView<CAgent> apply( final String p_name, final IView<CAgent> p_parent )
         {
-            return new CBeliefbasePersistent<>( new CMultiStorage<>() ).create( p_name, p_parent );
+            return new CBeliefbasePersistent<CAgent>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 
