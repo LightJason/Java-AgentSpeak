@@ -24,7 +24,6 @@
 package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.defuzzification.CCrisp;
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
@@ -42,14 +41,6 @@ import java.util.AbstractMap;
 public final class CBundle<S extends IAgent<?>> extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean, S>>
     implements IFuzzyBundle<Boolean, S>
 {
-
-    /**
-     * ctor
-     */
-    public CBundle()
-    {
-        this( new CIntersection(), new CCrisp<>( new CComplement() ) );
-    }
 
     /**
      * ctor

@@ -25,9 +25,7 @@ package org.lightjason.agentspeak.configuration;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.agent.unify.CUnifier;
 import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
@@ -92,19 +90,6 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      */
     protected final Set<IRule> m_rules;
 
-
-    /**
-     * ctor
-     */
-    @SuppressWarnings( "unchecked" )
-    public CDefaultAgentConfiguration()
-    {
-        this(
-            new CBundle<>(), Collections.emptyList(),
-            Collections.emptySet(), Collections.emptySet(),
-            null, new CUnifier()
-        );
-    }
 
     /**
      * ctor

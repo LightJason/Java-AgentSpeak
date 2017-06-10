@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -106,19 +107,19 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
     }
 
     @Override
-    public final  boolean containsMultiElement( final String p_key )
+    public final  boolean containsMultiElement( @Nonnull final String p_key )
     {
         return m_fields.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsSingleElement( final String p_key )
+    public final boolean containsSingleElement( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public final boolean putMultiElement( final String p_key, final ILiteral p_value )
+    public final boolean putMultiElement( @Nonnull final String p_key, final ILiteral p_value )
     {
         final Field l_field = m_fields.get( p_key );
         if ( ( l_field == null ) || ( p_value.emptyValues() ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
@@ -136,44 +137,44 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
     }
 
     @Override
-    public final boolean putSingleElement( final String p_key, final M p_value )
+    public final boolean putSingleElement( @Nonnull final String p_key, final M p_value )
     {
         return false;
     }
 
     @Override
-    public final boolean putSingleElementIfAbsent( final String p_key, final M p_value )
+    public final boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
     {
         return false;
     }
 
     @Override
-    public final boolean removeMultiElement( final String p_key, final ILiteral p_value )
+    public final boolean removeMultiElement( @Nonnull final String p_key, final ILiteral p_value )
     {
         return false;
     }
 
     @Override
-    public final boolean removeSingleElement( final String p_key )
+    public final boolean removeSingleElement( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public final M getSingleElement( final String p_key )
+    public final M getSingleElement( @Nonnull final String p_key )
     {
         return null;
     }
 
     @Override
-    public final M getSingleElementOrDefault( final String p_key, final M p_default )
+    public final M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
     {
         return p_default;
     }
 
     @Nonnull
     @Override
-    public Collection<ILiteral> getMultiElement( final String p_key )
+    public Collection<ILiteral> getMultiElement( @Nonnull final String p_key )
     {
         final Field l_field = m_fields.get( p_key );
         return l_field == null ? Collections.emptySet() : Stream.of( this.literal( p_key, l_field ) ).collect( Collectors.toSet() );
@@ -204,7 +205,8 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
      * @param p_field field reference
      * @return null or literal
      */
-    private ILiteral literal( final String p_name, final Field p_field )
+    @Nullable
+    private ILiteral literal( @Nonnull final String p_name, @Nonnull final Field p_field )
     {
         try
         {

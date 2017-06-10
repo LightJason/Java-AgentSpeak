@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
+import org.lightjason.agentspeak.language.fuzzy.defuzzification.CCrisp;
 import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.agent.unify.CUnifier;
@@ -37,6 +38,8 @@ import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CComplement;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CIntersection;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
@@ -60,9 +63,13 @@ import java.util.stream.Stream;
 public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
     /**
-     * unification
+     * default unification
      */
-    protected static final IUnifier UNIFIER = new CUnifier();
+    protected static final IUnifier DEFAULTUNIFIER = new CUnifier();
+    /**
+     * default fuzzy bundle
+     */
+    protected final IFuzzyBundle<Boolean, T> m_defaultfuzzybundle = new CBundle<>( new CIntersection(), new CCrisp<>( new CComplement() ) );
     /**
      * configuration of an agent
      */
@@ -110,7 +117,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
         m_configuration = this.configuration(
-            new CBundle<>(),
+            m_defaultfuzzybundle,
 
             Stream.concat(
                 l_visitor.initialbeliefs().stream(),
@@ -129,7 +136,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
 
             l_visitor.initialgoal(),
 
-            UNIFIER,
+            DEFAULTUNIFIER,
 
             p_variablebuilder
         );

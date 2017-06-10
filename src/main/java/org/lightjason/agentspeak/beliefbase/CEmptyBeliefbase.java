@@ -76,45 +76,45 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
 
     @Nonnull
     @Override
-    public final IView<T> add( final IView<T> p_view )
+    public final IView<T> add( @Nonnull final IView<T> p_view )
     {
         return p_view;
     }
 
     @Nonnull
     @Override
-    public final IView<T> remove( final IView<T> p_view )
+    public final IView<T> remove( @Nonnull final IView<T> p_view )
     {
         return p_view;
     }
 
     @Override
-    public final boolean containsLiteral( final String p_key )
+    public final boolean containsLiteral( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Override
-    public final boolean containsView( final String p_key )
+    public final boolean containsView( @Nonnull final String p_key )
     {
         return false;
     }
 
     @Nullable
     @Override
-    public final IView<T> view( final String p_key )
+    public final IView<T> view( @Nonnull final String p_key )
     {
         return null;
     }
 
     @Override
-    public final Collection<ILiteral> literal( final String p_key )
+    public final Collection<ILiteral> literal( @Nonnull final String p_key )
     {
         return Collections.emptySet();
     }
 
     @Override
-    public final IView<T> viewOrDefault( final String p_key, final IView<T> p_default )
+    public final IView<T> viewOrDefault( @Nonnull final String p_key, @Nonnull final IView<T> p_default )
     {
         return null;
     }
@@ -155,6 +155,7 @@ public final class CEmptyBeliefbase<T extends IAgent<?>> extends IBaseBeliefbase
      * @tparam T agent type
      * @return type instance of empty beliefbase
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
     public static <T extends IAgent<?>> IBeliefbase<T> instance()
     {

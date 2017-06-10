@@ -61,6 +61,6 @@ public interface IStructure<T extends IAgent<?>>
      * limit the number of update calls
      */
     @Nonnull
-    T update( final T p_agent );
+    T update( @Nonnull final T p_agent );
 
 }
