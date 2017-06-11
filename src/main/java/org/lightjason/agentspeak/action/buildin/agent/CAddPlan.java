@@ -46,6 +46,11 @@ import java.util.List;
  */
 public final class CAddPlan extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1759245318551344596L;
+
     @Override
     public int minimalArgumentNumber()
     {

@@ -42,6 +42,10 @@ import java.util.List;
  */
 public final class CAddEdgeMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4562621710701411252L;
 
     @Override
     protected final int windowsize()

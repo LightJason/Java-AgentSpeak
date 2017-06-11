@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CAdditive extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 220138218890736772L;
 
     /**
      * ctor

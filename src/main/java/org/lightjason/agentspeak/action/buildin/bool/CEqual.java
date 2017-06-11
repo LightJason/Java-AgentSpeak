@@ -53,6 +53,10 @@ import java.util.stream.Stream;
  */
 public class CEqual extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2953614515361905328L;
 
     @Override
     public final int minimalArgumentNumber()

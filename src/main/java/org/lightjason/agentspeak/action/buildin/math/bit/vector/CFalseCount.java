@@ -46,6 +46,11 @@ import java.util.List;
 public final class CFalseCount extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6963586261806222616L;
+
+    /**
      * ctor
      */
     public CFalseCount()

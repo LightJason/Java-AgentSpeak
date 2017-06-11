@@ -46,6 +46,11 @@ import java.util.Map;
  */
 public final class CClear extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1749636918394412139L;
+
     @Override
     public final int minimalArgumentNumber()
     {

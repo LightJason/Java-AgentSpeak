@@ -40,6 +40,10 @@ import javax.annotation.Nullable;
  */
 public final class CPutMultiple extends IMapApplyMultiple<Multimap<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7383684374847719178L;
 
     @Override
     protected void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )

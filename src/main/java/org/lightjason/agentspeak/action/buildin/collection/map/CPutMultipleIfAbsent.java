@@ -40,6 +40,11 @@ import java.util.Map;
  */
 public final class CPutMultipleIfAbsent extends IMapApplyMultiple<Map<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6020101779012749616L;
+
     @Override
     protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {

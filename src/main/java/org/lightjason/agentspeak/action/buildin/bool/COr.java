@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class COr extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3705444188004358159L;
 
     @Override
     public final int minimalArgumentNumber()

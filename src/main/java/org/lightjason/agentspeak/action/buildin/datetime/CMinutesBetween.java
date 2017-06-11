@@ -44,6 +44,10 @@ import java.util.stream.Stream;
  */
 public final class CMinutesBetween extends IBetween
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2915775037746512831L;
 
     @Nonnull
     @Override

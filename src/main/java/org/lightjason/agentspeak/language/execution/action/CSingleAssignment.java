@@ -45,6 +45,10 @@ import java.util.stream.Stream;
 public final class CSingleAssignment<M extends IExecution> extends IBaseExecution<IVariable<?>>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3668379813439056262L;
+    /**
      * right-hand argument
      */
     private final M m_righthand;

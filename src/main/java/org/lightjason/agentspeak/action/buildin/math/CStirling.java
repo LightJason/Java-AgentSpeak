@@ -49,6 +49,10 @@ import java.util.List;
  */
 public final class CStirling extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -9056209645109382946L;
 
     @Override
     public final int minimalArgumentNumber()

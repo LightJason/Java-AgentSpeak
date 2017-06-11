@@ -62,6 +62,11 @@ import java.util.stream.Collectors;
  */
 public class CCreate extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8220165218772387059L;
+
     @Override
     public final int minimalArgumentNumber()
     {

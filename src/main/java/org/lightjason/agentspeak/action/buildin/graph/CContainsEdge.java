@@ -48,6 +48,11 @@ import java.util.stream.Collectors;
  */
 public final class CContainsEdge extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -9220666349160219684L;
+
     @Override
     public final int minimalArgumentNumber()
     {

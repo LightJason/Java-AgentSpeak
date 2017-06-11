@@ -64,6 +64,10 @@ import java.util.stream.Stream;
 public final class CLiteral implements ILiteral
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3253396471300120109L;
+    /**
      * negation symbol
      */
     private static final String NEGATION = "~";
@@ -99,6 +103,7 @@ public final class CLiteral implements ILiteral
      * hash of the structure
      */
     private final int m_structurehash;
+
 
 
     /**

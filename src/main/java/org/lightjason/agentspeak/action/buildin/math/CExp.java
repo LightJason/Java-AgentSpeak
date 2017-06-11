@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CExp extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4366751265043159715L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -48,6 +48,12 @@ import java.util.List;
  */
 public final class CComplement extends IBuildinAction
 {
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8021131769211400348L;
+
     /**
      * ctor
      */
@@ -65,8 +71,7 @@ public final class CComplement extends IBuildinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         if ( ( p_argument.get( 0 ).<List<?>>raw().isEmpty() ) && ( p_argument.get( 1 ).<List<?>>raw().isEmpty() ) )
             return CFuzzyValue.from( false );

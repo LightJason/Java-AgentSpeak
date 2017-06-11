@@ -49,6 +49,11 @@ import java.util.Map;
 public final class CSize extends IBuildinAction
 {
 
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8185185045612045570L;
+
     @Override
     public final int minimalArgumentNumber()
     {

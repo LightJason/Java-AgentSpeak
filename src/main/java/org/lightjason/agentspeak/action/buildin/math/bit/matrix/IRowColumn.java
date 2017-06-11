@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
  */
 public abstract class IRowColumn extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3535898342256886326L;
 
     /**
      * ctor

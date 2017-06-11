@@ -47,6 +47,11 @@ import java.util.List;
 public final class CSize extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5730234014509726428L;
+
+    /**
      * ctor
      */
     public CSize()

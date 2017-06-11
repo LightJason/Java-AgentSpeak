@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CEndsWith extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2215284458570629048L;
 
     @Override
     public final int minimalArgumentNumber()

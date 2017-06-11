@@ -47,6 +47,13 @@ import java.util.stream.Collectors;
  */
 public abstract class IApplyPathAlgorithm extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1424878255126290894L;
+    /**
+     * default weight field
+     */
     private static final String DEFAULTWEIGHT = "defaultweight";
 
     @Override

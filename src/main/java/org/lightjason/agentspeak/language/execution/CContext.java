@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
 public final class CContext implements IContext
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2813094837634259389L;
+    /**
      * agent of the running context
      */
     private final IAgent<?> m_agent;

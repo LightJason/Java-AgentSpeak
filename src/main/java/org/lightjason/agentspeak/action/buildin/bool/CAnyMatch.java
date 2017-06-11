@@ -47,6 +47,10 @@ import java.util.stream.Collectors;
  */
 public final class CAnyMatch extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6573940317353492520L;
 
     @Override
     public final int minimalArgumentNumber()

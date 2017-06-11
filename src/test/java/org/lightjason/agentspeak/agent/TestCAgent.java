@@ -48,6 +48,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CConstant;
 
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -180,6 +181,10 @@ public final class TestCAgent extends IBaseTest
      */
     private static final class CEmptyPrint extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 8344720639088993942L;
 
         @Override
         public final IPath name()
@@ -194,8 +199,8 @@ public final class TestCAgent extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             return CFuzzyValue.from( true );
@@ -207,6 +212,10 @@ public final class TestCAgent extends IBaseTest
      */
     private final class CTestResult extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 9032624165822970132L;
 
         @Override
         public final IPath name()
@@ -221,8 +230,8 @@ public final class TestCAgent extends IBaseTest
         }
 
         @Override
-        public IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                             final List<ITerm> p_return
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             m_testlog.add(

@@ -49,6 +49,11 @@ import java.util.stream.Stream;
 public abstract class IBetween extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2806678071531558364L;
+
+    /**
      * ctor
      */
     protected IBetween()

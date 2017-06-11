@@ -47,6 +47,11 @@ import java.util.stream.Collectors;
 public final class CKeys extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8840624356230583535L;
+
+    /**
      * ctor
      */
     public CKeys()
@@ -63,8 +68,7 @@ public final class CKeys extends IBuildinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are map references
         final List<?> l_result = p_argument.stream()

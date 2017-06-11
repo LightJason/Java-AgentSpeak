@@ -41,6 +41,10 @@ import java.util.stream.Collectors;
  */
 public abstract class IOperator extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8050014065736376063L;
 
     /**
      * ctor

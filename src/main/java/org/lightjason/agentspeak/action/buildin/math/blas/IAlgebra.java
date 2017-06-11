@@ -37,6 +37,10 @@ public abstract class IAlgebra extends IBuildinAction
      * algebra reference
      */
     public static final Algebra ALGEBRA = Algebra.DEFAULT;
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8980414250195042661L;
 
     /**
      * ctor

@@ -47,6 +47,11 @@ import java.util.List;
 public final class CCopy extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4568380422187110927L;
+
+    /**
      * ctor
      */
     public CCopy()

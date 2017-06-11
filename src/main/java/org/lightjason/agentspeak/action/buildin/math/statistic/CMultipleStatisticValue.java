@@ -50,6 +50,10 @@ import java.util.stream.Collectors;
  */
 public final class CMultipleStatisticValue extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8921158589863826705L;
 
     /**
      * ctor

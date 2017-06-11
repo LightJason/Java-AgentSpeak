@@ -141,6 +141,10 @@ import java.util.stream.IntStream;
  */
 public final class CCreateDistribution extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 614460992147593598L;
 
     /**
      * ctor

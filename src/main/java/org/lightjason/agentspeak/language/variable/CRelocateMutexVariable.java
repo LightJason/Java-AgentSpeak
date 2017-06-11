@@ -40,6 +40,10 @@ import javax.annotation.Nullable;
 public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implements IRelocateVariable
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6680660424006072619L;
+    /**
      * reference to relocated variable
      */
     private final IVariable<?> m_relocate;

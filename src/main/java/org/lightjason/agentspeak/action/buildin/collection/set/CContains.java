@@ -48,6 +48,11 @@ import java.util.Set;
 public final class CContains extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6055086280161100662L;
+
+    /**
      * ctor
      */
     public CContains()

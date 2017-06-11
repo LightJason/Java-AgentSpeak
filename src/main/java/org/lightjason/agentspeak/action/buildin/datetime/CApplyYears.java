@@ -43,6 +43,10 @@ import java.util.stream.Stream;
  */
 public final class CApplyYears extends IPlusMinus
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2790401351550884571L;
 
     @Nonnull
     @Override

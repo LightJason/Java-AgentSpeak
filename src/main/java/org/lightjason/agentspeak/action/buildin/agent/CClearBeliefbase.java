@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CClearBeliefbase extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5832369527494082158L;
 
     @Override
     public final int minimalArgumentNumber()

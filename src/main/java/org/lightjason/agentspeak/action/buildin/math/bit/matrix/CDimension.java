@@ -46,6 +46,11 @@ import java.util.List;
 public final class CDimension extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7384202150654075448L;
+
+    /**
      * ctor
      */
     public CDimension()

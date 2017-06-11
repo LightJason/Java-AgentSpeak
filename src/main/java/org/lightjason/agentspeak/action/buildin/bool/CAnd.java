@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CAnd extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -136783534394246609L;
 
     @Override
     public final int minimalArgumentNumber()

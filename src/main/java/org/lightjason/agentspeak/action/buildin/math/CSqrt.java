@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CSqrt extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -622334205517915453L;
 
     @Override
     public final int minimalArgumentNumber()

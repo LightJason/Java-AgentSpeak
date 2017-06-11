@@ -42,6 +42,10 @@ import java.util.List;
  */
 public final class CIncidentVerticesSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4546335372329816028L;
 
     @Override
     protected final int skipsize()

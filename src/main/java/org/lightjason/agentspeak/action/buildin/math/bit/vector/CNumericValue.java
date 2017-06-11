@@ -49,6 +49,11 @@ import java.util.stream.Collectors;
 public final class CNumericValue extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3802792886808365176L;
+
+    /**
      * ctor
      */
     public CNumericValue()

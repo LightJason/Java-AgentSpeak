@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CSignum extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4228345064790514199L;
 
     @Override
     public final int minimalArgumentNumber()

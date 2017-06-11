@@ -49,6 +49,10 @@ import java.util.List;
  */
 public class CDistancePath extends IApplyPathAlgorithm
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2146213818742863048L;
 
     @Override
     protected final Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,

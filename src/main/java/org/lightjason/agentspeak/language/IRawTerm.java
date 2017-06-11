@@ -33,6 +33,10 @@ import javax.annotation.Nullable;
  */
 public interface IRawTerm<T> extends ITerm
 {
+    /**
+     * empty raw term
+     */
+    IRawTerm<?> EMPTY = new CRawTerm<>( null );
 
     /**
      * returns allocated state

@@ -39,6 +39,11 @@ import java.util.List;
 public final class CTestRule extends ITest
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5911658475527475288L;
+
+    /**
      * ctor
      *
      * @param p_value atom

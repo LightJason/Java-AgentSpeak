@@ -47,6 +47,10 @@ import java.util.List;
  */
 public final class CNextPrime extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 934582267427021924L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -44,7 +44,10 @@ import java.util.stream.Stream;
  */
 public final class CTernaryOperation extends IBaseExecution<IExpression>
 {
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5518298371186501138L;
     /**
      * true execution block
      */

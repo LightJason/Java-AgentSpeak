@@ -47,6 +47,10 @@ import java.util.List;
  */
 public final class CReplace extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5445088831145525666L;
 
     @Override
     public final int minimalArgumentNumber()

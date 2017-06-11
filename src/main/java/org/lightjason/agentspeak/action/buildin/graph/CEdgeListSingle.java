@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CEdgeListSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6501468310507608790L;
 
     @Override
     protected final int skipsize()

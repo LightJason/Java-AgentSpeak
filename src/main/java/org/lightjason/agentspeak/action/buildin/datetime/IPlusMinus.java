@@ -47,6 +47,11 @@ import java.util.stream.Stream;
 public abstract class IPlusMinus extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1831239783507142327L;
+
+    /**
      * ctor
      */
     protected IPlusMinus()

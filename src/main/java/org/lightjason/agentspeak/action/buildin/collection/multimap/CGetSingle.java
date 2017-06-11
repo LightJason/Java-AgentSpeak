@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2277559384526092314L;
 
     @Override
     protected final void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,

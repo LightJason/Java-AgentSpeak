@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CCountFalse extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3791972900593403711L;
 
     @Override
     public final int minimalArgumentNumber()

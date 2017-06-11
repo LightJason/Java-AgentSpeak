@@ -47,6 +47,11 @@ import java.util.List;
  */
 public final class CVertices extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8910556163865955921L;
+
     @Override
     public final int minimalArgumentNumber()
     {

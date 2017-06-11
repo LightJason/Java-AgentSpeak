@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CAverage extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3122381293872618564L;
 
     @Override
     public final int minimalArgumentNumber()

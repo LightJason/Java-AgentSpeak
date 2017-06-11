@@ -43,6 +43,11 @@ import java.util.stream.Stream;
  */
 public final class CLinearSelection extends ISelection
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4358925095494861120L;
+
     @Nonnull
     @Override
     protected final List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument )

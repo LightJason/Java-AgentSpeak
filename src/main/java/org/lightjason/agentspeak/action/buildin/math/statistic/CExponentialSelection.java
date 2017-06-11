@@ -43,6 +43,10 @@ import java.util.stream.Stream;
  */
 public final class CExponentialSelection extends ISelection
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5158153474814301429L;
 
     @Nonnull
     @Override

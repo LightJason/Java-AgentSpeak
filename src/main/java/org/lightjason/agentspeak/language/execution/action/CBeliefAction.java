@@ -41,6 +41,10 @@ import java.util.List;
 public final class CBeliefAction extends IBaseExecution<ILiteral>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2856258502338708361L;
+    /**
      * running action
      */
     private final EAction m_action;

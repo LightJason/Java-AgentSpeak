@@ -43,13 +43,17 @@ import java.util.List;
  */
 public final class CEdgeListMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -175626399205967595L;
+
     @Override
     protected final int windowsize()
     {
         return 2;
     }
 
-    @Nonnull
     @Override
     protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
                                 @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )

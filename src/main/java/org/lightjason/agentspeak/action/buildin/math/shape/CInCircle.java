@@ -49,6 +49,10 @@ import java.util.stream.Collectors;
  */
 public final class CInCircle extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7618753272977347282L;
 
     /**
      * ctor

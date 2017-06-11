@@ -42,11 +42,14 @@ import java.util.Map;
  */
 public final class CGetMultiple extends IMapGetMultiple<Map<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4100425217888323445L;
 
     @Override
-    protected final void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key,
-                                @Nonnull final List<ITerm> p_return
-    )
+    protected final void apply( final boolean p_parallel, @Nonnull final Map<Object, Object> p_instance,
+                                @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.from(

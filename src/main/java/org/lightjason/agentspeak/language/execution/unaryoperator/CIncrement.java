@@ -41,6 +41,10 @@ import java.util.stream.Stream;
 public final class CIncrement<T extends Number> implements IOperator<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8985578891714581618L;
+    /**
      * variable
      */
     private final IVariable<T> m_variable;

@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
@@ -38,13 +39,18 @@ import java.util.Map;
 /**
  * execution context with local data
  */
-public interface IContext
+public interface IContext extends Serializable
 {
     /**
      * empty context with plan
      */
     IContext EMPTYPLAN = new IContext()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1053856178724776159L;
+
         @Nonnull
         @Override
         public final IAgent<?> agent()
@@ -79,6 +85,11 @@ public interface IContext
      */
     IContext EMPTYRULE = new IContext()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1053856178757676139L;
+
         @Nonnull
         @Override
         public final IAgent<?> agent()

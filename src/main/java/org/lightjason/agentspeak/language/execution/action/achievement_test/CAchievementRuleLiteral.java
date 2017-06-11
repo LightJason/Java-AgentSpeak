@@ -41,6 +41,10 @@ import java.util.stream.Stream;
  */
 public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1575197582635138960L;
 
     /**
      * ctor

@@ -47,6 +47,11 @@ import java.util.Set;
 public final class CRemove extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -393680746973906155L;
+
+    /**
      * ctor
      */
     public CRemove()

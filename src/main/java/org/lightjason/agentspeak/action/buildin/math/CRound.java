@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CRound extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2582905011554676386L;
 
     @Override
     public final int minimalArgumentNumber()

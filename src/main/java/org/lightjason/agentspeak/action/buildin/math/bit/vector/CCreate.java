@@ -47,6 +47,11 @@ import java.util.List;
 public final class CCreate extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5779828720357795757L;
+
+    /**
      * ctor
      */
     public CCreate()

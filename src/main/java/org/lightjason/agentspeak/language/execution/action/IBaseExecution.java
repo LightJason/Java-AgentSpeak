@@ -39,6 +39,10 @@ import java.util.stream.Stream;
 public abstract class IBaseExecution<T> implements IExecution
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2572294057575105363L;
+    /**
      * data
      */
     protected final T m_value;

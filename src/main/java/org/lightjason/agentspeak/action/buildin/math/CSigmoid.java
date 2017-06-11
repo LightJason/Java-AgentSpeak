@@ -49,6 +49,10 @@ import java.util.function.Function;
  */
 public final class CSigmoid extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3824593010060693544L;
 
     @Override
     public final int minimalArgumentNumber()

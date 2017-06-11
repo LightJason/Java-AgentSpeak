@@ -39,6 +39,10 @@ import javax.annotation.Nonnull;
  */
 public final class COr extends IOperator
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5187948216900030916L;
 
     @Override
     protected final void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )

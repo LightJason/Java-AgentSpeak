@@ -49,6 +49,10 @@ import java.util.stream.Collectors;
  */
 public final class CMultipleInterpolate extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2051897472923199260L;
 
     /**
      * ctor

@@ -44,6 +44,10 @@ import java.util.stream.Stream;
 public final class CVariableEvaluate implements IVariableEvaluate
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7310663182659231951L;
+    /**
      * content variable with a string or literal
      */
     private final IVariable<?> m_variable;

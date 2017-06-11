@@ -46,6 +46,10 @@ import java.util.OptionalDouble;
  */
 public final class CMin extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7554573434382676207L;
 
     @Override
     public final int minimalArgumentNumber()

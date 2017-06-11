@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CPow extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3364760887780453571L;
 
     @Override
     public final int minimalArgumentNumber()

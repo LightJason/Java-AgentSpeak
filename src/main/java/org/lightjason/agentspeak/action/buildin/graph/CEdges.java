@@ -48,6 +48,11 @@ import java.util.List;
  */
 public final class CEdges extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2290182024313887326L;
+
     @Override
     public final int minimalArgumentNumber()
     {

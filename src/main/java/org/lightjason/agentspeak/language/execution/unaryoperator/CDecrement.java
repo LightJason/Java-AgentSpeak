@@ -41,6 +41,10 @@ import java.util.stream.Stream;
 public final class CDecrement<T extends Number> implements IOperator<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5980848121313572183L;
+    /**
      * variable
      */
     private final IVariable<T> m_variable;

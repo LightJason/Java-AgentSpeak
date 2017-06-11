@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class COppositeSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3606181902254431239L;
 
     @Override
     protected final int skipsize()

@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CASin extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1282500528999833663L;
 
     @Override
     public final int minimalArgumentNumber()

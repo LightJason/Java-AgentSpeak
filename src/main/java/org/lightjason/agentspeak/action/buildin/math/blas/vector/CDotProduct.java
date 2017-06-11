@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,11 @@ import java.util.stream.Collectors;
 public final class CDotProduct extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -953714393424081234L;
+
+    /**
      * ctor
      */
     public CDotProduct()
@@ -63,9 +69,8 @@ public final class CDotProduct extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<DoubleMatrix1D> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )

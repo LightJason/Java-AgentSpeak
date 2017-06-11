@@ -48,6 +48,11 @@ import java.util.List;
 public final class CAsMap extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6544612446767394569L;
+
+    /**
      * ctor
      */
     public CAsMap()

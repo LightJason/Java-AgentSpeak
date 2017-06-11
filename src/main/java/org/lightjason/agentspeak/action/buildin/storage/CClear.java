@@ -45,6 +45,10 @@ import java.util.stream.Stream;
  */
 public final class CClear extends IStorage
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -985959827654899897L;
 
     /**
      * ctor

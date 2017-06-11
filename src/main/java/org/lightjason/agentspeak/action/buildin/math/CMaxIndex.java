@@ -48,6 +48,10 @@ import java.util.stream.IntStream;
  */
 public final class CMaxIndex extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3532214759609690631L;
 
     @Override
     public final int minimalArgumentNumber()

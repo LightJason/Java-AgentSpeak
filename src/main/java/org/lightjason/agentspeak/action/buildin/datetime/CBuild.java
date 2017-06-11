@@ -49,6 +49,11 @@ import java.util.List;
  */
 public final class CBuild extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8462499187047054608L;
+
     @Override
     public final int minimalArgumentNumber()
     {

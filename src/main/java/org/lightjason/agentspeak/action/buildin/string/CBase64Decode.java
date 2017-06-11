@@ -49,6 +49,10 @@ import java.util.List;
  */
 public final class CBase64Decode extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2067392870344691806L;
 
     @Override
     public final int minimalArgumentNumber()

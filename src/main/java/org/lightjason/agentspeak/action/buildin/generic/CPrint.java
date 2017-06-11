@@ -53,7 +53,10 @@ import java.util.stream.Collectors;
  */
 public final class CPrint extends IBuildinAction
 {
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4271829260928469828L;
     /**
      * output stream
      */
@@ -66,6 +69,7 @@ public final class CPrint extends IBuildinAction
      * list mit individual format calls
      */
     private final Set<IFormatter<?>> m_formatter;
+
 
     /**
      * ctor

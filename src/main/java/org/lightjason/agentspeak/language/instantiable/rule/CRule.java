@@ -47,6 +47,10 @@ import java.util.stream.Stream;
 public final class CRule extends IBaseInstantiable implements IRule
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1165818799700126229L;
+    /**
      * identifier of the rule
      */
     private final ILiteral m_id;

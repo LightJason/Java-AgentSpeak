@@ -48,6 +48,10 @@ import java.util.stream.IntStream;
  */
 public final class CMinIndex extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8719414965491690822L;
 
     @Override
     public final int minimalArgumentNumber()

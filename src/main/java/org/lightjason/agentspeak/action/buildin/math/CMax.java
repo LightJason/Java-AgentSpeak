@@ -46,6 +46,10 @@ import java.util.OptionalDouble;
  */
 public final class CMax extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7784521124090034499L;
 
     @Override
     public final int minimalArgumentNumber()

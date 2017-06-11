@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
  */
 public abstract class IMapApplyMultiple<T> extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7048059456586091660L;
 
     /**
      * ctor

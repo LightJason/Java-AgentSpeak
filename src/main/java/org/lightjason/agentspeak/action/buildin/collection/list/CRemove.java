@@ -49,6 +49,12 @@ import java.util.stream.IntStream;
  */
 public final class CRemove extends IBuildinAction
 {
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4708243571656002435L;
+
     /**
      * ctor
      */
@@ -66,8 +72,7 @@ public final class CRemove extends IBuildinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Object> l_list = p_argument.get( 0 ).<List<Object>>raw();
         final Set<Integer> l_removed = new HashSet<>();

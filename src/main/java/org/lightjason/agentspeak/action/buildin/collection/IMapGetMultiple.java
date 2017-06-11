@@ -41,6 +41,10 @@ import java.util.List;
  */
 public abstract class IMapGetMultiple<T> extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4747498401722017900L;
 
     /**
      * ctor

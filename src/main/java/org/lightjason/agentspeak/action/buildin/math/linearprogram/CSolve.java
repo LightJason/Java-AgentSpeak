@@ -70,6 +70,10 @@ import java.util.Objects;
  */
 public final class CSolve extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -9105794980077188037L;
 
     /**
      * ctor

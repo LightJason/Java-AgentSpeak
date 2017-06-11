@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CCeil extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 9060970162510898637L;
 
     @Override
     public final int minimalArgumentNumber()

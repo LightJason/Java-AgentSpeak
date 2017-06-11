@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -281,6 +282,10 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private static final class CEmptyPrint extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 3623170719805419082L;
 
         @Override
         public final IPath name()
@@ -295,9 +300,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             return CFuzzyValue.from( true );
         }
@@ -308,6 +312,10 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private final class CStop extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 1356103671899402899L;
 
         @Override
         public final IPath name()
@@ -322,8 +330,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             m_running.set( false );
@@ -337,6 +345,10 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private final class CTowerSize extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -621010269747370196L;
 
         @Override
         public final IPath name()
@@ -351,9 +363,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( l_tower == null )
@@ -370,6 +381,10 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private final class CTowerPush extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3816901920109893840L;
         /**
          * probability for action failing
          */
@@ -398,9 +413,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( ( l_tower == null ) || ( Math.random() < m_failprobability ) )
@@ -423,6 +437,10 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private final class CTowerPop extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 7757699013244193313L;
 
         @Override
         public final IPath name()
@@ -437,9 +455,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                                   final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
             if ( l_tower == null )

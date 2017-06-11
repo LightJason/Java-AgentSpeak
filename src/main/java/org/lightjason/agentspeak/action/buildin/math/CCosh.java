@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CCosh extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3604147035964906734L;
 
     @Override
     public final int minimalArgumentNumber()

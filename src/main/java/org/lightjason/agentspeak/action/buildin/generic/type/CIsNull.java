@@ -45,6 +45,10 @@ import java.util.Objects;
  */
 public final class CIsNull extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -587616810133750663L;
 
     /**
      * ctor

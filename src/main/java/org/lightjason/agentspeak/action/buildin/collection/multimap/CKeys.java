@@ -47,6 +47,11 @@ import java.util.stream.Collectors;
 public final class CKeys extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5971820545869138123L;
+
+    /**
      * ctor
      */
     public CKeys()

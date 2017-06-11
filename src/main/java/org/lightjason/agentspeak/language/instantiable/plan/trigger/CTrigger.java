@@ -37,6 +37,10 @@ import java.text.MessageFormat;
 public final class CTrigger implements ITrigger
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4216265954626567558L;
+    /**
      * variable number
      */
     private final int m_variables;
@@ -62,7 +66,6 @@ public final class CTrigger implements ITrigger
      *
      * @param p_event type
      * @param p_literal literal with unified variables
-     * @bug #25 hash values are equal of beliefs with different values
      */
     @SuppressWarnings( "unchecked" )
     public CTrigger( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )

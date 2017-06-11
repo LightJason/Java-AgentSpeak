@@ -46,6 +46,11 @@ import java.util.stream.Stream;
 public final class CRawAction<T> extends IBaseExecution<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7181432659241612718L;
+
+    /**
      * ctor
      *
      * @param p_data any object data

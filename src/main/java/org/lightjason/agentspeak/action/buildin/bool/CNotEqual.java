@@ -37,6 +37,10 @@ package org.lightjason.agentspeak.action.buildin.bool;
  */
 public final class CNotEqual extends CEqual
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3226848482113693419L;
 
     @Override
     protected final boolean apply( final boolean p_value )

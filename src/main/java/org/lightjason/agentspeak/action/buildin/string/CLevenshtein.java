@@ -51,6 +51,11 @@ import java.util.stream.IntStream;
  */
 public final class CLevenshtein extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7085898562771050640L;
+
     @Override
     public final int minimalArgumentNumber()
     {

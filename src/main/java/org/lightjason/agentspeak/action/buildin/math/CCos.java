@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CCos extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4187282706474219719L;
 
     @Override
     public final int minimalArgumentNumber()

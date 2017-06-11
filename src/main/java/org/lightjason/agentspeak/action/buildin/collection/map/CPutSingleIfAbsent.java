@@ -40,6 +40,10 @@ import java.util.Map;
  */
 public final class CPutSingleIfAbsent extends IMapApplySingle<Map<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6130981531762056381L;
 
     @Override
     protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )

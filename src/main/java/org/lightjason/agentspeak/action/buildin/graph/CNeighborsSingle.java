@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CNeighborsSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5698214543592798527L;
 
     @Override
     protected final int skipsize()

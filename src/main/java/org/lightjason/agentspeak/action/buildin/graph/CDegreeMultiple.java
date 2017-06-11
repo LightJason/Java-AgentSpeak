@@ -41,6 +41,11 @@ import java.util.List;
  */
 public final class CDegreeMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4311346775363807891L;
+
     @Override
     protected final int windowsize()
     {

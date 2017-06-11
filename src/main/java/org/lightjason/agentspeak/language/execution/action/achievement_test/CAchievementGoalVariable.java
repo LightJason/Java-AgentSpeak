@@ -42,6 +42,10 @@ import java.util.stream.Stream;
  */
 public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEvaluate>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4338602284287736836L;
 
     /**
      * ctor

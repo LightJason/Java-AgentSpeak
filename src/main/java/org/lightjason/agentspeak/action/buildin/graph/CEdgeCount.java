@@ -46,6 +46,11 @@ import java.util.List;
  */
 public final class CEdgeCount extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 9192290787721046055L;
+
     @Override
     public final int minimalArgumentNumber()
     {

@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class CPredecessorCountSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4792236824035177716L;
 
     @Override
     protected final int skipsize()

@@ -51,6 +51,11 @@ import java.util.stream.Collectors;
 public final class CRange extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2022532423038334824L;
+
+    /**
      * ctor
      */
     public CRange()

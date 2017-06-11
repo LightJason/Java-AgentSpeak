@@ -41,6 +41,10 @@ import java.util.List;
  */
 public final class CAddEdgeSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1893938682357853616L;
 
     @Override
     protected final int skipsize()

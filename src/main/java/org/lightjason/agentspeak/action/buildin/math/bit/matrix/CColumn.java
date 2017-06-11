@@ -40,6 +40,10 @@ import java.util.stream.IntStream;
  */
 public final class CColumn extends IRowColumn
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6865043145578397469L;
 
     @Nonnull
     @Override

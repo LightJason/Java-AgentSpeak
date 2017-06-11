@@ -48,6 +48,11 @@ import java.util.stream.Collectors;
 public final class CClear extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8707781446631490810L;
+
+    /**
      * ctor
      */
     public CClear()

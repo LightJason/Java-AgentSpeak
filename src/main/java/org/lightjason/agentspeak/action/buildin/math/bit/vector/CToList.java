@@ -48,6 +48,10 @@ import java.util.stream.IntStream;
  */
 public final class CToList extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4246750559302125701L;
 
     /**
      * ctor

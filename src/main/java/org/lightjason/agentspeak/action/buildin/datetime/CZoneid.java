@@ -43,6 +43,11 @@ import java.util.List;
  */
 public final class CZoneid extends IDateTime
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8130639081454617186L;
+
     @Override
     protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {

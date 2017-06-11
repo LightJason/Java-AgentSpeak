@@ -48,6 +48,10 @@ import java.util.Map;
  */
 public final class CJsonList extends IBaseRest
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5630882266708277403L;
 
     @Nonnull
     @Override

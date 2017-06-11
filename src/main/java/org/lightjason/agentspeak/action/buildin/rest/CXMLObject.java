@@ -47,6 +47,11 @@ import java.util.Map;
  */
 public class CXMLObject extends IBaseRest
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8156192343303737293L;
+
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

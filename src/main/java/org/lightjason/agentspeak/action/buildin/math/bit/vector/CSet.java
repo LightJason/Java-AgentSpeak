@@ -49,6 +49,11 @@ import java.util.stream.Collectors;
 public final class CSet extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6269327474104817444L;
+
+    /**
      * ctor
      */
     public CSet()

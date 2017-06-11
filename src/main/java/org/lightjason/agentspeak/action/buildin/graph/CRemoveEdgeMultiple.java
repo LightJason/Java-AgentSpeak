@@ -41,6 +41,10 @@ import java.util.List;
  */
 public final class CRemoveEdgeMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5448974084390539735L;
 
     @Override
     protected final int windowsize()

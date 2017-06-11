@@ -43,8 +43,11 @@ import java.util.List;
  */
 public final class CDate extends IDateTime
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4490065527882057197L;
 
-    @Nonnull
     @Override
     protected final boolean elements( @Nonnull final ZonedDateTime p_datetime, @Nonnull final List<ITerm> p_return )
     {

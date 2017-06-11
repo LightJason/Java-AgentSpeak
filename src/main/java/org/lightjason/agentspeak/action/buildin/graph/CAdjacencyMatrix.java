@@ -77,6 +77,11 @@ import java.util.stream.Stream;
  */
 public final class CAdjacencyMatrix extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2499068539684263946L;
+
     @Override
     public final int minimalArgumentNumber()
     {

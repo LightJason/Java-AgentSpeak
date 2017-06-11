@@ -45,6 +45,10 @@ import java.util.stream.Stream;
 public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6234582899813921890L;
+    /**
      * right-hand argument (literal)
      */
     private final M m_righthand;

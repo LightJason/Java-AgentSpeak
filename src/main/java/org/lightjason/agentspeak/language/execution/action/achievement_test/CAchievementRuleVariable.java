@@ -41,6 +41,11 @@ import java.util.stream.Stream;
 public final class CAchievementRuleVariable extends IAchievementRule<IVariableEvaluate>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3462378724593325487L;
+
+    /**
      * ctor
      *
      * @param p_type value of the rule

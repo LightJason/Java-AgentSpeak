@@ -45,11 +45,15 @@ public abstract class IBuildinAction extends IBaseAction
      * logger
      */
     protected static final Logger LOGGER = CCommon.logger( IBuildinAction.class );
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3888384147874966937L;
     /**
      * action name
      */
     private final IPath m_name;
+
 
     /**
      * ctor

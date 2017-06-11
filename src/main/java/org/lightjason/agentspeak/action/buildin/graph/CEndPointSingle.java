@@ -42,6 +42,10 @@ import java.util.List;
  */
 public final class CEndPointSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8744180441364559959L;
 
     @Override
     protected final int skipsize()

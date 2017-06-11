@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CPower extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2301458658803978160L;
 
     /**
      * ctor

@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CIsNumeric extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4229494833999704947L;
 
     /**
      * ctor

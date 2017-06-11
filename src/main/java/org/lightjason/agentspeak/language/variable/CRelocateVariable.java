@@ -41,6 +41,10 @@ import java.text.MessageFormat;
 public final class CRelocateVariable<T> extends CVariable<T> implements IRelocateVariable
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2204692497385064257L;
+    /**
      * reference to relocated variable
      */
     private final IVariable<?> m_relocate;

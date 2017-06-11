@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CHypot extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3560235052118385438L;
 
     @Override
     public final int minimalArgumentNumber()

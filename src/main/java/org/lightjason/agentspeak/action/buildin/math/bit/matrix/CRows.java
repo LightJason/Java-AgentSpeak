@@ -46,6 +46,11 @@ import java.util.List;
 public final class CRows extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7823816898791078912L;
+
+    /**
      * ctor
      */
     public CRows()

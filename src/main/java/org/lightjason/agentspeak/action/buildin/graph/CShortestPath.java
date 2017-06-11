@@ -49,6 +49,10 @@ import java.util.List;
  */
 public final class CShortestPath extends IApplyPathAlgorithm
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4312684868579937853L;
 
     @Override
     protected final Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,

@@ -63,6 +63,10 @@ import java.util.Locale;
  */
 public final class CHash extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4638666396527392307L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -45,6 +45,10 @@ import java.util.stream.Collectors;
  */
 public final class CConcat extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4688132740901866985L;
 
     @Override
     public final int minimalArgumentNumber()

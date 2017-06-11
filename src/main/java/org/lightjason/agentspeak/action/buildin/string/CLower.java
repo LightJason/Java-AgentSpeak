@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CLower extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1587127075245919303L;
 
     @Override
     public final int minimalArgumentNumber()

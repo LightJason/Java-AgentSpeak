@@ -47,6 +47,11 @@ import java.util.stream.Collectors;
 public final class CReverse extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2744303113340038007L;
+
+    /**
      * ctor
      */
     public CReverse()
@@ -63,8 +68,7 @@ public final class CReverse extends IBuildinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments are list references
         p_return.addAll( Lists.reverse( CCommon.flatcollection( p_argument ).collect( Collectors.toList() ) ) );

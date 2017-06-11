@@ -40,6 +40,11 @@ import java.util.List;
  */
 public final class CFindEdgeMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -40723204307254306L;
+
     @Override
     protected final int windowsize()
     {

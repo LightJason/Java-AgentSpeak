@@ -37,6 +37,10 @@ import java.util.Locale;
  */
 public abstract class IConstraint extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1078912058401537801L;
 
     /**
      * ctor

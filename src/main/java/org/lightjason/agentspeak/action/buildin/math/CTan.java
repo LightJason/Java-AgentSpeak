@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CTan extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6605825121038499649L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -51,6 +51,11 @@ public interface IPlan extends IInstantiable
      */
     IPlan EMPTY = new IPlan()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8137749419571919583L;
+
         @Nonnull
         @Override
         public final ITrigger trigger()

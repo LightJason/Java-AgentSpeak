@@ -42,6 +42,10 @@ import java.util.Map;
  */
 public final class CParseLiteral extends IParse
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -619484136191200817L;
 
     /**
      * parses the input string

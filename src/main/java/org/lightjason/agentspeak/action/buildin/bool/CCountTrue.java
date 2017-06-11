@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CCountTrue extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7257086360012435958L;
 
     @Override
     public final int minimalArgumentNumber()

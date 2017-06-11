@@ -47,6 +47,11 @@ import java.util.List;
 public final class CCreateLiteral extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8784389208725950355L;
+
+    /**
      * ctor
      */
     public CCreateLiteral()

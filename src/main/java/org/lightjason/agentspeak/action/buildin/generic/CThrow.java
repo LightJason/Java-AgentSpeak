@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CThrow extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3116022203002012617L;
 
     @Override
     public final int minimalArgumentNumber()

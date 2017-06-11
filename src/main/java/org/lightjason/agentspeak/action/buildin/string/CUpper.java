@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CUpper extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3165533927167892489L;
 
     @Override
     public final int minimalArgumentNumber()

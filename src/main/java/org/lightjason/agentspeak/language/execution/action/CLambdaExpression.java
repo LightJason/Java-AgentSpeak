@@ -53,6 +53,10 @@ import java.util.stream.Stream;
 public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5128636076731831236L;
+    /**
      * initialization expression
      */
     private final IExecution m_initialize;

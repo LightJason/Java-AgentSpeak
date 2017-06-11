@@ -48,6 +48,11 @@ public interface IRule extends IInstantiable
     /** empty rule **/
     IRule EMPTY = new IRule()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6850403064097706468L;
+
         @Nonnull
         @Override
         public final ILiteral identifier()

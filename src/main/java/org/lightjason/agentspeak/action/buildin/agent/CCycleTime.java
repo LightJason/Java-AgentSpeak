@@ -44,6 +44,10 @@ import java.util.List;
  */
 public class CCycleTime extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3781558534685092083L;
 
     @Override
     public final int minimalArgumentNumber()

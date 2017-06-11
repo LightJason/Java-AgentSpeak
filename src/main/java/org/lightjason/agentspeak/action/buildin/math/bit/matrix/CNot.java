@@ -46,6 +46,11 @@ import java.util.List;
 public final class CNot extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8897353767314237164L;
+
+    /**
      * ctor
      */
     public CNot()

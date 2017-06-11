@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CMultiplicative extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3046373876617720672L;
 
     /**
      * ctor

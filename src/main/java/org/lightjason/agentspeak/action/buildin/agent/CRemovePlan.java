@@ -52,6 +52,12 @@ import java.util.List;
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CRemovePlan extends IBuildinAction
 {
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2509947123811973880L;
+
     @Override
     public final int minimalArgumentNumber()
     {

@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CUnary extends IBaseUnary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5203681823131507779L;
 
     /**
      * ctor

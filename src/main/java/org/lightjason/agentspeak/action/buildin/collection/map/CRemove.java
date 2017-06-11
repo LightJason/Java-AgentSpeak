@@ -48,6 +48,11 @@ import java.util.Map;
 public final class CRemove extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5920128340334118503L;
+
+    /**
      * ctor
      */
     public CRemove()

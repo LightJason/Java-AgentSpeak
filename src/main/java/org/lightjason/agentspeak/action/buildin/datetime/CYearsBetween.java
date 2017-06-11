@@ -44,6 +44,10 @@ import java.util.stream.Stream;
  */
 public final class CYearsBetween extends IBetween
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6456145317414317167L;
 
     @Nonnull
     @Override

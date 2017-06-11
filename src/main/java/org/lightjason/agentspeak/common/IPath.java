@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.common;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
  *
  * @note implement equals with String object, so a path object can be checked to a String
  */
-public interface IPath extends Comparable<IPath>
+public interface IPath extends Serializable, Comparable<IPath>
 {
 
     /**
@@ -42,6 +43,11 @@ public interface IPath extends Comparable<IPath>
      **/
     IPath EMPTY = new IPath()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8529008893337445887L;
+
         @Nonnull
         @Override
         public final IPath append( @Nonnull final IPath p_path )

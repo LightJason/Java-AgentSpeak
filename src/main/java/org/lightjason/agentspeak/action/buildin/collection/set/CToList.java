@@ -47,6 +47,11 @@ import java.util.Set;
 public final class CToList extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7123196333851031484L;
+
+    /**
      * ctor
      */
     public CToList()

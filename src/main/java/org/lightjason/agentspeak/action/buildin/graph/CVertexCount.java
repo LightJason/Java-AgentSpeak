@@ -46,6 +46,11 @@ import java.util.List;
  */
 public final class CVertexCount extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4454372402890603257L;
+
     @Override
     public final int minimalArgumentNumber()
     {

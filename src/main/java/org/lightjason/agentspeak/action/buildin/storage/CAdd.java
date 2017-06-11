@@ -46,6 +46,10 @@ import java.util.stream.Stream;
  */
 public final class CAdd extends IStorage
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3102307419115604147L;
 
     /**
      * ctor

@@ -53,6 +53,10 @@ import java.util.stream.Stream;
 public final class CPlan extends IBaseInstantiable implements IPlan
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8130277494195919583L;
+    /**
      * trigger event
      */
     private final ITrigger m_triggerevent;

@@ -48,6 +48,10 @@ import java.util.List;
  */
 public final class CBinomial extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7542134505799374485L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -55,6 +55,10 @@ import java.util.stream.Stream;
  */
 public final class CCreateStatistic extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8275199738531829131L;
 
     /**
      * ctor

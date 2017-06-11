@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CSize extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3545198567138617973L;
 
     @Override
     public final int minimalArgumentNumber()

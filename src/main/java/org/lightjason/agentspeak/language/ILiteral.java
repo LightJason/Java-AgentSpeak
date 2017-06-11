@@ -43,6 +43,11 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      */
     ILiteral EMPTY = new ILiteral()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3396471300120317809L;
+
         @Nonnull
         @Override
         public final Stream<ITerm> values( @Nullable final IPath... p_path )

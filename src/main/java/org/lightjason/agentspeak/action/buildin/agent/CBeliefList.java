@@ -52,6 +52,10 @@ import java.util.stream.Collectors;
  */
 public final class CBeliefList extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6884092740048107959L;
 
     @Override
     public final int minimalArgumentNumber()

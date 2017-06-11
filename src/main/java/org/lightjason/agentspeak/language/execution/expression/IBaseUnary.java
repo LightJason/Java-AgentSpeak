@@ -38,6 +38,10 @@ import java.util.stream.Stream;
 public abstract class IBaseUnary implements IUnaryExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8992581726613099958L;
+    /**
      * expression operator
      */
     protected final EOperator m_operator;

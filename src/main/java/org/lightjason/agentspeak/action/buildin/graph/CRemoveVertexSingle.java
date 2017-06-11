@@ -39,6 +39,11 @@ import java.util.List;
  */
 public final class CRemoveVertexSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4205919186813827537L;
+
     @Override
     protected final int skipsize()
     {

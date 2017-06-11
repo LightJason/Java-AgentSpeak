@@ -45,6 +45,11 @@ import java.util.Set;
 public final class CAdd extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2518410375938659779L;
+
+    /**
      * ctor
      */
     public CAdd()

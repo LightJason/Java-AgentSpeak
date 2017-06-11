@@ -48,6 +48,10 @@ import java.util.stream.Collectors;
  */
 public final class CPrimeFactors extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 773736897510104178L;
 
     @Override
     public final int minimalArgumentNumber()

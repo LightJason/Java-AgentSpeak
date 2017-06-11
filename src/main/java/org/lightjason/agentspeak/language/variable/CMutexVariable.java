@@ -36,6 +36,10 @@ import javax.annotation.Nullable;
  */
 public class CMutexVariable<T> extends CVariable<T>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 9040218112516254186L;
 
     /**
      * ctor

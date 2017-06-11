@@ -42,6 +42,10 @@ import java.util.stream.Stream;
 public final class CProxyReturnExpression<T extends IExecution> implements IExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8081637540101991377L;
+    /**
      * execution
      */
     private final T m_execution;

@@ -49,6 +49,10 @@ import java.util.stream.Collectors;
  */
 public final class CInRectangle extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1128548897818830791L;
 
     /**
      * ctor

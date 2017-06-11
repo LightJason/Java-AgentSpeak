@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +49,11 @@ import java.util.stream.Collectors;
 public final class CToList extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1640513979460742860L;
+
+    /**
      * ctor
      */
     public CToList()
@@ -62,9 +68,8 @@ public final class CToList extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, final IContext p_context, final List<ITerm> p_argument,
-                                               final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )

@@ -45,6 +45,12 @@ import java.util.List;
  */
 public final class CFlat extends IBuildinAction
 {
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8792941025876008933L;
+
     @Override
     public final int minimalArgumentNumber()
     {
@@ -54,8 +60,7 @@ public final class CFlat extends IBuildinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatcollection( p_argument ).forEach( p_return::add );
         return CFuzzyValue.from( true );

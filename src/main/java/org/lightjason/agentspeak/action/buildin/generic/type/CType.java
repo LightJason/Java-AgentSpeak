@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CType extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2771524436848359316L;
 
     /**
      * ctor

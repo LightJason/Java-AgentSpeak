@@ -53,6 +53,10 @@ import java.util.List;
  */
 public final class CDecrypt extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1057273195012687348L;
 
     @Override
     public final int minimalArgumentNumber()

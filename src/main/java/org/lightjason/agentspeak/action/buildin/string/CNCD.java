@@ -49,6 +49,11 @@ import java.util.stream.Collectors;
  */
 public final class CNCD extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3828839577514827324L;
+
     @Override
     public final int minimalArgumentNumber()
     {

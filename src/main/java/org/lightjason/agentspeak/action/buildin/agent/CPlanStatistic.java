@@ -51,6 +51,11 @@ import java.util.List;
 public final class CPlanStatistic extends IBuildinAction
 {
 
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 432941607230785685L;
+
     @Override
     public final int minimalArgumentNumber()
     {

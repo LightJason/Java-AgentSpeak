@@ -47,6 +47,12 @@ import java.util.stream.Collectors;
  */
 public final class CIntersect extends IBuildinAction
 {
+
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7453409804177199062L;
+
     /**
      * ctor
      */
@@ -64,8 +70,7 @@ public final class CIntersect extends IBuildinAction
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
         final List<?> l_result = CCommon.flatcollection( p_argument )

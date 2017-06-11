@@ -46,6 +46,11 @@ public interface IExpression extends IExecution
      */
     IExpression EMPTY = new IExpression()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 1051229233293816991L;
+
         @Nonnull
         @Override
         public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

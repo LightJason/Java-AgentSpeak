@@ -45,6 +45,10 @@ import java.util.stream.Stream;
  */
 public final class CSleep extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8150278330935392034L;
 
     @Override
     public final int minimalArgumentNumber()

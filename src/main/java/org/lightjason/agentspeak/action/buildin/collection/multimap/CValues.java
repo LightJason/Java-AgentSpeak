@@ -48,6 +48,11 @@ import java.util.stream.Collectors;
 public final class CValues extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2367547481201779686L;
+
+    /**
      * ctor
      */
     public CValues()

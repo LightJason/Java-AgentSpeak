@@ -48,6 +48,10 @@ import java.util.stream.Stream;
 public class CDefaultUnify extends IBaseExecution<ILiteral>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2858968840990978860L;
+    /**
      * parallel unification
      */
     protected final boolean m_parallel;

@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CDegrees extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1956551592217112401L;
 
     @Override
     public final int minimalArgumentNumber()

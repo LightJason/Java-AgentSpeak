@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CComparable extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3088316270644309406L;
 
     /**
      * ctor

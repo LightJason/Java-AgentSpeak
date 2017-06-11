@@ -54,6 +54,10 @@ import java.util.stream.Stream;
 public final class CProxyAction implements IExecution
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4799005052331053271L;
+    /**
      * execution
      */
     private final IExecution m_execution;
@@ -96,6 +100,10 @@ public final class CProxyAction implements IExecution
      */
     private static class CTermWrapper<T extends ITerm> implements IExecution
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6984535096829821628L;
         /**
          * term value
          */
@@ -166,6 +174,10 @@ public final class CProxyAction implements IExecution
      */
     private static class CActionWrapper implements IExecution
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 5531271525053969711L;
         /**
          * parallel execution flag
          */

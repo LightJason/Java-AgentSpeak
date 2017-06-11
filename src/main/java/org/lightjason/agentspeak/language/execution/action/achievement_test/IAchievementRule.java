@@ -47,6 +47,11 @@ import java.util.Set;
 abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -315973892409409832L;
+
+    /**
      * ctor
      *
      * @param p_type value of the achievment-goal

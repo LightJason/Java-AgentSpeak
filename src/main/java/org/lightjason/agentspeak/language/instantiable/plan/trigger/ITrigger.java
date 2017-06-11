@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.IStructureHash;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -45,13 +46,17 @@ import java.util.stream.Collectors;
  * and number of arguments are equal, otherwise unification is used
  * to define the literal variables
  */
-public interface ITrigger extends IStructureHash, IShallowCopy<ITrigger>, Comparable<ITrigger>
+public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITrigger>, Comparable<ITrigger>
 {
     /**
      * empty trigger
      */
     ITrigger EMPTY = new ITrigger()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -4216254162765675258L;
 
         @Override
         public final int structurehash()

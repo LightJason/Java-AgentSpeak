@@ -50,6 +50,10 @@ import java.util.stream.Stream;
 public abstract class IBaseInstantiable implements IInstantiable
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8843291880722926104L;
+    /**
      * action list
      */
     protected final List<IExecution> m_action;
@@ -62,6 +66,7 @@ public abstract class IBaseInstantiable implements IInstantiable
      * hash code
      */
     private final int m_hash;
+
 
     /**
      * ctor

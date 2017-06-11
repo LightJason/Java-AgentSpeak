@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CSum extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5366419253936818150L;
 
     @Override
     public final int minimalArgumentNumber()

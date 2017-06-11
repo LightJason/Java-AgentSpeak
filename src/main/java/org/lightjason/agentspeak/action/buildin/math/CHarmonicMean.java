@@ -46,6 +46,10 @@ import java.util.stream.Stream;
  */
 public final class CHarmonicMean extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 512098153369001644L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -43,6 +43,11 @@ import java.util.List;
  */
 public final class CNeighborsMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8428326199496471618L;
+
     @Override
     protected final int windowsize()
     {

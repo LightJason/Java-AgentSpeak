@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CRadians extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4469536361101029719L;
 
     @Override
     public final int minimalArgumentNumber()

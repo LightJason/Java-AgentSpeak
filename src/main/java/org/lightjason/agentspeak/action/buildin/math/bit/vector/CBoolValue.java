@@ -48,6 +48,11 @@ import java.util.stream.Collectors;
 public final class CBoolValue extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1878367487526537971L;
+
+    /**
      * ctor
      */
     public CBoolValue()

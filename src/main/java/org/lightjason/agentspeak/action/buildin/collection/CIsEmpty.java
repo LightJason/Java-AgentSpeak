@@ -49,6 +49,11 @@ import java.util.Map;
 public final class CIsEmpty extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3479069391247895544L;
+
+    /**
      * ctor
      */
     public CIsEmpty()

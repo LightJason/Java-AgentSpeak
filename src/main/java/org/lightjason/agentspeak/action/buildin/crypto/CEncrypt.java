@@ -54,6 +54,10 @@ import java.util.List;
  */
 public final class CEncrypt extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5791747611724910332L;
 
     @Override
     public final int minimalArgumentNumber()

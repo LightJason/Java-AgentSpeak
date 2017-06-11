@@ -46,6 +46,11 @@ import java.util.List;
 public final class CTrueCount extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7117386624268123187L;
+
+    /**
      * ctor
      */
     public CTrueCount()

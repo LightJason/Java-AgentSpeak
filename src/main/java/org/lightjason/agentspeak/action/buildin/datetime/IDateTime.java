@@ -43,6 +43,10 @@ import java.util.stream.Stream;
  */
 public abstract class IDateTime extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5384242048535616689L;
 
     /**
      * ctor

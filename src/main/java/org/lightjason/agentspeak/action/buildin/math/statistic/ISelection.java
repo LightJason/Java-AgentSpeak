@@ -43,6 +43,10 @@ import java.util.stream.Stream;
 public abstract class ISelection extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -365949510289020495L;
+    /**
      * random instance
      */
     private final Random m_random = new Random();

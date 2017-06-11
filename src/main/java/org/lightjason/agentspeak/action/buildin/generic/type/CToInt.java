@@ -39,6 +39,10 @@ import java.util.List;
  */
 public final class CToInt extends ICast
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3552457175331059713L;
 
     @Override
     protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )

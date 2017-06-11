@@ -40,6 +40,10 @@ import java.util.List;
  */
 public abstract class IApplySingle extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -531438839660684240L;
 
     @Override
     public final int minimalArgumentNumber()

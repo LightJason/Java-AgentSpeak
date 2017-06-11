@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8534258655371085840L;
 
     /**
      * ctor

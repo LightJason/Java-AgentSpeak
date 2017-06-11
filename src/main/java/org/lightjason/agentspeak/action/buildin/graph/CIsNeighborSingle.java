@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class CIsNeighborSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1358850067582349520L;
 
     @Override
     protected final int skipsize()

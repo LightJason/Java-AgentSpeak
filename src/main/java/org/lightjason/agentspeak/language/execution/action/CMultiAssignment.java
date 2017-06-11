@@ -47,6 +47,10 @@ import java.util.stream.Stream;
 public final class CMultiAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6123210880356077509L;
+    /**
      * right-hand argument
      */
     private final M m_righthand;

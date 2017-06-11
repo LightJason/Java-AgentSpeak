@@ -39,6 +39,10 @@ import java.util.List;
  */
 public final class CRemoveVertexMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2553854674274649435L;
 
     @Override
     protected final int windowsize()

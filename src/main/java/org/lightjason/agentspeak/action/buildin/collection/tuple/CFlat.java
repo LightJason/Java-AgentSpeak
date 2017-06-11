@@ -47,6 +47,11 @@ import java.util.stream.Stream;
 public final class CFlat extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5546539971471669886L;
+
+    /**
      * ctor
      */
     public CFlat()

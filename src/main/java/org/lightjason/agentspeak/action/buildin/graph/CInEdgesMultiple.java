@@ -43,6 +43,11 @@ import java.util.List;
  */
 public final class CInEdgesMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7662728152009053757L;
+
     @Override
     protected final int windowsize()
     {

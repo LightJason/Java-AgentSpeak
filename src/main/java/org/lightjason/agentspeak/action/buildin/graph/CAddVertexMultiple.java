@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class CAddVertexMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5025878705856964222L;
 
     @Override
     protected final int windowsize()

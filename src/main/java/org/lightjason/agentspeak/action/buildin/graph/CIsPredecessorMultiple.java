@@ -40,6 +40,11 @@ import java.util.List;
  */
 public final class CIsPredecessorMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4684357908598619316L;
+
     @Override
     protected final int windowsize()
     {

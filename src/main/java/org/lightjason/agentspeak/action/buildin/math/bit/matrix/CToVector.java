@@ -49,6 +49,11 @@ import java.util.stream.IntStream;
  */
 public final class CToVector extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8873596018924393696L;
+
     @Override
     public final int minimalArgumentNumber()
     {

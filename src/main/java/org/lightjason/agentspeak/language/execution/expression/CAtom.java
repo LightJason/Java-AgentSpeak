@@ -42,6 +42,10 @@ import java.util.stream.Stream;
 public class CAtom implements IExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -469420004121224419L;
+    /**
      * value
      */
     private final ITerm m_value;

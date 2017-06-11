@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CFloor extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6955658294620136380L;
 
     @Override
     public final int minimalArgumentNumber()

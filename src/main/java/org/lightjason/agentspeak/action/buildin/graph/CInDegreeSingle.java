@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class CInDegreeSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6595062279058002330L;
 
     @Override
     protected final int skipsize()

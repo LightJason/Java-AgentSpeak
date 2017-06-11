@@ -39,6 +39,10 @@ import java.util.List;
  */
 public final class CToFloat extends ICast
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5468250343047542012L;
 
     @Override
     protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )

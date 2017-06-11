@@ -42,6 +42,10 @@ import java.util.stream.Stream;
 public abstract class IBaseBinary implements IBinaryExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1630029294068548691L;
+    /**
      * expression operator
      */
     protected final EOperator m_operator;
@@ -53,6 +57,7 @@ public abstract class IBaseBinary implements IBinaryExpression
      * right-hand-side argument
      */
     protected final IExpression m_righthandside;
+
 
 
     /**

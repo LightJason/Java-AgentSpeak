@@ -47,6 +47,10 @@ import java.util.stream.Collectors;
  */
 public final class CAllMatch extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5787849046607404490L;
 
     @Override
     public final int minimalArgumentNumber()

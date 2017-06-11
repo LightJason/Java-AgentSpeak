@@ -42,6 +42,11 @@ import java.util.List;
  */
 public final class CIncidentVerticesMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5237880583521289516L;
+
     @Override
     protected final int windowsize()
     {

@@ -49,6 +49,11 @@ import java.util.stream.Stream;
 public final class CRemove extends IStorage
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7237340367513736766L;
+
+    /**
      * ctor
      *
      * @param p_resolver resolver function

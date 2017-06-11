@@ -40,7 +40,10 @@ import java.util.stream.Stream;
  */
 public abstract class IStorage extends IBuildinAction
 {
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2187242564778364709L;
     /**
      * set with forbidden keys
      */

@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CClearStatistic extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2770659299019763206L;
 
     /**
      * ctor

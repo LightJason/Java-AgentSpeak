@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class COutEdgesSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -540059834584856674L;
 
     @Override
     protected final int skipsize()

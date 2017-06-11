@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CFactorial extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4946461950145019864L;
 
     @Override
     public final int minimalArgumentNumber()

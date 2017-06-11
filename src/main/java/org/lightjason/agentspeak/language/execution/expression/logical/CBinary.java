@@ -43,6 +43,10 @@ import java.util.List;
  */
 public final class CBinary extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 397466749260293866L;
 
     /**
      * ctor

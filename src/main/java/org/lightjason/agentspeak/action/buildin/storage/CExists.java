@@ -47,6 +47,11 @@ import java.util.stream.Stream;
 public final class CExists extends IStorage
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8505190439682767260L;
+
+    /**
      * ctor
      *
      * @param p_resolver resolver function

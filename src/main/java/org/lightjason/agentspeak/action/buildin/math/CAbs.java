@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CAbs extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4682072669209033117L;
 
     @Override
     public final int minimalArgumentNumber()

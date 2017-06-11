@@ -34,6 +34,10 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseAction implements IAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1706803039397374484L;
 
     @Override
     public final int hashCode()

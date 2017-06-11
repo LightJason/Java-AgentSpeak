@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CACos extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 9092334723476270232L;
 
     @Override
     public final int minimalArgumentNumber()

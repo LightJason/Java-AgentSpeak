@@ -404,6 +404,10 @@ public final class TestCActionAgent extends IBaseTest
     private static class CEmptyPlan extends IBaseInstantiable implements IPlan
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6885053756134284862L;
+        /**
          * trigger
          */
         private final ITrigger m_trigger;

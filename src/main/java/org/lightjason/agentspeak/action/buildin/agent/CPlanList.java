@@ -47,6 +47,10 @@ import java.util.stream.Collectors;
  */
 public final class CPlanList extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4584573308355332034L;
 
     @Override
     public final int minimalArgumentNumber()

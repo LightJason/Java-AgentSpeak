@@ -39,6 +39,10 @@ import java.util.List;
  */
 public final class CToString extends ICast
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5084494896831207543L;
 
     /**
      * cast / translates value

@@ -40,6 +40,11 @@ import java.util.List;
  */
 public final class COppositeMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3118466211222229379L;
+
     @Override
     protected final int windowsize()
     {

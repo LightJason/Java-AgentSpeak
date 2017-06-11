@@ -47,6 +47,10 @@ import java.util.List;
  */
 public final class CIsPrime extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7062947098373880833L;
 
     @Override
     public final int minimalArgumentNumber()

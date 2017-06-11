@@ -48,6 +48,11 @@ import java.util.stream.Collectors;
  */
 public final class CContainsVertex extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -7405732178225852719L;
+
     @Override
     public final int minimalArgumentNumber()
     {

@@ -46,6 +46,10 @@ import java.util.stream.Stream;
  */
 public final class CGeometricMean extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3397904432745109682L;
 
     @Override
     public final int minimalArgumentNumber()

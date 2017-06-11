@@ -41,6 +41,10 @@ import java.util.stream.Stream;
 public class CRepair extends IBaseExecution<IExecution>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7095678561033158953L;
+    /**
      * fallback execution
      */
     private final IExecution m_fallback;

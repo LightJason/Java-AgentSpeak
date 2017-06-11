@@ -36,6 +36,11 @@ import java.util.List;
  */
 public final class CSuccessorCountMultiple extends IApplyMultiple
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3354752194496824469L;
+
     @Override
     protected final int windowsize()
     {

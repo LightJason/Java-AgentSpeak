@@ -50,6 +50,10 @@ import java.util.List;
  */
 public final class CCreateKey extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1156448289689463545L;
 
     @Override
     public final int minimalArgumentNumber()

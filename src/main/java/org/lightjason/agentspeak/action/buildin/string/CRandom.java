@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CRandom extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3114914702129124265L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -46,6 +46,11 @@ import java.util.List;
 public final class CColumns extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8582929331059867312L;
+
+    /**
      * ctor
      */
     public CColumns()

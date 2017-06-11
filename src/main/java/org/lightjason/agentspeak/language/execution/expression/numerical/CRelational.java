@@ -45,6 +45,11 @@ import java.util.List;
 public final class CRelational extends IBaseBinary
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5844609255203908714L;
+
+    /**
      * ctor
      *
      * @param p_operator operator

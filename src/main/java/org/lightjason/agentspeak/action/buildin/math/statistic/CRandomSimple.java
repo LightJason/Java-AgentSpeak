@@ -53,6 +53,10 @@ import java.util.stream.Stream;
 public final class CRandomSimple extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5755982505026599387L;
+    /**
      * random instance
      */
     private final Random m_random = new Random();

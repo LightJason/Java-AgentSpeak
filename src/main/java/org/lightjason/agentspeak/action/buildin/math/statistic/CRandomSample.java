@@ -51,6 +51,10 @@ import java.util.stream.Stream;
  */
 public final class CRandomSample extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1823216973305374276L;
 
     /**
      * ctor

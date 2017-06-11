@@ -46,6 +46,10 @@ import java.util.List;
  */
 public final class CLog extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3935600701959861161L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -56,6 +56,11 @@ import java.util.Map;
  */
 public final class CSpanningTree extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -367284435336974616L;
+
     @Override
     public final int minimalArgumentNumber()
     {

@@ -38,6 +38,10 @@ import javax.annotation.Nullable;
  */
 public final class CConstant<T> extends CVariable<T>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8207552612082585231L;
 
     /**
      * ctor

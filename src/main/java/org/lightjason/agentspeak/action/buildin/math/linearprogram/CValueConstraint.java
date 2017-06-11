@@ -59,6 +59,10 @@ import java.util.stream.Collectors;
  */
 public final class CValueConstraint extends IConstraint
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2316665584839205362L;
 
     /**
      * ctor

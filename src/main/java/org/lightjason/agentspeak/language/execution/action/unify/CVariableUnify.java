@@ -44,6 +44,10 @@ import java.util.stream.Stream;
 public final class CVariableUnify extends CDefaultUnify
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8392150596878840771L;
+    /**
      * unification variable with literal
      */
     private final IVariable<?> m_variable;

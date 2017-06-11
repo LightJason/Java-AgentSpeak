@@ -39,6 +39,11 @@ import java.util.List;
  */
 public final class CRemoveEdgeSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2587720096102368605L;
+
     @Override
     protected final int skipsize()
     {

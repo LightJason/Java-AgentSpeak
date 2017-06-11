@@ -58,6 +58,10 @@ import java.util.stream.Collectors;
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CGetPlan extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2674034436717184541L;
 
     @Override
     public final int minimalArgumentNumber()

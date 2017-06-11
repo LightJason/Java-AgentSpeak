@@ -42,6 +42,10 @@ import java.util.stream.Stream;
 public final class CExpressionUnify extends CDefaultUnify
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6897299610175239719L;
+    /**
      * unification expression
      */
     private final IExpression m_expression;

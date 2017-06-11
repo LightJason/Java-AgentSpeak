@@ -49,6 +49,10 @@ import java.util.stream.Stream;
 public final class CMethodAction extends IBaseAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -507236338411690842L;
+    /**
      * name of the action
      */
     private final IPath m_name;

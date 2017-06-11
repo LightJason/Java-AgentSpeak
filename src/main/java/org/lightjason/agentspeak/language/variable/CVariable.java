@@ -45,6 +45,10 @@ import java.util.Arrays;
 public class CVariable<T> implements IVariable<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5542578381343603600L;
+    /**
      * variable / functor name
      */
     protected final IPath m_functor;

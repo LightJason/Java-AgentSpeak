@@ -44,6 +44,10 @@ import java.util.List;
  */
 public abstract class ICast extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5568282370454217665L;
 
     /**
      * ctor

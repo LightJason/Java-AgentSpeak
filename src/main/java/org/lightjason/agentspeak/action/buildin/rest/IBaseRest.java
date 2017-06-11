@@ -57,6 +57,10 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseRest extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3713528201539676487L;
 
     @Override
     public final int minimalArgumentNumber()

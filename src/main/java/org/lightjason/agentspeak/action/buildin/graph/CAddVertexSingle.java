@@ -40,6 +40,10 @@ import java.util.List;
  */
 public final class CAddVertexSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6979920592502178203L;
 
     @Override
     protected final int skipsize()

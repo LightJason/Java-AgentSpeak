@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class CATan extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1450593922774619157L;
 
     @Override
     public final int minimalArgumentNumber()

@@ -39,6 +39,10 @@ import java.util.List;
  */
 public final class CTestGoal extends ITest
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6199668040937864138L;
 
     /**
      * ctor

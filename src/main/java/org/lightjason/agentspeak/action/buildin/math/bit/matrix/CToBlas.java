@@ -54,6 +54,11 @@ import java.util.stream.IntStream;
 public final class CToBlas extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5682613760524318512L;
+
+    /**
      * ctor
      */
     public CToBlas()

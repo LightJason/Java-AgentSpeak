@@ -49,6 +49,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
      */
     public static final ITerm EMPTY = new CRawTerm<>( null );
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8660012856755452965L;
+    /**
      * value data
      */
     private final T m_value;
@@ -60,6 +64,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
      * hash code cache
      */
     private final int m_hashcode;
+
 
 
     /**

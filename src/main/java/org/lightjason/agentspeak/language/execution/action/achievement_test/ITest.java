@@ -35,6 +35,11 @@ import javax.annotation.Nonnull;
 abstract class ITest extends IBaseExecution<IPath>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 500291351344481097L;
+
+    /**
      * ctor
      *
      * @param p_value atom

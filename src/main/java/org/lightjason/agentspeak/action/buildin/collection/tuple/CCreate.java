@@ -48,6 +48,11 @@ import java.util.stream.Collectors;
 public final class CCreate extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3030084067378090112L;
+
+    /**
      * ctor
      */
     public CCreate()

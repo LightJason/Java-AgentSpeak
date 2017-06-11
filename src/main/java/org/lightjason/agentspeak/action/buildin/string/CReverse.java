@@ -44,6 +44,10 @@ import java.util.List;
  */
 public final class CReverse extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3814060460849369103L;
 
     @Override
     public final int minimalArgumentNumber()

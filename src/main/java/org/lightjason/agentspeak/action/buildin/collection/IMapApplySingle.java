@@ -42,6 +42,10 @@ import java.util.List;
  */
 public abstract class IMapApplySingle<T> extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4069386763245022021L;
 
     /**
      * ctor
