@@ -34,13 +34,16 @@ import java.util.logging.Logger;
 /**
  * runtime exception
  */
-@SuppressWarnings( "serial" )
 public final class CRuntimeException extends RuntimeException implements IContextException
 {
     /**
      * logger
      */
     private static final Logger LOGGER = CCommon.logger( CIllegalStateException.class );
+    /**
+     * serial id
+     */
+    private static final transient long serialVersionUID = -1053856178724776159L;
     /**
      * execution context
      */

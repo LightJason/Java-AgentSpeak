@@ -32,13 +32,16 @@ import java.util.logging.Logger;
 /**
  * illegal argument exception
  */
-@SuppressWarnings( "serial" )
 public final class CIllegalArgumentException extends IllegalArgumentException implements IException
 {
     /**
      * logger
      */
     private static final Logger LOGGER = CCommon.logger( CIllegalArgumentException.class );
+    /**
+     * serial id
+     */
+    private static final transient long serialVersionUID = -3411208617187561215L;
 
     /**
      * ctor

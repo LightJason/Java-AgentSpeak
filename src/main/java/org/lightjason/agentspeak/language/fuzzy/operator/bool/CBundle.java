@@ -38,10 +38,14 @@ import java.util.AbstractMap;
  * @tparam S agent type
  * @tparam T agent type
  */
-@SuppressWarnings( "serial" )
 public final class CBundle<S extends IAgent<?>> extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean, S>>
     implements IFuzzyBundle<Boolean, S>
 {
+
+    /**
+     * serial id
+     */
+    private static final transient long serialVersionUID = 646232211237092457L;
 
     /**
      * ctor

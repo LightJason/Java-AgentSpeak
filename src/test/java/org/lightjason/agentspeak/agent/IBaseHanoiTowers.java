@@ -67,7 +67,6 @@ import static org.junit.Assert.assertTrue;
  * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
  * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
  */
-@SuppressWarnings( "serial" )
 abstract class IBaseHanoiTowers extends IBaseTest
 {
     /**
@@ -499,9 +498,13 @@ abstract class IBaseHanoiTowers extends IBaseTest
     /**
      * tower
      */
-    @SuppressWarnings( "serial" )
     private static final class CTower extends Stack<CSlice>
     {
+        /**
+         * serial id
+         */
+        private static final transient long serialVersionUID = 1361367629042813689L;
+
         @Override
         public final synchronized CSlice push( final CSlice p_item )
         {
