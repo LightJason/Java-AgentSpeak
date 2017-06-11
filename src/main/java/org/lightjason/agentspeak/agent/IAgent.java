@@ -191,6 +191,18 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
         {
             return (N) this;
         }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null ) && ( p_object instanceof IAgent<?> ) && ( this.hashCode() == p_object.hashCode() );
+        }
     };
 
 

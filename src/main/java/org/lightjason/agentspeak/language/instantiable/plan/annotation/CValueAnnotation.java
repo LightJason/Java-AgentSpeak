@@ -45,6 +45,7 @@ public final class CValueAnnotation<T> extends IBaseAnnotation<T>
      * ctor
      *
      * @param p_type type
+     * @param p_name name of the annotation
      * @param p_data number
      */
     public CValueAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
