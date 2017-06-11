@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 
@@ -42,6 +43,135 @@ import java.util.stream.Stream;
  */
 public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 {
+    /**
+     * empty beliefbase
+     */
+    IBeliefbase<IAgent<?>> EMPY = new IBeliefbase<IAgent<?>>()
+    {
+
+        @Override
+        public final boolean empty()
+        {
+            return true;
+        }
+
+        @Override
+        public final int size()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        {
+            return p_agent;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ITrigger> trigger( @Nonnull final IView<IAgent<?>> p_view )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ILiteral> streamLiteral()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IView<IAgent<?>>> streamView()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IBeliefbase<IAgent<?>> clear()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral add( @Nonnull final ILiteral p_literal )
+        {
+            return p_literal;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> add( @Nonnull final IView<IAgent<?>> p_view )
+        {
+            return p_view;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral remove( @Nonnull final ILiteral p_literal )
+        {
+            return p_literal;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final IView<IAgent<?>> p_view )
+        {
+            return p_view;
+        }
+
+        @Override
+        public final boolean containsLiteral( @Nonnull final String p_key )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean containsView( @Nonnull final String p_key )
+        {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public final IView<IAgent<?>> view( @Nonnull final String p_key )
+        {
+            return IView.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Collection<ILiteral> literal( @Nonnull final String p_key )
+        {
+            return Collections.emptySet();
+        }
+
+        @Nullable
+        @Override
+        public final IView<IAgent<?>> viewOrDefault( @Nonnull final String p_key, @Nullable final IView<IAgent<?>> p_default )
+        {
+            return p_default;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> create( @Nonnull final String p_name )
+        {
+            return IView.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> create( @Nonnull final String p_name, @Nullable final IView<IAgent<?>> p_parent
+        )
+        {
+            return IView.EMPTY;
+        }
+    };
 
     /**
      * returns all trigger of the beliefbase

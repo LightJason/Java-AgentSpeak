@@ -86,7 +86,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
         @Override
         public final IView<IAgent<?>> beliefbase()
         {
-            return null;
+            return IView.EMPTY;
         }
 
         @Nonnull

@@ -43,6 +43,182 @@ import java.util.stream.Stream;
  */
 public interface IView<T extends IAgent<?>> extends IStructure<T>
 {
+    /**
+     * empty view
+     */
+    IView<IAgent<?>> EMPTY = new IView<IAgent<?>>()
+    {
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final Stream<IView<IAgent<?>>> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator<IAgent<?>>... p_generator )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> generate( @Nonnull final IViewGenerator<IAgent<?>> p_generator, @Nonnull final IPath... p_paths )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IView<IAgent<?>>> root()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IBeliefbase<IAgent<?>> beliefbase()
+        {
+            return IBeliefbase.EMPY;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath path()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final String name()
+        {
+            return "";
+        }
+
+        @Nullable
+        @Override
+        public final IView<IAgent<?>> parent()
+        {
+            return null;
+        }
+
+        @Override
+        public final boolean hasParent()
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ITrigger> trigger()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> clear( @Nullable final IPath... p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> add( @Nonnull final Stream<ILiteral> p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> add( @Nonnull final ILiteral... p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final IView<IAgent<?>> add( @Nonnull final IView<IAgent<?>>... p_view )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final IView<IAgent<?>> add( @Nonnull final IPath p_path, @Nonnull final IView<IAgent<?>>... p_view
+        )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final Stream<ILiteral> p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final ILiteral... p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final IView<IAgent<?>> p_view )
+        {
+            return this;
+        }
+
+        @Override
+        public final boolean containsLiteral( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean containsView( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean empty()
+        {
+            return false;
+        }
+
+        @Override
+        public final int size()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        {
+            return p_agent;
+        }
+    };
+
 
     /**
      * streams path walking
