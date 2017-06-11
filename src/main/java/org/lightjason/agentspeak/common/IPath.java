@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.common;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
@@ -225,9 +227,26 @@ public interface IPath extends Comparable<IPath>
         }
 
         @Override
-        public final int compareTo( final IPath p_path )
+        public final int compareTo( @Nonnull final IPath p_path )
         {
-            return Integer.compare( p_path.hashCode(), 0 );
+            return Integer.compare( p_path.hashCode(), this.hashCode() );
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null )
+                   && (
+                       ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
+                       || ( ( p_object instanceof String ) && ( this.getPath().hashCode() == p_object.hashCode() ) )
+                   );
         }
     };
 

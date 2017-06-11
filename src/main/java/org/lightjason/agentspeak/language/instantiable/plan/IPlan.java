@@ -83,7 +83,7 @@ public interface IPlan extends IInstantiable
         @Override
         public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
         {
-            return null;
+            return IContext.EMPTYPLAN;
         }
 
         @Nonnull

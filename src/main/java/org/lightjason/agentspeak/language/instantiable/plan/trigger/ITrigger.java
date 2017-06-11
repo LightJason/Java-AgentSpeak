@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.IStructureHash;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -60,7 +61,7 @@ public interface ITrigger extends IStructureHash, IShallowCopy<ITrigger>, Compar
 
         @Nonnull
         @Override
-        public final ITrigger shallowcopy( final IPath... p_prefix )
+        public final ITrigger shallowcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
@@ -94,6 +95,18 @@ public interface ITrigger extends IStructureHash, IShallowCopy<ITrigger>, Compar
         public final int variablesize()
         {
             return 0;
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null ) && ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
         }
     };
 

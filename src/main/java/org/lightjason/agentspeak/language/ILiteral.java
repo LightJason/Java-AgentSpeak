@@ -122,7 +122,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
             return false;
         }
 
-        @Nullable
+        @Nonnull
         @Override
         @SuppressWarnings( "unchecked" )
         public final <T> T raw()
@@ -162,6 +162,18 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
         public final int structurehash()
         {
             return 0;
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null ) && ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
         }
     };
 
