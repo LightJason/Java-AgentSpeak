@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language;
 
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -50,7 +51,7 @@ public interface IRawTerm<T> extends ITerm
      * @throws IllegalStateException on non-allocated
      */
     @Nonnull
-    IRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException;
+    IRawTerm<T> throwNotAllocated( @Nullable final String... p_name ) throws IllegalStateException;
 
     /**
      * checkes assignable of the value
@@ -58,7 +59,7 @@ public interface IRawTerm<T> extends ITerm
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean valueAssignableTo( final Class<?>... p_class );
+    boolean valueAssignableTo( @Nonnull final Class<?>... p_class );
 
     /**
      * throws an illegal argument exception
@@ -71,6 +72,6 @@ public interface IRawTerm<T> extends ITerm
      * @throws IllegalArgumentException on assignable error
      */
     @Nonnull
-    IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
+    IRawTerm<T> throwValueNotAssignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

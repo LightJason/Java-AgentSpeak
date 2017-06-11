@@ -208,7 +208,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final Stream<ITerm> values( final IPath... p_path )
+    public final Stream<ITerm> values( @Nullable final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_values.values().stream()
@@ -221,7 +221,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final Stream<ITerm> orderedvalues( final IPath... p_path )
+    public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_orderedvalues.stream().sequential()
@@ -266,6 +266,7 @@ public final class CLiteral implements ILiteral
         return m_orderedvalues.parallelStream().anyMatch( ITerm::hasVariable );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final ILiteral unify( @Nonnull final IContext p_context )
@@ -289,6 +290,7 @@ public final class CLiteral implements ILiteral
         );
     }
 
+    @Nonnull
     @Override
     public final ILiteral allocate( @Nonnull final IContext p_context )
     {
@@ -334,6 +336,7 @@ public final class CLiteral implements ILiteral
         return m_functor;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final <T> T raw()
@@ -355,7 +358,7 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    public final ILiteral shallowcopy( final IPath... p_prefix )
+    public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 
@@ -370,6 +373,7 @@ public final class CLiteral implements ILiteral
                );
     }
 
+    @Nonnull
     @Override
     public final ILiteral shallowcopysuffix()
     {
@@ -394,7 +398,7 @@ public final class CLiteral implements ILiteral
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final synchronized ITerm deepcopy( final IPath... p_prefix )
+    public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 

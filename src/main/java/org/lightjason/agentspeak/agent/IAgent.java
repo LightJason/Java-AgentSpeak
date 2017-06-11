@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -69,14 +70,14 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
         @Override
         @SafeVarargs
         @SuppressWarnings( "varargs" )
-        public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
+        public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
         {
             return Arrays.stream( p_inspector );
         }
 
         @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
+        public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
         {
             return CFuzzyValue.from( true );
         }
@@ -103,28 +104,28 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> sleep( final long p_cycles, final ITerm... p_term )
+        public final IAgent<IAgent<?>> sleep( final long p_cycles, @Nullable final ITerm... p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> sleep( final long p_cycles, final Stream<ITerm> p_term )
+        public final IAgent<IAgent<?>> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> wakeup( final ITerm... p_term )
+        public final IAgent<IAgent<?>> wakeup( @Nullable final ITerm... p_term )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IAgent<IAgent<?>> wakeup( final Stream<ITerm> p_term )
+        public final IAgent<IAgent<?>> wakeup( @Nonnull final Stream<ITerm> p_term )
         {
             return this;
         }
@@ -201,7 +202,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    <N extends IInspector> Stream<N> inspect( final N... p_inspector );
+    <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector );
 
     /**
      * trigger an event
@@ -213,7 +214,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @note the trigger is ignored iif the agent is sleeping
      */
     @Nonnull
-    IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately );
+    IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately );
 
     /**
      * returns the beliefbase
@@ -246,7 +247,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> sleep( final long p_cycles, final ITerm... p_term );
+    IAgent<T> sleep( final long p_cycles, @Nullable final ITerm... p_term );
 
     /**
      * pushs the agent into sleeping state
@@ -256,7 +257,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_term );
+    IAgent<T> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term );
 
     /**
      * wake-up the agent by generating wakeup-goal
@@ -265,7 +266,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> wakeup( final ITerm... p_term );
+    IAgent<T> wakeup( @Nullable final ITerm... p_term );
 
     /**
      * wake-up the agent by generating wakeup-goal

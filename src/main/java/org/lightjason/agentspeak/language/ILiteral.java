@@ -45,14 +45,14 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
     {
         @Nonnull
         @Override
-        public final Stream<ITerm> values( final IPath... p_path )
+        public final Stream<ITerm> values( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final Stream<ITerm> orderedvalues( final IPath... p_path )
+        public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
         {
             return Stream.empty();
         }
@@ -132,7 +132,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
 
         @Nonnull
         @Override
-        public final ITerm deepcopy( final IPath... p_prefix )
+        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
@@ -146,7 +146,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
 
         @Nonnull
         @Override
-        public final ILiteral shallowcopy( final IPath... p_prefix )
+        public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
         {
             return this;
         }
@@ -180,7 +180,7 @@ public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>,
      * in sequential ordering
      */
     @Nonnull
-    Stream<ITerm> orderedvalues( final IPath... p_path );
+    Stream<ITerm> orderedvalues( @Nullable final IPath... p_path );
 
     /**
      * check for empty values

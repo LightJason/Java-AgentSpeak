@@ -32,6 +32,8 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 
@@ -67,7 +69,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
      * @tparam N value type
      */
     @SuppressWarnings( "unchecked" )
-    public <N> CRawTerm( final N p_value )
+    public <N> CRawTerm( @Nullable final N p_value )
     {
         if ( p_value instanceof ITerm )
         {
@@ -140,6 +142,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
+    @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
@@ -165,8 +168,9 @@ public final class CRawTerm<T> implements IRawTerm<T>
         return m_value != null;
     }
 
+    @Nonnull
     @Override
-    public final IRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException
+    public final IRawTerm<T> throwNotAllocated( @Nullable final String... p_name ) throws IllegalStateException
     {
         if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon
@@ -176,13 +180,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final boolean valueAssignableTo( final Class<?>... p_class )
+    public final boolean valueAssignableTo( @Nonnull final Class<?>... p_class )
     {
-        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
+    @Nonnull
     @Override
-    public final IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
+    public final IRawTerm<T> throwValueNotAssignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueAssignableTo( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", this, p_class ) );

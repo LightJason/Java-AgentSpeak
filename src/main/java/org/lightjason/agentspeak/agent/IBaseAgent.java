@@ -55,6 +55,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -168,11 +169,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public final <N extends IInspector> Stream<N> inspect( final N... p_inspector )
+    public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
     {
-        if ( p_inspector == null )
-            return Stream.empty();
-
         return Arrays.stream( p_inspector ).parallel().peek( i -> {
             i.inspectcycle( m_cycle.get() );
             i.inspectsleeping( m_sleepingcycles.get() );
@@ -210,7 +208,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_literal )
+    public final IAgent<T> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_literal )
     {
         m_sleepingcycles.set( p_cycles );
         p_literal.filter( i -> !i.hasVariable() ).forEach( m_sleepingterm::add );
@@ -218,7 +216,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     }
 
     @Override
-    public final IAgent<T> wakeup( final ITerm... p_term )
+    public final IAgent<T> wakeup( @Nullable final ITerm... p_term )
     {
         return this.wakeup(
             ( p_term == null ) || ( p_term.length == 0 )
@@ -229,7 +227,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IAgent<T> wakeup( final Stream<ITerm> p_term )
+    public final IAgent<T> wakeup( @Nonnull final Stream<ITerm> p_term )
     {
         p_term.forEach( m_sleepingterm::add );
         this.active( true );
@@ -318,7 +316,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately )
+    public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
     {
         if ( m_sleepingcycles.get() > 0 )
             return CFuzzyValue.from( false );
@@ -371,6 +369,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      *
      * @return collection with execution plan and context
      */
+    @Nonnull
     private synchronized Collection<Pair<IPlanStatistic, IContext>> generateexecutionlist()
     {
         m_runningplans.clear();
@@ -392,7 +391,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @param p_trigger trigger stream
      * @return collection with excutable plans, instantiated execution context and plan statistic
      */
-    private Collection<Pair<IPlanStatistic, IContext>> generateexecution( final Stream<ITrigger> p_trigger )
+    @Nonnull
+    private Collection<Pair<IPlanStatistic, IContext>> generateexecution( @Nonnull final Stream<ITrigger> p_trigger )
     {
         return p_trigger
             .filter( Objects::nonNull )
@@ -418,7 +418,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
      * @param p_execution execution collection with instantiated plans and context
      * @return fuzzy result for each executaed plan
      */
-    private IFuzzyValue<Boolean> execute( final Collection<Pair<IPlanStatistic, IContext>> p_execution )
+    @Nonnull
+    private IFuzzyValue<Boolean> execute( @Nonnull final Collection<Pair<IPlanStatistic, IContext>> p_execution )
     {
         // update executable plan list, so that test-goals are defined all the time
         p_execution.parallelStream().forEach( i -> m_runningplans.put(
