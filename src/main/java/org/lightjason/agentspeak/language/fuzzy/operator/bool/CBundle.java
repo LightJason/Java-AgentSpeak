@@ -35,6 +35,7 @@ import java.util.AbstractMap;
 /**
  * boolean fuzzy bundle
  *
+ * @tparam S agent type
  * @tparam T agent type
  */
 @SuppressWarnings( "serial" )
