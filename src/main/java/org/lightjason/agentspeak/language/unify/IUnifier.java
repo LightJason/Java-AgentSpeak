@@ -21,9 +21,10 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.action.unify;
+package org.lightjason.agentspeak.language.unify;
 
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
@@ -33,6 +34,7 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -89,5 +91,26 @@ public interface IUnifier
     @Nonnull
     IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
                                 @Nonnull final IExpression p_expression, final boolean p_parallel );
+
+
+    /**
+     * unify algorithm
+     */
+    interface IAlgorithm
+    {
+
+        /**
+         * unify algorithm
+         *
+         * @param p_variables unified variables
+         * @param p_source source stream of terms
+         * @param p_target target stream of terms with variables (must be a deep-copy)
+         * @return boolean of unify success
+         *
+         * @tparam T term type
+         */
+        <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target );
+
+    }
 
 }

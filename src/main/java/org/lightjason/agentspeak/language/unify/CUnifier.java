@@ -21,14 +21,13 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.agent.unify;
+package org.lightjason.agentspeak.language.unify;
 
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
@@ -73,7 +72,7 @@ public final class CUnifier implements IUnifier
      * @param p_hashbased hash-based unification algorithm
      * @param p_recursive recursive-based unification algorithm
      */
-    public CUnifier( @Nonnull final IAlgorithm p_hashbased, @Nonnull final IAlgorithm p_recursive )
+    public CUnifier( @Nonnull final IUnifier.IAlgorithm p_hashbased, @Nonnull final IUnifier.IAlgorithm p_recursive )
     {
         m_hashbased = p_hashbased;
         m_recursive = p_recursive;

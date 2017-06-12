@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.agent.unify;
+package org.lightjason.agentspeak.language.unify;
 
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * recursive unify
  */
-public final class CRecursive implements IAlgorithm
+public final class CRecursive implements IUnifier.IAlgorithm
 {
 
     @Override
