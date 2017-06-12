@@ -152,7 +152,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
 
     @Nonnull
     @Override
-    public final Stream<T> generatemultiple( final int p_number, final Object... p_data )
+    public final Stream<T> generatemultiple( final int p_number, @Nullable final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()

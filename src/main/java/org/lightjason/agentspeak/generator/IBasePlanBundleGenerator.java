@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.grammar.CParserPlanBundle;
 import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Set;
@@ -81,7 +82,7 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
 
     @Nonnull
     @Override
-    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data )
+    public final Stream<IPlanBundle> generatemultiple( final int p_number, @Nullable final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()

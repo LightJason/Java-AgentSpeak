@@ -42,7 +42,7 @@ public interface IGenerator<T>
      * @note can return null which will be ignored than on multiple generation
      */
     @Nullable
-    T generatesingle( final Object... p_data );
+    T generatesingle( @Nullable final Object... p_data );
 
     /**
      * generates a stream of objects
@@ -52,6 +52,6 @@ public interface IGenerator<T>
      * @return object stream
      */
     @Nonnull
-    Stream<T> generatemultiple( final int p_number, final Object... p_data );
+    Stream<T> generatemultiple( final int p_number, @Nullable final Object... p_data );
 
 }
