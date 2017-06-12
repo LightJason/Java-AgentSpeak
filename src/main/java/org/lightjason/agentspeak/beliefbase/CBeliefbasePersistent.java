@@ -195,6 +195,14 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
         return m_storage.streamSingleElements();
     }
 
+    @Nonnull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <N extends IAgent<?>> IBeliefbase<N> raw()
+    {
+        return (IBeliefbase<N>) this;
+    }
+
     @Override
     public final String toString()
     {

@@ -217,8 +217,25 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
         {
             return p_agent;
         }
+
+        @Nonnull
+        @Override
+        @SuppressWarnings( "unchecked" )
+        public final <N extends IAgent<?>> IView<N> raw()
+        {
+            return (IView<N>) this;
+        }
     };
 
+
+    /**
+     * casts the data to the given agent type
+     *
+     * @tparam N agent type
+     * @return casted view
+     */
+    @Nonnull
+    <N extends IAgent<?>> IView<N> raw();
 
     /**
      * streams path walking

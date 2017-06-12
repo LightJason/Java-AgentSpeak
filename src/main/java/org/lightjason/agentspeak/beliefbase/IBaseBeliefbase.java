@@ -176,4 +176,11 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
         return m_events.removeAll( p_view ).stream();
     }
 
+    @Nonnull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <N extends IAgent<?>> IBeliefbase<N> raw()
+    {
+        return (IBeliefbase<N>) this;
+    }
 }

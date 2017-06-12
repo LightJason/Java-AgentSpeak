@@ -171,6 +171,14 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
         {
             return IView.EMPTY;
         }
+
+        @Nonnull
+        @Override
+        @SuppressWarnings( "unchecked" )
+        public <N extends IAgent<?>> IBeliefbase<N> raw()
+        {
+            return (IBeliefbase<N>) this;
+        }
     };
 
     /**
@@ -181,6 +189,16 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      */
     @Nonnull
     Stream<ITrigger> trigger( @Nonnull final IView<T> p_view );
+
+
+    /**
+     * casts the data to the given agent type
+     *
+     * @tparam N agent type
+     * @return casted beliefbase
+     */
+    @Nonnull
+    <N extends IAgent<?>> IBeliefbase<N> raw();
 
 
 

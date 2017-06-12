@@ -112,6 +112,14 @@ public final class CView<T extends IAgent<?>> implements IView<T>
         return m_beliefbase.update( p_agent );
     }
 
+    @Nonnull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final <N extends IAgent<?>> IView<N> raw()
+    {
+        return (IView<N>) this;
+    }
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
