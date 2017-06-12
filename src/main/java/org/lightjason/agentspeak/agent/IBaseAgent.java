@@ -54,6 +54,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
@@ -255,12 +256,14 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_unifier;
     }
 
+    @Nonnegative
     @Override
     public final long cycletime()
     {
         return m_cycletime.get();
     }
 
+    @Nonnegative
     @Override
     public final long cycle()
     {
@@ -437,7 +440,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         // execute plan and return values and return execution result
         return p_execution.parallelStream().map( i -> {
 
-            final IFuzzyValue<Boolean> l_result = i.getLeft().plan().execute( false, i.getRight(), null, null );
+            final IFuzzyValue<Boolean> l_result = i.getLeft().plan().execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() );
             if ( m_fuzzy.getValue().defuzzify( l_result ) )
                 // increment successful runs
                 i.getLeft().incrementsuccessful();

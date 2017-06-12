@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
@@ -150,12 +151,14 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
             return IUnifier.EMPTY;
         }
 
+        @Nonnegative
         @Override
         public final long cycletime()
         {
             return 0;
         }
 
+        @Nonnegative
         @Override
         public final long cycle()
         {
@@ -318,6 +321,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      *
      * @return nano seconds
      */
+    @Nonnegative
     long cycletime();
 
     /**
@@ -325,6 +329,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      *
      * @return cycle
      */
+    @Nonnegative
     long cycle();
 
     /**
