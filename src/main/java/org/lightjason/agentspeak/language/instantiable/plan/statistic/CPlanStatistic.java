@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicLong;
@@ -72,18 +73,21 @@ public final class CPlanStatistic implements IPlanStatistic
     }
 
     @Override
+    @Nonnegative
     public final long count()
     {
         return m_fail.get() + m_successful.get();
     }
 
     @Override
+    @Nonnegative
     public final long successful()
     {
         return m_successful.get();
     }
 
     @Override
+    @Nonnegative
     public final double successfulratio()
     {
         final double l_sum = m_successful.get() + m_fail.get();
@@ -93,6 +97,7 @@ public final class CPlanStatistic implements IPlanStatistic
     }
 
     @Override
+    @Nonnegative
     public final long fail()
     {
         return m_fail.get();

@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
@@ -48,6 +49,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return number of executions
      */
+    @Nonnegative
     long count();
 
     /**
@@ -55,6 +57,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return number of executions
      */
+    @Nonnegative
     long successful();
 
     /**
@@ -62,6 +65,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return ratio
      */
+    @Nonnegative
     double successfulratio();
 
     /**
@@ -69,6 +73,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return number of executions
      */
+    @Nonnegative
     long fail();
 
     /**
@@ -76,6 +81,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return ratio
      */
+    @Nonnegative
     double failratio();
 
     /**
