@@ -78,7 +78,6 @@ public final class CUnifier implements IUnifier
         m_recursive = p_recursive;
     }
 
-
     // --- inheritance & context modification ------------------------------------------------------------------------------------------------------------------
 
     @Nonnull
@@ -120,7 +119,7 @@ public final class CUnifier implements IUnifier
 
         // otherwise the expression must be checked, first match will be used
         final Set<IVariable<?>> l_result = parallelstream( l_variables.stream(), p_parallel )
-                                                      .filter( i -> evaluateexpression( p_expression, p_context, i ) )
+                                                      .filter( i -> evaluateexpression( p_context, p_expression, i ) )
                                                       .findFirst()
                                                       .orElse( Collections.emptySet() );
 
@@ -132,24 +131,25 @@ public final class CUnifier implements IUnifier
         return CFuzzyValue.from( true );
     }
 
-    /**
-     * evaluate expression
-     *
-     * @param p_expression expression
-     * @param p_context execution context (will be duplicated)
-     * @param p_variables current variables
-     * @return boolean for correct evaluation
-     */
-    private static boolean evaluateexpression( final IExpression p_expression, final IContext p_context, final Set<IVariable<?>> p_variables )
-    {
-        final List<ITerm> l_return = new LinkedList<>();
-        p_expression.execute(
-            false, CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
-            Collections.emptyList(),
-            l_return
-        );
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
+    @Override
+    public final int hashCode()
+    {
+        return m_hashbased.hashCode() ^ m_recursive.hashCode();
+    }
+
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        return ( p_object != null ) && ( p_object instanceof IUnifier ) && ( this.hashCode() == p_object.hashCode() );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return MessageFormat.format( "hash-based unification: {0} / recursive unification: {1}", m_hashbased, m_recursive );
     }
 
     /**
@@ -165,29 +165,24 @@ public final class CUnifier implements IUnifier
         return p_parallel ? p_stream.parallel() : p_stream;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- unifying algorithm of a literal ---------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public final int hashCode()
+    /**
+     * evaluate expression
+     *
+     * @param p_context execution context (will be duplicated)
+     * @param p_expression expression
+     * @param p_variables current variables
+     * @return boolean for correct evaluation
+     */
+    private static boolean evaluateexpression( final IContext p_context, final IExpression p_expression, final Set<IVariable<?>> p_variables )
     {
-        return m_hashbased.hashCode() ^ m_recursive.hashCode();
-    }
+        final List<ITerm> l_return = new LinkedList<>();
+        p_expression.execute(
+            false, CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
+            Collections.emptyList(),
+            l_return
+        );
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        return ( p_object != null ) && ( p_object instanceof IUnifier ) && ( this.hashCode() == p_object.hashCode() );
-    }
-
-    @Override
-    public final String toString()
-    {
-        return MessageFormat.format( "hash-based unification: {0} / recursive unification: {1}", m_hashbased, m_recursive );
+        return ( l_return.size() == 1 ) && ( l_return.get( 0 ).<Boolean>raw() );
     }
 
     /**
