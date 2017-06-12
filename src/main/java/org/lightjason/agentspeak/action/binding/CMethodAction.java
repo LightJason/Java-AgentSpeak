@@ -34,6 +34,9 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
@@ -62,9 +65,13 @@ public final class CMethodAction extends IBaseAction
      */
     private final int m_arguments;
     /**
+     * method reference
+     */
+    private transient Method m_method;
+    /**
      * method handle
      */
-    private final transient MethodHandle m_method;
+    private transient MethodHandle m_methodhandle;
 
 
     /**
@@ -75,13 +82,48 @@ public final class CMethodAction extends IBaseAction
      */
     public CMethodAction( @Nonnull final Method p_method ) throws IllegalAccessException
     {
-        m_arguments = p_method.getParameterCount();
+        m_method = p_method;
+        m_arguments = m_method.getParameterCount();
         m_name = CPath.from(
-            p_method.isAnnotationPresent( IAgentActionName.class ) && !p_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
-            ? p_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
-            : p_method.getName().toLowerCase( Locale.ROOT )
+            m_method.isAnnotationPresent( IAgentActionName.class ) && !m_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
+            ? m_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
+            : m_method.getName().toLowerCase( Locale.ROOT )
         );
-        m_method = MethodHandles.lookup().unreflect( p_method );
+        m_methodhandle = MethodHandles.lookup().unreflect( m_method );
+    }
+
+    /**
+     * serialize call
+     *
+     * @param p_stream object stream
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
+
+        // serialize method handle
+        p_stream.writeObject( m_method.getDeclaringClass() );
+        p_stream.writeUTF( m_method.getName() );
+        p_stream.writeObject( m_method.getParameterTypes() );
+    }
+
+    /**
+     * deserializable call
+     *
+     * @param p_stream object stream
+     * @throws IOException is thrown on io error
+     * @throws ClassNotFoundException is thrown on deserialization error
+     * @throws NoSuchMethodException is thrown on method deserialization
+     * @throws IllegalAccessException is thrown on creating method handle
+     */
+    @SuppressWarnings( "unchecked" )
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException
+    {
+        p_stream.defaultReadObject();
+
+        // deserialize method handle
+        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[])p_stream.readObject() );
+        m_methodhandle = MethodHandles.lookup().unreflect( m_method );
     }
 
     @Nonnull
@@ -108,12 +150,12 @@ public final class CMethodAction extends IBaseAction
             return m_arguments == 0
 
                 ? CMethodAction.returnvalues(
-                    m_method.invoke( p_context.agent() ),
-                    p_return
+                m_methodhandle.invoke( p_context.agent() ),
+                p_return
                 )
 
                 : CMethodAction.returnvalues(
-                    m_method.invokeWithArguments(
+                    m_methodhandle.invokeWithArguments(
                         Stream.concat(
                             Stream.of( p_context.agent() ),
                             p_argument.stream().map( ITerm::raw )

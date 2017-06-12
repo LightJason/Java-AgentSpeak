@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,14 +90,14 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test print action
      *
-     * @throws UnsupportedEncodingException is thrown on encoding errors
+     * @throws Exception is thrown on encoding errors
      */
     @Test
-    public final void print() throws UnsupportedEncodingException
+    public final void print() throws Exception
     {
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
-        new CPrint( "-", new PrintStream( l_output, false, "utf-8" ) ).execute(
+        new CPrint( "-", () -> new PrintStream( l_output, false, "utf-8" ) ).execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
@@ -110,10 +109,10 @@ public final class TestCActionGeneric extends IBaseTest
     /**
      * test print action with formatter
      *
-     * @throws UnsupportedEncodingException is thrown on encoding errors
+     * @throws Exception is thrown on encoding errors
      */
     @Test
-    public final void printformatter() throws UnsupportedEncodingException
+    public final void printformatter() throws Exception
     {
         final CPrint.IFormatter<?> l_format1 = new CStringFormatter();
         final CPrint.IFormatter<?> l_format2 = new CBooleanFormatter();
@@ -122,7 +121,7 @@ public final class TestCActionGeneric extends IBaseTest
 
 
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
-        final CPrint l_print = new CPrint( "-", new PrintStream( l_output, false, "utf-8" ) );
+        final CPrint l_print = new CPrint( "-", () -> new PrintStream( l_output, false, "utf-8" ) );
 
         l_print.formatter().add( l_format1 );
         l_print.formatter().add( l_format2 );
@@ -153,6 +152,11 @@ public final class TestCActionGeneric extends IBaseTest
      */
     private static final class CStringFormatter extends CPrint.IFormatter<String>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8753365775971744734L;
+
         @Override
         protected final Class<?> getType()
         {
@@ -171,6 +175,11 @@ public final class TestCActionGeneric extends IBaseTest
      */
     private static final class CBooleanFormatter extends CPrint.IFormatter<Boolean>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1447139962315061035L;
+
         @Override
         protected final Class<?> getType()
         {

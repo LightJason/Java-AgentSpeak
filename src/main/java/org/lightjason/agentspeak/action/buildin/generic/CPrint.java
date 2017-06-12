@@ -33,7 +33,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
@@ -44,7 +43,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
@@ -68,7 +66,7 @@ public final class CPrint extends IBuildinAction
     /**
      * supplier of print stream field
      */
-    private final ISerializableSupplier<PrintStream> m_streamsupplier;
+    private final ISupplier<PrintStream> m_streamsupplier;
     /**
      * argument seperator
      */
@@ -82,9 +80,10 @@ public final class CPrint extends IBuildinAction
     /**
      * ctor
      *
+     * @throws Exception is thrown on supplierer error
      * @note generates an output stream to system.out
      */
-    public CPrint()
+    public CPrint() throws Exception
     {
         this( "   ", () -> System.out, new CFormat2D(), new CFormat1D() );
     }
@@ -95,8 +94,10 @@ public final class CPrint extends IBuildinAction
      * @param p_seperator argument seperator
      * @param p_streamsupplier print stream supplier
      * @param p_formatter formatter elements
+     * @throws Exception is thrown on supplierer error
      */
-    public CPrint( @Nonnull final String p_seperator, @Nonnull final ISerializableSupplier<PrintStream> p_streamsupplier, @Nullable final IFormatter<?>... p_formatter )
+    public CPrint( @Nonnull final String p_seperator, @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nullable final IFormatter<?>... p_formatter )
+    throws Exception
     {
         super( 2 );
         m_streamsupplier = p_streamsupplier;
@@ -109,10 +110,10 @@ public final class CPrint extends IBuildinAction
      * deserializable call
      *
      * @param p_stream object stream
-     * @throws IOException is thrown on io error
-     * @throws ClassNotFoundException is thrown on deserialization error
+     * @throws Exception is thrown on io error
+     * @throws Exception is thrown on deserialization error
      */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws Exception
     {
         p_stream.defaultReadObject();
         m_stream = m_streamsupplier.get();
@@ -174,9 +175,18 @@ public final class CPrint extends IBuildinAction
     /**
      * interface of a serializable supplier
      * @tparam T supplier type
+     * @todo modify to a SerializableLambda if posible
      */
-    public interface ISerializableSupplier<T> extends Serializable, Supplier<T>
+    @FunctionalInterface
+    public interface ISupplier<T> extends Serializable
     {
+        /**
+         * supplier exception
+         *
+         * @return item
+         * @throws Exception is thrown on any error
+         */
+        T get() throws Exception;
     }
 
 
