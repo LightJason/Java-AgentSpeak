@@ -50,6 +50,7 @@ import org.lightjason.agentspeak.action.buildin.math.blas.vector.CParse;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,7 +140,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );
@@ -159,13 +160,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 4, "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -184,7 +185,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
         new CSet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 0, 6.0, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -201,7 +202,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( VECTOR1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -222,7 +223,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
         new CAssign().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -239,7 +240,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final DoubleMatrix1D l_vector = new DenseDoubleMatrix1D( 4 );
 
         new CAssign().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( VECTOR2, l_vector ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -257,7 +258,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( VECTOR1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -276,7 +277,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCopy().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( VECTOR1, VECTOR2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -294,13 +295,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParse().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "1,2,3", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CParse().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "4,3,4", "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -319,13 +320,13 @@ public final class TestCActionMathBlasVector extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFromList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( Stream.of( 1, 2, 3 ).collect( Collectors.toList() ), "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CFromList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( Stream.of( 4, 3, 4 ).collect( Collectors.toList() ), "sparse" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

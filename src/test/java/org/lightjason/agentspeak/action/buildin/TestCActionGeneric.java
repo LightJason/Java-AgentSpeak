@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.action.buildin.generic.CPrint;
 import org.lightjason.agentspeak.action.buildin.generic.CThrow;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -52,7 +53,7 @@ public final class TestCActionGeneric extends IBaseTest
     public final void throwparameter()
     {
         new CThrow().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( true, "test message" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -66,7 +67,7 @@ public final class TestCActionGeneric extends IBaseTest
     public final void throwwithoutparameter()
     {
         new CThrow().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -80,7 +81,7 @@ public final class TestCActionGeneric extends IBaseTest
     public final void thrownot()
     {
         new CThrow().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( false, "this should not be thrown" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -98,7 +99,7 @@ public final class TestCActionGeneric extends IBaseTest
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
         new CPrint( "-", new PrintStream( l_output, false, "utf-8" ) ).execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -127,7 +128,7 @@ public final class TestCActionGeneric extends IBaseTest
         l_print.formatter().add( l_format2 );
 
         l_print.execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );

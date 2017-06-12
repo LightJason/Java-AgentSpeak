@@ -228,6 +228,11 @@ public final class TestCMetric extends IBaseTest
     private static final class CAgent extends IBaseAgent<CAgent>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 4390503811927101766L;
+
+        /**
          * ctor
          *
          * @param p_configuration agent configuration
@@ -247,7 +252,7 @@ public final class TestCMetric extends IBaseTest
              *
              * @throws Exception on any error
              */
-            public CAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
+            CAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
             {
                 super( p_stream, p_actions );
             }

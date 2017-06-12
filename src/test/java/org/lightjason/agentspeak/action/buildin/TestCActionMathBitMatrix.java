@@ -61,6 +61,7 @@ import org.lightjason.agentspeak.action.buildin.math.bit.matrix.CToBlas;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -203,7 +204,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -224,7 +225,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToVector().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -250,7 +251,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumn().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -274,7 +275,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRow().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -298,7 +299,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNumericValue().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -315,7 +316,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBoolValue().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -333,7 +334,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final Double[][] l_result = {{0.0, 1.0}, {1.0, 1.0}};
 
         new CToBlas().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

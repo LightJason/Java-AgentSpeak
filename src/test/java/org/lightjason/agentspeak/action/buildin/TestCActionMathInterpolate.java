@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.action.buildin.math.interpolate.CMultipleInterp
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,31 +62,31 @@ public final class TestCActionMathInterpolate extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "linear", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "divideddifference", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "neville", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "akima", 42, 65, 78, 87, 100, 150, 41, 63, 82, 98, 110, 200 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "loess", 42, 65, 78, 87, 100, 150, 300, 400, 500, 41, 63, 82, 98, 110, 200, 400, 600, 800 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -107,7 +108,7 @@ public final class TestCActionMathInterpolate extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSingleInterpolate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                     new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ), 3, 4
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
@@ -127,7 +128,7 @@ public final class TestCActionMathInterpolate extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultipleInterpolate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                     5,
                     new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ),

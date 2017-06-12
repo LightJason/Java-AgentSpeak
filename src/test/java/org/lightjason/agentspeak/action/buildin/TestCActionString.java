@@ -46,6 +46,7 @@ import org.lightjason.agentspeak.action.buildin.string.CStartsWith;
 import org.lightjason.agentspeak.action.buildin.string.CUpper;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.UnsupportedEncodingException;
 import java.util.AbstractMap;
@@ -89,13 +90,13 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_result = new ArrayList<>();
 
         new CBase64Encode().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CBase64Decode().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             l_return,
             l_result
         );
@@ -118,7 +119,7 @@ public final class TestCActionString extends IBaseTest
     {
         Assert.assertFalse(
             new CBase64Decode().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() ),
@@ -140,7 +141,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CConcat().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -164,7 +165,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CContains().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.concat(
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream()
@@ -191,7 +192,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLower().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -217,7 +218,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CReverse().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -243,7 +244,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -269,7 +270,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRandom().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.concat(
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream().mapToInt( String::length ).boxed()
@@ -297,7 +298,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CUpper().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -320,7 +321,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStartsWith().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -341,7 +342,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEndsWith().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -361,7 +362,7 @@ public final class TestCActionString extends IBaseTest
     {
         Assert.assertFalse(
             new CLevenshtein().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -378,7 +379,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLevenshtein().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -398,7 +399,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNCD().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -410,7 +411,7 @@ public final class TestCActionString extends IBaseTest
 
 
         new CNCD().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -430,7 +431,7 @@ public final class TestCActionString extends IBaseTest
     {
         Assert.assertFalse(
             new CNCD().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()

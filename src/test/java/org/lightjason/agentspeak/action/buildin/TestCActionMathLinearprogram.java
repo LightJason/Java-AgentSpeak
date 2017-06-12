@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.action.buildin.math.linearprogram.CEquationCons
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, 3, 4, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -91,7 +92,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
     public final void valueconstraint()
     {
         new CValueConstraint().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( m_linearprogram, 2.0, 2.0, 12.0, 19.0, "=", 11.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -110,7 +111,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
         final LinearConstraint l_result = new LinearConstraint( new double[]{2, 7, 12}, 19.0, Relationship.EQ, new double[]{1, 2, 3}, 5.0 );
 
         new CEquationConstraint().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( m_linearprogram, 2, 7, 12, 19.0, "=", 1, 2, 3, 5.0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -151,7 +152,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
 
 
         new CSolve().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_linearprogrammax, "maximize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -180,7 +181,7 @@ public final class TestCActionMathLinearprogram extends IBaseTest
         l_linearprogrammin.getRight().add( new LinearConstraint( new double[] {0, 1}, Relationship.GEQ, 0 ) );
 
         new CSolve().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_linearprogrammin, "minimize", "non-negative" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

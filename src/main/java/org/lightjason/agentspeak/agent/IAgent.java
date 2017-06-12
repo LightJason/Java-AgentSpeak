@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -52,13 +53,17 @@ import java.util.stream.Stream;
  *
  * @tparam T agent type
  */
-public interface IAgent<T extends IAgent<?>> extends Callable<T>
+public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
 {
     /**
      * empty agent
      */
     IAgent<?> EMPTY = new IAgent<IAgent<?>>()
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3043602502559853983L;
 
         @Override
         public final IAgent<?> call() throws Exception

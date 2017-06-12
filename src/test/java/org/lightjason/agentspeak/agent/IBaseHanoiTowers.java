@@ -188,6 +188,10 @@ abstract class IBaseHanoiTowers extends IBaseTest
     private class CAgent extends IBaseAgent<CAgent>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 9183183177551189228L;
+        /**
          * id of the agent
          */
         private final int m_id;

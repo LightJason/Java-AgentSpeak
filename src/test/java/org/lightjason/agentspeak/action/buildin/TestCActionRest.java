@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.action.buildin.rest.CXMLObject;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +55,7 @@ public final class TestCActionRest extends IBaseTest
     {
         Assert.assertFalse(
             new CJsonList().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( "jsonlist", "testjsonlist" )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() ),
@@ -72,7 +73,7 @@ public final class TestCActionRest extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -95,7 +96,7 @@ public final class TestCActionRest extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist", "item" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -117,7 +118,7 @@ public final class TestCActionRest extends IBaseTest
     {
         Assert.assertFalse(
             new CJsonObject().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( "jsonobject", "testjsonobject" )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() ),
@@ -136,7 +137,7 @@ public final class TestCActionRest extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonObject().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -158,7 +159,7 @@ public final class TestCActionRest extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CJsonObject().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "https://maps.googleapis.com/maps/api/geocode/json?address=Frankfurt", "testjsonobject", "loc" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -184,7 +185,7 @@ public final class TestCActionRest extends IBaseTest
     {
         Assert.assertFalse(
             new CXMLObject().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( "xmlobject", "testxml" )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() ),
@@ -203,7 +204,7 @@ public final class TestCActionRest extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CXMLObject().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -225,7 +226,7 @@ public final class TestCActionRest extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CXMLObject().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "https://en.wikipedia.org/wiki/Special:Export/Normalized_compression_distance", "testxml", "ncd" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),

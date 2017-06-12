@@ -121,11 +121,16 @@ public final class TestCActionBinding extends IBaseTest
     private static final class CClassBindingDefault extends IBaseAgent<CClassBindingDefault>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 3345768520232804575L;
+
+        /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        public CClassBindingDefault( final IAgentConfiguration<CClassBindingDefault> p_configuration )
+        CClassBindingDefault( final IAgentConfiguration<CClassBindingDefault> p_configuration )
         {
             super( p_configuration );
         }
@@ -144,11 +149,16 @@ public final class TestCActionBinding extends IBaseTest
     private static final class CClassBindingBlacklist extends IBaseAgent<CClassBindingBlacklist>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 7111629511993393960L;
+
+        /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        public CClassBindingBlacklist( final IAgentConfiguration<CClassBindingBlacklist> p_configuration )
+        CClassBindingBlacklist( final IAgentConfiguration<CClassBindingBlacklist> p_configuration )
         {
             super( p_configuration );
         }
@@ -167,11 +177,16 @@ public final class TestCActionBinding extends IBaseTest
     private static final class CClassBindingWhitelist extends IBaseAgent<CClassBindingWhitelist>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = -7816405802996290926L;
+
+        /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        public CClassBindingWhitelist( final IAgentConfiguration<CClassBindingWhitelist> p_configuration )
+        CClassBindingWhitelist( final IAgentConfiguration<CClassBindingWhitelist> p_configuration )
         {
             super( p_configuration );
         }
@@ -190,13 +205,17 @@ public final class TestCActionBinding extends IBaseTest
     @IAgentAction
     private static final class CMethodBindingDefault extends IBaseAgent<CMethodBindingDefault>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -2286148952945672902L;
 
         /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        public CMethodBindingDefault( final IAgentConfiguration<CMethodBindingDefault> p_configuration )
+        CMethodBindingDefault( final IAgentConfiguration<CMethodBindingDefault> p_configuration )
         {
             super( p_configuration );
         }
@@ -221,13 +240,17 @@ public final class TestCActionBinding extends IBaseTest
     @IAgentAction( access = IAgentAction.EAccess.BLACKLIST )
     private static final class CMethodBindingBlacklist extends IBaseAgent<CMethodBindingBlacklist>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 2803896156449016208L;
 
         /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        public CMethodBindingBlacklist( final IAgentConfiguration<CMethodBindingBlacklist> p_configuration )
+        CMethodBindingBlacklist( final IAgentConfiguration<CMethodBindingBlacklist> p_configuration )
         {
             super( p_configuration );
         }
@@ -253,13 +276,17 @@ public final class TestCActionBinding extends IBaseTest
     @IAgentAction( access = IAgentAction.EAccess.WHITELIST )
     private static final class CMethodBindingWhitelist extends IBaseAgent<CMethodBindingWhitelist>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -9187345129201192928L;
 
         /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        public CMethodBindingWhitelist( final IAgentConfiguration<CMethodBindingWhitelist> p_configuration )
+        CMethodBindingWhitelist( final IAgentConfiguration<CMethodBindingWhitelist> p_configuration )
         {
             super( p_configuration );
         }

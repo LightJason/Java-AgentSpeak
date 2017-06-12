@@ -40,6 +40,7 @@ import org.lightjason.agentspeak.action.buildin.collection.CIsEmpty;
 import org.lightjason.agentspeak.action.buildin.collection.CSize;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.text.MessageFormat;
 import java.util.AbstractMap;
@@ -130,7 +131,7 @@ public final class TestCActionCollection extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );
@@ -152,7 +153,7 @@ public final class TestCActionCollection extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CIsEmpty().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( new ArrayList<>(), HashMultimap.create(), new HashMap<>(), Stream.of( "1", 2 ).collect( Collectors.toList() ), new Object() )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -179,7 +180,7 @@ public final class TestCActionCollection extends IBaseTest
         IntStream.range( 0, 5 ).forEach( i -> IntStream.range( i, i + 5 ).forEach( j -> l_map.put( i, j ) ) );
 
         new CClear().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_list, l_set, l_map, l_multimap ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );

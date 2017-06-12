@@ -93,6 +93,7 @@ import org.lightjason.agentspeak.action.buildin.graph.CVertexCount;
 import org.lightjason.agentspeak.action.buildin.graph.CVertices;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -119,7 +120,7 @@ public final class TestCActionGraph extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "sparse", "SPARSEMULTI", "DIRECTEDSPARSE", "DIRECTEDSPARSEMULTI", "UNDIRECTEDSPARSE", "UNDIRECTEDSPARSEMULTI" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
@@ -144,7 +145,7 @@ public final class TestCActionGraph extends IBaseTest
                  .boxed()
                  .forEach( i ->
                                new CAddVertexSingle().execute(
-                                   false, null,
+                                   false, IContext.EMPTYPLAN,
                                    Stream.of( i, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
                                    Collections.emptyList()
                                ) );
@@ -163,7 +164,7 @@ public final class TestCActionGraph extends IBaseTest
         final Graph<?, ?> l_graph = new SparseGraph<>();
 
         new CAddVertexMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, "x", "y", "z" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -182,13 +183,13 @@ public final class TestCActionGraph extends IBaseTest
         final Graph<Integer, String> l_graph = new SparseGraph<>();
 
         new CAddEdgeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "xy", 1, 2, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
 
         new CAddEdgeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "bar", 4, 5, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -210,7 +211,7 @@ public final class TestCActionGraph extends IBaseTest
         final Graph<Integer, String> l_graph = new SparseGraph<>();
 
         new CAddEdgeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, "foo", 1, 1, "bar", 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -234,7 +235,7 @@ public final class TestCActionGraph extends IBaseTest
                  .forEach( l_graph::addVertex );
 
         new CVertexCount().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -260,7 +261,7 @@ public final class TestCActionGraph extends IBaseTest
 
 
         new CEdgeCount().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -284,7 +285,7 @@ public final class TestCActionGraph extends IBaseTest
                  .forEach( l_graph::addVertex );
 
         new CVertices().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -309,7 +310,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "d", 3, 4 );
 
         new CEdges().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -342,7 +343,7 @@ public final class TestCActionGraph extends IBaseTest
 
 
         new CAdjacencyMatrix().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -376,7 +377,7 @@ public final class TestCActionGraph extends IBaseTest
 
 
         new CContainsEdge().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "yyy", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -406,7 +407,7 @@ public final class TestCActionGraph extends IBaseTest
                  .forEach( l_graph2::addVertex );
 
         new CContainsVertex().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 5, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -440,7 +441,7 @@ public final class TestCActionGraph extends IBaseTest
 
 
         new CDegreeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.concat(
                 Stream.of( l_graph ),
                 IntStream.range( 1, 7 ).boxed()
@@ -471,7 +472,7 @@ public final class TestCActionGraph extends IBaseTest
 
 
         new CDegreeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -495,7 +496,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "pa", 2, 6 );
 
         new CDistancePath().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "defaultweight", 2, l_graph, 1, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -519,7 +520,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "pb", 2, 6 );
 
         new CShortestPath().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "defaultweight", 2, l_graph, 1, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -566,7 +567,7 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertEquals( l_graph.getVertexCount(), 10 );
 
         new CSpanningTree().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -608,7 +609,7 @@ public final class TestCActionGraph extends IBaseTest
         ).forEach( i -> l_weight.put( i.get( 0 ), i.get( 1 ) ) );
 
         new CSpanningTree().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_weight, l_graph ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -636,7 +637,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "xxx", 1, 2 );
 
         new CFindEdgeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -661,7 +662,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "edge24", 2, 4 );
 
         new CFindEdgeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2, 2, 3, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -687,7 +688,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "edgeB2", 3, 4 );
 
         new CEdgeListSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -700,7 +701,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CEdgeListSingle().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -729,7 +730,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "s", 2, 3 );
 
         new CEdgeListMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -742,7 +743,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CEdgeListMultiple().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -769,7 +770,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "edgeA", 2, 3 );
 
         new CEndPointSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "edgeA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -793,7 +794,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "edge3", 4, 3 );
 
         new CEndPointMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, "edge1", "edge3" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -820,7 +821,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "m", 8, 2 );
 
         new CInDegreeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -844,7 +845,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "p", 1, 4 );
 
         new CInDegreeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -868,7 +869,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "inedgesingle3", 1, 2 );
 
         new CInEdgesSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -908,7 +909,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "inedge5", 1, 3 );
 
         new CInEdgesMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -921,7 +922,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CInEdgesMultiple().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( l_graph, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -949,7 +950,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "outdegree3", 1, 2 );
 
         new COutDegreeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -973,7 +974,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "outdegree6", 1, 2 );
 
         new COutDegreeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -997,7 +998,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "incident1", 1, 2 );
 
         new CIncidentCountSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "incident1", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1020,7 +1021,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "incident2", 1, 2 );
 
         new CIncidentCountMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, "incident1", "incident2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1044,7 +1045,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "incidentsingleA", 1, 2 );
 
         new CIncidentVerticesSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "incidentsingleA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1057,7 +1058,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CIncidentVerticesSingle().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( "incidentsingleA", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1085,7 +1086,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "incidentD", 7, 6 );
 
         new CIncidentVerticesMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, "incidentA", "incidentB" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1098,7 +1099,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CIncidentVerticesMultiple().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( l_graph, "incidentA", "incidentB" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1125,7 +1126,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "successor2", 1, 2 );
 
         new CIsSuccessorSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1149,7 +1150,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "successor2", 3, 1 );
 
         new CIsSuccessorMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2, 3, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1175,7 +1176,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "predecessor2", 1, 2 );
 
         new CIsPredecessorSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1199,7 +1200,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "predecessor2", 3, 1 );
 
         new CIsPredecessorMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2, 3, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1228,7 +1229,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "neighborcount3", 4, 1 );
 
         new CNeighborsCountSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1255,7 +1256,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "neighborcount4", 4, 1 );
 
         new CNeighborsCountMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1284,7 +1285,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "isneighbor3", 4, 1 );
 
         new CIsNeighborSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1312,7 +1313,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "isneighbor30", 4, 1 );
 
         new CIsNeighborMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2, 3, 4, 3, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1341,7 +1342,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "isneighbor3", 4, 1 );
 
         new CNeighborsSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1354,7 +1355,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CNeighborsSingle().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1383,7 +1384,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "neighbors3", 4, 1 );
 
         new CNeighborsMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1396,7 +1397,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CNeighborsMultiple().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1426,7 +1427,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "isincident3", 4, 1 );
 
         new CIsIncidentSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, "isincident2", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1454,7 +1455,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "isincident30", 4, 1 );
 
         new CIsIncidentMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, "isincident10", 2, "isincident20" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1479,7 +1480,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "opposite", 3, 1 );
 
         new COppositeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, "opposite", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1502,7 +1503,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "opposite2", 3, 4 );
 
         new COppositeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, "opposite1", 3, "opposite2" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1528,7 +1529,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "outedgesingle4", 1, 5 );
 
         new COutEdgesSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1541,7 +1542,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new COutEdgesSingle().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1569,7 +1570,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "outedgemultiple4", 2, 5 );
 
         new COutEdgesMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1582,7 +1583,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new COutEdgesMultiple().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1611,7 +1612,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "predecessorcountsingle4", 5, 1 );
 
         new CPredecessorCountSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1636,7 +1637,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "predecessorcountmultiple4", 5, 1 );
 
         new CPredecessorCountMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1659,7 +1660,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "vertexremovemultiple", 1, 2 );
 
         new CRemoveVertexMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 3, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -1687,7 +1688,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "vertexremovesingle", 7, 1 );
 
         new CRemoveVertexSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 5, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -1719,7 +1720,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "successorcountsingle5", 1, 9 );
 
         new CSuccessorCountSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1743,7 +1744,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "successorcountmultiple4", 3, 5 );
 
         new CSuccessorCountMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, 1, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -1769,7 +1770,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph2.addEdge( "removeedgesingle5", 1, 9 );
 
         new CRemoveEdgeSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "removeedgesingle1", l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -1794,7 +1795,7 @@ public final class TestCActionGraph extends IBaseTest
         l_graph.addEdge( "removeedgesingle5", 5, 7 );
 
         new CRemoveEdgeMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_graph, "removeedgesingle2", "removeedgesingle5" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );

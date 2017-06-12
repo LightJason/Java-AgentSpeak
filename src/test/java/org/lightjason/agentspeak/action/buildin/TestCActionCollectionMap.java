@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.action.buildin.collection.map.CRemove;
 import org.lightjason.agentspeak.action.buildin.collection.map.CValues;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Collections.emptyList(),
             l_return
         );
@@ -76,7 +77,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(  "a", 1, "b", 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -89,7 +90,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
         new CCreate().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Collections.emptyList(),
             l_return
         );
@@ -115,13 +116,13 @@ public final class TestCActionCollectionMap extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CKeys().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
             l_return
         );
 
         new CValues().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( l_map ) ).collect( Collectors.toList() ),
             l_return
         );
@@ -146,7 +147,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         final Map<?, ?> l_map = new HashMap<>();
 
         new CPutSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "v", 1, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
 
             Collections.emptyList()
@@ -160,7 +161,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
         new CPutSingleIfAbsent().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "v", 666, l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
 
             Collections.emptyList()
@@ -181,7 +182,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         final Map<?, ?> l_map = new HashMap<>();
 
         new CPutMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map, "xx", 2, "yyy", 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -192,7 +193,7 @@ public final class TestCActionCollectionMap extends IBaseTest
 
 
         new CPutMultipleIfAbsent().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map, "xx", 100, "zz", 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -217,7 +218,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         l_map.put( "z", 3 );
 
         new CRemove().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map, "a", "z" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -242,7 +243,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         l_map.put( "k", 3 );
 
         new CGetMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map, "i", "j", "o" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -269,7 +270,7 @@ public final class TestCActionCollectionMap extends IBaseTest
         l_map2.put( "g", "text" );
 
         new CGetSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "g", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

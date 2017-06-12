@@ -85,6 +85,10 @@ public final class TestCPropertyAgent extends IBaseTest
     private static final class CAgent extends IBaseAgent<IAgent<?>>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 3053608318122134408L;
+        /**
          * test string property
          */
         private String m_stringvalue;

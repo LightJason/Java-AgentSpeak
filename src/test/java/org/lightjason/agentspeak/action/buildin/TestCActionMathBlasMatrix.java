@@ -78,6 +78,7 @@ import org.lightjason.agentspeak.action.buildin.math.blas.matrix.CGraphLaplacian
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -189,7 +190,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );
@@ -209,7 +210,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -230,7 +231,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumn().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -252,7 +253,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRow().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -274,7 +275,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPower().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -297,7 +298,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     public final void set()
     {
         new CSet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 0, 1, 6.0, MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -314,7 +315,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -337,7 +338,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CTranspose().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -360,7 +361,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSubMatrix().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 0, 0, 0, 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -383,7 +384,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSolve().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -406,7 +407,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
         new CAssign().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -423,7 +424,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
         new CAssign().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -440,7 +441,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -459,7 +460,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParse().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "1,2;3,4", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -481,7 +482,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInvert().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -503,7 +504,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEigen().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -528,7 +529,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSingularValue().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -560,7 +561,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCopy().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -579,7 +580,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGraphLaplacian().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                     new SparseDoubleMatrix2D( new double[][]{
                         {0, 1, 0, 0, 1, 0},
@@ -619,7 +620,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNormalizedGraphLaplacian().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                 new SparseDoubleMatrix2D( new double[][]{
                     {0, 1, 0, 0, 1, 0},
@@ -653,7 +654,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRowSum().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                 new SparseDoubleMatrix2D( new double[][]{
                     {1, 0, 0, 0, 0, 0},
@@ -684,7 +685,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumnSum().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                 new SparseDoubleMatrix2D( new double[][]{
                     {1, 0, 0, 0, 0, 0},
@@ -716,7 +717,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CIdentity().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_size ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -746,7 +747,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final double[] l_data = new double[]{1, 3, 5, 11};
 
         new CDiagonal().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                 new DenseDoubleMatrix1D( l_data )
             ).map( CRawTerm::from ).collect( Collectors.toList() ),

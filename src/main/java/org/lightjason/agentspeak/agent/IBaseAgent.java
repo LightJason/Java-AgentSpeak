@@ -79,6 +79,10 @@ import java.util.stream.Stream;
 public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -304366902555398136L;
+    /**
      * beliefbase
      */
     protected final IView<T> m_beliefbase;
@@ -138,6 +142,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     private final Multimap<IPath, ILiteral> m_runningplans = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
 
 
+
     /**
      * ctor
      *
@@ -195,6 +200,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_sleepingcycles.get() > 0;
     }
 
+    @Nonnull
     @Override
     public final IAgent<T> sleep( final long p_cycles, final ITerm... p_term )
     {
@@ -215,6 +221,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return this;
     }
 
+    @Nonnull
     @Override
     public final IAgent<T> wakeup( @Nullable final ITerm... p_term )
     {

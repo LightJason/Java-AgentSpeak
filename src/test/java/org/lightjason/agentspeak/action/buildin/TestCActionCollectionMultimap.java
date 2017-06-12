@@ -42,6 +42,7 @@ import org.lightjason.agentspeak.action.buildin.collection.multimap.CValues;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,7 +69,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Collections.emptyList(),
             l_return
         );
@@ -87,7 +88,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Collections.emptyList(),
             l_return
         );
@@ -114,13 +115,13 @@ public final class TestCActionCollectionMultimap extends IBaseTest
 
 
         new CKeys().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CValues().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -145,7 +146,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
                  .forEach( i -> l_map.put( i, RandomStringUtils.random( 10, "abcdefghijklmnop" ) ) );
 
         new CAsMap().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -171,7 +172,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         final Multimap<Integer, String> l_map2 = HashMultimap.create();
 
         new CPutSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, "foo", l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -193,7 +194,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         final Multimap<Integer, String> l_map = HashMultimap.create();
 
         new CPutMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map, 1, "xxx", 2, "blub", 3, "xxx", 3, "yyy" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -219,7 +220,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         l_map.put( 3, "blub" );
 
         new CGetMultiple().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map, 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -245,7 +246,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         l_map2.put( 1, "foobar" );
 
         new CGetSingle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

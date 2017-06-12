@@ -43,6 +43,7 @@ import org.lightjason.agentspeak.action.buildin.crypto.EAlgorithm;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import javax.crypto.KeyGenerator;
 import java.security.Key;
@@ -81,6 +82,26 @@ public final class TestCActionCrypto extends IBaseTest
         ).toArray();
     }
 
+    /**
+     * test crypt key generation
+     *
+     * @param p_crypt crypt definition
+     */
+    @Test
+    @UseDataProvider( "generatecrypt" )
+    public final void createkey( final Triple<String, Integer, Integer> p_crypt )
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CCreateKey().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        Assert.assertEquals( l_return.size(), p_crypt.getMiddle().intValue() );
+    }
+
 
     /**
      * test wrong algorithm
@@ -94,7 +115,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         Assert.assertFalse(
             new CEncrypt().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -103,13 +124,12 @@ public final class TestCActionCrypto extends IBaseTest
 
         Assert.assertFalse(
             new CDecrypt().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
     }
-
 
     /**
      * test decrypt execution array
@@ -123,7 +143,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEncrypt().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -131,13 +151,12 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertFalse(
             new CDecrypt().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
             ).value()
         );
     }
-
 
     /**
      * test hashing
@@ -151,14 +170,13 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHash().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( p_hash.getLeft() ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
             l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), p_hash.getRight() );
     }
-
 
     /**
      * test hash exception
@@ -167,13 +185,11 @@ public final class TestCActionCrypto extends IBaseTest
     public final void hashexception()
     {
         new CHash().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( "xxx" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
     }
-
-
 
     /**
      * data provider generator of crypt key definition
@@ -190,28 +206,6 @@ public final class TestCActionCrypto extends IBaseTest
         ).toArray();
     }
 
-
-    /**
-     * test crypt key generation
-     *
-     * @param p_crypt crypt definition
-     */
-    @Test
-    @UseDataProvider( "generatecrypt" )
-    public final void createkey( final Triple<String, Integer, Integer> p_crypt )
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CCreateKey().execute(
-            false, null,
-            Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
-            l_return
-        );
-
-        Assert.assertEquals( l_return.size(), p_crypt.getMiddle().intValue() );
-    }
-
-
     /**
      * test key generation on error call
      */
@@ -221,14 +215,12 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertFalse(
 
             new CCreateKey().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( CRawTerm.from( "test" ) ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
         );
     }
-
-
 
     /**
      * test encrypting & decrypting
@@ -240,7 +232,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_returnkey = new ArrayList<>();
 
         new CCreateKey().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_returnkey
         );
@@ -251,7 +243,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_returnencrypt = new ArrayList<>();
 
         new CEncrypt().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_returnkey.get( 0 ), CRawTerm.from( "test string" ), CRawTerm.from( 12345 ) ).collect( Collectors.toList() ),
             l_returnencrypt
         );
@@ -260,7 +252,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CDecrypt().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.concat( Stream.of( l_returnkey.get( p_crypt.getRight() ) ), l_returnencrypt.stream() ).collect( Collectors.toList() ),
             l_return
         );

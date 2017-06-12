@@ -44,6 +44,7 @@ import org.lightjason.agentspeak.action.buildin.collection.list.CZip;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Collections.emptyList(),
             l_return
         );
@@ -90,7 +91,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Collections.emptyList(),
             l_return
         );
@@ -111,7 +112,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "a", 1, "b", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -138,7 +139,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CComplement().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                 CRawTerm.from( Stream.of( "a", "b", 1, 2 ).collect( Collectors.toList() ) ),
                 CRawTerm.from( Stream.of( "x", "y", 4, "a", 5, 1 ).collect( Collectors.toList() ) )
@@ -163,7 +164,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<?> l_list = Stream.of( "a", 1, "b", true, "foobar", 56.78 ).collect( Collectors.toList() );
 
         new CGet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( l_list ), CRawTerm.from( 1 ), CRawTerm.from( 4 ), CRawTerm.from( 5 ) ).collect( Collectors.toList() ),
             l_return
         );
@@ -184,7 +185,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<?> l_list = IntStream.range( 0, 10 ).mapToObj( i -> Math.random() ).collect( Collectors.toList() );
 
         new CReverse().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
             l_return
         );
@@ -214,7 +215,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRemove().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.concat(
                 Stream.of( l_list ),
                 l_index.stream()
@@ -241,7 +242,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<?> l_list2 = Stream.of( "abc", 123, true ).collect( Collectors.toList() );
 
         new CSet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( 0 ), CRawTerm.from( "xxx" ), CRawTerm.from( l_list1 ), CRawTerm.from( l_list2 ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -263,7 +264,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<?> l_list = new ArrayList<>();
 
         new CAdd().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( CRawTerm.from( "xyz" ), CRawTerm.from( l_list ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -281,7 +282,7 @@ public final class TestCActionCollectionList extends IBaseTest
     {
         Assert.assertFalse(
             new CRange().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of().map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -298,7 +299,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRange().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 0, 5, 7, 9 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -326,7 +327,7 @@ public final class TestCActionCollectionList extends IBaseTest
     {
         Assert.assertFalse(
             new CSubList().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( new ArrayList<>() ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -342,7 +343,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSubList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( Stream.of( "ax", "bx", "c", 1, 2, 3 ).collect( Collectors.toList() ), 0, 2, 2, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -375,7 +376,7 @@ public final class TestCActionCollectionList extends IBaseTest
                                         .collect( Collectors.toList() );
 
         new CFlat().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -399,7 +400,7 @@ public final class TestCActionCollectionList extends IBaseTest
                                         .collect( Collectors.toList() );
 
         new CFlatConcat().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             l_list.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -417,7 +418,7 @@ public final class TestCActionCollectionList extends IBaseTest
     {
         Assert.assertFalse(
             new CZip().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -434,7 +435,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CZip().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             IntStream.range( 0, 6 ).boxed().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -454,7 +455,7 @@ public final class TestCActionCollectionList extends IBaseTest
 
 
         new CZip().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -474,7 +475,7 @@ public final class TestCActionCollectionList extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CUnique().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 1, 3, 4, 5, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

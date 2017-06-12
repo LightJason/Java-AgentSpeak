@@ -365,6 +365,10 @@ public final class TestCActionAgent extends IBaseTest
      */
     private static final class CAgent extends IBaseAgent<CAgent>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 8036930915838541805L;
 
         /**
          * ctor

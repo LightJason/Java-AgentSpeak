@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.action.buildin.collection.tuple.CFlat;
 import org.lightjason.agentspeak.action.buildin.collection.tuple.CSet;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "abcd", 123, "foobar", true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -77,7 +78,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
     {
         Assert.assertFalse(
             new CCreate().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -94,7 +95,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         final AbstractMap.Entry<String, String> l_data = new AbstractMap.SimpleEntry<>( "foo", "bar" );
 
         new CSet().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( "blubblub", l_data ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -112,7 +113,7 @@ public final class TestCActionCollectionTuple extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFlat().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( new AbstractMap.SimpleEntry<>( "foo", "bar" ), new AbstractMap.SimpleEntry<>( 1, 2 ) ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

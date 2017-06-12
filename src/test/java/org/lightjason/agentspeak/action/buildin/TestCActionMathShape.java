@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.action.buildin.math.shape.CInTriangle;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public final class TestCActionMathShape extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInCircle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 1, 1, 2, 2.5, 0.5, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -73,7 +74,7 @@ public final class TestCActionMathShape extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInRectangle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 0, 0, 100, 100, 40, 55, 100, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -92,7 +93,7 @@ public final class TestCActionMathShape extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInTriangle().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 250, 220, 25, 275, 40, 55, 60, 170, 310, 129 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

@@ -46,6 +46,7 @@ import org.lightjason.agentspeak.action.buildin.bool.COr;
 import org.lightjason.agentspeak.action.buildin.bool.CXor;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -207,7 +208,7 @@ public final class TestCActionBool extends IBaseTest
         final List<Integer> l_list2 = IntStream.range( 0, 5 ).boxed().collect( Collectors.toList() );
 
         new CEqual().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_list1, l_list2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -222,7 +223,7 @@ public final class TestCActionBool extends IBaseTest
         l_map2.put( 1, 1 );
 
         new CEqual().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_map1, l_map2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

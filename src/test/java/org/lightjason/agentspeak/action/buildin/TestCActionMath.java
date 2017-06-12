@@ -74,6 +74,7 @@ import org.lightjason.agentspeak.action.buildin.math.CTan;
 import org.lightjason.agentspeak.action.buildin.math.CTanh;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -258,7 +259,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );
@@ -284,7 +285,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );
@@ -305,7 +306,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBinomial().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 49, 30, 6, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -324,7 +325,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CFactorial().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 5, 1, 2, 3, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -346,7 +347,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPrimeFactors().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 8, 120 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -365,7 +366,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSigmoid().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 1, 1, 10, 20, 30 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -385,7 +386,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStirling().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 3, 2, 8, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -403,7 +404,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPow().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 2, 3, 4, 0.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -424,7 +425,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGeometricMean().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1.05, 1.03, 0.94, 1.02, 1.04 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -443,7 +444,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHarmonicMean().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 150, 50 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -464,7 +465,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHypot().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             l_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -488,7 +489,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMaxIndex().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -506,7 +507,7 @@ public final class TestCActionMath extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMinIndex().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 3, 4, 9, 1, 7, 8, 4 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

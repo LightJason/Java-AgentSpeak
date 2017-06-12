@@ -38,6 +38,7 @@ import org.lightjason.agentspeak.action.buildin.math.blas.CMultiply;
 
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,7 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( m_matrix1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -103,7 +104,7 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultiply().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( m_matrix1, m_matrix2, m_matrix1, m_vector, m_vector, m_vector, m_vector, m_matrix2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -124,7 +125,7 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CElementWise().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                     m_matrix1, "+", m_matrix2,
                     m_matrix1, "+", 5,
@@ -161,7 +162,7 @@ public final class TestCActionMathBlas extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CElementWise().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of(
                     m_vector, "+", m_vector,
                     m_vector, "+", 5,

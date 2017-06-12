@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.action.buildin.collection.set.CRemove;
 import org.lightjason.agentspeak.action.buildin.collection.set.CToList;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +59,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -77,7 +78,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 10, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -97,7 +98,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         final Set<Object> l_set = new HashSet<>();
 
         new CAdd().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_set, 1, 5, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -115,7 +116,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         final Set<Object> l_set = Stream.of( "foo", 1, 2 ).collect( Collectors.toSet() );
 
         new CContains().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_set, "foo", 1, "bar" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -133,7 +134,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         final Set<Object> l_set = Stream.of( "foo", 1, 2 ).collect( Collectors.toSet() );
 
         new CRemove().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_set, "foo", 1, 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -152,7 +153,7 @@ public final class TestCActionCollectionSet extends IBaseTest
         final Set<Object> l_set = Stream.of( "foobar", "x", "y" ).collect( Collectors.toSet() );
 
         new CToList().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_set ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
