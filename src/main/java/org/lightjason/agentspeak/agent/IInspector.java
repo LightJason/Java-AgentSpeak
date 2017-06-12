@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -43,11 +44,11 @@ public interface IInspector
     IInspector EMPTY = new IInspector()
     {
         @Override
-        public final void inspectsleeping( final long p_value )
+        public final void inspectsleeping( @Nonnegative final long p_value )
         {}
 
         @Override
-        public final void inspectcycle( final long p_value )
+        public final void inspectcycle( @Nonnegative final long p_value )
         {}
 
         @Override
@@ -77,14 +78,14 @@ public interface IInspector
      *
      * @param p_value value
      */
-    void inspectsleeping( final long p_value );
+    void inspectsleeping( @Nonnegative final long p_value );
 
     /**
      * inspect cycle value
      *
      * @param p_value value
      */
-    void inspectcycle( final long p_value );
+    void inspectcycle( @Nonnegative final long p_value );
 
     /**
      * inspect beliefs
