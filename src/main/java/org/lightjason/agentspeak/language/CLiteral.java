@@ -206,6 +206,7 @@ public final class CLiteral implements ILiteral
      *
      * @throws Exception parsing and stream exception
      */
+    @Nonnull
     public static ILiteral parse( @Nonnull final String p_literal ) throws Exception
     {
         return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).literal();
@@ -420,6 +421,7 @@ public final class CLiteral implements ILiteral
                );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final synchronized ITerm deepcopysuffix()
@@ -448,7 +450,7 @@ public final class CLiteral implements ILiteral
 
         @Nonnull
         @Override
-        public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
+        public final IASTVisitorType parse( @Nonnull final InputStream p_stream ) throws Exception
         {
             final IASTVisitorType l_visitor = new CASTVisitorType();
             l_visitor.visit( this.parser( p_stream ).literal_type() );

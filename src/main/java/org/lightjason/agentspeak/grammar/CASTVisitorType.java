@@ -83,15 +83,15 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     /**
      * parsed literal
      */
-    private ILiteral m_literal;
+    private ILiteral m_literal = ILiteral.EMPTY;
     /**
      * parsed expression
      */
-    private IExpression m_expression;
+    private IExpression m_expression = IExpression.EMPTY;
     /**
      * parsed term
      */
-    private ITerm m_term;
+    private ITerm m_term = ITerm.EMPTY;
 
 
     /**
@@ -636,18 +636,21 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
 
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final ILiteral literal()
     {
         return m_literal;
     }
 
+    @Nonnull
     @Override
     public final IExpression expression()
     {
         return m_expression;
     }
 
+    @Nonnull
     @Override
     public final ITerm term()
     {

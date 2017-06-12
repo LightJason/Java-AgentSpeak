@@ -27,7 +27,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 
 /**
@@ -41,7 +41,7 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return literal
      */
-    @Nullable
+    @Nonnull
     ILiteral literal();
 
     /**
@@ -49,7 +49,7 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return expression
      */
-    @Nullable
+    @Nonnull
     IExpression expression();
 
     /**
@@ -57,7 +57,7 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return any term
      */
-    @Nullable
+    @Nonnull
     ITerm term();
 
 }

@@ -35,6 +35,64 @@ import java.io.Serializable;
  */
 public interface ITerm extends Serializable, IDeepCopy<ITerm>
 {
+    /**
+     * empty term
+     */
+    ITerm EMPTY = new ITerm()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3396420174718981909L;
+
+        @Nonnull
+        @Override
+        public final String functor()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath functorpath()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath fqnfunctor()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Override
+        public final boolean hasVariable()
+        {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public final <T> T raw()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopysuffix()
+        {
+            return this;
+        }
+    };
 
     /**
      * returns the functor without path
