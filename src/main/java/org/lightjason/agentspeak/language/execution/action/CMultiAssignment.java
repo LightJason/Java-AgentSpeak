@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -46,6 +47,10 @@ import java.util.stream.Stream;
 public final class CMultiAssignment<M extends IExecution> extends IBaseExecution<List<IVariable<?>>>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6123210880356077509L;
+    /**
      * right-hand argument
      */
     private final M m_righthand;
@@ -56,18 +61,20 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
      * @param p_lefthand left-hand variable list
      * @param p_righthand right-hand argument
      */
-    public CMultiAssignment( final List<IVariable<?>> p_lefthand, final M p_righthand )
+    public CMultiAssignment( @Nonnull final List<IVariable<?>> p_lefthand, @Nonnull final M p_righthand )
     {
         super( p_lefthand );
         m_righthand = p_righthand;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_result = new LinkedList<>();
-        if ( ( !m_righthand.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_result ).value() )
+        if ( ( !m_righthand.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_result ).value() )
              || ( l_result.isEmpty() ) )
             return CFuzzyValue.from( false );
 
@@ -91,7 +98,7 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() ^ m_righthand.hashCode();
+        return ( m_value == null ? 0 : m_value.hashCode() ) ^ m_righthand.hashCode();
     }
 
     @Override
@@ -106,9 +113,13 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
         return MessageFormat.format( "{0} = {1}", m_value, m_righthand );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat( m_righthand.variables(), m_value.stream() );
+        return Stream.concat(
+            m_value == null ? Stream.empty() : m_value.stream(),
+            m_righthand.variables()
+        );
     }
 }

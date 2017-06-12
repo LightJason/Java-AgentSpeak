@@ -145,8 +145,7 @@ public final class CUnifier implements IUnifier
     {
         final List<ITerm> l_return = new LinkedList<>();
         p_expression.execute(
-            CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
-            false,
+            false, CCommon.updatecontext( p_context.duplicate(), p_variables.stream() ),
             Collections.emptyList(),
             l_return
         );

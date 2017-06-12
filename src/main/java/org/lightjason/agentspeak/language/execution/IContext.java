@@ -26,22 +26,106 @@ package org.lightjason.agentspeak.language.execution;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 
 
 /**
  * execution context with local data
  */
-public interface IContext
+public interface IContext extends Serializable
 {
+    /**
+     * empty context with plan
+     */
+    IContext EMPTYPLAN = new IContext()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1053856178724776159L;
+
+        @Nonnull
+        @Override
+        public final IAgent<?> agent()
+        {
+            return IAgent.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+            return IPlan.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Map<IPath, IVariable<?>> instancevariables()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+            return this;
+        }
+    };
+
+    /**
+     * empty context with rule
+     */
+    IContext EMPTYRULE = new IContext()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -1053856178757676139L;
+
+        @Nonnull
+        @Override
+        public final IAgent<?> agent()
+        {
+            return IAgent.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final IInstantiable instance()
+        {
+            return IRule.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Map<IPath, IVariable<?>> instancevariables()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Nonnull
+        @Override
+        public final IContext duplicate()
+        {
+            return this;
+        }
+    };
+
 
     /**
      * returns the agent of the context
      *
      * @return agent
      */
+    @Nonnull
     IAgent<?> agent();
 
     /**
@@ -49,6 +133,7 @@ public interface IContext
      *
      * @return instance object plan or rule
      */
+    @Nonnull
     IInstantiable instance();
 
     /**
@@ -56,6 +141,7 @@ public interface IContext
      *
      * @return variable names and their current value
      */
+    @Nonnull
     Map<IPath, IVariable<?>> instancevariables();
 
     /**
@@ -63,6 +149,7 @@ public interface IContext
      *
      * @return shallow-copy of the context
      */
+    @Nonnull
     IContext duplicate();
 
 }

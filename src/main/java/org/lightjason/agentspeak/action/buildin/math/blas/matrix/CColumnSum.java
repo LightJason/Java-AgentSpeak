@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -53,6 +54,11 @@ import java.util.stream.IntStream;
  */
 public final class CColumnSum extends IAlgebra
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6504165889102496768L;
+
     @Override
     public final int minimalArgumentNumber()
     {
@@ -60,8 +66,8 @@ public final class CColumnSum extends IAlgebra
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final EType l_type = CCommon.flatcollection( p_argument )
                                     .parallel()
@@ -89,7 +95,8 @@ public final class CColumnSum extends IAlgebra
      * @param p_type type
      * @return vector
      */
-    private static DoubleMatrix1D generate( final double[] p_value, final EType p_type )
+    @Nonnull
+    private static DoubleMatrix1D generate( @Nonnull final double[] p_value, @Nonnull final EType p_type )
     {
         switch ( p_type )
         {

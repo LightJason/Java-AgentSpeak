@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language;
 import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -43,7 +44,7 @@ public interface IDeepCopy<T> extends ICopy
      * @return new instance of the object
      */
     @Nonnull
-    T deepcopy( final IPath... p_prefix );
+    T deepcopy( @Nullable final IPath... p_prefix );
 
     /**
      * clones the object (shallow-copy)

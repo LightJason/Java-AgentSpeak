@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -39,6 +40,10 @@ import java.util.List;
  */
 public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8534258655371085840L;
 
     /**
      * ctor
@@ -46,7 +51,7 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
      * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalLiteral( final ILiteral p_type, final boolean p_immediately )
+    public CAchievementGoalLiteral( @Nonnull final ILiteral p_type, final boolean p_immediately )
     {
         super( p_type, p_immediately );
     }
@@ -57,9 +62,10 @@ public final class CAchievementGoalLiteral extends IAchievementGoal<ILiteral>
         return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().trigger( CTrigger.from( ITrigger.EType.ADDGOAL, m_value.unify( p_context ) ), m_immediately );
     }

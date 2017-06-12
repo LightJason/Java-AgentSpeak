@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 import org.lightjason.agentspeak.language.variable.IRelocateVariable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -46,11 +47,16 @@ import java.util.Set;
 abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -315973892409409832L;
+
+    /**
      * ctor
      *
      * @param p_type value of the achievment-goal
      */
-    IAchievementRule( final T p_type )
+    protected IAchievementRule( @Nonnull final T p_type )
     {
         super( p_type );
     }
@@ -58,13 +64,15 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     /**
      * execute rule from context
      *
+     * @param p_parallel parallel execution
      * @param p_context execution context
      * @param p_value execution literal
-     * @param p_parallel parallel execution
      * @return boolean result
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
-    protected static IFuzzyValue<Boolean> execute( final IContext p_context, final ILiteral p_value, final boolean p_parallel )
+    protected static IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final ILiteral p_value
+    )
     {
         // read current rules, if not exists execution fails
         final Collection<IRule> l_rules = p_context.agent().rules().get( p_value.fqnfunctor() );
@@ -86,14 +94,13 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
 
             // execute rule
             final IFuzzyValue<Boolean> l_return = i.execute(
-                i.instantiate( p_context.agent(), l_variables.stream() ),
-                false,
+                false, i.instantiate( p_context.agent(), l_variables.stream() ),
                 Collections.<ITerm>emptyList(),
                 Collections.<ITerm>emptyList()
             );
 
             // create rule result with fuzzy- and defuzzificated value and instantiate variable set
-            return new ImmutableTriple<>( p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return ), l_return, l_variables );
+            return new ImmutableTriple<>( p_context.agent().fuzzy().getValue().defuzzify( l_return ), l_return, l_variables );
 
         } )
 
@@ -119,7 +126,7 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode();
+        return m_value == null ? 0 : m_value.hashCode();
     }
 
     @Override

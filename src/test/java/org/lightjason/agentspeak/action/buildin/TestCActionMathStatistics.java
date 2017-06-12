@@ -110,16 +110,14 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreateStatistic().execute(
-                null,
-                false,
-                Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
         new CCreateStatistic().execute(
-                null,
-                true,
-                Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            true, null,
+            Stream.of( "summary", "descriptive" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 4 );
@@ -136,10 +134,9 @@ public final class TestCActionMathStatistics extends IBaseTest
     public final void clear()
     {
         new CClearStatistic().execute(
-                null,
-                false,
-                Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
+            false, null,
+            Stream.of( m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
         Assert.assertEquals( m_summarystatistic.getSum(), 0, 0 );
@@ -155,9 +152,8 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreateDistribution().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                         "normal", 20, 10,
                         "beta", 20, 10,
                         "cauchy", 10, 20,
@@ -177,7 +173,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                         "UNIFORM", 10, 25,
                         "WEIBULL", 10, 23
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 18 );
@@ -208,10 +204,9 @@ public final class TestCActionMathStatistics extends IBaseTest
     public final void addstatisticvalue()
     {
         new CAddStatisticValue().execute(
-                null,
-                false,
-                Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
+            false, null,
+            Stream.of( m_descriptivestatistic, m_summarystatistic, 1, 2, 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
         Assert.assertEquals( m_descriptivestatistic.getN(), 6, 0 );
@@ -227,9 +222,8 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultipleStatisticValue().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     m_summarystatistic,
                     "variance", "mean",
                     "max", "geometricmean",
@@ -237,7 +231,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "secondmoment", "standarddeviation",
                     "sumlog", "sumsquare"
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 10 );
@@ -263,9 +257,8 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultipleStatisticValue().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     m_descriptivestatistic,
                     "variance", "mean",
                     "max", "geometricmean",
@@ -273,7 +266,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                     "standarddeviation", "sumsquare",
                     "kurtiosis", "count", "sum"
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 11 );
@@ -299,10 +292,9 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRandomSample().execute(
-                null,
-                false,
-                Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::from  ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( new NormalDistribution(), 3 ).map( CRawTerm::from  ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -319,10 +311,9 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRandomSimple().execute(
-                null,
-                false,
-                Stream.of( 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -339,10 +330,9 @@ public final class TestCActionMathStatistics extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSingleStatisticValue().execute(
-                null,
-                false,
-                Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "min", m_summarystatistic, m_descriptivestatistic ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -362,11 +352,10 @@ public final class TestCActionMathStatistics extends IBaseTest
                  .parallel()
                  .forEach( i ->
                         new CExponentialSelection().execute(
-                                null,
-                                false,
-                                Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 1 )
+                            false, null,
+                            Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 1 )
                                         .map( CRawTerm::from ).collect( Collectors.toList() ),
-                                l_return
+                            l_return
                         ) );
 
 
@@ -396,8 +385,7 @@ public final class TestCActionMathStatistics extends IBaseTest
                  .parallel()
                  .forEach( i ->
                                new CExponentialSelection().execute(
-                                   null,
-                                   false,
+                                   false, null,
                                    Stream.of( Stream.of( "a", "b" ).collect( Collectors.toList() ), Stream.of( 4.5, 3.5 ).collect( Collectors.toList() ), 0.5 )
                                          .map( CRawTerm::from ).collect( Collectors.toList() ),
                                    l_return
@@ -429,11 +417,10 @@ public final class TestCActionMathStatistics extends IBaseTest
                  .parallel()
                  .forEach( i ->
                         new CLinearSelection().execute(
-                                null,
-                                false,
-                                Stream.of( Stream.of( "c", "d" ).collect( Collectors.toList() ), Stream.of( 3, 7 ).collect( Collectors.toList() ) )
+                            false, null,
+                            Stream.of( Stream.of( "c", "d" ).collect( Collectors.toList() ), Stream.of( 3, 7 ).collect( Collectors.toList() ) )
                                         .map( CRawTerm::from ).collect( Collectors.toList() ),
-                                l_return
+                            l_return
         ) );
 
         Assert.assertEquals(

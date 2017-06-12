@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,11 @@ import java.util.Map;
  */
 public abstract class IParse extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6011660734586672310L;
+
     /**
      * ctor
      */
@@ -53,8 +59,10 @@ public abstract class IParse extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         return CFuzzyValue.from(
@@ -77,6 +85,7 @@ public abstract class IParse extends IBuildinAction
      * @param p_value string value
      * @return tuple with boolean (for parsing error) and term
      */
-    protected abstract Map.Entry<Boolean, ITerm> parse( final String p_value );
+    @Nonnull
+    protected abstract Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value );
 
 }

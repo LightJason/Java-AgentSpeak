@@ -42,6 +42,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -76,14 +77,22 @@ import java.util.stream.Stream;
  */
 public final class CAdjacencyMatrix extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2499068539684263946L;
+
     @Override
     public final int minimalArgumentNumber()
     {
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // --- filter parameters ---
         final EType l_type = CCommon.flatcollection( p_argument )
@@ -129,8 +138,8 @@ public final class CAdjacencyMatrix extends IBuildinAction
      * @param p_type matrix type
      * @return pair of double matrix and vertices
      */
-    private static Pair<DoubleMatrix2D, Collection<?>> apply( final Graph<Object, Object> p_graph, final Map<?, Number> p_cost,
-                                                              final double p_defaultcost, final EType p_type )
+    private static Pair<DoubleMatrix2D, Collection<?>> apply( @Nonnull final Graph<Object, Object> p_graph, @Nonnull final Map<?, Number> p_cost,
+                                                              final double p_defaultcost, @Nonnull final EType p_type )
     {
         // index map for matching vertex to index position within matrix
         final Map<Object, Integer> l_index = new HashMap<>();

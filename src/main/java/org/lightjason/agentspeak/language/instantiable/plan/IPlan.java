@@ -23,15 +23,22 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan;
 
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -39,12 +46,73 @@ import java.util.List;
  */
 public interface IPlan extends IInstantiable
 {
+    /**
+     * empty plan
+     */
+    IPlan EMPTY = new IPlan()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8137749419571919583L;
+
+        @Nonnull
+        @Override
+        public final ITrigger trigger()
+        {
+            return ITrigger.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Collection<IAnnotation<?>> annotations()
+        {
+            return Collections.emptySet();
+        }
+
+        @Nonnull
+        @Override
+        public final List<IExecution> body()
+        {
+            return Collections.emptyList();
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> condition( final IContext p_context )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Nonnull
+        @Override
+        public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+        {
+            return IContext.EMPTYPLAN;
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IVariable<?>> variables()
+        {
+            return Stream.empty();
+        }
+    };
 
     /**
      * returns the trigger event
      *
      * @return trigger event
      */
+    @Nonnull
     ITrigger trigger();
 
     /**
@@ -52,6 +120,7 @@ public interface IPlan extends IInstantiable
      *
      * @return set with annotation
      */
+    @Nonnull
     Collection<IAnnotation<?>> annotations();
 
     /**
@@ -59,6 +128,7 @@ public interface IPlan extends IInstantiable
      *
      * @return action list;
      */
+    @Nonnull
     List<IExecution> body();
 
     /**
@@ -67,6 +137,7 @@ public interface IPlan extends IInstantiable
      * @param p_context execution context
      * @return execution result
      */
+    @Nonnull
     IFuzzyValue<Boolean> condition( final IContext p_context );
 
 }

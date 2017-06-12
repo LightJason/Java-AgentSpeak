@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -48,15 +49,21 @@ import java.util.stream.IntStream;
  */
 public final class CToVector extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8873596018924393696L;
+
     @Override
     public final int minimalArgumentNumber()
     {
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<BitMatrix>raw )
@@ -73,7 +80,8 @@ public final class CToVector extends IBuildinAction
      * @param p_matrix matrix
      * @return vector
      */
-    private static BitVector transform( final BitMatrix p_matrix )
+    @Nonnull
+    private static BitVector transform( @Nonnull final BitMatrix p_matrix )
     {
         final BitVector l_result = new BitVector( p_matrix.size() );
 

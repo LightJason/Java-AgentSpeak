@@ -24,10 +24,12 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
@@ -57,11 +59,12 @@ public final class CPlanStatistic implements IPlanStatistic
      *
      * @param p_plan plan reference
      */
-    private CPlanStatistic( final IPlan p_plan )
+    private CPlanStatistic( @Nonnull final IPlan p_plan )
     {
         m_plan = p_plan;
     }
 
+    @Nonnull
     @Override
     public final IPlan plan()
     {
@@ -104,6 +107,7 @@ public final class CPlanStatistic implements IPlanStatistic
                : m_fail.get() / l_sum;
     }
 
+    @Nonnull
     @Override
     public final IPlanStatistic incrementsuccessful()
     {
@@ -111,6 +115,7 @@ public final class CPlanStatistic implements IPlanStatistic
         return this;
     }
 
+    @Nonnull
     @Override
     public final IPlanStatistic incrementfail()
     {
@@ -118,6 +123,7 @@ public final class CPlanStatistic implements IPlanStatistic
         return this;
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
@@ -139,6 +145,7 @@ public final class CPlanStatistic implements IPlanStatistic
     }
 
     @Override
+    @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
     public final boolean equals( final Object p_object )
     {
         return ( p_object != null )
@@ -158,14 +165,15 @@ public final class CPlanStatistic implements IPlanStatistic
      * @param p_plan plan object
      * @return statistic object
      */
-    public static IPlanStatistic from( final IPlan p_plan )
+    @Nonnull
+    public static IPlanStatistic from( @Nonnull final IPlan p_plan )
     {
         return new CPlanStatistic( p_plan );
     }
 
 
     @Override
-    public final int compareTo( final IPlanStatistic p_other )
+    public final int compareTo( @Nonnull final IPlanStatistic p_other )
     {
         return Integer.compare( this.hashCode(), p_other.hashCode() );
     }

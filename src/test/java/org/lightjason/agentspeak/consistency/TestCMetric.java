@@ -23,27 +23,31 @@
 
 package org.lightjason.agentspeak.consistency;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
-import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.consistency.filter.CAll;
 import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.CSymmetricDifference;
 import org.lightjason.agentspeak.consistency.metric.CWeightedDifference;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
+import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
+import java.io.InputStream;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,9 +61,13 @@ import static org.junit.Assert.assertEquals;
 public final class TestCMetric extends IBaseTest
 {
     /**
+     * agent generator
+     */
+    private CAgent.CAgentGenerator m_agentgenerator;
+    /**
      * literal view generator
      */
-    private IViewGenerator<IAgent<?>> m_generator;
+    private IViewGenerator<CAgent> m_generator;
     /**
      * set with testing literals
      */
@@ -67,11 +75,14 @@ public final class TestCMetric extends IBaseTest
 
     /**
      * test initialize
+     *
+     * @throws Exception on any parsing error
      */
     @Before
-    public void initialize()
+    public void initialize() throws Exception
     {
         m_generator = new CGenerator();
+        m_agentgenerator = new CAgent.CAgentGenerator( IOUtils.toInputStream( "", "UTF-8" ), Collections.emptySet() );
 
         m_literals = Stream.of(
             CLiteral.from( "toplevel" ),
@@ -172,9 +183,7 @@ public final class TestCMetric extends IBaseTest
      * @param p_delta delta
      */
     private void check( final String p_message, final IFilter p_filter, final IMetric p_metric, final Collection<ILiteral> p_belief1,
-                        final Collection<ILiteral> p_belief2,
-                        final double p_excepted, final double p_delta
-    )
+                        final Collection<ILiteral> p_belief2, final double p_excepted, final double p_delta )
     {
         final double l_value = p_metric.apply(
             p_filter.apply( this.agent( p_belief1 ) ),
@@ -190,9 +199,11 @@ public final class TestCMetric extends IBaseTest
      * @param p_literals literal collection
      * @return agent
      */
-    private IAgent<IAgent<?>> agent( final Collection<ILiteral> p_literals )
+    private CAgent agent( final Collection<ILiteral> p_literals )
     {
-        final IAgent<IAgent<?>> l_agent = new CAgent( new CDefaultAgentConfiguration<>() );
+        Assume.assumeNotNull( m_generator );
+
+        final CAgent l_agent = m_agentgenerator.generatesingle();
         p_literals.forEach( i -> l_agent.beliefbase().generate( m_generator, i.functorpath() ).add( i ) );
         return l_agent;
     }
@@ -212,30 +223,54 @@ public final class TestCMetric extends IBaseTest
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * agetn class
+     * agent class
      */
-    private static class CAgent extends IBaseAgent<IAgent<?>>
+    private static final class CAgent extends IBaseAgent<CAgent>
     {
         /**
          * ctor
          *
          * @param p_configuration agent configuration
          */
-        CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
+        private CAgent( final IAgentConfiguration<CAgent> p_configuration )
         {
             super( p_configuration );
         }
+
+        /**
+         * agent generator class
+         */
+        private static final class CAgentGenerator extends IBaseAgentGenerator<CAgent>
+        {
+            /**
+             * ctor
+             *
+             * @throws Exception on any error
+             */
+            public CAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
+            {
+                super( p_stream, p_actions );
+            }
+
+            @Override
+            public CAgent generatesingle( final Object... p_data )
+            {
+                return new CAgent( m_configuration );
+            }
+        }
+
     }
+
 
     /**
      * test belief generator
      */
-    private static final class CGenerator implements IViewGenerator<IAgent<?>>
+    private static final class CGenerator implements IViewGenerator<CAgent>
     {
         @Override
-        public final IView<IAgent<?>> apply( final String p_name, final IView<IAgent<?>> p_parent )
+        public final IView<CAgent> apply( final String p_name, final IView<CAgent> p_parent )
         {
-            return new CBeliefbasePersistent<>( new CMultiStorage<>() ).create( p_name, p_parent );
+            return new CBeliefbasePersistent<CAgent>( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 

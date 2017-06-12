@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.execution.expression.EOperator;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expression.logical.CBinary;
 
+import javax.annotation.Nonnull;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,8 +82,7 @@ public final class CCommon
      * ctor
      */
     private CCommon()
-    {
-    }
+    {}
 
     /**
      * creates a logical expression concationation with single operator
@@ -92,8 +92,9 @@ public final class CCommon
      * @param p_righthandside right-hand-side expressions
      * @return concat expression
      */
-    static IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
-                                                      final Collection<IExpression> p_righthandside
+    @Nonnull
+    static IExpression createLogicalBinaryExpression( @Nonnull final EOperator p_operator,  @Nonnull final IExpression p_lefthandside,
+                                                      @Nonnull final Collection<IExpression> p_righthandside
     )
     {
         if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )

@@ -30,8 +30,10 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,21 +41,27 @@ import java.util.List;
 /**
  * returns all vertices of a graph.
  * The action returns a list of all vertices
- * for each graph argument
+ * for each graph argument, the action never fails
  *
  * @code [V1|V2] = graph/vertices( Graph1, Graph2 ); @endcode
- * @note the returned vertex list is unmodifyable list
  */
 public final class CVertices extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8910556163865955921L;
+
     @Override
     public final int minimalArgumentNumber()
     {
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         CCommon.flatcollection( p_argument )
@@ -63,6 +71,6 @@ public final class CVertices extends IBuildinAction
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
-        return null;
+        return CFuzzyValue.from( true );
     }
 }

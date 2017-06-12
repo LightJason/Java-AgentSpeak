@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,10 @@ import java.util.stream.Collectors;
  */
 public final class CInCircle extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7618753272977347282L;
 
     /**
      * ctor
@@ -63,9 +68,10 @@ public final class CInCircle extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<Double> l_arguments = CCommon.flatcollection( p_argument )
                                                 .map( ITerm::<Number>raw )

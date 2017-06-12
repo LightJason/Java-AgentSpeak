@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.generic.type;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -38,9 +39,13 @@ import java.util.List;
  */
 public final class CToInt extends ICast
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3552457175331059713L;
 
     @Override
-    protected final boolean cast( final ITerm p_value, final List<ITerm> p_return )
+    protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
     {
         try
         {

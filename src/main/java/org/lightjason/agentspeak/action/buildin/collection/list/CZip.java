@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +51,11 @@ import java.util.stream.Collectors;
 public final class CZip extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 3280909344611567001L;
+
+    /**
      * ctor
      */
     public CZip()
@@ -64,8 +70,8 @@ public final class CZip extends IBuildinAction
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<?> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )

@@ -21,37 +21,19 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.variable;
+package org.lightjason.agentspeak.language.fuzzy.operator;
 
-import java.util.Collections;
-import java.util.List;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
+
+import java.util.Map;
 
 
 /**
- * list for variables with head-tail definition
+ * fuzzy operators
+ *
+ * @tparam S agent type
  */
-public class CVariableList
+public interface IFuzzyBundle<T, S extends IAgent<?>> extends Map.Entry<IFuzzyOperator<T>, IDefuzzification<T, S>>
 {
-    private final List<IVariable<?>> m_variables;
-
-    /**
-     * ctor
-     *
-     * @param p_list list of variables
-     */
-    public CVariableList( final List<IVariable<?>> p_list )
-    {
-        m_variables = Collections.unmodifiableList( p_list );
-    }
-
-    /**
-     * list getter
-     *
-     * @return unmodifiable list
-     */
-    public List<IVariable<?>> get()
-    {
-        return m_variables;
-    }
-
 }

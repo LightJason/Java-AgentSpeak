@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -49,6 +50,10 @@ import java.util.stream.Stream;
 public abstract class IBaseInstantiable implements IInstantiable
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8843291880722926104L;
+    /**
      * action list
      */
     protected final List<IExecution> m_action;
@@ -61,6 +66,7 @@ public abstract class IBaseInstantiable implements IInstantiable
      * hash code
      */
     private final int m_hash;
+
 
     /**
      * ctor
@@ -88,20 +94,25 @@ public abstract class IBaseInstantiable implements IInstantiable
         return ( p_object != null ) && ( p_object instanceof IInstantiable ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
-    public final IContext instantiate( final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
+    public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
         return CCommon.instantiate( this, p_agent, p_variable );
     }
 
+    @Nonnull
     @Override
     public Stream<IVariable<?>> variables()
     {
         return m_action.stream().flatMap( IExecution::variables );
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         // execution must be the first call, because all elements must be executed and iif the execution fails the @atomic flag can be checked,
         // each item gets its own parameters, annotation and return stack, so it will be created locally, but the return list did not to be an "empty-list"
@@ -112,7 +123,7 @@ public abstract class IBaseInstantiable implements IInstantiable
         // if atomic flag if exists use this for return value
         return m_annotation.containsKey( IAnnotation.EType.ATOMIC )
                ? CFuzzyValue.from( true )
-               : l_result.stream().collect( p_context.agent().fuzzy().getResultOperator() );
+               : l_result.stream().collect( p_context.agent().fuzzy().getKey() );
     }
 
     /**
@@ -129,9 +140,9 @@ public abstract class IBaseInstantiable implements IInstantiable
 
         m_action.stream()
                 .map( i -> {
-                    final IFuzzyValue<Boolean> l_return = i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>() );
+                    final IFuzzyValue<Boolean> l_return = i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() );
                     l_result.add( l_return );
-                    return p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_return );
+                    return p_context.agent().fuzzy().getValue().defuzzify( l_return );
                 } )
                 .filter( i -> !i )
                 .findFirst();
@@ -150,7 +161,7 @@ public abstract class IBaseInstantiable implements IInstantiable
     private List<IFuzzyValue<Boolean>> executeparallel( final IContext p_context )
     {
         return m_action.parallelStream()
-                       .map( i -> i.execute( p_context, false, Collections.<ITerm>emptyList(), new LinkedList<>() ) )
+                       .map( i -> i.execute( false, p_context, Collections.<ITerm>emptyList(), new LinkedList<>() ) )
                        .collect( Collectors.toList() );
     }
 

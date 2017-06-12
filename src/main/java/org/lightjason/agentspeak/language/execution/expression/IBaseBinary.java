@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +41,10 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseBinary implements IBinaryExpression
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1630029294068548691L;
     /**
      * expression operator
      */
@@ -54,6 +59,7 @@ public abstract class IBaseBinary implements IBinaryExpression
     protected final IExpression m_righthandside;
 
 
+
     /**
      * ctor
      *
@@ -61,7 +67,7 @@ public abstract class IBaseBinary implements IBinaryExpression
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    protected IBaseBinary( final EOperator p_operator, final IExpression p_lefthandside, final IExpression p_righthandside )
+    protected IBaseBinary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         if ( !p_operator.isBinary() )
             throw new CIllegalArgumentException( CCommon.languagestring( IBaseBinary.class, "operator", p_operator ) );
@@ -74,20 +80,22 @@ public abstract class IBaseBinary implements IBinaryExpression
     /**
      * execute expression arguments
      *
-     * @param p_context execution context
      * @param p_parallel parallel execution
+     * @param p_context execution context
      * @param p_argument returning arguments of the expressions
      * @return boolean of successfully execution
      * @throws IllegalArgumentException is thrown if more than two arguments are returned
      */
-    protected final boolean executearguments( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument ) throws IllegalArgumentException
+    protected final boolean executearguments( final boolean p_parallel, @Nonnull final IContext p_context,
+                                              @Nonnull final List<ITerm> p_argument
+    ) throws IllegalArgumentException
     {
         // run left-hand- and right-hand-side argument
-        if ( ( !m_lefthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_argument ).value() )
+        if ( ( !m_lefthandside.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_argument ).value() )
              || ( p_argument.isEmpty() ) )
             return false;
 
-        if ( ( !m_righthandside.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_argument ).value() )
+        if ( ( !m_righthandside.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_argument ).value() )
              || ( p_argument.isEmpty() ) )
             return false;
 
@@ -98,18 +106,21 @@ public abstract class IBaseBinary implements IBinaryExpression
     }
 
 
+    @Nonnull
     @Override
     public final IExpression leftHandSide()
     {
         return m_lefthandside;
     }
 
+    @Nonnull
     @Override
     public final IExpression rightHandSide()
     {
         return m_righthandside;
     }
 
+    @Nonnull
     @Override
     public final EOperator operator()
     {
@@ -134,6 +145,7 @@ public abstract class IBaseBinary implements IBinaryExpression
         return MessageFormat.format( "{0} {1} {2}", m_lefthandside, m_operator, m_righthandside );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

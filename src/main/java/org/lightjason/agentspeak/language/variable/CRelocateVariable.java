@@ -28,6 +28,8 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
 
 
@@ -38,6 +40,10 @@ import java.text.MessageFormat;
  */
 public final class CRelocateVariable<T> extends CVariable<T> implements IRelocateVariable
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2204692497385064257L;
     /**
      * reference to relocated variable
      */
@@ -60,7 +66,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      *  @param p_functor variable name
      * @param p_relocate variable which should be relocated
      */
-    public CRelocateVariable( final IPath p_functor, final IVariable<?> p_relocate )
+    public CRelocateVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_relocate )
     {
         super( p_functor, p_relocate.raw() );
         m_relocate = p_relocate;
@@ -72,12 +78,13 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
      * @param p_variable referenced variable
      * @param p_value value
      */
-    private CRelocateVariable( final IPath p_functor, final IVariable<?> p_variable, final T p_value )
+    private CRelocateVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_variable, @Nullable  final T p_value )
     {
         super( p_functor, p_value );
         m_relocate = p_variable;
     }
 
+    @Nonnull
     @Override
     public final IVariable<?> relocate()
     {

@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.collection.map;
 
 import org.lightjason.agentspeak.action.buildin.collection.IMapApplySingle;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 
@@ -38,9 +40,13 @@ import java.util.Map;
  */
 public final class CPutSingle extends IMapApplySingle<Map<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2571810828014437518L;
 
     @Override
-    protected final void apply( final Map<Object, Object> p_instance, final Object p_key, final Object p_value )
+    protected final void apply( @Nonnull final Map<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.put( p_key, p_value );
     }

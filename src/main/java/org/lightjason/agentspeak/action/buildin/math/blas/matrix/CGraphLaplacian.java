@@ -34,6 +34,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -48,6 +49,10 @@ import java.util.stream.IntStream;
  */
 public final class CGraphLaplacian extends IAlgebra
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4781492413860210436L;
 
     /**
      * ctor
@@ -64,8 +69,8 @@ public final class CGraphLaplacian extends IAlgebra
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         CCommon.flatcollection( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )

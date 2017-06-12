@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
@@ -41,6 +43,7 @@ public interface IAnnotation<T>
      *
      * @return type
      */
+    @Nonnull
     EType id();
 
     /**
@@ -48,6 +51,7 @@ public interface IAnnotation<T>
      *
      * @return data or null
      */
+    @Nullable
     <N> N value();
 
     /**
@@ -63,6 +67,7 @@ public interface IAnnotation<T>
      *
      * @return variabel stream
      */
+    @Nonnull
     Stream<IVariable<?>> variables();
 
 

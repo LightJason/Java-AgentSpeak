@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -61,14 +62,21 @@ import java.util.stream.Collectors;
  */
 public class CCreate extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8220165218772387059L;
+
     @Override
     public final int minimalArgumentNumber()
     {
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         CCommon.flatcollection( p_argument )
@@ -108,6 +116,7 @@ public class CCreate extends IBuildinAction
          *
          * @return graph instance
          */
+        @Nonnull
         public final Graph<?, ?> get()
         {
             switch ( this )
@@ -141,7 +150,7 @@ public class CCreate extends IBuildinAction
          * @param p_value name value
          * @return existance flag
          */
-        public static boolean exist( final String p_value )
+        public static boolean exist( @Nonnull final String p_value )
         {
             return TYPES.contains( p_value.toUpperCase( Locale.ROOT ) );
         }
@@ -152,7 +161,8 @@ public class CCreate extends IBuildinAction
          * @param p_value name value
          * @return graph type
          */
-        public static EGraphTypes from( final String p_value )
+        @Nonnull
+        public static EGraphTypes from( @Nonnull final String p_value )
         {
             return EGraphTypes.valueOf( p_value.toUpperCase( Locale.ROOT ) );
         }

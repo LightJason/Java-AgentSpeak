@@ -56,6 +56,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -129,8 +130,7 @@ public final class TestCActionAgent extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPlanList().execute(
-            m_context,
-            false,
+            false, m_context,
             Collections.emptyList(),
             l_return
         );
@@ -143,8 +143,7 @@ public final class TestCActionAgent extends IBaseTest
         m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         new CPlanList().execute(
-            m_context,
-            false,
+            false, m_context,
             Collections.emptyList(),
             l_return
         );
@@ -167,8 +166,7 @@ public final class TestCActionAgent extends IBaseTest
         final IPlan l_plan = new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "testaddplan" ) ) );
 
         new CAddPlan().execute(
-            m_context,
-            false,
+            false, m_context,
             Stream.of( l_plan ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -191,8 +189,7 @@ public final class TestCActionAgent extends IBaseTest
 
         final List<ITerm> l_return = new ArrayList<>();
         new CCycleTime().execute(
-            m_context,
-            false,
+            false, m_context,
             Collections.emptyList(),
             l_return
         );
@@ -213,8 +210,7 @@ public final class TestCActionAgent extends IBaseTest
 
 
         new CGetPlan().execute(
-            m_context,
-            false,
+            false, m_context,
             Collections.emptyList(),
             l_return
         );
@@ -225,8 +221,7 @@ public final class TestCActionAgent extends IBaseTest
         m_context.agent().plans().put( l_plan.trigger(), CPlanStatistic.from( l_plan ) );
 
         new CGetPlan().execute(
-            m_context,
-            false,
+            false, m_context,
             Stream.of( "+!", "testgetplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -249,8 +244,7 @@ public final class TestCActionAgent extends IBaseTest
 
         Assert.assertTrue(
             new CRemovePlan().execute(
-                m_context,
-                false,
+                false, m_context,
                 Stream.of( "+!", "testremoveplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -266,8 +260,7 @@ public final class TestCActionAgent extends IBaseTest
     {
         Assert.assertFalse(
             new CRemovePlan().execute(
-                m_context,
-                false,
+                false, m_context,
                 Stream.of( "+!", "testremoveerrorplan" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -290,8 +283,7 @@ public final class TestCActionAgent extends IBaseTest
 
 
         new CClearBeliefbase().execute(
-            m_context,
-            false,
+            false, m_context,
             Collections.emptyList(),
             Collections.emptyList()
         );
@@ -318,8 +310,7 @@ public final class TestCActionAgent extends IBaseTest
         Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );
 
         new CBeliefList().execute(
-            m_context,
-            false,
+            false, m_context,
             Collections.emptyList(),
             l_return
         );
@@ -413,6 +404,10 @@ public final class TestCActionAgent extends IBaseTest
     private static class CEmptyPlan extends IBaseInstantiable implements IPlan
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6885053756134284862L;
+        /**
          * trigger
          */
         private final ITrigger m_trigger;
@@ -428,6 +423,7 @@ public final class TestCActionAgent extends IBaseTest
             m_trigger = p_trigger;
         }
 
+        @Nonnull
         @Override
         public final ITrigger trigger()
         {

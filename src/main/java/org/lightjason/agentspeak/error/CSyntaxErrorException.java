@@ -35,13 +35,17 @@ import java.util.logging.Logger;
  * @note must be an illegal state exception, because the AntLR error
  * lister cannot throw any other exception
  */
-@SuppressWarnings( "serial" )
 public final class CSyntaxErrorException extends IllegalStateException implements IException
 {
+
     /**
      * logger
      */
     private static final Logger LOGGER = CCommon.logger( CSyntaxErrorException.class );
+    /**
+     * serial id
+     */
+    private static final transient long serialVersionUID = 5220180409070733235L;
 
     /**
      * ctor

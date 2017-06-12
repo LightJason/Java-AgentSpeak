@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.datetime;
 import org.joda.time.Instant;
 import org.joda.time.Minutes;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -43,9 +44,14 @@ import java.util.stream.Stream;
  */
 public final class CMinutesBetween extends IBetween
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2915775037746512831L;
 
+    @Nonnull
     @Override
-    protected final Stream<?> apply( final Stream<List<Instant>> p_datetime )
+    protected final Stream<?> apply( @Nonnull final Stream<List<Instant>> p_datetime )
     {
         return p_datetime
             .map( i -> Minutes.minutesBetween( i.get( 0 ), i.get( 1 ) ) )

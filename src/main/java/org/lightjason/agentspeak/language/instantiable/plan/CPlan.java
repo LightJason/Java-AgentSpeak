@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,6 +52,10 @@ import java.util.stream.Stream;
  */
 public final class CPlan extends IBaseInstantiable implements IPlan
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8130277494195919583L;
     /**
      * trigger event
      */
@@ -68,9 +73,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger p_event, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
-        this( p_event, null, p_body, p_annotation );
+        this( p_event, IExpression.EMPTY, p_body, p_annotation );
     }
 
     /**
@@ -81,62 +86,70 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
-    )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
+                  @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
         super(
             p_body,
             p_annotation,
-            p_event.hashCode()
-            + ( p_condition == null ? 0 : p_condition.hashCode() )
-            + p_body.stream().mapToInt( Object::hashCode ).sum()
-            + p_annotation.stream().mapToInt( Object::hashCode ).sum()
-        );
 
+            CCommon.streamconcat(
+                Stream.of(
+                    p_event.hashCode(),
+                    p_condition.hashCode()
+                ),
+                p_body.stream().map( Object::hashCode ),
+                p_annotation.stream().map( Object::hashCode )
+            ).reduce( 0, ( i, j ) -> i ^ j )
+        );
 
         m_triggerevent = p_event;
         m_condition = p_condition;
     }
 
+    @Nonnull
     @Override
     public final ITrigger trigger()
     {
         return m_triggerevent;
     }
 
+    @Nonnull
     @Override
     public final Collection<IAnnotation<?>> annotations()
     {
         return m_annotation.values();
     }
 
+    @Nonnull
     @Override
     public final List<IExecution> body()
     {
         return m_action;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return );
+        final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
 
         // create delete-goal trigger
-        if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
+        if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
             p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValue<Boolean> condition( final IContext p_context )
     {
-        if ( m_condition == null )
-            return CFuzzyValue.from( true );
-
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-            m_condition.execute( p_context, false, Collections.emptyList(), l_return ).value()
+            m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
             && ( l_return.size() == 1 )
             ? l_return.get( 0 ).<Boolean>raw()
             : false
@@ -156,6 +169,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

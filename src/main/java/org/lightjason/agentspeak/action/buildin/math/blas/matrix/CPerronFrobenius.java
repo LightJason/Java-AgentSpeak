@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -55,6 +56,10 @@ import java.util.stream.IntStream;
  */
 public final class CPerronFrobenius extends IAlgebra
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4686274043894517802L;
 
     /**
      * ctor
@@ -71,7 +76,8 @@ public final class CPerronFrobenius extends IAlgebra
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final Random l_random = ThreadLocalRandom.current();
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );

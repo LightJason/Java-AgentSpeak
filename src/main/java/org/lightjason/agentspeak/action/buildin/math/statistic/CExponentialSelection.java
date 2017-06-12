@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.action.buildin.math.statistic;
 
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,9 +43,14 @@ import java.util.stream.Stream;
  */
 public final class CExponentialSelection extends ISelection
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5158153474814301429L;
 
+    @Nonnull
     @Override
-    protected final List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument )
+    protected final List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument )
     {
         final double l_demand = p_argument.get( 0 ).<Number>raw().doubleValue();
         return p_values.map( i -> Math.exp( i / l_demand ) ).collect( Collectors.toList() );

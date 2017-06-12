@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
@@ -42,6 +44,10 @@ import java.util.Arrays;
  */
 public class CVariable<T> implements IVariable<T>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5542578381343603600L;
     /**
      * variable / functor name
      */
@@ -60,7 +66,7 @@ public class CVariable<T> implements IVariable<T>
      *
      * @param p_functor name
      */
-    public CVariable( final String p_functor )
+    public CVariable( @Nonnull final String p_functor )
     {
         this( CPath.from( p_functor ), null );
     }
@@ -71,7 +77,7 @@ public class CVariable<T> implements IVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CVariable( final String p_functor, final T p_value )
+    public CVariable( @Nonnull final String p_functor, @Nullable final T p_value )
     {
         this( CPath.from( p_functor ), p_value );
     }
@@ -81,7 +87,7 @@ public class CVariable<T> implements IVariable<T>
      *
      * @param p_functor name
      */
-    public CVariable( final IPath p_functor )
+    public CVariable( @Nonnull final IPath p_functor )
     {
         this( p_functor, null );
     }
@@ -93,9 +99,9 @@ public class CVariable<T> implements IVariable<T>
      * @param p_value value
      */
     @SuppressFBWarnings( "EC_UNRELATED_CLASS_AND_INTERFACE" )
-    public CVariable( final IPath p_functor, final T p_value )
+    public CVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
-        m_any = ( p_functor == null ) || p_functor.isEmpty() || p_functor.equals( "_" );
+        m_any = p_functor.isEmpty() || p_functor.equals( "_" );
         m_functor = p_functor;
         this.internalset( p_value );
     }
@@ -124,6 +130,7 @@ public class CVariable<T> implements IVariable<T>
         return false;
     }
 
+    @Nonnull
     @Override
     public IVariable<T> throwNotAllocated() throws IllegalStateException
     {
@@ -139,6 +146,7 @@ public class CVariable<T> implements IVariable<T>
         return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
+    @Nonnull
     @Override
     public IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
     {
@@ -167,18 +175,21 @@ public class CVariable<T> implements IVariable<T>
         return MessageFormat.format( "{0}({1})", m_functor, m_value == null ? "" : m_value );
     }
 
+    @Nonnull
     @Override
     public final String functor()
     {
         return m_functor.getSuffix();
     }
 
+    @Nonnull
     @Override
     public final IPath functorpath()
     {
         return m_functor.getSubPath( 0, m_functor.size() - 1 );
     }
 
+    @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
@@ -198,6 +209,7 @@ public class CVariable<T> implements IVariable<T>
         return (N) m_value;
     }
 
+    @Nonnull
     @Override
     public IVariable<T> shallowcopy( final IPath... p_prefix )
     {
@@ -206,13 +218,14 @@ public class CVariable<T> implements IVariable<T>
                : new CVariable<>( p_prefix[0].append( m_functor ), m_value );
     }
 
-
+    @Nonnull
     @Override
     public IVariable<T> shallowcopysuffix()
     {
         return new CVariable<>( m_functor.getSuffix(), m_value );
     }
 
+    @Nonnull
     @Override
     public ITerm deepcopy( final IPath... p_prefix )
     {
@@ -224,6 +237,7 @@ public class CVariable<T> implements IVariable<T>
         );
     }
 
+    @Nonnull
     @Override
     public ITerm deepcopysuffix()
     {

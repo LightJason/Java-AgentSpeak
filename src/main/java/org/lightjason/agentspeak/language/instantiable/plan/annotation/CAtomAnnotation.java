@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -40,7 +41,7 @@ public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
      *
      * @param p_type type
      */
-    public CAtomAnnotation( final EType p_type )
+    public CAtomAnnotation( @Nonnull final EType p_type )
     {
         super( p_type, null );
     }

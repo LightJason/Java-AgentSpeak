@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action.unify;
 
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -32,6 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +44,10 @@ import java.util.stream.Stream;
 public final class CVariableUnify extends CDefaultUnify
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8392150596878840771L;
+    /**
      * unification variable with literal
      */
     private final IVariable<?> m_variable;
@@ -55,13 +59,10 @@ public final class CVariableUnify extends CDefaultUnify
      * @param p_literal variable with literal
      * @param p_variable expression
      */
-    public CVariableUnify( final boolean p_parallel, final ILiteral p_literal, final IVariable<?> p_variable )
+    public CVariableUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IVariable<?> p_variable )
     {
         super( p_parallel, p_literal );
         m_variable = p_variable;
-
-        if ( m_variable == null )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable", p_literal ) );
     }
 
 
@@ -71,8 +72,11 @@ public final class CVariableUnify extends CDefaultUnify
         return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_variable );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final Set<IVariable<?>> l_variables = p_context.agent()
                                                        .unifier()
@@ -88,6 +92,7 @@ public final class CVariableUnify extends CDefaultUnify
         return CFuzzyValue.from( true );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

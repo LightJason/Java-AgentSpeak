@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.action;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.IExecution;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * external action interface
@@ -37,6 +39,7 @@ public interface IAction extends IExecution
      *
      * @return path (literal functor)
      */
+    @Nonnull
     IPath name();
 
     /**

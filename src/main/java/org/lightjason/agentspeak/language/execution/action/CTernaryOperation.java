@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -43,7 +44,10 @@ import java.util.stream.Stream;
  */
 public final class CTernaryOperation extends IBaseExecution<IExpression>
 {
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5518298371186501138L;
     /**
      * true execution block
      */
@@ -61,32 +65,32 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
      * @param p_true true execution block
      * @param p_false false execution block
      */
-    public CTernaryOperation( final IExpression p_expression, final IExecution p_true, final IExecution p_false )
+    public CTernaryOperation( @Nonnull final IExpression p_expression, @Nonnull final IExecution p_true, @Nonnull final IExecution p_false )
     {
         super( p_expression );
         m_true = p_true;
         m_false = p_false;
     }
 
-
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_value.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument ).value() )
+        if ( ( !m_value.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 
         return l_argument.get( 0 ).raw()
-               ? m_true.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_return )
-               : m_false.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), p_return );
+               ? m_true.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_return )
+               : m_false.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), p_return );
     }
 
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode() ^ m_true.hashCode() ^ m_false.hashCode();
+        return ( m_value == null ? 0 : m_value.hashCode() ) ^ m_true.hashCode() ^ m_false.hashCode();
     }
 
     @Override
@@ -101,6 +105,7 @@ public final class CTernaryOperation extends IBaseExecution<IExpression>
         return MessageFormat.format( "[ {0} ] ? [ {1} ] : [ {2} ]", m_value, m_true, m_false );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

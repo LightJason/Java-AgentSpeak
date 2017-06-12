@@ -89,17 +89,15 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_result = new ArrayList<>();
 
         new CBase64Encode().execute(
-            null,
-            false,
+            false, null,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 
         new CBase64Decode().execute(
-            null,
-            false,
-                      l_return,
-                      l_result
+            false, null,
+            l_return,
+            l_result
         );
 
         StreamUtils.zip(
@@ -120,8 +118,7 @@ public final class TestCActionString extends IBaseTest
     {
         Assert.assertFalse(
             new CBase64Decode().execute(
-                null,
-                false,
+                false, null,
                 Stream.of( new String( "test encodingwith german additional character: öäß".getBytes( "UTF-16" ), "UTF-16" ) )
                       .map( CRawTerm::from )
                       .collect( Collectors.toList() ),
@@ -143,8 +140,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CConcat().execute(
-            null,
-            false,
+            false, null,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -168,8 +164,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CContains().execute(
-            null,
-            false,
+            false, null,
             Stream.concat(
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream()
@@ -196,8 +191,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLower().execute(
-            null,
-            false,
+            false, null,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -223,8 +217,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CReverse().execute(
-            null,
-            false,
+            false, null,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -250,8 +243,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSize().execute(
-            null,
-            false,
+            false, null,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -277,8 +269,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRandom().execute(
-            null,
-            false,
+            false, null,
             Stream.concat(
                 Stream.of( p_input.stream().collect( Collectors.joining() ) ),
                 p_input.stream().mapToInt( String::length ).boxed()
@@ -306,8 +297,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CUpper().execute(
-            null,
-            false,
+            false, null,
             p_input.stream().map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -330,8 +320,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CStartsWith().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "this is an input text", "this", "th", "is" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -352,8 +341,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEndsWith().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "this is a new input text with a cool ending", "ing", "this", "g" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -373,8 +361,7 @@ public final class TestCActionString extends IBaseTest
     {
         Assert.assertFalse(
             new CLevenshtein().execute(
-                null,
-                false,
+                false, null,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()
@@ -391,8 +378,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CLevenshtein().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "kitten", "sitting", "singing" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -412,8 +398,7 @@ public final class TestCActionString extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNCD().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -425,8 +410,7 @@ public final class TestCActionString extends IBaseTest
 
 
         new CNCD().execute(
-            null,
-            false,
+            false, null,
             Stream.of( "GZIP", "test", "tests", "this a complete other string", "test" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -446,8 +430,7 @@ public final class TestCActionString extends IBaseTest
     {
         Assert.assertFalse(
             new CNCD().execute(
-                null,
-                false,
+                false, null,
                 Collections.emptyList(),
                 Collections.emptyList()
             ).value()

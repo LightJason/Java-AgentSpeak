@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -56,6 +57,10 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseRest extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3713528201539676487L;
 
     @Override
     public final int minimalArgumentNumber()
@@ -72,7 +77,8 @@ public abstract class IBaseRest extends IBuildinAction
      *
      * @throws IOException is thrown on io errors
      */
-    protected static <T> T json( final String p_url, final Class<T> p_class ) throws IOException
+    @Nonnull
+    protected static <T> T json( @Nonnull final String p_url, @Nonnull final Class<T> p_class ) throws IOException
     {
         return new ObjectMapper().readValue( IBaseRest.httpdata( p_url ), p_class );
     }
@@ -85,8 +91,9 @@ public abstract class IBaseRest extends IBuildinAction
      *
      * @throws IOException is thrown on io errors
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
-    protected static Map<String, ?> xml( final String p_url ) throws IOException
+    protected static Map<String, ?> xml( @Nonnull final String p_url ) throws IOException
     {
         return new XmlMapper().readValue( IBaseRest.httpdata( p_url ), Map.class );
     }
@@ -99,7 +106,8 @@ public abstract class IBaseRest extends IBuildinAction
      * @param p_values value stream
      * @return term
      */
-    protected static ITerm baseliteral( final Stream<String> p_functor, final Stream<ITerm> p_values )
+    @Nonnull
+    protected static ITerm baseliteral( @Nonnull final Stream<String> p_functor, @Nonnull final Stream<ITerm> p_values )
     {
         final Stack<String> l_tree = p_functor.collect( Collectors.toCollection( Stack::new ) );
 
@@ -116,8 +124,9 @@ public abstract class IBaseRest extends IBuildinAction
      * @param p_object object
      * @return term stream
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
-    protected static Stream<ITerm> flatterm( final Object p_object )
+    protected static Stream<ITerm> flatterm( @Nonnull final Object p_object )
     {
         return p_object instanceof Map
                ? flatmap( (Map<String, ?>) p_object )
@@ -134,7 +143,8 @@ public abstract class IBaseRest extends IBuildinAction
      *
      * @throws IOException is thrown on connection errors
      */
-    private static String httpdata( final String p_url ) throws IOException
+    @Nonnull
+    private static String httpdata( @Nonnull final String p_url ) throws IOException
     {
         final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
 
@@ -170,7 +180,8 @@ public abstract class IBaseRest extends IBuildinAction
      * @param p_map input map
      * @return term stream
      */
-    private static Stream<ITerm> flatmap( final Map<String, ?> p_map )
+    @Nonnull
+    private static Stream<ITerm> flatmap( @Nonnull final Map<String, ?> p_map )
     {
         return p_map.entrySet()
                     .stream()
@@ -187,7 +198,8 @@ public abstract class IBaseRest extends IBuildinAction
      * @param p_collection collection
      * @return term stream
      */
-    private static Stream<ITerm> flatcollection( final Collection<?> p_collection )
+    @Nonnull
+    private static Stream<ITerm> flatcollection( @Nonnull final Collection<?> p_collection )
     {
         return p_collection.stream().flatMap( IBaseRest::flatterm );
     }

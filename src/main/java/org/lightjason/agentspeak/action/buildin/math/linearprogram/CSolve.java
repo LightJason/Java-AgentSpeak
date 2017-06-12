@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -69,6 +70,10 @@ import java.util.Objects;
  */
 public final class CSolve extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -9105794980077188037L;
 
     /**
      * ctor
@@ -84,9 +89,10 @@ public final class CSolve extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // first argument is the LP pair object, second argument is the goal-type (maximize / minimize),
         // third & fourth argument can be the number of iterations or string with "non-negative" variables

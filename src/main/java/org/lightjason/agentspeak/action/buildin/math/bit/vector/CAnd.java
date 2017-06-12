@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.math.bit.vector;
 
 import cern.colt.bitvector.BitVector;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * performs the logical and operation to all bit vectors.
@@ -37,9 +39,13 @@ import cern.colt.bitvector.BitVector;
  */
 public final class CAnd extends IOperator
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1930882384385872200L;
 
     @Override
-    protected final void apply( final BitVector p_target, final BitVector p_source )
+    protected final void apply( @Nonnull final BitVector p_target, @Nonnull final BitVector p_source )
     {
         p_target.and( p_source );
     }

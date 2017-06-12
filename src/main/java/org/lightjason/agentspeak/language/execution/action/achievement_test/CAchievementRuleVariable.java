@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -40,20 +41,26 @@ import java.util.stream.Stream;
 public final class CAchievementRuleVariable extends IAchievementRule<IVariableEvaluate>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3462378724593325487L;
+
+    /**
      * ctor
      *
      * @param p_type value of the rule
      */
-    public CAchievementRuleVariable( final IVariableEvaluate p_type )
+    public CAchievementRuleVariable( @Nonnull final IVariableEvaluate p_type )
     {
         super( p_type );
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CAchievementRuleVariable.execute( p_context, m_value.evaluate( p_context ), m_value.mutex() );
+        return CAchievementRuleVariable.execute( m_value.mutex(), p_context, m_value.evaluate( p_context ) );
     }
 
     @Override
@@ -62,9 +69,10 @@ public final class CAchievementRuleVariable extends IAchievementRule<IVariableEv
         return MessageFormat.format( "${0}", m_value );
     }
 
+    @Nonnull
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return m_value.variables();
+        return m_value == null ? Stream.empty() : m_value.variables();
     }
 }

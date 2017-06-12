@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -36,6 +37,40 @@ import java.util.stream.Stream;
  */
 public interface IInspector
 {
+    /**
+     * empty insprector
+     */
+    IInspector EMPTY = new IInspector()
+    {
+        @Override
+        public final void inspectsleeping( final long p_value )
+        {}
+
+        @Override
+        public final void inspectcycle( final long p_value )
+        {}
+
+        @Override
+        public final void inspectbelief( @Nonnull final Stream<ILiteral> p_value )
+        {}
+
+        @Override
+        public final void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value )
+        {}
+
+        @Override
+        public final void inspectrules( @Nonnull final Stream<IRule> p_value )
+        {}
+
+        @Override
+        public final void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value )
+        {}
+
+        @Override
+        public final void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value )
+        {}
+    };
+
 
     /**
      * inspect sleeping value
@@ -63,27 +98,27 @@ public interface IInspector
      *
      * @param p_value plan stream
      */
-    void inspectplans( final Stream<IPlanStatistic> p_value );
+    void inspectplans( @Nonnull final Stream<IPlanStatistic> p_value );
 
     /**
      * inspect rules
      *
      * @param p_value rule stream
      */
-    void inspectrules( final Stream<IRule> p_value );
+    void inspectrules( @Nonnull final Stream<IRule> p_value );
 
     /**
      * inspect running plans
      *
      * @param p_value literal stream
      */
-    void inspectrunningplans( final Stream<ILiteral> p_value );
+    void inspectrunningplans( @Nonnull final Stream<ILiteral> p_value );
 
     /**
      * inspect storage values
      *
      * @param p_value storage values
      */
-    void inspectstorage( final Stream<? extends Map.Entry<String, ?>> p_value );
+    void inspectstorage( @Nonnull final Stream<? extends Map.Entry<String, ?>> p_value );
 
 }

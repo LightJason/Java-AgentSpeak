@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.stream.Stream;
 
@@ -44,9 +45,10 @@ public final class CValueAnnotation<T> extends IBaseAnnotation<T>
      * ctor
      *
      * @param p_type type
+     * @param p_name name of the annotation
      * @param p_data number
      */
-    public CValueAnnotation( final EType p_type, final String p_name, final T p_data )
+    public CValueAnnotation( @Nonnull final EType p_type, @Nonnull final String p_name, final T p_data )
     {
         super( p_type, p_data );
         m_name = p_name;
@@ -70,6 +72,7 @@ public final class CValueAnnotation<T> extends IBaseAnnotation<T>
         return ( p_object != null ) && ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

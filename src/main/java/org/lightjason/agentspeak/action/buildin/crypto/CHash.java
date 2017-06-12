@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -62,6 +63,10 @@ import java.util.Locale;
  */
 public final class CHash extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4638666396527392307L;
 
     @Override
     public final int minimalArgumentNumber()
@@ -69,13 +74,15 @@ public final class CHash extends IBuildinAction
         return 2;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         CCommon.flatcollection( p_argument )
                .skip( 1 )
-               .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), serialize( i, p_context ) ) )
+               .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), serialize( p_context, i ) ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
@@ -86,13 +93,13 @@ public final class CHash extends IBuildinAction
     /**
      * serialize data
      *
-     * @param p_object term object
      * @param p_context execution context
+     * @param p_object term object
      * @return serialized bytes
      *
      * @note strings will be serialized always with utf-8 encoding, so comparing with md5sum is possible
      */
-    private static byte[] serialize( final ITerm p_object, final IContext p_context )
+    private static byte[] serialize( @Nonnull final IContext p_context, @Nonnull final ITerm p_object )
     {
         try
         {
@@ -114,7 +121,7 @@ public final class CHash extends IBuildinAction
      * @param p_data byte data representation
      * @return hash value
      */
-    private static String hash( final IContext p_context, final String p_algorithm, final byte[] p_data )
+    private static String hash( @Nonnull final IContext p_context, @Nonnull final String p_algorithm, @Nonnull final byte[] p_data )
     {
         switch ( p_algorithm.trim().toLowerCase( Locale.ROOT ) )
         {

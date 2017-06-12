@@ -26,6 +26,9 @@ package org.lightjason.agentspeak.action.buildin.collection.multimap;
 import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.action.buildin.collection.IMapApplySingle;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * adds an single element to multiple multimap arguments.
@@ -37,9 +40,13 @@ import org.lightjason.agentspeak.action.buildin.collection.IMapApplySingle;
  */
 public final class CPutSingle extends IMapApplySingle<Multimap<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7300831158175726919L;
 
     @Override
-    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final Object p_value )
+    protected final void apply( @Nonnull final Multimap<Object, Object> p_instance, @Nonnull final Object p_key, @Nullable final Object p_value )
     {
         p_instance.put( p_key, p_value );
     }

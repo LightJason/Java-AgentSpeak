@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -226,6 +227,10 @@ public final class TestCAgentExecution extends IBaseTest
      */
     private final class CStop extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 5466369414656444520L;
 
         @Override
         public final IPath name()
@@ -240,8 +245,8 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
             return CFuzzyValue.from( true );
@@ -253,6 +258,11 @@ public final class TestCAgentExecution extends IBaseTest
      */
     private final class CLog extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 4536335097194230205L;
+
         @Override
         public final IPath name()
         {
@@ -266,8 +276,8 @@ public final class TestCAgentExecution extends IBaseTest
         }
 
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_log.put( p_context.agent().cycle(), p_argument.get( 0 ).<String>raw()  );
             return CFuzzyValue.from( true );

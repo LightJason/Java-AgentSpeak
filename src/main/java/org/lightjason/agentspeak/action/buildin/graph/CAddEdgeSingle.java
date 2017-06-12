@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.graph;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -40,6 +41,10 @@ import java.util.List;
  */
 public final class CAddEdgeSingle extends IApplySingle
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1893938682357853616L;
 
     @Override
     protected final int skipsize()
@@ -48,7 +53,8 @@ public final class CAddEdgeSingle extends IApplySingle
     }
 
     @Override
-    protected final void apply( final boolean p_parallel, final Graph<Object, Object> p_graph, final List<ITerm> p_window, final List<ITerm> p_return )
+    protected final void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                                @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_graph.addEdge( p_window.get( 0 ).raw(), p_window.get( 1 ).raw(), p_window.get( 2 ).raw(), p_graph.getDefaultEdgeType() );
     }

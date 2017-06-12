@@ -28,6 +28,7 @@ import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.Graph;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -48,9 +49,14 @@ import java.util.List;
  */
 public final class CShortestPath extends IApplyPathAlgorithm
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4312684868579937853L;
 
     @Override
-    protected final Object apply( final List<ITerm> p_vertices, final Graph<Object, Object> p_graph, final Function<Object, Number> p_weightfunction )
+    protected final Object apply( @Nonnull final List<ITerm> p_vertices, @Nonnull final Graph<Object, Object> p_graph,
+                                  @Nonnull final Function<Object, Number> p_weightfunction )
     {
         return new DijkstraShortestPath<>( p_graph, p_weightfunction )
                                    .getPath( p_vertices.get( 0 ).raw(), p_vertices.get( 1 ).raw() );

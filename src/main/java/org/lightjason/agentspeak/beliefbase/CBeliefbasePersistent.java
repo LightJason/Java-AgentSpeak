@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -66,30 +67,34 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
         return ( p_object != null ) && ( p_object instanceof IBeliefbase<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
-    public final ILiteral add( final ILiteral p_literal )
+    public final ILiteral add( @Nonnull final ILiteral p_literal )
     {
         return m_storage.putMultiElement( p_literal.functor(), p_literal )
                ? super.add( p_literal )
                : p_literal;
     }
 
+    @Nonnull
     @Override
-    public final IView<T> add( final IView<T> p_view )
+    public final IView<T> add( @Nonnull final IView<T> p_view )
     {
         m_storage.putSingleElement( p_view.name(), p_view );
         return p_view;
     }
 
+    @Nonnull
     @Override
-    public final IView<T> remove( final IView<T> p_view )
+    public final IView<T> remove( @Nonnull final IView<T> p_view )
     {
         m_storage.removeSingleElement( this.internalremove( p_view ).name() );
         return p_view;
     }
 
+    @Nonnull
     @Override
-    public final ILiteral remove( final ILiteral p_literal )
+    public final ILiteral remove( @Nonnull final ILiteral p_literal )
     {
         return m_storage.removeMultiElement( p_literal.functor(), p_literal )
                ? super.remove( p_literal )
@@ -97,43 +102,48 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
     }
 
     @Override
-    public final boolean containsLiteral( final String p_key )
+    public final boolean containsLiteral( @Nonnull final String p_key )
     {
         return m_storage.containsMultiElement( p_key );
     }
 
     @Override
-    public final boolean containsView( final String p_key )
+    public final boolean containsView( @Nonnull final String p_key )
     {
         return m_storage.containsSingleElement( p_key );
     }
 
+    @Nonnull
     @Override
-    public final IView<T> view( final String p_key )
+    public final IView<T> view( @Nonnull final String p_key )
     {
         return m_storage.getSingleElement( p_key );
     }
 
+    @Nonnull
     @Override
-    public final IView<T> viewOrDefault( final String p_key, final IView<T> p_default )
+    public final IView<T> viewOrDefault( @Nonnull final String p_key, @Nullable final IView<T> p_default )
     {
         return m_storage.getSingleElementOrDefault( p_key, p_default );
     }
 
+    @Nonnull
     @Override
-    public final Collection<ILiteral> literal( final String p_key )
+    public final Collection<ILiteral> literal( @Nonnull final String p_key )
     {
         return m_storage.getMultiElement( p_key );
     }
 
+    @Nonnull
     @Override
-    public final T update( final T p_agent )
+    public final T update( @Nonnull final T p_agent )
     {
         super.update( p_agent );
         m_storage.streamSingleElements().parallel().forEach( i -> i.update( p_agent ) );
         return m_storage.update( p_agent );
     }
 
+    @Nonnull
     @Override
     public final IBeliefbase<T> clear()
     {
@@ -161,8 +171,9 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
         return m_storage.size() + m_storage.streamSingleElements().parallel().mapToInt( IStructure::size ).sum();
     }
 
+    @Nonnull
     @Override
-    public final Stream<ITrigger> trigger( final IView<T> p_view )
+    public final Stream<ITrigger> trigger( @Nonnull final IView<T> p_view )
     {
         return Stream.concat(
             super.trigger( p_view ).parallel(),
@@ -170,12 +181,14 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
         );
     }
 
+    @Nonnull
     @Override
     public final Stream<ILiteral> streamLiteral()
     {
         return m_storage.streamMultiElements();
     }
 
+    @Nonnull
     @Override
     public final Stream<IView<T>> streamView()
     {

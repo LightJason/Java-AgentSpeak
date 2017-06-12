@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 
@@ -36,6 +37,10 @@ import java.util.Locale;
  */
 public abstract class IConstraint extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1078912058401537801L;
 
     /**
      * ctor
@@ -51,7 +56,8 @@ public abstract class IConstraint extends IBuildinAction
      * @param p_symbol string symbol
      * @return relationship
      */
-    protected final Relationship getRelation( final String p_symbol )
+    @Nonnull
+    protected final Relationship getRelation( @Nonnull final String p_symbol )
     {
         switch ( p_symbol.trim().toLowerCase( Locale.ROOT ) )
         {

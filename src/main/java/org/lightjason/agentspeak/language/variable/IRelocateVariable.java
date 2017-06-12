@@ -24,6 +24,9 @@
 package org.lightjason.agentspeak.language.variable;
 
 
+import javax.annotation.Nonnull;
+
+
 /**
  * interface for relocated variables (linkage
  * between two variables for transfering the value)
@@ -38,6 +41,7 @@ public interface IRelocateVariable
      *
      * @return relocated variable
      */
+    @Nonnull
     IVariable<?> relocate();
 
 }

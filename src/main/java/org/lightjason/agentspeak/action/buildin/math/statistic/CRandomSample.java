@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +51,10 @@ import java.util.stream.Stream;
  */
 public final class CRandomSample extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1823216973305374276L;
 
     /**
      * ctor
@@ -65,9 +70,10 @@ public final class CRandomSample extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
@@ -93,7 +99,8 @@ public final class CRandomSample extends IBuildinAction
      * @param p_parallel parallel flag
      * @return term with data
      */
-    private static ITerm samples( final AbstractRealDistribution p_distribution, final int p_size, final boolean p_parallel )
+    @Nonnull
+    private static ITerm samples( @Nonnull final AbstractRealDistribution p_distribution, final int p_size, final boolean p_parallel )
     {
         if ( p_size < 2 )
             return CRawTerm.from( p_distribution.sample() );

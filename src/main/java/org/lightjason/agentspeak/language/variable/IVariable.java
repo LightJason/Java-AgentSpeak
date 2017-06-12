@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.language.variable;
 import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * variable defintion
@@ -41,6 +43,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @param p_value value
      * @return the object itself
      */
+    @Nonnull
     IVariable<T> set( final T p_value );
 
     /**
@@ -71,6 +74,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      *
      * @throws IllegalStateException on non-allocated
      */
+    @Nonnull
     IVariable<T> throwNotAllocated() throws IllegalStateException;
 
     /**
@@ -91,6 +95,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      *
      * @throws IllegalArgumentException on assignable error
      */
+    @Nonnull
     IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

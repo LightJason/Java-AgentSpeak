@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.AbstractMap;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ import java.util.Map;
  */
 public final class CParseLiteral extends IParse
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -619484136191200817L;
 
     /**
      * parses the input string
@@ -48,7 +53,8 @@ public final class CParseLiteral extends IParse
      * @param p_value string value
      * @return tuple with boolean (for parsing error) and term
      */
-    protected final Map.Entry<Boolean, ITerm> parse( final String p_value )
+    @Nonnull
+    protected final Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
     {
         try
         {

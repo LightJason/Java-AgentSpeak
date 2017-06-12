@@ -183,10 +183,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-                null,
-                false,
-                p_input.getLeft(),
-                l_return
+            false, null,
+            p_input.getLeft(),
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -204,10 +203,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 2, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -226,10 +224,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToVector().execute(
-                null,
-                false,
-                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -253,10 +250,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumn().execute(
-                null,
-                false,
-                Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -278,10 +274,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRow().execute(
-                null,
-                false,
-                Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -303,10 +298,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNumericValue().execute(
-                null,
-                false,
-                Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX1, 1, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
@@ -321,10 +315,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CBoolValue().execute(
-                null,
-                false,
-                Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2, 0, 0 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.get( 0 ).<Boolean>raw(), false );
@@ -340,10 +333,9 @@ public class TestCActionMathBitMatrix extends IBaseTest
         final Double[][] l_result = {{0.0, 1.0}, {1.0, 1.0}};
 
         new CToBlas().execute(
-                null,
-                false,
-                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );

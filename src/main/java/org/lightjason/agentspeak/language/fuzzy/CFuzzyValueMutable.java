@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.language.fuzzy;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 
@@ -48,7 +50,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      *
      * @param p_value value
      */
-    public CFuzzyValueMutable( final T p_value )
+    public CFuzzyValueMutable( @Nonnull final T p_value )
     {
         this( p_value, 1 );
     }
@@ -58,7 +60,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      *
      * @param p_value fuzzy value
      */
-    public CFuzzyValueMutable( final IFuzzyValue<T> p_value )
+    public CFuzzyValueMutable( @Nonnull final IFuzzyValue<T> p_value )
     {
         m_value = p_value.value();
         m_fuzzy = p_value.fuzzy();
@@ -70,7 +72,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      * @param p_value value
      * @param p_fuzzy fuzzy value
      */
-    public CFuzzyValueMutable( final T p_value, final double p_fuzzy )
+    public CFuzzyValueMutable( @Nonnull final T p_value, final double p_fuzzy )
     {
         if ( !( ( p_fuzzy >= 0 ) && ( p_fuzzy <= 1 ) ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "fuzzyvalue", p_value ) );
@@ -79,13 +81,15 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
         m_fuzzy = p_fuzzy;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValueMutable<T> value( final T p_value )
+    public final IFuzzyValueMutable<T> value( @Nullable final T p_value )
     {
         m_value = p_value;
         return this;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValueMutable<T> fuzzy( final double p_value )
     {
@@ -95,12 +99,14 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
         return this;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValue<T> immutable()
     {
         return CFuzzyValue.<T>from( m_value, m_fuzzy );
     }
 
+    @Nonnull
     @Override
     public final T value()
     {
@@ -116,7 +122,7 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     @Override
     public final boolean valueAssignableTo( final Class<?>... p_class )
     {
-        return m_value == null || Arrays.stream( p_class ).map( i -> i.isAssignableFrom( m_value.getClass() ) ).anyMatch( i -> i );
+        return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     /**
@@ -127,7 +133,8 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      *
      * @tparam N fuzzy type
      */
-    public static <N> IFuzzyValueMutable<N> from( final N p_value )
+    @Nonnull
+    public static <N> IFuzzyValueMutable<N> from( @Nonnull final N p_value )
     {
         return new CFuzzyValueMutable<>( p_value );
     }
@@ -141,7 +148,8 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
      *
      * @tparam N fuzzy type
      */
-    public static <N> IFuzzyValueMutable<N> from( final N p_value, final double p_fuzzy )
+    @Nonnull
+    public static <N> IFuzzyValueMutable<N> from( @Nonnull final N p_value, final double p_fuzzy )
     {
         return new CFuzzyValueMutable<>( p_value, p_fuzzy );
     }

@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -53,6 +54,11 @@ import java.util.List;
  */
 public final class CDiagonal extends IAlgebra
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3604474410543673614L;
+
     @Override
     public final int minimalArgumentNumber()
     {
@@ -60,8 +66,8 @@ public final class CDiagonal extends IAlgebra
     }
 
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final EType l_type = CCommon.flatcollection( p_argument )
                                     .parallel()
@@ -89,7 +95,8 @@ public final class CDiagonal extends IAlgebra
      * @param p_type type of the matrix
      * @return identity
      */
-    private static DoubleMatrix2D generate( final DoubleMatrix1D p_elements, final EType p_type )
+    @Nonnull
+    private static DoubleMatrix2D generate( @Nonnull final DoubleMatrix1D p_elements, @Nonnull final EType p_type )
     {
         switch ( p_type )
         {

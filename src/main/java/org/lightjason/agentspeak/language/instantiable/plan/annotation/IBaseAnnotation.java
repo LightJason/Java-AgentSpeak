@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 
@@ -48,18 +50,20 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
      * @param p_type type
      * @param p_value data
      */
-    protected IBaseAnnotation( final EType p_type, final T p_value )
+    protected IBaseAnnotation( @Nonnull final EType p_type, @Nullable final T p_value )
     {
         m_value = p_value;
         m_type = p_type;
     }
 
+    @Nonnull
     @Override
     public final EType id()
     {
         return m_type;
     }
 
+    @Nullable
     @Override
     @SuppressWarnings( "unchecked" )
     public final <N> N value()

@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.datetime;
 
 
+import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
@@ -42,15 +43,21 @@ import java.util.stream.Stream;
  */
 public final class CApplyNanoSeconds extends IPlusMinus
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6372470747556969039L;
 
+    @Nonnull
     @Override
-    protected final Stream<?> applyminus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected final Stream<?> applyminus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.minusNanos( p_value ) );
     }
 
+    @Nonnull
     @Override
-    protected final Stream<?> applyplus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected final Stream<?> applyplus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.plusNanos( p_value ) );
     }

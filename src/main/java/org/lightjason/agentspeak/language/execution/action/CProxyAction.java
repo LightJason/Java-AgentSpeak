@@ -23,9 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.Multiset;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.common.IPath;
@@ -39,6 +36,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,13 +54,13 @@ import java.util.stream.Stream;
 public final class CProxyAction implements IExecution
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4799005052331053271L;
+    /**
      * execution
      */
     private final IExecution m_execution;
-    /**
-     * cache list of all used actions for calculating score value
-     */
-    private final Multiset<IAction> m_scoringcache;
 
     /**
      * ctor
@@ -70,22 +68,21 @@ public final class CProxyAction implements IExecution
      * @param p_actions actions definition
      * @param p_literal literal
      */
-    public CProxyAction( final Map<IPath, IAction> p_actions, final ILiteral p_literal )
+    public CProxyAction( @Nonnull final Map<IPath, IAction> p_actions, @Nonnull final ILiteral p_literal )
     {
-        // create cache for scoring action and define action
-        final Multiset<IAction> l_scoringcache = HashMultiset.create();
-        m_execution = new CActionWrapper( p_literal, p_actions, l_scoringcache );
-
-        // scoring set is created so build-up to an unmodifieable set
-        m_scoringcache = ImmutableMultiset.copyOf( l_scoringcache );
+        m_execution = new CActionWrapper( p_literal, p_actions );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        return m_execution.execute( p_context, p_parallel, p_argument, p_return );
+        return m_execution.execute( p_parallel, p_context, p_argument, p_return );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
@@ -104,6 +101,10 @@ public final class CProxyAction implements IExecution
     private static class CTermWrapper<T extends ITerm> implements IExecution
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6984535096829821628L;
+        /**
          * term value
          */
         private final T m_value;
@@ -113,7 +114,7 @@ public final class CProxyAction implements IExecution
          *
          * @param p_value any static term
          */
-        CTermWrapper( final T p_value )
+        CTermWrapper( @Nonnull final T p_value )
         {
             m_value = p_value;
         }
@@ -136,14 +137,17 @@ public final class CProxyAction implements IExecution
             return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
         }
 
+        @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel,
-                                                   final List<ITerm> p_argument, final List<ITerm> p_return )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        )
         {
             p_return.add( m_value );
             return CFuzzyValue.from( true );
         }
 
+        @Nonnull
         @Override
         public final Stream<IVariable<?>> variables()
         {
@@ -156,6 +160,7 @@ public final class CProxyAction implements IExecution
          * @param p_value term type
          * @return variable set (empty)
          */
+        @Nonnull
         private Stream<IVariable<?>> getVariableSet( final T p_value )
         {
             return Stream.<IVariable<?>>empty();
@@ -169,6 +174,10 @@ public final class CProxyAction implements IExecution
      */
     private static class CActionWrapper implements IExecution
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 5531271525053969711L;
         /**
          * parallel execution flag
          */
@@ -189,9 +198,8 @@ public final class CProxyAction implements IExecution
          *
          * @param p_literal action literal
          * @param p_actions actions
-         * @param p_scorecache score cache
          */
-        CActionWrapper( final ILiteral p_literal, final Map<IPath, IAction> p_actions, final Multiset<IAction> p_scorecache )
+        CActionWrapper( @Nonnull final ILiteral p_literal, @Nonnull final Map<IPath, IAction> p_actions )
         {
             // check parallel and inner execution
             m_parallel = p_literal.hasAt();
@@ -207,11 +215,8 @@ public final class CProxyAction implements IExecution
                 throw new CIllegalArgumentException(
                     org.lightjason.agentspeak.common.CCommon.languagestring( this, "argumentnumber", p_literal, m_action.minimalArgumentNumber() ) );
 
-            p_scorecache.add( m_action );
-
             // resolve action arguments
-            m_arguments = Collections.unmodifiableMap(
-                this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions, p_scorecache ) );
+            m_arguments = Collections.unmodifiableMap( this.createSubExecutions( p_literal.orderedvalues().collect( Collectors.toList() ), p_actions ) );
         }
 
         @Override
@@ -232,16 +237,20 @@ public final class CProxyAction implements IExecution
             return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
         }
 
+        @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        )
         {
             return m_action.execute(
-                p_context, m_parallel,
+                m_parallel, p_context,
                 this.subexecute( p_context, m_arguments ),
                 p_return
             );
         }
 
+        @Nonnull
         @Override
         public final Stream<IVariable<?>> variables()
         {
@@ -253,13 +262,12 @@ public final class CProxyAction implements IExecution
          *
          * @param p_elements collection with literal elements (term- / literal list of attributes & annotations)
          * @param p_actions map with actions
-         * @param p_scorecache store cache
          * @return ordered execution structure
          */
+        @Nonnull
         @SuppressWarnings( "unchecked" )
-        private Map<Integer, IExecution> createSubExecutions( final Collection<? extends ITerm> p_elements, final Map<IPath, IAction> p_actions,
-                                                              final Multiset<IAction> p_scorecache
-        )
+        private Map<Integer, IExecution> createSubExecutions( @Nonnull final Collection<? extends ITerm> p_elements,
+                                                              @Nonnull final Map<IPath, IAction> p_actions )
         {
             // convert collection to list and build map with indices
             final List<? extends ITerm> l_elements = new LinkedList<>( p_elements );
@@ -271,7 +279,7 @@ public final class CProxyAction implements IExecution
                                     i -> {
                                         final ITerm l_term = l_elements.get( i );
                                         return l_term instanceof ILiteral
-                                               ? new CActionWrapper( (ILiteral) l_term, p_actions, p_scorecache )
+                                               ? new CActionWrapper( (ILiteral) l_term, p_actions )
                                                : new CTermWrapper<>( l_term );
                                     }
                                 )
@@ -285,8 +293,9 @@ public final class CProxyAction implements IExecution
          * @param p_execution map with execution elements
          * @return return arguments of execution (flat list)
          */
+        @Nonnull
         @SuppressWarnings( "unchecked" )
-        private List<ITerm> subexecute( final IContext p_context, final Map<Integer, IExecution> p_execution )
+        private List<ITerm> subexecute( @Nonnull final IContext p_context, @Nonnull final Map<Integer, IExecution> p_execution )
         {
             return Collections.unmodifiableList( CCommon.replaceFromContext(
                 p_context,
@@ -294,7 +303,7 @@ public final class CProxyAction implements IExecution
                     .flatMap( i -> {
 
                         final List<ITerm> l_return = new LinkedList<>();
-                        i.getValue().execute( p_context, m_parallel, Collections.emptyList(), l_return );
+                        i.getValue().execute( m_parallel, p_context, Collections.emptyList(), l_return );
                         return l_return.stream();
 
                     } ).collect( Collectors.toList() )

@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 
 import cern.colt.bitvector.BitMatrix;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * performs the logical xor operation to all bit matrices.
@@ -37,9 +39,13 @@ import cern.colt.bitvector.BitMatrix;
  */
 public final class CXor extends IOperator
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1472108124053352992L;
 
     @Override
-    protected final void apply( final BitMatrix p_target, final BitMatrix p_source )
+    protected final void apply( @Nonnull final BitMatrix p_target, @Nonnull final BitMatrix p_source )
     {
         p_target.xor( p_source );
     }

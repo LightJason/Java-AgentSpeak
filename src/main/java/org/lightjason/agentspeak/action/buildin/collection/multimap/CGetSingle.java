@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.action.buildin.collection.IMapGetSingle;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,9 +44,14 @@ import java.util.List;
  */
 public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2277559384526092314L;
 
     @Override
-    protected final void apply( final Multimap<Object, Object> p_instance, final Object p_key, final boolean p_parallel, final List<ITerm> p_return )
+    protected final void apply( final boolean p_parallel, @Nonnull final Multimap<Object, Object> p_instance,
+                                @Nonnull final Object p_key, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.from(

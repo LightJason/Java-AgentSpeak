@@ -61,38 +61,33 @@ public final class TestCActionMathInterpolate extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( "linear", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "linear", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( "divideddifference", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "divideddifference", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( "neville", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "neville", 2, 3, 8, 11, 13, 20 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( "akima", 42, 65, 78, 87, 100, 150, 41, 63, 82, 98, 110, 200 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "akima", 42, 65, 78, 87, 100, 150, 41, 63, 82, 98, 110, 200 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( "loess", 42, 65, 78, 87, 100, 150, 300, 400, 500, 41, 63, 82, 98, 110, 200, 400, 600, 800 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "loess", 42, 65, 78, 87, 100, 150, 300, 400, 500, 41, 63, 82, 98, 110, 200, 400, 600, 800 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 5 );
@@ -112,12 +107,11 @@ public final class TestCActionMathInterpolate extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSingleInterpolate().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ), 3, 4
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
         Assert.assertEquals( l_return.size(), 2 );
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 11.0 );
@@ -133,14 +127,13 @@ public final class TestCActionMathInterpolate extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CMultipleInterpolate().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     5,
                     new LinearInterpolator().interpolate( new double[]{3, 6}, new double[]{11, 13} ),
                     new NevilleInterpolator().interpolate( new double[]{2, 3, 8}, new double[]{11, 13, 20} )
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );

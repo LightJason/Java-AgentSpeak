@@ -27,12 +27,13 @@ import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.Serializable;
 
 
 /**
  * term interface
  */
-public interface ITerm extends IDeepCopy<ITerm>
+public interface ITerm extends Serializable, IDeepCopy<ITerm>
 {
 
     /**

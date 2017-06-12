@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +44,10 @@ import java.util.List;
  */
 public final class CUnary extends IBaseUnary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5203681823131507779L;
 
     /**
      * ctor
@@ -50,19 +55,20 @@ public final class CUnary extends IBaseUnary
      * @param p_operator operator
      * @param p_expression expression
      */
-    public CUnary( final EOperator p_operator, final IExpression p_expression )
+    public CUnary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_expression )
     {
         super( p_operator, p_expression );
         if ( !m_operator.isLogical() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument ).value() )
+        if ( ( !m_expression.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value() )
              || ( l_argument.size() != 1 ) )
             return CFuzzyValue.from( false );
 

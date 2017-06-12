@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,6 +43,10 @@ import java.util.List;
  */
 public final class CPower extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2301458658803978160L;
 
     /**
      * ctor
@@ -50,21 +55,20 @@ public final class CPower extends IBaseBinary
      * @param p_lefthandside left-hand-side argument
      * @param p_righthandside right-hand-side
      */
-    public CPower( final EOperator p_operator, final IExpression p_lefthandside,
-                   final IExpression p_righthandside
-    )
+    public CPower( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_lefthandside, @Nonnull final IExpression p_righthandside )
     {
         super( p_operator, p_lefthandside, p_righthandside );
         if ( !m_operator.isPower() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !this.executearguments( p_context, p_parallel, l_argument ) )
+        if ( !this.executearguments( p_parallel, p_context, l_argument ) )
             return CFuzzyValue.from( false );
 
 

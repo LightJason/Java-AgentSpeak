@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action.buildin.math.bit.matrix;
 import cern.colt.bitvector.BitMatrix;
 import cern.colt.bitvector.BitVector;
 
+import javax.annotation.Nonnull;
 import java.util.stream.IntStream;
 
 
@@ -39,9 +40,14 @@ import java.util.stream.IntStream;
  */
 public final class CColumn extends IRowColumn
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -6865043145578397469L;
 
+    @Nonnull
     @Override
-    protected final BitVector extract( final BitMatrix p_matrix, final int p_index )
+    protected final BitVector extract( @Nonnull final BitMatrix p_matrix, final int p_index )
     {
         final BitVector l_result = new BitVector( p_matrix.rows() );
         IntStream.range( 0, p_matrix.rows() )

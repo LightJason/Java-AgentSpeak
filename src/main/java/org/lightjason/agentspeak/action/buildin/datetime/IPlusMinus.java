@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -46,11 +47,15 @@ import java.util.stream.Stream;
 public abstract class IPlusMinus extends IBuildinAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1831239783507142327L;
+
+    /**
      * ctor
      */
     protected IPlusMinus()
-    {
-    }
+    {}
 
     @Override
     public final int minimalArgumentNumber()
@@ -58,9 +63,10 @@ public abstract class IPlusMinus extends IBuildinAction
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
 
@@ -106,7 +112,8 @@ public abstract class IPlusMinus extends IBuildinAction
      * @param p_value value
      * @return return object stream
      */
-    protected abstract Stream<?> applyminus( final Stream<ZonedDateTime> p_datetime, final long p_value );
+    @Nonnull
+    protected abstract Stream<?> applyminus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value );
 
     /**
      * apply function for minus operator
@@ -115,6 +122,7 @@ public abstract class IPlusMinus extends IBuildinAction
      * @param p_value value
      * @return return object stream
      */
-    protected abstract Stream<?> applyplus( final Stream<ZonedDateTime> p_datetime, final long p_value );
+    @Nonnull
+    protected abstract Stream<?> applyplus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value );
 
 }

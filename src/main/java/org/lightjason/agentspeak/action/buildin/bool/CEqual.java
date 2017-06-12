@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -52,6 +53,10 @@ import java.util.stream.Stream;
  */
 public class CEqual extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2953614515361905328L;
 
     @Override
     public final int minimalArgumentNumber()
@@ -59,8 +64,11 @@ public class CEqual extends IBuildinAction
         return 2;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         if ( CCommon.rawvalueAssignableTo( p_argument.get( 0 ), Collection.class ) )
             return this.pack(
@@ -124,7 +132,7 @@ public class CEqual extends IBuildinAction
      * @param p_stream boolean input stream
      * @return boolean flag
      */
-    private IFuzzyValue<Boolean> pack( final List<ITerm> p_return, final Stream<Boolean> p_stream )
+    private IFuzzyValue<Boolean> pack( @Nonnull final List<ITerm> p_return, @Nonnull final Stream<Boolean> p_stream )
     {
         p_stream.map( this::apply )
                 .map( CRawTerm::from )
@@ -140,7 +148,7 @@ public class CEqual extends IBuildinAction
      * @param p_target object to compare
      * @return equality boolean flag
      */
-    private static boolean equalobject( final Object p_source, final Object p_target )
+    private static boolean equalobject( @Nonnull final Object p_source, @Nonnull final Object p_target )
     {
         return p_source.equals( p_target );
     }
@@ -153,7 +161,7 @@ public class CEqual extends IBuildinAction
      * @param p_target collection to compare
      * @return equality boolean flag
      */
-    private static boolean equalcollection( final Object[] p_source, final Collection<?> p_target )
+    private static boolean equalcollection( @Nonnull final Object[] p_source, @Nonnull final Collection<?> p_target )
     {
         return Arrays.equals( p_source, p_target.toArray() );
     }
@@ -166,7 +174,7 @@ public class CEqual extends IBuildinAction
      * @param p_target map to compare
      * @return equality boolean flag
      */
-    private static boolean equalmap( final Map<?, ?> p_source, final Map<?, ?> p_target )
+    private static boolean equalmap( @Nonnull final Map<?, ?> p_source, @Nonnull final Map<?, ?> p_target )
     {
         return Arrays.equals( p_source.keySet().toArray(), p_target.keySet().toArray() )
                && Arrays.equals( p_source.values().toArray(), p_target.values().toArray() );
@@ -180,7 +188,7 @@ public class CEqual extends IBuildinAction
      * @param p_target multimap to compare
      * @return equality boolean flag
      */
-    private static boolean equalmultimap( final Multimap<?, ?> p_source, final Multimap<?, ?> p_target )
+    private static boolean equalmultimap( @Nonnull final Multimap<?, ?> p_source, @Nonnull final Multimap<?, ?> p_target )
     {
         return Arrays.equals( p_source.asMap().keySet().toArray(), p_target.asMap().keySet().toArray() )
                && Arrays.equals( p_source.values().toArray(), p_target.values().toArray() );

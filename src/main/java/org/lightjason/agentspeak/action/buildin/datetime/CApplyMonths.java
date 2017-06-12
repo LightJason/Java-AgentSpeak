@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.buildin.datetime;
 
 
+import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
@@ -42,15 +43,21 @@ import java.util.stream.Stream;
  */
 public final class CApplyMonths extends IPlusMinus
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7832801991688710533L;
 
+    @Nonnull
     @Override
-    protected final Stream<?> applyminus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected final Stream<?> applyminus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.minusMonths( p_value ) );
     }
 
+    @Nonnull
     @Override
-    protected final Stream<?> applyplus( final Stream<ZonedDateTime> p_datetime, final long p_value )
+    protected final Stream<?> applyplus( @Nonnull final Stream<ZonedDateTime> p_datetime, final long p_value )
     {
         return p_datetime.map( i -> i.plusMonths( p_value ) );
     }

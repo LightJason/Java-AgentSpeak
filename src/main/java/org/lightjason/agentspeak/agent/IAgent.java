@@ -23,20 +23,25 @@
 
 package org.lightjason.agentspeak.agent;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
@@ -49,6 +54,157 @@ import java.util.stream.Stream;
  */
 public interface IAgent<T extends IAgent<?>> extends Callable<T>
 {
+    /**
+     * empty agent
+     */
+    IAgent<?> EMPTY = new IAgent<IAgent<?>>()
+    {
+
+        @Override
+        public final IAgent<?> call() throws Exception
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
+        {
+            return Arrays.stream( p_inspector );
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> beliefbase()
+        {
+            return IView.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Multimap<IPath, ILiteral> runningplans()
+        {
+            return ImmutableMultimap.of();
+        }
+
+        @Override
+        public final boolean sleeping()
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<IAgent<?>> sleep( final long p_cycles, @Nullable final ITerm... p_term )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<IAgent<?>> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<IAgent<?>> wakeup( @Nullable final ITerm... p_term )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<IAgent<?>> wakeup( @Nonnull final Stream<ITerm> p_term )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final Map<String, Object> storage()
+        {
+            return Collections.emptyMap();
+        }
+
+        @Nonnull
+        @Override
+        public final IUnifier unifier()
+        {
+            return IUnifier.EMPTY;
+        }
+
+        @Override
+        public final long cycletime()
+        {
+            return 0;
+        }
+
+        @Override
+        public final long cycle()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final Multimap<ITrigger, IPlanStatistic> plans()
+        {
+            return ImmutableMultimap.of();
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyBundle<Boolean, IAgent<?>> fuzzy()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final IVariableBuilder variablebuilder()
+        {
+            return IVariableBuilder.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final Multimap<IPath, IRule> rules()
+        {
+            return ImmutableMultimap.of();
+        }
+
+        @Nonnull
+        @Override
+        @SuppressWarnings( "unchecked" )
+        public final <N extends IAgent<?>> N raw()
+        {
+            return (N) this;
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null ) && ( p_object instanceof IAgent<?> ) && ( this.hashCode() == p_object.hashCode() );
+        }
+    };
+
 
     /**
      * inspector method
@@ -58,7 +214,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    <N extends IInspector> Stream<N> inspect( final N... p_inspector );
+    <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector );
 
     /**
      * trigger an event
@@ -70,7 +226,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @note the trigger is ignored iif the agent is sleeping
      */
     @Nonnull
-    IFuzzyValue<Boolean> trigger( final ITrigger p_trigger, final boolean... p_immediately );
+    IFuzzyValue<Boolean> trigger( @Nonnull final ITrigger p_trigger, @Nullable final boolean... p_immediately );
 
     /**
      * returns the beliefbase
@@ -103,7 +259,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> sleep( final long p_cycles, final ITerm... p_term );
+    IAgent<T> sleep( final long p_cycles, @Nullable final ITerm... p_term );
 
     /**
      * pushs the agent into sleeping state
@@ -113,7 +269,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> sleep( final long p_cycles, final Stream<ITerm> p_term );
+    IAgent<T> sleep( final long p_cycles, @Nonnull final Stream<ITerm> p_term );
 
     /**
      * wake-up the agent by generating wakeup-goal
@@ -122,7 +278,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> wakeup( final ITerm... p_term );
+    IAgent<T> wakeup( @Nullable final ITerm... p_term );
 
     /**
      * wake-up the agent by generating wakeup-goal
@@ -179,7 +335,7 @@ public interface IAgent<T extends IAgent<?>> extends Callable<T>
      * @return operator
      */
     @Nonnull
-    IFuzzy<Boolean, T> fuzzy();
+    IFuzzyBundle<Boolean, T> fuzzy();
 
     /**
      * returns the variable builder function

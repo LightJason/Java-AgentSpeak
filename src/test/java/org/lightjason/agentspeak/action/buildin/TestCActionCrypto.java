@@ -94,8 +94,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         Assert.assertFalse(
             new CEncrypt().execute(
-                null,
-                false,
+                false, null,
                 Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -104,8 +103,7 @@ public final class TestCActionCrypto extends IBaseTest
 
         Assert.assertFalse(
             new CDecrypt().execute(
-                null,
-                false,
+                false, null,
                 Stream.of( l_key ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -125,8 +123,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEncrypt().execute(
-            null,
-            false,
+            false, null,
             Stream.of( l_key.getLeft(), "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -134,8 +131,7 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertFalse(
             new CDecrypt().execute(
-                null,
-                false,
+                false, null,
                 Stream.of( l_key.getLeft(), l_return.get( 0 ).<String>raw() ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 l_return
             ).value()
@@ -155,10 +151,9 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CHash().execute(
-                              null,
-                              false,
-                              Stream.of( CRawTerm.from( p_hash.getLeft() ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
-                              l_return
+            false, null,
+            Stream.of( CRawTerm.from( p_hash.getLeft() ), CRawTerm.from( "test string" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertArrayEquals( l_return.stream().map( ITerm::<String>raw ).toArray( String[]::new ), p_hash.getRight() );
@@ -172,8 +167,7 @@ public final class TestCActionCrypto extends IBaseTest
     public final void hashexception()
     {
         new CHash().execute(
-            null,
-            false,
+            false, null,
             Stream.of( CRawTerm.from( "xxx" ), CRawTerm.from( 1234 ) ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -209,8 +203,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreateKey().execute(
-            null,
-            false,
+            false, null,
             Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_return
         );
@@ -228,8 +221,7 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertFalse(
 
             new CCreateKey().execute(
-                null,
-                false,
+                false, null,
                 Stream.of( CRawTerm.from( "test" ) ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
@@ -248,8 +240,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_returnkey = new ArrayList<>();
 
         new CCreateKey().execute(
-            null,
-            false,
+            false, null,
             Stream.of( CRawTerm.from( p_crypt.getLeft() ) ).collect( Collectors.toList() ),
             l_returnkey
         );
@@ -260,8 +251,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_returnencrypt = new ArrayList<>();
 
         new CEncrypt().execute(
-            null,
-            false,
+            false, null,
             Stream.of( l_returnkey.get( 0 ), CRawTerm.from( "test string" ), CRawTerm.from( 12345 ) ).collect( Collectors.toList() ),
             l_returnencrypt
         );
@@ -270,8 +260,7 @@ public final class TestCActionCrypto extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CDecrypt().execute(
-            null,
-            false,
+            false, null,
             Stream.concat( Stream.of( l_returnkey.get( p_crypt.getRight() ) ), l_returnencrypt.stream() ).collect( Collectors.toList() ),
             l_return
         );

@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -41,6 +42,10 @@ import java.util.stream.Stream;
  */
 public abstract class ISelection extends IBuildinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -365949510289020495L;
     /**
      * random instance
      */
@@ -60,9 +65,11 @@ public abstract class ISelection extends IBuildinAction
         return 2 + this.additionalArgumentNumber();
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
@@ -105,7 +112,8 @@ public abstract class ISelection extends IBuildinAction
      * @param p_argument additional arguments
      * @return list with weights
      */
-    protected abstract List<Double> weight( final List<?> p_items, final Stream<Double> p_values, final List<ITerm> p_argument );
+    @Nonnull
+    protected abstract List<Double> weight( @Nonnull final List<?> p_items, @Nonnull final Stream<Double> p_values, @Nonnull final List<ITerm> p_argument );
 
     /**
      * number of additional parameter

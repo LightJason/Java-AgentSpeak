@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,14 +51,22 @@ import java.util.List;
 public final class CPlanStatistic extends IBuildinAction
 {
 
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 432941607230785685L;
+
     @Override
     public final int minimalArgumentNumber()
     {
         return 1;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         return CFuzzyValue.from(
             CCommon.flatcollection( p_argument )
@@ -73,7 +82,7 @@ public final class CPlanStatistic extends IBuildinAction
      * @param p_return return arguments
      * @return successfull flag
      */
-    private static boolean statistic( final ITrigger p_trigger, final IAgent<?> p_agent, final List<ITerm> p_return )
+    private static boolean statistic( @Nonnull final ITrigger p_trigger, @Nonnull final IAgent<?> p_agent, @Nonnull final List<ITerm> p_return )
     {
         final Collection<IPlanStatistic> l_plans = p_agent.plans().get( p_trigger );
         if ( l_plans.isEmpty() )

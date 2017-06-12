@@ -189,10 +189,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-                null,
-                false,
-                p_input.getLeft(),
-                l_return
+            false, null,
+            p_input.getLeft(),
+            l_return
         );
 
         Assert.assertArrayEquals(
@@ -210,10 +209,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-                null,
-                false,
-                Stream.of( 2, 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 2, 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -232,10 +230,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumn().execute(
-                null,
-                false,
-                Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -255,10 +252,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRow().execute(
-                null,
-                false,
-                Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -278,10 +274,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CPower().execute(
-                null,
-                false,
-                Stream.of( 2, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 2, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -302,10 +297,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     public final void set()
     {
         new CSet().execute(
-                null,
-                false,
-                Stream.of( 0, 1, 6.0, MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
+            false, null,
+            Stream.of( 0, 1, 6.0, MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
         Assert.assertEquals( MATRIX1.get( 0, 1 ), 6, 0 );
@@ -320,10 +314,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CToList().execute(
-                null,
-                false,
-                Stream.of( MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -344,10 +337,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CTranspose().execute(
-                null,
-                false,
-                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -368,10 +360,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSubMatrix().execute(
-                null,
-                false,
-                Stream.of( 0, 0, 0, 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( 0, 0, 0, 1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -392,10 +383,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSolve().execute(
-                null,
-                false,
-                Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -416,10 +406,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
         new CAssign().execute(
-                null,
-                false,
-                Stream.of( 2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
+            false, null,
+            Stream.of( 2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Collections.emptyList()
         );
 
         Assert.assertArrayEquals( l_matrix.toArray(), new double[][]{{2.0, 2.0}, {2.0, 2.0}} );
@@ -434,8 +423,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( 2, 2 );
 
         new CAssign().execute(
-            null,
-            false,
+            false, null,
             Stream.of( MATRIX2, l_matrix ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
         );
@@ -452,10 +440,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGet().execute(
-                null,
-                false,
-                Stream.of( MATRIX2, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2, 0, 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -472,10 +459,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CParse().execute(
-                null,
-                false,
-                Stream.of( "1,2;3,4", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( "1,2;3,4", "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -495,10 +481,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CInvert().execute(
-                null,
-                false,
-                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -518,10 +503,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEigen().execute(
-                null,
-                false,
-                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -544,10 +528,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CSingularValue().execute(
-                null,
-                false,
-                Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 3 );
@@ -577,10 +560,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCopy().execute(
-                null,
-                false,
-                Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            false, null,
+            Stream.of( MATRIX1, MATRIX2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 2 );
@@ -597,9 +579,8 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CGraphLaplacian().execute(
-                null,
-                false,
-                Stream.of(
+            false, null,
+            Stream.of(
                     new SparseDoubleMatrix2D( new double[][]{
                         {0, 1, 0, 0, 1, 0},
                         {1, 0, 1, 0, 1, 0},
@@ -609,7 +590,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                         {0, 0, 0, 1, 0, 0}
                     } )
                 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                l_return
+            l_return
         );
 
         Assert.assertEquals( l_return.size(), 1 );
@@ -638,8 +619,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNormalizedGraphLaplacian().execute(
-            null,
-            false,
+            false, null,
             Stream.of(
                 new SparseDoubleMatrix2D( new double[][]{
                     {0, 1, 0, 0, 1, 0},
@@ -673,8 +653,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CRowSum().execute(
-            null,
-            false,
+            false, null,
             Stream.of(
                 new SparseDoubleMatrix2D( new double[][]{
                     {1, 0, 0, 0, 0, 0},
@@ -705,8 +684,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CColumnSum().execute(
-            null,
-            false,
+            false, null,
             Stream.of(
                 new SparseDoubleMatrix2D( new double[][]{
                     {1, 0, 0, 0, 0, 0},
@@ -738,8 +716,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CIdentity().execute(
-            null,
-            false,
+            false, null,
             Stream.of( l_size ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -769,8 +746,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final double[] l_data = new double[]{1, 3, 5, 11};
 
         new CDiagonal().execute(
-            null,
-            false,
+            false, null,
             Stream.of(
                 new DenseDoubleMatrix1D( l_data )
             ).map( CRawTerm::from ).collect( Collectors.toList() ),

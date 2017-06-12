@@ -34,6 +34,10 @@ import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
 {
     /**
+     * serial
+     */
+    private static final long serialVersionUID = -4470789276770008098L;
+    /**
      * flag to run immediately
      */
     protected final boolean m_immediately;
@@ -53,7 +57,7 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value.hashCode();
+        return m_value == null ? 0 : m_value.hashCode();
     }
 
     @Override

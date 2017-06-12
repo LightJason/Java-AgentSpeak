@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -41,6 +42,10 @@ import java.util.stream.Stream;
 public final class CProxyReturnExpression<T extends IExecution> implements IExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 8081637540101991377L;
+    /**
      * execution
      */
     private final T m_execution;
@@ -50,17 +55,19 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
      *
      * @param p_execution execution
      */
+    @Nonnull
     public CProxyReturnExpression( final T p_execution )
     {
         m_execution = p_execution;
     }
 
-
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_returnarguments = new LinkedList<>();
-        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_context, p_parallel, p_argument, l_returnarguments );
+        final IFuzzyValue<Boolean> l_return = m_execution.execute( p_parallel, p_context, p_argument, l_returnarguments );
 
         // compare returning arguments, on empty return execution result, otherwise return arguments
         if ( l_returnarguments.isEmpty() )
@@ -71,6 +78,7 @@ public final class CProxyReturnExpression<T extends IExecution> implements IExpr
         return l_return;
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

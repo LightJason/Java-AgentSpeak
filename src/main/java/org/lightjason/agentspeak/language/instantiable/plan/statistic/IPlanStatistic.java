@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.instantiable.plan.statistic;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -39,6 +40,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return plan
      */
+    @Nonnull
     IPlan plan();
 
     /**
@@ -81,6 +83,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return self reference
      */
+    @Nonnull
     IPlanStatistic incrementsuccessful();
 
     /**
@@ -88,6 +91,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return self reference
      */
+    @Nonnull
     IPlanStatistic incrementfail();
 
     /**
@@ -96,6 +100,7 @@ public interface IPlanStatistic extends Comparable<IPlanStatistic>
      *
      * @return variable stream
      */
+    @Nonnull
     Stream<IVariable<?>> variables();
 
 

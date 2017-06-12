@@ -43,6 +43,182 @@ import java.util.stream.Stream;
  */
 public interface IView<T extends IAgent<?>> extends IStructure<T>
 {
+    /**
+     * empty view
+     */
+    IView<IAgent<?>> EMPTY = new IView<IAgent<?>>()
+    {
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final Stream<IView<IAgent<?>>> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator<IAgent<?>>... p_generator )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> generate( @Nonnull final IViewGenerator<IAgent<?>> p_generator, @Nonnull final IPath... p_paths )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IView<IAgent<?>>> root()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IBeliefbase<IAgent<?>> beliefbase()
+        {
+            return IBeliefbase.EMPY;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath path()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final String name()
+        {
+            return "";
+        }
+
+        @Nullable
+        @Override
+        public final IView<IAgent<?>> parent()
+        {
+            return null;
+        }
+
+        @Override
+        public final boolean hasParent()
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ITrigger> trigger()
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> clear( @Nullable final IPath... p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> add( @Nonnull final Stream<ILiteral> p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> add( @Nonnull final ILiteral... p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final IView<IAgent<?>> add( @Nonnull final IView<IAgent<?>>... p_view )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        @SafeVarargs
+        @SuppressWarnings( "varargs" )
+        public final IView<IAgent<?>> add( @Nonnull final IPath p_path, @Nonnull final IView<IAgent<?>>... p_view
+        )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final Stream<ILiteral> p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final ILiteral... p_literal )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IView<IAgent<?>> remove( @Nonnull final IView<IAgent<?>> p_view )
+        {
+            return this;
+        }
+
+        @Override
+        public final boolean containsLiteral( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean containsView( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean empty()
+        {
+            return false;
+        }
+
+        @Override
+        public final int size()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        {
+            return p_agent;
+        }
+    };
+
 
     /**
      * streams path walking
@@ -53,7 +229,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    Stream<IView<T>> walk( final IPath p_path, final IViewGenerator<T>... p_generator );
+    Stream<IView<T>> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator<T>... p_generator );
 
     /**
      * generates path structure
@@ -63,7 +239,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> generate( final IViewGenerator<T> p_generator, final IPath... p_paths );
+    IView<T> generate( @Nonnull final IViewGenerator<T> p_generator, @Nonnull final IPath... p_paths );
 
     /**
      * returns a stream to the root node
@@ -131,7 +307,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return literal stream
      */
     @Nonnull
-    Stream<ILiteral> stream( final IPath... p_path );
+    Stream<ILiteral> stream( @Nullable final IPath... p_path );
 
     /**
      * returns stream of literal
@@ -141,7 +317,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return literal stream
      */
     @Nonnull
-    Stream<ILiteral> stream( final boolean p_negated, final IPath... p_path );
+    Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path );
 
 
 
@@ -152,7 +328,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> clear( final IPath... p_path );
+    IView<T> clear( @Nullable final IPath... p_path );
 
 
 
@@ -163,7 +339,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> add( final Stream<ILiteral> p_literal );
+    IView<T> add( @Nonnull final Stream<ILiteral> p_literal );
 
     /**
      * adds a literal in the current structure
@@ -172,7 +348,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> add( final ILiteral... p_literal );
+    IView<T> add( @Nonnull final ILiteral... p_literal );
 
     /**
      * adds view in the current structure
@@ -182,7 +358,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    IView<T> add( final IView<T>... p_view );
+    IView<T> add( @Nonnull final IView<T>... p_view );
 
     /**
      * adds view in the current structure
@@ -193,7 +369,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    IView<T> add( final IPath p_path, final IView<T>... p_view );
+    IView<T> add( @Nonnull final IPath p_path, @Nonnull final IView<T>... p_view );
 
 
 
@@ -204,7 +380,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> remove( final Stream<ILiteral> p_literal );
+    IView<T> remove( @Nonnull final Stream<ILiteral> p_literal );
 
     /**
      * removes a literal in the current structure
@@ -213,7 +389,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> remove( final ILiteral... p_literal );
+    IView<T> remove( @Nonnull final ILiteral... p_literal );
 
     /**
      * removes a view in the current structure
@@ -222,7 +398,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> remove( final IView<T> p_view );
+    IView<T> remove( @Nonnull final IView<T> p_view );
 
 
 
@@ -232,7 +408,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @param p_path path to a literal (suffix is literal name)
      * @return existance boolean
      */
-    boolean containsLiteral( final IPath p_path );
+    boolean containsLiteral( @Nonnull final IPath p_path );
 
     /**
      * view existing check
@@ -240,6 +416,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @param p_path path to a view
      * @return existance boolean
      */
-    boolean containsView( final IPath p_path );
+    boolean containsView( @Nonnull final IPath p_path );
 
 }

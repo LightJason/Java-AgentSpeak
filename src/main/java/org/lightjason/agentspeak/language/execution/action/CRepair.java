@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -40,6 +41,10 @@ import java.util.stream.Stream;
 public class CRepair extends IBaseExecution<IExecution>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7095678561033158953L;
+    /**
      * fallback execution
      */
     private final IExecution m_fallback;
@@ -50,23 +55,29 @@ public class CRepair extends IBaseExecution<IExecution>
      * @param p_value execution element
      * @param p_fallback fallback execution
      */
-    public CRepair( final IExecution p_value, final IExecution p_fallback )
+    public CRepair( @Nonnull final IExecution p_value, @Nonnull final IExecution p_fallback )
     {
         super( p_value );
         m_fallback = p_fallback;
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IFuzzyValue<Boolean> l_return = m_value.execute( p_context, p_parallel, p_argument, p_return );
-        return l_return.value() ? l_return : m_fallback.execute( p_context, p_parallel, p_argument, p_return );
+        final IFuzzyValue<Boolean> l_return = m_value.execute( p_parallel, p_context, p_argument, p_return );
+        return l_return.value() ? l_return : m_fallback.execute( p_parallel, p_context, p_argument, p_return );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat( m_value.variables(), m_fallback.variables() );
+        return Stream.concat(
+            m_value == null ? Stream.empty() : m_value.variables(),
+            m_fallback.variables()
+        );
     }
 
     @Override

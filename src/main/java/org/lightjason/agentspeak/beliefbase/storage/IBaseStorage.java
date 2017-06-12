@@ -36,7 +36,7 @@ public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorag
 
     @Nonnull
     @Override
-    public T update( final T p_agent )
+    public T update( @Nonnull final T p_agent )
     {
         return p_agent;
     }

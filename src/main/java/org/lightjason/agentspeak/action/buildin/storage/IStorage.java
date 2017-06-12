@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.action.buildin.storage;
 
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -38,7 +40,10 @@ import java.util.stream.Stream;
  */
 public abstract class IStorage extends IBuildinAction
 {
-
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2187242564778364709L;
     /**
      * set with forbidden keys
      */
@@ -50,7 +55,7 @@ public abstract class IStorage extends IBuildinAction
      * @param p_resolver resolver of forbidden keys
      * @warning resolver will be triggered in parallel
      */
-    protected IStorage( final Function<String, Boolean> p_resolver )
+    protected IStorage( @Nonnull final Function<String, Boolean> p_resolver )
     {
         m_resolver = p_resolver;
     }
@@ -60,7 +65,7 @@ public abstract class IStorage extends IBuildinAction
      *
      * @param p_forbidden forbidden keys
      */
-    protected IStorage( final String... p_forbidden )
+    protected IStorage( @Nullable final String... p_forbidden )
     {
         this(
             ( p_forbidden == null ) || ( p_forbidden.length == 0 )
@@ -74,7 +79,7 @@ public abstract class IStorage extends IBuildinAction
      *
      * @param p_fordbidden forbidden keys
      */
-    protected IStorage( final Stream<String> p_fordbidden )
+    protected IStorage( @Nonnull final Stream<String> p_fordbidden )
     {
         final Set<String> l_names = p_fordbidden.collect( Collectors.toCollection( ConcurrentSkipListSet::new ) );
         m_resolver = l_names::contains;
@@ -86,7 +91,8 @@ public abstract class IStorage extends IBuildinAction
      * @param p_keys key name stream
      * @return boolean stream with forbidden check
      */
-    public final Stream<Boolean> forbiddenkeys( final Stream<String> p_keys )
+    @Nonnull
+    public final Stream<Boolean> forbiddenkeys( @Nonnull final Stream<String> p_keys )
     {
         return p_keys.map( m_resolver );
     }
@@ -97,7 +103,8 @@ public abstract class IStorage extends IBuildinAction
      * @param p_keys keys
      * @return boolean stream with forbidden check
      */
-    public final Stream<Boolean> forbiddenkeys( final String... p_keys )
+    @Nonnull
+    public final Stream<Boolean> forbiddenkeys( @Nonnull final String... p_keys )
     {
         return this.forbiddenkeys( Arrays.stream( p_keys ) );
     }

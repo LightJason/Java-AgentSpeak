@@ -26,10 +26,12 @@ package org.lightjason.agentspeak.language.execution.action.unify;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -38,6 +40,28 @@ import java.util.Set;
  */
 public interface IUnifier
 {
+    /**
+     * empty unifier
+     */
+    IUnifier EMPTY = new IUnifier()
+    {
+        @Nonnull
+        @Override
+        public final Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
+        {
+            return Collections.emptySet();
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> unify( @Nonnull final IContext p_context, @Nonnull final ILiteral p_literal, final long p_variables,
+                                                 @Nonnull final IExpression p_expression, final boolean p_parallel )
+        {
+            return CFuzzyValue.from( false );
+        }
+    };
+
+
     /**
      * unifies a literal
      *
