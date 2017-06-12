@@ -33,6 +33,10 @@ import java.text.MessageFormat;
  */
 public final class CFormat1D extends IFormat<DoubleMatrix1D>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5588984423759143305L;
 
     @Override
     protected final Class<?> getType()

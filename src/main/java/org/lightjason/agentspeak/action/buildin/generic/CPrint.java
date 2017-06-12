@@ -33,7 +33,10 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,6 +44,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
@@ -60,7 +64,11 @@ public final class CPrint extends IBuildinAction
     /**
      * output stream
      */
-    private final PrintStream m_stream;
+    private transient PrintStream m_stream;
+    /**
+     * supplier of print stream field
+     */
+    private final ISerializableSupplier<PrintStream> m_streamsupplier;
     /**
      * argument seperator
      */
@@ -78,22 +86,36 @@ public final class CPrint extends IBuildinAction
      */
     public CPrint()
     {
-        this( "   ", System.out, new CFormat2D(), new CFormat1D() );
+        this( "   ", () -> System.out, new CFormat2D(), new CFormat1D() );
     }
 
     /**
      * ctor
      *
      * @param p_seperator argument seperator
-     * @param p_stream any byte output stream
+     * @param p_streamsupplier print stream supplier
      * @param p_formatter formatter elements
      */
-    public CPrint( @Nonnull final String p_seperator, @Nonnull final PrintStream p_stream, @Nullable final IFormatter<?>... p_formatter )
+    public CPrint( @Nonnull final String p_seperator, @Nonnull final ISerializableSupplier<PrintStream> p_streamsupplier, @Nullable final IFormatter<?>... p_formatter )
     {
         super( 2 );
-        m_stream = p_stream;
+        m_streamsupplier = p_streamsupplier;
+        m_stream = m_streamsupplier.get();
         m_seperator = p_seperator;
         m_formatter = p_formatter != null ? new HashSet<>( Arrays.asList( p_formatter ) ) : Collections.emptySet();
+    }
+
+    /**
+     * deserializable call
+     *
+     * @param p_stream object stream
+     * @throws IOException is thrown on io error
+     * @throws ClassNotFoundException is thrown on deserialization error
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+        m_stream = m_streamsupplier.get();
     }
 
     /**
@@ -149,14 +171,27 @@ public final class CPrint extends IBuildinAction
                          .collect( Collectors.joining( m_seperator ) );
     }
 
+    /**
+     * interface of a serializable supplier
+     * @tparam T supplier type
+     */
+    public interface ISerializableSupplier<T> extends Serializable, Supplier<T>
+    {
+    }
+
 
     /**
      * formating class
      *
      * @tparam any type
      */
-    public abstract static class IFormatter<T>
+    public abstract static class IFormatter<T> implements Serializable
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -4997526550642055213L;
+
         /**
          * checks if a type is assigneable
          *

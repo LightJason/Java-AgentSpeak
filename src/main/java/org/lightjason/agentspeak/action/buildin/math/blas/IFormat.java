@@ -36,6 +36,10 @@ public abstract class IFormat<T> extends CPrint.IFormatter<T>
      * formatter definition
      */
     protected static final Formatter FORMATTER;
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5600570343858338053L;
 
     static
     {

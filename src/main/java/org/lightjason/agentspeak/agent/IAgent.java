@@ -292,7 +292,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * @return agent reference
      */
     @Nonnull
-    IAgent<T> wakeup( final Stream<ITerm> p_term );
+    IAgent<T> wakeup( @Nonnull final Stream<ITerm> p_term );
 
 
     /**

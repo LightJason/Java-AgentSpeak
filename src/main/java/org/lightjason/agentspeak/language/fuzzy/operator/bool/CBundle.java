@@ -45,7 +45,7 @@ public final class CBundle<S extends IAgent<?>> extends AbstractMap.SimpleImmuta
     /**
      * serial id
      */
-    private static final transient long serialVersionUID = 646232211237092457L;
+    private static final long serialVersionUID = 646232211237092457L;
 
     /**
      * ctor

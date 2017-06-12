@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
@@ -63,7 +64,7 @@ public final class CMethodAction extends IBaseAction
     /**
      * method handle
      */
-    private final MethodHandle m_method;
+    private final transient MethodHandle m_method;
 
 
     /**
@@ -134,7 +135,8 @@ public final class CMethodAction extends IBaseAction
      * @param p_return return argument list
      * @return execution return
      */
-    private static IFuzzyValue<Boolean> returnvalues( final Object p_result, final List<ITerm> p_return )
+    @Nonnull
+    private static IFuzzyValue<Boolean> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
     {
         // void result of the execution
         if ( ( p_result == null ) || ( void.class.equals( p_result.getClass() ) ) )
