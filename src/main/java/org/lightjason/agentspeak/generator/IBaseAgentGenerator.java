@@ -27,10 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
-import org.lightjason.agentspeak.language.fuzzy.defuzzification.CCrisp;
-import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.language.unify.CUnifier;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.grammar.CParserAgent;
@@ -38,8 +35,6 @@ import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
 import org.lightjason.agentspeak.language.unify.IUnifier;
-import org.lightjason.agentspeak.language.fuzzy.operator.bool.CComplement;
-import org.lightjason.agentspeak.language.fuzzy.operator.bool.CIntersection;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
@@ -62,14 +57,6 @@ import java.util.stream.Stream;
 @SuppressFBWarnings( "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" )
 public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
-    /**
-     * default unification
-     */
-    protected static final IUnifier DEFAULTUNIFIER = new CUnifier();
-    /**
-     * default fuzzy bundle
-     */
-    protected final IFuzzyBundle<Boolean, T> m_defaultfuzzybundle = new CBundle<>( new CIntersection(), new CCrisp<>( new CComplement() ) );
     /**
      * configuration of an agent
      */
@@ -117,7 +104,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
         m_configuration = this.configuration(
-            m_defaultfuzzybundle,
+            DEFAULTFUZZYBUNDLE,
 
             Stream.concat(
                 l_visitor.initialbeliefs().stream(),
@@ -147,7 +134,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @return configuration object
      */
-    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                                     @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                                     @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
                                                     @Nonnull final IVariableBuilder p_variablebuilder )

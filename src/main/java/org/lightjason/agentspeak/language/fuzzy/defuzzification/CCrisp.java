@@ -27,6 +27,9 @@ import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyComplement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * defuzzification to a crisp value
@@ -34,7 +37,7 @@ import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyComplement;
  * @tparam T fuzzy type
  * @tparam S agent type
  */
-public class CCrisp<T, S extends IAgent<?>> implements IDefuzzification<T, S>
+public class CCrisp<T> implements IDefuzzification<T>
 {
 
     /**
@@ -47,20 +50,22 @@ public class CCrisp<T, S extends IAgent<?>> implements IDefuzzification<T, S>
      *
      * @param p_complement fuzzy complement operator
      */
-    public CCrisp( final IFuzzyComplement<T> p_complement )
+    public CCrisp( @Nonnull final IFuzzyComplement<T> p_complement )
     {
         m_complement = p_complement;
     }
 
 
+    @Nullable
     @Override
-    public final T defuzzify( final IFuzzyValue<T> p_value )
+    public final T defuzzify( @Nonnull final IFuzzyValue<T> p_value )
     {
         return p_value.fuzzy() <= 0.5 ? m_complement.complement( p_value ).value() : p_value.value();
     }
 
+    @Nonnull
     @Override
-    public S update( final S p_agent )
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         return p_agent;
     }

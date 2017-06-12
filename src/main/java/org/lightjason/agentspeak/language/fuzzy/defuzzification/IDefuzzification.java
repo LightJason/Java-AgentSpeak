@@ -26,6 +26,9 @@ package org.lightjason.agentspeak.language.fuzzy.defuzzification;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * defuzzification interface
@@ -34,7 +37,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
  * @tparam S agent type
  * @see https://en.wikipedia.org/wiki/Defuzzification
  */
-public interface IDefuzzification<T, S extends IAgent<?>>
+public interface IDefuzzification<T>
 {
 
     /**
@@ -43,7 +46,8 @@ public interface IDefuzzification<T, S extends IAgent<?>>
      * @param p_value fuzzy value
      * @return native value
      */
-    T defuzzify( final IFuzzyValue<T> p_value );
+    @Nullable
+    T defuzzify( @Nonnull final IFuzzyValue<T> p_value );
 
     /**
      * update of the internal defuzzification
@@ -52,6 +56,7 @@ public interface IDefuzzification<T, S extends IAgent<?>>
      * @param p_agent agent object
      * @return agent reference
      */
-    S update( final S p_agent );
+    @Nonnull
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }

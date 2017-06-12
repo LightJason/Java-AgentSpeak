@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
@@ -73,10 +74,11 @@ public final class CUnion implements IFuzzyOperator<Boolean>
         return Collections.emptySet();
     }
 
+    @Nonnull
     @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public final IFuzzyValue<Boolean> result( final IFuzzyValue<Boolean>... p_values )
+    public final IFuzzyValue<Boolean> result( @Nonnull final IFuzzyValue<Boolean>... p_values )
     {
         return Arrays.stream( p_values ).collect( this );
     }

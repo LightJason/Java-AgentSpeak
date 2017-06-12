@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.language.fuzzy.operator;
 
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * fuzzy complement
@@ -40,6 +42,7 @@ public interface IFuzzyComplement<T>
      * @param p_value value
      * @return complement value
      */
-    IFuzzyValue<T> complement( final IFuzzyValue<T> p_value );
+    @Nonnull
+    IFuzzyValue<T> complement( @Nonnull final IFuzzyValue<T> p_value );
 
 }

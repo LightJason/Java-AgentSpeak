@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
@@ -34,14 +33,9 @@ import java.util.AbstractMap;
 
 /**
  * boolean fuzzy bundle
- *
- * @tparam S agent type
- * @tparam T agent type
  */
-public final class CBundle<S extends IAgent<?>> extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean, S>>
-    implements IFuzzyBundle<Boolean, S>
+public final class CBundle extends AbstractMap.SimpleImmutableEntry<IFuzzyOperator<Boolean>, IDefuzzification<Boolean>> implements IFuzzyBundle<Boolean>
 {
-
     /**
      * serial id
      */
@@ -53,7 +47,7 @@ public final class CBundle<S extends IAgent<?>> extends AbstractMap.SimpleImmuta
      * @param p_key fuzzy operator
      * @param p_value defuzzification
      */
-    public CBundle( @Nonnull final IFuzzyOperator<Boolean> p_key, @Nonnull final IDefuzzification<Boolean, S> p_value )
+    public CBundle( @Nonnull final IFuzzyOperator<Boolean> p_key, @Nonnull final IDefuzzification<Boolean> p_value )
     {
         super( p_key, p_value );
     }

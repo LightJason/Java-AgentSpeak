@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.language.fuzzy.operator;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValueMutable;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Collector;
 
 
@@ -43,7 +44,8 @@ public interface IFuzzyOperator<T> extends Collector<IFuzzyValue<T>, IFuzzyValue
      * @param p_values values
      * @return result value
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
-    IFuzzyValue<T> result( final IFuzzyValue<T>... p_values );
+    IFuzzyValue<T> result( @Nonnull final IFuzzyValue<T>... p_values );
 
 }

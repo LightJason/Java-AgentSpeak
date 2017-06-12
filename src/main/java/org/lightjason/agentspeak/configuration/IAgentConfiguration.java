@@ -82,7 +82,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      * @return operator object
      */
     @Nonnull
-    IFuzzyBundle<Boolean, T> fuzzy();
+    IFuzzyBundle<Boolean> fuzzy();
 
     /**
      * returns the initial beliefs

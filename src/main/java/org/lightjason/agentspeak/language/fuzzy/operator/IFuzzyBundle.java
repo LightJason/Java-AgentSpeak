@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.fuzzy.operator;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
 
 import java.util.Map;
@@ -34,6 +33,6 @@ import java.util.Map;
  *
  * @tparam S agent type
  */
-public interface IFuzzyBundle<T, S extends IAgent<?>> extends Map.Entry<IFuzzyOperator<T>, IDefuzzification<T, S>>
+public interface IFuzzyBundle<T> extends Map.Entry<IFuzzyOperator<T>, IDefuzzification<T>>
 {
 }

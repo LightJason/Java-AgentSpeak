@@ -135,7 +135,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * fuzzy result collector
      */
-    private final IFuzzyBundle<Boolean, T> m_fuzzy;
+    private final IFuzzyBundle<Boolean> m_fuzzy;
     /**
      * running plans (thread-safe)
      */
@@ -276,7 +276,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IFuzzyBundle<Boolean, T> fuzzy()
+    public final IFuzzyBundle<Boolean> fuzzy()
     {
         return m_fuzzy;
     }

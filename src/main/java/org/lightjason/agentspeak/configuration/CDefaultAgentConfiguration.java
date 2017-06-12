@@ -84,7 +84,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * fuzzy operator
      */
-    protected final IFuzzyBundle<Boolean, T> m_fuzzy;
+    protected final IFuzzyBundle<Boolean> m_fuzzy;
     /**
      * rules
      */
@@ -101,7 +101,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_initialgoal initial goal
      * @param p_unifier unifier component
      */
-    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
                                        @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                        @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier
     )
@@ -120,7 +120,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean, T> p_fuzzy, @Nonnull final Collection<ILiteral> p_initialbeliefs,
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initialbeliefs,
                                        @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
                                        final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
                                        @Nonnull final IVariableBuilder p_variablebuilder
@@ -174,7 +174,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
 
     @Nonnull
     @Override
-    public final IFuzzyBundle<Boolean, T> fuzzy()
+    public final IFuzzyBundle<Boolean> fuzzy()
     {
         return m_fuzzy;
     }
