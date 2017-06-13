@@ -199,15 +199,14 @@ public final class CVariableEvaluate implements IVariableEvaluate
      */
     private ILiteral fromLiteral( final ILiteral p_literal, final IContext p_context )
     {
-        if ( m_parameter.isEmpty() )
-            return p_literal.unify( p_context );
-
-        return new CLiteral(
-            p_literal.hasAt(),
-            p_literal.negated(),
-            p_literal.fqnfunctor(),
-            m_parameter
-        ).unify( p_context );
+        return m_parameter.isEmpty()
+            ? p_literal.unify( p_context )
+            : new CLiteral(
+                p_literal.hasAt(),
+                p_literal.negated(),
+                p_literal.fqnfunctor(),
+                m_parameter
+            ).unify( p_context );
     }
 
 }

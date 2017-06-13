@@ -27,51 +27,41 @@
  * base test
  */
 +!test <-
-
-    +belief(1);
-    +belief(2);
-
-    +belief(3);
-    +belief(3);
-
-    +delbelief("test");
-
-    !goaltrigger;
-    !errortrigger
+    !stringvariableempty;
+    !stringvariablesingle
+    //!stringvariablemultiple
 .
 
 
-/**
- * add belief trigger
- **/
-+belief(N)
-   : N == 1 <- test/result( success )
-   : N == 2 <- test/result( success )
-   : N == 3 <- test/result( success )
-.
 
 /**
- * add belief trigger
- **/
-+delbelief(X) <- test/result( bool/equal( X, "test" ) ); -delbelief(X).
+ * execute by variable without parameter
+ */
++!stringvariableempty <- X = "vartest"; !X.
 
 /**
- * delete belief
+ * execution by variable with single parameter
  **/
--delbelief(X) <- test/result( bool/equal( X, "test" ) ).
++!stringvariablesingle <- X = "vartest"; !X(5).
+
+/**
+ * execution by variable with single parameter
+ **/
++!stringvariablemultiple <- X = "vartest"; !X(7,3).
+
 
 
 /**
- * goal trigger
+ * variable test
  **/
-+!goaltrigger <- test/result( success ).
++!vartest <- test/result(success).
 
 /**
- * error trigger
+ * variable test
  **/
-+!errortrigger <- test/result( success ); fail.
++!vartest(X) <- test/result( bool/equal(X, 5) ).
 
 /**
- * error trigger
+ * variable test
  **/
--!errortrigger <- test/result( success ).
++!vartest(X, Y) <- test/result( bool/equal(X, 7) ); test/result( bool/equal(Y, 7) ); generic/print(X, Y).

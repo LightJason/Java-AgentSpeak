@@ -113,6 +113,7 @@ public final class CLiteral implements ILiteral
      * @param p_negated negated flag
      * @param p_functor functor of the literal
      * @param p_values initial list of values
+     * @bug structure hash calculate seems has been an order problem
      */
     public CLiteral( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Collection<ITerm> p_values )
     {
