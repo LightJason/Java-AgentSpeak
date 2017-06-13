@@ -33,7 +33,7 @@ import java.io.Serializable;
 /**
  * term interface
  */
-public interface ITerm extends Serializable, IDeepCopy<ITerm>
+public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
 {
     /**
      * empty term
@@ -91,6 +91,12 @@ public interface ITerm extends Serializable, IDeepCopy<ITerm>
         public final ITerm deepcopysuffix()
         {
             return this;
+        }
+
+        @Override
+        public final int structurehash()
+        {
+            return 0;
         }
     };
 

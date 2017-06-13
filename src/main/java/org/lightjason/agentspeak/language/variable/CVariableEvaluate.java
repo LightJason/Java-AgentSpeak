@@ -178,6 +178,12 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return m_variable.deepcopysuffix();
     }
 
+    @Override
+    public final int structurehash()
+    {
+        return 0;
+    }
+
     /**
      * creates the result literal from an input string
      *

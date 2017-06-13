@@ -211,4 +211,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
     {
         return CRawTerm.from( m_value );
     }
+
+    @Override
+    public final int structurehash()
+    {
+        return 0;
+    }
 }

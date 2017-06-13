@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral extends ITerm, IStructureHash, IShallowCopy<ILiteral>, Comparable<ILiteral>
+public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILiteral>
 {
     /**
      * empty literal

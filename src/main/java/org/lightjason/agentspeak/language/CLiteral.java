@@ -113,7 +113,6 @@ public final class CLiteral implements ILiteral
      * @param p_negated negated flag
      * @param p_functor functor of the literal
      * @param p_values initial list of values
-     * @bug structure hash calculate seems has been an order problem
      */
     public CLiteral( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Collection<ITerm> p_values )
     {
@@ -140,18 +139,11 @@ public final class CLiteral implements ILiteral
         ).reduce( 0, ( i, j ) -> i ^ j );
 
 
-        // calculates the structure hash value (Murmur3) of the value definition
-        final String l_functor = p_functor.getPath();
-
+        // calculates the structure hash value of the value definition (need to start with value definition)
         final Hasher l_valuehasher = CCommon.getTermHashing();
-        m_orderedvalues.stream()
-                       .filter( i -> i instanceof ILiteral )
-                       .map( ITerm::<ILiteral>raw )
-                       .filter( Objects::nonNull )
-                       .forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
+        m_orderedvalues.forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
         l_valuehasher.putBoolean( m_negated );
-        l_valuehasher.putString( l_functor, Charsets.UTF_8 );
-
+        l_valuehasher.putString( p_functor.getPath(), Charsets.UTF_8 );
         m_structurehash = l_valuehasher.hash().asInt();
     }
 

@@ -244,6 +244,12 @@ public class CVariable<T> implements IVariable<T>
         return new CVariable<>( m_functor.getSuffix(), new Cloner().deepClone( m_value ) );
     }
 
+    @Override
+    public final int structurehash()
+    {
+        return 0;
+    }
+
     /**
      * internel set for avoid any exception throwing
      *

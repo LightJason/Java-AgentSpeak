@@ -102,7 +102,7 @@ public final class TestCAgent extends IBaseTest
             new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 2, 24 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/trigger.asl", 3, 8 ),
-            new ImmutableTriple<>( "src/test/resources/agent/language/execution.asl", 3, 2 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/execution.asl", 3, 4 ),
             new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 3 )
         ).toArray();
     }
@@ -157,11 +157,8 @@ public final class TestCAgent extends IBaseTest
             Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
         }
 
-
-        Assert.assertEquals(  MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );
-        m_testlog.stream()
-                 .filter( i -> !i.getKey() )
-                 .forEach( i -> Assert.assertTrue( MessageFormat.format( "{0} {1}", p_asl.getLeft(), i.getValue() ), false ) );
+        Assert.assertEquals( MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );
+        m_testlog.forEach( i -> Assert.assertTrue( MessageFormat.format( "{0} {1}", p_asl.getLeft(), i.getValue() ), i.getKey() ) );
     }
 
     /**

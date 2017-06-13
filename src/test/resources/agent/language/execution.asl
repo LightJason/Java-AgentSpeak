@@ -33,8 +33,8 @@
  */
 +!test <-
     !stringvariableempty;
-    !stringvariablesingle
-    //!stringvariablemultiple
+    !stringvariablesingle;
+    !stringvariablemultiple
 .
 
 
@@ -59,14 +59,17 @@
 /**
  * variable test
  **/
-+!vartest <- test/result(success).
++!vartest <- test/result(success, "variable execution fails").
 
 /**
  * variable test
  **/
-+!vartest(X) <- test/result( bool/equal(X, 5) ).
++!vartest(X) <- test/result( bool/equal(X, 5), "variable execution test with 5 fails" ).
 
 /**
  * variable test
  **/
-+!vartest(X, Y) <- test/result( bool/equal(X, 7) ); test/result( bool/equal(Y, 7) ); generic/print(X, Y).
++!vartest(X, Y) <-
+    test/result( bool/equal(X, 7), "variable execution test with 7 fails" );
+    test/result( bool/equal(Y, 3), "variable execution test with 3 fails" )
+.
