@@ -23,7 +23,8 @@
 
 package org.lightjason.agentspeak.action.buildin.string;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.CharacterPredicate;
+import org.apache.commons.text.RandomStringGenerator;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -62,14 +63,11 @@ public final class CRandom extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final char[] l_characters = p_argument.get( 0 ).<String>raw().toCharArray();
+        final CharacterPredicate l_characters = p_char -> p_argument.get( 0 ).<String>raw().contains( new String( Character.toChars( p_char ) ) );
 
         CCommon.flatcollection( p_argument )
                .skip( 1 )
-               .map( i -> RandomStringUtils.random(
-                   i.<Number>raw().intValue(),
-                   l_characters
-               ) )
+               .map( i -> new RandomStringGenerator.Builder().filteredBy( l_characters  ).build().generate( i.<Number>raw().intValue() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 
