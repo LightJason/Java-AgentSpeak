@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing expression execution
+// -----
+
+// initial-goal
 !test.
 
 /**

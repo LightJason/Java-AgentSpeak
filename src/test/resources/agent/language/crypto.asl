@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing crypto actions
+// -----
+
+// initial-goal
 !test.
 
 /**

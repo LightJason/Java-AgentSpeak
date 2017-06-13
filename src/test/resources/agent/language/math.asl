@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing math actions
+// -----
+
+// initial-goal
 !test.
 
 /**

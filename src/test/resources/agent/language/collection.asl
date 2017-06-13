@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing collection actions
+// -----
+
+// initial-goal
 !test.
 
 /**

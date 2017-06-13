@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing trigger execution
+// -----
+
+// initial-goal
 !test.
 
 /**

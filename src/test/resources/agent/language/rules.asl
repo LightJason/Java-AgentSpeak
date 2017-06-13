@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing rules
+// -----
+
+// initial-goal
 !test.
 
 

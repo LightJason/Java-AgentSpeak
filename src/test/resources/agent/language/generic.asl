@@ -21,6 +21,10 @@
  * @endcond
  */
 
+// -----
+// agent for testing generic structures and actions
+// -----
+
 
 hello(123).
 hello(600).
@@ -36,7 +40,7 @@ hello(foo(3)).
 foo(blub(1),hello("test")).
 
 
-
+// initial-goal
 !test.
 
 /**

@@ -21,6 +21,11 @@
  * @endcond
  */
 
+// -----
+// agent for testing webservices actions
+// -----
+
+// initial-goal
 !test.
 
 /**

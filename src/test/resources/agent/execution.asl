@@ -23,16 +23,18 @@
 
 
 // -----
-// agent for testing execution structure
+// agent for testing single & parallel execution structure
 // -----
 
 
  // initial-goal
- !main.
+ !test.
 
 
-
-+!main <-
+/**
+ * base test for staring executions
+ */
++!test <-
     log( "main" );
 
     !multiple( "first" );
@@ -45,18 +47,27 @@
     !L
 .
 
-+!multiple(X) <-
-    log(X);
-    !single
-.
+/**
+ * called mutiple times
+ */
++!multiple(X) <- log(X); !single.
 
-+!single <-
-    log("single");
-    stop
-.
+/*
+ * called single times
+ */
++!single <- log("single"); stop.
 
+/**
+ * test plan
+ */
 +!twovaluesequaltype(X,Y) <- log("twovalues equal type").
 
+/**
+ * test plan
+ */
 +!twovaluesdiffenttype(N,M) <- log("twovalues different type").
 
+/**
+ * test plan
+ */
 +!twovaluesliteral(X, foo(Y)) <- log("twovalues with literal").
