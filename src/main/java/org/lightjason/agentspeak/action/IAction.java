@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.IExecution;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 
@@ -47,6 +48,7 @@ public interface IAction extends IExecution
      *
      * @return number of minimal arguments
      */
+    @Nonnegative
     int minimalArgumentNumber();
 
 }
