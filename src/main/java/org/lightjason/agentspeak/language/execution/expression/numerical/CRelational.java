@@ -78,43 +78,46 @@ public final class CRelational extends IBaseBinary
         {
             case GREATER:
                 p_return.add( CRawTerm.from(
-                    this.compare(
-                        CRelational.map( l_argument.get( 0 ).raw() ),
-                        CRelational.map( l_argument.get( 1 ).raw() )
-                    ) > 0 )
-                );
+                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) > 0
+                ) );
                 return CFuzzyValue.from( true );
 
             case GREATEREQUAL:
                 p_return.add( CRawTerm.from(
-                    this.compare(
-                        CRelational.map( l_argument.get( 0 ).raw() ),
-                        CRelational.map( l_argument.get( 1 ).raw() )
-                    ) >= 0 )
-                );
+                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) >= 0
+                ) );
                 return CFuzzyValue.from( true );
 
             case LESS:
                 p_return.add( CRawTerm.from(
-                    this.compare(
-                        CRelational.map( l_argument.get( 0 ).raw() ),
-                        CRelational.map( l_argument.get( 1 ).raw() )
-                    ) < 0 )
-                );
+                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) < 0
+                ) );
                 return CFuzzyValue.from( true );
 
             case LESSEQUAL:
                 p_return.add( CRawTerm.from(
-                    this.compare(
-                        CRelational.map( l_argument.get( 0 ).raw() ),
-                        CRelational.map( l_argument.get( 1 ).raw() )
-                    ) <= 0 )
-                );
+                    CRelational.compare( l_argument.get( 0 ), l_argument.get( 1 ) ) <= 0
+                ) );
                 return CFuzzyValue.from( true );
 
             default:
                 return CFuzzyValue.from( false );
         }
+    }
+
+    /**
+     * compares term types
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     */
+    private static int compare( @Nonnull final ITerm p_left, @Nonnull final ITerm p_right )
+    {
+        return org.lightjason.agentspeak.language.CCommon.rawvalueAssignableTo( p_left.raw(), Number.class )
+               && org.lightjason.agentspeak.language.CCommon.rawvalueAssignableTo( p_right.raw(), Number.class )
+               ? comparenumber( CRelational.map( p_left.raw() ), CRelational.map( p_right.raw() ) )
+               : compareobject( CRelational.map( p_left.raw() ), CRelational.map( p_right.raw() ) );
     }
 
     /**
@@ -126,12 +129,29 @@ public final class CRelational extends IBaseBinary
      *
      * @tparam T number type
      */
-    private <T extends Number & Comparable<T>> int compare( @Nonnull final T p_left, @Nonnull final T p_right )
+    private static <T extends Number & Comparable<T>> int comparenumber( @Nonnull final T p_left, @Nonnull final T p_right )
     {
         return ( p_left instanceof Double ) || ( p_right instanceof Double )
                ? Double.compare( p_left.doubleValue(), p_right.doubleValue() )
                : p_left.compareTo( p_right );
     }
+
+
+    /**
+     * compare method for any object type
+     *
+     * @param p_left left argument
+     * @param p_right right argument
+     * @return default compare values [-1,1]
+     *
+     * @tparam T object type
+     */
+    private static <T extends Comparable<T>> int compareobject( @Nonnull final T p_left, @Nonnull final T p_right )
+    {
+        return p_left.compareTo( p_right );
+    }
+
+
 
 
     /**
