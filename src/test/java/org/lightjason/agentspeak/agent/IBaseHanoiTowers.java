@@ -153,10 +153,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
 
     /**
      * running towers of hanoi
-     *
-     * @throws InterruptedException on thread-sleeping
      */
-    protected final void execute() throws InterruptedException
+    protected final void execute()
     {
         while ( m_running.get() )
         {
