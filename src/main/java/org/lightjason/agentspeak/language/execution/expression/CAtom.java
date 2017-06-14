@@ -67,8 +67,7 @@ public class CAtom implements IExpression
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
-        p_return.add( CRawTerm.from( l_term.raw() ).thrownotallocated( l_term.fqnfunctor().toString() ) );
+        p_return.add( CRawTerm.from( CCommon.replaceFromContext( p_context, m_value ).raw() ).thrownotallocated() );
         return CFuzzyValue.from( true );
     }
 

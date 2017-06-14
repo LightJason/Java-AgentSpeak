@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.language;
 
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 
 /**
@@ -49,13 +48,12 @@ public interface IRawTerm<T> extends ITerm
      * throws an illegal state exception
      * iif the raw term is not allocated
      *
-     * @param p_name optional name text for the error message
      * @return object itself
      *
      * @throws IllegalStateException on non-allocated
      */
     @Nonnull
-    IRawTerm<T> thrownotallocated( @Nullable final String... p_name ) throws IllegalStateException;
+    IRawTerm<T> thrownotallocated() throws IllegalStateException;
 
     /**
      * checkes assignable of the value

@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language.variable;
 
 import com.rits.cloning.Cloner;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
@@ -136,7 +137,7 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( CVariable.class, "notallocated", this ) );
+            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "notallocated", m_functor ) );
 
         return this;
     }
@@ -152,8 +153,7 @@ public class CVariable<T> implements IVariable<T>
     public IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException(
-                org.lightjason.agentspeak.common.CCommon.languagestring( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", m_functor, Arrays.asList( p_class ) ) );
 
         return this;
     }

@@ -177,11 +177,10 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public final IRawTerm<T> thrownotallocated( @Nullable final String... p_name ) throws IllegalStateException
+    public final IRawTerm<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
-            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon
-                                                  .languagestring( this, "notallocated", p_name != null ? p_name[0] : this ) );
+            throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "notallocated" ) );
 
         return this;
     }
@@ -197,7 +196,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     public final IRawTerm<T> throwvaluenotassignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", this, p_class ) );
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
 
         return this;
     }
