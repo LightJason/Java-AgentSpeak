@@ -63,7 +63,7 @@ public final class CNot extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<Boolean>raw )
                .map( i -> !i )
                .map( CRawTerm::from )

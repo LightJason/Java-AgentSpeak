@@ -165,7 +165,7 @@ public final class CCreateDistribution extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         IntStream.range( 0, l_arguments.size() )
                  .filter( i -> CCommon.rawvalueAssignableTo( l_arguments.get( i ), String.class ) )

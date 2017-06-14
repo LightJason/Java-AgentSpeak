@@ -71,7 +71,7 @@ public abstract class IDateTime extends IBuildinAction
 
                 p_argument.size() == 0
                 ? Stream.of( CRawTerm.from( "now" ) )
-                : CCommon.flatcollection( p_argument )
+                : CCommon.flatten( p_argument )
 
             )
                 .allMatch( i -> this.getdatetime( i, p_return ) )

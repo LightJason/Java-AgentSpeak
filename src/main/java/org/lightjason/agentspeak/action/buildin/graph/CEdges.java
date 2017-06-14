@@ -65,7 +65,7 @@ public final class CEdges extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<Graph<?, ?>>raw )
                .map( Hypergraph::getEdges )
                .map( ArrayList::new )

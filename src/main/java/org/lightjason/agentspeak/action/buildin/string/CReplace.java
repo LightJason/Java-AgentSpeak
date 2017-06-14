@@ -66,7 +66,7 @@ public final class CReplace extends IBuildinAction
         final String l_search = p_argument.get( 0 ).<String>raw();
         final String l_replace = p_argument.get( 1 ).<String>raw();
 
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( 2 )
                .map( i -> i.<String>raw().replaceAll( l_search, l_replace ) )
                .map( CRawTerm::from )

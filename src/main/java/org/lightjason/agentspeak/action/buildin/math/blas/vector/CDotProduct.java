@@ -72,7 +72,7 @@ public final class CDotProduct extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<DoubleMatrix1D> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
+        final List<DoubleMatrix1D> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<DoubleMatrix1D>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() % 2 == 1 )
             return CFuzzyValue.from( false );
 

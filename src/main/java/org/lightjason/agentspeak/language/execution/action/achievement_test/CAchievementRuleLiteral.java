@@ -71,7 +71,7 @@ public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
     {
         return m_value == null
                ? Stream.empty()
-               : CCommon.recursiveterm( m_value.orderedvalues() )
+               : CCommon.flattenrecursive( m_value.orderedvalues() )
                         .parallel()
                         .filter( i -> i instanceof IVariable<?> )
                         .map( i -> (IVariable<?>) i );

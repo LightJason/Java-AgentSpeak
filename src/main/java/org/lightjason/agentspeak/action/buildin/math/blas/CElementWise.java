@@ -69,7 +69,7 @@ public class CElementWise extends IBuildinAction
     {
         return CFuzzyValue.from(
                 StreamUtils.windowed(
-                CCommon.flatcollection( p_argument ),
+                CCommon.flatten( p_argument ),
             3,
                 3
             ).allMatch( i -> {

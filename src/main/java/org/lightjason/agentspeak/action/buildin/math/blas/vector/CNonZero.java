@@ -69,7 +69,7 @@ public final class CNonZero extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix1D>raw )
                .mapToLong( DoubleMatrix1D::cardinality )
                .boxed()

@@ -65,9 +65,9 @@ public final class CXor extends IBuildinAction
     {
         p_return.add(
             CRawTerm.from(
-                CCommon.flatcollection( p_argument )
+                CCommon.flatten( p_argument )
                        .anyMatch( ITerm::<Boolean>raw )
-                && !CCommon.flatcollection( p_argument )
+                && !CCommon.flatten( p_argument )
                            .allMatch( ITerm::<Boolean>raw )
             )
         );

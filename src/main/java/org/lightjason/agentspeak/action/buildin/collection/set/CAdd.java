@@ -71,7 +71,7 @@ public final class CAdd extends IBuildinAction
     {
         final Set<Object> l_set = p_argument.get( 0 ).<Set<Object>>raw();
 
-        CCommon.flatstream( p_argument.stream().skip( 1 ) )
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )
                .forEach( l_set::add );
 

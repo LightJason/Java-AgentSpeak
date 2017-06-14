@@ -73,7 +73,7 @@ public abstract class IBetween extends IBuildinAction
     {
         this.apply(
             StreamUtils.windowed(
-                CCommon.flatcollection( p_argument )
+                CCommon.flatten( p_argument )
                        .map( ITerm::<ZonedDateTime>raw )
                        .map( i ->  new DateTime( i.toInstant().toEpochMilli(), DateTimeZone.forTimeZone( TimeZone.getTimeZone( i.getZone() ) ) ) )
                        .map( Instant::new ),

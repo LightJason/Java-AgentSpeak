@@ -71,7 +71,7 @@ public final class CUnion extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments must be lists
-        final List<?> l_result = new ArrayList<>( CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
+        final List<?> l_result = new ArrayList<>( CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() ) );
 
         p_return.add(
             CRawTerm.from(

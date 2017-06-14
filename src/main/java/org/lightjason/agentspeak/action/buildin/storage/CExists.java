@@ -93,7 +93,7 @@ public final class CExists extends IStorage
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( i -> ( !m_resolver.apply( i ) ) && ( p_context.agent().storage().containsKey( i ) ) )
                .map( CRawTerm::from )

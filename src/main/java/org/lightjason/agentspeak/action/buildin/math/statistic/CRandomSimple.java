@@ -83,7 +83,7 @@ public final class CRandomSimple extends IBuildinAction
         (
             p_argument.size() == 0
             ? Stream.of( 1 )
-            : CCommon.flatcollection( p_argument )
+            : CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
         ).map( i -> i == 1

@@ -70,7 +70,7 @@ public final class CTrueCount extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<BitMatrix>raw )
                .mapToLong( BitMatrix::cardinality )
                .boxed()

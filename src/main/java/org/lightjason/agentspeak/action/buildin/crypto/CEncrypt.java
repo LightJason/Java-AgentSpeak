@@ -83,7 +83,7 @@ public final class CEncrypt extends IBuildinAction
         }
 
         return CFuzzyValue.from(
-                   CCommon.flatstream( p_argument.stream().skip( 1 ) )
+                   CCommon.flatten( p_argument.stream().skip( 1 ) )
                           .map( ITerm::<Serializable>raw )
                           .allMatch( i -> encrypt( l_algorithm, l_key, i, p_return ) )
         );

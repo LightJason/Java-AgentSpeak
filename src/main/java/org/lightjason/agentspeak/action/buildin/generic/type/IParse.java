@@ -66,7 +66,7 @@ public abstract class IParse extends IBuildinAction
     )
     {
         return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
+            CCommon.flatten( p_argument )
                    .map( ITerm::<String>raw )
                    .map( this::parse )
                    .allMatch( i -> {

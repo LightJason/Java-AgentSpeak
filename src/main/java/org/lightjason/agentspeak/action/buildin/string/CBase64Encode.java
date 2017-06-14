@@ -63,7 +63,7 @@ public final class CBase64Encode extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( i -> Base64.getEncoder().encodeToString( i.getBytes( Charset.forName( "UTF-8" ) ) ) )
                .map( CRawTerm::from )

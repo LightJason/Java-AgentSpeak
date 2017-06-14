@@ -73,7 +73,6 @@ public final class CRelational extends IBaseBinary
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )
             return CFuzzyValue.from( false );
 
-
         switch ( m_operator )
         {
             case GREATER:

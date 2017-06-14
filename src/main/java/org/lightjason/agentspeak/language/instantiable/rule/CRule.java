@@ -105,7 +105,7 @@ public final class CRule extends IBaseInstantiable implements IRule
         return CCommon.streamconcat(
             super.variables(),
             m_annotation.values().stream().flatMap( IAnnotation::variables ),
-            CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+            CCommon.flattenrecursive( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
         );
     }
 

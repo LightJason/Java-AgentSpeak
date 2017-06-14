@@ -177,7 +177,7 @@ public final class CPlan extends IBaseInstantiable implements IPlan
             m_condition != null ? m_condition.variables() : Stream.empty(),
             super.variables(),
             m_annotation.values().stream().flatMap( IAnnotation::variables ),
-            CCommon.recursiveterm( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+            CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
         );
     }
 

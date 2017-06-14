@@ -57,7 +57,7 @@ public abstract class IApplySingle extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( this.skipsize() )
                .forEach( i -> this.apply( p_parallel, i.<Graph<Object, Object>>raw(), p_argument.subList( 0, this.skipsize() ), p_return ) );
 

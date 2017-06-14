@@ -94,8 +94,8 @@ public final class CUnifier implements IUnifier
             p_target.structurehash() == p_source.structurehash()
             ? m_hashbased.unify(
                 l_result,
-                CCommon.recursiveterm( p_source.orderedvalues() ),
-                CCommon.recursiveterm( p_target.orderedvalues() )
+                CCommon.flattenrecursive( p_source.orderedvalues() ),
+                CCommon.flattenrecursive( p_target.orderedvalues() )
             )
             : m_recursive.unify(
                 l_result,

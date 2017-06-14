@@ -72,14 +72,14 @@ public final class CSpanningTree extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final double l_defaultcost = CCommon.flatcollection( p_argument )
+        final double l_defaultcost = CCommon.flatten( p_argument )
                                             .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
                                             .orElseGet( () -> 0D );
 
-        final Map<?, Number> l_costmap = CCommon.flatcollection( p_argument )
+        final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
                                                 .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
                                                 .findFirst()
                                                 .map( ITerm::<Map<?, Number>>raw )
@@ -89,7 +89,7 @@ public final class CSpanningTree extends IBuildinAction
         final PrimMinimumSpanningTree<Object, Object> l_treefactory = new PrimMinimumSpanningTree<>( DelegateTree.getFactory(), l_weightfunction );
 
         // --- filter graphs ---
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( l_treefactory )

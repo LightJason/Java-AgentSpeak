@@ -79,7 +79,7 @@ public class CCreate extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .map( i -> EGraphTypes.exist( i ) ? EGraphTypes.from( i ) : EGraphTypes.SPARSE )
                .map( EGraphTypes::get )

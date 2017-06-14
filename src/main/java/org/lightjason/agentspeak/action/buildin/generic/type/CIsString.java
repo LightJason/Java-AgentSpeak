@@ -69,7 +69,7 @@ public final class CIsString extends IBuildinAction
     )
     {
         return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
+            CCommon.flatten( p_argument )
                .map( ITerm::raw )
                .allMatch( i -> ( i instanceof String ) || ( i instanceof Character ) || ( i instanceof CharSequence ) )
         );

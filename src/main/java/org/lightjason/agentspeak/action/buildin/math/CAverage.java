@@ -63,7 +63,7 @@ public final class CAverage extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from(
-            CCommon.flatcollection( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()
+            CCommon.flatten( p_argument ).mapToDouble( i -> i.<Number>raw().doubleValue() ).average()
                    .orElseThrow( () -> new CRuntimeException( p_context ) )
         ) );
         return CFuzzyValue.from( true );

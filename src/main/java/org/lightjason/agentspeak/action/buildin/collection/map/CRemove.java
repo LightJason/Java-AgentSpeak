@@ -72,7 +72,7 @@ public final class CRemove extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatstream( p_argument.stream().skip( 1 ) )
+        CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::raw )
                .map( i -> p_argument.get( 0 ).<Map<Object, Object>>raw().remove( i ) )
                .map( CRawTerm::from )

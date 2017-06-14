@@ -69,7 +69,7 @@ public final class CDiagonal extends IAlgebra
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final EType l_type = CCommon.flatcollection( p_argument )
+        final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
                                     .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                     .findFirst()
@@ -77,7 +77,7 @@ public final class CDiagonal extends IAlgebra
                                     .map( EType::from )
                                     .orElseGet( () -> EType.SPARSE );
 
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix1D.class ) )
                .map( ITerm::<DoubleMatrix1D>raw )
                .map( i  -> generate( i, l_type ) )

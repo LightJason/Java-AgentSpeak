@@ -63,7 +63,7 @@ public final class CCountFalse extends IBuildinAction
     {
         p_return.add(
             CRawTerm.from(
-                CCommon.flatcollection( p_argument )
+                CCommon.flatten( p_argument )
                        .map( ITerm::<Boolean>raw )
                        .filter( i -> !i )
                        .count()

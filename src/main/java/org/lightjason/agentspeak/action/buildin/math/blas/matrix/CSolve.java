@@ -68,7 +68,7 @@ public final class CSolve extends IAlgebra
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
-            CCommon.flatcollection( p_argument ),
+            CCommon.flatten( p_argument ),
             2
         )
             .map( i -> ALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )

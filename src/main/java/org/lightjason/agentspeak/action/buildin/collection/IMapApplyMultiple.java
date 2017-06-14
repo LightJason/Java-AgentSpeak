@@ -70,7 +70,7 @@ public abstract class IMapApplyMultiple<T> extends IBuildinAction
     )
     {
 
-        final List<ITerm> l_list = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<ITerm> l_list = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_list.size() % 2 == 0 )
             return CFuzzyValue.from( false );
 

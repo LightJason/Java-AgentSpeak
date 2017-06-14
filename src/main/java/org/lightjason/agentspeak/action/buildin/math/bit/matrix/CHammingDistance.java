@@ -64,7 +64,7 @@ public final class CHammingDistance extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<BitMatrix> l_arguments = CCommon.flatcollection( p_argument ).map( ITerm::<BitMatrix>raw ).collect( Collectors.toList() );
+        final List<BitMatrix> l_arguments = CCommon.flatten( p_argument ).map( ITerm::<BitMatrix>raw ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
             return CFuzzyValue.from( false );
 

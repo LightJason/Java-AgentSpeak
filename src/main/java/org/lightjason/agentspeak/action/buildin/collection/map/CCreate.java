@@ -75,7 +75,7 @@ public final class CCreate extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( ( l_arguments.size() > 0 ) && ( l_arguments.size() % 2 == 1 ) )
             return CFuzzyValue.from( false );
 

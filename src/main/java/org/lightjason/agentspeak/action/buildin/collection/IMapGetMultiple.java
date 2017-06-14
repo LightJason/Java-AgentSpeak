@@ -67,7 +67,7 @@ public abstract class IMapGetMultiple<T> extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( 1 )
                .forEach( i ->  this.apply( p_parallel, p_argument.get( 0 ).<T>raw(), i.raw(), p_return ) );
 

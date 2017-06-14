@@ -73,7 +73,7 @@ public final class CSubList extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatstream( p_argument.stream().skip( 1 ) ) )
+        final List<ITerm> l_arguments = Stream.concat( Stream.of( p_argument.get( 0 ) ), CCommon.flatten( p_argument.stream().skip( 1 ) ) )
                                               .collect( Collectors.toList() );
 
         if ( ( l_arguments.size() % 2 == 0 ) || ( l_arguments.size() < 3 ) )

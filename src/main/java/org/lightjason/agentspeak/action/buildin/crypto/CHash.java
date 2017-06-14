@@ -80,7 +80,7 @@ public final class CHash extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( 1 )
                .map( i -> hash( p_context, p_argument.get( 0 ).<String>raw(), serialize( p_context, i ) ) )
                .map( CRawTerm::from )

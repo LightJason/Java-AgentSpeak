@@ -70,7 +70,7 @@ public final class CTranspose extends IAlgebra
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // arguments are matrix objects
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( ALGEBRA::transpose )
                .map( CRawTerm::from )

@@ -65,7 +65,7 @@ public final class CBinomial extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         StreamUtils.windowed(
-            CCommon.flatcollection( p_argument )
+            CCommon.flatten( p_argument )
                    .map( ITerm::<Number>raw )
                    .mapToInt( Number::intValue )
                    .boxed(),

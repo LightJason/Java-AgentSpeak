@@ -156,7 +156,7 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 0 ).<Map<?, ?>>raw().keySet().toArray(), l_map.keySet().toArray() );
 
         Assert.assertArrayEquals(
-            CCommon.flatstream( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::from ) ).map( ITerm::raw ).toArray(),
+            CCommon.flatten( l_return.get( 0 ).<Map<?, ?>>raw().values().stream().map( CRawTerm::from ) ).map( ITerm::raw ).toArray(),
             l_map.values().toArray()
         );
     }

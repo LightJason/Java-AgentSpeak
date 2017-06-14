@@ -71,7 +71,7 @@ public final class CFlatConcat extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<?> l_list = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+        final List<?> l_list = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
         p_return.add( CRawTerm.from( p_parallel ? Collections.synchronizedList( l_list ) : l_list ) );
         return CFuzzyValue.from( true );
     }

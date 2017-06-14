@@ -63,7 +63,7 @@ public final class CAddPlan extends IBuildinAction
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .parallel()
                .map( ITerm::<IPlan>raw )
                .map( CPlanStatistic::from )

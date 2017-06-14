@@ -70,7 +70,7 @@ public final class CClearStatistic extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
+            CCommon.flatten( p_argument )
                    .parallel()
                    .allMatch( i -> {
 

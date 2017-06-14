@@ -76,7 +76,7 @@ public final class CCreate extends IBuildinAction
     {
         final List<?> l_list = p_argument.isEmpty()
                                ? new ArrayList<>()
-                               : CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
+                               : CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toList() );
 
         p_return.add( CRawTerm.from(
             p_parallel

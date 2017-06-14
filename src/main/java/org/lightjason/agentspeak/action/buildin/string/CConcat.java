@@ -62,7 +62,7 @@ public final class CConcat extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         p_return.add( CRawTerm.from(
-            CCommon.flatcollection( p_argument )
+            CCommon.flatten( p_argument )
                    .map( ITerm::<String>raw )
                    .collect( Collectors.joining() )
         ) );

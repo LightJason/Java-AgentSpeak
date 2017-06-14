@@ -66,7 +66,7 @@ public abstract class IOperator extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final List<BitMatrix> l_arguments = CCommon.flatcollection( p_argument )
+        final List<BitMatrix> l_arguments = CCommon.flatten( p_argument )
                                                    .map( ITerm::<BitMatrix>raw )
                                                    .collect( Collectors.toList() );
 

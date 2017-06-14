@@ -66,7 +66,7 @@ public final class CBase64Decode extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument,  @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.from(
-            CCommon.flatcollection( p_argument )
+            CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
                .allMatch( i -> CBase64Decode.apply( i, p_return ) )
         );

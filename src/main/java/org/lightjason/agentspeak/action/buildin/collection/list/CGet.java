@@ -72,7 +72,7 @@ public final class CGet extends IBuildinAction
     {
         final List<?> l_list = p_argument.get( 0 ).<List<?>>raw();
 
-        CCommon.flatcollection( p_argument.subList( 1, p_argument.size() ) )
+        CCommon.flatten( p_argument.subList( 1, p_argument.size() ) )
                    .map( i -> i.<Number>raw().intValue() )
                    .map( l_list::get )
                    .map( CRawTerm::from )

@@ -70,7 +70,7 @@ public final class CSigmoid extends IBuildinAction
                                                                 + Math.exp( -p_argument.get( 2 ).<Number>raw().doubleValue() * i )
                                                             );
 
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( 2 )
                .map( ITerm::<Number>raw )
                .mapToDouble( Number::doubleValue )

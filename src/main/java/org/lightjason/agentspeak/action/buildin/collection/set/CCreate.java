@@ -73,7 +73,7 @@ public final class CCreate extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final Set<?> l_return = CCommon.flatcollection( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() );
+        final Set<?> l_return = CCommon.flatten( p_argument ).map( ITerm::raw ).collect( Collectors.toSet() );
 
         p_return.add(
             CRawTerm.from(

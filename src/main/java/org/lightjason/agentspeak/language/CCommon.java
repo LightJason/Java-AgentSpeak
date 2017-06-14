@@ -191,7 +191,7 @@ public final class CCommon
     public static Map<IVariable<?>, Integer> variablefrequency( @Nonnull final ILiteral p_literal )
     {
         return Collections.unmodifiableMap(
-            recursiveterm( p_literal.orderedvalues() )
+            flattenrecursive( p_literal.orderedvalues() )
                   .filter( i -> i instanceof IVariable<?> )
                   .map( i -> (IVariable<?>) i )
                   .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
@@ -262,9 +262,9 @@ public final class CCommon
      * @return flat term stream
      */
     @Nonnull
-    public static Stream<ITerm> flatcollection( @Nonnull final Collection<? extends ITerm> p_terms )
+    public static Stream<ITerm> flatten( @Nonnull final Collection<? extends ITerm> p_terms )
     {
-        return flattenToStream( p_terms.stream() );
+        return flattenstream( p_terms.stream() );
     }
 
     /**
@@ -275,9 +275,9 @@ public final class CCommon
      * @return flat term stream
      */
     @Nonnull
-    public static Stream<ITerm> flatstream( @Nonnull final Stream<? extends ITerm> p_terms )
+    public static Stream<ITerm> flatten( @Nonnull final Stream<? extends ITerm> p_terms )
     {
-        return flattenToStream( p_terms );
+        return flattenstream( p_terms );
     }
 
     /**
@@ -287,23 +287,9 @@ public final class CCommon
      * @return term stream
      */
     @Nonnull
-    public static Stream<ITerm> recursiveterm( @Nonnull final Stream<ITerm> p_input )
+    public static Stream<ITerm> flattenrecursive( @Nonnull final Stream<ITerm> p_input )
     {
-        return p_input.flatMap( i -> i instanceof ILiteral ? recursiveterm( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
-    }
-
-    /**
-     * recursive stream of literal values
-     *
-     * @param p_input term stream
-     * @return term stream
-     *
-     * @note annotations cannot use annotation within
-     */
-    @Nonnull
-    public static Stream<ITerm> recursiveliteral( @Nonnull final Stream<ILiteral> p_input )
-    {
-        return p_input.flatMap( i -> recursiveterm( i.orderedvalues() ) );
+        return p_input.flatMap( i -> i instanceof ILiteral ? flattenrecursive( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
     }
 
     /*
@@ -314,12 +300,12 @@ public final class CCommon
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    private static Stream<ITerm> flattenToStream( @Nonnull final Stream<?> p_stream )
+    private static Stream<ITerm> flattenstream( @Nonnull final Stream<?> p_stream )
     {
         return p_stream.flatMap( i -> {
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
-                   ? flattenToStream( ( (Collection<?>) l_value ).stream() )
+                   ? flattenstream( ( (Collection<?>) l_value ).stream() )
                    : Stream.of( CRawTerm.from( l_value ) );
         } );
     }

@@ -77,7 +77,7 @@ public final class CGetPlan extends IBuildinAction
     {
         return CFuzzyValue.from(
             StreamUtils.windowed(
-                CCommon.flatcollection( p_argument ),
+                CCommon.flatten( p_argument ),
                 2,
                 2
             ).allMatch( i -> CGetPlan.query( ITrigger.EType.from( i.get( 0 ).<String>raw() ), i.get( 1 ), p_context.agent(), p_return ) )

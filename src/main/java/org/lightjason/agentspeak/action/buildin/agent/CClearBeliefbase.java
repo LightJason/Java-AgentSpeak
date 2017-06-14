@@ -67,7 +67,7 @@ public final class CClearBeliefbase extends IBuildinAction
                  .clear(
                     p_argument.size() == 0
                     ? null
-                    : CCommon.flatcollection( p_argument )
+                    : CCommon.flatten( p_argument )
                              .parallel()
                              .map( i -> CPath.from( i.raw() ) )
                              .toArray( IPath[]::new ) );

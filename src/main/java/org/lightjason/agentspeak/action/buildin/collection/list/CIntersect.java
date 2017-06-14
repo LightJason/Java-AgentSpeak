@@ -73,7 +73,7 @@ public final class CIntersect extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
-        final List<?> l_result = CCommon.flatcollection( p_argument )
+        final List<?> l_result = CCommon.flatten( p_argument )
                                         .parallel()
                                         .map( ITerm::raw )
                                         .distinct()

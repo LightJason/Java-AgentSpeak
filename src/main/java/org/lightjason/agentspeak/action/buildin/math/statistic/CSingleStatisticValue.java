@@ -75,7 +75,7 @@ public final class CSingleStatisticValue extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         final EStatisticValue l_value = EStatisticValue.from( l_arguments.get( 0 ).<String>raw() );
 
         l_arguments.stream()

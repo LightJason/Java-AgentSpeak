@@ -67,7 +67,7 @@ public abstract class IMapGetSingle<T> extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( 1 )
                .forEach( i ->  this.apply( p_parallel, i.<T>raw(), p_argument.get( 0 ).raw(), p_return ) );
 

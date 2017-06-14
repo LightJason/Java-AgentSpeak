@@ -63,7 +63,7 @@ public final class CNextPrime extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
                .mapToLong( i -> Primes.nextPrime( i.intValue() ) )
                .boxed()

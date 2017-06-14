@@ -71,7 +71,7 @@ public final class CCondition extends IAlgebra
     {
         // first argument must be a term with a matrix object
         // arguments are matrix objects
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( ALGEBRA::cond )
                .map( CRawTerm::from )

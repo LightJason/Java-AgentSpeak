@@ -65,8 +65,8 @@ public final class CGeometricMean extends IBuildinAction
         p_return.add(
             CRawTerm.from(
                 CGeometricMean.apply(
-                    CCommon.flatcollection( p_argument ).count(),
-                    CCommon.flatcollection( p_argument )
+                    CCommon.flatten( p_argument ).count(),
+                    CCommon.flatten( p_argument )
                            .map( ITerm::<Number>raw )
                            .mapToDouble( Number::doubleValue )
                            .boxed()

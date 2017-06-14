@@ -64,7 +64,7 @@ public final class CVertices extends IBuildinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .map( ITerm::<Graph<?, ?>>raw )
                .map( Hypergraph::getVertices )
                .map( ArrayList::new )

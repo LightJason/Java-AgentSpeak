@@ -69,7 +69,7 @@ public final class CRowSum extends IAlgebra
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final EType l_type = CCommon.flatcollection( p_argument )
+        final EType l_type = CCommon.flatten( p_argument )
                                     .parallel()
                                     .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                     .findFirst()
@@ -77,7 +77,7 @@ public final class CRowSum extends IAlgebra
                                     .map( EType::from )
                                     .orElseGet( () -> EType.DENSE );
 
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix2D.class ) )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( i -> IntStream.range( 0, i.rows() ).boxed().map( i::viewRow ).mapToDouble( DoubleMatrix1D::zSum ).toArray() )

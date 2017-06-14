@@ -83,7 +83,7 @@ public final class CCreateStatistic extends IBuildinAction
         (
             p_argument.size() == 0
             ? Stream.of( EType.SUMMARY )
-            : CCommon.flatcollection( p_argument ).map( ITerm::<String>raw ).map( EType::from )
+            : CCommon.flatten( p_argument ).map( ITerm::<String>raw ).map( EType::from )
         ).map( i -> i.generate( p_parallel ) )
          .map( CRawTerm::from ).forEach( p_return::add );
 

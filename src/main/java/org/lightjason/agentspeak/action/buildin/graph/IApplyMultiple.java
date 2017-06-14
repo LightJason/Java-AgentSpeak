@@ -59,7 +59,7 @@ public abstract class IApplyMultiple extends IBuildinAction
     )
     {
         StreamUtils.windowed(
-            CCommon.flatcollection( p_argument ).skip( 1 ),
+            CCommon.flatten( p_argument ).skip( 1 ),
             this.windowsize(),
             this.windowsize()
         )

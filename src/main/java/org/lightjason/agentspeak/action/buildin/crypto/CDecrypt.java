@@ -82,7 +82,7 @@ public final class CDecrypt extends IBuildinAction
         }
 
         return CFuzzyValue.from(
-                   CCommon.flatstream( p_argument.stream().skip( 1 ) )
+                   CCommon.flatten( p_argument.stream().skip( 1 ) )
                           .map( ITerm::<String>raw )
                           .allMatch( i -> decrypt( l_algorithm, l_key, i, p_return ) )
         );

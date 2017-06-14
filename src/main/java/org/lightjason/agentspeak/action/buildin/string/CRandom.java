@@ -65,7 +65,7 @@ public final class CRandom extends IBuildinAction
     {
         final CharacterPredicate l_characters = p_char -> p_argument.get( 0 ).<String>raw().contains( new String( Character.toChars( p_char ) ) );
 
-        CCommon.flatcollection( p_argument )
+        CCommon.flatten( p_argument )
                .skip( 1 )
                .map( i -> new RandomStringGenerator.Builder().filteredBy( l_characters  ).build().generate( i.<Number>raw().intValue() ) )
                .map( CRawTerm::from )

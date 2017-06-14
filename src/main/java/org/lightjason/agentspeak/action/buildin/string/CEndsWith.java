@@ -64,7 +64,7 @@ public final class CEndsWith extends IBuildinAction
     {
         final String l_string = p_argument.get( 0 ).raw();
 
-        CCommon.flatcollection( p_argument ).skip( 1 )
+        CCommon.flatten( p_argument ).skip( 1 )
                .map( i -> l_string.endsWith( i.raw() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );

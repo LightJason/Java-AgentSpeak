@@ -72,7 +72,7 @@ public final class CPower extends IAlgebra
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_argument = CCommon.flatcollection( p_argument ).collect( Collectors.toList() );
+        final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
 
         l_argument.stream()
                   .skip( 1 )

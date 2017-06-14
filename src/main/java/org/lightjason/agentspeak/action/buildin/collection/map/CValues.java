@@ -73,7 +73,7 @@ public final class CValues extends IBuildinAction
     )
     {
         // arguments are map references
-        final List<?> l_result = CCommon.flatcollection( p_argument )
+        final List<?> l_result = CCommon.flatten( p_argument )
                                         .flatMap( i -> i.<Map<?, ?>>raw().values().stream() )
                                         .collect( Collectors.toList() );
 

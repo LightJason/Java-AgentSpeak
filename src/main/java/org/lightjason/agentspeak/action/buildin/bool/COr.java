@@ -65,7 +65,7 @@ public final class COr extends IBuildinAction
     {
         p_return.add(
             CRawTerm.from(
-                CCommon.flatcollection( p_argument )
+                CCommon.flatten( p_argument )
                        .anyMatch( ITerm::<Boolean>raw )
             )
         );

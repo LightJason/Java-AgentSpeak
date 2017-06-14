@@ -21,42 +21,42 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.buildin.math;
+package org.lightjason.agentspeak.action.buildin.generic.type;
 
-import org.apache.commons.math3.primes.Primes;
 import org.lightjason.agentspeak.action.buildin.IBuildinAction;
 import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * action for creating prime factors list.
- * For each argument the action returns a list
- * of prime factors and fails never.
+ * returns the given arguments as results of the action.
+ * The action gets as arguments a tuple of arguments,
+ * a boolean and numeric (normalized in [0,1]) value
+ * and returns this values as result of the action,
+ * the action fails on wrong input
  *
- * @code [L1|L2] = math/primfactors( 8, [120] ); @endcode
- * @see https://en.wikipedia.org/wiki/Prime_number
- * @see https://en.wikipedia.org/wiki/Primality_test
+ * @code generic/type/fuzzyreturn( true, 0.4); @endcode
  */
-public final class CPrimeFactors extends IBuildinAction
+public class CFuzzyReturn extends IBuildinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 773736897510104178L;
+    private static final long serialVersionUID = -8360611536281500599L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {
-        return 1;
+        return 2;
     }
 
     @Nonnull
@@ -64,16 +64,7 @@ public final class CPrimeFactors extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        CCommon.flatten( p_argument )
-               .map( ITerm::<Number>raw )
-               .mapToInt( Number::intValue )
-               .boxed()
-               .map( Primes::primeFactors )
-               .map( i -> i.stream().mapToLong( j -> j ).boxed().collect( Collectors.toList() ) )
-               .map( CRawTerm::from )
-               .forEach( p_return::add );
-
-        return CFuzzyValue.from( true );
+        final List<ITerm> l_return = CCommon.flatten( p_argument ).limit( 2 ).collect( Collectors.toList() );
+        return CFuzzyValue.from( l_return.get( 0 ).<Boolean>raw(), l_return.get( 1 ).<Number>raw().doubleValue() );
     }
-
 }

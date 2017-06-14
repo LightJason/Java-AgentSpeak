@@ -72,7 +72,7 @@ public final class CInTriangle extends IBuildinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final List<Double> l_arguments = CCommon.flatcollection( p_argument )
+        final List<Double> l_arguments = CCommon.flatten( p_argument )
                                                 .map( ITerm::<Number>raw )
                                                 .mapToDouble( Number::doubleValue )
                                                 .boxed()
