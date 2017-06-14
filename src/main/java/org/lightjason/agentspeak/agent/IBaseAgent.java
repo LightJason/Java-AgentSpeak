@@ -359,7 +359,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
             return (T) this;
 
         // update defuzzification
-        m_fuzzy.getValue().update( (T) this );
+        m_fuzzy.getValue().update( this );
 
         // clear running plan- and trigger list and execute elements
         this.execute( this.generateexecutionlist() );
