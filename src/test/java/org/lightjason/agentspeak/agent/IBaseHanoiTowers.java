@@ -139,7 +139,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
         final Map<Integer, CAgent> l_agentmap = new ConcurrentHashMap<>();
         try
             (
-                final InputStream l_asl = new FileInputStream( p_asl );
+                final InputStream l_asl = new FileInputStream( p_asl )
             )
         {
             final CGenerator l_generator = new CGenerator( l_asl, p_action );

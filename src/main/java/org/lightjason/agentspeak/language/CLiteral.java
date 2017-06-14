@@ -301,7 +301,7 @@ public final class CLiteral implements ILiteral
                            .map( i -> {
                                if ( i instanceof IVariable<?> )
                                {
-                                   final IVariable<?> l_variable = p_context.instancevariables().get( ( (IVariable<?>) i ).fqnfunctor() );
+                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
                                    return l_variable == null
                                           ? CRawTerm.EMPTY
                                           : l_variable;

@@ -128,7 +128,7 @@ public final class TestCAgent extends IBaseTest
     {
         try
         (
-            final InputStream l_stream = new FileInputStream( p_asl.getLeft() );
+            final InputStream l_stream = new FileInputStream( p_asl.getLeft() )
         )
         {
             final IAgent<?> l_agent = new CAgent.CAgentGenerator(

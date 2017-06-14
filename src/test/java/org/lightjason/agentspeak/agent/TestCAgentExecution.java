@@ -100,7 +100,7 @@ public final class TestCAgentExecution extends IBaseTest
         m_running = new AtomicBoolean( true );
         try
             (
-                final InputStream l_asl = new FileInputStream( ASL );
+                final InputStream l_asl = new FileInputStream( ASL )
             )
         {
             m_agent = new CGenerator( l_asl ).generatesingle();

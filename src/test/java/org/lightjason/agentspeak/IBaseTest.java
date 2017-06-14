@@ -119,6 +119,7 @@ public abstract class IBaseTest
         }
         catch ( final AssumptionViolatedException l_exception )
         {
+            // ignore catched exception
         }
         catch ( final InvocationTargetException l_exception )
         {

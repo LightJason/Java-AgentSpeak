@@ -299,7 +299,7 @@ public final class CProxyAction implements IExecution
         {
             return Collections.unmodifiableList( CCommon.replaceFromContext(
                 p_context,
-                (Collection<? extends ITerm>) ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
+                ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
                     .flatMap( i -> {
 
                         final List<ITerm> l_return = new LinkedList<>();

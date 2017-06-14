@@ -52,8 +52,8 @@ public final class CHash implements IUnifier.IAlgorithm
                 {
                     p_variables.add(
                         ( (IVariable<?>) t ).mutex()
-                        ? new CRelocateMutexVariable<>( ( (IVariable<?>) t ).fqnfunctor(), (IVariable<?>) s )
-                        : new CRelocateVariable<>( ( (IVariable<?>) t ).fqnfunctor(), (IVariable<?>) s )
+                        ? new CRelocateMutexVariable<>( t.fqnfunctor(), (IVariable<?>) s )
+                        : new CRelocateVariable<>( t.fqnfunctor(), (IVariable<?>) s )
                     );
                     return true;
                 }
