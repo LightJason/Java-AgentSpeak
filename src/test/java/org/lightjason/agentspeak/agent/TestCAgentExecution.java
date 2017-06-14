@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -243,6 +244,7 @@ public final class TestCAgentExecution extends IBaseTest
             return CPath.from( "stop" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
@@ -274,6 +276,7 @@ public final class TestCAgentExecution extends IBaseTest
             return CPath.from( "log" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {

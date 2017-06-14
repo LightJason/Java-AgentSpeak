@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -58,6 +59,7 @@ public final class CDecrypt extends IBuildinAction
      */
     private static final long serialVersionUID = -1057273195012687348L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

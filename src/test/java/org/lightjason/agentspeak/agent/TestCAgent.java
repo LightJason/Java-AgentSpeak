@@ -48,6 +48,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CConstant;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -190,6 +191,7 @@ public final class TestCAgent extends IBaseTest
             return CPath.from( "generic/print" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
@@ -221,6 +223,7 @@ public final class TestCAgent extends IBaseTest
             return CPath.from( "test/result" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {

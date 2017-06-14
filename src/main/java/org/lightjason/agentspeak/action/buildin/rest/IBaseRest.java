@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,6 +63,7 @@ public abstract class IBaseRest extends IBuildinAction
      */
     private static final long serialVersionUID = -3713528201539676487L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

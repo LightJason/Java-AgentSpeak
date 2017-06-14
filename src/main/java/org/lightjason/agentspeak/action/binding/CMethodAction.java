@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -133,6 +134,7 @@ public final class CMethodAction extends IBaseAction
         return m_name;
     }
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

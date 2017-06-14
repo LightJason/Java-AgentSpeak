@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
@@ -69,6 +70,7 @@ public final class CPerronFrobenius extends IAlgebra
         super( 4 );
     }
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

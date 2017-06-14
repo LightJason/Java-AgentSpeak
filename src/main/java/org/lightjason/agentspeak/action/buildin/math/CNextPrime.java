@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public final class CNextPrime extends IBuildinAction
      */
     private static final long serialVersionUID = 934582267427021924L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

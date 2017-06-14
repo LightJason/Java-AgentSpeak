@@ -41,6 +41,7 @@ import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -297,6 +298,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
             return CPath.from( "generic/print" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
@@ -327,6 +329,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
             return CPath.from( "stop" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
@@ -360,6 +363,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
             return CPath.from( "tower/size" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
@@ -410,6 +414,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
             return CPath.from( "tower/push" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
@@ -452,6 +457,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
             return CPath.from( "tower/pop" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {

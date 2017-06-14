@@ -129,13 +129,6 @@ public final class CPrint extends IBuildinAction
         return m_formatter;
     }
 
-
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

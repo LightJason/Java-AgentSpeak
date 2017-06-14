@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
@@ -51,6 +52,7 @@ public final class CGeometricMean extends IBuildinAction
      */
     private static final long serialVersionUID = -3397904432745109682L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

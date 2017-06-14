@@ -45,7 +45,7 @@ public abstract class IConstraint extends IBuildinAction
     /**
      * ctor
      */
-    protected IConstraint()
+    public IConstraint()
     {
         super( 3 );
     }

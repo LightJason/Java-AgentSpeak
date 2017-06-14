@@ -42,6 +42,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,6 +83,7 @@ public final class CAdjacencyMatrix extends IBuildinAction
      */
     private static final long serialVersionUID = -2499068539684263946L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

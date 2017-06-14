@@ -37,6 +37,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 
@@ -58,6 +59,7 @@ public final class CRemovePlan extends IBuildinAction
      */
     private static final long serialVersionUID = -2509947123811973880L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

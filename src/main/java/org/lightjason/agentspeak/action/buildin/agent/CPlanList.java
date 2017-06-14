@@ -52,12 +52,6 @@ public final class CPlanList extends IBuildinAction
      */
     private static final long serialVersionUID = 4584573308355332034L;
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

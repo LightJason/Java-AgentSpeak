@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public final class CNot extends IBuildinAction
      */
     private static final long serialVersionUID = -7990703518931629152L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

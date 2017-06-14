@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
@@ -57,6 +58,7 @@ public abstract class IMapApplyMultiple<T> extends IBuildinAction
         super( 3 );
     }
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

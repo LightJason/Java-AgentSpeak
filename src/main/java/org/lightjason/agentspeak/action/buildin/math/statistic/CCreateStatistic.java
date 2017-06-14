@@ -68,12 +68,6 @@ public final class CCreateStatistic extends IBuildinAction
         super( 3 );
     }
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

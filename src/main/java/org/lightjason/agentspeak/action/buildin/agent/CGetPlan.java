@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStati
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +64,7 @@ public final class CGetPlan extends IBuildinAction
      */
     private static final long serialVersionUID = 2674034436717184541L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

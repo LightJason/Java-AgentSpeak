@@ -50,12 +50,6 @@ public final class CClearBeliefbase extends IBuildinAction
      */
     private static final long serialVersionUID = 5832369527494082158L;
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

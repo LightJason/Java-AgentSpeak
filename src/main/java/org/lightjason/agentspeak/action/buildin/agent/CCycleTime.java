@@ -49,12 +49,6 @@ public class CCycleTime extends IBuildinAction
      */
     private static final long serialVersionUID = 3781558534685092083L;
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

@@ -57,12 +57,6 @@ public final class CBeliefList extends IBuildinAction
      */
     private static final long serialVersionUID = 6884092740048107959L;
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

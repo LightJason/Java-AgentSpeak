@@ -35,6 +35,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -68,6 +69,7 @@ public final class CHash extends IBuildinAction
      */
     private static final long serialVersionUID = 4638666396527392307L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

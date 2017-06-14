@@ -39,6 +39,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
@@ -67,6 +68,7 @@ public class CCreate extends IBuildinAction
      */
     private static final long serialVersionUID = -8220165218772387059L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

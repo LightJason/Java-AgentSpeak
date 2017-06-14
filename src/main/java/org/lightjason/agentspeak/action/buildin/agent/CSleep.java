@@ -50,12 +50,6 @@ public final class CSleep extends IBuildinAction
      */
     private static final long serialVersionUID = -8150278330935392034L;
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

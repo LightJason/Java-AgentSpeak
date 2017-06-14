@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -54,6 +55,7 @@ public final class CBuild extends IBuildinAction
      */
     private static final long serialVersionUID = -8462499187047054608L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

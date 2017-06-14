@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
@@ -62,14 +63,8 @@ public final class CEquationConstraint extends IConstraint
      */
     private static final long serialVersionUID = 3123101079239668634L;
 
-    /**
-     * ctor
-     */
-    public CEquationConstraint()
-    {
-        super();
-    }
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

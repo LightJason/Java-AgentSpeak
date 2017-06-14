@@ -80,12 +80,6 @@ public final class CClear extends IStorage
         super( p_fordbidden );
     }
 
-    @Override
-    public final int minimalArgumentNumber()
-    {
-        return 0;
-    }
-
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,6 +59,7 @@ public class CEqual extends IBuildinAction
      */
     private static final long serialVersionUID = -2953614515361905328L;
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {

@@ -36,6 +36,11 @@ import javax.annotation.Nonnull;
 public interface IAction extends IExecution
 {
     /**
+     * serial id
+     */
+    long serialVersionUID = -6374480398439703170L;
+
+    /**
      * returns the name with path of the action
      *
      * @return path (literal functor)
@@ -49,6 +54,9 @@ public interface IAction extends IExecution
      * @return number of minimal arguments
      */
     @Nonnegative
-    int minimalArgumentNumber();
+    default int minimalArgumentNumber()
+    {
+        return 0;
+    }
 
 }

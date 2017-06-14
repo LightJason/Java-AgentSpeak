@@ -32,6 +32,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.CPlanStatistic;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public final class CAddPlan extends IBuildinAction
      */
     private static final long serialVersionUID = -1759245318551344596L;
 
+    @Nonnegative
     @Override
     public int minimalArgumentNumber()
     {
