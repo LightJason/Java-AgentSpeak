@@ -78,7 +78,7 @@ public final class CDiagonal extends IAlgebra
                                     .findFirst()
                                     .map( ITerm::<String>raw )
                                     .map( EType::from )
-                                    .orElseGet( () -> EType.SPARSE );
+                                    .orElse( EType.SPARSE );
 
         CCommon.flatten( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix1D.class ) )

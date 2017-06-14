@@ -87,7 +87,7 @@ public abstract class IApplyPathAlgorithm extends IBuildinAction
                                                  )
                                                  .findFirst()
                                                  .map( i -> i.get( 1 ).<Number>raw() )
-                                                 .orElseGet( () -> 0D );
+                                                 .orElse( 0D );
 
         final Function<Object, Number> l_weightfunction = ( e ) -> l_weights.getOrDefault( e, l_defaultvalue );
 

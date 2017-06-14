@@ -102,14 +102,14 @@ public final class CAdjacencyMatrix extends IBuildinAction
                                     .findFirst()
                                     .map( ITerm::<String>raw )
                                     .map( EType::from )
-                                    .orElseGet( () -> EType.SPARSE );
+                                    .orElse( EType.SPARSE );
 
         final double l_defaultcost = CCommon.flatten( p_argument )
                                             .filter( i -> CCommon.rawvalueAssignableTo( i, Number.class ) )
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
-                                            .orElseGet( () -> 1D );
+                                            .orElse( 1D );
 
         final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
                                                 .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )

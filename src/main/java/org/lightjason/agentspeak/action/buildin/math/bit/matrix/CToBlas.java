@@ -83,7 +83,7 @@ public final class CToBlas extends IBuildinAction
         final EType l_type = l_arguments.parallelStream()
                                         .filter( i -> CCommon.rawvalueAssignableTo( i, String.class ) )
                                         .findFirst().map( i -> EType.from( i.<String>raw() ) )
-                                        .orElseGet( () -> EType.SPARSE );
+                                        .orElse( EType.SPARSE );
 
         switch ( l_type )
         {

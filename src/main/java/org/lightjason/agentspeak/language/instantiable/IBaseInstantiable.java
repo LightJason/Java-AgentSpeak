@@ -134,6 +134,7 @@ public abstract class IBaseInstantiable implements IInstantiable
      *
      * @note stream is stopped iif an execution is failed
      */
+    @SuppressWarnings( "ResultOfMethodCallIgnored" )
     private List<IFuzzyValue<Boolean>> executesequential( final IContext p_context )
     {
         final List<IFuzzyValue<Boolean>> l_result = Collections.synchronizedList( new LinkedList<>() );

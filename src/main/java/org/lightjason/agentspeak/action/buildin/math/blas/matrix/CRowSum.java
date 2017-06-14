@@ -78,7 +78,7 @@ public final class CRowSum extends IAlgebra
                                     .findFirst()
                                     .map( ITerm::<String>raw )
                                     .map( EType::from )
-                                    .orElseGet( () -> EType.DENSE );
+                                    .orElse( EType.DENSE );
 
         CCommon.flatten( p_argument )
                .filter( i -> CCommon.rawvalueAssignableTo( i, DoubleMatrix2D.class ) )

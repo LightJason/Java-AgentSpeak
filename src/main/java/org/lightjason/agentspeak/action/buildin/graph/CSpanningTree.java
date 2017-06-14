@@ -79,7 +79,7 @@ public final class CSpanningTree extends IBuildinAction
                                             .findFirst()
                                             .map( ITerm::<Number>raw )
                                             .map( Number::doubleValue )
-                                            .orElseGet( () -> 0D );
+                                            .orElse( 0D );
 
         final Map<?, Number> l_costmap = CCommon.flatten( p_argument )
                                                 .filter( i -> CCommon.rawvalueAssignableTo( i, Map.class ) )
