@@ -64,6 +64,7 @@ public final class CSolve extends IAlgebra
         return 2;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,

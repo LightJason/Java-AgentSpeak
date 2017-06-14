@@ -73,28 +73,28 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
 
     @Nonnull
     @Override
-    public final IView<T> create( final String p_name )
+    public final IView<T> create( @Nonnull final String p_name )
     {
         return this.eventreference( new CView<>( p_name, this ) );
     }
 
     @Nonnull
     @Override
-    public final IView<T> create( final String p_name, final IView<T> p_parent )
+    public final IView<T> create( @Nonnull final String p_name, final IView<T> p_parent )
     {
         return this.eventreference( new CView<>( p_name, this, p_parent ) );
     }
 
     @Nonnull
     @Override
-    public ILiteral add( final ILiteral p_literal )
+    public ILiteral add( @Nonnull final ILiteral p_literal )
     {
         return this.event( ITrigger.EType.ADDBELIEF, p_literal );
     }
 
     @Nonnull
     @Override
-    public ILiteral remove( final ILiteral p_literal )
+    public ILiteral remove( @Nonnull final ILiteral p_literal )
     {
         return this.event( ITrigger.EType.DELETEBELIEF, p_literal );
     }
@@ -120,7 +120,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
 
     @Nonnull
     @Override
-    public Stream<ITrigger> trigger( final IView<T> p_view )
+    public Stream<ITrigger> trigger( @Nonnull final IView<T> p_view )
     {
         return this.cleartrigger( p_view );
     }

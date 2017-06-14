@@ -68,6 +68,7 @@ public final class CSubMatrix extends IAlgebra
         return 5;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )

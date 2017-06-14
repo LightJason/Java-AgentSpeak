@@ -65,7 +65,7 @@ public final class CComparable extends IBaseBinary
     @Nonnull
     @Override
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, final List<ITerm> p_return )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
         if ( !this.executearguments( p_parallel, p_context, l_argument ) )

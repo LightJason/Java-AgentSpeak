@@ -882,7 +882,7 @@ public final class TestCActionGraph extends IBaseTest
         l_return.clear();
 
         new CInEdgesSingle().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 2, l_graph1, l_graph2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

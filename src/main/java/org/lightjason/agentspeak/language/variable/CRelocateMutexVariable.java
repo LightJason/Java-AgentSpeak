@@ -96,7 +96,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
 
     @Nonnull
     @Override
-    public final IVariable<T> shallowcopy( @Nonnull final IPath... p_prefix )
+    public final IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value )

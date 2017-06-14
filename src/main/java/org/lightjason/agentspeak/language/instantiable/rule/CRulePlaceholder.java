@@ -91,6 +91,7 @@ public final class CRulePlaceholder implements IRule
         return CCommon.instantiate( this, p_agent, p_variable );
     }
 
+    @Nonnull
     @Override
     public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                          @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
@@ -99,6 +100,7 @@ public final class CRulePlaceholder implements IRule
         return CFuzzyValue.from( false );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
