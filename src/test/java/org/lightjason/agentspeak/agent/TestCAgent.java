@@ -185,6 +185,7 @@ public final class TestCAgent extends IBaseTest
          */
         private static final long serialVersionUID = 8344720639088993942L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
@@ -217,6 +218,7 @@ public final class TestCAgent extends IBaseTest
          */
         private static final long serialVersionUID = 9032624165822970132L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {

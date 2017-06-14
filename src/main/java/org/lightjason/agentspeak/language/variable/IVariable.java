@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -44,7 +45,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @return the object itself
      */
     @Nonnull
-    IVariable<T> set( final T p_value );
+    IVariable<T> set( @Nullable final T p_value );
 
     /**
      * returns allocated state
@@ -75,7 +76,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @throws IllegalStateException on non-allocated
      */
     @Nonnull
-    IVariable<T> throwNotAllocated() throws IllegalStateException;
+    IVariable<T> thrownotallocated() throws IllegalStateException;
 
     /**
      * checkes assignable of the value
@@ -83,7 +84,7 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean valueAssignableTo( final Class<?>... p_class );
+    boolean valueassignableto( @Nonnull final Class<?>... p_class );
 
     /**
      * throws an illegal argument exception
@@ -96,6 +97,6 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @throws IllegalArgumentException on assignable error
      */
     @Nonnull
-    IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
+    IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

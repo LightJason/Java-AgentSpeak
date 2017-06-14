@@ -54,7 +54,8 @@ public final class CFindEdgeSingle extends IApplySingle
     }
 
     @Override
-    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph, @Nonnull final List<ITerm> p_window, final List<ITerm> p_return )
+    protected void apply( final boolean p_parallel, @Nonnull final Graph<Object, Object> p_graph,
+                          @Nonnull final List<ITerm> p_window, @Nonnull final List<ITerm> p_return )
     {
         p_return.add(
             CRawTerm.from(

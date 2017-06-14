@@ -431,18 +431,21 @@ public final class TestCActionAgent extends IBaseTest
             return m_trigger;
         }
 
+        @Nonnull
         @Override
         public final Collection<IAnnotation<?>> annotations()
         {
             return m_annotation.values();
         }
 
+        @Nonnull
         @Override
         public final List<IExecution> body()
         {
             return Collections.emptyList();
         }
 
+        @Nonnull
         @Override
         public final IFuzzyValue<Boolean> condition( final IContext p_context )
         {

@@ -64,6 +64,7 @@ public final class CAtomAnnotation<T> extends IBaseAnnotation<T>
         return ( p_object != null ) && ( p_object instanceof IAnnotation<?> ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

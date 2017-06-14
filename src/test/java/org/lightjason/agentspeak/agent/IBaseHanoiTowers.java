@@ -287,6 +287,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
          */
         private static final long serialVersionUID = 3623170719805419082L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
@@ -318,6 +319,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
          */
         private static final long serialVersionUID = 1356103671899402899L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
@@ -352,6 +354,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
          */
         private static final long serialVersionUID = -621010269747370196L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
@@ -403,6 +406,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
             m_failprobability = p_failprobability;
         }
 
+        @Nonnull
         @Override
         public final IPath name()
         {
@@ -446,6 +450,7 @@ abstract class IBaseHanoiTowers extends IBaseTest
          */
         private static final long serialVersionUID = 7757699013244193313L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {

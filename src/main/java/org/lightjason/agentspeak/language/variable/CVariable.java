@@ -106,8 +106,9 @@ public class CVariable<T> implements IVariable<T>
         this.internalset( p_value );
     }
 
+    @Nonnull
     @Override
-    public IVariable<T> set( final T p_value )
+    public IVariable<T> set( @Nullable final T p_value )
     {
         return this.internalset( p_value );
     }
@@ -132,7 +133,7 @@ public class CVariable<T> implements IVariable<T>
 
     @Nonnull
     @Override
-    public IVariable<T> throwNotAllocated() throws IllegalStateException
+    public IVariable<T> thrownotallocated() throws IllegalStateException
     {
         if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon.languagestring( CVariable.class, "notallocated", this ) );
@@ -141,16 +142,16 @@ public class CVariable<T> implements IVariable<T>
     }
 
     @Override
-    public boolean valueAssignableTo( final Class<?>... p_class )
+    public boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Nonnull
     @Override
-    public IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
+    public IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
-        if ( !this.valueAssignableTo( p_class ) )
+        if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException(
                 org.lightjason.agentspeak.common.CCommon.languagestring( CVariable.class, "notassignable", this, Arrays.asList( p_class ) ) );
 

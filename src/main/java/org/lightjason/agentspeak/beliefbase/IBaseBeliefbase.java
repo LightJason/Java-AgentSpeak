@@ -101,7 +101,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
 
     @Nonnull
     @Override
-    public T update( final T p_agent )
+    public T update( @Nonnull final T p_agent )
     {
         // check all references of mask and remove unused references
         Reference<? extends IView<T>> l_reference;

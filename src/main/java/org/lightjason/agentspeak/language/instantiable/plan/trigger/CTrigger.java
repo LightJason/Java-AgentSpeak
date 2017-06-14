@@ -131,12 +131,14 @@ public final class CTrigger implements ITrigger
         return m_structurehash;
     }
 
+    @Nonnull
     @Override
     public final ITrigger shallowcopy( final IPath... p_prefix )
     {
         return new CTrigger( m_event, m_literal.shallowcopy( p_prefix ) );
     }
 
+    @Nonnull
     @Override
     public final ITrigger shallowcopysuffix()
     {

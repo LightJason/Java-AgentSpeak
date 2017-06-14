@@ -92,6 +92,7 @@ public final class CConstant<T> extends CVariable<T>
         throw new CIllegalStateException( CCommon.languagestring( this, "set", m_functor ) );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
@@ -101,6 +102,7 @@ public final class CConstant<T> extends CVariable<T>
     }
 
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopysuffix()
     {

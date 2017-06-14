@@ -83,6 +83,7 @@ public class CMutexVariable<T> extends CVariable<T>
         super( p_functor, p_value );
     }
 
+    @Nonnull
     @Override
     public final synchronized IVariable<T> set( final T p_value )
     {
@@ -95,16 +96,18 @@ public class CMutexVariable<T> extends CVariable<T>
         return super.raw();
     }
 
+    @Nonnull
     @Override
-    public final synchronized IVariable<T> throwNotAllocated() throws IllegalStateException
+    public final synchronized IVariable<T> thrownotallocated() throws IllegalStateException
     {
-        return super.throwNotAllocated();
+        return super.thrownotallocated();
     }
 
+    @Nonnull
     @Override
-    public final synchronized IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
+    public final synchronized IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
-        return super.throwValueNotAssignableTo( p_class );
+        return super.throwvaluenotassignableto( p_class );
     }
 
     @Override
@@ -114,9 +117,9 @@ public class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized boolean valueAssignableTo( final Class<?>... p_class )
+    public final synchronized boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
-        return super.valueAssignableTo( p_class );
+        return super.valueassignableto( p_class );
     }
 
     @Override
@@ -127,7 +130,7 @@ public class CMutexVariable<T> extends CVariable<T>
 
     @Nonnull
     @Override
-    public IVariable<T> shallowcopy( final IPath... p_prefix )
+    public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CMutexVariable<>( m_functor, m_value )

@@ -209,9 +209,9 @@ public final class CCommon
     public static <T> boolean rawvalueAssignableTo( @Nonnull final T p_value, @Nonnull final Class<?>... p_class )
     {
         if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).valueAssignableTo( p_class );
+            return ( (IVariable<?>) p_value ).valueassignableto( p_class );
         if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).valueAssignableTo( p_class );
+            return ( (IRawTerm<?>) p_value ).valueassignableto( p_class );
 
         return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( p_value.getClass() ) );
     }

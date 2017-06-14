@@ -100,6 +100,7 @@ public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<IL
                        .filter( Objects::nonNull );
     }
 
+    @Nonnull
     @Override
     public final Stream<M> streamSingleElements()
     {

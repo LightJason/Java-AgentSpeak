@@ -1031,6 +1031,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return this.visitChildren( p_context );
     }
 
+    @Nonnull
     @Override
     public final Set<ILiteral> initialbeliefs()
     {
@@ -1042,12 +1043,14 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
     // --- getter structure ------------------------------------------------------------------------------------------------------------------------------------
 
+    @Nonnull
     @Override
     public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
+    @Nonnull
     @Override
     public final Set<IRule> rules()
     {

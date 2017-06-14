@@ -94,6 +94,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
             : m_relocate.set( this.raw() );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
@@ -102,12 +103,14 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
                : new CRelocateVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopysuffix()
     {
         return new CRelocateVariable<>( m_functor, m_relocate );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
@@ -119,6 +122,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
         );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {

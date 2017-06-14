@@ -135,12 +135,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
         return m_value == null ? "" : m_value.toString();
     }
 
+    @Nonnull
     @Override
     public final String functor()
     {
         return m_functor.getSuffix();
     }
 
+    @Nonnull
     @Override
     public final IPath functorpath()
     {
@@ -175,7 +177,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public final IRawTerm<T> throwNotAllocated( @Nullable final String... p_name ) throws IllegalStateException
+    public final IRawTerm<T> thrownotallocated( @Nullable final String... p_name ) throws IllegalStateException
     {
         if ( !this.allocated() )
             throw new CIllegalStateException( org.lightjason.agentspeak.common.CCommon
@@ -185,27 +187,29 @@ public final class CRawTerm<T> implements IRawTerm<T>
     }
 
     @Override
-    public final boolean valueAssignableTo( @Nonnull final Class<?>... p_class )
+    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
 
     @Nonnull
     @Override
-    public final IRawTerm<T> throwValueNotAssignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public final IRawTerm<T> throwvaluenotassignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
-        if ( !this.valueAssignableTo( p_class ) )
+        if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", this, p_class ) );
 
         return this;
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return CRawTerm.from( new Cloner().deepClone( m_value ) );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {

@@ -55,7 +55,7 @@ public interface IRawTerm<T> extends ITerm
      * @throws IllegalStateException on non-allocated
      */
     @Nonnull
-    IRawTerm<T> throwNotAllocated( @Nullable final String... p_name ) throws IllegalStateException;
+    IRawTerm<T> thrownotallocated( @Nullable final String... p_name ) throws IllegalStateException;
 
     /**
      * checkes assignable of the value
@@ -63,7 +63,7 @@ public interface IRawTerm<T> extends ITerm
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean valueAssignableTo( @Nonnull final Class<?>... p_class );
+    boolean valueassignableto( @Nonnull final Class<?>... p_class );
 
     /**
      * throws an illegal argument exception
@@ -76,6 +76,6 @@ public interface IRawTerm<T> extends ITerm
      * @throws IllegalArgumentException on assignable error
      */
     @Nonnull
-    IRawTerm<T> throwValueNotAssignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
+    IRawTerm<T> throwvaluenotassignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

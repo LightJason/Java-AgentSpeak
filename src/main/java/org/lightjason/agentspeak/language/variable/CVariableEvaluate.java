@@ -95,10 +95,10 @@ public final class CVariableEvaluate implements IVariableEvaluate
             throw new CIllegalStateException();
 
         // if variable is a string
-        if ( l_variable.valueAssignableTo( String.class ) )
+        if ( l_variable.valueassignableto( String.class ) )
             return this.fromString( l_variable.raw(), p_context );
 
-        if ( m_variable.valueAssignableTo( ILiteral.class ) )
+        if ( m_variable.valueassignableto( ILiteral.class ) )
             return this.fromLiteral( l_variable.raw(), p_context );
 
         throw new CIllegalStateException();
@@ -136,18 +136,21 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return MessageFormat.format( "{0}{1}", m_variable, m_parameter.isEmpty() ? "" : m_parameter );
     }
 
+    @Nonnull
     @Override
     public final String functor()
     {
         return m_variable.functor();
     }
 
+    @Nonnull
     @Override
     public final IPath functorpath()
     {
         return m_variable.functorpath();
     }
 
+    @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
@@ -166,12 +169,14 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return m_variable.raw();
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return m_variable.deepcopy( p_prefix );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {

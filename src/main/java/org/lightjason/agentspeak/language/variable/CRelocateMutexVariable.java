@@ -94,20 +94,23 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     }
 
 
+    @Nonnull
     @Override
-    public final IVariable<T> shallowcopy( final IPath... p_prefix )
+    public final IVariable<T> shallowcopy( @Nonnull final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
                ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value )
                : new CRelocateMutexVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {
         return new CRelocateMutexVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate, new Cloner().deepClone( m_value ) );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
@@ -120,6 +123,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
         );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopysuffix()
     {
