@@ -91,10 +91,7 @@ public final class CPerronFrobenius extends IAlgebra
             .boxed()
             .map( i -> new double[l_arguments.get( i ).<DoubleMatrix2D>raw().rows()] )
             .map( DenseDoubleMatrix1D::new )
-            .map( i -> {
-                IntStream.range( 0, i.size() ).forEach( j -> i.setQuick( j, l_random.nextDouble() ) );
-                return i;
-            } )
+            .peek( i -> IntStream.range( 0, i.size() ).forEach( j -> i.setQuick( j, l_random.nextDouble() ) ) )
             .collect( Collectors.toList() );
 
         // run iteration

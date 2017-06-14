@@ -47,7 +47,7 @@ public final class CWeightedDifference implements IMetric
 
         // element aggregation
         final double l_union = Stream.concat( l_first.stream(), l_second.stream() ).count();
-        final Set<? extends ITerm> l_intersection = l_first.stream().collect( Collectors.toSet() );
+        final Set<? extends ITerm> l_intersection = new HashSet<>( l_first );
         l_intersection.retainAll( l_second );
 
         // return distance

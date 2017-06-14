@@ -301,10 +301,7 @@ public final class TestCActionAgent extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
         final Set<String> l_list = IntStream.range( 0, 100 )
                                             .mapToObj( i -> RandomStringUtils.random( 12, "abcdefghijklmnop" ) )
-                                            .map( i -> {
-                                                m_context.agent().beliefbase().add( CLiteral.from( i ) );
-                                                return i;
-                                            } )
+                                            .peek( i -> m_context.agent().beliefbase().add( CLiteral.from( i ) ) )
                                             .collect( Collectors.toSet() );
 
         Assert.assertEquals( m_context.agent().beliefbase().size(), 100 );

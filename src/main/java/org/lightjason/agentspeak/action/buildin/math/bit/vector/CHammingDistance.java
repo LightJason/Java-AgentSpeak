@@ -73,10 +73,7 @@ public final class CHammingDistance extends IBuildinAction
         l_arguments.stream()
                    .skip( 1 )
                    .map( BitVector::copy )
-                   .map( i -> {
-                       i.xor( l_arguments.get( 0 ) );
-                       return i;
-                   } )
+                   .peek( i -> i.xor( l_arguments.get( 0 ) ) )
                    .mapToLong( BitVector::cardinality )
                    .boxed()
                    .map( CRawTerm::from )

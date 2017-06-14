@@ -292,7 +292,7 @@ public final class TestCActionMath extends IBaseTest
 
         Assert.assertArrayEquals(
             l_return.stream().map( ITerm::raw ).toArray(),
-            p_input.getLeft().stream().map( ITerm::<Number>raw ).map( p_input.getRight()::apply ).toArray()
+            p_input.getLeft().stream().map( ITerm::<Number>raw ).map( p_input.getRight() ).toArray()
         );
     }
 

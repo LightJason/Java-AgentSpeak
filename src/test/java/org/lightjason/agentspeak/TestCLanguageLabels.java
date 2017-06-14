@@ -329,7 +329,7 @@ public final class TestCLanguageLabels extends IBaseTest
         /**
          * label set
          */
-        private Set<String> m_label = new HashSet<>();
+        private final Set<String> m_label = new HashSet<>();
 
         /**
          * returns the translated labels

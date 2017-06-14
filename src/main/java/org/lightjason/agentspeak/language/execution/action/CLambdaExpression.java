@@ -67,7 +67,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     /**
      * flag of parallel execution
      */
-    private boolean m_parallel;
+    private final boolean m_parallel;
     /**
      * return variable
      */

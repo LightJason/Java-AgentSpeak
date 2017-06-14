@@ -88,10 +88,6 @@ abstract class IBaseHanoiTowers extends IBaseTest
      */
     private Long m_slicenumber;
     /**
-     * number of agents
-     */
-    private Long m_agentnumber;
-    /**
      * tower map
      */
     private Map<Integer, CTower> m_tower;
@@ -117,10 +113,9 @@ abstract class IBaseHanoiTowers extends IBaseTest
      * @param p_action action stream
      * @throws Exception thrown on initialize error
      */
-    protected final void initialize( final long p_agentnumber, final long p_towernumber, final long p_slicenumber,
+    protected final void initialize( final int p_agentnumber, final long p_towernumber, final long p_slicenumber,
                                      final String p_asl, final Stream<IAction> p_action ) throws Exception
     {
-        m_agentnumber = p_agentnumber;
         m_towernumber = p_towernumber;
         m_slicenumber = p_slicenumber;
         m_running = new AtomicBoolean( true );
@@ -143,8 +138,8 @@ abstract class IBaseHanoiTowers extends IBaseTest
             )
         {
             final CGenerator l_generator = new CGenerator( l_asl, p_action );
-            IntStream.range( 0, m_agentnumber.intValue() )
-                     .forEach( i -> l_agentmap.put( i, l_generator.generatesingle( i ) ) );
+            IntStream.range( 0, p_agentnumber )
+                      .forEach( i -> l_agentmap.put( i, l_generator.generatesingle( i ) ) );
         }
         catch ( final IOException l_exception )
         {
