@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.language.variable;
 
+import org.lightjason.agentspeak.language.IRawStructure;
 import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.ITerm;
 
@@ -35,7 +36,7 @@ import javax.annotation.Nullable;
  *
  * @tparam T data type
  */
-public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
+public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShallowCopy<IVariable<T>>
 {
 
     /**
@@ -46,13 +47,6 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      */
     @Nonnull
     IVariable<T> set( @Nullable final T p_value );
-
-    /**
-     * returns allocated state
-     *
-     * @return boolean flag
-     */
-    boolean allocated();
 
     /**
      * flag to define a "any variable"
@@ -66,37 +60,5 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * concurrency- / thread-safe
      */
     boolean mutex();
-
-    /**
-     * throws an illegal state exception
-     * iif the variable is not allocated
-     *
-     * @return object itself
-     *
-     * @throws IllegalStateException on non-allocated
-     */
-    @Nonnull
-    IVariable<T> thrownotallocated() throws IllegalStateException;
-
-    /**
-     * checkes assignable of the value
-     *
-     * @param p_class class
-     * @return assignable (on null always true)
-     */
-    boolean valueassignableto( @Nonnull final Class<?>... p_class );
-
-    /**
-     * throws an illegal argument exception
-     * iif the value is not assignable to the
-     * class
-     *
-     * @param p_class assignable class
-     * @return object itself
-     *
-     * @throws IllegalArgumentException on assignable error
-     */
-    @Nonnull
-    IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

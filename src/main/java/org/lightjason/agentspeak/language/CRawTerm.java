@@ -193,7 +193,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
 
     @Nonnull
     @Override
-    public final IRawTerm<T> throwvaluenotassignableTo( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    public final IRawTerm<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
         if ( !this.valueassignableto( p_class ) )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );

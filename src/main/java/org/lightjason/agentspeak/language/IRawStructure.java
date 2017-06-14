@@ -23,14 +23,51 @@
 
 package org.lightjason.agentspeak.language;
 
+import javax.annotation.Nonnull;
+
+
 /**
- * interface of raw terms
+ * interface to define a structure with native data
  */
-public interface IRawTerm<T> extends ITerm, IRawStructure<IRawTerm<T>>
+public interface IRawStructure<T>
 {
     /**
-     * empty raw term
+     * returns allocated state
+     *
+     * @return boolean flag
      */
-    IRawTerm<?> EMPTY = new CRawTerm<>( null );
+    boolean allocated();
+
+    /**
+     * checkes assignable of the value
+     *
+     * @param p_class class
+     * @return assignable (on null always true)
+     */
+    boolean valueassignableto( @Nonnull final Class<?>... p_class );
+
+    /**
+     * throws an illegal state exception
+     * iif the variable is not allocated
+     *
+     * @return object itself
+     *
+     * @throws IllegalStateException on non-allocated
+     */
+    @Nonnull
+    T thrownotallocated() throws IllegalStateException;
+
+    /**
+     * throws an illegal argument exception
+     * iif the value is not assignable to the
+     * class
+     *
+     * @param p_class assignable class
+     * @return object itself
+     *
+     * @throws IllegalArgumentException on assignable error
+     */
+    @Nonnull
+    T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }
