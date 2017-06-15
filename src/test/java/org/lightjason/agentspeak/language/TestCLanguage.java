@@ -140,6 +140,20 @@ public final class TestCLanguage extends IBaseTest
         );
     }
 
+    /**
+     * check any variable
+     */
+    @Test( expected = IllegalStateException.class )
+    public final void anyvariable()
+    {
+        final IVariable<?> l_variable = new CVariable<Object>( "_" );
+
+        Assert.assertTrue( l_variable.any() );
+        Assert.assertFalse( l_variable.allocated() );
+
+        l_variable.thrownotallocated();
+    }
+
 
     /**
      * checks the variable structure
