@@ -47,31 +47,11 @@ public final class CConstant<T> extends CVariable<T>
      * ctor
      *
      * @param p_functor name
-     */
-    public CConstant( final String p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
      * @param p_value value
      */
     public CConstant( @Nonnull final String p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
-     */
-    public CConstant( @Nonnull final IPath p_functor )
-    {
-        super( p_functor );
     }
 
     /**

@@ -108,7 +108,7 @@ public final class TestCLanguage extends IBaseTest
 
 
     /**
-     * test constantstructure
+     * test constant structure
      */
     @Test
     public final void constant()
@@ -121,6 +121,23 @@ public final class TestCLanguage extends IBaseTest
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Number.class ) );
         Assert.assertTrue( CCommon.rawvalueAssignableTo( l_constant, Double.class ) );
         Assert.assertEquals( "constant number value", l_constant.raw(), l_value, 0 );
+    }
+
+    /**
+     * test constant copy
+     */
+    @Test
+    public final void constantcopy()
+    {
+        Assert.assertEquals(
+            new CConstant<>( "const/value", "test" ).shallowcopysuffix().functor(),
+            "value"
+        );
+
+        Assert.assertEquals(
+            new CConstant<>( "const/value", "test" ).shallowcopy( CPath.from( "xxx" ) ).fqnfunctor().toString(),
+            "xxx/const/value"
+        );
     }
 
 
