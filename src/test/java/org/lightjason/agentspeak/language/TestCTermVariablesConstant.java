@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 /**
  * test for language components
  */
-public final class TestCLanguage extends IBaseTest
+public final class TestCTermVariablesConstant extends IBaseTest
 {
 
     /**
@@ -144,7 +144,7 @@ public final class TestCLanguage extends IBaseTest
      * check any variable
      */
     @Test( expected = IllegalStateException.class )
-    public final void anyvariable()
+    public final void variableany()
     {
         final IVariable<?> l_variable = new CVariable<Object>( "_" );
 
@@ -159,7 +159,7 @@ public final class TestCLanguage extends IBaseTest
      * test exception on value asiable
      */
     @Test( expected = IllegalArgumentException.class )
-    public final void valueassignable()
+    public final void variablevalueassignable()
     {
         new CVariable<Object>( "num", 123 ).throwvaluenotassignableto( String.class );
     }
@@ -185,7 +185,7 @@ public final class TestCLanguage extends IBaseTest
      * test tostring
      */
     @Test
-    public final void string()
+    public final void variabletostring()
     {
         Assert.assertEquals( new CVariable<>( "data" ).toString(), "data()" );
         Assert.assertEquals( new CVariable<>( "data", "value" ).toString(), "data(value)" );
@@ -223,6 +223,17 @@ public final class TestCLanguage extends IBaseTest
         Assert.assertFalse( l_variable.allocated() );
     }
 
+    /**
+     * test variable functor
+     */
+    @Test
+    public final void variablefunctor()
+    {
+        Assert.assertEquals(
+            new CVariable<>( "prefix/name" ).functorpath(),
+            CPath.from( "prefix" )
+        );
+    }
 
     /**
      * check the mutex variable
@@ -252,12 +263,33 @@ public final class TestCLanguage extends IBaseTest
         Assert.assertFalse( l_variable.allocated() );
     }
 
+    /**
+     * test variable shallow-copy
+     */
+    @Test
+    public final void variablecopy()
+    {
+        final IVariable<?> l_variable = new CVariable<>( "prefix/copy", new Object()  );
+
+        Assert.assertEquals( l_variable.shallowcopysuffix().fqnfunctor(), CPath.from( "copy" ) );
+        Assert.assertEquals( l_variable.shallowcopy( CPath.from( "xxx" ) ).fqnfunctor(), CPath.from( "xxx/prefix/copy" ) );
+        Assert.assertEquals( l_variable.shallowcopysuffix().<Object>raw(), l_variable.<Object>raw() );
+
+        final ITerm l_deep = l_variable.deepcopy( CPath.from("foo") );
+        Assert.assertEquals( l_deep.fqnfunctor(), CPath.from( "foo/prefix/copy" ) );
+        Assert.assertNotEquals( l_deep.<Object>raw(), l_variable.<Object>raw() );
+
+        final ITerm l_deepsuffix = l_variable.deepcopysuffix();
+        Assert.assertEquals( l_deepsuffix.fqnfunctor(), CPath.from( "copy" ) );
+        Assert.assertNotEquals( l_deepsuffix.<Object>raw(), l_variable.<Object>raw() );
+    }
+
 
     /**
      * test realocated variable
      */
     @Test
-    public final void relocatevariable()
+    public final void relocatevariablerelocate()
     {
         final IVariable<String> l_variable = new CVariable<>( "RA" );
         final CRelocateVariable<String> l_relocate = new CRelocateVariable<>( l_variable );
@@ -317,6 +349,7 @@ public final class TestCLanguage extends IBaseTest
     }
 
 
+
     /**
      * main method for testing
      *
@@ -324,7 +357,7 @@ public final class TestCLanguage extends IBaseTest
      */
     public static void main( final String[] p_args )
     {
-        new TestCLanguage().invoketest();
+        new TestCTermVariablesConstant().invoketest();
 
     }
 }
