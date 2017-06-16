@@ -158,46 +158,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 ## Coding - Agent
 
 * Agent (ASL) can be defined as a logic program with [beliefs](#belief), [rules](#rule) and [plans](#plan)
+* The agent execution structure can be described as a _finite-state machine_ which execute the state changing based on an event processing
 * Agents must be run (triggered) by an external runtime e.g. from an outside system component
 * [Plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
-
-
-## <a name="cycle">Running Semantics - Agent-Cycle</a>
-
-Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
-
-1. execute perceiving on each beliefbase
-    * run _perceive_ on each beliefbase perceiving object
-    * add / delete beliefs in the beliefbase
-    * beliefbase events will generate
-
-2. if agent is in suspend state stop execution
-    
-3. run agent cycle
-
-    1. run update of defuzzifcation
-    2. collect plans, which match belief-events and goal-events
-    3. create plan execution list of instantiated plans
-    4. execute instantiated plans in parallel and apply the following rules for each body formula
-
-        1. if an item is an _action_ or _rule_ execute it immediatly
-        2. if an item is a _test goal_ check instantiated plans if a plan is found return true otherwise false
-        3. if an item is an _achievment goal_ and
-            * begins with ```!``` add a new trigger-event for the next cycle to instantiate a possible plan
-            * begins with ```!!``` the plan which is matched by the goal is executated immediately within the current plan context          
-        4. if an item is a belief-
-            * addition, unify the literal and add it into the beliefbase and create a trigger-event
-            * deletion, unify the literal and remove it from the beliefbase and create a trigger-event
-
-    5. if a plan is finished check plan result, if it is false / fail create a ```-!goal``` event 
-
-4. increment cycle value
-
-
-## <a name="devaction">Developing Buildin Actions & Components</a>
-
-* [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html) see [example](http://commons.apache.org/proper/commons-math/userguide/ode.html)
-* [Curve Fitting](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/package-summary.html)
-* [Genetic Algorithm](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/genetics/package-summary.html)
-* [Base Clustering](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ml/clustering/package-summary.html)
-* [FIPA communication interface](http://www.fipa.org/specs/fipa00061/index.html) (encapsulate message parsing) and [FIPA ontology](http://www.fipa.org/specs/fipa00086/index.html) definition
+* The [execution semantic](https://lightjason.github.io/knowledgebase/differencetojason/) in comparation to Jason (see chapter 10.1 [AgentSpeak, p.207])
