@@ -116,6 +116,7 @@ INPUT                  = src/main/java \
                          src/test/java \
                          readme.md \
                          contributing.md \
+                         code-of-conduct.md \
                          license.md
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.java \

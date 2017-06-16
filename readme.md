@@ -9,6 +9,9 @@ a Java 8 implementation has been build-up with parallel execution calls. The ver
 with a fuzzy-based logical calculus and grammar features like lambda expressions. Agent execution based on a mathematical structure
 to describe an optimizing process by a [finite-state-machine](https://en.wikipedia.org/wiki/Finite-state_machine)
 
+* [Contribution Guidelines](contribution.md)
+* [Code-of-Conduct](code-of-conduct.md)
+
 
 
 ## Requirements
