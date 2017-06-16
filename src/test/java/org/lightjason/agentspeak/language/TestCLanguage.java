@@ -156,6 +156,43 @@ public final class TestCLanguage extends IBaseTest
 
 
     /**
+     * test exception on value asiable
+     */
+    @Test( expected = IllegalArgumentException.class )
+    public final void valueassignable()
+    {
+        new CVariable<Object>( "num", 123 ).throwvaluenotassignableto( String.class );
+    }
+
+    /**
+     * variable equals
+     */
+    @Test
+    public final void variableequals()
+    {
+        Assert.assertEquals(
+            new CVariable<Object>( "foo", "str" ),
+            new CVariable<Object>( "foo", 123 )
+        );
+
+        Assert.assertEquals(
+            new CVariable<>( "eq", 56  ),
+            new CVariable<>( "eq", 56 )
+        );
+    }
+
+    /**
+     * test tostring
+     */
+    @Test
+    public final void string()
+    {
+        Assert.assertEquals( new CVariable<>( "data" ).toString(), "data()" );
+        Assert.assertEquals( new CVariable<>( "data", "value" ).toString(), "data(value)" );
+    }
+
+
+    /**
      * checks the variable structure
      */
     @Test
