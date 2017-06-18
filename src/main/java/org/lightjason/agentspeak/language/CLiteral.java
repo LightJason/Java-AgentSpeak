@@ -194,6 +194,38 @@ public final class CLiteral implements ILiteral
     /**
      * factory
      *
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    {
+        return from( false, false, p_functor, p_values );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_at  at
+     * @param p_negated negation
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    {
+        return new CLiteral(
+            p_at,
+            p_negated,
+            p_functor,
+            ( p_values == null ) || ( p_values.length == 0 )
+            ? Collections.emptySet()
+            : Arrays.stream( p_values ).collect( Collectors.toList() ) );
+    }
+
+    /**
+     * factory
+     *
      * @param p_literal literal string
      * @return literal
      *
