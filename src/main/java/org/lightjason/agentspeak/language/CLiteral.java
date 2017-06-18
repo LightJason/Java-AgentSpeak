@@ -122,11 +122,18 @@ public final class CLiteral implements ILiteral
         m_functor = new CPath( p_functor );
 
         // create immutable structures
-        final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
-        p_values.forEach( i -> l_values.put( i.fqnfunctor(), i ) );
-        m_values = ImmutableListMultimap.copyOf( l_values );
-
-        m_orderedvalues = Collections.unmodifiableList( new ArrayList<>( p_values ) );
+        if ( !p_values.isEmpty() )
+        {
+            final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
+            p_values.forEach( i -> l_values.put( i.fqnfunctor(), i ) );
+            m_values = ImmutableListMultimap.copyOf( l_values );
+            m_orderedvalues = Collections.unmodifiableList( new ArrayList<>( p_values ) );
+        }
+        else
+        {
+            m_orderedvalues = Collections.emptyList();
+            m_values = ImmutableListMultimap.of();
+        }
 
         // calculates hash value
         m_hash = Stream.concat(
@@ -214,13 +221,21 @@ public final class CLiteral implements ILiteral
      */
     public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return new CLiteral(
-            p_at,
-            p_negated,
-            p_functor,
-            ( p_values == null ) || ( p_values.length == 0 )
-            ? Collections.emptySet()
-            : Arrays.stream( p_values ).collect( Collectors.toList() ) );
+        return from( p_at, p_negated, p_functor, ( p_values == null ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_at  at
+     * @param p_negated negation
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    {
+        return new CLiteral( p_at, p_negated, p_functor, p_values.collect( Collectors.toList() ) );
     }
 
     /**
