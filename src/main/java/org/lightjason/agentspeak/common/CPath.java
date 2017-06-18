@@ -50,10 +50,6 @@ import java.util.stream.Stream;
 public final class CPath implements IPath
 {
     /**
-     * default seperatir
-     */
-    public static final String DEFAULTSEPERATOR = "/";
-    /**
      * serial id
      */
     private static final long serialVersionUID = -8502900889333744887L;

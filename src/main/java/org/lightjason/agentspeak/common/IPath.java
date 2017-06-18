@@ -37,6 +37,10 @@ import java.util.stream.Stream;
  */
 public interface IPath extends Serializable, Comparable<IPath>
 {
+    /**
+     * default seperator
+     */
+    String DEFAULTSEPERATOR = "/";
 
     /**
      * empty path
