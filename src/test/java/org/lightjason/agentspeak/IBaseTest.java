@@ -32,6 +32,8 @@ import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,7 +44,10 @@ import java.util.stream.Collectors;
  */
 public abstract class IBaseTest
 {
-
+    /**
+     * enable printing of test-data
+     */
+    protected static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
     /**
      * invoke all test manually
      */

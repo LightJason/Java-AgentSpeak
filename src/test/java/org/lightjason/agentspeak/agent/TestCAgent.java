@@ -52,8 +52,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,10 +71,6 @@ import java.util.stream.Stream;
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
 {
-    /**
-     * enable printing of test-data
-     */
-    private static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
     /**
      * list with successful plans
      */
