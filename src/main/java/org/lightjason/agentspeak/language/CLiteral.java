@@ -202,10 +202,22 @@ public final class CLiteral implements ILiteral
      * factory
      *
      * @param p_functor functor path
-     * @param p_values vales
+     * @param p_values values
      * @return literal
      */
     public static ILiteral from( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    {
+        return from( false, false, p_functor, p_values );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor path
+     * @param p_values values
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
     {
         return from( false, false, p_functor, p_values );
     }
