@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -66,9 +67,17 @@ public final class CViewMap implements IView
      */
     private final Map<String, Object> m_data;
     /**
-     * key name function
+     * path to key converting
      */
-    private final Function<String, String> m_keyfunction;
+    private final Function<String, String> m_pathtokey;
+    /**
+     * key to literal converting
+     */
+    private final Function<String, String> m_keytoliteral;
+    /**
+     * clear consumer
+     */
+    private final Consumer<Map<String, Object>> m_clearconsumer;
     /**
      * add-view consumer
      */
@@ -100,13 +109,16 @@ public final class CViewMap implements IView
                      @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, Object>> p_addliteralconsumer,
                      @Nonnull final BiConsumer<Stream<IView>, Map<String, Object>> p_removeviewconsumer,
                      @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, Object>> p_removeliteralconsumer,
-                     @Nonnull final Function<String, String> p_keynamefunction
+                     @Nonnull final Consumer<Map<String, Object>> p_clearconsumer,
+                     @Nonnull final Function<String, String> p_pathtokey, @Nonnull final Function<String, String> p_keytoliteral
     )
     {
         m_name = p_name;
         m_parent = p_parent;
         m_data = p_root;
-        m_keyfunction = p_keynamefunction;
+        m_pathtokey = p_pathtokey;
+        m_keytoliteral = p_keytoliteral;
+        m_clearconsumer = p_clearconsumer;
         m_addviewconsumer = p_addviewconsumer;
         m_addliteralconsumer = p_addliteralconsumer;
         m_removeviewconsumer = p_removeviewconsumer;
@@ -186,8 +198,10 @@ public final class CViewMap implements IView
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length == 0 )
-               ? m_data.entrySet().stream().filter( i -> !( i instanceof Map<?, ?> ) ).map( i -> CLiteral.from( i.getKey(), toterm( i.getValue() ) ) )
-               : Stream.empty();
+               ? m_data.entrySet().stream()
+                                  .filter( i -> !( i instanceof Map<?, ?> ) )
+                                  .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) )
+               : Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ).flatMap( j -> j.stream() ) );
     }
 
     @Nonnull
@@ -201,6 +215,9 @@ public final class CViewMap implements IView
     @Override
     public final IView clear( @Nullable final IPath... p_path )
     {
+        //if ( ( p_path == null ) || ( p_path.length == 0 ) )
+        //    m_clearconsumer.
+
         return this;
     }
 
@@ -290,26 +307,27 @@ public final class CViewMap implements IView
         if ( p_path.isEmpty() )
             return Stream.of( this );
 
-        final String l_key = m_keyfunction.apply( p_path.get( 0 ) );
+        final String l_key = m_pathtokey.apply( p_path.get( 0 ) );
         final Object l_data = m_data.get( l_key );
         return l_data instanceof Map<?, ?>
                ? Stream.concat(
             Stream.of( this ),
             new CViewMap( l_key, this, (Map<String, Object>) l_data,
-                          m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_keyfunction
+                          m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_pathtokey, m_keytoliteral
             ).walk( p_path.getSubPath( 1 ), p_generator )
         )
                : Stream.of( this );
     }
 
     @SuppressWarnings( "unchecked" )
-    private static Stream<ITerm> toterm( final Object p_value )
+    private Stream<ITerm> toterm( final Object p_value )
     {
         if ( p_value instanceof Collection<?> )
-            return ( (Collection<Object>) p_value ).stream().flatMap( i -> toterm( i ) );
+            return ( (Collection<Object>) p_value ).stream().flatMap( i -> this.toterm( i ) );
 
         if ( p_value instanceof Map<?, ?> )
-            return ( (Map<String, Object>) p_value ).entrySet().stream().map( i -> CLiteral.from( i.getKey(), toterm( i.getValue() ) ) );
+            return ( (Map<String, Object>) p_value ).entrySet().stream()
+                                                    .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
 
         if ( p_value instanceof Integer )
             return Stream.of( CRawTerm.from( ( (Number) p_value ).longValue() ) );
