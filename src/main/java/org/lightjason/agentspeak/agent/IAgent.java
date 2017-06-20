@@ -91,7 +91,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> beliefbase()
+        public final IView beliefbase()
         {
             return IView.EMPTY;
         }
@@ -243,7 +243,7 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
      * @return beliefbase
      */
     @Nonnull
-    IView<T> beliefbase();
+    IView beliefbase();
 
     /**
      * returns a map of the current running plans

@@ -50,7 +50,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      * @return root view
      */
     @Nonnull
-    IView<T> beliefbase();
+    IView beliefbase();
 
     /**
      * returns the initial goal

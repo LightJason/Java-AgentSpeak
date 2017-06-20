@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * on-demand beliefbase for creating trigger-events
  * without any percistency
  */
-public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeliefbase<T>
+public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeliefbase
 {
 
     @Override
@@ -90,41 +90,41 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
 
     @Nonnull
     @Override
-    public final IView<T> view( @Nonnull final String p_key )
+    public final IView view( @Nonnull final String p_key )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
     @Override
-    public final IView<T> viewOrDefault( @Nonnull final String p_key, final IView<T> p_default )
+    public final IView viewOrDefault( @Nonnull final String p_key, final IView p_default )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
     @Nonnull
     @Override
-    public final Stream<IView<T>> streamView()
+    public final Stream<IView> streamView()
     {
         return Stream.empty();
     }
 
     @Nonnull
     @Override
-    public final IBeliefbase<T> clear()
+    public final IBeliefbase clear()
     {
         return this;
     }
 
     @Nonnull
     @Override
-    public final IView<T> add( @Nonnull final IView<T> p_view )
+    public final IView add( @Nonnull final IView p_view )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
     }
 
     @Nonnull
     @Override
-    public final IView<T> remove( @Nonnull final IView<T> p_view )
+    public final IView remove( @Nonnull final IView p_view )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
     }

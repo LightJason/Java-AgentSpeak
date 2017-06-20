@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase.storage;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -50,7 +49,7 @@ import java.util.stream.Stream;
  * @todo implement recursive descent of properties
  * @todo implement renaming function of properties
  */
-public final class CClassStorage<M, T extends IAgent<?>> extends IBaseStorage<ILiteral, M, T>
+public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
 {
     /**
      * object instance

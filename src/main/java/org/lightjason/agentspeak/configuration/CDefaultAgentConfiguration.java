@@ -140,9 +140,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
 
     @Nonnull
     @Override
-    public IView<T> beliefbase()
+    public IView beliefbase()
     {
-        final IView<T> l_beliefbase = new CBeliefbasePersistent<T>( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
+        final IView l_beliefbase = new CBeliefbasePersistent( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs

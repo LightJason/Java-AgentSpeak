@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  *
  * @tparam T agent type
  */
-public final class CView<T extends IAgent<?>> implements IView<T>
+public final class CView implements IView
 {
     /**
      * view name
@@ -54,11 +54,11 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     /**
      * reference to the beliefbase context
      */
-    private final IBeliefbase<T> m_beliefbase;
+    private final IBeliefbase m_beliefbase;
     /**
      * parent name
      */
-    private final IView<T> m_parent;
+    private final IView m_parent;
 
 
 
@@ -68,7 +68,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_name view name
      * @param p_beliefbase reference to the beliefbase context
      */
-    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase<T> p_beliefbase )
+    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase p_beliefbase )
     {
         this( p_name, p_beliefbase, null );
     }
@@ -81,7 +81,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @param p_parent reference to the parent view
      */
     @SuppressWarnings( "unchecked" )
-    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase<T> p_beliefbase, final IView<T> p_parent )
+    public CView( @Nonnull final String p_name, @Nonnull final IBeliefbase p_beliefbase, final IView p_parent )
     {
         if ( p_name.isEmpty() )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "empty" ) );
@@ -107,17 +107,9 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final T update( @Nonnull final T p_agent )
+    public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         return m_beliefbase.update( p_agent );
-    }
-
-    @Nonnull
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public final <N extends IAgent<?>> IView<N> raw()
-    {
-        return (IView<N>) this;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -128,7 +120,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> add( @Nonnull final Stream<ILiteral> p_literal )
+    public final IView add( @Nonnull final Stream<ILiteral> p_literal )
     {
         p_literal.parallel()
                  .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().add( i.shallowcopysuffix() ) );
@@ -137,7 +129,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> add( @Nonnull final ILiteral... p_literal )
+    public final IView add( @Nonnull final ILiteral... p_literal )
     {
         return this.add( Arrays.stream( p_literal ) );
     }
@@ -146,7 +138,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public final IView<T> add( @Nonnull final IView<T>... p_view )
+    public final IView add( @Nonnull final IView... p_view )
     {
         Arrays.stream( p_view )
               .parallel()
@@ -167,7 +159,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public final IView<T> remove( @Nonnull final IView<T>... p_view )
+    public final IView remove( @Nonnull final IView... p_view )
     {
         Arrays.stream( p_view ).forEach( m_beliefbase::remove );
         return this;
@@ -175,7 +167,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> remove( @Nonnull final Stream<ILiteral> p_literal )
+    public final IView remove( @Nonnull final Stream<ILiteral> p_literal )
     {
         p_literal.parallel()
             .forEach( i -> this.leafview( this.walk( i.functorpath() ) ).beliefbase().remove( i.shallowcopysuffix() ) );
@@ -184,14 +176,14 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> remove( @Nonnull final ILiteral... p_literal )
+    public final IView remove( @Nonnull final ILiteral... p_literal )
     {
         return this.remove( Arrays.stream( p_literal ) );
     }
 
     @Nonnull
     @Override
-    public final IView<T> clear( @Nullable final IPath... p_path )
+    public final IView clear( @Nullable final IPath... p_path )
     {
         if ( ( p_path == null ) || ( p_path.length == 0 ) )
             m_beliefbase.clear();
@@ -262,15 +254,14 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    @SafeVarargs
-    public final Stream<IView<T>> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator<T>... p_generator )
+    public final Stream<IView> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
         return this.walkdown( p_path, p_generator );
     }
 
     @Nonnull
     @Override
-    public final IView<T> generate( @Nonnull final IViewGenerator<T> p_generator, @Nonnull final IPath... p_paths )
+    public final IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
     {
         Arrays.stream( p_paths )
             .parallel()
@@ -287,12 +278,12 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      */
     @SafeVarargs
     @SuppressWarnings( "varargs" )
-    private final Stream<IView<T>> walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator<T>... p_generator )
+    private final Stream<IView> walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
         if ( p_path.isEmpty() )
             return Stream.of( this );
 
-        final IView<T> l_view;
+        final IView l_view;
         final String l_root = p_path.get( 0 );
         synchronized ( this )
         {
@@ -323,7 +314,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
      * @return last / leaf view
      */
     @Nonnull
-    private IView<T> leafview( @Nonnull final Stream<IView<T>> p_stream )
+    private IView leafview( @Nonnull final Stream<IView> p_stream )
     {
         return p_stream
             .reduce( ( i, j ) -> j )
@@ -338,7 +329,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IBeliefbase<T> beliefbase()
+    public final IBeliefbase beliefbase()
     {
         return m_beliefbase;
     }
@@ -357,7 +348,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final Stream<IView<T>> root()
+    public final Stream<IView> root()
     {
         return Stream.concat(
             Stream.of( this ),
@@ -383,7 +374,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nullable
     @Override
-    public final IView<T> parent()
+    public final IView parent()
     {
         return m_parent;
     }
@@ -403,7 +394,7 @@ public final class CView<T extends IAgent<?>> implements IView<T>
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IView<?> ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object != null ) && ( p_object instanceof IView ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Override

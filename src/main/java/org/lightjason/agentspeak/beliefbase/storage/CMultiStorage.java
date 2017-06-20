@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.beliefbase.storage;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
-import org.lightjason.agentspeak.agent.IAgent;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
@@ -44,7 +43,7 @@ import java.util.stream.Stream;
  * @tparam M single-element type
  * @tparam T agent type
  */
-public final class CMultiStorage<N, M, T extends IAgent<?>> extends IBaseStorage<N, M, T>
+public final class CMultiStorage<N, M> extends IBaseStorage<N, M>
 {
     /**
      * map with elements

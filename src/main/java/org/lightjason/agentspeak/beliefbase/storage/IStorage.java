@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * @tparam T agent type
  * @warning internal data structure must be thread-safe
  */
-public interface IStorage<N, M, T extends IAgent<?>>
+public interface IStorage<N, M>
 {
 
     /**
@@ -162,7 +162,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @return agent
      */
     @Nonnull
-    T update( @Nonnull final T p_agent );
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
     /**
      * number of multi elements

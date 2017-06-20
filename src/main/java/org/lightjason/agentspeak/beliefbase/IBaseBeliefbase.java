@@ -54,35 +54,35 @@ import java.util.stream.Stream;
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
 @SuppressFBWarnings( "RI_REDUNDANT_INTERFACES" )
-public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbase<T>
+public abstract class IBaseBeliefbase implements IBeliefbase
 {
 
     /**
      * map with events for a mask
      */
-    private final Multimap<IView<T>, ITrigger> m_events = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
+    private final Multimap<IView, ITrigger> m_events = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
     /**
      * set with all current views
      */
-    private final Set<IView<T>> m_views = Collections.synchronizedSet( new HashSet<>() );
+    private final Set<IView> m_views = Collections.synchronizedSet( new HashSet<>() );
     /**
      * weak reference queue of all masks to avoid memory-leaks of belief events
      */
-    private final ReferenceQueue<IView<T>> m_maskreference = new ReferenceQueue<>();
+    private final ReferenceQueue<IView> m_maskreference = new ReferenceQueue<>();
 
 
     @Nonnull
     @Override
-    public final IView<T> create( @Nonnull final String p_name )
+    public final IView create( @Nonnull final String p_name )
     {
-        return this.eventreference( new CView<>( p_name, this ) );
+        return this.eventreference( new CView( p_name, this ) );
     }
 
     @Nonnull
     @Override
-    public final IView<T> create( @Nonnull final String p_name, final IView<T> p_parent )
+    public final IView create( @Nonnull final String p_name, final IView p_parent )
     {
-        return this.eventreference( new CView<>( p_name, this, p_parent ) );
+        return this.eventreference( new CView( p_name, this, p_parent ) );
     }
 
     @Nonnull
@@ -101,13 +101,13 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
 
     @Nonnull
     @Override
-    public T update( @Nonnull final T p_agent )
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         // check all references of mask and remove unused references
-        Reference<? extends IView<T>> l_reference;
+        Reference<? extends IView> l_reference;
         while ( ( l_reference = m_maskreference.poll() ) != null )
         {
-            final IView<T> l_view = l_reference.get();
+            final IView l_view = l_reference.get();
             if ( l_view != null )
             {
                 m_views.remove( l_view );
@@ -120,7 +120,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
 
     @Nonnull
     @Override
-    public Stream<ITrigger> trigger( @Nonnull final IView<T> p_view )
+    public Stream<ITrigger> trigger( @Nonnull final IView p_view )
     {
         return this.cleartrigger( p_view );
     }
@@ -145,7 +145,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view view to remove
      * @return view
      */
-    protected final IView<T> internalremove( final IView<T> p_view )
+    protected final IView internalremove( final IView p_view )
     {
         m_views.remove( p_view );
         m_events.removeAll( p_view );
@@ -158,7 +158,7 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view view
      * @return input view
      */
-    protected IView<T> eventreference( final IView<T> p_view )
+    protected IView eventreference( final IView p_view )
     {
         new PhantomReference<>( p_view, m_maskreference );
         m_views.add( p_view );
@@ -171,16 +171,9 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view trigger of this view
      * @return set with trigger values
      */
-    protected final Stream<ITrigger> cleartrigger( final IView<T> p_view )
+    protected final Stream<ITrigger> cleartrigger( final IView p_view )
     {
         return m_events.removeAll( p_view ).stream();
     }
 
-    @Nonnull
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public <N extends IAgent<?>> IBeliefbase<N> raw()
-    {
-        return (IBeliefbase<N>) this;
-    }
 }

@@ -67,7 +67,7 @@ public final class TestCMetric extends IBaseTest
     /**
      * literal view generator
      */
-    private IViewGenerator<CAgent> m_generator;
+    private IViewGenerator m_generator;
     /**
      * set with testing literals
      */
@@ -270,12 +270,12 @@ public final class TestCMetric extends IBaseTest
     /**
      * test belief generator
      */
-    private static final class CGenerator implements IViewGenerator<CAgent>
+    private static final class CGenerator implements IViewGenerator
     {
         @Override
-        public final IView<CAgent> apply( final String p_name, final IView<CAgent> p_parent )
+        public final IView apply( final String p_name, final IView p_parent )
         {
-            return new CBeliefbasePersistent<CAgent>( new CMultiStorage<>() ).create( p_name, p_parent );
+            return new CBeliefbasePersistent( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 

@@ -111,7 +111,7 @@ public final class TestCPropertyAgent extends IBaseTest
         private CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
         {
             super( p_configuration );
-            m_beliefbase.add( new CBeliefbasePersistent<>( new CClassStorage<>( this ) ).create( "self", m_beliefbase ) );
+            m_beliefbase.add( new CBeliefbasePersistent( new CClassStorage<>( this ) ).create( "self", m_beliefbase ) );
         }
 
         /**

@@ -41,12 +41,12 @@ import java.util.stream.Stream;
  *
  * @tparam T agent type
  */
-public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
+public interface IBeliefbase extends IStructure
 {
     /**
      * empty beliefbase
      */
-    IBeliefbase<IAgent<?>> EMPY = new IBeliefbase<IAgent<?>>()
+    IBeliefbase EMPY = new IBeliefbase()
     {
 
         @Override
@@ -70,7 +70,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        public final Stream<ITrigger> trigger( @Nonnull final IView<IAgent<?>> p_view )
+        public final Stream<ITrigger> trigger( @Nonnull final IView p_view )
         {
             return Stream.empty();
         }
@@ -84,14 +84,14 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        public final Stream<IView<IAgent<?>>> streamView()
+        public final Stream<IView> streamView()
         {
             return Stream.empty();
         }
 
         @Nonnull
         @Override
-        public final IBeliefbase<IAgent<?>> clear()
+        public final IBeliefbase clear()
         {
             return this;
         }
@@ -105,7 +105,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> add( @Nonnull final IView<IAgent<?>> p_view )
+        public final IView add( @Nonnull final IView p_view )
         {
             return p_view;
         }
@@ -119,7 +119,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> remove( @Nonnull final IView<IAgent<?>> p_view )
+        public final IView remove( @Nonnull final IView p_view )
         {
             return p_view;
         }
@@ -138,7 +138,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 
         @Nullable
         @Override
-        public final IView<IAgent<?>> view( @Nonnull final String p_key )
+        public final IView view( @Nonnull final String p_key )
         {
             return IView.EMPTY;
         }
@@ -152,33 +152,26 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
 
         @Nullable
         @Override
-        public final IView<IAgent<?>> viewOrDefault( @Nonnull final String p_key, @Nullable final IView<IAgent<?>> p_default )
+        public final IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
         {
             return p_default;
         }
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> create( @Nonnull final String p_name )
+        public final IView create( @Nonnull final String p_name )
         {
             return IView.EMPTY;
         }
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> create( @Nonnull final String p_name, @Nullable final IView<IAgent<?>> p_parent
+        public final IView create( @Nonnull final String p_name, @Nullable final IView p_parent
         )
         {
             return IView.EMPTY;
         }
 
-        @Nonnull
-        @Override
-        @SuppressWarnings( "unchecked" )
-        public <N extends IAgent<?>> IBeliefbase<N> raw()
-        {
-            return (IBeliefbase<N>) this;
-        }
     };
 
     /**
@@ -188,17 +181,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return set with trigger events
      */
     @Nonnull
-    Stream<ITrigger> trigger( @Nonnull final IView<T> p_view );
-
-
-    /**
-     * casts the data to the given agent type
-     *
-     * @tparam N agent type
-     * @return casted beliefbase
-     */
-    @Nonnull
-    <N extends IAgent<?>> IBeliefbase<N> raw();
+    Stream<ITrigger> trigger( @Nonnull final IView p_view );
 
 
 
@@ -216,7 +199,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return view stream
      */
     @Nonnull
-    Stream<IView<T>> streamView();
+    Stream<IView> streamView();
 
 
 
@@ -226,7 +209,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return beliefbase reference
      */
     @Nonnull
-    IBeliefbase<T> clear();
+    IBeliefbase clear();
 
 
 
@@ -246,7 +229,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return beliefbase reference
      */
     @Nonnull
-    IView<T> add( @Nonnull final IView<T> p_view );
+    IView add( @Nonnull final IView p_view );
 
 
 
@@ -266,7 +249,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return beliefbase reference
      */
     @Nonnull
-    IView<T> remove( @Nonnull final IView<T> p_view );
+    IView remove( @Nonnull final IView p_view );
 
 
 
@@ -295,7 +278,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return view or null
      */
     @Nullable
-    IView<T> view( @Nonnull final String p_key );
+    IView view( @Nonnull final String p_key );
 
     /**
      * returns a literal by the name
@@ -314,7 +297,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return view or default element
      */
     @Nullable
-    IView<T> viewOrDefault( @Nonnull final String p_key, @Nullable final IView<T> p_default );
+    IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default );
 
 
 
@@ -325,7 +308,7 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return created view
      */
     @Nonnull
-    IView<T> create( @Nonnull final String p_name );
+    IView create( @Nonnull final String p_name );
 
     /**
      * returns a new view of the belief base
@@ -335,6 +318,6 @@ public interface IBeliefbase<T extends IAgent<?>> extends IStructure<T>
      * @return view
      */
     @Nonnull
-    IView<T> create( @Nonnull final String p_name, @Nullable final IView<T> p_parent );
+    IView create( @Nonnull final String p_name, @Nullable final IView p_parent );
 
 }

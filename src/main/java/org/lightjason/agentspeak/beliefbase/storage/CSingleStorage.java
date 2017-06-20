@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase.storage;
 
-import org.lightjason.agentspeak.agent.IAgent;
-
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -46,7 +44,7 @@ import java.util.stream.Stream;
  * @tparam M single-element type
  * @tparam T agent type
  */
-public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorage<N, M, T>
+public final class CSingleStorage<N, M> extends IBaseStorage<N, M>
 {
     /**
      * map with elements

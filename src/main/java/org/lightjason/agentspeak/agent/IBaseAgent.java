@@ -86,7 +86,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     /**
      * beliefbase
      */
-    protected final IView<T> m_beliefbase;
+    protected final IView m_beliefbase;
     /**
      * storage map
      *
@@ -166,7 +166,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 
     @Nonnull
     @Override
-    public final IView<T> beliefbase()
+    public final IView beliefbase()
     {
         return m_beliefbase;
     }

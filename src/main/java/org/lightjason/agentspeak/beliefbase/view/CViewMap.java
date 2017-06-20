@@ -46,7 +46,7 @@ import java.util.stream.Stream;
  * @note trigger of beliefs are not generated
  * @tparam T agent type
  */
-public final class CViewMap<T extends IAgent<?>> implements IView<T>
+public final class CViewMap implements IView
 {
     /**
      * view name
@@ -55,7 +55,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     /**
      * parent name
      */
-    private final IView<T> m_parent;
+    private final IView m_parent;
     /**
      * root map
      */
@@ -63,7 +63,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     /**
      * add-view consumer
      */
-    private final BiConsumer<Stream<IView<T>>, Map<String, ?>> m_addviewconsumer;
+    private final BiConsumer<Stream<IView>, Map<String, ?>> m_addviewconsumer;
     /**
      * add-literal consumer
      */
@@ -71,7 +71,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     /**
      * remove-view consumer
      */
-    private final BiConsumer<Stream<IView<T>>, Map<String, ?>> m_removeviewconsumer;
+    private final BiConsumer<Stream<IView>, Map<String, ?>> m_removeviewconsumer;
     /**
      * remove-literal consumer
      */
@@ -86,10 +86,10 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
      * @param p_addviewconsumer add-view consumer
      * @param p_addliteralconsumer add-literal consumer
      */
-    public CViewMap( @Nonnull final String p_name, @Nullable final IView<T> p_parent, @Nonnull final Map<String, Object> p_root,
-                     @Nonnull final BiConsumer<Stream<IView<T>>, Map<String, ?>> p_addviewconsumer,
+    public CViewMap( @Nonnull final String p_name, @Nullable final IView p_parent, @Nonnull final Map<String, Object> p_root,
+                     @Nonnull final BiConsumer<Stream<IView>, Map<String, ?>> p_addviewconsumer,
                      @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, ?>> p_addliteralconsumer,
-                     @Nonnull final BiConsumer<Stream<IView<T>>, Map<String, ?>> p_removeviewconsumer,
+                     @Nonnull final BiConsumer<Stream<IView>, Map<String, ?>> p_removeviewconsumer,
                      @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, ?>> p_removeliteralconsumer
     )
     {
@@ -104,16 +104,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final <N extends IAgent<?>> IView<N> raw()
-    {
-        return (IView<N>) this;
-    }
-
-    @Nonnull
-    @Override
-    @SafeVarargs
-    public final Stream<IView<T>> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator<T>... p_generator )
+    public final Stream<IView> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
 
         return null;
@@ -121,14 +112,14 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public IView<T> generate( @Nonnull final IViewGenerator<T> p_generator, @Nonnull final IPath... p_paths )
+    public IView generate( @Nonnull final IViewGenerator p_generator, @Nonnull final IPath... p_paths )
     {
         return this;
     }
 
     @Nonnull
     @Override
-    public final Stream<IView<T>> root()
+    public final Stream<IView> root()
     {
         return Stream.concat(
             Stream.of( this ),
@@ -138,9 +129,9 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IBeliefbase<T> beliefbase()
+    public final IBeliefbase beliefbase()
     {
-        return IBeliefbase.EMPY.raw();
+        return IBeliefbase.EMPY;
     }
 
     @Nonnull
@@ -161,7 +152,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nullable
     @Override
-    public final IView<T> parent()
+    public final IView parent()
     {
         return m_parent;
     }
@@ -195,14 +186,14 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> clear( @Nullable final IPath... p_path )
+    public final IView clear( @Nullable final IPath... p_path )
     {
         return this;
     }
 
     @Nonnull
     @Override
-    public final IView<T> add( @Nonnull final Stream<ILiteral> p_literal )
+    public final IView add( @Nonnull final Stream<ILiteral> p_literal )
     {
         m_addliteralconsumer.accept( p_literal, m_data );
         return this;
@@ -210,16 +201,15 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> add( @Nonnull final ILiteral... p_literal )
+    public final IView add( @Nonnull final ILiteral... p_literal )
     {
         return this.add( Arrays.stream( p_literal ) );
     }
 
     @Nonnull
     @Override
-    @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public final IView<T> add( @Nonnull final IView<T>... p_view )
+    public final IView add( @Nonnull final IView... p_view )
     {
         m_addviewconsumer.accept( Arrays.stream( p_view ), m_data );
         return this;
@@ -227,7 +217,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public IView<T> remove( @Nonnull final Stream<ILiteral> p_literal )
+    public IView remove( @Nonnull final Stream<ILiteral> p_literal )
     {
         m_removeliteralconsumer.accept( p_literal, m_data );
         return this;
@@ -236,16 +226,15 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     @Nonnull
     @Override
     @SuppressWarnings( "varargs" )
-    public IView<T> remove( @Nonnull final ILiteral... p_literal )
+    public IView remove( @Nonnull final ILiteral... p_literal )
     {
         return this.remove( Arrays.stream( p_literal ) );
     }
 
     @Nonnull
     @Override
-    @SafeVarargs
     @SuppressWarnings( "varargs" )
-    public final IView<T> remove( @Nonnull final IView<T>... p_view )
+    public final IView remove( @Nonnull final IView... p_view )
     {
         m_removeviewconsumer.accept( Arrays.stream( p_view ), m_data );
         return this;
@@ -277,7 +266,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final T update( @Nonnull final T p_agent )
+    public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         return p_agent;
     }

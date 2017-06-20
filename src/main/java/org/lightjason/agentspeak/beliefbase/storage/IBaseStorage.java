@@ -31,12 +31,12 @@ import javax.annotation.Nonnull;
 /**
  * default structure of a storage
  */
-public abstract class IBaseStorage<N, M, T extends IAgent<?>> implements IStorage<N, M, T>
+public abstract class IBaseStorage<N, M> implements IStorage<N, M>
 {
 
     @Nonnull
     @Override
-    public T update( @Nonnull final T p_agent )
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         return p_agent;
     }

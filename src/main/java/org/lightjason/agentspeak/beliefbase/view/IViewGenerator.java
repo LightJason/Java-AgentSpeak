@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.beliefbase.view;
 
-import org.lightjason.agentspeak.agent.IAgent;
-
 import java.util.function.BiFunction;
 
 
@@ -33,6 +31,6 @@ import java.util.function.BiFunction;
  *
  * @tparam T agent type
  */
-public interface IViewGenerator<T extends IAgent<?>> extends BiFunction<String, IView<T>, IView<T>>
+public interface IViewGenerator extends BiFunction<String, IView, IView>
 {
 }

@@ -38,19 +38,19 @@ import java.util.stream.Stream;
 /**
  * beliefbase, reference counting is used to collect the events for each beliefbase view
  */
-public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBeliefbase<T>
+public final class CBeliefbasePersistent extends IBaseBeliefbase
 {
     /**
      * storage with data
      */
-    private final IStorage<ILiteral, IView<T>, T> m_storage;
+    private final IStorage<ILiteral, IView> m_storage;
 
     /**
      * ctor
      *
      * @param p_storage storage
      */
-    public CBeliefbasePersistent( @Nonnull final IStorage<ILiteral, IView<T>, T> p_storage )
+    public CBeliefbasePersistent( @Nonnull final IStorage<ILiteral, IView> p_storage )
     {
         m_storage = p_storage;
     }
@@ -64,7 +64,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IBeliefbase<?> ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object != null ) && ( p_object instanceof IBeliefbase ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Nonnull
@@ -78,7 +78,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final IView<T> add( @Nonnull final IView<T> p_view )
+    public final IView add( @Nonnull final IView p_view )
     {
         m_storage.putSingleElement( p_view.name(), p_view );
         return p_view;
@@ -86,7 +86,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final IView<T> remove( @Nonnull final IView<T> p_view )
+    public final IView remove( @Nonnull final IView p_view )
     {
         m_storage.removeSingleElement( this.internalremove( p_view ).name() );
         return p_view;
@@ -115,14 +115,14 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final IView<T> view( @Nonnull final String p_key )
+    public final IView view( @Nonnull final String p_key )
     {
         return m_storage.getSingleElement( p_key );
     }
 
     @Nonnull
     @Override
-    public final IView<T> viewOrDefault( @Nonnull final String p_key, @Nullable final IView<T> p_default )
+    public final IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
     {
         return m_storage.getSingleElementOrDefault( p_key, p_default );
     }
@@ -136,7 +136,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final T update( @Nonnull final T p_agent )
+    public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         super.update( p_agent );
         m_storage.streamSingleElements().parallel().forEach( i -> i.update( p_agent ) );
@@ -145,7 +145,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final IBeliefbase<T> clear()
+    public final IBeliefbase clear()
     {
         // create delete-event for all literals
         m_storage
@@ -173,7 +173,7 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final Stream<ITrigger> trigger( @Nonnull final IView<T> p_view )
+    public final Stream<ITrigger> trigger( @Nonnull final IView p_view )
     {
         return Stream.concat(
             super.trigger( p_view ).parallel(),
@@ -190,17 +190,9 @@ public final class CBeliefbasePersistent<T extends IAgent<?>> extends IBaseBelie
 
     @Nonnull
     @Override
-    public final Stream<IView<T>> streamView()
+    public final Stream<IView> streamView()
     {
         return m_storage.streamSingleElements();
-    }
-
-    @Nonnull
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public <N extends IAgent<?>> IBeliefbase<N> raw()
-    {
-        return (IBeliefbase<N>) this;
     }
 
     @Override

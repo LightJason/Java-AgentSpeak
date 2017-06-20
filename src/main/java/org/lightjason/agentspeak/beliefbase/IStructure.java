@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
  *
  * @tparam T agent type
  */
-public interface IStructure<T extends IAgent<?>>
+public interface IStructure
 {
 
     /**
@@ -61,6 +61,6 @@ public interface IStructure<T extends IAgent<?>>
      * limit the number of update calls
      */
     @Nonnull
-    T update( @Nonnull final T p_agent );
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
 }
