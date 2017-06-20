@@ -144,17 +144,6 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final IView<T> add( @Nonnull final IPath p_path, @Nonnull final IView<T>... p_view )
-    {
-        Arrays.stream( p_view )
-              .parallel()
-              .forEach( i -> this.leafview( this.walk( p_path ) ).add( i ) );
-        return this;
-    }
-
-    @Nonnull
-    @Override
     @SafeVarargs
     @SuppressWarnings( "varargs" )
     public final IView<T> add( @Nonnull final IView<T>... p_view )
@@ -176,9 +165,11 @@ public final class CView<T extends IAgent<?>> implements IView<T>
 
     @Nonnull
     @Override
-    public final IView<T> remove( @Nonnull final IView<T> p_view )
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
+    public final IView<T> remove( @Nonnull final IView<T>... p_view )
     {
-        m_beliefbase.remove( p_view );
+        Arrays.stream( p_view ).forEach( m_beliefbase::remove );
         return this;
     }
 

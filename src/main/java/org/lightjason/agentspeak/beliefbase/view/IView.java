@@ -142,13 +142,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> add( @Nonnull final ILiteral... p_literal )
-        {
-            return this;
-        }
-
-        @Nonnull
-        @Override
         @SafeVarargs
         @SuppressWarnings( "varargs" )
         public final IView<IAgent<?>> add( @Nonnull final IView<IAgent<?>>... p_view )
@@ -158,10 +151,7 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        @SafeVarargs
-        @SuppressWarnings( "varargs" )
-        public final IView<IAgent<?>> add( @Nonnull final IPath p_path, @Nonnull final IView<IAgent<?>>... p_view
-        )
+        public final IView<IAgent<?>> add( @Nonnull final ILiteral... p_literal )
         {
             return this;
         }
@@ -182,7 +172,8 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
 
         @Nonnull
         @Override
-        public final IView<IAgent<?>> remove( @Nonnull final IView<IAgent<?>> p_view )
+        @SafeVarargs
+        public final IView<IAgent<?>> remove( @Nonnull final IView<IAgent<?>>... p_view )
         {
             return this;
         }
@@ -352,20 +343,20 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
     /**
      * adds a literal in the current structure
      *
-     * @param p_literal literal stream
-     * @return self reference
-     */
-    @Nonnull
-    IView<T> add( @Nonnull final Stream<ILiteral> p_literal );
-
-    /**
-     * adds a literal in the current structure
-     *
      * @param p_literal literal
      * @return self reference
      */
     @Nonnull
     IView<T> add( @Nonnull final ILiteral... p_literal );
+
+    /**
+     * adds a literal in the current structure
+     *
+     * @param p_literal literal stream
+     * @return self reference
+     */
+    @Nonnull
+    IView<T> add( @Nonnull final Stream<ILiteral> p_literal );
 
     /**
      * adds view in the current structure
@@ -376,19 +367,6 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
     @Nonnull
     @SuppressWarnings( "unchecked" )
     IView<T> add( @Nonnull final IView<T>... p_view );
-
-    /**
-     * adds view in the current structure
-     *
-     * @param p_path path
-     * @param p_view existing view
-     * @return self reference
-     */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    IView<T> add( @Nonnull final IPath p_path, @Nonnull final IView<T>... p_view );
-
-
 
     /**
      * removes a literal in the current structure
@@ -415,7 +393,8 @@ public interface IView<T extends IAgent<?>> extends IStructure<T>
      * @return self reference
      */
     @Nonnull
-    IView<T> remove( @Nonnull final IView<T> p_view );
+    @SuppressWarnings( "unchecked" )
+    IView<T> remove( @Nonnull final IView<T>... p_view );
 
 
 

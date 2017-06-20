@@ -28,16 +28,14 @@ import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 
@@ -45,6 +43,7 @@ import java.util.stream.Stream;
  * view which can use a map of maps to represent
  * the hierarchical beliefbase structure
  *
+ * @note trigger of beliefs are not generated
  * @tparam T agent type
  */
 public final class CViewMap<T extends IAgent<?>> implements IView<T>
@@ -60,16 +59,47 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     /**
      * root map
      */
-    private final Map<String, Object> m_root;
+    private final Map<String, Object> m_data;
+    /**
+     * add-view consumer
+     */
+    private final BiConsumer<Stream<IView<T>>, Map<String, ?>> m_addviewconsumer;
+    /**
+     * add-literal consumer
+     */
+    private final BiConsumer<Stream<ILiteral>, Map<String, ?>> m_addliteralconsumer;
+    /**
+     * remove-view consumer
+     */
+    private final BiConsumer<Stream<IView<T>>, Map<String, ?>> m_removeviewconsumer;
+    /**
+     * remove-literal consumer
+     */
+    private final BiConsumer<Stream<ILiteral>, Map<String, ?>> m_removeliteralconsumer;
 
     /**
      * ctor
      *
-     * @param p_root map reference
+     * @param p_name view name
+     * @param p_parent parent view
+     * @param p_root map reference map reference
+     * @param p_addviewconsumer add-view consumer
+     * @param p_addliteralconsumer add-literal consumer
      */
-    public CViewMap( final Map<String, Object> p_root )
+    public CViewMap( @Nonnull final String p_name, @Nullable final IView<T> p_parent, @Nonnull final Map<String, Object> p_root,
+                     @Nonnull final BiConsumer<Stream<IView<T>>, Map<String, ?>> p_addviewconsumer,
+                     @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, ?>> p_addliteralconsumer,
+                     @Nonnull final BiConsumer<Stream<IView<T>>, Map<String, ?>> p_removeviewconsumer,
+                     @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, ?>> p_removeliteralconsumer
+    )
     {
-        m_root = p_root;
+        m_name = p_name;
+        m_parent = p_parent;
+        m_data = p_root;
+        m_addviewconsumer = p_addviewconsumer;
+        m_addliteralconsumer = p_addliteralconsumer;
+        m_removeviewconsumer = p_removeviewconsumer;
+        m_removeliteralconsumer = p_removeliteralconsumer;
     }
 
     @Nonnull
@@ -85,6 +115,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     @SafeVarargs
     public final Stream<IView<T>> walk( @Nonnull final IPath p_path, @Nullable final IViewGenerator<T>... p_generator )
     {
+
         return null;
     }
 
@@ -152,7 +183,7 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     @Override
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
-        return null;
+        return Stream.empty();
     }
 
     @Nonnull
@@ -166,61 +197,58 @@ public final class CViewMap<T extends IAgent<?>> implements IView<T>
     @Override
     public final IView<T> clear( @Nullable final IPath... p_path )
     {
-        return null;
+        return this;
     }
 
     @Nonnull
     @Override
     public final IView<T> add( @Nonnull final Stream<ILiteral> p_literal )
     {
-        return null;
+        m_addliteralconsumer.accept( p_literal, m_data );
+        return this;
     }
 
     @Nonnull
     @Override
     public final IView<T> add( @Nonnull final ILiteral... p_literal )
     {
-        Arrays.stream( p_literal )
-              .forEach( i -> m_root.putIfAbsent(
-                  i.functor(),
-                  null
-              ) );
+        return this.add( Arrays.stream( p_literal ) );
+    }
+
+    @Nonnull
+    @Override
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
+    public final IView<T> add( @Nonnull final IView<T>... p_view )
+    {
+        m_addviewconsumer.accept( Arrays.stream( p_view ), m_data );
         return this;
-    }
-
-    @Nonnull
-    @Override
-    public IView<T> add( @Nonnull final IView<T>... p_view )
-    {
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public IView<T> add( @Nonnull final IPath p_path, @Nonnull final IView<T>... p_view )
-    {
-        return null;
     }
 
     @Nonnull
     @Override
     public IView<T> remove( @Nonnull final Stream<ILiteral> p_literal )
     {
-        return null;
+        m_removeliteralconsumer.accept( p_literal, m_data );
+        return this;
     }
 
     @Nonnull
     @Override
+    @SuppressWarnings( "varargs" )
     public IView<T> remove( @Nonnull final ILiteral... p_literal )
     {
-        return null;
+        return this.remove( Arrays.stream( p_literal ) );
     }
 
     @Nonnull
     @Override
-    public IView<T> remove( @Nonnull final IView<T> p_view )
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
+    public final IView<T> remove( @Nonnull final IView<T>... p_view )
     {
-        return null;
+        m_removeviewconsumer.accept( Arrays.stream( p_view ), m_data );
+        return this;
     }
 
     @Override
