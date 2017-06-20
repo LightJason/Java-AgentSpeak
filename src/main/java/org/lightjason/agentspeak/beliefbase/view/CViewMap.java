@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -95,6 +96,28 @@ public final class CViewMap implements IView
      */
     private final BiConsumer<Stream<ILiteral>, Map<String, Object>> m_removeliteralconsumer;
 
+
+    /**
+     * ctor
+     *
+     * @param p_name view name
+     * @param p_parent parent view
+     * @param p_root map reference map reference
+     */
+    public CViewMap( @Nonnull final String p_name, @Nullable final IView p_parent, @Nonnull final Map<String, Object> p_root )
+    {
+        this(
+            p_name, p_parent, p_root,
+            ( i, j ) -> { },
+            ( i, j ) -> { },
+            ( i, j ) -> { },
+            ( i, j ) -> { },
+            ( i ) -> { },
+            ( i ) -> i.toLowerCase( Locale.ROOT ),
+            ( i ) -> i.toLowerCase( Locale.ROOT )
+        );
+    }
+
     /**
      * ctor
      *
@@ -103,6 +126,11 @@ public final class CViewMap implements IView
      * @param p_root map reference map reference
      * @param p_addviewconsumer add-view consumer
      * @param p_addliteralconsumer add-literal consumer
+     * @param p_removeviewconsumer remove-view consumer
+     * @param p_removeliteralconsumer remove-view consumer
+     * @param p_clearconsumer clear consumer
+     * @param p_pathtokey converts a path item to a map key
+     * @param p_keytoliteral converts a map key to literal path
      */
     public CViewMap( @Nonnull final String p_name, @Nullable final IView p_parent, @Nonnull final Map<String, Object> p_root,
                      @Nonnull final BiConsumer<Stream<IView>, Map<String, Object>> p_addviewconsumer,
