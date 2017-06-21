@@ -41,6 +41,7 @@ import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -168,6 +169,7 @@ public final class CMethodAction extends IBaseAction
         }
         catch ( final Throwable l_throwable )
         {
+            LOGGER.warning( MessageFormat.format( "binding method [{0}] throws error [{1}] in agent: ", m_name, l_throwable, p_context.agent() ) );
             return CFuzzyValue.from( false );
         }
     }

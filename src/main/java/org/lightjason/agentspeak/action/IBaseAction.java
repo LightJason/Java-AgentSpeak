@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.action;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 
@@ -35,9 +36,14 @@ import java.util.stream.Stream;
 public abstract class IBaseAction implements IAction
 {
     /**
+     * logger
+     */
+    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.logger( IAction.class );
+    /**
      * serial id
      */
     private static final long serialVersionUID = -1706803039397374484L;
+
 
     @Override
     public final int hashCode()

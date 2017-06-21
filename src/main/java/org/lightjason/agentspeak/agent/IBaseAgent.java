@@ -68,6 +68,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -79,6 +80,10 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
 {
+    /**
+     * logger
+     */
+    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.logger( IAgent.class );
     /**
      * serial id
      */
