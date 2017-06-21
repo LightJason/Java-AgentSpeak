@@ -25,19 +25,30 @@ package org.lightjason.agentspeak.beliefbase;
 
 import com.codepoetics.protonpack.StreamUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
 import org.lightjason.agentspeak.beliefbase.view.CViewMap;
 import org.lightjason.agentspeak.beliefbase.view.IView;
+import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.configuration.IAgentConfiguration;
+import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,6 +62,12 @@ public final class TestCViewMap extends IBaseTest
      * map reference
      */
     private Map<String, Object> m_data;
+
+    static
+    {
+        // disable logger
+        LogManager.getLogManager().reset();
+    }
 
     /**
      * initialize
@@ -118,6 +135,24 @@ public final class TestCViewMap extends IBaseTest
     }
 
     /**
+     * test in-agent definition
+     */
+    @Test
+    public final void inagent() throws Exception
+    {
+        Assume.assumeNotNull( m_data );
+
+        final IAgent<?> l_agent = new CAgent.CAgentGenerator(
+            "!main. +!main <- >>map/val(X); generic/print(X). -!main <- generic/print('error').",
+            m_data
+        ).generatesingle();
+
+        l_agent.beliefbase().stream().forEach( i -> System.out.println( i ) );
+
+        l_agent.call().call();
+    }
+
+    /**
      * manual test
      *
      * @param p_args command-line arguments
@@ -125,5 +160,67 @@ public final class TestCViewMap extends IBaseTest
     public static void main( final String[] p_args )
     {
         new TestCViewMap().invoketest();
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * agent class
+     */
+    private static final class CAgent extends IBaseAgent<IAgent<?>>
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -2312863050588218178L;
+
+
+        /**
+         * ctor
+         *
+         * @param p_configuration agent configuration
+         * @param p_map belief map
+         */
+        private CAgent( final IAgentConfiguration<IAgent<?>> p_configuration, final Map<String, Object> p_map )
+        {
+            super( p_configuration );
+            m_beliefbase.add( new CViewMap( "map", p_map, m_beliefbase ) );
+        }
+
+        /**
+         * agent generator class
+         */
+        private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
+        {
+            /*
+             * actions
+             */
+            private static final Set<IAction> ACTIONS = CCommon.actionsFromPackage().collect( Collectors.toSet() );
+            /**
+             * belief map
+             */
+            private final Map<String, Object> m_map;
+
+            /**
+             * ctor
+             *
+             * @param p_asl asl string code
+             * @param p_map belief map
+             * @throws Exception thrown on error
+             */
+            CAgentGenerator( final String p_asl, final Map<String, Object> p_map ) throws Exception
+            {
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), ACTIONS );
+                m_map = p_map;
+            }
+
+            @Override
+            public IAgent<?> generatesingle( final Object... p_data )
+            {
+                return new CAgent( m_configuration, m_map );
+            }
+        }
+
     }
 }

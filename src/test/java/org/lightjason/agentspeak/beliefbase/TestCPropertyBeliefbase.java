@@ -21,13 +21,14 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.agent;
+package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
+import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.agent.IBaseAgent;
 import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
@@ -41,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * test agent with beliebase properties
  */
-public final class TestCPropertyAgent extends IBaseTest
+public final class TestCPropertyBeliefbase extends IBaseTest
 {
 
     /**
@@ -73,7 +74,7 @@ public final class TestCPropertyAgent extends IBaseTest
      */
     public static void main( final String[] p_args ) throws Exception
     {
-        new TestCPropertyAgent().invoketest();
+        new TestCPropertyBeliefbase().invoketest();
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,7 +108,6 @@ public final class TestCPropertyAgent extends IBaseTest
          *
          * @param p_configuration agent configuration
          */
-        @SuppressWarnings( "unchecked" )
         private CAgent( final IAgentConfiguration<IAgent<?>> p_configuration )
         {
             super( p_configuration );
