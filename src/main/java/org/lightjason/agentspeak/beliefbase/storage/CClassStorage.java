@@ -178,7 +178,6 @@ public final class CClassStorage<M> extends IBaseStorage<ILiteral, M>
     {
         final Field l_field = m_fields.get( p_key );
         return l_field == null ? Collections.emptySet() : Stream.of( this.literal( p_key, l_field ) ).collect( Collectors.toSet() );
-
     }
 
     @Override

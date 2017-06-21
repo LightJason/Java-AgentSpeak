@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -181,10 +180,9 @@ public final class CViewMap implements IView
     @Override
     public final Stream<IView> root()
     {
-        return Stream.concat(
-            Stream.of( this ),
-            Stream.of( this.parent() ).filter( Objects::nonNull )
-        );
+        return this.hasParent()
+               ? Stream.concat( Stream.of( this ), Stream.of( this.parent() ).flatMap( IView::root ) )
+               : Stream.empty();
     }
 
     @Nonnull
@@ -233,6 +231,8 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
+        System.out.println( "---> " + this.path() );
+
         return ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat(
                    m_data.entrySet().stream()

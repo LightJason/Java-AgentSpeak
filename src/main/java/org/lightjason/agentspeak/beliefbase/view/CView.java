@@ -36,7 +36,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -350,10 +349,9 @@ public final class CView implements IView
     @Override
     public final Stream<IView> root()
     {
-        return Stream.concat(
-            Stream.of( this ),
-            Stream.of( this.parent() ).filter( Objects::nonNull )
-        );
+        return this.hasParent()
+               ? Stream.concat( Stream.of( this ), Stream.of( this.parent() ).flatMap( IView::root ) )
+               : Stream.empty();
     }
 
     @Nonnull

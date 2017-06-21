@@ -85,7 +85,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test stream
      */
-    @Test
+    //@Test
     public final void stream()
     {
         Assume.assumeNotNull( m_data );
@@ -108,7 +108,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test contains literal
      */
-    @Test
+    //@Test
     public final void containsliteral()
     {
         Assume.assumeNotNull( m_data );
@@ -122,7 +122,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test contains view
      */
-    @Test
+    //@Test
     public final void containsview()
     {
         Assume.assumeNotNull( m_data );

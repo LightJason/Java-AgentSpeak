@@ -183,7 +183,8 @@ public final class CPath implements IPath
     @Override
     public final IPath remove( final int p_index )
     {
-        m_path.remove( p_index );
+        if ( !m_path.isEmpty() )
+            m_path.remove( p_index );
         return this;
     }
 
