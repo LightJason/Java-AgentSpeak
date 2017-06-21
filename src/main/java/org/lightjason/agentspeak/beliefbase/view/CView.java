@@ -226,7 +226,7 @@ public final class CView implements IView
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
         // build path relative to this view
-        final IPath l_path = this.path().getSubPath( 1 );
+        final IPath l_path = this.path();
         return ( ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
                : Arrays.stream( p_path )
@@ -239,7 +239,7 @@ public final class CView implements IView
     public final Stream<ILiteral> stream( final boolean p_negated, @Nullable final IPath... p_path )
     {
         // build path relative to this view
-        final IPath l_path = this.path().getSubPath( 1 );
+        final IPath l_path = this.path();
         return ( ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat(
                    m_beliefbase.streamLiteral().filter( i -> i.negated() == p_negated ),
