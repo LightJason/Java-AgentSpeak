@@ -231,15 +231,13 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
-        System.out.println( "---> " + this.path() );
-
         return ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat(
                    m_data.entrySet().stream()
                                     .filter( i -> !( i.getValue() instanceof Map<?, ?> ) )
                                     .map( i -> CLiteral.from(
                                         Stream.concat(
-                                            this.path().stream().skip( 1 ),
+                                            this.path().stream(),
                                             Stream.of( m_keytoliteral.apply( i.getKey() ) )
                                         ).collect( CPath.collect() ),
                                         this.toterm( i.getValue() )
