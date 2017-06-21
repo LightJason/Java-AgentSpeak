@@ -228,7 +228,7 @@ public final class CViewMap implements IView
         return ( p_path == null ) || ( p_path.length == 0 )
                ? m_data.entrySet().stream()
                                   .filter( i -> !( i instanceof Map<?, ?> ) )
-                                  .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) )
+                                  .map( i -> CLiteral.from( this.path().pushback( m_keytoliteral.apply( i.getKey() ) ), this.toterm( i.getValue() ) ) )
                : Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ).flatMap( j -> j.stream() ) );
     }
 
@@ -243,8 +243,10 @@ public final class CViewMap implements IView
     @Override
     public final IView clear( @Nullable final IPath... p_path )
     {
-        //if ( ( p_path == null ) || ( p_path.length == 0 ) )
-        //    m_clearconsumer.
+        if ( ( p_path == null ) || ( p_path.length == 0 ) )
+            m_clearconsumer.accept( m_data );
+        else
+            Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ) ).forEach( i -> i.clear() );
 
         return this;
     }
