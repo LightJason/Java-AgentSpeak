@@ -367,9 +367,7 @@ public final class CView implements IView
     @Override
     public final IPath path()
     {
-        final IPath l_path = new CPath();
-        this.root().forEach( i -> l_path.pushfront( i.name() ) );
-        return l_path;
+        return this.root().map( IView::name ).collect( CPath.collect() ).reverse();
     }
 
     @Nullable

@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.beliefbase.storage.CClassStorage;
 import org.lightjason.agentspeak.beliefbase.view.CViewMap;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
@@ -45,7 +44,6 @@ import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.LogManager;
@@ -136,6 +134,8 @@ public final class TestCViewMap extends IBaseTest
 
     /**
      * test in-agent definition
+     *
+     * @throws Exception is thrown on execution error
      */
     @Test
     public final void inagent() throws Exception
@@ -147,7 +147,7 @@ public final class TestCViewMap extends IBaseTest
             m_data
         ).generatesingle();
 
-        l_agent.beliefbase().stream().forEach( i -> System.out.println( i ) );
+        l_agent.beliefbase().stream().forEach( System.out::println );
 
         l_agent.call().call();
     }
