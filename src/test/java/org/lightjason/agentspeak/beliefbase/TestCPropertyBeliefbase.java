@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.beliefbase;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.agent.IAgent;
@@ -52,7 +51,6 @@ public final class TestCPropertyBeliefbase extends IBaseTest
      * @throws Exception is thrown on intialization error
      */
     @Test
-    @Ignore
     public final void belieflist() throws Exception
     {
         final IAgent<?> l_agent = new CAgent.CAgentGenerator( "" ).generatesingle();
