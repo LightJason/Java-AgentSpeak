@@ -96,18 +96,28 @@ public final class CViewMap implements IView
      */
     private final BiConsumer<Stream<ILiteral>, Map<String, Object>> m_removeliteralconsumer;
 
+    /**
+     * ctor
+     *
+     * @param p_name name of the view
+     * @param p_map map reference
+     */
+    public CViewMap( @Nonnull final String p_name, @Nonnull final Map<String, Object> p_map )
+    {
+        this( p_name, p_map, null );
+    }
 
     /**
      * ctor
      *
      * @param p_name view name
+     * @param p_map map reference
      * @param p_parent parent view
-     * @param p_root map reference map reference
      */
-    public CViewMap( @Nonnull final String p_name, @Nullable final IView p_parent, @Nonnull final Map<String, Object> p_root )
+    public CViewMap( @Nonnull final String p_name, @Nonnull final Map<String, Object> p_map, @Nullable final IView p_parent )
     {
         this(
-            p_name, p_parent, p_root,
+            p_name, p_map, p_parent,
             ( i, j ) -> { },
             ( i, j ) -> { },
             ( i, j ) -> { },
@@ -122,8 +132,8 @@ public final class CViewMap implements IView
      * ctor
      *
      * @param p_name view name
+     * @param p_map map reference
      * @param p_parent parent view
-     * @param p_root map reference map reference
      * @param p_addviewconsumer add-view consumer
      * @param p_addliteralconsumer add-literal consumer
      * @param p_removeviewconsumer remove-view consumer
@@ -132,7 +142,7 @@ public final class CViewMap implements IView
      * @param p_pathtokey converts a path item to a map key
      * @param p_keytoliteral converts a map key to literal path
      */
-    public CViewMap( @Nonnull final String p_name, @Nullable final IView p_parent, @Nonnull final Map<String, Object> p_root,
+    public CViewMap( @Nonnull final String p_name, @Nonnull final Map<String, Object> p_map, @Nullable final IView p_parent,
                      @Nonnull final BiConsumer<Stream<IView>, Map<String, Object>> p_addviewconsumer,
                      @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, Object>> p_addliteralconsumer,
                      @Nonnull final BiConsumer<Stream<IView>, Map<String, Object>> p_removeviewconsumer,
@@ -143,7 +153,7 @@ public final class CViewMap implements IView
     {
         m_name = p_name;
         m_parent = p_parent;
-        m_data = p_root;
+        m_data = p_map;
         m_pathtokey = p_pathtokey;
         m_keytoliteral = p_keytoliteral;
         m_clearconsumer = p_clearconsumer;
@@ -226,9 +236,20 @@ public final class CViewMap implements IView
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length == 0 )
-               ? m_data.entrySet().stream()
-                                  .filter( i -> !( i instanceof Map<?, ?> ) )
-                                  .map( i -> CLiteral.from( this.path().pushback( m_keytoliteral.apply( i.getKey() ) ), this.toterm( i.getValue() ) ) )
+               ? Stream.concat(
+                   m_data.entrySet().stream()
+                                    .filter( i -> !( i.getValue() instanceof Map<?, ?> ) )
+                                    .map( i -> CLiteral.from(
+                                        Stream.concat(
+                                            this.path().stream().skip( 1 ),
+                                            Stream.of( m_keytoliteral.apply( i.getKey() ) )
+                                        ).collect( CPath.collect() ),
+                                        this.toterm( i.getValue() )
+                                    ) ),
+                   m_data.entrySet().stream()
+                         .filter( i -> i.getValue() instanceof Map<?, ?> )
+                         .flatMap( i -> new CViewMap( m_keytoliteral.apply( i.getKey() ), (Map<String, Object>) i.getValue(), this ).stream() )
+               )
                : Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ).flatMap( j -> j.stream() ) );
     }
 
@@ -301,15 +322,35 @@ public final class CViewMap implements IView
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public boolean containsLiteral( @Nonnull final IPath p_path )
     {
-        return false;
+        if ( p_path.isEmpty() )
+            return false;
+
+        final String l_key = m_pathtokey.apply( p_path.get( 0 ) );
+        final Object l_data = m_data.get( l_key );
+
+        return p_path.size() == 1
+               ? ( l_data != null ) && ( !( l_data instanceof Map<?, ?> ) )
+               : ( l_data instanceof Map<?, ?> )
+                 && new CViewMap( l_key, (Map<String, Object>) l_data, this ).containsLiteral( p_path.getSubPath( 1 ) );
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final boolean containsView( @Nonnull final IPath p_path )
     {
-        return false;
+        if ( p_path.isEmpty() )
+            return false;
+
+        final String l_key = m_pathtokey.apply( p_path.get( 0 ) );
+        final Object l_data = m_data.get( l_key );
+
+        return p_path.size() == 1
+               ? ( l_data != null ) && ( l_data instanceof Map<?, ?> )
+               : ( l_data instanceof Map<?, ?> )
+                 && new CViewMap( l_key, (Map<String, Object>) l_data, this ).containsView( p_path.getSubPath( 1 ) );
     }
 
     @Override
@@ -319,9 +360,17 @@ public final class CViewMap implements IView
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
     public final int size()
     {
-        return 0;
+        return (int) m_data.entrySet().stream()
+                     .filter( i -> !( i instanceof Map<?, ?> ) )
+                     .count()
+               + m_data.entrySet().stream()
+                       .filter( i -> i instanceof Map<?, ?> )
+                       .map( i -> new CViewMap( i.getKey(), (Map<String, Object>)i, this ) )
+                       .mapToInt( CViewMap::size )
+                       .sum();
     }
 
     @Nonnull
@@ -342,7 +391,7 @@ public final class CViewMap implements IView
         return l_data instanceof Map<?, ?>
                ? Stream.concat(
             Stream.of( this ),
-            new CViewMap( l_key, this, (Map<String, Object>) l_data,
+            new CViewMap( l_key, (Map<String, Object>) l_data, this,
                           m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_pathtokey, m_keytoliteral
             ).walk( p_path.getSubPath( 1 ), p_generator )
         )
@@ -353,7 +402,7 @@ public final class CViewMap implements IView
     private Stream<ITerm> toterm( final Object p_value )
     {
         if ( p_value instanceof Collection<?> )
-            return ( (Collection<Object>) p_value ).stream().flatMap( i -> this.toterm( i ) );
+            return ( (Collection<Object>) p_value ).stream().flatMap( this::toterm );
 
         if ( p_value instanceof Map<?, ?> )
             return ( (Map<String, Object>) p_value ).entrySet().stream()

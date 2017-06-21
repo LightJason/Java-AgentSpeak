@@ -501,4 +501,50 @@ public final class CPath implements IPath
         return new CopyOnWriteArrayList<>();
     }
 
+    /**
+     * returns a collector to build a path from strings
+     *
+     * @return collector
+     */
+    public static Collector<String, IPath, IPath> collect()
+    {
+        return new CPathCollector();
+    }
+
+    /**
+     * path collector
+     */
+    private static final class CPathCollector implements Collector<String, IPath, IPath>
+    {
+
+        @Override
+        public final Supplier<IPath> supplier()
+        {
+            return () -> new CPath( Stream.empty() );
+        }
+
+        @Override
+        public final BiConsumer<IPath, String> accumulator()
+        {
+            return IPath::pushback;
+        }
+
+        @Override
+        public final BinaryOperator<IPath> combiner()
+        {
+            return IPath::pushback;
+        }
+
+        @Override
+        public final Function<IPath, IPath> finisher()
+        {
+            return Function.identity();
+        }
+
+        @Override
+        public final Set<Characteristics> characteristics()
+        {
+            return Collections.emptySet();
+        }
+    }
 }
