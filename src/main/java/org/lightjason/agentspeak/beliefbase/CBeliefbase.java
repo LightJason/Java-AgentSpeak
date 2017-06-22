@@ -36,9 +36,9 @@ import java.util.stream.Stream;
 
 
 /**
- * beliefbase, reference counting is used to collect the events for each beliefbase view
+ * beliefbase to generate any event-based data by reference counting
  */
-public final class CBeliefbasePersistent extends IBaseBeliefbase
+public final class CBeliefbase extends IBaseBeliefbase
 {
     /**
      * storage with data
@@ -50,7 +50,7 @@ public final class CBeliefbasePersistent extends IBaseBeliefbase
      *
      * @param p_storage storage
      */
-    public CBeliefbasePersistent( @Nonnull final IStorage<ILiteral, IView> p_storage )
+    public CBeliefbase( @Nonnull final IStorage<ILiteral, IView> p_storage )
     {
         m_storage = p_storage;
     }

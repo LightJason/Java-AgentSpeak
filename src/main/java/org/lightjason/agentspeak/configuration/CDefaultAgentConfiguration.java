@@ -26,7 +26,7 @@ package org.lightjason.agentspeak.configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
-import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
+import org.lightjason.agentspeak.beliefbase.CBeliefbase;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
@@ -142,7 +142,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     @Override
     public IView beliefbase()
     {
-        final IView l_beliefbase = new CBeliefbasePersistent( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
+        final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
         m_initialbeliefs.forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs

@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
+import org.lightjason.agentspeak.beliefbase.CBeliefbase;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.beliefbase.view.IViewGenerator;
@@ -275,7 +275,7 @@ public final class TestCMetric extends IBaseTest
         @Override
         public final IView apply( final String p_name, final IView p_parent )
         {
-            return new CBeliefbasePersistent( new CMultiStorage<>() ).create( p_name, p_parent );
+            return new CBeliefbase( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 

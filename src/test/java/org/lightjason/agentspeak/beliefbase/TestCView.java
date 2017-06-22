@@ -50,7 +50,7 @@ public final class TestCView extends IBaseTest
     public final void testTree()
     {
         final int l_max = 1000;
-        final IView l_beliefbase = new CBeliefbasePersistent( new CMultiStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator l_generator = new CGenerator();
 
         IntStream.range( 0, l_max )
@@ -68,7 +68,7 @@ public final class TestCView extends IBaseTest
     @Test
     public final void testManual()
     {
-        final IView l_beliefbase = new CBeliefbasePersistent( new CMultiStorage<>() ).create( "root" );
+        final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( "root" );
         final IViewGenerator l_gen = new CGenerator();
 
         l_beliefbase.add( CLiteral.from( "toplevel" ) )
@@ -108,7 +108,7 @@ public final class TestCView extends IBaseTest
         @Override
         public final IView apply( final String p_name, final IView p_parent )
         {
-            return new CBeliefbasePersistent( new CMultiStorage<>() ).create( p_name, p_parent );
+            return new CBeliefbase( new CMultiStorage<>() ).create( p_name, p_parent );
         }
     }
 
