@@ -135,7 +135,6 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    @SafeVarargs
     @SuppressWarnings( "varargs" )
     public final IView add( @Nonnull final IView... p_view )
     {
@@ -156,7 +155,6 @@ public final class CView implements IView
 
     @Nonnull
     @Override
-    @SafeVarargs
     @SuppressWarnings( "varargs" )
     public final IView remove( @Nonnull final IView... p_view )
     {
@@ -275,7 +273,6 @@ public final class CView implements IView
      * @param p_generator generator (first argument is used, other elements will be ignored)
      * @return view stream
      */
-    @SafeVarargs
     @SuppressWarnings( "varargs" )
     private final Stream<IView> walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
@@ -284,6 +281,7 @@ public final class CView implements IView
 
         final IView l_view;
         final String l_root = p_path.get( 0 );
+
         synchronized ( this )
         {
             // add is run here for avoid overwriting view with a new object reference

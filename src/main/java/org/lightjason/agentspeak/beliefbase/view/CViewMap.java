@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -408,5 +409,148 @@ public final class CViewMap implements IView
             return Stream.of( CRawTerm.from( ( (Number) p_value ).longValue() ) );
 
         return Stream.of( CRawTerm.from( p_value ) );
+    }
+
+    /**
+     * wrapper beliefbase
+     */
+    private final class CWrapperBeliefbase implements IBeliefbase
+    {
+        private final IView m_view;
+
+        /**
+         * ctor
+         *
+         * @param p_view
+         */
+        CWrapperBeliefbase( @Nonnull final IView p_view )
+        {
+            m_view = p_view;
+        }
+
+        @Override
+        public final boolean empty()
+        {
+            return m_view.empty();
+        }
+
+        @Override
+        public final int size()
+        {
+            return m_view.size();
+        }
+
+        @Nonnull
+        @Override
+        public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
+        {
+            return m_view.update( p_agent );
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ITrigger> trigger( @Nonnull final IView p_view )
+        {
+            return Stream.empty();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<ILiteral> streamLiteral()
+        {
+            return m_view.stream();
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IView> streamView()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final IBeliefbase clear()
+        {
+            m_view.clear();
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral add( @Nonnull final ILiteral p_literal )
+        {
+            m_view.add( p_literal );
+            return p_literal;
+        }
+
+        @Nonnull
+        @Override
+        public final IView add( @Nonnull final IView p_view )
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final ILiteral remove( @Nonnull final ILiteral p_literal )
+        {
+            m_view.remove( p_literal );
+            return p_literal;
+        }
+
+        @Nonnull
+        @Override
+        public final IView remove( @Nonnull final IView p_view )
+        {
+            return p_view;
+        }
+
+        @Override
+        public final boolean containsLiteral( @Nonnull final String p_key )
+        {
+            return m_view.containsLiteral( CPath.from( m_keytoliteral.apply( p_key ) ) );
+        }
+
+        @Override
+        public boolean containsView( @Nonnull final String p_key )
+        {
+            return m_view.containsView( CPath.from( m_keytoliteral.apply( p_key ) ) );
+        }
+
+        @Nullable
+        @Override
+        public final IView view( @Nonnull final String p_key )
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final Collection<ILiteral> literal( @Nonnull final String p_key )
+        {
+            return m_view.stream( CPath.from( m_keytoliteral.apply( p_key ) ) ).collect( Collectors.toSet() );
+        }
+
+        @Nullable
+        @Override
+        public final IView viewOrDefault( @Nonnull final String p_key, @Nullable final IView p_default )
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final IView create( @Nonnull final String p_name )
+        {
+            return m_view;
+        }
+
+        @Nonnull
+        @Override
+        public final IView create( @Nonnull final String p_name, @Nullable final IView p_parent )
+        {
+            return m_view;
+        }
     }
 }

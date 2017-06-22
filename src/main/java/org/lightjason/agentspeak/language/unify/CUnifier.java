@@ -193,13 +193,12 @@ public final class CUnifier implements IUnifier
      * @param p_variablenumber number of unified variables
      * @return list of literal sets
      **/
-    @SuppressWarnings( "unchecked" )
     private List<Set<IVariable<?>>> variables( final IAgent<?> p_agent, final ILiteral p_literal, final long p_variablenumber )
     {
         return p_agent.beliefbase()
                       .stream( p_literal.negated(), p_literal.fqnfunctor() )
                       .filter( i -> i.emptyValues() == p_literal.emptyValues() )
-                      .map( i -> this.unify( i, (ILiteral) p_literal.deepcopy() ) )
+                      .map( i -> this.unify( i, p_literal.deepcopy().<ILiteral>raw() ) )
                       .filter( i -> p_variablenumber == i.size() )
                       .collect( Collectors.toList() );
     }

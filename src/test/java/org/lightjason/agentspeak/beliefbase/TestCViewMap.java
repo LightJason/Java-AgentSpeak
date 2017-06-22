@@ -147,7 +147,7 @@ public final class TestCViewMap extends IBaseTest
             m_data
         ).generatesingle();
 
-        l_agent.beliefbase().stream().forEach( System.out::println );
+        //l_agent.beliefbase().stream().forEach( System.out::println );
 
         l_agent.call().call();
     }
