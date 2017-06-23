@@ -252,24 +252,12 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
-        // @todo refactor
-        return ( p_path == null ) || ( p_path.length == 0 )
-               ? Stream.concat(
-                   m_data.entrySet().stream()
-                                    .filter( i -> !( i.getValue() instanceof Map<?, ?> ) )
-                                    .map( i -> CLiteral.from(
-                                        Stream.concat(
-                                            this.path().stream(),
-                                            Stream.of( m_keytoliteral.apply( i.getKey() ) )
-                                        ).collect( CPath.collect() ),
-                                        //this.toterm( i.getValue() )
-                                        Stream.empty()
-                                    ) ),
-                   m_data.entrySet().stream()
-                         .filter( i -> i.getValue() instanceof Map<?, ?> )
-                         .flatMap( i -> new CViewMap( m_keytoliteral.apply( i.getKey() ), (Map<String, Object>) i.getValue(), this ).stream() )
-               )
-               : Arrays.stream( p_path ).flatMap( i -> this.walkdown( i ).flatMap( j -> j.stream() ) );
+        final IPath l_path = this.path();
+        return ( ( p_path == null ) || ( p_path.length == 0 )
+                 ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
+                 : Arrays.stream( p_path )
+                         .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
+        ).map( i -> i.shallowcopy( l_path ) );
     }
 
     @Nonnull
@@ -344,31 +332,24 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public boolean containsLiteral( @Nonnull final IPath p_path )
     {
-        // @todo refactor
-        if ( p_path.empty() )
-            return false;
-
-        if ( p_path.size() == 1 )
-            return m_beliefbase.containsLiteral( p_path.get( 0 ) );
-
-        return false;
+        return !p_path.empty()
+               && ( p_path.size() == 1
+                   ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                   : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                         .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+               );
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
     public final boolean containsView( @Nonnull final IPath p_path )
     {
-        // @todo refactor
-        if ( p_path.empty() )
-            return false;
-
-        final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
-        final Object l_data = m_data.get( l_key );
-
-        return p_path.size() == 1
-               ? ( l_data != null ) && ( l_data instanceof Map<?, ?> )
-               : ( l_data instanceof Map<?, ?> )
-                 && new CViewMap( l_key, (Map<String, Object>) l_data, this ).containsView( p_path.subpath( 1 ) );
+        return !p_path.empty()
+               && ( p_path.size() == 1
+                    ? m_beliefbase.containsView( p_path.get( 0 ) )
+                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                          .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+               );
     }
 
     @Override
@@ -529,13 +510,15 @@ public final class CViewMap implements IView
         @Override
         public final boolean containsLiteral( @Nonnull final String p_key )
         {
-            return !( m_data.get( m_literaltokey.apply( p_key ) ) instanceof Map<?, ?> );
+            final String l_key = m_literaltokey.apply( p_key );
+            return m_data.containsKey( l_key ) && ( !( m_data.get( l_key ) instanceof Map<?, ?> ) );
         }
 
         @Override
         public boolean containsView( @Nonnull final String p_key )
         {
-            return m_data.get( m_literaltokey.apply( p_key ) ) instanceof Map<?, ?>;
+            final String l_key = m_literaltokey.apply( p_key );
+            return m_data.containsKey( l_key ) &&  ( m_data.get( l_key ) instanceof Map<?, ?> );
         }
 
         @Nullable

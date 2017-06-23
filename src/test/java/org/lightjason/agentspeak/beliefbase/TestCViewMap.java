@@ -26,24 +26,38 @@ package org.lightjason.agentspeak.beliefbase;
 import com.codepoetics.protonpack.StreamUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
+import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
+import org.lightjason.agentspeak.agent.TestCAgent;
 import org.lightjason.agentspeak.beliefbase.view.CViewMap;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.LogManager;
@@ -57,9 +71,22 @@ import java.util.stream.Stream;
 public final class TestCViewMap extends IBaseTest
 {
     /**
+     * actions
+     */
+    private final Set<IAction> m_actions = Stream.concat(
+        PRINTENABLE
+        ? Stream.of( new CTestResult() )
+        : Stream.of( new CTestResult(), new CEmptyPrint() ),
+        CCommon.actionsFromPackage()
+    ).collect( Collectors.toSet() );
+    /**
      * map reference
      */
     private Map<String, Object> m_data;
+    /**
+     * list with successful plans
+     */
+    private List<Pair<Boolean, String>> m_testlog;
 
     static
     {
@@ -76,6 +103,7 @@ public final class TestCViewMap extends IBaseTest
     @SuppressWarnings( "unchecked" )
     public final void initialize() throws IOException
     {
+        m_testlog = Collections.synchronizedList( new ArrayList<>() );
         m_data = new ObjectMapper().readValue(
             "{ \"val\" : 123, \"str\" : \"text value\", \"logic\" : true, \"obj\" : { \"name\" : \"abcdef\", \"val\" : 357 }, \"ar\" : [1, 3, 5] }",
             Map.class
@@ -85,7 +113,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test stream
      */
-    //@Test
+    @Test
     public final void stream()
     {
         Assume.assumeNotNull( m_data );
@@ -108,7 +136,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test contains literal
      */
-    //@Test
+    @Test
     public final void containsliteral()
     {
         Assume.assumeNotNull( m_data );
@@ -122,7 +150,7 @@ public final class TestCViewMap extends IBaseTest
     /**
      * test contains view
      */
-    //@Test
+    @Test
     public final void containsview()
     {
         Assume.assumeNotNull( m_data );
@@ -143,13 +171,11 @@ public final class TestCViewMap extends IBaseTest
         Assume.assumeNotNull( m_data );
 
         final IAgent<?> l_agent = new CAgent.CAgentGenerator(
-            "!main. +!main <- >>map/val(X); generic/print(X). -!main <- generic/print('error').",
-            m_data
-        ).generatesingle();
-
-        //l_agent.beliefbase().stream().forEach( System.out::println );
-
-        l_agent.call().call();
+            "!main. +!main <- >>map/str(X); generic/print('string-value:', X); test/result( bool/equal(X, 'text value'), 'unified value incorrect' ). -!main <- generic/print('error').",
+            m_data,
+            m_actions
+        ).generatesingle().call().call();
+        Assert.assertTrue( m_testlog.isEmpty() );
     }
 
     /**
@@ -164,6 +190,82 @@ public final class TestCViewMap extends IBaseTest
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * empty print action
+     */
+    private static final class CEmptyPrint extends IBaseAction
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 8344720639088993942L;
+
+        @Nonnull
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "generic/print" );
+        }
+
+        @Nonnegative
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        )
+        {
+            return CFuzzyValue.from( true );
+        }
+    }
+
+    /**
+     * test action
+     */
+    private final class CTestResult extends IBaseAction
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 9032624165822970132L;
+
+        @Nonnull
+        @Override
+        public final IPath name()
+        {
+            return CPath.from( "test/result" );
+        }
+
+        @Nonnegative
+        @Override
+        public final int minimalArgumentNumber()
+        {
+            return 1;
+        }
+
+        @Nonnull
+        @Override
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+        )
+        {
+            m_testlog.add(
+                new ImmutablePair<>(
+                    p_argument.get( 0 ).<Boolean>raw(),
+                    p_argument.size() > 1
+                    ? p_argument.get( 1 ).<String>raw()
+                    : ""
+                )
+            );
+
+            return CFuzzyValue.from( p_argument.get( 0 ).<Boolean>raw() );
+        }
+    }
 
     /**
      * agent class
@@ -193,10 +295,6 @@ public final class TestCViewMap extends IBaseTest
          */
         private static final class CAgentGenerator extends IBaseAgentGenerator<IAgent<?>>
         {
-            /*
-             * actions
-             */
-            private static final Set<IAction> ACTIONS = CCommon.actionsFromPackage().collect( Collectors.toSet() );
             /**
              * belief map
              */
@@ -207,11 +305,12 @@ public final class TestCViewMap extends IBaseTest
              *
              * @param p_asl asl string code
              * @param p_map belief map
+             * @param p_actions actions
              * @throws Exception thrown on error
              */
-            CAgentGenerator( final String p_asl, final Map<String, Object> p_map ) throws Exception
+            CAgentGenerator( final String p_asl, final Map<String, Object> p_map, final Set<IAction> p_actions ) throws Exception
             {
-                super( IOUtils.toInputStream( p_asl, "UTF-8" ), ACTIONS );
+                super( IOUtils.toInputStream( p_asl, "UTF-8" ), p_actions );
                 m_map = p_map;
             }
 

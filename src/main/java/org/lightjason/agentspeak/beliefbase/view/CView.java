@@ -195,8 +195,8 @@ public final class CView implements IView
     @Override
     public final boolean containsView( @Nonnull final IPath p_path )
     {
-        return p_path.empty()
-               || ( p_path.size() == 1
+        return !p_path.empty()
+               && ( p_path.size() == 1
                     ? m_beliefbase.containsView( p_path.get( 0 ) )
                     : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
                         .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
@@ -206,10 +206,11 @@ public final class CView implements IView
     @Override
     public final boolean containsLiteral( @Nonnull final IPath p_path )
     {
-        return p_path.empty() || ( p_path.size() == 1
-               ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
-               : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
-                     .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
+        return !p_path.empty()
+               || ( p_path.size() == 1
+                    ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
+                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                          .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
