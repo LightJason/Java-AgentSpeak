@@ -194,21 +194,21 @@ public final class CView implements IView
     @Override
     public final boolean containsView( @Nonnull final IPath p_path )
     {
-        return p_path.isEmpty()
+        return p_path.empty()
                || ( p_path.size() == 1
                     ? m_beliefbase.containsView( p_path.get( 0 ) )
-                    : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) )
-                        .containsView( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
+                    : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                        .containsView( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
     @Override
     public final boolean containsLiteral( @Nonnull final IPath p_path )
     {
-        return p_path.isEmpty() || ( p_path.size() == 1
+        return p_path.empty() || ( p_path.size() == 1
                ? m_beliefbase.containsLiteral( p_path.get( 0 ) )
-               : this.leafview( this.walk( p_path.getSubPath( 0, p_path.size() - 1 ) ) )
-                     .containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) )
+               : this.leafview( this.walk( p_path.subpath( 0, p_path.size() - 1 ) ) )
+                     .containsLiteral( p_path.subpath( p_path.size() - 1, p_path.size() ) )
                );
     }
 
@@ -228,7 +228,7 @@ public final class CView implements IView
         return ( ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
                : Arrays.stream( p_path )
-                       .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() ).stream() )
+                       .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
         ).map( i -> i.shallowcopy( l_path ) );
     }
 
@@ -244,7 +244,7 @@ public final class CView implements IView
                    m_beliefbase.streamView().flatMap( i -> i.stream( p_negated ) )
                )
                : Arrays.stream( p_path )
-                       .flatMap( i -> this.leafview( this.walk( i.getSubPath( 0, -1 ) ) ).beliefbase().literal( i.getSuffix() ).stream() )
+                       .flatMap( i -> this.leafview( this.walk( i.subpath( 0, -1 ) ) ).beliefbase().literal( i.suffix() ).stream() )
                        .filter( j -> j.negated() == p_negated )
         ).map( i -> i.shallowcopy( l_path ) );
     }
@@ -276,7 +276,7 @@ public final class CView implements IView
     @SuppressWarnings( "varargs" )
     private final Stream<IView> walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
-        if ( p_path.isEmpty() )
+        if ( p_path.empty() )
             return Stream.of( this );
 
         final IView l_view;
@@ -300,7 +300,7 @@ public final class CView implements IView
 
         return Stream.concat(
             Stream.of( this ),
-            l_view.walk( p_path.getSubPath( 1 ), p_generator )
+            l_view.walk( p_path.subpath( 1 ), p_generator )
         );
     }
 

@@ -139,14 +139,14 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final String functor()
     {
-        return m_functor.getSuffix();
+        return m_functor.suffix();
     }
 
     @Nonnull
     @Override
     public final IPath functorpath()
     {
-        return m_functor.getSubPath( 0, m_functor.size() - 1 );
+        return m_functor.subpath( 0, m_functor.size() - 1 );
     }
 
     @Nonnull

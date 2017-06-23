@@ -342,7 +342,7 @@ public final class CViewMap implements IView
     public boolean containsLiteral( @Nonnull final IPath p_path )
     {
         // @todo refactor
-        if ( p_path.isEmpty() )
+        if ( p_path.empty() )
             return false;
 
         if ( p_path.size() == 1 )
@@ -356,7 +356,7 @@ public final class CViewMap implements IView
     public final boolean containsView( @Nonnull final IPath p_path )
     {
         // @todo refactor
-        if ( p_path.isEmpty() )
+        if ( p_path.empty() )
             return false;
 
         final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
@@ -365,7 +365,7 @@ public final class CViewMap implements IView
         return p_path.size() == 1
                ? ( l_data != null ) && ( l_data instanceof Map<?, ?> )
                : ( l_data instanceof Map<?, ?> )
-                 && new CViewMap( l_key, (Map<String, Object>) l_data, this ).containsView( p_path.getSubPath( 1 ) );
+                 && new CViewMap( l_key, (Map<String, Object>) l_data, this ).containsView( p_path.subpath( 1 ) );
     }
 
     @Override
@@ -404,7 +404,7 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     private Stream<IView> walkdown( final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
-        if ( p_path.isEmpty() )
+        if ( p_path.empty() )
             return Stream.of( this );
 
         final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
@@ -415,7 +415,7 @@ public final class CViewMap implements IView
                     new CViewMap(
                         l_key, (Map<String, Object>) l_data, this,
                         m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_literaltokey, m_keytoliteral
-                    ).walk( p_path.getSubPath( 1 ), p_generator ) )
+                    ).walk( p_path.subpath( 1 ), p_generator ) )
                : Stream.of( this );
     }
 

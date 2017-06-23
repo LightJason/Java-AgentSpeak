@@ -81,13 +81,13 @@ public interface IPath extends Serializable, Comparable<IPath>
         }
 
         @Override
-        public final boolean endsWith( @Nonnull final IPath p_path )
+        public final boolean endswith( @Nonnull final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public final boolean isEmpty()
+        public final boolean empty()
         {
             return true;
         }
@@ -101,63 +101,63 @@ public interface IPath extends Serializable, Comparable<IPath>
 
         @Nonnull
         @Override
-        public final String getPath( final String p_separator )
+        public final String path( final String p_separator )
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final String getPath()
+        public final String path()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final String getSeparator()
+        public final String separator()
         {
             return "";
         }
 
         @Nonnull
         @Override
-        public final IPath setSeparator( @Nonnull final String p_separator )
+        public final IPath separator( @Nonnull final String p_separator )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath toLower()
+        public final IPath lower()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath toUpper()
+        public final IPath upper()
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath getSubPath( final int p_fromindex )
+        public final IPath subpath( final int p_fromindex )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final IPath getSubPath( final int p_fromindex, final int p_toindex )
+        public final IPath subpath( final int p_fromindex, final int p_toindex )
         {
             return this;
         }
 
         @Nonnull
         @Override
-        public final String getSuffix()
+        public final String suffix()
         {
             return "";
         }
@@ -192,7 +192,7 @@ public interface IPath extends Serializable, Comparable<IPath>
 
         @Nonnull
         @Override
-        public final String removeSuffix()
+        public final String removesuffix()
         {
             return "";
         }
@@ -211,13 +211,13 @@ public interface IPath extends Serializable, Comparable<IPath>
         }
 
         @Override
-        public final boolean startsWith( final IPath p_path )
+        public final boolean startswith( final IPath p_path )
         {
             return false;
         }
 
         @Override
-        public final boolean startsWith( final String p_path )
+        public final boolean startswith( final String p_path )
         {
             return false;
         }
@@ -225,13 +225,6 @@ public interface IPath extends Serializable, Comparable<IPath>
         @Nonnull
         @Override
         public final Stream<String> stream()
-        {
-            return Stream.empty();
-        }
-
-        @Nonnull
-        @Override
-        public final Stream<String> parallelStream()
         {
             return Stream.empty();
         }
@@ -255,7 +248,7 @@ public interface IPath extends Serializable, Comparable<IPath>
             return ( p_object != null )
                    && (
                        ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
-                       || ( ( p_object instanceof String ) && ( this.getPath().hashCode() == p_object.hashCode() ) )
+                       || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) )
                    );
         }
     };
@@ -303,14 +296,14 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean endsWith( @Nonnull final IPath p_path );
+    boolean endswith( @Nonnull final IPath p_path );
 
     /**
      * check if the path is empty
      *
      * @return empty flag
      */
-    boolean isEmpty();
+    boolean empty();
 
     /**
      * returns an part of the path
@@ -328,7 +321,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return string path
      */
     @Nonnull
-    String getPath( final String p_separator );
+    String path( final String p_separator );
 
     /**
      * returns the full path as string
@@ -336,7 +329,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return string path
      */
     @Nonnull
-    String getPath();
+    String path();
 
     /**
      * returns the separator
@@ -344,7 +337,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return separator
      */
     @Nonnull
-    String getSeparator();
+    String separator();
 
     /**
      * sets the separator
@@ -353,7 +346,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return path object
      */
     @Nonnull
-    IPath setSeparator( @Nonnull final String p_separator );
+    IPath separator( @Nonnull final String p_separator );
 
     /**
      * changes all elements to lower-case
@@ -361,7 +354,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return object
      */
     @Nonnull
-    IPath toLower();
+    IPath lower();
 
     /**
      * changes all elements to uppercase
@@ -369,7 +362,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return object
      */
     @Nonnull
-    IPath toUpper();
+    IPath upper();
 
     /**
      * creates a path of the start index until the end
@@ -378,7 +371,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return path
      */
     @Nonnull
-    IPath getSubPath( final int p_fromindex );
+    IPath subpath( final int p_fromindex );
 
     /**
      * creates a path of the indices
@@ -388,7 +381,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return path
      */
     @Nonnull
-    IPath getSubPath( final int p_fromindex, final int p_toindex );
+    IPath subpath( final int p_fromindex, final int p_toindex );
 
     /**
      * returns the last part of the path
@@ -396,7 +389,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return string
      */
     @Nonnull
-    String getSuffix();
+    String suffix();
 
     /**
      * adds a path at the end
@@ -440,7 +433,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @return last item of the path
      */
     @Nonnull
-    String removeSuffix();
+    String removesuffix();
 
     /**
      * reverse path
@@ -463,7 +456,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean startsWith( final IPath p_path );
+    boolean startswith( final IPath p_path );
 
     /**
      * check of a path starts with another path
@@ -471,7 +464,7 @@ public interface IPath extends Serializable, Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean startsWith( final String p_path );
+    boolean startswith( final String p_path );
 
     /**
      * stream over elements
@@ -480,13 +473,5 @@ public interface IPath extends Serializable, Comparable<IPath>
      */
     @Nonnull
     Stream<String> stream();
-
-    /**
-     * parallel stream over elements
-     *
-     * @return parallel stream
-     */
-    @Nonnull
-    Stream<String> parallelStream();
 
 }

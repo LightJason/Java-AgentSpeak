@@ -126,7 +126,7 @@ public final class CRelocateVariable<T> extends CVariable<T> implements IRelocat
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate, new Cloner().deepClone( m_value ) );
+        return new CRelocateVariable<>( CPath.from( m_functor.suffix() ), m_relocate, new Cloner().deepClone( m_value ) );
     }
 
     @Override

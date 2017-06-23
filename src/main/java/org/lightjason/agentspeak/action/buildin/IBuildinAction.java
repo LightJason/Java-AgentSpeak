@@ -76,7 +76,7 @@ public abstract class IBuildinAction extends IBaseAction
         m_name = new CPath(
             IntStream.range( Math.max( 0, l_names.size() - p_length ), l_names.size() )
                      .mapToObj( l_names::get )
-        ).toLower();
+        ).lower();
     }
 
     @Nonnull

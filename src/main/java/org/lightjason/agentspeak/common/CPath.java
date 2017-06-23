@@ -83,7 +83,7 @@ public final class CPath implements IPath
     public CPath( @Nonnull final IPath p_path )
     {
         m_path = p_path.stream().collect( CPath.collectorfactory() );
-        m_separator = p_path.getSeparator();
+        m_separator = p_path.separator();
     }
 
     /**
@@ -197,14 +197,14 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final synchronized boolean endsWith( @Nonnull final IPath p_path )
+    public final synchronized boolean endswith( @Nonnull final IPath p_path )
     {
         return p_path.size() <= this.size()
                && IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -> this.get( i - p_path.size() ).equals( p_path.get( i ) ) );
     }
 
     @Override
-    public final boolean startsWith( @Nonnull final IPath p_path )
+    public final boolean startswith( @Nonnull final IPath p_path )
     {
         return p_path.size() <= this.size()
                && IntStream.range( 0, p_path.size() ).boxed().parallel().allMatch( i -> this.get( i ).equals( p_path.get( i ) ) );
@@ -220,28 +220,28 @@ public final class CPath implements IPath
 
     @Nonnull
     @Override
-    public final String getPath( @Nonnull final String p_separator )
+    public final String path( @Nonnull final String p_separator )
     {
         return StringUtils.join( m_path, p_separator );
     }
 
     @Nonnull
     @Override
-    public final String getPath()
+    public final String path()
     {
         return StringUtils.join( m_path, m_separator );
     }
 
     @Nonnull
     @Override
-    public final String getSeparator()
+    public final String separator()
     {
         return m_separator;
     }
 
     @Nonnull
     @Override
-    public final IPath setSeparator( @Nonnull final String p_separator )
+    public final IPath separator( @Nonnull final String p_separator )
     {
         if ( p_separator.isEmpty() )
             throw new CIllegalArgumentException( CCommon.languagestring( this, "separatornotempty" ) );
@@ -252,7 +252,7 @@ public final class CPath implements IPath
 
     @Nonnull
     @Override
-    public final synchronized IPath toLower()
+    public final synchronized IPath lower()
     {
         IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toLowerCase() ) );
         return this;
@@ -260,7 +260,7 @@ public final class CPath implements IPath
 
     @Nonnull
     @Override
-    public final synchronized IPath toUpper()
+    public final synchronized IPath upper()
     {
         IntStream.range( 0, m_path.size() ).boxed().parallel().forEach( i -> m_path.set( i, m_path.get( i ).toUpperCase() ) );
         return this;
@@ -268,14 +268,14 @@ public final class CPath implements IPath
 
     @Nonnull
     @Override
-    public final IPath getSubPath( final int p_fromindex )
+    public final IPath subpath( final int p_fromindex )
     {
-        return this.getSubPath( p_fromindex, this.size() );
+        return this.subpath( p_fromindex, this.size() );
     }
 
     @Nonnull
     @Override
-    public final IPath getSubPath( final int p_fromindex, final int p_toindex )
+    public final IPath subpath( final int p_fromindex, final int p_toindex )
     {
         return new CPath(
             p_toindex == 0
@@ -285,12 +285,12 @@ public final class CPath implements IPath
                 p_toindex > 0 ? p_toindex : this.size() + p_toindex
             )
             .mapToObj( m_path::get )
-        ).setSeparator( m_separator );
+        ).separator( m_separator );
     }
 
     @Nonnull
     @Override
-    public final synchronized String getSuffix()
+    public final synchronized String suffix()
     {
         return m_path.isEmpty()
                ? ""
@@ -310,14 +310,14 @@ public final class CPath implements IPath
         return ( p_object != null )
                && (
                     ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
-                    || ( ( p_object instanceof String ) && ( this.getPath().hashCode() == p_object.hashCode() ) )
+                    || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) )
                );
     }
 
     @Override
     public final String toString()
     {
-        return this.getPath();
+        return this.path();
     }
 
     /**
@@ -325,7 +325,7 @@ public final class CPath implements IPath
      *
      * @return empty flag
      */
-    public final boolean isEmpty()
+    public final boolean empty()
     {
         return m_path.isEmpty();
     }
@@ -366,12 +366,12 @@ public final class CPath implements IPath
 
     @Nonnull
     @Override
-    public final String removeSuffix()
+    public final String removesuffix()
     {
-        if ( this.isEmpty() )
+        if ( this.empty() )
             return "";
 
-        final String l_suffix = this.getSuffix();
+        final String l_suffix = this.suffix();
         if ( m_path.size() > 0 )
             m_path.remove( m_path.size() - 1 );
         return l_suffix;
@@ -392,9 +392,9 @@ public final class CPath implements IPath
     }
 
     @Override
-    public final boolean startsWith( final String p_path )
+    public final boolean startswith( final String p_path )
     {
-        return this.startsWith( new CPath( p_path ) );
+        return this.startswith( new CPath( p_path ) );
     }
 
     @Nonnull
@@ -402,13 +402,6 @@ public final class CPath implements IPath
     public final Stream<String> stream()
     {
         return m_path.stream();
-    }
-
-    @Nonnull
-    @Override
-    public final Stream<String> parallelStream()
-    {
-        return m_path.parallelStream();
     }
 
     @Override

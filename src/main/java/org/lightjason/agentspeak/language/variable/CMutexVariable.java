@@ -141,7 +141,7 @@ public class CMutexVariable<T> extends CVariable<T>
     @Override
     public IVariable<T> shallowcopysuffix()
     {
-        return new CMutexVariable<>( m_functor.getSuffix(), m_value );
+        return new CMutexVariable<>( m_functor.suffix(), m_value );
     }
 
     @Override

@@ -53,7 +53,7 @@ public final class TestCActionBinding extends IBaseTest
                 CClassBindingDefault.class,
                 CClassBindingBlacklist.class,
                 CClassBindingWhitelist.class
-            ).map( i -> i.name().getPath() ).toArray(),
+            ).map( i -> i.name().path() ).toArray(),
 
             Stream.of( "methodwhitelist" ).toArray()
         );
@@ -67,7 +67,7 @@ public final class TestCActionBinding extends IBaseTest
     public final void methoddefault()
     {
         Assert.assertArrayEquals(
-            CCommon.actionsFromAgentClass( CMethodBindingDefault.class ).map( i -> i.name().getPath() ).toArray(),
+            CCommon.actionsFromAgentClass( CMethodBindingDefault.class ).map( i -> i.name().path() ).toArray(),
             Stream.of( "methodannotate" ).toArray()
         );
     }
@@ -80,7 +80,7 @@ public final class TestCActionBinding extends IBaseTest
     public final void methodblacklist()
     {
         Assert.assertArrayEquals(
-            CCommon.actionsFromAgentClass( CMethodBindingBlacklist.class ).map( i -> i.name().getPath() ).toArray(),
+            CCommon.actionsFromAgentClass( CMethodBindingBlacklist.class ).map( i -> i.name().path() ).toArray(),
             Stream.of( "methodannotate" ).toArray()
         );
     }
@@ -93,7 +93,7 @@ public final class TestCActionBinding extends IBaseTest
     public final void methodwhitelist()
     {
         Assert.assertArrayEquals(
-            CCommon.actionsFromAgentClass( CMethodBindingWhitelist.class ).map( i -> i.name().getPath() ).toArray(),
+            CCommon.actionsFromAgentClass( CMethodBindingWhitelist.class ).map( i -> i.name().path() ).toArray(),
             Stream.of( "methodnotannotate" ).toArray()
         );
     }

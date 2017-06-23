@@ -236,7 +236,7 @@ public final class CCommon
      */
     private static boolean actionusable( final IAction p_action )
     {
-        if ( ( p_action.name().isEmpty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
+        if ( ( p_action.name().empty() ) || ( p_action.name().get( 0 ).trim().isEmpty() ) )
         {
             LOGGER.warning( CCommon.languagestring( CCommon.class, "actionnameempty" ) );
             return false;

@@ -150,7 +150,7 @@ public final class CLiteral implements ILiteral
         final Hasher l_valuehasher = CCommon.getTermHashing();
         m_orderedvalues.forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
         l_valuehasher.putBoolean( m_negated );
-        l_valuehasher.putString( p_functor.getPath(), Charsets.UTF_8 );
+        l_valuehasher.putString( p_functor.path(), Charsets.UTF_8 );
         m_structurehash = l_valuehasher.hash().asInt();
     }
 
@@ -377,14 +377,14 @@ public final class CLiteral implements ILiteral
     @Override
     public final String functor()
     {
-        return m_functor.getSuffix();
+        return m_functor.suffix();
     }
 
     @Nonnull
     @Override
     public final IPath functorpath()
     {
-        return m_functor.getSubPath( 0, m_functor.size() - 1 );
+        return m_functor.subpath( 0, m_functor.size() - 1 );
     }
 
     @Nonnull
@@ -436,7 +436,7 @@ public final class CLiteral implements ILiteral
     public final ILiteral shallowcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.getSuffix() ),
+            m_at, m_negated, CPath.from( m_functor.suffix() ),
             m_values.values()
         );
     }
@@ -479,7 +479,7 @@ public final class CLiteral implements ILiteral
     public final synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.getSuffix() ),
+            m_at, m_negated, CPath.from( m_functor.suffix() ),
             m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
         );
     }

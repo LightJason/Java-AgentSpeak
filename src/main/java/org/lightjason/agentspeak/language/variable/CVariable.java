@@ -102,7 +102,7 @@ public class CVariable<T> implements IVariable<T>
     @SuppressFBWarnings( "EC_UNRELATED_CLASS_AND_INTERFACE" )
     public CVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
-        m_any = p_functor.isEmpty() || p_functor.equals( "_" );
+        m_any = p_functor.empty() || p_functor.equals( "_" );
         m_functor = p_functor;
         this.internalset( p_value );
     }
@@ -180,14 +180,14 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public final String functor()
     {
-        return m_functor.getSuffix();
+        return m_functor.suffix();
     }
 
     @Nonnull
     @Override
     public final IPath functorpath()
     {
-        return m_functor.getSubPath( 0, m_functor.size() - 1 );
+        return m_functor.subpath( 0, m_functor.size() - 1 );
     }
 
     @Nonnull
@@ -223,7 +223,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public IVariable<T> shallowcopysuffix()
     {
-        return new CVariable<>( m_functor.getSuffix(), m_value );
+        return new CVariable<>( m_functor.suffix(), m_value );
     }
 
     @Nonnull
@@ -242,7 +242,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public ITerm deepcopysuffix()
     {
-        return new CVariable<>( m_functor.getSuffix(), new Cloner().deepClone( m_value ) );
+        return new CVariable<>( m_functor.suffix(), new Cloner().deepClone( m_value ) );
     }
 
     @Override
