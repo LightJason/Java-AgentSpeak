@@ -144,7 +144,8 @@ public final class TestCHanoiTowers extends IBaseTest
 
         final Map<Integer, CTower> l_towermap = new ConcurrentHashMap<>();
         IntStream.range( 0, m_towernumber.intValue() )
-                 .forEach( i -> {
+                 .forEach( i ->
+                 {
                      final CTower l_tower = new CTower();
                      l_towermap.put( i, l_tower );
                      if ( i == 0 )
@@ -184,7 +185,8 @@ public final class TestCHanoiTowers extends IBaseTest
                 System.out.println( MessageFormat.format( "\ntower configuration: {0}", m_tower ) );
             m_agents.values()
                     .parallelStream()
-                    .forEach( j -> {
+                    .forEach( j ->
+                    {
                         try
                         {
                             j.call();

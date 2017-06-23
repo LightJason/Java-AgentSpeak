@@ -85,7 +85,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      * @throws Exception thrown on error
      */
     public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions, @Nonnull final IVariableBuilder p_variablebuilder )
-    throws Exception
+        throws Exception
     {
         this( p_stream, p_actions, Collections.emptySet(), p_variablebuilder );
     }

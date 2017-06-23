@@ -58,6 +58,8 @@ public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShall
     /**
      * flag to check if variable has is
      * concurrency- / thread-safe
+     *
+     * @return mutex flag
      */
     boolean mutex();
 

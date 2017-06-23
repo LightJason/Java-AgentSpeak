@@ -96,7 +96,8 @@ public final class CFromList extends IBuildinAction
                   .limit( l_limit )
                   .map( ITerm::<List<Number>>raw )
                   .map( i -> i.stream().mapToDouble( Number::doubleValue ).toArray() )
-                  .map( i -> {
+                  .map( i ->
+                  {
                       switch ( l_type )
                       {
                           case SPARSE:

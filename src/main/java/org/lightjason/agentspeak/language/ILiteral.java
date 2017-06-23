@@ -195,6 +195,8 @@ public interface ILiteral extends ITerm, IShallowCopy<ILiteral>, Comparable<ILit
     /**
      * returns a stream over the ordered values
      * in sequential ordering
+     *
+     * @return term stream
      */
     @Nonnull
     Stream<ITerm> orderedvalues( @Nullable final IPath... p_path );

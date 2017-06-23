@@ -48,6 +48,8 @@ public abstract class IBaseTest
      * enable printing of test-data
      */
     protected static final boolean PRINTENABLE = Files.exists( Paths.get( "agentprinting.conf" ) );
+
+
     /**
      * invoke all test manually
      */
@@ -108,7 +110,8 @@ public abstract class IBaseTest
         try
         {
             if ( !p_before.isEmpty() )
-                p_before.forEach( i -> {
+                p_before.forEach( i ->
+                {
                     try
                     {
                         i.invoke( this );

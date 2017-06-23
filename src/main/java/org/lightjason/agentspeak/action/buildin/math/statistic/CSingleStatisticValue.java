@@ -82,7 +82,8 @@ public final class CSingleStatisticValue extends IBuildinAction
 
         l_arguments.stream()
                    .skip( 1 )
-                   .mapToDouble( i -> {
+                   .mapToDouble( i ->
+                   {
 
                        if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
                            return l_value.value( i.<SummaryStatistics>raw() );

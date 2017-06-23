@@ -185,7 +185,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     @Test
     @UseDataProvider( "generator" )
     public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-    throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -210,7 +210,8 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CCreate().execute(
-            false, IContext.EMPTYPLAN,
+            false,
+            IContext.EMPTYPLAN,
             Stream.of( 2, 2, "dense" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -761,7 +762,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
             Arrays.stream( l_data ).boxed().toArray(),
             IntStream.range( 0, l_result.rows() )
                      .boxed()
-                     .map( i-> l_result.getQuick( i, i ) )
+                     .map( i -> l_result.getQuick( i, i ) )
                      .toArray()
         );
 

@@ -334,7 +334,8 @@ public final class CLiteral implements ILiteral
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i -> {
+                           .map( i ->
+                           {
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
@@ -357,7 +358,8 @@ public final class CLiteral implements ILiteral
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i -> {
+                           .map( i ->
+                           {
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );

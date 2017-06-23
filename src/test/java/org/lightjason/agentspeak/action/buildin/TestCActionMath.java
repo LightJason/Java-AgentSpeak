@@ -254,7 +254,7 @@ public final class TestCActionMath extends IBaseTest
     @Test
     @UseDataProvider( "aggregationvaluegenerate" )
     public final void aggregationvalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Stream<Number>, ?>> p_input )
-    throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
@@ -280,7 +280,7 @@ public final class TestCActionMath extends IBaseTest
     @Test
     @UseDataProvider( "singlevaluegenerate" )
     public final void singlevalueaction( final Triple<List<ITerm>, Class<? extends IAction>, Function<Number, ?>> p_input )
-    throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 

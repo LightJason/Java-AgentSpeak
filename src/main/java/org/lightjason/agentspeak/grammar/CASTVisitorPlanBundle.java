@@ -221,12 +221,14 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             (ILiteral) this.visitLiteral( p_context.literal() )
         );
 
-        return p_context.plandefinition().stream().map( i -> {
-
-            final Pair<IExpression, List<IExecution>> l_content = (Pair<IExpression, List<IExecution>>) this.visitPlandefinition( i );
-            return new CPlan( l_trigger, l_content.getLeft(), l_content.getRight(), l_annotation );
-
-        } ).collect( Collectors.toList() );
+        return p_context.plandefinition()
+                        .stream()
+                        .map( i ->
+                        {
+                            final Pair<IExpression, List<IExecution>> l_content = (Pair<IExpression, List<IExecution>>) this.visitPlandefinition( i );
+                            return new CPlan( l_trigger, l_content.getLeft(), l_content.getRight(), l_annotation );
+                        } )
+                        .collect( Collectors.toList() );
     }
 
     @Override

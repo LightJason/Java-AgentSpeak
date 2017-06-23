@@ -101,7 +101,8 @@ public final class CPerronFrobenius extends IAlgebra
                      .range( 0, l_arguments.size() )
                      .boxed()
                      .parallel()
-                     .forEach( j -> {
+                     .forEach( j ->
+                     {
                          l_eigenvector.get( j ).assign( ALGEBRA.mult( l_arguments.get( j + 1 ).<DoubleMatrix2D>raw(), l_eigenvector.get( j ) ) );
                          l_eigenvector.get( j ).assign( Mult.div( ALGEBRA.norm2( l_eigenvector.get( j ) ) ) );
                      } ) );

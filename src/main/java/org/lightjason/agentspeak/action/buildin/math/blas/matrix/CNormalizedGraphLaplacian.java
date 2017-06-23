@@ -77,7 +77,8 @@ public final class CNormalizedGraphLaplacian extends IAlgebra
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( i -> {
+               .map( i ->
+               {
                    final DoubleMatrix2D l_degree = DoubleFactory2D
                              .sparse
                              .diagonal( new DenseDoubleMatrix1D( IntStream.range( 0, i.rows() ).mapToDouble( j -> i.viewRow( j ).cardinality() ).toArray() ) );

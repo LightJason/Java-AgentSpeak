@@ -302,7 +302,8 @@ public final class CCommon
     @SuppressWarnings( "unchecked" )
     private static Stream<ITerm> flattenstream( @Nonnull final Stream<?> p_stream )
     {
-        return p_stream.flatMap( i -> {
+        return p_stream.flatMap( i ->
+        {
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
                    ? flattenstream( ( (Collection<?>) l_value ).stream() )

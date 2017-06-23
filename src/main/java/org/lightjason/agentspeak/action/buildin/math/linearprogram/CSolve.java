@@ -105,7 +105,8 @@ public final class CSolve extends IBuildinAction
         l_settings.add( new LinearConstraintSet( l_default.getRight() ) );
 
         p_argument.subList( 1, p_argument.size() ).stream()
-                  .map( i -> {
+                  .map( i ->
+                  {
                       if ( CCommon.rawvalueAssignableTo( i, Number.class ) )
                           return new MaxIter( i.raw() );
 

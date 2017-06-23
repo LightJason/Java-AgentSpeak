@@ -464,7 +464,8 @@ public final class CPath implements IPath
             @Override
             public final BinaryOperator<List<String>> combiner()
             {
-                return (i, j) -> {
+                return ( i, j ) ->
+                {
                     i.addAll( j );
                     return i;
                 };

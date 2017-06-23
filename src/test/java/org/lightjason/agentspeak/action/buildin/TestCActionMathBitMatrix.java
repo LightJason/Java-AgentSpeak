@@ -179,12 +179,13 @@ public class TestCActionMathBitMatrix extends IBaseTest
     @Test
     @UseDataProvider( "generator" )
     public final void action( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-    throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            false, null,
+            false,
+            IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );

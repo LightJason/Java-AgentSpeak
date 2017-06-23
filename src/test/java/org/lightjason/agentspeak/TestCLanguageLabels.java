@@ -94,7 +94,8 @@ public final class TestCLanguageLabels extends IBaseTest
         final String[] l_languages = CCommon.languages();
         IntStream.range( 0, l_languages.length )
                  .boxed()
-                 .forEach( i -> {
+                 .forEach( i ->
+                 {
                      try
                      {
                          LANGUAGEPROPERY.put(
@@ -236,7 +237,8 @@ public final class TestCLanguageLabels extends IBaseTest
         if ( l_ignoredlabel.size() > 0 )
             System.err.println( MessageFormat.format( "labels that starts with {0} are ignored, because parsing errors are occurred", l_ignoredlabel ) );
 
-        LANGUAGEPROPERY.forEach( ( k, v ) -> {
+        LANGUAGEPROPERY.forEach( ( k, v ) ->
+        {
             try
                  (
                      final FileInputStream l_stream = new FileInputStream( new File( v ) )

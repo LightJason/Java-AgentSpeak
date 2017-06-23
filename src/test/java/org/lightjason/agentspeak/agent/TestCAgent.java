@@ -136,7 +136,8 @@ public final class TestCAgent extends IBaseTest
                                       ).generatesingle();
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
-                     .forEach( i -> {
+                     .forEach( i ->
+                     {
                          try
                          {
                              l_agent.call();

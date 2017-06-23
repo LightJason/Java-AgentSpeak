@@ -71,8 +71,8 @@ public abstract class IParse extends IBuildinAction
             CCommon.flatten( p_argument )
                    .map( ITerm::<String>raw )
                    .map( this::parse )
-                   .allMatch( i -> {
-
+                   .allMatch( i ->
+                   {
                        p_return.add( i.getValue() );
                        return i.getKey();
 

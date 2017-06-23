@@ -79,7 +79,8 @@ public final class CMultiply extends IAlgebra
                 CCommon.flatten( p_argument ),
                 2,
                 2
-            ).parallel().allMatch( i -> {
+            ).parallel().allMatch( i ->
+            {
 
                 if ( ( CCommon.rawvalueAssignableTo( i.get( 0 ), DoubleMatrix1D.class ) )
                      && ( CCommon.rawvalueAssignableTo( i.get( 1 ), DoubleMatrix1D.class ) ) )

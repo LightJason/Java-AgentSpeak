@@ -145,7 +145,8 @@ public final class CView implements IView
                   this.root()
                       .filter( j -> i.beliefbase().equals( this.beliefbase() ) )
                       .findAny()
-                      .ifPresent( j -> {
+                      .ifPresent( j ->
+                      {
                           throw new CIllegalArgumentException( CCommon.languagestring( this, "equal", i.path(), j.path() ) );
                       } );
                   m_beliefbase.add( i );

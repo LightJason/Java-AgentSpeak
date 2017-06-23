@@ -97,7 +97,7 @@ public final class CPrint extends IBuildinAction
      * @throws Exception is thrown on supplierer error
      */
     public CPrint( @Nonnull final String p_seperator, @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nullable final IFormatter<?>... p_formatter )
-    throws Exception
+        throws Exception
     {
         super( 2 );
         m_streamsupplier = p_streamsupplier;
@@ -150,7 +150,8 @@ public final class CPrint extends IBuildinAction
     {
         return p_argument.stream()
                          .map( ITerm::raw )
-                         .map( i -> {
+                         .map( i ->
+                         {
                              if ( i == null )
                                  return "";
 

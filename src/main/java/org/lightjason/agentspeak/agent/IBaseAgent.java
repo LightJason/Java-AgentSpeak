@@ -182,15 +182,18 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     @SuppressWarnings( "varargs" )
     public final <N extends IInspector> Stream<N> inspect( @Nonnull final N... p_inspector )
     {
-        return Arrays.stream( p_inspector ).parallel().peek( i -> {
-            i.inspectcycle( m_cycle.get() );
-            i.inspectsleeping( m_sleepingcycles.get() );
-            i.inspectbelief( m_beliefbase.stream() );
-            i.inspectplans( m_plans.values().stream() );
-            i.inspectrunningplans( m_runningplans.values().stream() );
-            i.inspectstorage( m_storage.entrySet().stream() );
-            i.inspectrules( m_rules.values().stream() );
-        } );
+        return Arrays.stream( p_inspector )
+                     .parallel()
+                     .peek( i ->
+                     {
+                         i.inspectcycle( m_cycle.get() );
+                         i.inspectsleeping( m_sleepingcycles.get() );
+                         i.inspectbelief( m_beliefbase.stream() );
+                         i.inspectplans( m_plans.values().stream() );
+                         i.inspectrunningplans( m_runningplans.values().stream() );
+                         i.inspectstorage( m_storage.entrySet().stream() );
+                         i.inspectrules( m_rules.values().stream() );
+                     } );
     }
 
     @Nonnull
@@ -443,18 +446,20 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         ) );
 
         // execute plan and return values and return execution result
-        return p_execution.parallelStream().map( i -> {
-
-            final IFuzzyValue<Boolean> l_result = i.getLeft().plan().execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() );
-            if ( m_fuzzy.getValue().defuzzify( l_result ) )
-                // increment successful runs
-                i.getLeft().incrementsuccessful();
-            else
-                // increment failed runs and create delete goal-event
-                i.getLeft().incrementfail();
-
-            return l_result;
-        } ).collect( m_fuzzy.getKey() );
+        return p_execution.parallelStream()
+                          .map( i ->
+                          {
+                              final IFuzzyValue<Boolean> l_result = i.getLeft()
+                                                                     .plan()
+                                                                     .execute( false, i.getRight(), Collections.emptyList(), Collections.emptyList() );
+                              if ( m_fuzzy.getValue().defuzzify( l_result ) )
+                                  // increment successful runs
+                                  i.getLeft().incrementsuccessful();
+                              else
+                                  // increment failed runs and create delete goal-event
+                                  i.getLeft().incrementfail();
+                              return l_result;
+                          } ).collect( m_fuzzy.getKey() );
     }
 
     /**

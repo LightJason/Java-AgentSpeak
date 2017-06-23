@@ -155,7 +155,8 @@ public final class CCommon
         return ( ( p_package == null ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.buildin" ) )
                  : Arrays.stream( p_package ) )
-            .flatMap( j -> {
+            .flatMap( j ->
+            {
                 try
                 {
                     return ClassPath.from( Thread.currentThread().getContextClassLoader() )
@@ -166,7 +167,8 @@ public final class CCommon
                                     .filter( i -> !Modifier.isInterface( i.getModifiers() ) )
                                     .filter( i -> Modifier.isPublic( i.getModifiers() ) )
                                     .filter( IAction.class::isAssignableFrom )
-                                    .map( i -> {
+                                    .map( i ->
+                                    {
                                         try
                                         {
                                             return (IAction) i.newInstance();
@@ -209,7 +211,8 @@ public final class CCommon
                        .parallel()
                        .filter( IAgent.class::isAssignableFrom )
                        .flatMap( i -> CCommon.methods( i, i ) )
-                       .map( i -> {
+                       .map( i ->
+                       {
                            try
                            {
                                return (IAction) new CMethodAction( i );

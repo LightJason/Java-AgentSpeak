@@ -78,7 +78,8 @@ public final class CSingularValue extends IBuildinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( SingularValueDecomposition::new )
-               .forEach( i -> {
+               .forEach( i ->
+               {
                    p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( i.getSingularValues() ) ) );
                    p_return.add( CRawTerm.from( i.getU() ) );
                    p_return.add( CRawTerm.from( i.getV() ) );

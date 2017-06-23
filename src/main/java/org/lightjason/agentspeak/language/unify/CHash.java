@@ -46,7 +46,8 @@ public final class CHash implements IUnifier.IAlgorithm
         return StreamUtils.zip(
             p_source,
             p_target,
-            ( s, t ) -> {
+            ( s, t ) ->
+            {
                 // if s and t are variable create a realocated variable for backtracking
                 if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )
                 {

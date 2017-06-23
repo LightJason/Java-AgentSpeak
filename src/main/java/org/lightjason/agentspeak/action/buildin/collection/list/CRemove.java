@@ -82,7 +82,8 @@ public final class CRemove extends IBuildinAction
         CCommon.flatten( p_argument.stream().skip( 1 ) )
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
-               .map( i -> {
+               .map( i ->
+               {
                    l_removed.add( i );
                    return l_list.get( i );
                } )

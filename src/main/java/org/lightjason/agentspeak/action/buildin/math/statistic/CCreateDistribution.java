@@ -174,7 +174,8 @@ public final class CCreateDistribution extends IBuildinAction
                  .mapToObj( i -> new AbstractMap.SimpleImmutableEntry<>( i, l_arguments.get( i ).<String>raw() ) )
                  .filter( i -> EDistribution.exist( i.getValue() ) )
                  .map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), EDistribution.from( i.getValue() ) ) )
-                 .map( i -> {
+                 .map( i ->
+                 {
 
                      // check if next argument to the distribution name a generator name
                      final int l_skip;

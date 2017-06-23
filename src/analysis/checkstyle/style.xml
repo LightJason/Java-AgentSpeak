@@ -338,7 +338,7 @@
         <module name = "MutableException" />
 
         <module name = "NPathComplexity">
-            <property name = "max" value = "275" />
+            <property name = "max" value = "475" />
         </module>
 
         <!-- <module name="NeedBraces">
@@ -408,8 +408,9 @@
             <property name = "checkMethods" value = "true" />
         </module>
 
-        <module name = "ReturnCount">
-            <property name = "max" value = "20" />
+        <module name="ReturnCount">
+            <property name="max" value="20"/>
+            <property name="maxForVoid" value="20"/>
         </module>
 
         <module name = "RightCurly">

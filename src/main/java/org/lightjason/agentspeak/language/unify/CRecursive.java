@@ -39,6 +39,8 @@ import java.util.stream.Stream;
 
 /**
  * recursive unify
+ *
+ * @todo reduce npath complexity
  */
 public final class CRecursive implements IUnifier.IAlgorithm
 {
@@ -59,7 +61,8 @@ public final class CRecursive implements IUnifier.IAlgorithm
         return StreamUtils.zip(
             l_source.stream(),
             l_target.stream(),
-            ( s, t ) -> {
+            ( s, t ) ->
+            {
 
                 // if s and t are variable create a realocated variable for backtracking
                 if ( ( t instanceof IVariable<?> ) && ( s instanceof IVariable<?> ) )

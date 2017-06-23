@@ -142,25 +142,29 @@ public final class CConsistency implements IConsistency
 
         // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
-        IntStream.range( 0, l_keys.size() ).parallel().boxed().forEach( i -> {
+        IntStream.range( 0, l_keys.size() )
+                 .parallel()
+                 .boxed()
+                 .forEach( i ->
+                 {
+                     final IAgent<?> l_item = l_keys.get( i );
+                     IntStream.range( i + 1, l_keys.size() )
+                              .boxed()
+                              .forEach( j ->
+                              {
+                                  final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
+                                  l_matrix.setQuick( i, j, l_value );
+                                  l_matrix.setQuick( j, i, l_value );
+                              } );
 
-            final IAgent<?> l_item = l_keys.get( i );
-            IntStream.range( i + 1, l_keys.size() ).boxed().forEach( j -> {
+                     // row-wise normalization for getting probabilities
+                     final double l_norm = Algebra.DEFAULT.norm1( l_matrix.viewRow( i ) );
+                     if ( l_norm != 0 )
+                        l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 
-                final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
-                l_matrix.setQuick( i, j, l_value );
-                l_matrix.setQuick( j, i, l_value );
-
-            } );
-
-            // row-wise normalization for getting probabilities
-            final double l_norm = Algebra.DEFAULT.norm1( l_matrix.viewRow( i ) );
-            if ( l_norm != 0 )
-                l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
-
-            // set epsilon slope for preventing periodic markov chains
-            l_matrix.setQuick( i, i, m_epsilon );
-        } );
+                     // set epsilon slope for preventing periodic markov chains
+                     l_matrix.setQuick( i, i, m_epsilon );
+                 } );
 
         // check for a zero-matrix
         final DoubleMatrix1D l_eigenvector = l_matrix.zSum() <= m_data.size() * m_epsilon
@@ -175,7 +179,8 @@ public final class CConsistency implements IConsistency
         m_statistic.clear();
         IntStream.range( 0, l_keys.size() )
                  .boxed()
-                 .forEach( i -> {
+                 .forEach( i ->
+                 {
                      m_statistic.addValue( l_eigenvector.get( i ) );
                      m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
                  } );
@@ -357,10 +362,12 @@ public final class CConsistency implements IConsistency
         private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix, final int p_iteration )
         {
             final DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
-            IntStream.range( 0, p_iteration ).forEach( i -> {
-                l_probability.assign( Algebra.DEFAULT.mult( p_matrix, l_probability ) );
-                l_probability.assign( Mult.div( Algebra.DEFAULT.norm2( l_probability ) ) );
-            } );
+            IntStream.range( 0, p_iteration )
+                     .forEach( i ->
+                     {
+                         l_probability.assign( Algebra.DEFAULT.mult( p_matrix, l_probability ) );
+                         l_probability.assign( Mult.div( Algebra.DEFAULT.norm2( l_probability ) ) );
+                     } );
             return l_probability;
         }
 

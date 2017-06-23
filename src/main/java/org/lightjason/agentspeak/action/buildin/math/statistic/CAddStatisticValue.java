@@ -86,7 +86,8 @@ public final class CAddStatisticValue extends IBuildinAction
         return CFuzzyValue.from(
             l_arguments.parallelStream()
                    .filter( i -> CCommon.rawvalueAssignableTo( i, StatisticalSummary.class ) )
-                   .allMatch( i -> {
+                   .allMatch( i ->
+                   {
 
                        if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
                        {

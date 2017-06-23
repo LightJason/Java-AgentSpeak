@@ -168,18 +168,20 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     {
         final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
 
-        return CCommon.flatten( p_input ).map( i -> {
-
-            l_localcontext.getMiddle().set( i.raw() );
-            m_body.forEach(
-                j -> j.execute(
-                    m_parallel, l_localcontext.getLeft(),
-                    Collections.<ITerm>emptyList(),
-                    new LinkedList<>()
-                ) );
-            return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
-
-        } ).filter( Objects::nonNull ).collect( Collectors.toList() );
+        return CCommon.flatten( p_input )
+                      .map( i ->
+                      {
+                          l_localcontext.getMiddle().set( i.raw() );
+                          m_body.forEach( j -> j.execute(
+                                  m_parallel,
+                                  l_localcontext.getLeft(),
+                                  Collections.<ITerm>emptyList(),
+                                  new LinkedList<>()
+                               ) );
+                          return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
+                      } )
+                      .filter( Objects::nonNull )
+                      .collect( Collectors.toList() );
     }
 
     /**
@@ -192,17 +194,22 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
     @Nonnull
     private List<?> executeParallel( @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_input )
     {
-        return CCommon.flatten( p_input ).parallel().map( i -> {
-
-            final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
-            l_localcontext.getMiddle().set( i.raw() );
-            m_body.forEach(
-                j -> j.execute(
-                    m_parallel, l_localcontext.getLeft(), Collections.<ITerm>emptyList(), new LinkedList<>()
-                ) );
-            return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
-
-        } ).filter( Objects::nonNull ).collect( Collectors.toList() );
+        return CCommon.flatten( p_input )
+                      .parallel()
+                      .map( i ->
+                      {
+                          final Triple<IContext, IVariable<?>, IVariable<?>> l_localcontext = this.getLocalContext( p_context );
+                          l_localcontext.getMiddle().set( i.raw() );
+                          m_body.forEach( j -> j.execute(
+                                  m_parallel,
+                                  l_localcontext.getLeft(),
+                                  Collections.<ITerm>emptyList(),
+                                  new LinkedList<>()
+                                ) );
+                          return l_localcontext.getRight() != null ? l_localcontext.getRight().raw() : null;
+                      } )
+                      .filter( Objects::nonNull )
+                      .collect( Collectors.toList() );
     }
 
 

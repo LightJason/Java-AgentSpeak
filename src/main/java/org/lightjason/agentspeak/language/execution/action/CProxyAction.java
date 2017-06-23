@@ -276,7 +276,8 @@ public final class CProxyAction implements IExecution
                             .collect(
                                 Collectors.toMap(
                                     i -> i,
-                                    i -> {
+                                    i ->
+                                    {
                                         final ITerm l_term = l_elements.get( i );
                                         return l_term instanceof ILiteral
                                                ? new CActionWrapper( (ILiteral) l_term, p_actions )
@@ -299,14 +300,17 @@ public final class CProxyAction implements IExecution
         {
             return Collections.unmodifiableList( CCommon.replaceFromContext(
                 p_context,
-                ( m_parallel ? p_execution.entrySet().parallelStream() : p_execution.entrySet().stream() )
-                    .flatMap( i -> {
-
-                        final List<ITerm> l_return = new LinkedList<>();
-                        i.getValue().execute( m_parallel, p_context, Collections.emptyList(), l_return );
-                        return l_return.stream();
-
-                    } ).collect( Collectors.toList() )
+                ( m_parallel
+                  ? p_execution.entrySet().parallelStream()
+                  : p_execution.entrySet()
+                               .stream() )
+                               .flatMap( i ->
+                               {
+                                   final List<ITerm> l_return = new LinkedList<>();
+                                   i.getValue().execute( m_parallel, p_context, Collections.emptyList(), l_return );
+                                   return l_return.stream();
+                               } )
+                               .collect( Collectors.toList() )
             ) );
         }
     }

@@ -87,7 +87,8 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
             p_parallel
             ? l_rules.parallelStream()
             : l_rules.stream()
-        ).map( i -> {
+        ).map( i ->
+        {
 
             // instantiate variables by unification of the rule literal
             final Set<IVariable<?>> l_variables = p_context.agent().unifier().unify( l_unified, i.identifier() );
@@ -109,7 +110,8 @@ abstract class IAchievementRule<T extends ITerm> extends IBaseExecution<T>
          .findFirst()
 
          // realocate rule instantiated variables back to execution context
-         .map( i -> {
+         .map( i ->
+         {
 
              i.getRight().parallelStream()
               .filter( j -> j instanceof IRelocateVariable )

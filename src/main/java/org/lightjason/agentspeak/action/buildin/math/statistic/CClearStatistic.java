@@ -74,7 +74,8 @@ public final class CClearStatistic extends IBuildinAction
         return CFuzzyValue.from(
             CCommon.flatten( p_argument )
                    .parallel()
-                   .allMatch( i -> {
+                   .allMatch( i ->
+                   {
 
                        if ( CCommon.rawvalueAssignableTo( i, SummaryStatistics.class ) )
                             return CClearStatistic.apply( i.<SummaryStatistics>raw() );

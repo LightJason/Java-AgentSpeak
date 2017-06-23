@@ -75,7 +75,8 @@ public class CElementWise extends IBuildinAction
                 CCommon.flatten( p_argument ),
             3,
                 3
-            ).allMatch( i -> {
+            ).allMatch( i ->
+            {
 
                 switch ( i.get( 1 ).<String>raw().trim() )
                 {

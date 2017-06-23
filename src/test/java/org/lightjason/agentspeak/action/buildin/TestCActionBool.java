@@ -169,7 +169,7 @@ public final class TestCActionBool extends IBaseTest
     @Test
     @UseDataProvider( "generate" )
     public final void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-    throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException
     {
         final List<ITerm> l_return = new ArrayList<>();
 

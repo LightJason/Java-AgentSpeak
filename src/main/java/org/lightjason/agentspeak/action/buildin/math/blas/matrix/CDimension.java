@@ -74,7 +74,8 @@ public final class CDimension extends IBuildinAction
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .forEach( i -> {
+               .forEach( i ->
+               {
                    p_return.add( CRawTerm.from( (long) i.rows() ) );
                    p_return.add( CRawTerm.from( (long) i.columns() ) );
                } );

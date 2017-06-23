@@ -123,7 +123,8 @@ public final class CAdjacencyMatrix extends IBuildinAction
                .filter( i -> CCommon.rawvalueAssignableTo( i, Graph.class ) )
                .map( ITerm::<Graph<Object, Object>>raw )
                .map( i -> CAdjacencyMatrix.apply( i, l_costmap, l_defaultcost, l_type ) )
-               .forEach( i -> {
+               .forEach( i ->
+               {
                    p_return.add( CRawTerm.from( i.getLeft() ) );
                    p_return.add( CRawTerm.from( i.getRight() ) );
                } );

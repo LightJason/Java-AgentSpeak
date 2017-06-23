@@ -82,7 +82,8 @@ public final class CAssign extends IBuildinAction
             l_arguments.stream()
                        .skip( 1 )
                        .parallel()
-                       .allMatch( i -> {
+                       .allMatch( i ->
+                       {
 
                            if ( CCommon.rawvalueAssignableTo( l_arguments.get( 0 ), Number.class ) )
                            {

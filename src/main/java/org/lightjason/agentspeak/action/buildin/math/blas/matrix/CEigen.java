@@ -77,7 +77,8 @@ public final class CEigen extends IBuildinAction
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
                .map( EigenvalueDecomposition::new )
-               .forEach( i -> {
+               .forEach( i ->
+               {
                    p_return.add( CRawTerm.from( i.getRealEigenvalues() ) );
                    p_return.add( CRawTerm.from( i.getV() ) );
                } );

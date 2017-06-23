@@ -83,7 +83,8 @@ public final class CInTriangle extends IBuildinAction
             return CFuzzyValue.from( false );
 
         StreamUtils.windowed( l_arguments.stream().skip( 6 ), 2, 2 )
-                   .peek( i -> {
+                   .peek( i ->
+                   {
                        i.add(
                            l_arguments.get( 1 ) * l_arguments.get( 4 )
                            - l_arguments.get( 0 ) * l_arguments.get( 5 )

@@ -125,17 +125,19 @@ public final class CViewMap implements IView
         this(
             p_name, p_map, p_parent,
             // add view
-            ( i, j ) -> { j.putIfAbsent( i, new ConcurrentHashMap<>() ); },
+            ( i, j ) -> j.putIfAbsent( i, new ConcurrentHashMap<>() ),
             // add literal
             ( i, j ) -> i.getValue().limit( 1 ).filter( ITerm::raw ).forEach( n -> j.put( i.getKey(), n.raw() ) ),
             // remove view
-            ( i, j ) -> {
+            ( i, j ) ->
+            {
                 final Object l_data = j.get( i );
                 if ( l_data instanceof Map<?, ?> )
                     j.remove( i, l_data );
             },
             // remove literal
-            ( i, j ) -> {
+            ( i, j ) ->
+            {
                 final Object l_data = j.get( i );
                 if ( !( l_data instanceof Map<?, ?> ) )
                     j.remove( i, l_data );
@@ -260,7 +262,8 @@ public final class CViewMap implements IView
                                             this.path().stream(),
                                             Stream.of( m_keytoliteral.apply( i.getKey() ) )
                                         ).collect( CPath.collect() ),
-                                        this.toterm( i.getValue() )
+                                        //this.toterm( i.getValue() )
+                                        Stream.empty()
                                     ) ),
                    m_data.entrySet().stream()
                          .filter( i -> i.getValue() instanceof Map<?, ?> )
@@ -503,7 +506,7 @@ public final class CViewMap implements IView
         @Override
         public final IView add( @Nonnull final IView p_view )
         {
-            m_addviewconsumer.accept( p_view, m_data );
+            m_addviewconsumer.accept( m_keytoliteral.apply( p_view.name() ), m_data );
             return p_view;
         }
 
