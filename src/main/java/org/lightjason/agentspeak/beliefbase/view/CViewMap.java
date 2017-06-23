@@ -64,13 +64,17 @@ public final class CViewMap implements IView
      */
     private final IView m_parent;
     /**
+     * beliefbase
+     */
+    private final IBeliefbase m_beliefbase = new CWrapperBeliefbase();
+    /**
      * root map
      */
     private final Map<String, Object> m_data;
     /**
      * path to key converting
      */
-    private final Function<String, String> m_pathtokey;
+    private final Function<String, String> m_literaltokey;
     /**
      * key to literal converting
      */
@@ -82,19 +86,19 @@ public final class CViewMap implements IView
     /**
      * add-view consumer
      */
-    private final BiConsumer<Stream<IView>, Map<String, Object>> m_addviewconsumer;
+    private final BiConsumer<IView, Map<String, Object>> m_addviewconsumer;
     /**
      * add-literal consumer
      */
-    private final BiConsumer<Stream<ILiteral>, Map<String, Object>> m_addliteralconsumer;
+    private final BiConsumer<ILiteral, Map<String, Object>> m_addliteralconsumer;
     /**
      * remove-view consumer
      */
-    private final BiConsumer<Stream<IView>, Map<String, Object>> m_removeviewconsumer;
+    private final BiConsumer<IView, Map<String, Object>> m_removeviewconsumer;
     /**
      * remove-literal consumer
      */
-    private final BiConsumer<Stream<ILiteral>, Map<String, Object>> m_removeliteralconsumer;
+    private final BiConsumer<ILiteral, Map<String, Object>> m_removeliteralconsumer;
 
     /**
      * ctor
@@ -139,22 +143,22 @@ public final class CViewMap implements IView
      * @param p_removeviewconsumer remove-view consumer
      * @param p_removeliteralconsumer remove-view consumer
      * @param p_clearconsumer clear consumer
-     * @param p_pathtokey converts a path item to a map key
+     * @param p_literaltokey converts a path ( functor item to a map key
      * @param p_keytoliteral converts a map key to literal path
      */
     public CViewMap( @Nonnull final String p_name, @Nonnull final Map<String, Object> p_map, @Nullable final IView p_parent,
-                     @Nonnull final BiConsumer<Stream<IView>, Map<String, Object>> p_addviewconsumer,
-                     @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, Object>> p_addliteralconsumer,
-                     @Nonnull final BiConsumer<Stream<IView>, Map<String, Object>> p_removeviewconsumer,
-                     @Nonnull final BiConsumer<Stream<ILiteral>, Map<String, Object>> p_removeliteralconsumer,
+                     @Nonnull final BiConsumer<IView, Map<String, Object>> p_addviewconsumer,
+                     @Nonnull final BiConsumer<ILiteral, Map<String, Object>> p_addliteralconsumer,
+                     @Nonnull final BiConsumer<IView, Map<String, Object>> p_removeviewconsumer,
+                     @Nonnull final BiConsumer<ILiteral, Map<String, Object>> p_removeliteralconsumer,
                      @Nonnull final Consumer<Map<String, Object>> p_clearconsumer,
-                     @Nonnull final Function<String, String> p_pathtokey, @Nonnull final Function<String, String> p_keytoliteral
+                     @Nonnull final Function<String, String> p_literaltokey, @Nonnull final Function<String, String> p_keytoliteral
     )
     {
         m_name = p_name;
         m_parent = p_parent;
         m_data = p_map;
-        m_pathtokey = p_pathtokey;
+        m_literaltokey = p_literaltokey;
         m_keytoliteral = p_keytoliteral;
         m_clearconsumer = p_clearconsumer;
         m_addviewconsumer = p_addviewconsumer;
@@ -190,7 +194,7 @@ public final class CViewMap implements IView
     @Override
     public final IBeliefbase beliefbase()
     {
-        return IBeliefbase.EMPY;
+        return m_beliefbase;
     }
 
     @Nonnull
@@ -224,7 +228,7 @@ public final class CViewMap implements IView
     @Override
     public final Stream<ITrigger> trigger()
     {
-        return Stream.empty();
+        return m_beliefbase.trigger( this );
     }
 
     @Nonnull
@@ -232,6 +236,7 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
+        // @todo refactor
         return ( p_path == null ) || ( p_path.length == 0 )
                ? Stream.concat(
                    m_data.entrySet().stream()
@@ -273,7 +278,7 @@ public final class CViewMap implements IView
     @Override
     public final IView add( @Nonnull final Stream<ILiteral> p_literal )
     {
-        m_addliteralconsumer.accept( p_literal, m_data );
+        p_literal.forEach( m_beliefbase::add );
         return this;
     }
 
@@ -289,7 +294,7 @@ public final class CViewMap implements IView
     @SuppressWarnings( "varargs" )
     public final IView add( @Nonnull final IView... p_view )
     {
-        m_addviewconsumer.accept( Arrays.stream( p_view ), m_data );
+        Arrays.stream( p_view ).forEach( m_beliefbase::remove );
         return this;
     }
 
@@ -297,7 +302,7 @@ public final class CViewMap implements IView
     @Override
     public IView remove( @Nonnull final Stream<ILiteral> p_literal )
     {
-        m_removeliteralconsumer.accept( p_literal, m_data );
+        p_literal.forEach( m_beliefbase::remove );
         return this;
     }
 
@@ -314,7 +319,7 @@ public final class CViewMap implements IView
     @SuppressWarnings( "varargs" )
     public final IView remove( @Nonnull final IView... p_view )
     {
-        m_removeviewconsumer.accept( Arrays.stream( p_view ), m_data );
+        Arrays.stream( p_view ).forEach( m_beliefbase::remove );
         return this;
     }
 
@@ -322,10 +327,11 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public boolean containsLiteral( @Nonnull final IPath p_path )
     {
+        // @todo refactor
         if ( p_path.isEmpty() )
             return false;
 
-        final String l_key = m_pathtokey.apply( p_path.get( 0 ) );
+        final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
         final Object l_data = m_data.get( l_key );
 
         return p_path.size() == 1
@@ -338,10 +344,11 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public final boolean containsView( @Nonnull final IPath p_path )
     {
+        // @todo refactor
         if ( p_path.isEmpty() )
             return false;
 
-        final String l_key = m_pathtokey.apply( p_path.get( 0 ) );
+        final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
         final Object l_data = m_data.get( l_key );
 
         return p_path.size() == 1
@@ -353,28 +360,20 @@ public final class CViewMap implements IView
     @Override
     public final boolean empty()
     {
-        return m_data.isEmpty();
+        return m_beliefbase.empty();
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final int size()
     {
-        return (int) m_data.entrySet().stream()
-                     .filter( i -> !( i instanceof Map<?, ?> ) )
-                     .count()
-               + m_data.entrySet().stream()
-                       .filter( i -> i instanceof Map<?, ?> )
-                       .map( i -> new CViewMap( i.getKey(), (Map<String, Object>)i, this ) )
-                       .mapToInt( CViewMap::size )
-                       .sum();
+        return m_beliefbase.size();
     }
 
     @Nonnull
     @Override
     public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
-        return p_agent;
+        return m_beliefbase.update( p_agent );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -383,13 +382,13 @@ public final class CViewMap implements IView
         if ( p_path.isEmpty() )
             return Stream.of( this );
 
-        final String l_key = m_pathtokey.apply( p_path.get( 0 ) );
+        final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
         final Object l_data = m_data.get( l_key );
         return l_data instanceof Map<?, ?>
                ? Stream.concat(
             Stream.of( this ),
             new CViewMap( l_key, (Map<String, Object>) l_data, this,
-                          m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_pathtokey, m_keytoliteral
+                          m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_literaltokey, m_keytoliteral
             ).walk( p_path.getSubPath( 1 ), p_generator )
         )
                : Stream.of( this );
@@ -416,35 +415,33 @@ public final class CViewMap implements IView
      */
     private final class CWrapperBeliefbase implements IBeliefbase
     {
-        private final IView m_view;
-
-        /**
-         * ctor
-         *
-         * @param p_view
-         */
-        CWrapperBeliefbase( @Nonnull final IView p_view )
-        {
-            m_view = p_view;
-        }
 
         @Override
         public final boolean empty()
         {
-            return m_view.empty();
+            return m_data.isEmpty();
         }
 
         @Override
+        @SuppressWarnings( "unchecked" )
         public final int size()
         {
-            return m_view.size();
+            return (int) m_data.values()
+                         .stream()
+                         .filter( i -> !( i instanceof Map<?, ?> ) )
+                         .count()
+                    + m_data.entrySet()
+                            .stream()
+                            .filter( i -> i instanceof Map<?, ?> )
+                            .mapToInt( i -> new CViewMap( i.getKey(), (Map<String, Object>) i.getValue() ).size() )
+                            .sum();
         }
 
         @Nonnull
         @Override
         public final IAgent<?> update( @Nonnull final IAgent<?> p_agent )
         {
-            return m_view.update( p_agent );
+            return p_agent;
         }
 
         @Nonnull
@@ -456,23 +453,31 @@ public final class CViewMap implements IView
 
         @Nonnull
         @Override
+        @SuppressWarnings( "unchecked" )
         public final Stream<ILiteral> streamLiteral()
         {
-            return m_view.stream();
+            return m_data.entrySet()
+                         .stream()
+                         .filter( i -> !( i.getValue() instanceof Map<?, ?> ) )
+                         .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), CViewMap.this.toterm( i.getValue() ) ) );
         }
 
         @Nonnull
         @Override
+        @SuppressWarnings( "unchecked" )
         public final Stream<IView> streamView()
         {
-            return null;
+            return m_data.entrySet()
+                         .stream()
+                         .filter( i -> i.getValue() instanceof Map<?, ?> )
+                         .map( i -> new CViewMap( m_keytoliteral.apply( i.getKey() ), (Map<String, Object>) i.getValue() ) );
         }
 
         @Nonnull
         @Override
         public final IBeliefbase clear()
         {
-            m_view.clear();
+            m_data.clear();
             return this;
         }
 
@@ -480,7 +485,7 @@ public final class CViewMap implements IView
         @Override
         public final ILiteral add( @Nonnull final ILiteral p_literal )
         {
-            m_view.add( p_literal );
+            m_addliteralconsumer.accept( p_literal, m_data );
             return p_literal;
         }
 
@@ -488,14 +493,20 @@ public final class CViewMap implements IView
         @Override
         public final IView add( @Nonnull final IView p_view )
         {
-            return null;
+            m_addviewconsumer.accept( p_view, m_data );
+            return p_view;
         }
 
         @Nonnull
         @Override
         public final ILiteral remove( @Nonnull final ILiteral p_literal )
         {
-            m_view.remove( p_literal );
+            final String l_key = m_literaltokey.apply( p_literal.functor() );
+            final Object l_data = m_data.get( l_key );
+            if ( !( l_data instanceof Map<?, ?> ) )
+                m_data.remove( l_key, l_data );
+
+            m_removeliteralconsumer.accept( p_literal, m_data );
             return p_literal;
         }
 
@@ -503,19 +514,25 @@ public final class CViewMap implements IView
         @Override
         public final IView remove( @Nonnull final IView p_view )
         {
+            final String l_key = m_literaltokey.apply( p_view.name() );
+            final Object l_data = m_data.get( l_key );
+            if ( l_data instanceof Map<?, ?> )
+                m_data.remove( l_key, l_data );
+
+            m_removeviewconsumer.accept( p_view, m_data );
             return p_view;
         }
 
         @Override
         public final boolean containsLiteral( @Nonnull final String p_key )
         {
-            return m_view.containsLiteral( CPath.from( m_keytoliteral.apply( p_key ) ) );
+            return !( m_data.get( m_literaltokey.apply( p_key ) ) instanceof Map<?, ?> );
         }
 
         @Override
         public boolean containsView( @Nonnull final String p_key )
         {
-            return m_view.containsView( CPath.from( m_keytoliteral.apply( p_key ) ) );
+            return m_data.get( m_literaltokey.apply( p_key ) ) instanceof Map<?, ?>;
         }
 
         @Nullable
@@ -529,7 +546,7 @@ public final class CViewMap implements IView
         @Override
         public final Collection<ILiteral> literal( @Nonnull final String p_key )
         {
-            return m_view.stream( CPath.from( m_keytoliteral.apply( p_key ) ) ).collect( Collectors.toSet() );
+            return this.streamLiteral().collect( Collectors.toSet() );
         }
 
         @Nullable
@@ -543,14 +560,14 @@ public final class CViewMap implements IView
         @Override
         public final IView create( @Nonnull final String p_name )
         {
-            return m_view;
+            return CViewMap.this;
         }
 
         @Nonnull
         @Override
         public final IView create( @Nonnull final String p_name, @Nullable final IView p_parent )
         {
-            return m_view;
+            return CViewMap.this;
         }
     }
 }
