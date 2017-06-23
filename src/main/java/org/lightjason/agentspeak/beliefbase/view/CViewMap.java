@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.beliefbase.view;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.IBeliefbase;
 import org.lightjason.agentspeak.common.CPath;
@@ -39,6 +41,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -50,8 +53,7 @@ import java.util.stream.Stream;
  * view which can use a map of maps to represent
  * the hierarchical beliefbase structure
  *
- * @note trigger of beliefs are not generated
- * @tparam T agent type
+ * @note given map should be thread-safe
  */
 public final class CViewMap implements IView
 {
@@ -86,19 +88,19 @@ public final class CViewMap implements IView
     /**
      * add-view consumer
      */
-    private final BiConsumer<IView, Map<String, Object>> m_addviewconsumer;
+    private final BiConsumer<String, Map<String, Object>> m_addviewconsumer;
     /**
      * add-literal consumer
      */
-    private final BiConsumer<ILiteral, Map<String, Object>> m_addliteralconsumer;
+    private final BiConsumer<Pair<String, Stream<ITerm>>, Map<String, Object>> m_addliteralconsumer;
     /**
      * remove-view consumer
      */
-    private final BiConsumer<IView, Map<String, Object>> m_removeviewconsumer;
+    private final BiConsumer<String, Map<String, Object>> m_removeviewconsumer;
     /**
      * remove-literal consumer
      */
-    private final BiConsumer<ILiteral, Map<String, Object>> m_removeliteralconsumer;
+    private final BiConsumer<String, Map<String, Object>> m_removeliteralconsumer;
 
     /**
      * ctor
@@ -122,11 +124,23 @@ public final class CViewMap implements IView
     {
         this(
             p_name, p_map, p_parent,
-            ( i, j ) -> { },
-            ( i, j ) -> { },
-            ( i, j ) -> { },
-            ( i, j ) -> { },
-            ( i ) -> { },
+            // add view
+            ( i, j ) -> { j.putIfAbsent( i, new ConcurrentHashMap<>() ); },
+            // add literal
+            ( i, j ) -> i.getValue().limit( 1 ).filter( ITerm::raw ).forEach( n -> j.put( i.getKey(), n.raw() ) ),
+            // remove view
+            ( i, j ) -> {
+                final Object l_data = j.get( i );
+                if ( l_data instanceof Map<?, ?> )
+                    j.remove( i, l_data );
+            },
+            // remove literal
+            ( i, j ) -> {
+                final Object l_data = j.get( i );
+                if ( !( l_data instanceof Map<?, ?> ) )
+                    j.remove( i, l_data );
+            },
+            Map::clear,
             ( i ) -> i.toLowerCase( Locale.ROOT ),
             ( i ) -> i.toLowerCase( Locale.ROOT )
         );
@@ -147,10 +161,10 @@ public final class CViewMap implements IView
      * @param p_keytoliteral converts a map key to literal path
      */
     public CViewMap( @Nonnull final String p_name, @Nonnull final Map<String, Object> p_map, @Nullable final IView p_parent,
-                     @Nonnull final BiConsumer<IView, Map<String, Object>> p_addviewconsumer,
-                     @Nonnull final BiConsumer<ILiteral, Map<String, Object>> p_addliteralconsumer,
-                     @Nonnull final BiConsumer<IView, Map<String, Object>> p_removeviewconsumer,
-                     @Nonnull final BiConsumer<ILiteral, Map<String, Object>> p_removeliteralconsumer,
+                     @Nonnull final BiConsumer<String, Map<String, Object>> p_addviewconsumer,
+                     @Nonnull final BiConsumer<Pair<String, Stream<ITerm>>, Map<String, Object>> p_addliteralconsumer,
+                     @Nonnull final BiConsumer<String, Map<String, Object>> p_removeviewconsumer,
+                     @Nonnull final BiConsumer<String, Map<String, Object>> p_removeliteralconsumer,
                      @Nonnull final Consumer<Map<String, Object>> p_clearconsumer,
                      @Nonnull final Function<String, String> p_literaltokey, @Nonnull final Function<String, String> p_keytoliteral
     )
@@ -331,13 +345,10 @@ public final class CViewMap implements IView
         if ( p_path.isEmpty() )
             return false;
 
-        final String l_key = m_literaltokey.apply( p_path.get( 0 ) );
-        final Object l_data = m_data.get( l_key );
+        if ( p_path.size() == 1 )
+            return m_beliefbase.containsLiteral( p_path.get( 0 ) );
 
-        return p_path.size() == 1
-               ? ( l_data != null ) && ( !( l_data instanceof Map<?, ?> ) )
-               : ( l_data instanceof Map<?, ?> )
-                 && new CViewMap( l_key, (Map<String, Object>) l_data, this ).containsLiteral( p_path.getSubPath( 1 ) );
+        return false;
     }
 
     @Override
@@ -376,6 +387,20 @@ public final class CViewMap implements IView
         return m_beliefbase.update( p_agent );
     }
 
+    /**
+     * returns the leaf of a view path
+     *
+     * @param p_stream stream of views
+     * @return last / leaf view
+     */
+    @Nonnull
+    private IView leafview( @Nonnull final Stream<IView> p_stream )
+    {
+        return p_stream
+            .reduce( ( i, j ) -> j )
+            .orElse( this );
+    }
+
     @SuppressWarnings( "unchecked" )
     private Stream<IView> walkdown( final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
@@ -386,29 +411,14 @@ public final class CViewMap implements IView
         final Object l_data = m_data.get( l_key );
         return l_data instanceof Map<?, ?>
                ? Stream.concat(
-            Stream.of( this ),
-            new CViewMap( l_key, (Map<String, Object>) l_data, this,
-                          m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_literaltokey, m_keytoliteral
-            ).walk( p_path.getSubPath( 1 ), p_generator )
-        )
+                    Stream.of( this ),
+                    new CViewMap(
+                        l_key, (Map<String, Object>) l_data, this,
+                        m_addviewconsumer, m_addliteralconsumer, m_removeviewconsumer, m_removeliteralconsumer, m_clearconsumer, m_literaltokey, m_keytoliteral
+                    ).walk( p_path.getSubPath( 1 ), p_generator ) )
                : Stream.of( this );
     }
 
-    @SuppressWarnings( "unchecked" )
-    private Stream<ITerm> toterm( final Object p_value )
-    {
-        if ( p_value instanceof Collection<?> )
-            return ( (Collection<Object>) p_value ).stream().flatMap( this::toterm );
-
-        if ( p_value instanceof Map<?, ?> )
-            return ( (Map<String, Object>) p_value ).entrySet().stream()
-                                                    .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
-
-        if ( p_value instanceof Integer )
-            return Stream.of( CRawTerm.from( ( (Number) p_value ).longValue() ) );
-
-        return Stream.of( CRawTerm.from( p_value ) );
-    }
 
     /**
      * wrapper beliefbase
@@ -459,7 +469,7 @@ public final class CViewMap implements IView
             return m_data.entrySet()
                          .stream()
                          .filter( i -> !( i.getValue() instanceof Map<?, ?> ) )
-                         .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), CViewMap.this.toterm( i.getValue() ) ) );
+                         .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
         }
 
         @Nonnull
@@ -485,7 +495,7 @@ public final class CViewMap implements IView
         @Override
         public final ILiteral add( @Nonnull final ILiteral p_literal )
         {
-            m_addliteralconsumer.accept( p_literal, m_data );
+            m_addliteralconsumer.accept( new ImmutablePair<>( m_literaltokey.apply( p_literal.functor() ), p_literal.orderedvalues() ), m_data );
             return p_literal;
         }
 
@@ -501,12 +511,7 @@ public final class CViewMap implements IView
         @Override
         public final ILiteral remove( @Nonnull final ILiteral p_literal )
         {
-            final String l_key = m_literaltokey.apply( p_literal.functor() );
-            final Object l_data = m_data.get( l_key );
-            if ( !( l_data instanceof Map<?, ?> ) )
-                m_data.remove( l_key, l_data );
-
-            m_removeliteralconsumer.accept( p_literal, m_data );
+            m_removeliteralconsumer.accept( m_literaltokey.apply( p_literal.functor() ), m_data );
             return p_literal;
         }
 
@@ -514,12 +519,7 @@ public final class CViewMap implements IView
         @Override
         public final IView remove( @Nonnull final IView p_view )
         {
-            final String l_key = m_literaltokey.apply( p_view.name() );
-            final Object l_data = m_data.get( l_key );
-            if ( l_data instanceof Map<?, ?> )
-                m_data.remove( l_key, l_data );
-
-            m_removeviewconsumer.accept( p_view, m_data );
+            m_removeviewconsumer.accept( m_literaltokey.apply( p_view.name() ), m_data );
             return p_view;
         }
 
@@ -539,7 +539,7 @@ public final class CViewMap implements IView
         @Override
         public final IView view( @Nonnull final String p_key )
         {
-            return null;
+            return CViewMap.this;
         }
 
         @Nonnull
@@ -568,6 +568,22 @@ public final class CViewMap implements IView
         public final IView create( @Nonnull final String p_name, @Nullable final IView p_parent )
         {
             return CViewMap.this;
+        }
+
+        @SuppressWarnings( "unchecked" )
+        private Stream<ITerm> toterm( final Object p_value )
+        {
+            if ( p_value instanceof Collection<?> )
+                return ( (Collection<Object>) p_value ).stream().flatMap( this::toterm );
+
+            if ( p_value instanceof Map<?, ?> )
+                return ( (Map<String, Object>) p_value ).entrySet().stream()
+                                                        .map( i -> CLiteral.from( m_keytoliteral.apply( i.getKey() ), this.toterm( i.getValue() ) ) );
+
+            if ( p_value instanceof Integer )
+                return Stream.of( CRawTerm.from( ( (Number) p_value ).longValue() ) );
+
+            return Stream.of( CRawTerm.from( p_value ) );
         }
     }
 }
