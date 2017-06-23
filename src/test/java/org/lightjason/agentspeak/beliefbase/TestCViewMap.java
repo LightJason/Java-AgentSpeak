@@ -37,7 +37,6 @@ import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.action.IBaseAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IBaseAgent;
-import org.lightjason.agentspeak.agent.TestCAgent;
 import org.lightjason.agentspeak.beliefbase.view.CViewMap;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
@@ -55,6 +54,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -171,11 +171,18 @@ public final class TestCViewMap extends IBaseTest
         Assume.assumeNotNull( m_data );
 
         final IAgent<?> l_agent = new CAgent.CAgentGenerator(
-            "!main. +!main <- >>map/str(X); generic/print('string-value:', X); test/result( bool/equal(X, 'text value'), 'unified value incorrect' ). -!main <- generic/print('error').",
+            "!main. +!main <- "
+            + ">>map/str(X); "
+            + "generic/print('string-value:', X); "
+            + "test/result( bool/equal(X, 'text value'), 'unified value incorrect' ). "
+            + "-!main <- test/result( fail, 'unification wrong').",
             m_data,
             m_actions
         ).generatesingle().call().call();
-        Assert.assertTrue( m_testlog.isEmpty() );
+        Assert.assertTrue(
+            MessageFormat.format( "{0}", m_testlog.stream().filter( i -> !i.getLeft() ).map( Pair::getRight ).collect( Collectors.toList() ) ),
+            m_testlog.stream().anyMatch( Pair::getLeft )
+        );
     }
 
     /**

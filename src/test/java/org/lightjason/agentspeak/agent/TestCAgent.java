@@ -154,7 +154,10 @@ public final class TestCAgent extends IBaseTest
         }
 
         Assert.assertEquals( MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );
-        m_testlog.forEach( i -> Assert.assertTrue( MessageFormat.format( "{0} {1}", p_asl.getLeft(), i.getValue() ), i.getKey() ) );
+        Assert.assertTrue(
+            MessageFormat.format( "{0}", m_testlog.stream().filter( i -> !i.getLeft() ).map( Pair::getRight ).collect( Collectors.toList() ) ),
+            m_testlog.stream().anyMatch( Pair::getLeft )
+        );
     }
 
     /**

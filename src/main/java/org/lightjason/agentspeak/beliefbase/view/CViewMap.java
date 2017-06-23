@@ -39,6 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -252,6 +253,7 @@ public final class CViewMap implements IView
     @SuppressWarnings( "unchecked" )
     public final Stream<ILiteral> stream( @Nullable final IPath... p_path )
     {
+        // build path relative to this view
         final IPath l_path = this.path();
         return ( ( p_path == null ) || ( p_path.length == 0 )
                  ? Stream.concat( m_beliefbase.streamLiteral(), m_beliefbase.streamView().flatMap( i -> i.stream() ) )
@@ -532,7 +534,15 @@ public final class CViewMap implements IView
         @Override
         public final Collection<ILiteral> literal( @Nonnull final String p_key )
         {
-            return this.streamLiteral().collect( Collectors.toSet() );
+            final String l_key = m_literaltokey.apply( p_key );
+            if ( !m_data.containsKey( l_key ) )
+                return Collections.emptySet();
+
+            final Object l_data = m_data.get( l_key );
+            if ( m_data.get( l_key ) instanceof Map<?, ?> )
+                return Collections.emptySet();
+
+            return Stream.of( CLiteral.from( p_key, this.toterm( l_data ) ) ).collect( Collectors.toSet() );
         }
 
         @Nullable
