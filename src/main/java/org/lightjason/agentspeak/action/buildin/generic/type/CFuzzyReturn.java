@@ -52,6 +52,14 @@ public class CFuzzyReturn extends IBuildinAction
      */
     private static final long serialVersionUID = -8360611536281500599L;
 
+    /**
+     * ctor
+     */
+    public CFuzzyReturn()
+    {
+        super( 3 );
+    }
+
     @Nonnegative
     @Override
     public final int minimalArgumentNumber()
