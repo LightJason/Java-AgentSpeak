@@ -153,7 +153,7 @@ public final class CCommon
     public static Stream<IAction> actionsFromPackage( final String... p_package )
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
-                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.buildin" ) )
+                 ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
                  : Arrays.stream( p_package ) )
             .flatMap( j ->
             {
