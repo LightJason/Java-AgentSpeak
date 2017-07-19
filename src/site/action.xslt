@@ -9,14 +9,14 @@
     <xsl:template match = "/*">
         <xsl:text>{</xsl:text>
 
-        <!-- create json object of a class node (only public classes and if the class is an inheritance of IBuildinAction) -->
+        <!-- create json object of a class node (only public classes and if the class is an inheritance of IBuiltinAction) -->
         <xsl:for-each
-                select = "compounddef[@kind='class' and @prot='public' and (not(@abstract) or @abstrac!='yes') and inheritancegraph//node/label='org.lightjason.agentspeak.action.buildin.IBuildinAction']">
+                select = "compounddef[@kind='class' and @prot='public' and (not(@abstract) or @abstrac!='yes') and inheritancegraph//node/label='org.lightjason.agentspeak.action.builtin.IBuiltinAction']">
 
             <!-- replace base package and class prefix, replace :: to / and create lower-case -->
             <xsl:variable name = "name" as = "xs:string">
                 <xsl:value-of
-                        select = "replace(replace(replace( lower-case(normalize-space(compoundname)), 'org::lightjason::agentspeak::action::buildin::', ''), '::c', '::'), '::', '/')" />
+                        select = "replace(replace(replace( lower-case(normalize-space(compoundname)), 'org::lightjason::agentspeak::action::builtin::', ''), '::c', '::'), '::', '/')" />
             </xsl:variable>
 
             <xsl:text>"</xsl:text><xsl:value-of select = "$name" /><xsl:text>" : </xsl:text>
