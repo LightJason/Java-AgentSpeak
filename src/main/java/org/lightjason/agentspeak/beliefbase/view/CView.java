@@ -276,7 +276,7 @@ public final class CView implements IView
      * @return view stream
      */
     @SuppressWarnings( "varargs" )
-    private final Stream<IView> walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
+    private Stream<IView> walkdown( @Nonnull final IPath p_path, @Nullable final IViewGenerator... p_generator )
     {
         if ( p_path.empty() )
             return Stream.of( this );
@@ -317,7 +317,7 @@ public final class CView implements IView
     {
         return p_stream
             .reduce( ( i, j ) -> j )
-            .orElse( this );
+            .orElse( IView.EMPTY );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
