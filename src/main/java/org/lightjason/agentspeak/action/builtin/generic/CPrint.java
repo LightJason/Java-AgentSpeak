@@ -85,18 +85,29 @@ public final class CPrint extends IBuiltinAction
      */
     public CPrint() throws Exception
     {
-        this( "   ", () -> System.out, new CFormat2D(), new CFormat1D() );
+        this( () -> System.out, "   ", new CFormat2D(), new CFormat1D() );
     }
 
     /**
      * ctor
      *
-     * @param p_seperator argument seperator
      * @param p_streamsupplier print stream supplier
+     * @throws Exception is thrown on supplierer error
+     */
+    public CPrint( @Nonnull final ISupplier<PrintStream> p_streamsupplier ) throws Exception
+    {
+        this( p_streamsupplier, "   ", new CFormat2D(), new CFormat1D() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_streamsupplier print stream supplier
+     * @param p_seperator argument seperator
      * @param p_formatter formatter elements
      * @throws Exception is thrown on supplierer error
      */
-    public CPrint( @Nonnull final String p_seperator, @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nullable final IFormatter<?>... p_formatter )
+    public CPrint( @Nonnull final ISupplier<PrintStream> p_streamsupplier, @Nonnull final String p_seperator, @Nullable final IFormatter<?>... p_formatter )
         throws Exception
     {
         super( 2 );

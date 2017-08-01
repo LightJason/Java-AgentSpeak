@@ -97,7 +97,7 @@ public final class TestCActionGeneric extends IBaseTest
     {
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
 
-        new CPrint( "-", () -> new PrintStream( l_output, false, "utf-8" ) ).execute(
+        new CPrint( () -> new PrintStream( l_output, false, "utf-8" ), "-" ).execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "foobar", 1234, true ).map( CRawTerm::from ).collect( Collectors.toList() ),
             Collections.emptyList()
@@ -121,7 +121,7 @@ public final class TestCActionGeneric extends IBaseTest
 
 
         final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
-        final CPrint l_print = new CPrint( "-", () -> new PrintStream( l_output, false, "utf-8" ) );
+        final CPrint l_print = new CPrint( () -> new PrintStream( l_output, false, "utf-8" ), "-" );
 
         l_print.formatter().add( l_format1 );
         l_print.formatter().add( l_format2 );
