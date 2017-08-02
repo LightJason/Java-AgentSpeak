@@ -35,6 +35,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +76,7 @@ public final class CIntersect extends IBuiltinAction
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // all arguments must be lists (build unique list of all elements and check all collection if an element exists in each collection)
-        final List<?> l_result = CCommon.flatten( p_argument )
+        final List<Object> l_result = CCommon.flatten( p_argument )
                                         .parallel()
                                         .map( ITerm::raw )
                                         .distinct()
@@ -88,6 +89,7 @@ public final class CIntersect extends IBuiltinAction
                                                                .contains( i )
                                                            )
                                         ).collect( Collectors.toList() );
+        l_result.sort( Comparator.comparing( Object::hashCode ) );
 
         p_return.add( CRawTerm.from(
             p_parallel ? Collections.synchronizedList( l_result ) : l_result

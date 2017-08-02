@@ -75,7 +75,7 @@ public final class CColumns extends IBuiltinAction
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .mapToLong( AbstractMatrix2D::columns )
+               .mapToDouble( AbstractMatrix2D::columns )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

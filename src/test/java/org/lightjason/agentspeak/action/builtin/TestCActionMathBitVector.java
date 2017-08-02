@@ -122,15 +122,15 @@ public final class TestCActionMathBitVector extends IBaseTest
                         CHammingDistance.class,
                         CXor.class
                 ),
-                Stream.of( 2L, 2L ),
+                Stream.of( 2D, 2D ),
                 Stream.of( VECTOR1, VECTOR2 ),
-                Stream.of( 1L, 1L ),
+                Stream.of( 1D, 1D ),
                 Stream.of( 3, 3 ),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
-                Stream.of( 2L ),
+                Stream.of( 2D ),
                 Stream.of()
 
         ).toArray();
@@ -178,6 +178,7 @@ public final class TestCActionMathBitVector extends IBaseTest
         );
 
         Assert.assertArrayEquals(
+                p_input.getMiddle().toGenericString(),
                 l_return.stream().map( ITerm::raw ).toArray(),
                 p_input.getRight().toArray()
         );
@@ -282,7 +283,7 @@ public final class TestCActionMathBitVector extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0D );
     }
 
     /**
@@ -301,7 +302,7 @@ public final class TestCActionMathBitVector extends IBaseTest
 
         Assert.assertEquals( l_return.size(), 1 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof List<?> );
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 1L, 0L, 0L ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 1D, 0D, 0D ).toArray() );
     }
 
     /**

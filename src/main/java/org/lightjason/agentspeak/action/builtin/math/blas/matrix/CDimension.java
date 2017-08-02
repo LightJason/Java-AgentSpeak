@@ -76,8 +76,8 @@ public final class CDimension extends IBuiltinAction
                .map( ITerm::<DoubleMatrix2D>raw )
                .forEach( i ->
                {
-                   p_return.add( CRawTerm.from( (long) i.rows() ) );
-                   p_return.add( CRawTerm.from( (long) i.columns() ) );
+                   p_return.add( CRawTerm.from( (double) i.rows() ) );
+                   p_return.add( CRawTerm.from( (double) i.columns() ) );
                } );
 
         return CFuzzyValue.from( true );

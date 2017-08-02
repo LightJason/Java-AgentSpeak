@@ -130,19 +130,19 @@ public class TestCActionMathBitMatrix extends IBaseTest
                         CNAnd.class,
                         CHammingDistance.class
                 ),
-                Stream.of( 2L, 2L ),
-                Stream.of( 2L, 1L ),
-                Stream.of( 2L, 2L, 2L, 2L ),
+                Stream.of( 2D, 2D ),
+                Stream.of( 2D, 1D ),
+                Stream.of( 2D, 2D, 2D, 2D ),
                 Stream.of( MATRIX1, MATRIX2 ),
-                Stream.of( 2L, 3L ),
+                Stream.of( 2D, 3D ),
                 Stream.of( 4, 4 ),
-                Stream.of( 2L, 2L ),
+                Stream.of( 2D, 2D ),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
                 Stream.of(),
-                Stream.of( 3L )
+                Stream.of( 3D )
 
         ).toArray();
     }
@@ -191,6 +191,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
         );
 
         Assert.assertArrayEquals(
+                p_input.getMiddle().toGenericString(),
                 l_return.stream().map( ITerm::raw ).toArray(),
                 p_input.getRight().toArray()
         );
@@ -305,7 +306,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
             l_return
         );
 
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 0D );
     }
 
     /**

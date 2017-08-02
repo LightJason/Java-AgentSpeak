@@ -110,7 +110,7 @@ public final class TestCActionMath extends IBaseTest
                     CNextPrime.class
                 ),
 
-                ( i ) -> (long) Primes.nextPrime( i.intValue() )
+                ( i ) -> (double) Primes.nextPrime( i.intValue() )
             ),
 
             singlevaluetestcase(
@@ -291,6 +291,7 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertArrayEquals(
+            p_input.getMiddle().toGenericString(),
             l_return.stream().map( ITerm::raw ).toArray(),
             p_input.getLeft().stream().map( ITerm::<Number>raw ).map( p_input.getRight() ).toArray()
         );
@@ -352,8 +353,8 @@ public final class TestCActionMath extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2L, 2L, 2L ).toArray() );
-        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2L, 2L, 2L, 3L, 5L ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 2D, 2D, 2D ).toArray() );
+        Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( 2D, 2D, 2D, 3D, 5D ).toArray() );
     }
 
 
@@ -495,7 +496,7 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 2D );
     }
 
     /**
@@ -513,7 +514,7 @@ public final class TestCActionMath extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3D );
     }
 
 

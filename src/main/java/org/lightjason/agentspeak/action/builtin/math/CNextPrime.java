@@ -67,7 +67,7 @@ public final class CNextPrime extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Number>raw )
-               .mapToLong( i -> Primes.nextPrime( i.intValue() ) )
+               .mapToDouble( i -> Primes.nextPrime( i.intValue() ) )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

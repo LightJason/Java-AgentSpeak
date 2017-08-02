@@ -72,7 +72,7 @@ public final class CSize extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<AbstractMatrix>raw )
-               .mapToLong( AbstractMatrix::size )
+               .mapToDouble( AbstractMatrix::size )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

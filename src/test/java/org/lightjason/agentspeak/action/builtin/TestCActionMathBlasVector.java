@@ -96,7 +96,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
                         CSum.class,
                         CDotProduct.class
                 ),
-                Stream.of( 4L, 4L ),
+                Stream.of( 4D, 4D ),
                 Stream.of( VECTOR1.zSum(), VECTOR2.zSum() ),
                 Stream.of( 60.0 )
 
@@ -146,6 +146,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
         );
 
         Assert.assertArrayEquals(
+                p_input.getMiddle().toGenericString(),
                 l_return.stream().map( ITerm::raw ).toArray(),
                 p_input.getRight().toArray()
         );

@@ -57,7 +57,7 @@ public final class CPredecessorCountMultiple extends IApplyMultiple
     {
         p_return.add(
             CRawTerm.from(
-                (long) p_graph.getPredecessorCount( p_window.get( 0 ).raw() )
+                (double) p_graph.getPredecessorCount( p_window.get( 0 ).raw() )
             )
         );
     }

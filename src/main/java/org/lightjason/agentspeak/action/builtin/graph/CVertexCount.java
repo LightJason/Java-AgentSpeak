@@ -67,7 +67,7 @@ public final class CVertexCount extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Graph<?, ?>>raw )
-               .mapToLong( Hypergraph::getVertexCount )
+               .mapToDouble( Hypergraph::getVertexCount )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

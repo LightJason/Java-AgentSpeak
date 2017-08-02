@@ -130,9 +130,7 @@ public final class CRelational extends IBaseBinary
      */
     private static <T extends Number & Comparable<T>> int comparenumber( @Nonnull final T p_left, @Nonnull final T p_right )
     {
-        return ( p_left instanceof Double ) || ( p_right instanceof Double )
-               ? Double.compare( p_left.doubleValue(), p_right.doubleValue() )
-               : p_left.compareTo( p_right );
+        return Double.compare( p_left.doubleValue(), p_right.doubleValue() );
     }
 
 

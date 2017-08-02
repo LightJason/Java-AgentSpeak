@@ -59,7 +59,8 @@ public final class CCommon
                 "gravity",
                 "electron",
                 "neutron",
-                "proton"
+                "proton",
+                "infinity"
             ),
 
             Stream.of(
@@ -71,7 +72,8 @@ public final class CCommon
                 6.67408e-11,
                 9.10938356e-31,
                 1674927471214e-27,
-                1.6726219e-27
+                1.6726219e-27,
+                Double.POSITIVE_INFINITY
             ),
 
             AbstractMap.SimpleImmutableEntry::new

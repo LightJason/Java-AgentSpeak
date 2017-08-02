@@ -31,13 +31,13 @@ import java.util.List;
 
 
 /**
- * action to cast a value to an floating-point value.
- * Cast any argument into a floating-point number,
+ * action to cast a value to a number value.
+ * Cast any argument into a number,
  * the action fails on casting errors
  *
  * @code [N1|N2] = generic/type/tofloat( X, Y ); @endcode
  */
-public final class CToFloat extends ICast
+public final class CToNumber extends ICast
 {
     /**
      * serial id

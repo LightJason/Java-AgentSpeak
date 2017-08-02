@@ -664,51 +664,32 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitNumber( final PlanBundleParser.NumberContext p_context )
     {
-        return this.visitChildren( p_context );
+        final Number l_value = (Number) this.visitChildren( p_context );
+        return p_context.MINUS() != null
+               ? -1 * l_value.doubleValue()
+               : l_value.doubleValue();
     }
 
     @Override
-    public final Object visitIntegernumber( final PlanBundleParser.IntegernumberContext p_context )
+    public final Object visitDigitsequence( final PlanBundleParser.DigitsequenceContext p_context )
     {
-        return p_context.integernumber_negative() != null ? this.visitIntegernumber_negative( p_context.integernumber_negative() )
-                                                          : this.visitIntegernumber_positive( p_context.integernumber_positive() );
+        return Double.valueOf( p_context.getText() );
     }
 
     @Override
-    public final Object visitIntegernumber_positive( final PlanBundleParser.Integernumber_positiveContext p_context )
+    public final Object visitConstant( final PlanBundleParser.ConstantContext p_context )
     {
-        return Long.valueOf( p_context.getText() );
-    }
-
-    @Override
-    public final Object visitIntegernumber_negative( final PlanBundleParser.Integernumber_negativeContext p_context )
-    {
-        return Long.valueOf( p_context.getText() );
-    }
-
-    @Override
-    public final Object visitFloatnumber( final PlanBundleParser.FloatnumberContext p_context )
-    {
-        if ( p_context.getText().equals( "infinity" ) )
-            return p_context.MINUS() == null ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
-
         final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_context.getText() );
         if ( l_constant != null )
             return l_constant;
 
-        return Double.valueOf( p_context.getText() );
+        throw new CSyntaxErrorException( CCommon.languagestring( this, "constantunknown", p_context.getText() ) );
     }
 
     @Override
     public final Object visitLogicalvalue( final PlanBundleParser.LogicalvalueContext p_context )
     {
         return p_context.TRUE() != null;
-    }
-
-    @Override
-    public final Object visitConstant( final PlanBundleParser.ConstantContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
     @Override

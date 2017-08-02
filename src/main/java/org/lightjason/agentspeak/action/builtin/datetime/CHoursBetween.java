@@ -55,7 +55,7 @@ public final class CHoursBetween extends IBetween
     {
         return p_datetime
             .map( i -> Hours.hoursBetween( i.get( 0 ), i.get( 1 ) ) )
-            .mapToLong( Hours::getHours )
+            .mapToDouble( Hours::getHours )
             .boxed();
     }
 

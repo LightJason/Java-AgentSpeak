@@ -57,7 +57,7 @@ public final class CInDegreeMultiple extends IApplyMultiple
     {
         p_return.add(
             CRawTerm.from(
-                (long) p_graph.inDegree( p_window.get( 0 ).raw() )
+                (double) p_graph.inDegree( p_window.get( 0 ).raw() )
             )
         );
     }

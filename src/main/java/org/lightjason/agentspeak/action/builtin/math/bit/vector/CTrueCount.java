@@ -73,7 +73,7 @@ public final class CTrueCount extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitVector>raw )
-               .mapToLong( BitVector::cardinality )
+               .mapToDouble( BitVector::cardinality )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

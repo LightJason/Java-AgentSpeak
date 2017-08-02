@@ -306,46 +306,15 @@ binaryoperator :
  * also definied constants are used
  **/
 number :
-    floatnumber
-    | integernumber
-    ;
-
-/**
- * floating-point number
- **/
-floatnumber :
     MINUS?
-    ( DIGIT+ DOT DIGIT+ | constant )
+    ( constant | digitsequence )
     ;
 
 /**
- * integer number
+ * number definition
  **/
-integernumber :
-    integernumber_positive
-    | integernumber_negative
-    ;
-
-/**
- * positive integer number
- **/
-integernumber_positive :
-    PLUS? DIGIT+
-    ;
-
-/**
- * negative integer number
- **/
-integernumber_negative :
-    MINUS DIGIT+
-    ;
-
-/**
- * boolean values
- **/
-logicalvalue :
-    TRUE
-    | FALSE
+digitsequence :
+    DIGIT+ ( DOT DIGIT+ )?
     ;
 
 /**
@@ -362,6 +331,14 @@ constant :
     | NEUTRON
     | LIGHTSPEED
     | INFINITY
+    ;
+
+/**
+ * boolean values
+ **/
+logicalvalue :
+    TRUE
+    | FALSE
     ;
 
 /**

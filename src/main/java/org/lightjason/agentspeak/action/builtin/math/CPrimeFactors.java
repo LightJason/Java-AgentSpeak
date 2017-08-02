@@ -71,7 +71,7 @@ public final class CPrimeFactors extends IBuiltinAction
                .mapToInt( Number::intValue )
                .boxed()
                .map( Primes::primeFactors )
-               .map( i -> i.stream().mapToLong( j -> j ).boxed().collect( Collectors.toList() ) )
+               .map( i -> i.stream().mapToDouble( j -> j ).boxed().collect( Collectors.toList() ) )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

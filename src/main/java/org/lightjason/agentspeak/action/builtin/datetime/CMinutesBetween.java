@@ -55,7 +55,7 @@ public final class CMinutesBetween extends IBetween
     {
         return p_datetime
             .map( i -> Minutes.minutesBetween( i.get( 0 ), i.get( 1 ) ) )
-            .mapToLong( Minutes::getMinutes )
+            .mapToDouble( Minutes::getMinutes )
             .boxed();
     }
 

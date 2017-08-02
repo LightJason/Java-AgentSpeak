@@ -31,11 +31,9 @@ import org.lightjason.agentspeak.action.builtin.generic.type.CIs;
 import org.lightjason.agentspeak.action.builtin.generic.type.CIsNull;
 import org.lightjason.agentspeak.action.builtin.generic.type.CIsNumeric;
 import org.lightjason.agentspeak.action.builtin.generic.type.CIsString;
-import org.lightjason.agentspeak.action.builtin.generic.type.CParseFloat;
-import org.lightjason.agentspeak.action.builtin.generic.type.CParseInt;
+import org.lightjason.agentspeak.action.builtin.generic.type.CParseNumber;
 import org.lightjason.agentspeak.action.builtin.generic.type.CParseLiteral;
-import org.lightjason.agentspeak.action.builtin.generic.type.CToFloat;
-import org.lightjason.agentspeak.action.builtin.generic.type.CToInt;
+import org.lightjason.agentspeak.action.builtin.generic.type.CToNumber;
 import org.lightjason.agentspeak.action.builtin.generic.type.CToString;
 import org.lightjason.agentspeak.action.builtin.generic.type.CType;
 import org.lightjason.agentspeak.language.CLiteral;
@@ -105,7 +103,7 @@ public final class TestCActionGenericType extends IBaseTest
             CLiteral.from(
                     "main/parsefunctor",
                     CRawTerm.from( "hello" ),
-                    CRawTerm.from( 666 ),
+                    CRawTerm.from( 666D ),
                     CRawTerm.from( false )
             )
         );
@@ -131,28 +129,6 @@ public final class TestCActionGenericType extends IBaseTest
 
 
     /**
-     * test parse-int action
-     */
-    @Test
-    public final void parseint()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CParseInt().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "666", "123", "-123", "xxx" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
-        );
-
-        Assert.assertEquals( l_return.size(), 4 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw().longValue(), 666 );
-        Assert.assertEquals( l_return.get( 1 ).<Number>raw().longValue(), 123 );
-        Assert.assertEquals( l_return.get( 2 ).<Number>raw().longValue(), -123 );
-        Assert.assertNull( l_return.get( 3 ).raw() );
-    }
-
-
-    /**
      * test parse-float action
      */
     @Test
@@ -160,7 +136,7 @@ public final class TestCActionGenericType extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CParseFloat().execute(
+        new CParseNumber().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( "732.489", "64.091248", "-78129.01", "foo" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
@@ -294,39 +270,6 @@ public final class TestCActionGenericType extends IBaseTest
 
 
     /**
-     * test "toint" action
-     */
-    @Test
-    public final void toint()
-    {
-        final List<ITerm> l_return = new ArrayList<>();
-
-        new CToInt().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( 1, 2.5 ).map( CRawTerm::from ).collect( Collectors.toList() ),
-            l_return
-        );
-
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 2L ).toArray() );
-    }
-
-    /**
-     * test "toint" action with errors
-     */
-    @Test
-    public final void tointerror()
-    {
-        Assert.assertFalse(
-            new CToInt().execute(
-                false, IContext.EMPTYPLAN,
-                Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
-                Collections.emptyList()
-            ).value()
-        );
-    }
-
-
-    /**
      * test "tostring"
      */
     @Test
@@ -356,7 +299,7 @@ public final class TestCActionGenericType extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CToFloat().execute(
+        new CToNumber().execute(
             false, IContext.EMPTYPLAN,
             Stream.of( 1, 2, 3.2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
@@ -376,7 +319,7 @@ public final class TestCActionGenericType extends IBaseTest
     public final void tofloaterror()
     {
         Assert.assertFalse(
-            new CToFloat().execute(
+            new CToNumber().execute(
                 false, IContext.EMPTYPLAN,
                 Stream.of( "" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()

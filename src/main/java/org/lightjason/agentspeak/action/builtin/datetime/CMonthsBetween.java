@@ -55,7 +55,7 @@ public final class CMonthsBetween extends IBetween
     {
         return p_datetime
             .map( i -> Months.monthsBetween( i.get( 0 ), i.get( 1 ) ) )
-            .mapToLong( Months::getMonths )
+            .mapToDouble( Months::getMonths )
             .boxed();
     }
 

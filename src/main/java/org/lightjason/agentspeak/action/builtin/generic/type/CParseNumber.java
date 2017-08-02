@@ -27,34 +27,41 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.AbstractMap;
+import java.util.Map;
 
 
 /**
- * action to cast a value to an integer value.
- * Cast any argument into an integer number,
- * the action fails on casting errors
+ * action for parsing a number from string.
+ * Parses each argument to a number value
+ * and returns the value, the action fails on
+ * parsing errors
  *
- * @code [N1|N2] = generic/type/tofloat( X, Y ); @endcode
+ * @code [X|Y|Z] = generic/type/parsenumber( "1.45", ["8.88", "9"] ); @endcode
  */
-public final class CToInt extends ICast
+public final class CParseNumber extends IParse
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3552457175331059713L;
+    private static final long serialVersionUID = 1809811719927824635L;
 
-    @Override
-    protected final boolean cast( @Nonnull final ITerm p_value, @Nonnull final List<ITerm> p_return )
+    /**
+     * parses the input string
+     *
+     * @param p_value string value
+     * @return tuple with boolean (for parsing error) and term
+     */
+    @Nonnull
+    protected final Map.Entry<Boolean, ITerm> parse( @Nonnull final String p_value )
     {
         try
         {
-            p_return.add( CRawTerm.from( p_value.<Number>raw().longValue() ) );
-            return true;
+            return new AbstractMap.SimpleImmutableEntry<>( true, CRawTerm.from( Double.parseDouble( p_value ) ) );
         }
         catch ( final Exception l_exception )
         {
-            return false;
+            return new AbstractMap.SimpleImmutableEntry<>( false, CRawTerm.from( null ) );
         }
     }
 

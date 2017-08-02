@@ -55,7 +55,7 @@ public final class CYearsBetween extends IBetween
     {
         return p_datetime
             .map( i -> Years.yearsBetween( i.get( 0 ), i.get( 1 ) ) )
-            .mapToLong( Years::getYears )
+            .mapToDouble( Years::getYears )
             .boxed();
     }
 

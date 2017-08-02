@@ -75,7 +75,7 @@ public final class CRank extends IAlgebra
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .mapToLong( ALGEBRA::rank )
+               .mapToDouble( ALGEBRA::rank )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

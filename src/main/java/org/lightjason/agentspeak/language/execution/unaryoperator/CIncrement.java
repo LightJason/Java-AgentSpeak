@@ -74,15 +74,8 @@ public final class CIncrement<T extends Number> implements IOperator<T>
     )
     {
         final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).thrownotallocated();
-
-        if ( l_variable.valueassignableto( Double.class ) )
+        if ( l_variable.valueassignableto( Number.class ) )
             l_variable.set( (T) Double.valueOf( l_variable.<Number>raw().doubleValue() + 1 ) );
-        if ( l_variable.valueassignableto( Long.class ) )
-            l_variable.set( (T) Long.valueOf( l_variable.<Number>raw().longValue() + 1 ) );
-        if ( l_variable.valueassignableto( Float.class ) )
-            l_variable.set( (T) Float.valueOf( l_variable.<Number>raw().floatValue() + 1 ) );
-        if ( l_variable.valueassignableto( Integer.class ) )
-            l_variable.set( (T) Integer.valueOf( l_variable.<Number>raw().intValue() + 1 ) );
 
         return CFuzzyValue.from( true );
     }

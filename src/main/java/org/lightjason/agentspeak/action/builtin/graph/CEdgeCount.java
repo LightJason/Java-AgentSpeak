@@ -67,7 +67,7 @@ public final class CEdgeCount extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<Graph<?, ?>>raw )
-               .mapToLong( Hypergraph::getEdgeCount )
+               .mapToDouble( Hypergraph::getEdgeCount )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

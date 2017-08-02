@@ -55,7 +55,7 @@ public final class CSecondsBetween extends IBetween
     {
         return p_datetime
             .map( i -> Seconds.secondsBetween( i.get( 0 ), i.get( 1 ) ) )
-            .mapToLong( Seconds::getSeconds )
+            .mapToDouble( Seconds::getSeconds )
             .boxed();
     }
 

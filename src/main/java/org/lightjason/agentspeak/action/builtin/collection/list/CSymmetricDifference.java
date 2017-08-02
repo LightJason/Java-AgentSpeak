@@ -36,6 +36,7 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,7 +81,11 @@ public final class CSymmetricDifference extends IBuiltinAction
         // create a multiset and counts the occurence of element -> on an odd number the element will be returned
         final Multiset<Object> l_count = ConcurrentHashMultiset.create();
         CCommon.flatten( p_argument ).parallel().map( ITerm::raw ).forEach( l_count::add );
-        final List<?> l_result = l_count.entrySet().parallelStream().filter( i -> i.getCount() % 2 == 1 ).map( Multiset.Entry::getElement ).collect( Collectors.toList() );
+        final List<Object> l_result = l_count.entrySet()
+                                             .parallelStream()
+                                             .filter( i -> i.getCount() % 2 == 1 )
+                                             .map( Multiset.Entry::getElement ).collect( Collectors.toList() );
+        l_result.sort( Comparator.comparing( Object::hashCode ) );
 
         p_return.add(
             CRawTerm.from(

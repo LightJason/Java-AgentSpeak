@@ -92,7 +92,7 @@ public final class TestCActionMathBlas extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4D );
     }
 
     /**

@@ -136,17 +136,17 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                         CSum.class,
                         CTrace.class
                 ),
-                Stream.of( 2L, 2L ),
-                Stream.of( 2L, 2L, 2L, 2L ),
-                Stream.of( 2L, 2L ),
-                Stream.of( 4L, 4L ),
+                Stream.of( 2D, 2D ),
+                Stream.of( 2D, 2D, 2D, 2D ),
+                Stream.of( 2D, 2D ),
+                Stream.of( 4D, 4D ),
                 Stream.of( 56.48229533707794, 4.265564437074639 ),
                 Stream.of( -2.000000000000001, -4.0 ),
                 Stream.of( 10.628480167651258, 4.130648586880581 ),
                 Stream.of( 14.0000, 5.0000 ),
                 Stream.of( 10.63014581273465, 4.242640687119285 ),
                 Stream.of( 11.0000, 4.0000 ),
-                Stream.of( 2L, 2L ),
+                Stream.of( 2D, 2D ),
                 Stream.of( MATRIX1.zSum(), MATRIX2.zSum() ),
                 Stream.of( 10.0, 3.0 )
 
@@ -196,6 +196,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         );
 
         Assert.assertArrayEquals(
+                p_input.getMiddle().toGenericString(),
                 l_return.stream().map( ITerm::raw ).toArray(),
                 p_input.getRight().toArray()
         );

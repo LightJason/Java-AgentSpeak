@@ -57,7 +57,7 @@ public final class COutDegreeMultiple extends IApplyMultiple
     {
         p_return.add(
             CRawTerm.from(
-                (long) p_graph.outDegree( p_window.get( 0 ).raw() )
+                (double) p_graph.outDegree( p_window.get( 0 ).raw() )
             )
         );
     }

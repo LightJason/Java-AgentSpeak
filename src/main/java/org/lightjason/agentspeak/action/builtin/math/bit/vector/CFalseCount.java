@@ -73,7 +73,7 @@ public final class CFalseCount extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitVector>raw )
-               .mapToLong( i -> i.size() - i.cardinality() )
+               .mapToDouble( i -> i.size() - i.cardinality() )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

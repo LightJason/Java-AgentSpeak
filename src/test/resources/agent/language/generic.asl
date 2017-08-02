@@ -134,7 +134,7 @@ foo(blub(1),hello("test")).
         // recursive unification
         >>foo( UN5a, UN5b );
         generic/print( "fifth unification", UN5a, UN5b );
-        test/result( bool/equal( generic/type/tostring(UN5a), "blub[1]" ), "fifth unification first part has been failed" );
+        test/result( bool/equal( generic/type/tostring(UN5a), "blub[1.0]" ), "fifth unification first part has been failed" );
         test/result( bool/equal( generic/type/tostring(UN5b), "hello[test]" ), "fifth unification second part has been failed" );
 
 

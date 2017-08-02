@@ -57,7 +57,7 @@ public final class CSuccessorCountSingle extends IApplySingle
     {
         p_return.add(
             CRawTerm.from(
-                (long) p_graph.getSuccessorCount( p_window.get( 0 ).raw() )
+                (double) p_graph.getSuccessorCount( p_window.get( 0 ).raw() )
             )
         );
     }

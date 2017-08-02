@@ -57,7 +57,7 @@ public final class CIncidentCountSingle extends IApplySingle
     {
         p_return.add(
             CRawTerm.from(
-                (long) p_graph.getIncidentCount( p_window.get( 0 ).raw() )
+                (double) p_graph.getIncidentCount( p_window.get( 0 ).raw() )
             )
         );
     }

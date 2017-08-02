@@ -74,7 +74,7 @@ public final class CNonZero extends IBuiltinAction
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix1D>raw )
-               .mapToLong( DoubleMatrix1D::cardinality )
+               .mapToDouble( DoubleMatrix1D::cardinality )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

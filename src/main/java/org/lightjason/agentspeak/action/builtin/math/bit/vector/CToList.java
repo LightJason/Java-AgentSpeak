@@ -76,7 +76,7 @@ public final class CToList extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<BitVector>raw )
-               .map( i -> IntStream.range( 0, i.size() ).boxed().map( j -> i.getQuick( j ) ? 1L : 0L ).collect( Collectors.toList() ) )
+               .map( i -> IntStream.range( 0, i.size() ).boxed().map( j -> i.getQuick( j ) ? 1D : 0D ).collect( Collectors.toList() ) )
                .map( i -> p_parallel ? Collections.synchronizedList( i ) : i )
                .map( CRawTerm::from )
                .forEach( p_return::add );

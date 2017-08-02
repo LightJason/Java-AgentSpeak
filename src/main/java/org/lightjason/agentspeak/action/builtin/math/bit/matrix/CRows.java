@@ -74,7 +74,7 @@ public final class CRows extends IBuiltinAction
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<BitMatrix>raw )
-               .mapToLong( BitMatrix::rows )
+               .mapToDouble( BitMatrix::rows )
                .boxed()
                .map( CRawTerm::from )
                .forEach( p_return::add );

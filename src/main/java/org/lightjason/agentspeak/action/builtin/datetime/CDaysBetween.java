@@ -55,7 +55,7 @@ public final class CDaysBetween extends IBetween
     {
         return p_datetime
                 .map( i -> Days.daysBetween( i.get( 0 ), i.get( 1 ) ) )
-                .mapToLong( Days::getDays )
+                .mapToDouble( Days::getDays )
                 .boxed();
     }
 

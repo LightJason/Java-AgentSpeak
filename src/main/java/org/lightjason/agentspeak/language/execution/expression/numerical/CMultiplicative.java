@@ -115,9 +115,7 @@ public final class CMultiplicative extends IBaseBinary
     @Nonnull
     private <N extends Number, M extends Number> Number multiply( @Nonnull final N p_left, @Nonnull final M p_right )
     {
-        return ( p_left instanceof Double ) || ( p_right instanceof Double )
-               ? Double.valueOf( p_left.doubleValue() * p_right.doubleValue() )
-               : Long.valueOf( p_left.longValue() * p_right.longValue() );
+        return p_left.doubleValue() * p_right.doubleValue();
     }
 
     /**
@@ -133,9 +131,7 @@ public final class CMultiplicative extends IBaseBinary
     @Nonnull
     private <N extends Number, M extends Number> Number divide( @Nonnull final N p_left, @Nonnull final M p_right )
     {
-        return ( p_left instanceof Double ) || ( p_right instanceof Double )
-               ? Double.valueOf( p_left.doubleValue() / p_right.doubleValue() )
-               : Long.valueOf( p_left.longValue() / p_right.longValue() );
+        return p_left.doubleValue() / p_right.doubleValue();
     }
 
     /**

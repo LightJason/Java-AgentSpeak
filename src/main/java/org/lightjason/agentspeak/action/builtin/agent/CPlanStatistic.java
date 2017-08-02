@@ -90,8 +90,8 @@ public final class CPlanStatistic extends IBuiltinAction
         if ( l_plans.isEmpty() )
             return false;
 
-        final long l_success = l_plans.parallelStream().mapToLong( IPlanStatistic::successful ).sum();
-        final long l_fail = l_plans.parallelStream().mapToLong( IPlanStatistic::fail ).sum();
+        final double l_success = l_plans.parallelStream().mapToDouble( IPlanStatistic::successful ).sum();
+        final double l_fail = l_plans.parallelStream().mapToDouble( IPlanStatistic::fail ).sum();
 
         p_return.add( CRawTerm.from( l_success ) );
         p_return.add( CRawTerm.from( l_fail ) );

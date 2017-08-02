@@ -241,7 +241,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), (long) l_graph.getVertexCount() );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), (double) l_graph.getVertexCount() );
     }
 
 
@@ -267,7 +267,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 1 );
-        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4L );
+        Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 4D );
     }
 
 
@@ -449,7 +449,7 @@ public final class TestCActionGraph extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3, 3, 2, 3, 3, 1 ).mapToLong( i -> i ).boxed().toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3D, 3D, 2D, 3D, 3D, 1D ).toArray() );
     }
 
 
@@ -477,7 +477,7 @@ public final class TestCActionGraph extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 2L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3D, 2D ).toArray() );
     }
 
 
@@ -827,7 +827,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 3L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2D, 3D ).toArray() );
     }
 
 
@@ -851,7 +851,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 1L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2D, 1D ).toArray() );
     }
 
     /**
@@ -956,7 +956,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 0L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1D, 0D ).toArray() );
     }
 
 
@@ -980,7 +980,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 1L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1D, 1D ).toArray() );
     }
 
 
@@ -1004,7 +1004,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 2L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2D, 2D ).toArray() );
     }
 
 
@@ -1027,7 +1027,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2L, 0L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 2D, 0D ).toArray() );
     }
 
 
@@ -1618,7 +1618,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 2L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1D, 2D ).toArray() );
     }
 
 
@@ -1643,7 +1643,7 @@ public final class TestCActionGraph extends IBaseTest
         );
 
         Assert.assertEquals( l_return.size(), 2 );
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1L, 2L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 1D, 2D ).toArray() );
     }
 
 
@@ -1725,7 +1725,7 @@ public final class TestCActionGraph extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 2L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3D, 2D ).toArray() );
     }
 
 
@@ -1749,7 +1749,7 @@ public final class TestCActionGraph extends IBaseTest
             l_return
         );
 
-        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3L, 1L ).toArray() );
+        Assert.assertArrayEquals( l_return.stream().map( ITerm::raw ).toArray(), Stream.of( 3D, 1D ).toArray() );
     }
 
 

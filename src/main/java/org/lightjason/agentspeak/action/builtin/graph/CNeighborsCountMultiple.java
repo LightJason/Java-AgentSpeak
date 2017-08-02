@@ -58,7 +58,7 @@ public final class CNeighborsCountMultiple extends IApplyMultiple
     {
         p_return.add(
             CRawTerm.from(
-                (long) p_graph.getNeighborCount( p_window.get( 0 ).raw() )
+                (double) p_graph.getNeighborCount( p_window.get( 0 ).raw() )
             )
         );
     }
