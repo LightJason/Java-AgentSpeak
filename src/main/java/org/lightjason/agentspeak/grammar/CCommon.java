@@ -60,7 +60,11 @@ public final class CCommon
                 "electron",
                 "neutron",
                 "proton",
-                "infinity"
+                "positiveinfinity",
+                "negativeinfinity",
+                "maximumvalue",
+                "minimumvalue",
+                "nan"
             ),
 
             Stream.of(
@@ -73,7 +77,11 @@ public final class CCommon
                 9.10938356e-31,
                 1674927471214e-27,
                 1.6726219e-27,
-                Double.POSITIVE_INFINITY
+                Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY,
+                Double.MAX_VALUE,
+                Double.MIN_VALUE,
+                Double.NaN
             ),
 
             AbstractMap.SimpleImmutableEntry::new

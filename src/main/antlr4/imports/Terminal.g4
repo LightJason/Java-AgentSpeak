@@ -57,7 +57,11 @@ ELECTRON                   : 'electron';
 PROTON                     : 'proton';
 NEUTRON                    : 'neutron';
 LIGHTSPEED                 : 'lightspeed';
-INFINITY                   : 'infinity';
+POSITIVEINFINITY           : 'positiveinfinity';
+NEGATIVEINFINITY           : 'negativeinfinity';
+MAXIMUMVALUE               : 'maximumvalue';
+MINIMUMVALUE               : 'minimumvalue';
+NAN                        : 'notanumber';
 
 LEFTROUNDBRACKET           : '(';
 RIGHTROUNDBRACKET          : ')';

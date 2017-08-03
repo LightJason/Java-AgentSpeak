@@ -330,7 +330,11 @@ constant :
     | PROTON
     | NEUTRON
     | LIGHTSPEED
-    | INFINITY
+    | POSITIVEINFINITY
+    | NEGATIVEINFINITY
+    | MAXIMUMVALUE
+    | MINIMUMVALUE
+    | NAN
     ;
 
 /**
