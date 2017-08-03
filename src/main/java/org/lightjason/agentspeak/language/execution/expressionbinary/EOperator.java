@@ -21,15 +21,72 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.unaryoperator;
+package org.lightjason.agentspeak.language.execution.expressionbinary;
 
-import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CSyntaxErrorException;
+
+import java.util.function.BiFunction;
 
 
 /**
- * interface of variable unary operator
+ * binary operator
  */
-public interface IOperator<T> extends IExecution
+public enum EOperator implements BiFunction<Number, Number, Number>
 {
+    ASSIGNINCREMENT( "+=" ),
+    ASSIGNDECREMENT( "-=" ),
+    ASSIGNMULTIPLY( "*=" ),
+    ASSIGNDIVIDE( "/=" ),
+    ASSIGNMODULO( "%=" ),
+    ASSIGNPOW( "^=" );
 
+    /**
+     * operator
+     */
+    private final String m_operator;
+
+    /**
+     * ctor
+     *
+     * @param p_operator operator string
+     */
+    EOperator( final String p_operator )
+    {
+        m_operator = p_operator;
+    }
+
+    @Override
+    public final Number apply( final Number p_lhs, final Number p_rhs )
+    {
+        switch ( this )
+        {
+            case ASSIGNINCREMENT:
+                return p_lhs.doubleValue() + p_rhs.doubleValue();
+
+            case ASSIGNDECREMENT:
+                return p_lhs.doubleValue() - p_rhs.doubleValue();
+
+            case ASSIGNMULTIPLY:
+                return p_lhs.doubleValue() * p_rhs.doubleValue();
+
+            case ASSIGNDIVIDE:
+                return p_lhs.doubleValue() * p_rhs.doubleValue();
+
+            case ASSIGNMODULO:
+                return p_lhs.longValue() % p_lhs.longValue();
+
+            case ASSIGNPOW:
+                return Math.pow( p_lhs.doubleValue(), p_lhs.doubleValue() );
+
+            default:
+                throw new CSyntaxErrorException( CCommon.languagestring( this, "operatorunknown", this ) );
+        }
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_operator;
+    }
 }

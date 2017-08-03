@@ -67,8 +67,9 @@ import org.lightjason.agentspeak.language.execution.expression.numerical.CCompar
 import org.lightjason.agentspeak.language.execution.expression.numerical.CMultiplicative;
 import org.lightjason.agentspeak.language.execution.expression.numerical.CPower;
 import org.lightjason.agentspeak.language.execution.expression.numerical.CRelational;
-import org.lightjason.agentspeak.language.execution.unaryoperator.CDecrement;
-import org.lightjason.agentspeak.language.execution.unaryoperator.CIncrement;
+import org.lightjason.agentspeak.language.execution.expressionbinary.COperatorAssign;
+import org.lightjason.agentspeak.language.execution.expressionunary.CDecrement;
+import org.lightjason.agentspeak.language.execution.expressionunary.CIncrement;
 import org.lightjason.agentspeak.language.instantiable.plan.CPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.annotation.CAtomAnnotation;
@@ -546,13 +547,59 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         switch ( p_context.unaryoperator().getText() )
         {
             case "++":
-                return new CIncrement<>( (IVariable) this.visitVariable( p_context.variable() ) );
+                return new CIncrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
 
             case "--":
-                return new CDecrement<>( (IVariable) this.visitVariable( p_context.variable() ) );
+                return new CDecrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
 
             default:
                 throw new CIllegalArgumentException( CCommon.languagestring( this, "unaryoperator", p_context.getText() ) );
+        }
+    }
+
+    @Override
+    public final Object visitBinary_expression( final AgentParser.Binary_expressionContext p_context )
+    {
+        final IVariable<Number> l_lhs = (IVariable<Number>) this.visitVariable( p_context.variable( 0 ) );
+        final ITerm l_rhs = p_context.variable().size() == 2
+                            ? (IVariable<Number>) this.visitVariable( p_context.variable( 1 ) )
+                            : CRawTerm.from( this.visitNumber( p_context.number() ) );
+
+
+        switch ( p_context.binaryoperator().getText() )
+        {
+            case "+=":
+                return new COperatorAssign(
+                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNINCREMENT
+                );
+
+            case "-=":
+                return new COperatorAssign(
+                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNDECREMENT
+                );
+
+            case "*=":
+                return new COperatorAssign(
+                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNMULTIPLY
+                );
+
+            case "/=":
+                return new COperatorAssign(
+                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNDIVIDE
+                );
+
+            case "%=":
+                return new COperatorAssign(
+                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNMODULO
+                );
+
+            case "^=":
+                return new COperatorAssign(
+                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNPOW
+                );
+
+            default:
+                throw new CIllegalArgumentException( CCommon.languagestring( this, "binaryassignoperator", p_context.getText() ) );
         }
     }
 

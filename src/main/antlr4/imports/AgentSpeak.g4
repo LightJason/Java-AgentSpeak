@@ -174,6 +174,7 @@ body_formula :
     | deconstruct_expression
     | assignment_expression
     | unary_expression
+    | binary_expression
 
     | lambda
     ;
@@ -248,6 +249,15 @@ assignment_expression_multivariable :
 unary_expression :
     variable
     unaryoperator
+    ;
+
+/**
+ * binary expression
+ **/
+binary_expression :
+    variable
+    binaryoperator
+    ( variable | number )
     ;
 
 /**

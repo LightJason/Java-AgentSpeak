@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.unaryoperator;
+package org.lightjason.agentspeak.language.execution.expressionunary;
 
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,12 +38,12 @@ import java.util.stream.Stream;
 /**
  * unary increment
  */
-public final class CDecrement<T extends Number> implements IOperator<T>
+public final class CIncrement<T extends Number> implements IUnaryExpression<T>
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -5980848121313572183L;
+    private static final long serialVersionUID = 8985578891714581618L;
     /**
      * variable
      */
@@ -55,7 +55,7 @@ public final class CDecrement<T extends Number> implements IOperator<T>
      * @param p_variable variable
      */
     @Nonnull
-    public CDecrement( @Nonnull final IVariable<T> p_variable )
+    public CIncrement( @Nonnull final IVariable<T> p_variable )
     {
         m_variable = p_variable;
     }
@@ -63,18 +63,19 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     @Override
     public final String toString()
     {
-        return m_variable.toString() + "--";
+        return m_variable.toString() + "++";
     }
 
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
         final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).thrownotallocated();
         if ( l_variable.valueassignableto( Number.class ) )
-            l_variable.set( (T) Double.valueOf( l_variable.<Number>raw().doubleValue() - 1 ) );
+            l_variable.set( (T) Double.valueOf( l_variable.<Number>raw().doubleValue() + 1 ) );
 
         return CFuzzyValue.from( true );
     }
@@ -85,4 +86,5 @@ public final class CDecrement<T extends Number> implements IOperator<T>
     {
         return Stream.of( m_variable );
     }
+
 }

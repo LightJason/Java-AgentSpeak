@@ -113,6 +113,8 @@ ASSIGNINCREMENT            : '+=';
 ASSIGNDECREMENT            : '-=';
 ASSIGNMULTIPLY             : '*=';
 ASSIGNDIVIDE               : '/=';
+ASSIGNMODULO               : '%=';
+ASSIGNPOW                  : '^=';
 
 /**
  * comparator types

@@ -297,6 +297,8 @@ binaryoperator :
     | ASSIGNDECREMENT
     | ASSIGNMULTIPLY
     | ASSIGNDIVIDE
+    | ASSIGNMODULO
+    | ASSIGNPOW
     ;
 
 /**

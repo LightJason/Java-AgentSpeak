@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.execution.unaryoperator;
+package org.lightjason.agentspeak.language.execution.expressionbinary;
 
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
@@ -31,60 +31,76 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
 
 /**
- * unary increment
+ * assign operator expression
  */
-public final class CIncrement<T extends Number> implements IOperator<T>
+public final class COperatorAssign implements IBinaryExpression
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8985578891714581618L;
+    private static final long serialVersionUID = 720534461732785140L;
     /**
-     * variable
+     * left-hand-side
      */
-    private final IVariable<T> m_variable;
+    private final IVariable<?> m_lhs;
+    /**
+     * right-hand-side
+     */
+    private final ITerm m_rhs;
+    /**
+     * operator
+     */
+    private final EOperator m_operator;
+
 
     /**
      * ctor
      *
-     * @param p_variable variable
+     * @param p_lhs left-hand-side variable
+     * @param p_rhs right-hand-side data
+     * @param p_operator operator
      */
-    @Nonnull
-    public CIncrement( @Nonnull final IVariable<T> p_variable )
+    public COperatorAssign( final IVariable<?> p_lhs, final ITerm p_rhs, final EOperator p_operator )
     {
-        m_variable = p_variable;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_variable.toString() + "++";
+        m_lhs = p_lhs;
+        m_operator = p_operator;
+        m_rhs = p_rhs;
     }
 
     @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                         @Nonnull final List<ITerm> p_return )
     {
-        final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).thrownotallocated();
-        if ( l_variable.valueassignableto( Number.class ) )
-            l_variable.set( (T) Double.valueOf( l_variable.<Number>raw().doubleValue() + 1 ) );
+        final IVariable<Number> l_lhs = (IVariable<Number>) CCommon.replaceFromContext( p_context, m_lhs );
+        l_lhs.set( m_operator.apply( l_lhs.raw(), CCommon.replaceFromContext( p_context, m_rhs ).raw() ) );
 
         return CFuzzyValue.from( true );
     }
 
-    @Nonnull
     @Override
-    public final Stream<IVariable<?>> variables()
+    public final String toString()
     {
-        return Stream.of( m_variable );
+        return MessageFormat.format( "{0} {1} {2}", m_lhs, m_operator, m_rhs );
     }
 
+    @Nonnull
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public final Stream<IVariable<?>> variables()
+    {
+        return Stream.concat(
+            Stream.of( m_lhs ),
+            m_rhs instanceof IVariable<?>
+            ? Stream.of( (IVariable<?>) m_rhs )
+            : Stream.empty()
+        );
+    }
 }
