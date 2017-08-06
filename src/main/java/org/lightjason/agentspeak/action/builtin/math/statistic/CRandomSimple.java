@@ -34,7 +34,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -56,10 +55,6 @@ public final class CRandomSimple extends IBuiltinAction
      * serial id
      */
     private static final long serialVersionUID = 5755982505026599387L;
-    /**
-     * random instance
-     */
-    private final Random m_random = new Random();
 
     /**
      * ctor
@@ -81,12 +76,12 @@ public final class CRandomSimple extends IBuiltinAction
                .map( ITerm::<Number>raw )
                .map( Number::intValue )
         ).map( i -> i == 1
-                    ? m_random.nextDouble()
+                    ? Math.random()
                     : p_parallel
                       ? Collections.synchronizedList(
-                        IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
+                        IntStream.range( 0, i ).mapToDouble( j -> Math.random() ).boxed().collect( Collectors.toList() )
                       )
-                      : IntStream.range( 0, i ).mapToDouble( j -> m_random.nextDouble() ).boxed().collect( Collectors.toList() )
+                      : IntStream.range( 0, i ).mapToDouble( j -> Math.random() ).boxed().collect( Collectors.toList() )
                )
                .map( CRawTerm::from )
                .forEach( p_return::add );
