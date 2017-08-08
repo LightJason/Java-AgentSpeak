@@ -45,8 +45,6 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
@@ -62,7 +60,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -429,20 +426,6 @@ public final class TestCActionAgent extends IBaseTest
         public final ITrigger trigger()
         {
             return m_trigger;
-        }
-
-        @Nonnull
-        @Override
-        public final Collection<IAnnotation<?>> annotations()
-        {
-            return m_annotation.values();
-        }
-
-        @Nonnull
-        @Override
-        public final List<IExecution> body()
-        {
-            return Collections.emptyList();
         }
 
         @Nonnull

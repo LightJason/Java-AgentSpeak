@@ -26,17 +26,13 @@ package org.lightjason.agentspeak.language.instantiable.plan;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -61,20 +57,6 @@ public interface IPlan extends IInstantiable
         public final ITrigger trigger()
         {
             return ITrigger.EMPTY;
-        }
-
-        @Nonnull
-        @Override
-        public final Collection<IAnnotation<?>> annotations()
-        {
-            return Collections.emptySet();
-        }
-
-        @Nonnull
-        @Override
-        public final List<IExecution> body()
-        {
-            return Collections.emptyList();
         }
 
         @Nonnull
@@ -114,22 +96,6 @@ public interface IPlan extends IInstantiable
      */
     @Nonnull
     ITrigger trigger();
-
-    /**
-     * return unmodifieable annotation set
-     *
-     * @return set with annotation
-     */
-    @Nonnull
-    Collection<IAnnotation<?>> annotations();
-
-    /**
-     * returns unmodifieable list with plan actions
-     *
-     * @return action list;
-     */
-    @Nonnull
-    List<IExecution> body();
 
     /**
      * execute the plan condition

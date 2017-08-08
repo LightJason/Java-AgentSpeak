@@ -39,7 +39,6 @@ import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,20 +111,6 @@ public final class CPlan extends IBaseInstantiable implements IPlan
     public final ITrigger trigger()
     {
         return m_triggerevent;
-    }
-
-    @Nonnull
-    @Override
-    public final Collection<IAnnotation<?>> annotations()
-    {
-        return m_annotation.values();
-    }
-
-    @Nonnull
-    @Override
-    public final List<IExecution> body()
-    {
-        return m_action;
     }
 
     @Nonnull
