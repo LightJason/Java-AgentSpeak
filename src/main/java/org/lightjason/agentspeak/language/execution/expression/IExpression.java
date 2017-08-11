@@ -67,6 +67,12 @@ public interface IExpression extends IExecution
         {
             return Stream.empty();
         }
+
+        @Override
+        public final String toString()
+        {
+            return "true";
+        }
     };
 
 
