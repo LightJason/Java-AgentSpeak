@@ -319,7 +319,7 @@ public final class CCommon
     @Nonnull
     public static Hasher getTermHashing()
     {
-        return Hashing.murmur3_32().newHasher();
+        return Hashing.sipHash24().newHasher();
     }
 
     // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------

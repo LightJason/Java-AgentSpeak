@@ -92,7 +92,7 @@ public final class TestCUnifier extends IBaseTest
                 CLiteral.parse( "second/sub(2)" ),
                 CLiteral.parse( "second/sub(3)" )
             )
-        ).collect( Collectors.toSet() ) );
+        ).collect( Collectors.toList() ) );
 
         Assert.assertArrayEquals(
             MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
