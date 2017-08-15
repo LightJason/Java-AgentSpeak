@@ -23,6 +23,7 @@
 
 package org.lightjason.agentspeak.agent;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.common.CPath;
@@ -31,15 +32,14 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -80,21 +80,24 @@ public final class TestCUnifier extends IBaseTest
     @Test
     public final void literalvaluesequentialtraversing() throws Exception
     {
-        final Stack<ILiteral> l_test = Stream.of(
+        final ILiteral[] l_test = Stream.of(
             CLiteral.parse( "first('Hello')" ),
             CLiteral.parse( "first('Foo')" )
-        ).collect( Collectors.toCollection( Stack::new ) );
+        ).toArray( ILiteral[]::new );
 
-        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat( l_test.stream(), Stream.of(
-            CLiteral.parse( "second/sub(1)" ),
-            CLiteral.parse( "second/sub(2)" ),
-            CLiteral.parse( "second/sub(3)" )
-        ) ).collect( Collectors.toSet() ) );
+        final ILiteral l_literal = CLiteral.from( "toplevel", Stream.concat(
+            Arrays.stream( l_test ),
+            Stream.of(
+                CLiteral.parse( "second/sub(1)" ),
+                CLiteral.parse( "second/sub(2)" ),
+                CLiteral.parse( "second/sub(3)" )
+            )
+        ).collect( Collectors.toSet() ) );
 
-        assertTrue(
-            MessageFormat.format( "literal sequential traversing in {0} is wrong for {1}", l_literal, l_test ),
-            l_literal.orderedvalues( CPath.from( "first" ) ).allMatch( i -> i.equals( l_test.pop() ) )
-            && l_test.isEmpty()
+        Assert.assertArrayEquals(
+            MessageFormat.format( "literal sequential traversing in {0} is wrong for", l_literal ),
+            l_literal.orderedvalues( CPath.from( "first" ) ).toArray(),
+            l_test
         );
     }
 

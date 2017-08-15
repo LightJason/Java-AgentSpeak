@@ -73,3 +73,5 @@
     test/result( bool/equal(X, 7), "variable execution test with 7 fails" );
     test/result( bool/equal(Y, 3), "variable execution test with 3 fails" )
 .
+
+

@@ -46,6 +46,19 @@ public final class TestCPath extends IBaseTest
     }
 
     /**
+     * test hash collision
+     */
+    @Test
+    public final void collisition()
+    {
+        Assert.assertNotEquals(
+            CPath.from( "hashcollision/Ea" ),
+            CPath.from( "hashcollision/FB" )
+        );
+    }
+
+
+    /**
      * manual test
      *
      * @param p_args commandline arguments

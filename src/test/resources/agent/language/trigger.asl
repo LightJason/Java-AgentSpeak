@@ -51,10 +51,19 @@
     !equalname( "foobar" );
     !equalname( "foo", "bar" );
 
+    !hashcollision/Ea;
+    !hashcollision/FB;
+
     !goaltrigger;
     !errortrigger
 .
 
+
+/**
+ * test plan with hash collision
+ **/
++!hashcollision/Ea <- test/result( success ).
++!hashcollision/FB <- test/result( success ).
 
 /**
  * add belief trigger

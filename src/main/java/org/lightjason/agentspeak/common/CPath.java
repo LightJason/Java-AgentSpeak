@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.common;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hasher;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
@@ -300,7 +302,9 @@ public final class CPath implements IPath
     @Override
     public final int hashCode()
     {
-        return m_path.stream().mapToInt( String::hashCode ).sum();
+        final Hasher l_hasher = org.lightjason.agentspeak.language.CCommon.getTermHashing();
+        m_path.forEach( i -> l_hasher.putString( i, Charsets.UTF_8 ) );
+        return l_hasher.hash().hashCode();
     }
 
     @Override
