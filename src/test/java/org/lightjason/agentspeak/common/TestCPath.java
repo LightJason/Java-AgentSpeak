@@ -49,12 +49,22 @@ public final class TestCPath extends IBaseTest
      * test hash collision
      */
     @Test
-    public final void collisition()
+    public final void collision()
     {
         Assert.assertNotEquals(
             CPath.from( "hashcollision/Ea" ),
             CPath.from( "hashcollision/FB" )
         );
+    }
+
+    /**
+     * compare string and path
+     */
+    @Test
+    public final void comparing()
+    {
+        Assert.assertEquals( CPath.from( "foo/bar" ), "foo/bar" );
+        Assert.assertNotEquals( CPath.from( "foo/bar" ), CPath.from( "bar/foo" ) );
     }
 
 
