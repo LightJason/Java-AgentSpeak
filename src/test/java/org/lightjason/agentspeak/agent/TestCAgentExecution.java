@@ -114,6 +114,7 @@ public final class TestCAgentExecution extends IBaseTest
 
         // define execution results
         m_result.put( 0L, "main" );
+        m_result.put( 1L, "single run" );
         m_result.put( 1L, "first" );
         m_result.put( 1L, "second" );
         m_result.put( 1L, "twovalues equal type" );

@@ -37,6 +37,9 @@
 +!test <-
     log( "main" );
 
+    !doublecall;
+    !doublecall;
+
     !multiple( "first" );
     !multiple( "second" );
 
@@ -46,6 +49,11 @@
     L = generic/type/parseliteral( "twovaluesliteral(5, foo(3))" );
     !L
 .
+
+/**
+ * double plan call but single execution
+ **/
++!doublecall <- log("single run").
 
 /**
  * called mutiple times
