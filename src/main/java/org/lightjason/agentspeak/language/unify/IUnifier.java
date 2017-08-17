@@ -49,7 +49,7 @@ public interface IUnifier
     {
         @Nonnull
         @Override
-        public final Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
+        public final Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
         {
             return Collections.emptySet();
         }
@@ -72,14 +72,12 @@ public interface IUnifier
      * @return set with allocated variables
      *
      * @note check input literal and result of correct unification
-     * @todo check nonnull parameter modifier
      */
     @Nonnull
-    Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target );
+    Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target );
 
     /**
-     * unifies a literal - checks all possible literals with the given expression, first expression
-     * which finish successful is the result
+     * unifies the literal with the expression
      *
      * @param p_context running context
      * @param p_literal literal with variables (creates a deep-copy)

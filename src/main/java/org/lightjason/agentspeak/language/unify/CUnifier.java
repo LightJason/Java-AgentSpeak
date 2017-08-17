@@ -82,7 +82,7 @@ public final class CUnifier implements IUnifier
 
     @Nonnull
     @Override
-    public final Set<IVariable<?>> unify( final ILiteral p_source, final ILiteral p_target )
+    public final Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
     {
         if ( ( p_source == null ) || ( p_target == null ) )
             return Collections.emptySet();
