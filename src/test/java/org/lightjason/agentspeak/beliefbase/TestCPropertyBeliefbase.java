@@ -55,7 +55,8 @@ public final class TestCPropertyBeliefbase extends IBaseTest
     {
         final IAgent<?> l_agent = new CAgent.CAgentGenerator( "" ).generatesingle();
 
-        l_agent.beliefbase().stream().forEach( i -> System.out.println( i ) );
+        if ( PRINTENABLE )
+            l_agent.beliefbase().stream().forEach( System.out::println );
 
         Assert.assertArrayEquals(
             Stream.of(
