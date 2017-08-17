@@ -24,7 +24,7 @@ dependencies:
     pre:
         - sudo apt-get install graphviz xsltproc
         - wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
-        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
+        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/Saxon-HE/9.8/SaxonHE9-8-0-4J.zip/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
 
 
 checkout:
