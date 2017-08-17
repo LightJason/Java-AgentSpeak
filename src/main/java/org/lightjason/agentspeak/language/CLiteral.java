@@ -135,16 +135,13 @@ public final class CLiteral implements ILiteral
             m_values = ImmutableListMultimap.of();
         }
 
-        // calculates hash value
-        m_hash = Stream.concat(
-            m_orderedvalues.stream().map( Object::hashCode ),
-            Stream.of(
-                m_functor.hashCode(),
-                m_negated ? 0 : 55529,
-                m_at ? 0 : 8081
-            )
-        ).reduce( 0, ( i, j ) -> i ^ j );
-
+        // calculates object hash value
+        final Hasher l_hasher = CCommon.getTermHashing();
+        l_hasher.putInt( m_functor.hashCode() );
+        l_hasher.putBoolean( m_negated );
+        l_hasher.putBoolean( m_at );
+        m_orderedvalues.forEach( i -> l_hasher.putInt( i.hashCode() ) );
+        m_hash = l_hasher.hash().asInt();
 
         // calculates the structure hash value of the value definition (need to start with value definition)
         final Hasher l_valuehasher = CCommon.getTermHashing();
