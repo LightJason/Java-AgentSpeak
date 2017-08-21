@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.action.builtin.math.statistic;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -80,7 +81,7 @@ public abstract class ISelection extends IBuiltinAction
             l_items,
             p_argument.get( 1 ).<List<?>>raw().stream()
                                               // list can be contains default Java objects or term objects
-                                              .map( i -> i instanceof ITerm ? ( (ITerm) i ).<Number>raw() : (Number) i )
+                                              .map( i -> i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).<Number>raw() : (Number) i )
                                               .map( Number::doubleValue )
                                               .map( Math::abs ),
             p_argument.subList( 2, p_argument.size() )
