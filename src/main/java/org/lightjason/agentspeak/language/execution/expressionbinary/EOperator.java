@@ -74,10 +74,10 @@ public enum EOperator implements BiFunction<Number, Number, Number>
                 return p_lhs.doubleValue() * p_rhs.doubleValue();
 
             case ASSIGNMODULO:
-                return p_lhs.longValue() % p_lhs.longValue();
+                return p_lhs.longValue() % p_rhs.longValue();
 
             case ASSIGNPOW:
-                return Math.pow( p_lhs.doubleValue(), p_lhs.doubleValue() );
+                return Math.pow( p_lhs.doubleValue(), p_rhs.doubleValue() );
 
             default:
                 throw new CSyntaxErrorException( CCommon.languagestring( this, "operatorunknown", this ) );
