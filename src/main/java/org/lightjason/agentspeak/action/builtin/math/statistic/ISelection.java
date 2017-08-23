@@ -35,6 +35,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -76,7 +77,9 @@ public abstract class ISelection extends IBuiltinAction
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
-        final List<?> l_items = p_argument.get( 0 ).raw();
+        final List<?> l_items = p_argument.get( 0 ).<List<?>>raw().stream()
+                                                                  .map( i -> i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).raw() : i  )
+                                                                  .collect( Collectors.toList() );
         final List<Double> l_weight = this.weight(
             l_items,
             p_argument.get( 1 ).<List<?>>raw().stream()
