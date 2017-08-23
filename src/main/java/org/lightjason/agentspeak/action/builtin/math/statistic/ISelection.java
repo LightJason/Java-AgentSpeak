@@ -77,7 +77,7 @@ public abstract class ISelection extends IBuiltinAction
     {
         // first parameter is a list with elements, which will return by the selection
         // second parameter is a numeric value for each element
-        final List<?> l_items = p_argument.get( 0 ).<List<?>>raw().stream()
+        final List<Object> l_items = p_argument.get( 0 ).<List<Object>>raw().stream()
                                                                   .map( i -> i instanceof ITerm ? ( CCommon.replaceFromContext( p_context, (ITerm) i ) ).raw() : i  )
                                                                   .collect( Collectors.toList() );
         final List<Double> l_weight = this.weight(
