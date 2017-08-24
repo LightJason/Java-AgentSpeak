@@ -152,8 +152,24 @@ foo(blub(1),hello("test")).
         >>notexist( UN8 ) << true;
         generic/type/isnull( UN8 );
         generic/print( "eighth unification successful" );
-        test/result( success, "eighth unification has been failed" )
+        test/result( success, "eighth unification has been failed" );
+
+        !unifyany
 .
+
+
+/**
+ * test for unification and non-existing
+ */
++!unifyany
+    : >>hello(X) <-
+        generic/print( "first unifyany:", X );
+        test/result( bool/equal( X, 123 ), "first unifyany failed" )
+    : ~>>foobar( _ ) <-
+        generic/print( "second unifyany" );
+        test/result( success )
+.
+
 
 
 /**

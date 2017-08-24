@@ -84,9 +84,6 @@ public final class CUnifier implements IUnifier
     @Override
     public final Set<IVariable<?>> unify( @Nonnull final ILiteral p_source, @Nonnull final ILiteral p_target )
     {
-        if ( ( p_source == null ) || ( p_target == null ) )
-            return Collections.emptySet();
-
         final Set<IVariable<?>> l_result = new HashSet<>();
 
         // try to unify exact or if not possible by recursive on the value set

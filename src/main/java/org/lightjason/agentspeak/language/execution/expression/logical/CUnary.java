@@ -68,16 +68,15 @@ public final class CUnary extends IBaseUnary
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_expression.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value() )
-             || ( l_argument.size() != 1 ) )
+        final boolean l_result = m_expression.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value();
+        if ( l_argument.size() != 1 )
             return CFuzzyValue.from( false );
-
 
         switch ( m_operator )
         {
             case NEGATION:
                 p_return.add( CRawTerm.from(
-                    !l_argument.get( 0 ).<Boolean>raw()
+                    !( l_result && l_argument.get( 0 ).<Boolean>raw() )
                 ) );
                 return CFuzzyValue.from( true );
 
