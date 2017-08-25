@@ -43,7 +43,6 @@ import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -105,10 +104,9 @@ public final class CCommon
     public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
         final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
-        CCommon.streamconcat(
+        Stream.concat(
             p_variable,
-            p_agent.variablebuilder().apply( p_agent, p_instance ),
-            Stream.of( new CConstant<>( "Cycle", p_agent.cycle() ) )
+            p_agent.variablebuilder().apply( p_agent, p_instance )
         )
                .peek( l_variables::remove )
                .forEach( l_variables::add );

@@ -48,7 +48,7 @@ public interface IInspector
         {}
 
         @Override
-        public final void inspectcycle( @Nonnegative final long p_value )
+        public final void inspectcycletime( @Nonnegative final long p_value )
         {}
 
         @Override
@@ -85,7 +85,7 @@ public interface IInspector
      *
      * @param p_value value
      */
-    void inspectcycle( @Nonnegative final long p_value );
+    void inspectcycletime( @Nonnegative final long p_value );
 
     /**
      * inspect beliefs

@@ -158,13 +158,6 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
             return 0;
         }
 
-        @Nonnegative
-        @Override
-        public final long cycle()
-        {
-            return 0;
-        }
-
         @Nonnull
         @Override
         public final Multimap<ITrigger, IPlanStatistic> plans()
@@ -316,21 +309,13 @@ public interface IAgent<T extends IAgent<?>> extends Serializable, Callable<T>
     IUnifier unifier();
 
     /**
-     * returns the time in nano seconds
-     * since the last cycle
+     * returns the time in nano
+     * seconds at the last cycle
      *
      * @return nano seconds
      */
     @Nonnegative
     long cycletime();
-
-    /**
-     * returns the current cycle
-     *
-     * @return cycle
-     */
-    @Nonnegative
-    long cycle();
 
     /**
      * returns the internal map of plans

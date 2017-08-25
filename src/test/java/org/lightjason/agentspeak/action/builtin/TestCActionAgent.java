@@ -62,12 +62,10 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 
@@ -102,17 +100,6 @@ public final class TestCActionAgent extends IBaseTest
             new CEmptyPlan( CTrigger.from( ITrigger.EType.ADDGOAL, CLiteral.from( "contextplan" ) ) ),
             Collections.emptyList()
         );
-    }
-
-
-    /**
-     * test cycle
-     */
-    @Test
-    public final void cycle()
-    {
-        Assert.assertEquals( m_context.agent().cycle(), 0 );
-        LongStream.range( 1, new Random().nextInt( 200 ) + 1 ).forEach( i -> Assert.assertEquals( this.next().agent().cycle(), i ) );
     }
 
 

@@ -49,6 +49,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -216,6 +217,10 @@ public final class TestCAgentExecution extends IBaseTest
          * serial id
          */
         private static final long serialVersionUID = -7467073439000881088L;
+        /**
+         * cycle counter
+         */
+        private final AtomicLong m_cycle = new AtomicLong();
 
         /**
          * ctor
@@ -225,6 +230,24 @@ public final class TestCAgentExecution extends IBaseTest
         CAgent( final IAgentConfiguration<CAgent> p_configuration )
         {
             super( p_configuration );
+        }
+
+        @Override
+        public final CAgent call() throws Exception
+        {
+            super.call();
+            m_cycle.incrementAndGet();
+            return this;
+        }
+
+        /**
+         * returns the cycle
+         *
+         * @return cycle
+         */
+        final long cycle()
+        {
+            return m_cycle.get();
         }
     }
 
@@ -292,7 +315,7 @@ public final class TestCAgentExecution extends IBaseTest
         public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            m_log.put( p_context.agent().cycle(), p_argument.get( 0 ).<String>raw()  );
+            m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
             return CFuzzyValue.from( true );
         }
     }

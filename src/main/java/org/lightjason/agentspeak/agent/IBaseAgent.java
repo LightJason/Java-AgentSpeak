@@ -112,10 +112,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     protected final Multimap<ITrigger, IPlanStatistic> m_plans = Multimaps.synchronizedMultimap(
                                                                     TreeMultimap.create( IStructureHash.COMPARATOR, Comparator.<IPlanStatistic>naturalOrder() ) );
     /**
-     * curent agent cycle
-     */
-    private final AtomicLong m_cycle = new AtomicLong();
-    /**
      * nano seconds at the last cycle
      */
     private final AtomicLong m_cycletime = new AtomicLong();
@@ -186,7 +182,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
                      .parallel()
                      .peek( i ->
                      {
-                         i.inspectcycle( m_cycle.get() );
+                         i.inspectcycletime( m_cycletime.get() );
                          i.inspectsleeping( m_sleepingcycles.get() );
                          i.inspectbelief( m_beliefbase.stream() );
                          i.inspectplans( m_plans.values().stream() );
@@ -271,13 +267,6 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         return m_cycletime.get();
     }
 
-    @Nonnegative
-    @Override
-    public final long cycle()
-    {
-        return m_cycle.get();
-    }
-
     @Nonnull
     @Override
     public final Multimap<ITrigger, IPlanStatistic> plans()
@@ -318,9 +307,8 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
     public String toString()
     {
         return MessageFormat.format(
-            "{0} ( Cycle: {1} / {2} )",
+            "{0} ( {1} )",
             super.toString(),
-            m_cycle,
             StringUtils.join(
                 StreamUtils.zip(
                     Stream.of( "Trigger", "Running Plans", "Beliefbase" ),
@@ -373,8 +361,7 @@ public abstract class IBaseAgent<T extends IAgent<?>> implements IAgent<T>
         this.execute( this.generateexecutionlist() );
 
 
-        // increment cycle and set the cycle time
-        m_cycle.incrementAndGet();
+        // set the cycle time
         m_cycletime.set( System.nanoTime() );
 
         return (T) this;
