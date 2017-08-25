@@ -23,8 +23,12 @@
 
 package org.lightjason.agentspeak.language.variable;
 
+import org.lightjason.agentspeak.language.IRawStructure;
 import org.lightjason.agentspeak.language.IShallowCopy;
 import org.lightjason.agentspeak.language.ITerm;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
@@ -32,7 +36,7 @@ import org.lightjason.agentspeak.language.ITerm;
  *
  * @tparam T data type
  */
-public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
+public interface IVariable<T> extends ITerm, IRawStructure<IVariable<T>>, IShallowCopy<IVariable<T>>
 {
 
     /**
@@ -41,14 +45,8 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
      * @param p_value value
      * @return the object itself
      */
-    IVariable<T> set( final T p_value );
-
-    /**
-     * returns allocated state
-     *
-     * @return boolean flag
-     */
-    boolean allocated();
+    @Nonnull
+    IVariable<T> set( @Nullable final T p_value );
 
     /**
      * flag to define a "any variable"
@@ -60,37 +58,9 @@ public interface IVariable<T> extends ITerm, IShallowCopy<IVariable<T>>
     /**
      * flag to check if variable has is
      * concurrency- / thread-safe
+     *
+     * @return mutex flag
      */
     boolean mutex();
-
-    /**
-     * throws an illegal state exception
-     * iif the variable is not allocated
-     *
-     * @return object itself
-     *
-     * @throws IllegalStateException on non-allocated
-     */
-    IVariable<T> throwNotAllocated() throws IllegalStateException;
-
-    /**
-     * checkes assignable of the value
-     *
-     * @param p_class class
-     * @return assignable (on null always true)
-     */
-    boolean valueAssignableTo( final Class<?>... p_class );
-
-    /**
-     * throws an illegal argument exception
-     * iif the value is not assignable to the
-     * class
-     *
-     * @param p_class assignable class
-     * @return object itself
-     *
-     * @throws IllegalArgumentException on assignable error
-     */
-    IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

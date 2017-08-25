@@ -23,7 +23,9 @@
 
 package org.lightjason.agentspeak.beliefbase;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.beliefbase.view.CView;
@@ -32,15 +34,13 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 
+import javax.annotation.Nonnull;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 
@@ -53,64 +53,78 @@ import java.util.stream.Stream;
  * @see http://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html
  * @see https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  */
-@SuppressWarnings( "serial" )
 @SuppressFBWarnings( "RI_REDUNDANT_INTERFACES" )
-public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbase<T>
+public abstract class IBaseBeliefbase implements IBeliefbase
 {
+
     /**
      * map with events for a mask
      */
-    protected final CEventMap m_events = new CEventMap();
+    private final Multimap<IView, ITrigger> m_events = Multimaps.synchronizedSetMultimap( HashMultimap.create() );
+    /**
+     * set with all current views
+     */
+    private final Set<IView> m_views = Collections.synchronizedSet( new HashSet<>() );
     /**
      * weak reference queue of all masks to avoid memory-leaks of belief events
      */
-    private final ReferenceQueue<IView<T>> m_maskreference = new ReferenceQueue<>();
+    private final ReferenceQueue<IView> m_maskreference = new ReferenceQueue<>();
 
 
+    @Nonnull
     @Override
-    public final IView<T> create( final String p_name )
+    public final IView create( @Nonnull final String p_name )
     {
-        return this.eventreference( new CView<>( p_name, this ) );
+        return this.eventreference( new CView( p_name, this ) );
     }
 
+    @Nonnull
     @Override
-    public final IView<T> create( final String p_name, final IView<T> p_parent )
+    public final IView create( @Nonnull final String p_name, final IView p_parent )
     {
-        return this.eventreference( new CView<>( p_name, this, p_parent ) );
+        return this.eventreference( new CView( p_name, this, p_parent ) );
     }
 
+    @Nonnull
     @Override
-    public ILiteral add( final ILiteral p_literal )
+    public ILiteral add( @Nonnull final ILiteral p_literal )
     {
         return this.event( ITrigger.EType.ADDBELIEF, p_literal );
     }
 
+    @Nonnull
     @Override
-    public ILiteral remove( final ILiteral p_literal )
+    public ILiteral remove( @Nonnull final ILiteral p_literal )
     {
         return this.event( ITrigger.EType.DELETEBELIEF, p_literal );
     }
 
+    @Nonnull
     @Override
-    public T update( final T p_agent )
+    public IAgent<?> update( @Nonnull final IAgent<?> p_agent )
     {
         // check all references of mask and remove unused references
-        Reference<? extends IView<T>> l_reference;
+        Reference<? extends IView> l_reference;
         while ( ( l_reference = m_maskreference.poll() ) != null )
         {
-            final IView<T> l_view = l_reference.get();
+            final IView l_view = l_reference.get();
             if ( l_view != null )
-                m_events.remove( l_view );
+            {
+                m_views.remove( l_view );
+                m_events.asMap().remove( l_view );
+            }
         }
 
         return p_agent;
     }
 
+    @Nonnull
     @Override
-    public Stream<ITrigger> trigger( final IView<T> p_view )
+    public Stream<ITrigger> trigger( @Nonnull final IView p_view )
     {
-        return this.getAndClearTrigger( p_view ).parallel();
+        return this.cleartrigger( p_view );
     }
+
 
     /**
      * push an event and literal to the event map
@@ -120,8 +134,22 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      */
     protected ILiteral event( final ITrigger.EType p_event, final ILiteral p_literal )
     {
-        m_events.keySet().forEach( i -> m_events.put( i, CTrigger.from( p_event, p_literal ) ) );
+        final ITrigger l_trigger = CTrigger.from( p_event, p_literal );
+        m_views.parallelStream().forEach( i -> m_events.put( i, l_trigger ) );
         return p_literal;
+    }
+
+    /**
+     * removes the interal view references
+     *
+     * @param p_view view to remove
+     * @return view
+     */
+    protected final IView internalremove( final IView p_view )
+    {
+        m_views.remove( p_view );
+        m_events.removeAll( p_view );
+        return p_view;
     }
 
     /**
@@ -130,10 +158,10 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view view
      * @return input view
      */
-    protected IView<T> eventreference( final IView<T> p_view )
+    protected IView eventreference( final IView p_view )
     {
         new PhantomReference<>( p_view, m_maskreference );
-        m_events.put( p_view );
+        m_views.add( p_view );
         return p_view;
     }
 
@@ -143,46 +171,9 @@ public abstract class IBaseBeliefbase<T extends IAgent<?>> implements IBeliefbas
      * @param p_view trigger of this view
      * @return set with trigger values
      */
-    protected final Stream<ITrigger> getAndClearTrigger( final IView<T> p_view )
+    protected final Stream<ITrigger> cleartrigger( final IView p_view )
     {
-        final Collection<ITrigger> l_trigger = m_events.getOrDefault( p_view, Collections.<ITrigger>emptySet() );
-        final Set<ITrigger> l_result = new HashSet<>( l_trigger );
-        l_trigger.clear();
-        return l_result.stream();
-    }
-
-
-    /**
-     * class to represent the event structure
-     */
-    @SuppressWarnings( "serial" )
-    @SuppressFBWarnings( "SE_NO_SERIALVERSIONID" )
-    protected final class CEventMap extends ConcurrentHashMap<IView<T>, Set<ITrigger>> implements Map<IView<T>, Set<ITrigger>>
-    {
-        /**
-         * add an empty key structure
-         *
-         * @param p_key key object
-         * @return value
-         */
-        public synchronized Set<ITrigger> put( final IView<T> p_key  )
-        {
-            return super.put( p_key, Sets.newConcurrentHashSet() );
-        }
-
-        /**
-         * puts a trigger into the set
-         *
-         * @param p_key key object
-         * @param p_value trigger value
-         * @return set
-         */
-        public Set<ITrigger> put( final IView<T> p_key, final ITrigger p_value )
-        {
-            final Set<ITrigger> l_set = m_events.getOrDefault( p_key, Sets.newConcurrentHashSet() );
-            l_set.add( p_value );
-            return this.putIfAbsent( p_key, l_set );
-        }
+        return m_events.removeAll( p_view ).stream();
     }
 
 }

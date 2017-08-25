@@ -9,7 +9,7 @@ general:
             - /support-.*/
             - /dev-.*/
             - /gh-.*/
-            - /binary-.*/
+            - /jar-.*/
 
 
 machine:
@@ -23,8 +23,8 @@ machine:
 dependencies:
     pre:
         - sudo apt-get install graphviz xsltproc
-        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/latest/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
         - wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
+        - wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/Saxon-HE/9.8/SaxonHE9-8-0-4J.zip/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
 
 
 checkout:
@@ -32,36 +32,48 @@ checkout:
         - git clean -xdf
         - git fetch -p
         - git gc --prune=now
-        - mvn clean dependency:purge-local-repository -DreResolve=false -DactTransitively=true
+        - mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
 
 
 test:
     override:
-        - mvn -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
+        - mvn -B -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DperformRelease=false -DskipTests=true
 
     post:
         # documentation and test build
-        - mvn site coveralls:report -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -Dcoverall.token=${COVERALL_TOKEN}
+        - mvn -B -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1} -Dcoverall.token=${COVERALL_TOKEN} site coveralls:report
+        # create CircleCI reports
+        - mkdir -p ${CIRCLE_TEST_REPORTS}/junit/
+        - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ${CIRCLE_TEST_REPORTS}/junit/ \;
         # transformation classes to website json import
         - xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
         - java -jar /tmp/saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
-        # create CircleCI reports
-        - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-        - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
 
 deployment:
     production:
         branch: master
         commands:
-            # documentation deployment to gh-pages
+            - export FILENAME=$(mvn -B help:evaluate -Dexpression=project.build.finalName | grep -vi info) && mv -f target/${FILENAME}.jar /tmp && mv -f target/${FILENAME}-sources.jar /tmp
             - mv -f target/site /tmp
+            # binary deployment to binary
+            - export FILENAME=$(mvn -B help:evaluate -Dexpression=project.build.finalName | grep -vi info) && rm -Rf * && mv -f /tmp/${FILENAME}.jar . && mv -f /tmp/${FILENAME}-sources.jar .
+            - git push origin :jar-${CIRCLE_BRANCH} || true
+            - git brach -D jar-${CIRCLE_BRANCH} || true
+            - git checkout --orphan jar-${CIRCLE_BRANCH}
+            - echo -e "# "${CIRCLE_PROJECT_REPONAME} > readme.md
+            - echo -e 'general:\n    branches:\n        ignore:\n            - /.*/\n' > circle.yml
+            - echo -e '*.*\n!.gitignore\n!circle.yml\n!*.jar\n' > .gitignore
+            - git add --all .
+            - git commit -m "current binary"
+            - git push origin jar-${CIRCLE_BRANCH}
+            # documentation deployment to gh-pages
+            - rm -Rf *
             - git push origin :gh-pages || true
             - git branch -D gh-pages || true
             - git checkout --orphan gh-pages
-            - rm -Rf *
             - mv -f /tmp/site/* .
-            - echo -e 'general:\n    branches:\n        ignore:\n            - gh-pages\n' > circle.yml
+            - echo -e 'general:\n    branches:\n        ignore:\n            - /.*/\n' > circle.yml
             - echo -e '*.*\n!.gitignore\n!circle.yml\n!*.htm*\n!*.css\n!*.js\n!*.png\n!*.gif\n!*.svg\n!*.json\n!*.g4\n' > .gitignore
             - git add --all .
             - git commit -m "current documentation"

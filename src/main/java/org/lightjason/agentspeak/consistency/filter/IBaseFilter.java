@@ -49,7 +49,7 @@ abstract class IBaseFilter implements IFilter
     protected IBaseFilter( final IPath... p_paths )
     {
         if ( p_paths != null )
-            Arrays.stream( p_paths ).forEach( m_paths::add );
+            m_paths.addAll( Arrays.asList( p_paths ) );
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class IBaseFilter implements IFilter
     protected IBaseFilter( final Collection<IPath> p_paths )
     {
         if ( p_paths != null )
-            p_paths.forEach( m_paths::add );
+            m_paths.addAll( p_paths );
     }
 
     /**

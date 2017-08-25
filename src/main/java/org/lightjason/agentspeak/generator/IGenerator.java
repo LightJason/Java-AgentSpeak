@@ -23,6 +23,8 @@
 
 package org.lightjason.agentspeak.generator;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
@@ -39,7 +41,8 @@ public interface IGenerator<T>
      * @return object
      * @note can return null which will be ignored than on multiple generation
      */
-    T generatesingle( final Object... p_data );
+    @Nullable
+    T generatesingle( @Nullable final Object... p_data );
 
     /**
      * generates a stream of objects
@@ -48,6 +51,7 @@ public interface IGenerator<T>
      * @param p_data any object data
      * @return object stream
      */
-    Stream<T> generatemultiple( final int p_number, final Object... p_data );
+    @Nonnull
+    Stream<T> generatemultiple( final int p_number, @Nullable final Object... p_data );
 
 }

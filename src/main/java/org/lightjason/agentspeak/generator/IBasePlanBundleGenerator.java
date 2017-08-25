@@ -31,6 +31,8 @@ import org.lightjason.agentspeak.configuration.IPlanBundleConfiguration;
 import org.lightjason.agentspeak.grammar.CParserPlanBundle;
 import org.lightjason.agentspeak.grammar.IASTVisitorPlanBundle;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Set;
@@ -57,7 +59,7 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
      * @param p_actions set with actions
      * @throws Exception thrown on error
      */
-    public IBasePlanBundleGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
+    public IBasePlanBundleGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
     {
         final IASTVisitorPlanBundle l_visitor = new CParserPlanBundle( p_actions ).parse( p_stream );
 
@@ -73,13 +75,14 @@ public abstract class IBasePlanBundleGenerator implements IPlanBundleGenerator
      *
      * @param p_configuration configuration
      */
-    protected IBasePlanBundleGenerator( final IPlanBundleConfiguration p_configuration )
+    protected IBasePlanBundleGenerator( @Nonnull final IPlanBundleConfiguration p_configuration )
     {
         m_configuration = p_configuration;
     }
 
+    @Nonnull
     @Override
-    public final Stream<IPlanBundle> generatemultiple( final int p_number, final Object... p_data )
+    public final Stream<IPlanBundle> generatemultiple( final int p_number, @Nullable final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()

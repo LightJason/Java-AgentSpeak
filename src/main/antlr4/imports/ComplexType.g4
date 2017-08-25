@@ -231,13 +231,12 @@ variable_evaluate :
 
 /**
  * clause represent a literal structure existing
- * atom, optional argument, optional annotations
+ * atom, optional argument
  **/
 literal :
     ( AT | STRONGNEGATION )?
     atom
     ( LEFTROUNDBRACKET termlist? RIGHTROUNDBRACKET )?
-    ( LEFTANGULARBRACKET literalset? RIGHTANGULARBRACKET )?
     ;
 
 /**
@@ -248,14 +247,7 @@ termlist :
     ;
 
 /**
- * specified list only with literals and empty clause
- **/
-literalset :
-    literal ( COMMA literal )*
-    ;
-
-/**
- * list with head-tail-annotation definition
+ * list with head-tail-notation definition
  **/
 variablelist :
     LEFTANGULARBRACKET
@@ -278,6 +270,13 @@ atom :
  **/
 variable :
     AT?
+    variableatom
+    ;
+
+/**
+ * name structure of a variable
+ **/
+variableatom:
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | UNDERSCORE | DIGIT | SLASH )*
     ;
@@ -298,6 +297,8 @@ binaryoperator :
     | ASSIGNDECREMENT
     | ASSIGNMULTIPLY
     | ASSIGNDIVIDE
+    | ASSIGNMODULO
+    | ASSIGNPOW
     ;
 
 /**
@@ -307,46 +308,15 @@ binaryoperator :
  * also definied constants are used
  **/
 number :
-    floatnumber
-    | integernumber
-    ;
-
-/**
- * floating-point number
- **/
-floatnumber :
     MINUS?
-    ( DIGIT+ DOT DIGIT+ | constant )
+    ( constant | digitsequence )
     ;
 
 /**
- * integer number
+ * number definition
  **/
-integernumber :
-    integernumber_positive
-    | integernumber_negative
-    ;
-
-/**
- * positive integer number
- **/
-integernumber_positive :
-    PLUS? DIGIT+
-    ;
-
-/**
- * negative integer number
- **/
-integernumber_negative :
-    MINUS DIGIT+
-    ;
-
-/**
- * boolean values
- **/
-logicalvalue :
-    TRUE
-    | FALSE
+digitsequence :
+    DIGIT+ ( DOT DIGIT+ )?
     ;
 
 /**
@@ -362,7 +332,19 @@ constant :
     | PROTON
     | NEUTRON
     | LIGHTSPEED
-    | INFINITY
+    | POSITIVEINFINITY
+    | NEGATIVEINFINITY
+    | MAXIMUMVALUE
+    | MINIMUMVALUE
+    | NAN
+    ;
+
+/**
+ * boolean values
+ **/
+logicalvalue :
+    TRUE
+    | FALSE
     ;
 
 /**

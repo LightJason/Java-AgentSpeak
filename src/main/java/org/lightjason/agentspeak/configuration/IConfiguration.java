@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.configuration;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 
 
@@ -42,6 +43,7 @@ public interface IConfiguration
      *
      * @return plan set
      */
+    @Nonnull
     Set<IPlan> plans();
 
     /**
@@ -49,5 +51,6 @@ public interface IConfiguration
      *
      * @return rule set
      */
+    @Nonnull
     Set<IRule> rules();
 }

@@ -59,7 +59,7 @@ public @interface IAgentAction
     enum EAccess
     {
         BLACKLIST,
-        WHITELIST;
+        WHITELIST
     }
 
 }

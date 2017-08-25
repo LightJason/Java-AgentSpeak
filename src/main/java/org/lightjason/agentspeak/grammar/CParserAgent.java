@@ -24,17 +24,16 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Set;
 
 
 /**
  * default agent parser
  */
-public final class CParserAgent extends IParserBase<IASTVisitorAgent, AgentLexer, AgentParser>
+public final class CParserAgent extends IBaseParser<IASTVisitorAgent, AgentLexer, AgentParser>
 {
     /**
      * set with actions
@@ -47,16 +46,17 @@ public final class CParserAgent extends IParserBase<IASTVisitorAgent, AgentLexer
      * @param p_actions agent actions
      * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserAgent( final Set<IAction> p_actions ) throws NoSuchMethodException
+    public CParserAgent( @Nonnull final Set<IAction> p_actions ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;
     }
 
+    @Nonnull
     @Override
     public final IASTVisitorAgent parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions, Collections.<IRule>emptySet() );
+        final IASTVisitorAgent l_visitor = new CASTVisitorAgent( m_actions );
         l_visitor.visit( this.parser( p_stream ).agent() );
         return l_visitor;
     }

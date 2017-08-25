@@ -24,10 +24,10 @@
 package org.lightjason.agentspeak.language.instantiable.plan.trigger;
 
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 
 
@@ -36,6 +36,10 @@ import java.text.MessageFormat;
  */
 public final class CTrigger implements ITrigger
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -4216265954626567558L;
     /**
      * variable number
      */
@@ -55,7 +59,7 @@ public final class CTrigger implements ITrigger
     /**
      * content hashcode
      */
-    private final int m_contenthash;
+    private final int m_structurehash;
 
     /**
      * ctor
@@ -64,16 +68,13 @@ public final class CTrigger implements ITrigger
      * @param p_literal literal with unified variables
      */
     @SuppressWarnings( "unchecked" )
-    public CTrigger( final EType p_event, final ILiteral p_literal )
+    public CTrigger( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )
     {
-        if ( ( p_event == null ) || ( p_literal == null ) )
-            throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "empty" ) );
-
         m_event = p_event;
         m_literal = p_literal;
         m_variables = CCommon.variablefrequency( p_literal ).size();
-        m_hashcode = m_event.hashCode() ^ m_literal.fqnfunctor().hashCode() ^ (int) p_literal.values().count() ^ (int) p_literal.annotations().count();
-        m_contenthash = m_event.hashCode() ^ m_literal.hashCode();
+        m_hashcode = m_event.hashCode() ^ m_literal.hashCode();
+        m_structurehash = m_event.hashCode() ^ m_literal.structurehash();
     }
 
     /**
@@ -83,7 +84,7 @@ public final class CTrigger implements ITrigger
      * @param p_literal trigger literal
      * @return trigger object
      */
-    public static ITrigger from( final EType p_event, final ILiteral p_literal )
+    public static ITrigger from( @Nonnull final EType p_event, @Nonnull final ILiteral p_literal )
     {
         return new CTrigger( p_event, p_literal );
     }
@@ -107,35 +108,37 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final EType getType()
+    public final EType type()
     {
         return m_event;
     }
 
     @Override
-    public final ILiteral getLiteral()
+    public final ILiteral literal()
     {
         return m_literal;
     }
 
     @Override
-    public final int getVariableSize()
+    public final int variablesize()
     {
         return m_variables;
     }
 
     @Override
-    public final int contenthash()
+    public final int structurehash()
     {
-        return m_contenthash;
+        return m_structurehash;
     }
 
+    @Nonnull
     @Override
     public final ITrigger shallowcopy( final IPath... p_prefix )
     {
         return new CTrigger( m_event, m_literal.shallowcopy( p_prefix ) );
     }
 
+    @Nonnull
     @Override
     public final ITrigger shallowcopysuffix()
     {
@@ -143,7 +146,7 @@ public final class CTrigger implements ITrigger
     }
 
     @Override
-    public final int compareTo( final ITrigger p_other )
+    public final int compareTo( @Nonnull final ITrigger p_other )
     {
         return p_other.toString().compareTo( this.toString() );
     }

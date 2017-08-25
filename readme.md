@@ -9,6 +9,9 @@ a Java 8 implementation has been build-up with parallel execution calls. The ver
 with a fuzzy-based logical calculus and grammar features like lambda expressions. Agent execution based on a mathematical structure
 to describe an optimizing process by a [finite-state-machine](https://en.wikipedia.org/wiki/Finite-state_machine)
 
+* [Contribution Guidelines](contributing.md)
+* [Code-of-Conduct](code_of_conduct.md)
+
 
 
 ## Requirements
@@ -63,7 +66,6 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 #### <a name="planinternal">Internals Constants</a>
  
 * The plan has got additional [constant variables](#variable), that are added in the context condition (values are calculated before plan execution is started)
-    * _Score_ returns the current score-value of the plan
     * _PlanFail_ stores the number of fail runs and _PlanFailRatio_ normalized value in [0,1]
     * _PlanSuccessful_ stores the number of successful runs and _PlanSuccessfulRatio_ normalized value in [0,1] 
     * _PlanRuns_ number of runs of the plan (fail + successful runs)
@@ -92,7 +94,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 
 * Annotations can modify a plan / rule behaviour to change runtime semantic
 * The following annotation can be used
-    * ```@Score``` adds an individual score value
+    * ```@Constant( AnyValue, 5 )``` creates the given constant variable
     * ```@Atomic``` the plan / rule cannot be fail, it returns always true (only the [actions](#action) can fail)
     * ```@Parallel``` all items will be run in parallel
  
@@ -147,8 +149,8 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 * If more than one ```action-term-annotation``` is needs to be added, they have to be ordered according to the rule: _First HOW, then WHAT_, e.g. ```@>>``` (parallel unification)
 * To annotate multiple actions/terms brackets ```(```,```)``` can be used. See the following examples
 * Examples
-    * ```@>>( foo(X), X > 1 ) && Score > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Score > 0.5```)
-    * ```>>foo(X) && X > 1 && Score > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
+    * ```@>>( foo(X), X > 1 ) && Value > 0.5``` (unify ```foo(X)``` and ```X > 1``` in parallel and if this results in a true statement check whether ```Value > 0.5```)
+    * ```>>foo(X) && X > 1 && Value > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
 
 
 ## <a name="graphic">Graphical Representation</a> 
@@ -159,46 +161,7 @@ to describe an optimizing process by a [finite-state-machine](https://en.wikiped
 ## Coding - Agent
 
 * Agent (ASL) can be defined as a logic program with [beliefs](#belief), [rules](#rule) and [plans](#plan)
+* The agent execution structure can be described as a _finite-state machine_ which execute the state changing based on an event processing
 * Agents must be run (triggered) by an external runtime e.g. from an outside system component
 * [Plans](#plan) can be bundeled in a _plan-bundle_ which is semantic equal to a class, plan-bundles can be included in an agent
-
-
-## <a name="cycle">Running Semantics - Agent-Cycle</a>
-
-Semantik definition of Jason see chapter 10.1 [AgentSpeak, p.207]
-
-1. execute perceiving on each beliefbase
-    * run _perceive_ on each beliefbase perceiving object
-    * add / delete beliefs in the beliefbase
-    * beliefbase events will generate
-
-2. if agent is in suspend state stop execution
-    
-3. run agent cycle
-
-    1. run update of defuzzifcation
-    2. collect plans, which match belief-events and goal-events
-    3. create plan execution list of instantiated plans
-    4. execute instantiated plans in parallel and apply the following rules for each body formula
-
-        1. if an item is an _action_ or _rule_ execute it immediatly
-        2. if an item is a _test goal_ check instantiated plans if a plan is found return true otherwise false
-        3. if an item is an _achievment goal_ and
-            * begins with ```!``` add a new trigger-event for the next cycle to instantiate a possible plan
-            * begins with ```!!``` the plan which is matched by the goal is executated immediately within the current plan context          
-        4. if an item is a belief-
-            * addition, unify the literal and add it into the beliefbase and create a trigger-event
-            * deletion, unify the literal and remove it from the beliefbase and create a trigger-event
-
-    5. if a plan is finished check plan result, if it is false / fail create a ```-!goal``` event 
-
-4. increment cycle value
-
-
-## <a name="devaction">Developing Buildin Actions & Components</a>
-
-* [ODE Solver](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ode/package-summary.html) see [example](http://commons.apache.org/proper/commons-math/userguide/ode.html)
-* [Curve Fitting](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/optim/package-summary.html)
-* [Genetic Algorithm](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/genetics/package-summary.html)
-* [Base Clustering](https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/ml/clustering/package-summary.html)
-* [FIPA communication interface](http://www.fipa.org/specs/fipa00061/index.html) (encapsulate message parsing) and [FIPA ontology](http://www.fipa.org/specs/fipa00086/index.html) definition
+* The [execution semantic](https://lightjason.github.io/knowledgebase/differencetojason/) in comparation to Jason (see chapter 10.1 [AgentSpeak, p.207])

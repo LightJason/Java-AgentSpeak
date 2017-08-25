@@ -23,49 +23,14 @@
 
 package org.lightjason.agentspeak.language;
 
-
 /**
  * interface of raw terms
  */
-public interface IRawTerm<T> extends ITerm
+public interface IRawTerm<T> extends ITerm, IRawStructure<IRawTerm<T>>
 {
-
     /**
-     * returns allocated state
-     *
-     * @return boolean flag
+     * empty raw term
      */
-    boolean allocated();
-
-    /**
-     * throws an illegal state exception
-     * iif the raw term is not allocated
-     *
-     * @param p_name optional name text for the error message
-     * @return object itself
-     *
-     * @throws IllegalStateException on non-allocated
-     */
-    IRawTerm<T> throwNotAllocated( final String... p_name ) throws IllegalStateException;
-
-    /**
-     * checkes assignable of the value
-     *
-     * @param p_class class
-     * @return assignable (on null always true)
-     */
-    boolean valueAssignableTo( final Class<?>... p_class );
-
-    /**
-     * throws an illegal argument exception
-     * iif the value is not assignable to the
-     * class
-     *
-     * @param p_class assignable class
-     * @return object itself
-     *
-     * @throws IllegalArgumentException on assignable error
-     */
-    IRawTerm<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException;
+    IRawTerm<?> EMPTY = new CRawTerm<>( null );
 
 }

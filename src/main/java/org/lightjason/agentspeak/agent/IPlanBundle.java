@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 
 
@@ -41,6 +42,7 @@ public interface IPlanBundle
      *
      * @return set with initial beliefs
      */
+    @Nonnull
     Set<ILiteral> initialbeliefs();
 
     /**
@@ -48,6 +50,7 @@ public interface IPlanBundle
      *
      * @return multimap plans
      */
+    @Nonnull
     Set<IPlan> plans();
 
     /**
@@ -55,6 +58,7 @@ public interface IPlanBundle
      *
      * @return rules
      */
+    @Nonnull
     Set<IRule> rules();
 
 }

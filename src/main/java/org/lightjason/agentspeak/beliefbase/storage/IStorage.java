@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.beliefbase.storage;
 
 import org.lightjason.agentspeak.agent.IAgent;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -37,7 +38,7 @@ import java.util.stream.Stream;
  * @tparam T agent type
  * @warning internal data structure must be thread-safe
  */
-public interface IStorage<N, M, T extends IAgent<?>>
+public interface IStorage<N, M>
 {
 
     /**
@@ -45,6 +46,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      *
      * @return multi-element stream
      */
+    @Nonnull
     Stream<N> streamMultiElements();
 
     /**
@@ -52,6 +54,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      *
      * @return single-element stream
      */
+    @Nonnull
     Stream<M> streamSingleElements();
 
     /**
@@ -60,7 +63,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsMultiElement( final String p_key );
+    boolean containsMultiElement( @Nonnull final String p_key );
 
     /**
      * contains a single-element
@@ -68,7 +71,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return boolean existing flag
      */
-    boolean containsSingleElement( final String p_key );
+    boolean containsSingleElement( @Nonnull final String p_key );
 
     /**
      * puts a multi-element into the storage
@@ -77,7 +80,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value multi-element
      * @return boolean if the element can be stored
      */
-    boolean putMultiElement( final String p_key, final N p_value );
+    boolean putMultiElement( @Nonnull final String p_key, final N p_value );
 
     /**
      * puts a single-element into the storage
@@ -86,7 +89,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value single-element
      * @return boolean if the element can be stored
      */
-    boolean putSingleElement( final String p_key, final M p_value );
+    boolean putSingleElement( @Nonnull final String p_key, final M p_value );
 
     /**
      * puts a single-element if it is absent
@@ -95,7 +98,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value single-element
      * @return boolean if the element can be stored
      */
-    boolean putSingleElementIfAbsent( final String p_key, final M p_value );
+    boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value );
 
     /**
      * removes a multi-element from the storage
@@ -104,7 +107,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_value multi-element
      * @return boolean if the element can removed
      */
-    boolean removeMultiElement( final String p_key, final N p_value );
+    boolean removeMultiElement( @Nonnull final String p_key, final N p_value );
 
     /**
      * removes a single-element from the storage
@@ -112,7 +115,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return boolean if the element can be removed
      */
-    boolean removeSingleElement( final String p_key );
+    boolean removeSingleElement( @Nonnull final String p_key );
 
     /**
      * returns a single-element by the name
@@ -120,7 +123,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key key
      * @return single-element or null
      */
-    M getSingleElement( final String p_key );
+    M getSingleElement( @Nonnull final String p_key );
 
     /**
      * returns a single-element by the name
@@ -129,7 +132,7 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_default default element
      * @return single-element or the default element
      */
-    M getSingleElementOrDefault( final String p_key, final M p_default );
+    M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default );
 
     /**
      * returns a collection of multi-elementy by name
@@ -137,7 +140,8 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_key name
      * @return collection of multi-elements
      */
-    Collection<N> getMultiElement( final String p_key );
+    @Nonnull
+    Collection<N> getMultiElement( @Nonnull final String p_key );
 
     /**
      * clears all elements
@@ -157,7 +161,8 @@ public interface IStorage<N, M, T extends IAgent<?>>
      * @param p_agent agent which calls the update
      * @return agent
      */
-    T update( final T p_agent );
+    @Nonnull
+    IAgent<?> update( @Nonnull final IAgent<?> p_agent );
 
     /**
      * number of multi elements

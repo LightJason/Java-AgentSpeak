@@ -25,22 +25,21 @@ package org.lightjason.agentspeak.configuration;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
-import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
-import org.lightjason.agentspeak.agent.unify.CUnifier;
-import org.lightjason.agentspeak.beliefbase.CBeliefbasePersistent;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.beliefbase.CBeliefbase;
 import org.lightjason.agentspeak.beliefbase.storage.CMultiStorage;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
-import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.IAggregation;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,7 +56,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * logger
      */
-    protected static final Logger LOGGER = CCommon.logger( CDefaultAgentConfiguration.class );
+    protected static final Logger LOGGER = CCommon.logger( IAgentConfiguration.class );
     /**
      * name of the root beliefbase
      */
@@ -70,10 +69,6 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * initial goal trigger
      */
     protected final ITrigger m_initialgoal;
-    /**
-     * instance of the aggregate function
-     */
-    protected final IAggregation m_aggregation;
     /**
      * instance of agent plans
      */
@@ -89,7 +84,7 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
     /**
      * fuzzy operator
      */
-    protected final IFuzzy<Boolean, T> m_fuzzy;
+    protected final IFuzzyBundle<Boolean> m_fuzzy;
     /**
      * rules
      */
@@ -98,19 +93,6 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
 
     /**
      * ctor
-     */
-    @SuppressWarnings( "unchecked" )
-    public CDefaultAgentConfiguration()
-    {
-        this(
-            new CBoolFuzzy<>(), Collections.emptyList(),
-            Collections.emptySet(), Collections.emptySet(),
-            null, new CUnifier(), IAggregation.EMPTY
-        );
-    }
-
-    /**
-     * ctor
      *
      * @param p_fuzzy fuzzy operator
      * @param p_initalbeliefs set with initial beliefs
@@ -118,53 +100,50 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
      * @param p_rules rules
      * @param p_initialgoal initial goal
      * @param p_unifier unifier component
-     * @param p_aggregation aggregation function
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+                                       @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
+                                       @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier
     )
     {
-        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, p_aggregation, IVariableBuilder.EMPTY );
+        this( p_fuzzy, p_initalbeliefs, p_plans, p_rules, p_initialgoal, p_unifier, IVariableBuilder.EMPTY );
     }
 
     /**
      * ctor
      *
      * @param p_fuzzy fuzzy operator
-     * @param p_initalbeliefs set with initial beliefs
+     * @param p_initialbeliefs set with initial beliefs
      * @param p_plans plans
      * @param p_rules rules
      * @param p_initialgoal initial goal
-     * @param p_aggregation aggregation function
      * @param p_unifier unifier component
      * @param p_variablebuilder variable builder
      */
-    public CDefaultAgentConfiguration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                       final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                       final ILiteral p_initialgoal, final IUnifier p_unifier, final IAggregation p_aggregation,
-                                       final IVariableBuilder p_variablebuilder
+    public CDefaultAgentConfiguration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initialbeliefs,
+                                       @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
+                                       final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                       @Nonnull final IVariableBuilder p_variablebuilder
     )
     {
-        m_unifier = p_unifier;
-        m_aggregation = p_aggregation;
         m_fuzzy = p_fuzzy;
+        m_unifier = p_unifier;
         m_variablebuilder = p_variablebuilder;
-
-        m_initialbeliefs = Collections.unmodifiableCollection( p_initalbeliefs );
 
         m_plans = Collections.unmodifiableSet( p_plans );
         m_rules = Collections.unmodifiableSet( p_rules );
+        m_initialbeliefs = Collections.unmodifiableCollection( p_initialbeliefs );
         m_initialgoal = p_initialgoal != null ? CTrigger.from( ITrigger.EType.ADDGOAL, p_initialgoal ) : null;
 
         LOGGER.info( MessageFormat.format( "create agent configuration: {0}", this ) );
     }
 
+    @Nonnull
     @Override
-    public IView<T> beliefbase()
+    public IView beliefbase()
     {
-        final IView<T> l_beliefbase = new CBeliefbasePersistent<T>( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
-        m_initialbeliefs.parallelStream().forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
+        final IView l_beliefbase = new CBeliefbase( new CMultiStorage<>() ).create( BELIEFBASEROOTNAME );
+        m_initialbeliefs.forEach( i -> l_beliefbase.add( i.shallowcopy() ) );
 
         // clear all events of the initial beliefs
         l_beliefbase.trigger();
@@ -172,48 +151,49 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         return l_beliefbase;
     }
 
+    @Nullable
     @Override
     public final ITrigger initialgoal()
     {
         return m_initialgoal;
     }
 
-    @Override
-    public final IAggregation aggregation()
-    {
-        return m_aggregation;
-    }
-
+    @Nonnull
     @Override
     public final IUnifier unifier()
     {
         return m_unifier;
     }
 
+    @Nonnull
     @Override
     public final IVariableBuilder variablebuilder()
     {
         return m_variablebuilder;
     }
 
+    @Nonnull
     @Override
-    public final IFuzzy<Boolean, T> fuzzy()
+    public final IFuzzyBundle<Boolean> fuzzy()
     {
         return m_fuzzy;
     }
 
+    @Nonnull
     @Override
     public final Collection<ILiteral> initialbeliefs()
     {
         return m_initialbeliefs;
     }
 
+    @Nonnull
     @Override
     public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
+    @Nonnull
     @Override
     public final Set<IRule> rules()
     {
@@ -235,10 +215,9 @@ public class CDefaultAgentConfiguration<T extends IAgent<?>> implements IAgentCo
         ).trim();
 
         return MessageFormat.format(
-            "{0} ( unifier: {1} / aggregation {2} / {3} {4} )",
+            "{0} ( unifier: {1} / {2} {3} )",
             super.toString(),
             m_unifier,
-            m_aggregation,
             m_fuzzy,
             l_elements.isEmpty() ? "" : l_elements
         ).trim();

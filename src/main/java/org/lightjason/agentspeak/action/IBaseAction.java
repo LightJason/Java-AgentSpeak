@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 
@@ -35,6 +35,15 @@ import java.util.stream.Stream;
  */
 public abstract class IBaseAction implements IAction
 {
+    /**
+     * logger
+     */
+    protected static final Logger LOGGER = org.lightjason.agentspeak.common.CCommon.logger( IAction.class );
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1706803039397374484L;
+
 
     @Override
     public final int hashCode()
@@ -54,16 +63,11 @@ public abstract class IBaseAction implements IAction
         return this.name().toString();
     }
 
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of( this ) );
-    }
-
+    @Nonnull
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Stream.<IVariable<?>>empty();
+        return Stream.empty();
     }
 
 }

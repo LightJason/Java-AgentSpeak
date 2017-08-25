@@ -23,6 +23,10 @@
 
 package org.lightjason.agentspeak.common;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 
@@ -31,8 +35,223 @@ import java.util.stream.Stream;
  *
  * @note implement equals with String object, so a path object can be checked to a String
  */
-public interface IPath extends Comparable<IPath>
+public interface IPath extends Serializable, Comparable<IPath>
 {
+    /**
+     * default seperator
+     */
+    String DEFAULTSEPERATOR = "/";
+
+    /**
+     * empty path
+     **/
+    IPath EMPTY = new IPath()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -8529008893337445887L;
+
+        @Nonnull
+        @Override
+        public final IPath append( @Nonnull final IPath p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath append( @Nonnull final String p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath remove( final int p_index )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath remove( final int p_start, final int p_end )
+        {
+            return this;
+        }
+
+        @Override
+        public final boolean endswith( @Nonnull final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean empty()
+        {
+            return true;
+        }
+
+        @Nonnull
+        @Override
+        public final String get( final int p_index )
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final String path( final String p_separator )
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final String path()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final String separator()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath separator( @Nonnull final String p_separator )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath lower()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath upper()
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath subpath( final int p_fromindex )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath subpath( final int p_fromindex, final int p_toindex )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final String suffix()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushback( @Nonnull final IPath p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushback( @Nonnull final String p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushfront( @Nonnull final String p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath pushfront( @Nonnull final IPath p_path )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final String removesuffix()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath reverse()
+        {
+            return this;
+        }
+
+        @Override
+        public final int size()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean startswith( final IPath p_path )
+        {
+            return false;
+        }
+
+        @Override
+        public final boolean startswith( final String p_path )
+        {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<String> stream()
+        {
+            return Stream.empty();
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final IPath p_path )
+        {
+            return Integer.compare( p_path.hashCode(), this.hashCode() );
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        @SuppressFBWarnings( "EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" )
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null )
+                   && (
+                       ( ( p_object instanceof IPath ) && ( this.hashCode() == p_object.hashCode() ) )
+                       || ( ( p_object instanceof String ) && ( this.path().hashCode() == p_object.hashCode() ) )
+                   );
+        }
+    };
 
     /**
      * appends a path at the current and returns a new object
@@ -40,7 +259,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return new path
      */
-    IPath append( final IPath p_path );
+    @Nonnull
+    IPath append( @Nonnull final IPath p_path );
 
     /**
      * appends a string at the current path and returns the new object
@@ -48,7 +268,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path string with path
      * @return new path
      */
-    IPath append( final String p_path );
+    @Nonnull
+    IPath append( @Nonnull final String p_path );
 
     /**
      * removes an element
@@ -56,6 +277,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_index index position
      * @return return the changed object
      */
+    @Nonnull
     IPath remove( final int p_index );
 
     /**
@@ -65,6 +287,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_end end index (exclusive)
      * @return return the changed object
      */
+    @Nonnull
     IPath remove( final int p_start, final int p_end );
 
     /**
@@ -73,14 +296,14 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean endsWith( final IPath p_path );
+    boolean endswith( @Nonnull final IPath p_path );
 
     /**
      * check if the path is empty
      *
      * @return empty flag
      */
-    boolean isEmpty();
+    boolean empty();
 
     /**
      * returns an part of the path
@@ -88,6 +311,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_index index position (negativ index is element from the end)
      * @return element
      */
+    @Nonnull
     String get( final int p_index );
 
     /**
@@ -96,21 +320,24 @@ public interface IPath extends Comparable<IPath>
      * @param p_separator separator
      * @return string path
      */
-    String getPath( final String p_separator );
+    @Nonnull
+    String path( final String p_separator );
 
     /**
      * returns the full path as string
      *
      * @return string path
      */
-    String getPath();
+    @Nonnull
+    String path();
 
     /**
      * returns the separator
      *
      * @return separator
      */
-    String getSeparator();
+    @Nonnull
+    String separator();
 
     /**
      * sets the separator
@@ -118,21 +345,24 @@ public interface IPath extends Comparable<IPath>
      * @param p_separator separator
      * @return path object
      */
-    IPath setSeparator( final String p_separator );
+    @Nonnull
+    IPath separator( @Nonnull final String p_separator );
 
     /**
      * changes all elements to lower-case
      *
      * @return object
      */
-    IPath toLower();
+    @Nonnull
+    IPath lower();
 
     /**
      * changes all elements to uppercase
      *
      * @return object
      */
-    IPath toUpper();
+    @Nonnull
+    IPath upper();
 
     /**
      * creates a path of the start index until the end
@@ -140,7 +370,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_fromindex start index
      * @return path
      */
-    IPath getSubPath( final int p_fromindex );
+    @Nonnull
+    IPath subpath( final int p_fromindex );
 
     /**
      * creates a path of the indices
@@ -149,14 +380,16 @@ public interface IPath extends Comparable<IPath>
      * @param p_toindex end index (exclusive) / negative values from the end
      * @return path
      */
-    IPath getSubPath( final int p_fromindex, final int p_toindex );
+    @Nonnull
+    IPath subpath( final int p_fromindex, final int p_toindex );
 
     /**
      * returns the last part of the path
      *
      * @return string
      */
-    String getSuffix();
+    @Nonnull
+    String suffix();
 
     /**
      * adds a path at the end
@@ -164,7 +397,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return return the changed object
      */
-    IPath pushback( final IPath p_path );
+    @Nonnull
+    IPath pushback( @Nonnull final IPath p_path );
 
     /**
      * adds a path at the end
@@ -172,7 +406,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path string path
      * @return return the changed object
      */
-    IPath pushback( final String p_path );
+    @Nonnull
+    IPath pushback( @Nonnull final String p_path );
 
     /**
      * adds a path at the front
@@ -180,7 +415,8 @@ public interface IPath extends Comparable<IPath>
      * @param p_path string path
      * @return return the changed object
      */
-    IPath pushfront( final String p_path );
+    @Nonnull
+    IPath pushfront( @Nonnull final String p_path );
 
     /**
      * adds a path to the front of the path
@@ -188,20 +424,23 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return return the changed object
      */
-    IPath pushfront( final IPath p_path );
+    @Nonnull
+    IPath pushfront( @Nonnull final IPath p_path );
 
     /**
      * remove the suffix from the path
      *
      * @return last item of the path
      */
-    String removeSuffix();
+    @Nonnull
+    String removesuffix();
 
     /**
      * reverse path
      *
      * @return return the changed object
      */
+    @Nonnull
     IPath reverse();
 
     /**
@@ -217,7 +456,7 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean startsWith( final IPath p_path );
+    boolean startswith( final IPath p_path );
 
     /**
      * check of a path starts with another path
@@ -225,20 +464,14 @@ public interface IPath extends Comparable<IPath>
      * @param p_path path
      * @return boolean
      */
-    boolean startsWith( final String p_path );
+    boolean startswith( final String p_path );
 
     /**
      * stream over elements
      *
      * @return sequential stream
      */
+    @Nonnull
     Stream<String> stream();
-
-    /**
-     * parallel stream over elements
-     *
-     * @return parallel stream
-     */
-    Stream<String> parallelStream();
 
 }

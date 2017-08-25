@@ -113,16 +113,18 @@ annotation_atom :
  * annotation (with parameter)
  **/
 annotation_literal :
-    AT annotation_numeric_literal
+    AT annotation_value_literal
     ;
 
 /**
- * annotations (with numerical parameter)
+ * annotations (with any parameter)
  **/
-annotation_numeric_literal :
-    SCORE
+annotation_value_literal :
+    CONSTANT
     LEFTROUNDBRACKET
-    number
+    variableatom
+    COMMA
+    ( number | string )
     RIGHTROUNDBRACKET
     ;
 
@@ -172,6 +174,7 @@ body_formula :
     | deconstruct_expression
     | assignment_expression
     | unary_expression
+    | binary_expression
 
     | lambda
     ;
@@ -246,6 +249,15 @@ assignment_expression_multivariable :
 unary_expression :
     variable
     unaryoperator
+    ;
+
+/**
+ * binary expression
+ **/
+binary_expression :
+    variable
+    binaryoperator
+    ( variable | number )
     ;
 
 /**

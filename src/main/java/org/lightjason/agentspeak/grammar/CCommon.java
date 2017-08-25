@@ -29,10 +29,10 @@ import org.lightjason.agentspeak.language.execution.expression.EOperator;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 import org.lightjason.agentspeak.language.execution.expression.logical.CBinary;
 
+import javax.annotation.Nonnull;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,7 +59,12 @@ public final class CCommon
                 "gravity",
                 "electron",
                 "neutron",
-                "proton"
+                "proton",
+                "positiveinfinity",
+                "negativeinfinity",
+                "maximumvalue",
+                "minimumvalue",
+                "nan"
             ),
 
             Stream.of(
@@ -71,7 +76,12 @@ public final class CCommon
                 6.67408e-11,
                 9.10938356e-31,
                 1674927471214e-27,
-                1.6726219e-27
+                1.6726219e-27,
+                Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY,
+                Double.MAX_VALUE,
+                Double.MIN_VALUE,
+                Double.NaN
             ),
 
             AbstractMap.SimpleImmutableEntry::new
@@ -82,8 +92,7 @@ public final class CCommon
      * ctor
      */
     private CCommon()
-    {
-    }
+    {}
 
     /**
      * creates a logical expression concationation with single operator
@@ -93,20 +102,20 @@ public final class CCommon
      * @param p_righthandside right-hand-side expressions
      * @return concat expression
      */
-    static IExpression createLogicalBinaryExpression( final EOperator p_operator, final IExpression p_lefthandside,
-                                                      final Collection<IExpression> p_righthandside
+    @Nonnull
+    static IExpression createLogicalBinaryExpression( @Nonnull final EOperator p_operator,  @Nonnull final IExpression p_lefthandside,
+                                                      @Nonnull final Collection<IExpression> p_righthandside
     )
     {
         if ( ( !p_operator.isBinary() ) || ( !p_operator.isLogical() ) )
             throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( CCommon.class, "notbinarylogicoperator", p_operator ) );
 
-        final List<IExpression> l_expression = new LinkedList<>();
-        l_expression.add( p_lefthandside );
-        p_righthandside.forEach( l_expression::add );
+        final List<IExpression> l_expression = Stream.concat( Stream.of( p_lefthandside ), p_righthandside.stream() ).collect( Collectors.toList() );
 
         // only left-hand-side is existing
         if ( l_expression.size() == 1 )
             return l_expression.get( 0 );
+
 
         // otherwise creare concat expression
         while ( l_expression.size() > 1 )

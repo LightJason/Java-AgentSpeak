@@ -25,12 +25,13 @@ package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 import org.lightjason.agentspeak.language.variable.IVariableEvaluate;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -41,6 +42,10 @@ import java.util.stream.Stream;
  */
 public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEvaluate>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 4338602284287736836L;
 
     /**
      * ctor
@@ -48,7 +53,7 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
      * @param p_type value of the achievment-goal
      * @param p_immediately immediately execution
      */
-    public CAchievementGoalVariable( final IVariableEvaluate p_type, final boolean p_immediately )
+    public CAchievementGoalVariable( @Nonnull final IVariableEvaluate p_type, final boolean p_immediately )
     {
         super( p_type, p_immediately );
     }
@@ -59,10 +64,10 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
         return MessageFormat.format( "{0}{1}", m_immediately ? "!!" : "!", m_value );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return p_context.agent().trigger(
             CTrigger.from(
@@ -73,9 +78,10 @@ public final class CAchievementGoalVariable extends IAchievementGoal<IVariableEv
         );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {
-        return m_value.variables();
+        return m_value == null ? Stream.empty() :  m_value.variables();
     }
 }

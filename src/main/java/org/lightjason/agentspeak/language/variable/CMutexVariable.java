@@ -25,6 +25,9 @@ package org.lightjason.agentspeak.language.variable;
 
 import org.lightjason.agentspeak.common.IPath;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * thread-safe variable
@@ -33,6 +36,10 @@ import org.lightjason.agentspeak.common.IPath;
  */
 public class CMutexVariable<T> extends CVariable<T>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 9040218112516254186L;
 
     /**
      * ctor
@@ -71,11 +78,12 @@ public class CMutexVariable<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CMutexVariable( final IPath p_functor, final T p_value )
+    public CMutexVariable( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
 
+    @Nonnull
     @Override
     public final synchronized IVariable<T> set( final T p_value )
     {
@@ -88,16 +96,18 @@ public class CMutexVariable<T> extends CVariable<T>
         return super.raw();
     }
 
+    @Nonnull
     @Override
-    public final synchronized IVariable<T> throwNotAllocated() throws IllegalStateException
+    public final synchronized IVariable<T> thrownotallocated() throws IllegalStateException
     {
-        return super.throwNotAllocated();
+        return super.thrownotallocated();
     }
 
+    @Nonnull
     @Override
-    public final synchronized IVariable<T> throwValueNotAssignableTo( final Class<?>... p_class ) throws IllegalArgumentException
+    public final synchronized IVariable<T> throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
     {
-        return super.throwValueNotAssignableTo( p_class );
+        return super.throwvaluenotassignableto( p_class );
     }
 
     @Override
@@ -107,9 +117,9 @@ public class CMutexVariable<T> extends CVariable<T>
     }
 
     @Override
-    public final synchronized boolean valueAssignableTo( final Class<?>... p_class )
+    public final synchronized boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
-        return super.valueAssignableTo( p_class );
+        return super.valueassignableto( p_class );
     }
 
     @Override
@@ -118,19 +128,20 @@ public class CMutexVariable<T> extends CVariable<T>
         return super.toString();
     }
 
+    @Nonnull
     @Override
-    public IVariable<T> shallowcopy( final IPath... p_prefix )
+    public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CMutexVariable<T>( m_functor, m_value )
-               : new CMutexVariable<T>( p_prefix[0].append( m_functor ), m_value );
+               ? new CMutexVariable<>( m_functor, m_value )
+               : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value );
     }
 
-
+    @Nonnull
     @Override
     public IVariable<T> shallowcopysuffix()
     {
-        return new CMutexVariable<T>( m_functor.getSuffix(), m_value );
+        return new CMutexVariable<>( m_functor.suffix(), m_value );
     }
 
     @Override

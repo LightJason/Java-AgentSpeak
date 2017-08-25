@@ -93,13 +93,13 @@
         </module>
 
         <module name = "AnonInnerLengthCheck">
-            <property name = "max" value = "35" />
+            <property name = "max" value = "215" />
         </module>
 
         <module name = "AnnotationUseStyle" />
 
         <module name = "AnonInnerLength">
-            <property name = "max" value = "50" />
+            <property name = "max" value = "215" />
         </module>
 
         <!-- <module name="ArrayTrailingComma"/> -->
@@ -134,7 +134,7 @@
         <!-- <module name = "CatchParameterName" /> -->
 
         <module name = "ClassDataAbstractionCoupling">
-            <property name = "max" value = "45" />
+            <property name = "max" value = "65" />
         </module>
 
         <!-- <module name="ClassFanOutComplexity"/> -->
@@ -338,7 +338,7 @@
         <module name = "MutableException" />
 
         <module name = "NPathComplexity">
-            <property name = "max" value = "275" />
+            <property name = "max" value = "475" />
         </module>
 
         <!-- <module name="NeedBraces">
@@ -408,8 +408,9 @@
             <property name = "checkMethods" value = "true" />
         </module>
 
-        <module name = "ReturnCount">
-            <property name = "max" value = "20" />
+        <module name="ReturnCount">
+            <property name="max" value="20"/>
+            <property name="maxForVoid" value="20"/>
         </module>
 
         <module name = "RightCurly">

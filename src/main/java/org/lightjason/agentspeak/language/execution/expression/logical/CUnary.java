@@ -30,9 +30,10 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.expression.EOperator;
 import org.lightjason.agentspeak.language.execution.expression.IBaseUnary;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +44,10 @@ import java.util.List;
  */
 public final class CUnary extends IBaseUnary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -5203681823131507779L;
 
     /**
      * ctor
@@ -50,29 +55,28 @@ public final class CUnary extends IBaseUnary
      * @param p_operator operator
      * @param p_expression expression
      */
-    public CUnary( final EOperator p_operator, final IExpression p_expression )
+    public CUnary( @Nonnull final EOperator p_operator, @Nonnull final IExpression p_expression )
     {
         super( p_operator, p_expression );
         if ( !m_operator.isLogical() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "operator", m_operator ) );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( ( !m_expression.execute( p_context, p_parallel, Collections.<ITerm>emptyList(), l_argument, Collections.<ITerm>emptyList() ).value() )
-             || ( l_argument.size() != 1 ) )
+        final boolean l_result = m_expression.execute( p_parallel, p_context, Collections.<ITerm>emptyList(), l_argument ).value();
+        if ( l_argument.size() != 1 )
             return CFuzzyValue.from( false );
-
 
         switch ( m_operator )
         {
             case NEGATION:
                 p_return.add( CRawTerm.from(
-                    !l_argument.get( 0 ).<Boolean>raw()
+                    !( l_result && l_argument.get( 0 ).<Boolean>raw() )
                 ) );
                 return CFuzzyValue.from( true );
 

@@ -26,6 +26,9 @@ package org.lightjason.agentspeak.action;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.IExecution;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 
 /**
  * external action interface
@@ -33,10 +36,16 @@ import org.lightjason.agentspeak.language.execution.IExecution;
 public interface IAction extends IExecution
 {
     /**
+     * serial id
+     */
+    long serialVersionUID = -6374480398439703170L;
+
+    /**
      * returns the name with path of the action
      *
      * @return path (literal functor)
      */
+    @Nonnull
     IPath name();
 
     /**
@@ -44,6 +53,10 @@ public interface IAction extends IExecution
      *
      * @return number of minimal arguments
      */
-    int minimalArgumentNumber();
+    @Nonnegative
+    default int minimalArgumentNumber()
+    {
+        return 0;
+    }
 
 }

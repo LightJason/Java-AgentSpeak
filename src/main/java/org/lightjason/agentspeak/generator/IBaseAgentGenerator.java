@@ -27,23 +27,23 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.action.IAction;
 import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.agent.IPlanBundle;
-import org.lightjason.agentspeak.agent.fuzzy.CBoolFuzzy;
-import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
-import org.lightjason.agentspeak.agent.unify.CUnifier;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.configuration.CDefaultAgentConfiguration;
 import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.grammar.CParserAgent;
 import org.lightjason.agentspeak.grammar.IASTVisitorAgent;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
-import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
-import org.lightjason.agentspeak.language.score.IAggregation;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,10 +58,6 @@ import java.util.stream.Stream;
 public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgentGenerator<T>
 {
     /**
-     * unification
-     */
-    protected static final IUnifier UNIFIER = new CUnifier();
-    /**
      * configuration of an agent
      */
     protected final IAgentConfiguration<T> m_configuration;
@@ -72,17 +68,12 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
-     * @param p_aggregation aggregation function
      * @throws Exception thrown on error
      */
     @SuppressWarnings( "unchecked" )
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions, final IAggregation p_aggregation )
-    throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions ) throws Exception
     {
-        this( p_stream, p_actions, p_aggregation,
-              Collections.<IPlanBundle>emptySet(),
-              IVariableBuilder.EMPTY
-        );
+        this( p_stream, p_actions, Collections.emptySet(), IVariableBuilder.EMPTY );
     }
 
     /**
@@ -90,17 +81,13 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
-     * @param p_aggregation aggregation function
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation,
-                                final IVariableBuilder p_variablebuilder
-    )
-    throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions, @Nonnull final IVariableBuilder p_variablebuilder )
+        throws Exception
     {
-        this( p_stream, p_actions, p_aggregation, Collections.<IPlanBundle>emptySet(), p_variablebuilder );
+        this( p_stream, p_actions, Collections.emptySet(), p_variablebuilder );
     }
 
     /**
@@ -108,25 +95,21 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @param p_stream input stream
      * @param p_actions set with action
-     * @param p_aggregation aggregation function
      * @param p_planbundle set with planbundles
      * @param p_variablebuilder variable builder (can be set to null)
      * @throws Exception thrown on error
      */
-    public IBaseAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions,
-                                final IAggregation p_aggregation, final Set<IPlanBundle> p_planbundle,
-                                final IVariableBuilder p_variablebuilder
-    )
-    throws Exception
+    public IBaseAgentGenerator( @Nonnull final InputStream p_stream, @Nonnull final Set<IAction> p_actions,
+                                @Nonnull final Set<IPlanBundle> p_planbundle, @Nonnull final IVariableBuilder p_variablebuilder ) throws Exception
     {
         final IASTVisitorAgent l_visitor = new CParserAgent( p_actions ).parse( p_stream );
         m_configuration = this.configuration(
-            new CBoolFuzzy<>(),
+            DEFAULTFUZZYBUNDLE,
 
             Stream.concat(
                 l_visitor.initialbeliefs().stream(),
-                p_planbundle.parallelStream().flatMap( i -> i.initialbeliefs().stream() )
-            ).collect( Collectors.toSet() ),
+                p_planbundle.stream().flatMap( i -> i.initialbeliefs().stream() )
+            ).collect( Collectors.toCollection( LinkedHashSet::new ) ),
 
             Stream.concat(
                 l_visitor.plans().stream(),
@@ -140,9 +123,7 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
 
             l_visitor.initialgoal(),
 
-            UNIFIER,
-
-            p_aggregation,
+            DEFAULTUNIFIER,
 
             p_variablebuilder
         );
@@ -153,11 +134,10 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
      *
      * @return configuration object
      */
-    protected IAgentConfiguration<T> configuration( final IFuzzy<Boolean, T> p_fuzzy, final Collection<ILiteral> p_initalbeliefs,
-                                                    final Set<IPlan> p_plans, final Set<IRule> p_rules,
-                                                    final ILiteral p_initialgoal, final IUnifier p_unifier,
-                                                    final IAggregation p_aggregation,
-                                                    final IVariableBuilder p_variablebuilder )
+    protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,
+                                                    @Nonnull final Set<IPlan> p_plans, @Nonnull final Set<IRule> p_rules,
+                                                    @Nullable final ILiteral p_initialgoal, @Nonnull final IUnifier p_unifier,
+                                                    @Nonnull final IVariableBuilder p_variablebuilder )
     {
         return new CDefaultAgentConfiguration<>(
             p_fuzzy,
@@ -166,13 +146,13 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
             p_rules,
             p_initialgoal,
             p_unifier,
-            p_aggregation,
             p_variablebuilder
         );
     }
 
+    @Nonnull
     @Override
-    public final Stream<T> generatemultiple( final int p_number, final Object... p_data )
+    public final Stream<T> generatemultiple( final int p_number, @Nullable final Object... p_data )
     {
         return IntStream.range( 0, p_number )
                     .parallel()

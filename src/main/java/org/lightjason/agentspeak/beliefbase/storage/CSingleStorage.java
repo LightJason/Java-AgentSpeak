@@ -23,10 +23,11 @@
 
 package org.lightjason.agentspeak.beliefbase.storage;
 
-import org.lightjason.agentspeak.agent.IAgent;
-
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -43,12 +44,12 @@ import java.util.stream.Stream;
  * @tparam M single-element type
  * @tparam T agent type
  */
-public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorage<N, M, T>
+public final class CSingleStorage<N, M> extends IBaseStorage<N, M>
 {
     /**
      * map with elements
      **/
-    private final Map<String, N> m_multielements = new ConcurrentHashMap<>();
+    private final Map<String, N> m_multielements = Collections.synchronizedMap( new LinkedHashMap<>() );
     /**
      * map with single elements
      **/
@@ -62,12 +63,14 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
         super();
     }
 
+    @Nonnull
     @Override
     public final Stream<N> streamMultiElements()
     {
         return m_multielements.values().stream();
     }
 
+    @Nonnull
     @Override
     public final Stream<M> streamSingleElements()
     {
@@ -75,61 +78,62 @@ public final class CSingleStorage<N, M, T extends IAgent<?>> extends IBaseStorag
     }
 
     @Override
-    public final boolean containsMultiElement( final String p_key )
+    public final boolean containsMultiElement( @Nonnull final String p_key )
     {
         return m_multielements.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsSingleElement( final String p_key )
+    public final boolean containsSingleElement( @Nonnull final String p_key )
     {
         return m_singleelements.containsKey( p_key );
     }
 
     @Override
-    public final boolean putMultiElement( final String p_key, final N p_value )
+    public final boolean putMultiElement( @Nonnull final String p_key, final N p_value )
     {
         return !p_value.equals( m_multielements.put( p_key, p_value ) );
     }
 
     @Override
-    public final boolean putSingleElement( final String p_key, final M p_value )
+    public final boolean putSingleElement( @Nonnull final String p_key, final M p_value )
     {
         return !p_value.equals( m_singleelements.put( p_key, p_value ) );
     }
 
     @Override
-    public final boolean putSingleElementIfAbsent( final String p_key, final M p_value )
+    public final boolean putSingleElementIfAbsent( @Nonnull final String p_key, final M p_value )
     {
         return !p_value.equals( m_singleelements.putIfAbsent( p_key, p_value ) );
     }
 
     @Override
-    public final boolean removeMultiElement( final String p_key, final N p_value )
+    public final boolean removeMultiElement( @Nonnull final String p_key, final N p_value )
     {
         return p_value.equals( m_multielements.remove( p_key ) );
     }
 
     @Override
-    public final boolean removeSingleElement( final String p_key )
+    public final boolean removeSingleElement( @Nonnull final String p_key )
     {
         return m_singleelements.remove( p_key ) != null;
     }
 
     @Override
-    public final M getSingleElement( final String p_key )
+    public final M getSingleElement( @Nonnull final String p_key )
     {
         return m_singleelements.get( p_key );
     }
 
     @Override
-    public final M getSingleElementOrDefault( final String p_key, final M p_default )
+    public final M getSingleElementOrDefault( @Nonnull final String p_key, final M p_default )
     {
         return m_singleelements.getOrDefault( p_key, p_default );
     }
 
+    @Nonnull
     @Override
-    public final Collection<N> getMultiElement( final String p_key )
+    public final Collection<N> getMultiElement( @Nonnull final String p_key )
     {
         return Stream.of( m_multielements.get( p_key ) ).collect( Collectors.toSet() );
     }

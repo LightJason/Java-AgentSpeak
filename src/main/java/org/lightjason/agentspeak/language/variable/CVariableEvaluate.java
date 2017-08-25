@@ -31,6 +31,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +43,10 @@ import java.util.stream.Stream;
  */
 public final class CVariableEvaluate implements IVariableEvaluate
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 7310663182659231951L;
     /**
      * content variable with a string or literal
      */
@@ -56,7 +61,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
      *
      * @param p_variable variable
      */
-    public CVariableEvaluate( final IVariable<?> p_variable )
+    public CVariableEvaluate( @Nonnull final IVariable<?> p_variable )
     {
         this( p_variable, Collections.<ITerm>emptyList() );
     }
@@ -67,7 +72,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
      * @param p_variable variable
      * @param p_parameter optional parameter list
      */
-    public CVariableEvaluate( final IVariable<?> p_variable, final List<ITerm> p_parameter )
+    public CVariableEvaluate( @Nonnull final IVariable<?> p_variable, @Nonnull final List<ITerm> p_parameter )
     {
         m_variable = p_variable;
         m_parameter = Collections.unmodifiableList( p_parameter );
@@ -80,6 +85,7 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return m_variable.mutex();
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final ILiteral evaluate( final IContext p_context )
@@ -89,15 +95,16 @@ public final class CVariableEvaluate implements IVariableEvaluate
             throw new CIllegalStateException();
 
         // if variable is a string
-        if ( l_variable.valueAssignableTo( String.class ) )
+        if ( l_variable.valueassignableto( String.class ) )
             return this.fromString( l_variable.raw(), p_context );
 
-        if ( m_variable.valueAssignableTo( ILiteral.class ) )
+        if ( m_variable.valueassignableto( ILiteral.class ) )
             return this.fromLiteral( l_variable.raw(), p_context );
 
         throw new CIllegalStateException();
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()
@@ -129,18 +136,21 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return MessageFormat.format( "{0}{1}", m_variable, m_parameter.isEmpty() ? "" : m_parameter );
     }
 
+    @Nonnull
     @Override
     public final String functor()
     {
         return m_variable.functor();
     }
 
+    @Nonnull
     @Override
     public final IPath functorpath()
     {
         return m_variable.functorpath();
     }
 
+    @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
@@ -159,16 +169,24 @@ public final class CVariableEvaluate implements IVariableEvaluate
         return m_variable.raw();
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return m_variable.deepcopy( p_prefix );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {
         return m_variable.deepcopysuffix();
+    }
+
+    @Override
+    public final int structurehash()
+    {
+        return 0;
     }
 
     /**
@@ -192,16 +210,14 @@ public final class CVariableEvaluate implements IVariableEvaluate
      */
     private ILiteral fromLiteral( final ILiteral p_literal, final IContext p_context )
     {
-        if ( m_parameter.isEmpty() )
-            return p_literal.unify( p_context );
-
-        return new CLiteral(
-            p_literal.hasAt(),
-            p_literal.negated(),
-            p_literal.fqnfunctor(),
-            m_parameter,
-            Collections.<ILiteral>emptyList()
-        ).unify( p_context );
+        return m_parameter.isEmpty()
+            ? p_literal.unify( p_context )
+            : new CLiteral(
+                p_literal.hasAt(),
+                p_literal.negated(),
+                p_literal.fqnfunctor(),
+                m_parameter
+            ).unify( p_context );
     }
 
 }

@@ -24,10 +24,8 @@
 package org.lightjason.agentspeak.language;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.hash.Hasher;
@@ -36,34 +34,39 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.grammar.CASTVisitorType;
 import org.lightjason.agentspeak.grammar.CErrorListener;
 import org.lightjason.agentspeak.grammar.IASTVisitorType;
-import org.lightjason.agentspeak.grammar.IParserBase;
+import org.lightjason.agentspeak.grammar.IBaseParser;
 import org.lightjason.agentspeak.grammar.TypeLexer;
 import org.lightjason.agentspeak.grammar.TypeParser;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
 /**
  * default generic literal class for agent beliefs
- * a literal consists of a functor, an optional list of values and
- * an optional set of annotations, e.g. velocity(50)[source(self)]
+ * a literal consists of a functor, an optional list of values
+ * e.g. velocity(50)
  */
 public final class CLiteral implements ILiteral
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3253396471300120109L;
     /**
      * negation symbol
      */
@@ -72,10 +75,6 @@ public final class CLiteral implements ILiteral
      * at symbol
      */
     private static final String AT = "@";
-    /**
-     * literal annotations
-     */
-    private final ImmutableMultimap<IPath, ILiteral> m_annotations;
     /**
      * literal values
      */
@@ -101,13 +100,10 @@ public final class CLiteral implements ILiteral
      */
     private final int m_hash;
     /**
-     * hash of the annotations
+     * hash of the structure
      */
-    private final int m_annotationhash;
-    /**
-     * hash of the values
-     */
-    private final int m_valuehash;
+    private final int m_structurehash;
+
 
 
     /**
@@ -117,11 +113,8 @@ public final class CLiteral implements ILiteral
      * @param p_negated negated flag
      * @param p_functor functor of the literal
      * @param p_values initial list of values
-     * @param p_annotations initial set of annotations
      */
-    public CLiteral( final boolean p_at, final boolean p_negated, final IPath p_functor, final Collection<ITerm> p_values,
-                     final Collection<ILiteral> p_annotations
-    )
+    public CLiteral( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Collection<ITerm> p_values )
     {
         m_at = p_at;
         m_negated = p_negated;
@@ -129,44 +122,33 @@ public final class CLiteral implements ILiteral
         m_functor = new CPath( p_functor );
 
         // create immutable structures
-        final Multimap<IPath, ILiteral> l_annotations = HashMultimap.create();
-        p_annotations.forEach( i -> l_annotations.put( i.fqnfunctor(), i ) );
-        m_annotations = ImmutableSetMultimap.copyOf( l_annotations );
+        if ( !p_values.isEmpty() )
+        {
+            final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
+            p_values.forEach( i -> l_values.put( i.fqnfunctor(), i ) );
+            m_values = ImmutableListMultimap.copyOf( l_values );
+            m_orderedvalues = Collections.unmodifiableList( new ArrayList<>( p_values ) );
+        }
+        else
+        {
+            m_orderedvalues = Collections.emptyList();
+            m_values = ImmutableListMultimap.of();
+        }
 
-        final Multimap<IPath, ITerm> l_values = LinkedListMultimap.create();
-        p_values.forEach( i -> l_values.put( i.fqnfunctor(), i ) );
-        m_values = ImmutableListMultimap.copyOf( l_values );
+        // calculates object hash value
+        final Hasher l_hasher = CCommon.getTermHashing();
+        l_hasher.putInt( m_functor.hashCode() );
+        l_hasher.putBoolean( m_negated );
+        l_hasher.putBoolean( m_at );
+        m_orderedvalues.forEach( i -> l_hasher.putInt( i.hashCode() ) );
+        m_hash = l_hasher.hash().asInt();
 
-        m_orderedvalues = Collections.unmodifiableList( new LinkedList<>( p_values ) );
-
-        // calculates hash value
-        m_hash = m_functor.hashCode()
-                 ^ IntStream.range( 0, m_orderedvalues.size() ).boxed().mapToInt( i -> ( i + 1 ) * m_orderedvalues.get( i ).hashCode() ).sum()
-                 ^ m_annotations.values().stream().mapToInt( Object::hashCode ).sum()
-                 ^ ( m_negated ? 0 : 55529 )
-                 ^ ( m_at ? 0 : 8081 );
-
-
-        // calculates the structure hash value (Murmur3) of the value and annotation definition
-        // functor will be added iif no literal data exists ( hasher must be existing twice )
-        final String l_functor = p_functor.getPath();
-
+        // calculates the structure hash value of the value definition (need to start with value definition)
         final Hasher l_valuehasher = CCommon.getTermHashing();
-        if ( m_orderedvalues.stream().filter( i -> i instanceof ILiteral ).map( i -> l_valuehasher.putInt( ( (ILiteral) i ).valuehash() ) ).count() == 0 )
-        {
-            l_valuehasher.putBoolean( m_negated );
-            l_valuehasher.putString( l_functor, Charsets.UTF_8 );
-        }
-
-        final Hasher l_annotationhasher = CCommon.getTermHashing();
-        if ( m_annotations.values().stream().map( i -> l_annotationhasher.putInt( i.valuehash() ) ).count() == 0 )
-        {
-            l_annotationhasher.putBoolean( m_negated );
-            l_annotationhasher.putString( l_functor, Charsets.UTF_8 );
-        }
-
-        m_annotationhash = l_annotationhasher.hash().asInt();
-        m_valuehash = l_valuehasher.hash().asInt();
+        m_orderedvalues.forEach( i -> l_valuehasher.putInt( i.structurehash() ) );
+        l_valuehasher.putBoolean( m_negated );
+        l_valuehasher.putString( p_functor.path(), Charsets.UTF_8 );
+        m_structurehash = l_valuehasher.hash().asInt();
     }
 
     /**
@@ -176,27 +158,14 @@ public final class CLiteral implements ILiteral
      * @param p_values value term
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final ITerm... p_values )
+    public static ILiteral from( @Nonnull final String p_functor, @Nullable final ITerm... p_values )
     {
         return from(
             p_functor,
             ( p_values == null ) || ( p_values.length == 0 )
             ? Collections.emptySet()
-            : Arrays.stream( p_values ).collect( Collectors.toList() ),
-            Collections.emptySet()
+            : Arrays.stream( p_values ).collect( Collectors.toList() )
         );
-    }
-
-    /**
-     * factory
-     *
-     * @param p_functor functor string
-     * @param p_values value ter
-     * @return literal
-     */
-    public static ILiteral from( final String p_functor, final Collection<ITerm> p_values )
-    {
-        return from( p_functor, p_values, Collections.emptySet() );
     }
 
     /**
@@ -204,15 +173,13 @@ public final class CLiteral implements ILiteral
      *
      * @param p_functor functor string
      * @param p_values value term
-     * @param p_annotations annotation literals
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final Collection<ITerm> p_values, final Collection<ILiteral> p_annotations )
+    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Collection<ITerm> p_values )
     {
         return new CLiteral(
             p_functor.contains( AT ), p_functor.contains( NEGATION ), CPath.from( p_functor.replace( AT, "" ).replace( NEGATION, "" ) ),
-            p_values,
-            p_annotations
+            p_values
         );
     }
 
@@ -221,24 +188,63 @@ public final class CLiteral implements ILiteral
      *
      * @param p_functor functor
      * @param p_values value stream
-     * @param p_annotations annotation stream
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final Stream<ITerm> p_values, final Stream<ILiteral> p_annotations )
+    public static ILiteral from( @Nonnull final String p_functor, @Nonnull final Stream<ITerm> p_values )
     {
-        return from( p_functor, p_values.collect( Collectors.toList() ), p_annotations.collect( Collectors.toList() ) );
+        return from( p_functor, p_values.collect( Collectors.toList() ) );
     }
 
     /**
-     * stream factory
+     * factory
      *
-     * @param p_functor functor
-     * @param p_values value stream
+     * @param p_functor functor path
+     * @param p_values values
      * @return literal
      */
-    public static ILiteral from( final String p_functor, final Stream<ITerm> p_values )
+    public static ILiteral from( @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return from( p_functor, p_values.collect( Collectors.toList() ) );
+        return from( false, false, p_functor, p_values );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_functor functor path
+     * @param p_values values
+     * @return literal
+     */
+    public static ILiteral from( @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    {
+        return from( false, false, p_functor, p_values );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_at  at
+     * @param p_negated negation
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
+    {
+        return from( p_at, p_negated, p_functor, ( p_values == null ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
+    }
+
+    /**
+     * factory
+     *
+     * @param p_at  at
+     * @param p_negated negation
+     * @param p_functor functor path
+     * @param p_values vales
+     * @return literal
+     */
+    public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nonnull final Stream<ITerm> p_values )
+    {
+        return new CLiteral( p_at, p_negated, p_functor, p_values.collect( Collectors.toList() ) );
     }
 
     /**
@@ -249,13 +255,15 @@ public final class CLiteral implements ILiteral
      *
      * @throws Exception parsing and stream exception
      */
-    public static ILiteral parse( final String p_literal ) throws Exception
+    @Nonnull
+    public static ILiteral parse( @Nonnull final String p_literal ) throws Exception
     {
         return new CParser().parse( new ByteArrayInputStream( p_literal.getBytes( Charset.forName( "UTF-8" ) ) ) ).literal();
     }
 
+    @Nonnull
     @Override
-    public final Stream<ITerm> values( final IPath... p_path )
+    public final Stream<ITerm> values( @Nullable final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_values.values().stream()
@@ -266,8 +274,9 @@ public final class CLiteral implements ILiteral
                            .flatMap( i -> ( (ILiteral) i ).values( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
+    @Nonnull
     @Override
-    public final Stream<ITerm> orderedvalues( final IPath... p_path )
+    public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
         return ( p_path == null ) || ( p_path.length < 1 )
                ? m_orderedvalues.stream().sequential()
@@ -277,17 +286,9 @@ public final class CLiteral implements ILiteral
                  : m_orderedvalues.stream()
                                   .filter( i -> i.fqnfunctor().equals( p_path[0] ) )
                                   .filter( i -> i instanceof ILiteral )
-                                  .flatMap( i -> ( (ILiteral) i ).orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
-    }
-
-    @Override
-    public final Stream<ILiteral> annotations( final IPath... p_path )
-    {
-        return ( p_path == null ) || ( p_path.length < 1 )
-               ? m_annotations.values().stream()
-               : Arrays.stream( p_path )
-                       .parallel()
-                       .flatMap( i -> m_annotations.asMap().get( i ).stream() );
+                                  .map( ITerm::<ILiteral>raw )
+                                  .filter( Objects::nonNull )
+                                  .flatMap( i -> i.orderedvalues( Arrays.copyOfRange( p_path, 1, p_path.length ) ) );
     }
 
     @Override
@@ -297,21 +298,9 @@ public final class CLiteral implements ILiteral
     }
 
     @Override
-    public final boolean emptyAnnotations()
+    public final int structurehash()
     {
-        return m_annotations.isEmpty();
-    }
-
-    @Override
-    public final int annotationhash()
-    {
-        return m_annotationhash;
-    }
-
-    @Override
-    public final int valuehash()
-    {
-        return m_valuehash;
+        return m_structurehash;
     }
 
     @Override
@@ -329,22 +318,21 @@ public final class CLiteral implements ILiteral
     @Override
     public final boolean hasVariable()
     {
-        return Stream.concat(
-            m_orderedvalues.parallelStream(),
-            m_annotations.entries().parallelStream().map( Map.Entry::getValue )
-        ).anyMatch( ITerm::hasVariable );
+        return m_orderedvalues.parallelStream().anyMatch( ITerm::hasVariable );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final ILiteral unify( final IContext p_context )
+    public final ILiteral unify( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i -> {
+                           .map( i ->
+                           {
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
@@ -354,23 +342,24 @@ public final class CLiteral implements ILiteral
                                    return ( (ILiteral) i ).unify( p_context );
                                return i;
                            } )
-                           .collect( Collectors.toList() ),
-            m_annotations.values().stream().map( i -> i.unify( p_context ) ).collect( Collectors.toSet() )
+                           .collect( Collectors.toList() )
         );
     }
 
+    @Nonnull
     @Override
-    public final ILiteral allocate( final IContext p_context )
+    public final ILiteral allocate( @Nonnull final IContext p_context )
     {
         return new CLiteral(
             m_at,
             m_negated,
             m_functor,
             m_orderedvalues.stream()
-                           .map( i -> {
+                           .map( i ->
+                           {
                                if ( i instanceof IVariable<?> )
                                {
-                                   final IVariable<?> l_variable = p_context.instancevariables().get( ( (IVariable<?>) i ).fqnfunctor() );
+                                   final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
                                    return l_variable == null
                                           ? CRawTerm.EMPTY
                                           : l_variable;
@@ -379,29 +368,32 @@ public final class CLiteral implements ILiteral
                                    return ( (ILiteral) i ).unify( p_context );
                                return i;
                            } )
-                           .collect( Collectors.toList() ),
-            m_annotations.values().stream().map( i -> i.unify( p_context ) ).collect( Collectors.toSet() )
+                           .collect( Collectors.toList() )
         );
     }
 
+    @Nonnull
     @Override
     public final String functor()
     {
-        return m_functor.getSuffix();
+        return m_functor.suffix();
     }
 
+    @Nonnull
     @Override
     public final IPath functorpath()
     {
-        return m_functor.getSubPath( 0, m_functor.size() - 1 );
+        return m_functor.subpath( 0, m_functor.size() - 1 );
     }
 
+    @Nonnull
     @Override
     public final IPath fqnfunctor()
     {
         return m_functor;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final <T> T raw()
@@ -421,75 +413,73 @@ public final class CLiteral implements ILiteral
         return ( p_object != null ) && ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
     }
 
+    @Nonnull
     @Override
-    public final ILiteral shallowcopy( final IPath... p_prefix )
+    public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 
                ? new CLiteral(
                    m_at, m_negated, m_functor,
-                   m_values.values(),
-                   m_annotations.values()
+                   m_values.values()
                )
 
                : new CLiteral(
                    m_at, m_negated, p_prefix[0].append( m_functor ),
-                   m_values.values(),
-                   m_annotations.values()
+                   m_values.values()
                );
     }
 
+    @Nonnull
     @Override
     public final ILiteral shallowcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.getSuffix() ),
-            m_values.values(),
-            m_annotations.values()
+            m_at, m_negated, CPath.from( m_functor.suffix() ),
+            m_values.values()
         );
     }
 
     @Override
     public final String toString()
     {
-        return MessageFormat.format( "{0}{1}{2}{3}{4}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues, m_annotations.values() );
+        return MessageFormat.format( "{0}{1}{2}{3}", m_negated ? NEGATION : "", m_at ? AT : "", m_functor, m_orderedvalues );
     }
 
     @Override
-    public final int compareTo( final ILiteral p_literal )
+    public final int compareTo( @Nonnull final ILiteral p_literal )
     {
         return Integer.compare( this.hashCode(), p_literal.hashCode() );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final synchronized ITerm deepcopy( final IPath... p_prefix )
+    public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
 
                ?
                new CLiteral(
                    m_at, m_negated, m_functor,
-                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
-                   m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
                )
 
                :
                new CLiteral(
                    m_at, m_negated, p_prefix[0].append( m_functor ),
-                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
-                   m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+                   m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
                );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(
-            m_at, m_negated, CPath.from( m_functor.getSuffix() ),
-            m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() ),
-            m_annotations.values().stream().map( i -> (ILiteral) i.deepcopy() ).collect( Collectors.toSet() )
+            m_at, m_negated, CPath.from( m_functor.suffix() ),
+            m_values.values().stream().map( i -> i.deepcopy() ).collect( Collectors.toList() )
         );
     }
 
@@ -497,7 +487,7 @@ public final class CLiteral implements ILiteral
     /**
      * literal parser
      */
-    private static final class CParser extends IParserBase<IASTVisitorType, TypeLexer, TypeParser>
+    private static final class CParser extends IBaseParser<IASTVisitorType, TypeLexer, TypeParser>
     {
 
         /**
@@ -509,8 +499,9 @@ public final class CLiteral implements ILiteral
             super( new CErrorListener() );
         }
 
+        @Nonnull
         @Override
-        public final IASTVisitorType parse( final InputStream p_stream ) throws Exception
+        public final IASTVisitorType parse( @Nonnull final InputStream p_stream ) throws Exception
         {
             final IASTVisitorType l_visitor = new CASTVisitorType();
             l_visitor.visit( this.parser( p_stream ).literal_type() );

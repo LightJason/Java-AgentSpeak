@@ -24,17 +24,16 @@
 package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Set;
 
 
 /**
  * default planbundle parser
  */
-public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
+public final class CParserPlanBundle extends IBaseParser<IASTVisitorPlanBundle, PlanBundleLexer, PlanBundleParser>
 {
     /**
      * set with actions
@@ -47,16 +46,17 @@ public final class CParserPlanBundle extends IParserBase<IASTVisitorPlanBundle, 
      * @param p_actions agent actions
      * @throws NoSuchMethodException on ctor-method call
      */
-    public CParserPlanBundle( final Set<IAction> p_actions ) throws NoSuchMethodException
+    public CParserPlanBundle( @Nonnull final Set<IAction> p_actions ) throws NoSuchMethodException
     {
         super( new CErrorListener() );
         m_actions = p_actions;
     }
 
+    @Nonnull
     @Override
     public final IASTVisitorPlanBundle parse( final InputStream p_stream ) throws Exception
     {
-        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions, Collections.<IRule>emptySet() );
+        final IASTVisitorPlanBundle l_visitor = new CASTVisitorPlanBundle( m_actions );
         l_visitor.visit( this.parser( p_stream ).planbundle() );
         return l_visitor;
     }

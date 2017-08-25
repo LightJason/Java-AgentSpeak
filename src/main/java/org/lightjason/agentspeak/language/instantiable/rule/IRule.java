@@ -24,9 +24,20 @@
 package org.lightjason.agentspeak.language.instantiable.rule;
 
 import com.google.common.collect.Multimap;
+import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
+import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
+import org.lightjason.agentspeak.language.variable.IVariable;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -34,13 +45,59 @@ import org.lightjason.agentspeak.language.instantiable.IInstantiable;
  */
 public interface IRule extends IInstantiable
 {
+    /** empty rule **/
+    IRule EMPTY = new IRule()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 6850403064097706468L;
+
+        @Nonnull
+        @Override
+        public final ILiteral identifier()
+        {
+            return CLiteral.from( "empty" );
+        }
+
+        @Nonnull
+        @Override
+        public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
+        {
+            return IContext.EMPTYRULE;
+        }
+
+        @Nonnull
+        @Override
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
+        {
+            return CFuzzyValue.from( true );
+        }
+
+        @Nonnull
+        @Override
+        public final Stream<IVariable<?>> variables()
+        {
+            return Stream.empty();
+        }
+    };
+
 
     /**
      * returns the identifier of the rule
      *
      * @return literal
      */
-    ILiteral getIdentifier();
+    @Nonnull
+    ILiteral identifier();
 
     /**
      * replaces all placeholder objects and reinstantiate object
@@ -48,6 +105,7 @@ public interface IRule extends IInstantiable
      * @param p_rules full instantiated rules
      * @return new object instance without placeholders
      */
-    IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules );
+    @Nonnull
+    IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules );
 
 }

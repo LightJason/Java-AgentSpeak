@@ -24,14 +24,15 @@
 package org.lightjason.agentspeak.configuration;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.agent.fuzzy.IFuzzy;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
 import org.lightjason.agentspeak.beliefbase.view.IView;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IVariableBuilder;
-import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.score.IAggregation;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 
@@ -48,28 +49,23 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return root view
      */
-    IView<T> beliefbase();
+    @Nonnull
+    IView beliefbase();
 
     /**
      * returns the initial goal
      *
      * @return initial goal literal
      */
+    @Nullable
     ITrigger initialgoal();
-
-    /**
-     * returns the aggregate function
-     * of the plan scoring
-     *
-     * @return aggregate function
-     */
-    IAggregation aggregation();
 
     /**
      * returns the unifier function
      *
      * @return unifier
      */
+    @Nonnull
     IUnifier unifier();
 
     /**
@@ -77,6 +73,7 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return builder
      */
+    @Nonnull
     IVariableBuilder variablebuilder();
 
     /**
@@ -84,13 +81,15 @@ public interface IAgentConfiguration<T extends IAgent<?>> extends IConfiguration
      *
      * @return operator object
      */
-    IFuzzy<Boolean, T> fuzzy();
+    @Nonnull
+    IFuzzyBundle<Boolean> fuzzy();
 
     /**
      * returns the initial beliefs
      *
      * @return collection of initial beliefs
      */
+    @Nonnull
     Collection<ILiteral> initialbeliefs();
 
 }

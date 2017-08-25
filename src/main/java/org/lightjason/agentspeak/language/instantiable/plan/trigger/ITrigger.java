@@ -24,10 +24,15 @@
 package org.lightjason.agentspeak.language.instantiable.plan.trigger;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IShallowCopy;
+import org.lightjason.agentspeak.language.IStructureHash;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -41,35 +46,95 @@ import java.util.stream.Collectors;
  * and number of arguments are equal, otherwise unification is used
  * to define the literal variables
  */
-public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
+public interface ITrigger extends Serializable, IStructureHash, IShallowCopy<ITrigger>, Comparable<ITrigger>
 {
+    /**
+     * empty trigger
+     */
+    ITrigger EMPTY = new ITrigger()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -4216254162765675258L;
+
+        @Override
+        public final int structurehash()
+        {
+            return 0;
+        }
+
+        @Nonnull
+        @Override
+        public final ITrigger shallowcopy( @Nullable final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ITrigger shallowcopysuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public final int compareTo( @Nonnull final ITrigger p_trigger )
+        {
+            return Integer.compare( p_trigger.hashCode(), this.hashCode() );
+        }
+
+        @Override
+        public final EType type()
+        {
+            return EType.EMPTY;
+        }
+
+        @Override
+        public final ILiteral literal()
+        {
+            return ILiteral.EMPTY;
+        }
+
+        @Override
+        public final int variablesize()
+        {
+            return 0;
+        }
+
+        @Override
+        public final int hashCode()
+        {
+            return 0;
+        }
+
+        @Override
+        public final boolean equals( final Object p_object )
+        {
+            return ( p_object != null ) && ( p_object instanceof ITrigger ) && ( this.hashCode() == p_object.hashCode() );
+        }
+    };
 
     /**
      * returns the type of the event
      *
      * @return type
      */
-    EType getType();
+    EType type();
 
     /**
      * returns the literal of the event
      *
      * @return literal
      */
-    ILiteral getLiteral();
+    ILiteral literal();
 
     /**
      * returns variable number
      *
      * @return number
      */
-    int getVariableSize();
-
-    /**
-     * returns a hash value over the whole content
-     * @return content hash value
-     */
-    int contenthash();
+    int variablesize();
 
 
 
@@ -81,7 +146,8 @@ public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
         ADDBELIEF( "+" ),
         DELETEBELIEF( "-" ),
         ADDGOAL( "+!" ),
-        DELETEGOAL( "-!" );
+        DELETEGOAL( "-!" ),
+        EMPTY( "" );
 
         /**
          * math with elements for intantiation
@@ -127,7 +193,7 @@ public interface ITrigger extends IShallowCopy<ITrigger>, Comparable<ITrigger>
          * @param p_sequence sequence
          * @return trigger type
          */
-        public static EType from( final String p_sequence )
+        public static EType from( @Nonnull final String p_sequence )
         {
             final EType l_type = ELEMENTS.get( p_sequence.trim() );
             if ( l_type == null )

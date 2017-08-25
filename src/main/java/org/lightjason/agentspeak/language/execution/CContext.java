@@ -24,12 +24,11 @@
 package org.lightjason.agentspeak.language.execution;
 
 import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,6 +43,10 @@ import java.util.stream.Collectors;
  */
 public final class CContext implements IContext
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2813094837634259389L;
     /**
      * agent of the running context
      */
@@ -65,34 +68,35 @@ public final class CContext implements IContext
      * @param p_instance instance object
      * @param p_variables instance variables
      */
-    public CContext( final IAgent<?> p_agent, final IInstantiable p_instance, final Collection<IVariable<?>> p_variables )
+    public CContext( @Nonnull final IAgent<?> p_agent, @Nonnull final IInstantiable p_instance, @Nonnull final Collection<IVariable<?>> p_variables )
     {
-        if ( ( p_agent == null ) || ( p_instance == null ) || ( p_variables == null ) )
-            throw new CIllegalArgumentException( CCommon.languagestring( this, "notnull" ) );
-
         m_agent = p_agent;
         m_instance = p_instance;
         m_variables = Collections.unmodifiableMap( p_variables.parallelStream().collect( Collectors.toMap( IVariable::fqnfunctor, i -> i ) ) );
     }
 
+    @Nonnull
     @Override
     public final IContext duplicate()
     {
         return new CContext( m_agent, m_instance, m_variables.values().parallelStream().map( i -> i.shallowcopy() ).collect( Collectors.toSet() ) );
     }
 
+    @Nonnull
     @Override
     public final IAgent<?> agent()
     {
         return m_agent;
     }
 
+    @Nonnull
     @Override
     public final IInstantiable instance()
     {
         return m_instance;
     }
 
+    @Nonnull
     @Override
     public final Map<IPath, IVariable<?>> instancevariables()
     {

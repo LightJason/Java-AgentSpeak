@@ -57,7 +57,11 @@ ELECTRON                   : 'electron';
 PROTON                     : 'proton';
 NEUTRON                    : 'neutron';
 LIGHTSPEED                 : 'lightspeed';
-INFINITY                   : 'infinity';
+POSITIVEINFINITY           : 'positiveinfinity';
+NEGATIVEINFINITY           : 'negativeinfinity';
+MAXIMUMVALUE               : 'maximumvalue';
+MINIMUMVALUE               : 'minimumvalue';
+NAN                        : 'notanumber';
 
 LEFTROUNDBRACKET           : '(';
 RIGHTROUNDBRACKET          : ')';
@@ -77,7 +81,7 @@ RIGHTSHIFT                 : '>>';
  **/
 PARALLEL                   : 'parallel';
 ATOMIC                     : 'atomic';
-SCORE                      : 'score';
+CONSTANT                   : 'constant';
 
 
 /**
@@ -109,6 +113,8 @@ ASSIGNINCREMENT            : '+=';
 ASSIGNDECREMENT            : '-=';
 ASSIGNMULTIPLY             : '*=';
 ASSIGNDIVIDE               : '/=';
+ASSIGNMODULO               : '%=';
+ASSIGNPOW                  : '^=';
 
 /**
  * comparator types

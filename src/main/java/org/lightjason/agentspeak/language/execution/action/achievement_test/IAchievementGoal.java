@@ -23,8 +23,6 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
@@ -35,6 +33,10 @@ import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
  */
 abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
 {
+    /**
+     * serial
+     */
+    private static final long serialVersionUID = -4470789276770008098L;
     /**
      * flag to run immediately
      */
@@ -53,15 +55,9 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     }
 
     @Override
-    public double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
-    }
-
-    @Override
     public final int hashCode()
     {
-        return m_value.hashCode();
+        return m_value == null ? 0 : m_value.hashCode();
     }
 
     @Override

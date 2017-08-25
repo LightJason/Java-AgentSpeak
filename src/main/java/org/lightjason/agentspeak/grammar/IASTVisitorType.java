@@ -27,6 +27,8 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * interface of a type parser
@@ -39,6 +41,7 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return literal
      */
+    @Nonnull
     ILiteral literal();
 
     /**
@@ -46,6 +49,7 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return expression
      */
+    @Nonnull
     IExpression expression();
 
     /**
@@ -53,6 +57,7 @@ public interface IASTVisitorType extends IASTVisitor, TypeVisitor<Object>
      *
      * @return any term
      */
+    @Nonnull
     ITerm term();
 
 }

@@ -24,22 +24,21 @@
 package org.lightjason.agentspeak.language.instantiable.plan;
 
 import org.apache.commons.lang3.StringUtils;
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
-import org.lightjason.agentspeak.language.execution.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.CTrigger;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +51,10 @@ import java.util.stream.Stream;
  */
 public final class CPlan extends IBaseInstantiable implements IPlan
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -8130277494195919583L;
     /**
      * trigger event
      */
@@ -69,9 +72,9 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger p_event, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
-        this( p_event, null, p_body, p_annotation );
+        this( p_event, IExpression.EMPTY, p_body, p_annotation );
     }
 
     /**
@@ -82,64 +85,56 @@ public final class CPlan extends IBaseInstantiable implements IPlan
      * @param p_body plan body
      * @param p_annotation annotations
      */
-    public CPlan( final ITrigger p_event, final IExpression p_condition, final List<IExecution> p_body, final Set<IAnnotation<?>> p_annotation
-    )
+    public CPlan( @Nonnull final ITrigger p_event, @Nonnull final IExpression p_condition,
+                  @Nonnull final List<IExecution> p_body, @Nonnull final Set<IAnnotation<?>> p_annotation )
     {
         super(
             p_body,
             p_annotation,
-            p_event.hashCode()
-            + ( p_condition == null ? 0 : p_condition.hashCode() )
-            + p_body.stream().mapToInt( Object::hashCode ).sum()
-            + p_annotation.stream().mapToInt( Object::hashCode ).sum()
-        );
 
+            CCommon.streamconcat(
+                Stream.of(
+                    p_event.hashCode(),
+                    p_condition.hashCode()
+                ),
+                p_body.stream().map( Object::hashCode ),
+                p_annotation.stream().map( Object::hashCode )
+            ).reduce( 0, ( i, j ) -> i ^ j )
+        );
 
         m_triggerevent = p_event;
         m_condition = p_condition;
     }
 
+    @Nonnull
     @Override
-    public final ITrigger getTrigger()
+    public final ITrigger trigger()
     {
         return m_triggerevent;
     }
 
+    @Nonnull
     @Override
-    public final Collection<IAnnotation<?>> getAnnotations()
-    {
-        return m_annotation.values();
-    }
-
-    @Override
-    public final List<IExecution> getBodyActions()
-    {
-        return m_action;
-    }
-
-    @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        final IFuzzyValue<Boolean> l_result = super.execute( p_context, p_parallel, p_argument, p_return, p_annotation );
+        final IFuzzyValue<Boolean> l_result = super.execute( p_parallel, p_context, p_argument, p_return );
 
         // create delete-goal trigger
-        if ( !p_context.agent().fuzzy().getDefuzzyfication().defuzzify( l_result ) )
-            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.getLiteral().unify( p_context ) ) );
+        if ( !p_context.agent().fuzzy().getValue().defuzzify( l_result ) )
+            p_context.agent().trigger( CTrigger.from( ITrigger.EType.DELETEGOAL, m_triggerevent.literal().unify( p_context ) ) );
 
         return l_result;
     }
 
+    @Nonnull
     @Override
     public final IFuzzyValue<Boolean> condition( final IContext p_context )
     {
-        if ( m_condition == null )
-            return CFuzzyValue.from( true );
-
         final List<ITerm> l_return = new LinkedList<>();
         return CFuzzyValue.from(
-            m_condition.execute( p_context, false, Collections.emptyList(), l_return, Collections.emptyList() ).value()
+            m_condition.execute( false, p_context, Collections.emptyList(), l_return ).value()
             && ( l_return.size() == 1 )
             ? l_return.get( 0 ).<Boolean>raw()
             : false
@@ -159,43 +154,16 @@ public final class CPlan extends IBaseInstantiable implements IPlan
         );
     }
 
+    @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
-    public final double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate(
-            Stream.concat(
-                Stream.of( super.score( p_agent ) ),
-                Stream.of(
-                    m_annotation.containsKey( IAnnotation.EType.SCORE )
-                    ? ( (Number) m_annotation.get( IAnnotation.EType.SCORE ).value() ).doubleValue()
-                    : 0
-                )
-            )
-        );
-    }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return (Stream<IVariable<?>>) Stream.of(
-            m_condition != null
-            ? m_condition.variables()
-            : Stream.<IVariable<?>>empty(),
-
+        return CCommon.streamconcat(
+            m_condition != null ? m_condition.variables() : Stream.empty(),
             super.variables(),
-
-            CCommon.recursiveterm( m_triggerevent.getLiteral().orderedvalues() )
-                   .filter( i -> i instanceof IVariable<?> )
-                   .map( i -> (IVariable<?>) i ),
-
-            CCommon.recursiveliteral( m_triggerevent.getLiteral().annotations() )
-                   .filter( i -> i instanceof IVariable<?> )
-                   .map( i -> (IVariable<?>) i )
-        )
-                                            .reduce( Stream::concat )
-                                            .orElseGet( Stream::<IVariable<?>>empty );
+            m_annotation.values().stream().flatMap( IAnnotation::variables ),
+            CCommon.flattenrecursive( m_triggerevent.literal().orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+        );
     }
 
 }

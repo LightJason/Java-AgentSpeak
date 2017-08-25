@@ -23,15 +23,15 @@
 
 package org.lightjason.agentspeak.language.execution.expression;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -42,6 +42,10 @@ import java.util.stream.Stream;
 public class CAtom implements IExpression
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -469420004121224419L;
+    /**
      * value
      */
     private final ITerm m_value;
@@ -51,29 +55,23 @@ public class CAtom implements IExpression
      *
      * @param p_value any atomic value
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
     public <T> CAtom( final T p_value )
     {
         m_value = ( p_value instanceof IVariable<?> ) ? (IVariable<?>) p_value : CRawTerm.from( p_value );
     }
 
-
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final ITerm l_term = CCommon.replaceFromContext( p_context, m_value );
-        p_return.add( CRawTerm.from( l_term.raw() ).throwNotAllocated( l_term.fqnfunctor().toString() ) );
+        p_return.add( CRawTerm.from( CCommon.replaceFromContext( p_context, m_value ).raw() ).thrownotallocated() );
         return CFuzzyValue.from( true );
     }
 
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        return 0;
-    }
-
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

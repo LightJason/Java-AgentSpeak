@@ -29,6 +29,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -38,7 +39,7 @@ import java.util.stream.Stream;
  * on-demand beliefbase for creating trigger-events
  * without any percistency
  */
-public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeliefbase<T>
+public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeliefbase
 {
 
     @Override
@@ -53,75 +54,83 @@ public abstract class IBeliefbaseOnDemand<T extends IAgent<?>> extends IBaseBeli
         return 0;
     }
 
+    @Nonnull
     @Override
     public Stream<ILiteral> streamLiteral()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
+    @Nonnull
     @Override
-    public ILiteral add( final ILiteral p_literal )
+    public ILiteral add( @Nonnull final ILiteral p_literal )
     {
         return super.add( p_literal );
     }
 
+    @Nonnull
     @Override
-    public ILiteral remove( final ILiteral p_literal )
+    public ILiteral remove( @Nonnull final ILiteral p_literal )
     {
         return super.remove( p_literal );
     }
 
     @Override
-    public boolean containsLiteral( final String p_key )
+    public boolean containsLiteral( @Nonnull final String p_key )
     {
         return false;
     }
 
+    @Nonnull
     @Override
-    public Collection<ILiteral> literal( final String p_key )
+    public Collection<ILiteral> literal( @Nonnull final String p_key )
     {
         return Collections.<ILiteral>emptySet();
     }
 
-
+    @Nonnull
     @Override
-    public final IView<T> view( final String p_key )
+    public final IView view( @Nonnull final String p_key )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
     @Override
-    public final IView<T> viewOrDefault( final String p_key, final IView<T> p_default )
+    public final IView viewOrDefault( @Nonnull final String p_key, final IView p_default )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_key ) );
     }
 
+    @Nonnull
     @Override
-    public final Stream<IView<T>> streamView()
+    public final Stream<IView> streamView()
     {
-        return Stream.of();
+        return Stream.empty();
     }
 
+    @Nonnull
     @Override
-    public final IBeliefbase<T> clear()
+    public final IBeliefbase clear()
     {
         return this;
     }
 
+    @Nonnull
     @Override
-    public final IView<T> add( final IView<T> p_view )
+    public final IView add( @Nonnull final IView p_view )
+    {
+        throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
+    }
+
+    @Nonnull
+    @Override
+    public final IView remove( @Nonnull final IView p_view )
     {
         throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
     }
 
     @Override
-    public final IView<T> remove( final IView<T> p_view )
-    {
-        throw new CIllegalStateException( CCommon.languagestring( IBeliefbaseOnDemand.class, "nostorage", this, p_view.name() ) );
-    }
-
-    @Override
-    public final boolean containsView( final String p_key )
+    public final boolean containsView( @Nonnull final String p_key )
     {
         return false;
     }

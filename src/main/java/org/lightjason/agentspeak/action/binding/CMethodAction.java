@@ -29,12 +29,19 @@ import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -48,6 +55,10 @@ import java.util.stream.Stream;
 public final class CMethodAction extends IBaseAction
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -507236338411690842L;
+    /**
      * name of the action
      */
     private final IPath m_name;
@@ -56,9 +67,13 @@ public final class CMethodAction extends IBaseAction
      */
     private final int m_arguments;
     /**
+     * method reference
+     */
+    private transient Method m_method;
+    /**
      * method handle
      */
-    private final MethodHandle m_method;
+    private transient MethodHandle m_methodhandle;
 
 
     /**
@@ -67,33 +82,70 @@ public final class CMethodAction extends IBaseAction
      * @param p_method method reference
      * @throws IllegalAccessException on method access error
      */
-    public CMethodAction( final Method p_method ) throws IllegalAccessException
+    public CMethodAction( @Nonnull final Method p_method ) throws IllegalAccessException
     {
-        m_arguments = p_method.getParameterCount();
+        m_method = p_method;
+        m_arguments = m_method.getParameterCount();
         m_name = CPath.from(
-            p_method.isAnnotationPresent( IAgentActionName.class ) && !p_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
-            ? p_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
-            : p_method.getName().toLowerCase( Locale.ROOT )
+            m_method.isAnnotationPresent( IAgentActionName.class ) && !m_method.getAnnotation( IAgentActionName.class ).name().isEmpty()
+            ? m_method.getAnnotation( IAgentActionName.class ).name().toLowerCase( Locale.ROOT )
+            : m_method.getName().toLowerCase( Locale.ROOT )
         );
-        m_method = MethodHandles.lookup().unreflect( p_method );
+        m_methodhandle = MethodHandles.lookup().unreflect( m_method );
     }
 
+    /**
+     * serialize call
+     *
+     * @param p_stream object stream
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
 
+        // serialize method handle
+        p_stream.writeObject( m_method.getDeclaringClass() );
+        p_stream.writeUTF( m_method.getName() );
+        p_stream.writeObject( m_method.getParameterTypes() );
+    }
+
+    /**
+     * deserializable call
+     *
+     * @param p_stream object stream
+     * @throws IOException is thrown on io error
+     * @throws ClassNotFoundException is thrown on deserialization error
+     * @throws NoSuchMethodException is thrown on method deserialization
+     * @throws IllegalAccessException is thrown on creating method handle
+     */
+    @SuppressWarnings( "unchecked" )
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException
+    {
+        p_stream.defaultReadObject();
+
+        // deserialize method handle
+        m_method = ( (Class<?>) p_stream.readObject() ).getMethod( p_stream.readUTF(), (Class<?>[])p_stream.readObject() );
+        m_methodhandle = MethodHandles.lookup().unreflect( m_method );
+    }
+
+    @Nonnull
     @Override
     public final IPath name()
     {
         return m_name;
     }
 
+    @Nonnegative
     @Override
     public final int minimalArgumentNumber()
     {
         return m_arguments;
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         try
@@ -101,12 +153,12 @@ public final class CMethodAction extends IBaseAction
             return m_arguments == 0
 
                 ? CMethodAction.returnvalues(
-                    m_method.invoke( p_context.agent() ),
-                    p_return
+                m_methodhandle.invoke( p_context.agent() ),
+                p_return
                 )
 
                 : CMethodAction.returnvalues(
-                    m_method.invokeWithArguments(
+                    m_methodhandle.invokeWithArguments(
                         Stream.concat(
                             Stream.of( p_context.agent() ),
                             p_argument.stream().map( ITerm::raw )
@@ -117,6 +169,7 @@ public final class CMethodAction extends IBaseAction
         }
         catch ( final Throwable l_throwable )
         {
+            LOGGER.warning( MessageFormat.format( "binding method [{0}] throws error [{1}] in agent: ", m_name, l_throwable, p_context.agent() ) );
             return CFuzzyValue.from( false );
         }
     }
@@ -128,7 +181,8 @@ public final class CMethodAction extends IBaseAction
      * @param p_return return argument list
      * @return execution return
      */
-    private static IFuzzyValue<Boolean> returnvalues( final Object p_result, final List<ITerm> p_return )
+    @Nonnull
+    private static IFuzzyValue<Boolean> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
     {
         // void result of the execution
         if ( ( p_result == null ) || ( void.class.equals( p_result.getClass() ) ) )

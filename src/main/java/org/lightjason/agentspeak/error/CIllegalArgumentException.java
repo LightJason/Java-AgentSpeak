@@ -25,19 +25,23 @@ package org.lightjason.agentspeak.error;
 
 import org.lightjason.agentspeak.common.CCommon;
 
+import javax.annotation.Nonnull;
 import java.util.logging.Logger;
 
 
 /**
  * illegal argument exception
  */
-@SuppressWarnings( "serial" )
 public final class CIllegalArgumentException extends IllegalArgumentException implements IException
 {
     /**
      * logger
      */
     private static final Logger LOGGER = CCommon.logger( CIllegalArgumentException.class );
+    /**
+     * serial id
+     */
+    private static final transient long serialVersionUID = -3411208617187561215L;
 
     /**
      * ctor
@@ -53,7 +57,7 @@ public final class CIllegalArgumentException extends IllegalArgumentException im
      *
      * @param p_message message
      */
-    public CIllegalArgumentException( final String p_message )
+    public CIllegalArgumentException( @Nonnull final String p_message )
     {
         super( p_message );
         LOGGER.warning( p_message );
@@ -65,7 +69,7 @@ public final class CIllegalArgumentException extends IllegalArgumentException im
      * @param p_message message
      * @param p_cause throwable
      */
-    public CIllegalArgumentException( final String p_message, final Throwable p_cause )
+    public CIllegalArgumentException( @Nonnull final String p_message, @Nonnull final Throwable p_cause )
     {
         super( p_message, p_cause );
         LOGGER.warning( p_message );
@@ -76,7 +80,7 @@ public final class CIllegalArgumentException extends IllegalArgumentException im
      *
      * @param p_cause throwable
      */
-    public CIllegalArgumentException( final Throwable p_cause )
+    public CIllegalArgumentException( @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         LOGGER.warning( p_cause.getMessage() );

@@ -24,6 +24,13 @@
 package org.lightjason.agentspeak.generator;
 
 import org.lightjason.agentspeak.agent.IAgent;
+import org.lightjason.agentspeak.language.fuzzy.defuzzification.CCrisp;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CComplement;
+import org.lightjason.agentspeak.language.fuzzy.operator.bool.CIntersection;
+import org.lightjason.agentspeak.language.unify.CUnifier;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 
 
 /**
@@ -31,4 +38,13 @@ import org.lightjason.agentspeak.agent.IAgent;
  */
 public interface IAgentGenerator<T extends IAgent<?>> extends IGenerator<T>
 {
+    /**
+     * default fuzzy bundle
+     */
+    IFuzzyBundle<Boolean> DEFAULTFUZZYBUNDLE = new CBundle( new CIntersection(), new CCrisp<>( new CComplement() ) );
+    /**
+     * default unification
+     */
+    IUnifier DEFAULTUNIFIER = new CUnifier();
+
 }

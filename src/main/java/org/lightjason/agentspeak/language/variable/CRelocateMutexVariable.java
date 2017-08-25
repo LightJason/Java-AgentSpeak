@@ -28,6 +28,9 @@ import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * class for a mutex relocated variable
@@ -36,6 +39,10 @@ import org.lightjason.agentspeak.language.ITerm;
  */
 public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implements IRelocateVariable
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6680660424006072619L;
     /**
      * reference to relocated variable
      */
@@ -58,7 +65,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
      *  @param p_functor variable name
      * @param p_relocate variable which should be relocated
      */
-    public CRelocateMutexVariable( final IPath p_functor, final IVariable<?> p_relocate )
+    public CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_relocate )
     {
         super( p_functor, p_relocate.raw() );
         m_relocate = p_relocate;
@@ -71,12 +78,13 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
      * @param p_variable referenced variable
      * @param p_value value
      */
-    private CRelocateMutexVariable( final IPath p_functor, final IVariable<?> p_variable, final T p_value )
+    private CRelocateMutexVariable( @Nonnull final IPath p_functor, @Nonnull final IVariable<?> p_variable, @Nullable final T p_value )
     {
         super( p_functor, p_value );
         m_relocate = p_variable;
     }
 
+    @Nonnull
     @Override
     public final IVariable<?> relocate()
     {
@@ -86,20 +94,23 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     }
 
 
+    @Nonnull
     @Override
-    public final IVariable<T> shallowcopy( final IPath... p_prefix )
+    public final IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CRelocateMutexVariable<T>( m_functor, m_relocate, m_value )
-               : new CRelocateMutexVariable<T>( p_prefix[0].append( m_functor ), m_relocate, m_value );
+               ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value )
+               : new CRelocateMutexVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateMutexVariable<>( CPath.from( m_functor.getSuffix() ), m_relocate, new Cloner().deepClone( m_value ) );
+        return new CRelocateMutexVariable<>( CPath.from( m_functor.suffix() ), m_relocate, new Cloner().deepClone( m_value ) );
     }
 
+    @Nonnull
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
@@ -112,6 +123,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
         );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopysuffix()
     {

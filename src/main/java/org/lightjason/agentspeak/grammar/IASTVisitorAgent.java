@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.grammar;
 
 import org.lightjason.agentspeak.language.ILiteral;
 
+import javax.annotation.Nullable;
+
 
 /**
  * visitor interface of the abstract-syntax-tree (AST) for an agent
@@ -35,8 +37,9 @@ public interface IASTVisitorAgent extends IASTVisitorAgentSpeak, AgentVisitor<Ob
     /**
      * returns the initial goal
      *
-     * @returns literal or null
+     * @return literal or null
      */
+    @Nullable
     ILiteral initialgoal();
 
 }

@@ -29,10 +29,11 @@ import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementRuleLiteral;
-import org.lightjason.agentspeak.language.execution.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
+import org.lightjason.agentspeak.language.instantiable.plan.annotation.IAnnotation;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +47,10 @@ import java.util.stream.Stream;
 public final class CRule extends IBaseInstantiable implements IRule
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1165818799700126229L;
+    /**
      * identifier of the rule
      */
     private final ILiteral m_id;
@@ -56,50 +61,52 @@ public final class CRule extends IBaseInstantiable implements IRule
      * @param p_id literal with signature
      * @param p_action action list
      */
-    public CRule( final ILiteral p_id, final List<IExecution> p_action )
+    public CRule( @Nonnull final ILiteral p_id, @Nonnull final List<IExecution> p_action )
     {
         super(
             p_action,
-            Collections.<IAnnotation<?>>emptySet(),
-            p_id.hashCode()
-            + p_action.stream().mapToInt( Object::hashCode ).sum()
+            Collections.emptySet(),
+            Stream.concat(
+                Stream.of( p_id.hashCode() ),
+                p_action.stream().map( Object::hashCode )
+            ).reduce( 0, ( i, j ) -> i ^ j )
         );
         m_id = p_id;
     }
 
+    @Nonnull
     @Override
-    public final ILiteral getIdentifier()
+    public final ILiteral identifier()
     {
         return m_id;
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
-    public final IRule replaceplaceholder( final Multimap<IPath, IRule> p_rules )
+    public final IRule replaceplaceholder( @Nonnull final Multimap<IPath, IRule> p_rules )
     {
         return new CRule(
             m_id,
             m_action.stream().map( i ->
                                        i instanceof CRulePlaceholder
-                                       // create a full deep-copy of the literal for avoid indeterminisitic
-                                       // behaviour on rule unification
-                                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).getIdentifier().deepcopy() )
+                                       // create a full deep-copy of the literal for avoid indeterminisitic behaviour on rule unification
+                                       ? new CAchievementRuleLiteral( (ILiteral) ( (CRulePlaceholder) i ).identifier().deepcopy() )
                                        : i
             ).collect( Collectors.toList() )
         );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return (Stream<IVariable<?>>) Stream.of(
-            CCommon.recursiveterm( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-            CCommon.recursiveliteral( m_id.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-            super.variables()
-        )
-                                            .reduce( Stream::concat )
-                                            .orElseGet( Stream::<IVariable<?>>empty );
+        return CCommon.streamconcat(
+            super.variables(),
+            m_annotation.values().stream().flatMap( IAnnotation::variables ),
+            CCommon.flattenrecursive( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+        );
     }
 
     @Override

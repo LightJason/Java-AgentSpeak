@@ -38,16 +38,18 @@ import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -99,7 +101,7 @@ public final class TestCAgentExecution extends IBaseTest
         m_running = new AtomicBoolean( true );
         try
             (
-                final InputStream l_asl = new FileInputStream( ASL );
+                final InputStream l_asl = new FileInputStream( ASL )
             )
         {
             m_agent = new CGenerator( l_asl ).generatesingle();
@@ -112,10 +114,14 @@ public final class TestCAgentExecution extends IBaseTest
 
 
         // define execution results
-        m_result.put( Long.valueOf( 0 ), "main" );
-        m_result.put( Long.valueOf( 1 ), "first" );
-        m_result.put( Long.valueOf( 1 ), "second" );
-        m_result.put( Long.valueOf( 2 ), "single" );
+        m_result.put( 0L, "main" );
+        m_result.put( 1L, "single run" );
+        m_result.put( 1L, "first" );
+        m_result.put( 1L, "second" );
+        m_result.put( 1L, "twovalues equal type" );
+        m_result.put( 1L, "twovalues different type" );
+        m_result.put( 1L, "twovalues with literal" );
+        m_result.put( 2L, "single" );
     }
 
     /**
@@ -190,8 +196,7 @@ public final class TestCAgentExecution extends IBaseTest
                         new CStop(),
                         new CLog()
                     )
-                ).collect( Collectors.toSet() ),
-                IAggregation.EMPTY
+                ).collect( Collectors.toSet() )
             );
         }
 
@@ -209,6 +214,15 @@ public final class TestCAgentExecution extends IBaseTest
     private static class CAgent extends IBaseAgent<CAgent>
     {
         /**
+         * serial id
+         */
+        private static final long serialVersionUID = -7467073439000881088L;
+        /**
+         * cycle counter
+         */
+        private final AtomicLong m_cycle = new AtomicLong();
+
+        /**
          * ctor
          *
          * @param p_configuration agent configuration
@@ -216,6 +230,24 @@ public final class TestCAgentExecution extends IBaseTest
         CAgent( final IAgentConfiguration<CAgent> p_configuration )
         {
             super( p_configuration );
+        }
+
+        @Override
+        public final CAgent call() throws Exception
+        {
+            super.call();
+            m_cycle.incrementAndGet();
+            return this;
+        }
+
+        /**
+         * returns the cycle
+         *
+         * @return cycle
+         */
+        final long cycle()
+        {
+            return m_cycle.get();
         }
     }
 
@@ -225,23 +257,29 @@ public final class TestCAgentExecution extends IBaseTest
      */
     private final class CStop extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 5466369414656444520L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
             return CPath.from( "stop" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
             return 0;
         }
 
+        @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                                   final List<ITerm> p_annotation
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             m_running.set( false );
             return CFuzzyValue.from( true );
@@ -253,24 +291,31 @@ public final class TestCAgentExecution extends IBaseTest
      */
     private final class CLog extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 4536335097194230205L;
+
+        @Nonnull
         @Override
         public final IPath name()
         {
             return CPath.from( "log" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
             return 1;
         }
 
+        @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                                   final List<ITerm> p_annotation
-        )
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
-            m_log.put( p_context.agent().cycle(), p_argument.get( 0 ).<String>raw()  );
+            m_log.put( p_context.agent().<CAgent>raw().cycle(), p_argument.get( 0 ).<String>raw()  );
             return CFuzzyValue.from( true );
         }
     }

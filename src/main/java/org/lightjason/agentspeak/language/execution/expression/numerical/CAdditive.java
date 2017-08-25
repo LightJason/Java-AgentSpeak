@@ -31,9 +31,10 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.expression.EOperator;
 import org.lightjason.agentspeak.language.execution.expression.IBaseBinary;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +44,10 @@ import java.util.List;
  */
 public final class CAdditive extends IBaseBinary
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 220138218890736772L;
 
     /**
      * ctor
@@ -60,13 +65,13 @@ public final class CAdditive extends IBaseBinary
             throw new CIllegalArgumentException( CCommon.languagestring( this, "operator", m_operator ) );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         final List<ITerm> l_argument = new LinkedList<>();
-        if ( !this.executearguments( p_context, p_parallel, l_argument ) )
+        if ( !this.executearguments( p_parallel, p_context, l_argument ) )
             return CFuzzyValue.from( false );
 
 
@@ -102,11 +107,10 @@ public final class CAdditive extends IBaseBinary
      * @tparam N any number type
      * @tparam M any number type
      */
-    private <N extends Number, M extends Number> Number add( final N p_left, final M p_right )
+    @Nonnull
+    private <N extends Number, M extends Number> Number add( @Nonnull final N p_left, @Nonnull final M p_right )
     {
-        return ( p_left instanceof Double ) || ( p_right instanceof Double )
-               ? p_left.doubleValue() + p_right.doubleValue()
-               : p_left.longValue() + p_right.longValue();
+        return p_left.doubleValue() + p_right.doubleValue();
     }
 
     /**
@@ -119,11 +123,10 @@ public final class CAdditive extends IBaseBinary
      * @tparam N any number type
      * @tparam M any number type
      */
-    private <N extends Number, M extends Number> Number subtract( final N p_left, final M p_right )
+    @Nonnull
+    private <N extends Number, M extends Number> Number subtract( @Nonnull final N p_left, @Nonnull final M p_right )
     {
-        return ( p_left instanceof Double ) || ( p_right instanceof Double )
-               ? p_left.doubleValue() - p_right.doubleValue()
-               : p_left.longValue() - p_right.longValue();
+        return p_left.doubleValue() - p_right.doubleValue();
     }
 
 }

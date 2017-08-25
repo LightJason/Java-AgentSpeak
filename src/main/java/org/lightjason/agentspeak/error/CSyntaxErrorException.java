@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.error;
 
 import org.lightjason.agentspeak.common.CCommon;
 
+import javax.annotation.Nonnull;
 import java.util.logging.Logger;
 
 
@@ -34,13 +35,17 @@ import java.util.logging.Logger;
  * @note must be an illegal state exception, because the AntLR error
  * lister cannot throw any other exception
  */
-@SuppressWarnings( "serial" )
 public final class CSyntaxErrorException extends IllegalStateException implements IException
 {
+
     /**
      * logger
      */
     private static final Logger LOGGER = CCommon.logger( CSyntaxErrorException.class );
+    /**
+     * serial id
+     */
+    private static final transient long serialVersionUID = 5220180409070733235L;
 
     /**
      * ctor
@@ -56,7 +61,7 @@ public final class CSyntaxErrorException extends IllegalStateException implement
      *
      * @param p_message message
      */
-    public CSyntaxErrorException( final String p_message )
+    public CSyntaxErrorException( @Nonnull final String p_message )
     {
         super( p_message );
         LOGGER.warning( p_message );
@@ -68,7 +73,7 @@ public final class CSyntaxErrorException extends IllegalStateException implement
      * @param p_message message
      * @param p_cause cause
      */
-    public CSyntaxErrorException( final String p_message, final Throwable p_cause )
+    public CSyntaxErrorException( @Nonnull final String p_message, @Nonnull final Throwable p_cause )
     {
         super( p_message, p_cause );
         LOGGER.warning( p_message );
@@ -79,7 +84,7 @@ public final class CSyntaxErrorException extends IllegalStateException implement
      *
      * @param p_cause cause
      */
-    public CSyntaxErrorException( final Throwable p_cause )
+    public CSyntaxErrorException( @Nonnull final Throwable p_cause )
     {
         super( p_cause );
         LOGGER.warning( p_cause.getMessage() );

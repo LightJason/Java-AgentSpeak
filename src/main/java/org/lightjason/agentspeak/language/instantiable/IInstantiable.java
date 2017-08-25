@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 
@@ -44,6 +45,7 @@ public interface IInstantiable extends IExecution
      * @param p_variable variable stream
      * @return individual context
      */
-    IContext instantiate( final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable );
+    @Nonnull
+    IContext instantiate( @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable );
 
 }

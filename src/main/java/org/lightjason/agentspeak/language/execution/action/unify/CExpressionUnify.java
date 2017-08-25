@@ -27,9 +27,10 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.expression.IExpression;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -41,6 +42,10 @@ import java.util.stream.Stream;
 public final class CExpressionUnify extends CDefaultUnify
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 6897299610175239719L;
+    /**
      * unification expression
      */
     private final IExpression m_expression;
@@ -50,12 +55,12 @@ public final class CExpressionUnify extends CDefaultUnify
      *
      * @param p_parallel parallel execution
      * @param p_literal literal
-     * @param p_constraint expression
+     * @param p_expression expression
      */
-    public CExpressionUnify( final boolean p_parallel, final ILiteral p_literal, final IExpression p_constraint )
+    public CExpressionUnify( final boolean p_parallel, @Nonnull final ILiteral p_literal, @Nonnull final IExpression p_expression )
     {
         super( p_parallel, p_literal );
-        m_expression = p_constraint;
+        m_expression = p_expression;
     }
 
 
@@ -65,16 +70,16 @@ public final class CExpressionUnify extends CDefaultUnify
         return MessageFormat.format( "{0}>>({1}, {2})", m_parallel ? "@" : "", m_value, m_expression );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
-        return m_parallel
-               ? p_context.agent().unifier().parallel( p_context, m_value, m_variablenumber, m_expression )
-               : p_context.agent().unifier().sequential( p_context, m_value, m_variablenumber, m_expression );
+        return p_context.agent().unifier().unify( p_context, m_value, m_variablenumber, m_expression, m_parallel );
     }
 
+    @Nonnull
     @Override
     public final Stream<IVariable<?>> variables()
     {

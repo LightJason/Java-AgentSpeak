@@ -25,18 +25,87 @@ package org.lightjason.agentspeak.language;
 
 import org.lightjason.agentspeak.common.IPath;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
+
 
 /**
  * term interface
  */
-public interface ITerm extends IDeepCopy<ITerm>
+public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
 {
+    /**
+     * empty term
+     */
+    ITerm EMPTY = new ITerm()
+    {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = -3396420174718981909L;
+
+        @Nonnull
+        @Override
+        public final String functor()
+        {
+            return "";
+        }
+
+        @Nonnull
+        @Override
+        public final IPath functorpath()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public final IPath fqnfunctor()
+        {
+            return IPath.EMPTY;
+        }
+
+        @Override
+        public final boolean hasVariable()
+        {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public final <T> T raw()
+        {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopy( @Nullable final IPath... p_prefix )
+        {
+            return this;
+        }
+
+        @Nonnull
+        @Override
+        public final ITerm deepcopysuffix()
+        {
+            return this;
+        }
+
+        @Override
+        public final int structurehash()
+        {
+            return 0;
+        }
+    };
 
     /**
      * returns the functor without path
      *
      * @return functor
      */
+    @Nonnull
     String functor();
 
     /**
@@ -44,6 +113,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return path
      */
+    @Nonnull
     IPath functorpath();
 
     /**
@@ -52,6 +122,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      *
      * @return fqn functor
      */
+    @Nonnull
     IPath fqnfunctor();
 
     /**
@@ -67,6 +138,7 @@ public interface ITerm extends IDeepCopy<ITerm>
      * @tparam raw type
      * @return any type
      */
+    @Nullable
     <T> T raw();
 
 }

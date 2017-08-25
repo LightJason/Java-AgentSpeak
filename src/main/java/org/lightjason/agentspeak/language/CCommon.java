@@ -39,20 +39,17 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.action.unify.IUnifier;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
-import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
+import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
-import org.lightjason.agentspeak.language.variable.CConstant;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -88,9 +85,10 @@ public final class CCommon
      * @param p_unifiedvariables unified variables as stream
      * @return context reference
      */
-    public static IContext updatecontext( final IContext p_context, final Stream<IVariable<?>> p_unifiedvariables )
+    @Nonnull
+    public static IContext updatecontext( @Nonnull final IContext p_context, @Nonnull final Stream<IVariable<?>> p_unifiedvariables )
     {
-        p_unifiedvariables.forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
+        p_unifiedvariables.parallel().forEach( i -> p_context.instancevariables().get( i.fqnfunctor() ).set( i.raw() ) );
         return p_context;
     }
 
@@ -102,20 +100,16 @@ public final class CCommon
      * @param p_variable variable stream
      * @return context object
      */
-    public static IContext instantiate( final IInstantiable p_instance, final IAgent<?> p_agent, final Stream<IVariable<?>> p_variable )
+    @Nonnull
+    public static IContext instantiate( @Nonnull final IInstantiable p_instance, @Nonnull final IAgent<?> p_agent, @Nonnull final Stream<IVariable<?>> p_variable )
     {
         final Set<IVariable<?>> l_variables = p_instance.variables().parallel().map( i -> i.shallowcopy() ).collect( Collectors.toSet() );
-        Stream.of(
+        Stream.concat(
             p_variable,
-            p_agent.variablebuilder().generate( p_agent, p_instance ),
-            Stream.of( new CConstant<>( "Score", p_instance.score( p_agent ) ) ),
-            Stream.of( new CConstant<>( "Cycle", p_agent.cycle() ) )
-        ).reduce( Stream::concat )
-              .orElseGet( Stream::<IVariable<?>>empty )
-              .forEach( i -> {
-                  l_variables.remove( i );
-                  l_variables.add( i );
-              } );
+            p_agent.variablebuilder().apply( p_agent, p_instance )
+        )
+               .peek( l_variables::remove )
+               .forEach( l_variables::add );
 
         return new CContext( p_agent, p_instance, Collections.unmodifiableSet( l_variables ) );
     }
@@ -128,20 +122,21 @@ public final class CCommon
      * @param p_unifier unifier
      * @param p_source input trigger (with values)
      * @param p_target trigger (of a plan / rule)
-     * @return  pair of valid unification and unified variables
+     * @return pair of valid unification and unified variables
      */
-    public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( final IUnifier p_unifier, final ITrigger p_source, final ITrigger p_target )
+    @Nonnull
+    public static Pair<Boolean, Set<IVariable<?>>> unifytrigger( @Nonnull final IUnifier p_unifier,
+                                                                 @Nonnull final ITrigger p_source, @Nonnull final ITrigger p_target )
     {
-        // filter for avoid duplicated instantiation on non-existing values / annotations
-        if ( !( ( p_source.getLiteral().emptyValues() == p_target.getLiteral().emptyValues() )
-             && ( p_source.getLiteral().emptyAnnotations() == p_target.getLiteral().emptyAnnotations() ) ) )
+        // filter for avoid duplicated instantiation on non-existing values
+        if ( !( p_source.literal().emptyValues() == p_target.literal().emptyValues() ) )
             return new ImmutablePair<>( false, Collections.emptySet() );
 
         // unify variables, source trigger literal must be copied
-        final Set<IVariable<?>> l_variables = p_unifier.literal( p_target.getLiteral().deepcopy().<ILiteral>raw(), p_source.getLiteral() );
+        final Set<IVariable<?>> l_variables = p_unifier.unify( p_source.literal(), p_target.literal().deepcopy().<ILiteral>raw() );
 
         // check for completely unification (of all variables)
-        return l_variables.size() == CCommon.variablefrequency( p_target.getLiteral() ).size()
+        return l_variables.size() == CCommon.variablefrequency( p_target.literal() ).size()
                ? new ImmutablePair<>( true, l_variables )
                : new ImmutablePair<>( false, Collections.emptySet() );
     }
@@ -149,36 +144,40 @@ public final class CCommon
     /**
      * instantiate a plan with context and plan-specific variables
      *
-     * @param p_plan plan
-     * @param p_fail fail runs
-     * @param p_success successful runs
+     * @param p_planstatistic plan statistic for instatiation
      * @param p_agent agent
      * @param p_variables instantiated variables
-     * @return pair of plan and context object
+     * @return pair of planstatistic and context
      */
-    public static Pair<IPlan, IContext> instantiateplan( final IPlan p_plan, final double p_fail, final double p_success,
-                                                          final IAgent<?> p_agent, final Set<IVariable<?>> p_variables
-    )
+    @Nonnull
+    public static Pair<IPlanStatistic, IContext> instantiateplan( @Nonnull final IPlanStatistic p_planstatistic,
+                                                                  @Nonnull final IAgent<?> p_agent, @Nonnull final Set<IVariable<?>> p_variables )
     {
-        final double l_sum = p_success + p_fail;
-        return new ImmutablePair<>( p_plan, p_plan.instantiate(
-            p_agent,
-            Stream.concat(
-                p_variables.stream(),
-                Stream.of(
-                    // execution count
-                    new CConstant<>( "PlanSuccessful", p_success ),
-                    new CConstant<>( "PlanFail", p_fail ),
-                    new CConstant<>( "PlanRuns", l_sum ),
-
-                    // execution ratio
-                    new CConstant<>( "PlanSuccessfulRatio", l_sum == 0 ? 0 : p_success / l_sum ),
-                    new CConstant<>( "PlanFailRatio", l_sum == 0 ? 0 : p_fail / l_sum )
-                ) ) )
+        return new ImmutablePair<>(
+            p_planstatistic,
+            p_planstatistic.plan().instantiate(
+                p_agent,
+                Stream.concat( p_variables.stream(), p_planstatistic.variables() )
+            )
         );
     }
 
     // --- variable / term helpers -----------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * concat multiple streams
+     *
+     * @param p_streams streams
+     * @tparam T any value type
+     * @return concated stream
+     */
+    @Nonnull
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
+    public static <T> Stream<T> streamconcat( @Nonnull final Stream<T>... p_streams )
+    {
+        return Arrays.stream( p_streams ).reduce( Stream::concat ).orElseGet( Stream::empty );
+    }
 
     /**
      * consts the variables within a literal
@@ -186,13 +185,11 @@ public final class CCommon
      * @param p_literal literal
      * @return map with frequency
      */
-    public static Map<IVariable<?>, Integer> variablefrequency( final ILiteral p_literal )
+    @Nonnull
+    public static Map<IVariable<?>, Integer> variablefrequency( @Nonnull final ILiteral p_literal )
     {
         return Collections.unmodifiableMap(
-            Stream.concat(
-                recursiveterm( p_literal.orderedvalues() ),
-                recursiveliteral( p_literal.annotations() )
-            )
+            flattenrecursive( p_literal.orderedvalues() )
                   .filter( i -> i instanceof IVariable<?> )
                   .map( i -> (IVariable<?>) i )
                   .collect( Collectors.toMap( i -> i, i -> 1, Integer::sum ) )
@@ -207,12 +204,12 @@ public final class CCommon
      * @return term value or raw value
      */
     @SuppressWarnings( "unchecked" )
-    public static <T> boolean rawvalueAssignableTo( final T p_value, final Class<?>... p_class )
+    public static <T> boolean rawvalueAssignableTo( @Nonnull final T p_value, @Nonnull final Class<?>... p_class )
     {
         if ( p_value instanceof IVariable<?> )
-            return ( (IVariable<?>) p_value ).valueAssignableTo( p_class );
+            return ( (IVariable<?>) p_value ).valueassignableto( p_class );
         if ( p_value instanceof IRawTerm<?> )
-            return ( (IRawTerm<?>) p_value ).valueAssignableTo( p_class );
+            return ( (IRawTerm<?>) p_value ).valueassignableto( p_class );
 
         return Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( p_value.getClass() ) );
     }
@@ -225,7 +222,8 @@ public final class CCommon
      * @param p_terms replacing term list
      * @return result term list
      */
-    public static List<ITerm> replaceFromContext( final IContext p_context, final Collection<? extends ITerm> p_terms )
+    @Nonnull
+    public static List<ITerm> replaceFromContext( @Nonnull final IContext p_context, @Nonnull final Collection<? extends ITerm> p_terms )
     {
         return p_terms.stream().map( i -> replaceFromContext( p_context, i ) ).collect( Collectors.toList() );
     }
@@ -238,7 +236,8 @@ public final class CCommon
      * @param p_term term
      * @return replaces variable object
      */
-    public static ITerm replaceFromContext( final IContext p_context, final ITerm p_term )
+    @Nonnull
+    public static ITerm replaceFromContext( @Nonnull final IContext p_context, @Nonnull final ITerm p_term )
     {
         if ( !( p_term instanceof IVariable<?> ) )
             return p_term;
@@ -260,9 +259,10 @@ public final class CCommon
      * @param p_terms term collection
      * @return flat term stream
      */
-    public static Stream<ITerm> flatcollection( final Collection<? extends ITerm> p_terms )
+    @Nonnull
+    public static Stream<ITerm> flatten( @Nonnull final Collection<? extends ITerm> p_terms )
     {
-        return flattenToStream( p_terms.stream() );
+        return flattenstream( p_terms.stream() );
     }
 
     /**
@@ -272,42 +272,11 @@ public final class CCommon
      * @param p_terms term stream
      * @return flat term stream
      */
-    public static Stream<ITerm> flatstream( final Stream<? extends ITerm> p_terms )
+    @Nonnull
+    public static Stream<ITerm> flatten( @Nonnull final Stream<? extends ITerm> p_terms )
     {
-        return flattenToStream( p_terms );
+        return flattenstream( p_terms );
     }
-
-    /**
-     * returns a byte array of a object stream
-     *
-     * @param p_input input object list
-     * @return byte sequence with UTF-8 encoding
-     *
-     * @throws IOException is thrown on initializing error
-     */
-    public static byte[] getBytes( final Stream<?> p_input ) throws IOException
-    {
-        try
-        (
-            final ByteArrayOutputStream l_output = new ByteArrayOutputStream();
-            final ObjectOutput l_object = new ObjectOutputStream( l_output )
-        )
-        {
-            p_input.forEach( i -> {
-                try
-                {
-                    l_object.writeObject( i );
-                }
-                catch ( final IOException l_exception )
-                {
-                    throw new RuntimeException( l_exception );
-                }
-            } );
-
-            return l_output.toByteArray();
-        }
-    }
-
 
     /**
      * recursive stream of term values
@@ -315,22 +284,10 @@ public final class CCommon
      * @param p_input term stream
      * @return term stream
      */
-    public static Stream<ITerm> recursiveterm( final Stream<ITerm> p_input )
+    @Nonnull
+    public static Stream<ITerm> flattenrecursive( @Nonnull final Stream<ITerm> p_input )
     {
-        return p_input.flatMap( i -> i instanceof ILiteral ? recursiveterm( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
-    }
-
-    /**
-     * recursive stream of literal values
-     *
-     * @param p_input term stream
-     * @return term stream
-     *
-     * @note annotations cannot use annotation within
-     */
-    public static Stream<ITerm> recursiveliteral( final Stream<ILiteral> p_input )
-    {
-        return p_input.flatMap( i -> recursiveterm( i.orderedvalues() ) );
+        return p_input.flatMap( i -> i instanceof ILiteral ? flattenrecursive( ( i.<ILiteral>raw() ).orderedvalues() ) : Stream.of( i ) );
     }
 
     /*
@@ -339,13 +296,15 @@ public final class CCommon
      * @param p_list any stream
      * @return term stream
      */
+    @Nonnull
     @SuppressWarnings( "unchecked" )
-    private static Stream<ITerm> flattenToStream( final Stream<?> p_stream )
+    private static Stream<ITerm> flattenstream( @Nonnull final Stream<?> p_stream )
     {
-        return p_stream.flatMap( i -> {
+        return p_stream.flatMap( i ->
+        {
             final Object l_value = i instanceof ITerm ? ( (ITerm) i ).raw() : i;
             return l_value instanceof Collection<?>
-                   ? flattenToStream( ( (Collection<?>) l_value ).stream() )
+                   ? flattenstream( ( (Collection<?>) l_value ).stream() )
                    : Stream.of( CRawTerm.from( l_value ) );
         } );
     }
@@ -355,9 +314,10 @@ public final class CCommon
      *
      * @return hasher
      */
+    @Nonnull
     public static Hasher getTermHashing()
     {
-        return Hashing.murmur3_32().newHasher();
+        return Hashing.sipHash24().newHasher();
     }
 
     // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------
@@ -373,8 +333,8 @@ public final class CCommon
      * @return distance
      * @see https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
      */
-    public static double levenshtein( final String p_first, final String p_second, final double p_insertweight, final double p_replaceweight,
-                                      final double p_deleteweight )
+    public static double levenshtein( @Nonnull final String p_first, @Nonnull final String p_second, final double p_insertweight,
+                                      final double p_replaceweight, final double p_deleteweight )
     {
         // the array of distances
         double[] l_cost = IntStream.range( 0, p_first.length() + 1 ).mapToDouble( i -> i ).toArray();
@@ -423,7 +383,7 @@ public final class CCommon
      * @param p_second second string
      * @return distance in [0,1]
      */
-    public static double ncd( final ECompression p_compression, final String p_first, final String p_second )
+    public static double ncd( @Nonnull final ECompression p_compression, @Nonnull final String p_first, @Nonnull final String p_second )
     {
         if ( p_first.equals( p_second ) )
             return 0;
@@ -442,7 +402,7 @@ public final class CCommon
      * @return number of compression bytes
      * @warning counting stream returns the correct number of bytes after flushing
      */
-    private static double compress( final ECompression p_compression, final String p_input )
+    private static double compress( @Nonnull final ECompression p_compression, @Nonnull final String p_input )
     {
         final DataOutputStream l_counting = new DataOutputStream( new NullOutputStream() );
 
@@ -489,7 +449,8 @@ public final class CCommon
          * @return compression output stream
          * @throws IOException throws on any io error
          */
-        public final OutputStream get( final DataOutputStream p_datastream ) throws IOException
+        @Nonnull
+        public final OutputStream get( @Nonnull final DataOutputStream p_datastream ) throws IOException
         {
             switch ( this )
             {
@@ -514,7 +475,8 @@ public final class CCommon
          * @param p_value string name
          * @return compression value
          */
-        public static ECompression from( final String p_value )
+        @Nonnull
+        public static ECompression from( @Nonnull final String p_value )
         {
             return ECompression.valueOf( p_value.toUpperCase( Locale.ROOT ) );
         }
@@ -526,7 +488,7 @@ public final class CCommon
          * @param p_value compression name
          * @return existance flag
          */
-        public static boolean exist( final String p_value )
+        public static boolean exist( @Nonnull final String p_value )
         {
             return ALGORITHMS.contains( p_value.toUpperCase( Locale.ROOT ) );
         }

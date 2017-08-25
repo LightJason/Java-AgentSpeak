@@ -25,6 +25,8 @@ package org.lightjason.agentspeak.error;
 
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * exception with execution context
@@ -37,6 +39,7 @@ public interface IContextException extends IException
      *
      * @return context
      */
+    @Nonnull
     IContext context();
 
 }

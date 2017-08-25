@@ -26,6 +26,8 @@ package org.lightjason.agentspeak.language.execution.action.achievement_test;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * abstract class of test-goal / test-rule action
@@ -33,11 +35,17 @@ import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 abstract class ITest extends IBaseExecution<IPath>
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 500291351344481097L;
+
+    /**
      * ctor
      *
      * @param p_value atom
      */
-    ITest( final IPath p_value )
+    @Nonnull
+    ITest( @Nonnull final IPath p_value )
     {
         super( p_value );
     }

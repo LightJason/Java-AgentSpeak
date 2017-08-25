@@ -31,6 +31,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
@@ -43,11 +44,12 @@ import org.lightjason.agentspeak.configuration.IAgentConfiguration;
 import org.lightjason.agentspeak.generator.IBaseAgentGenerator;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.score.IAggregation;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.CConstant;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -63,18 +65,16 @@ import java.util.stream.Stream;
 
 /**
  * test agent structure
+ *
+ * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
 {
     /**
-     * enable printing of test-data
-     */
-    private static final boolean PRINTENABLE = false;
-    /**
      * list with successful plans
      */
-    private final List<Pair<Boolean, String>> m_testlog = Collections.synchronizedList( new ArrayList<>() );
+    private List<Pair<Boolean, String>> m_testlog;
 
     static
     {
@@ -90,18 +90,26 @@ public final class TestCAgent extends IBaseTest
     public static Object[] generate()
     {
         return Stream.of(
-            new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
-            /*
-            new ImmutableTriple<>( "src/test/resources/agent/math.asl", 2, 10 ),
-            new ImmutableTriple<>( "src/test/resources/agent/crypto.asl", 2, 9 ),
-            new ImmutableTriple<>( "src/test/resources/agent/collection.asl", 2, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/webservice.asl", 4, 1 ),
-            new ImmutableTriple<>( "src/test/resources/agent/rules.asl", 2, 4 ),
-            new ImmutableTriple<>( "src/test/resources/agent/generic.asl", 2, 14 )
-            */
+            //new ImmutableTriple<>( "src/test/resources/agent/complete.asl", 5, 0 )
+            new ImmutableTriple<>( "src/test/resources/agent/language/crypto.asl", 2, 9 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/math.asl", 2, 10 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/collection.asl", 2, 5 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/generic.asl", 3, 26 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/rules.asl", 2, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/trigger.asl", 3, 21 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/execution.asl", 3, 4 ),
+            new ImmutableTriple<>( "src/test/resources/agent/language/webservice.asl", 4, 3 )
         ).toArray();
     }
 
+    /**
+     * return list initialize
+     */
+    @Before
+    public final void initialize()
+    {
+        m_testlog = Collections.synchronizedList( new ArrayList<>() );
+    }
 
     /**
      * test for default generators and configuration
@@ -114,7 +122,7 @@ public final class TestCAgent extends IBaseTest
     {
         try
         (
-            final InputStream l_stream = new FileInputStream( p_asl.getLeft() );
+            final InputStream l_stream = new FileInputStream( p_asl.getLeft() )
         )
         {
             final IAgent<?> l_agent = new CAgent.CAgentGenerator(
@@ -128,7 +136,8 @@ public final class TestCAgent extends IBaseTest
                                       ).generatesingle();
 
             IntStream.range( 0, p_asl.getMiddle().intValue() )
-                     .forEach( i -> {
+                     .forEach( i ->
+                     {
                          try
                          {
                              l_agent.call();
@@ -144,11 +153,11 @@ public final class TestCAgent extends IBaseTest
             Assert.assertTrue( MessageFormat.format( "{0}: {1}", p_asl.getLeft(), l_exception.getMessage() ), false );
         }
 
-
-        Assert.assertEquals(  MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );
-        m_testlog.stream()
-                 .filter( i -> !i.getKey() )
-                 .forEach( i -> Assert.assertTrue( MessageFormat.format( "{0} {1}", p_asl.getLeft(), i.getValue() ), false ) );
+        Assert.assertEquals( MessageFormat.format( "{0} {1}", "number of tests", p_asl.getLeft() ), p_asl.getRight().longValue(), m_testlog.size() );
+        Assert.assertTrue(
+            MessageFormat.format( "{0}", m_testlog.stream().filter( i -> !i.getLeft() ).map( Pair::getRight ).collect( Collectors.toList() ) ),
+            m_testlog.stream().anyMatch( Pair::getLeft )
+        );
     }
 
     /**
@@ -169,22 +178,29 @@ public final class TestCAgent extends IBaseTest
      */
     private static final class CEmptyPrint extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 8344720639088993942L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
             return CPath.from( "generic/print" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
             return 0;
         }
 
+        @Nonnull
         @Override
-        public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                                   final List<ITerm> p_annotation
+        public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                                   @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             return CFuzzyValue.from( true );
@@ -196,22 +212,29 @@ public final class TestCAgent extends IBaseTest
      */
     private final class CTestResult extends IBaseAction
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 9032624165822970132L;
 
+        @Nonnull
         @Override
         public final IPath name()
         {
             return CPath.from( "test/result" );
         }
 
+        @Nonnegative
         @Override
         public final int minimalArgumentNumber()
         {
             return 1;
         }
 
+        @Nonnull
         @Override
-        public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                             final List<ITerm> p_annotation
+        public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                             @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
         )
         {
             m_testlog.add(
@@ -232,6 +255,11 @@ public final class TestCAgent extends IBaseTest
      */
     private static final class CAgent extends IBaseAgent<IAgent<?>>
     {
+        /**
+         * serial id
+         */
+        private static final long serialVersionUID = 7077303993134371057L;
+
         /**
          * ctor
          *
@@ -257,7 +285,7 @@ public final class TestCAgent extends IBaseTest
              */
             CAgentGenerator( final InputStream p_stream, final Set<IAction> p_actions ) throws Exception
             {
-                super( p_stream, p_actions, IAggregation.EMPTY, ( p_agent, p_runningcontext ) -> Stream.of(
+                super( p_stream, p_actions, ( p_agent, p_runningcontext ) -> Stream.of(
                     new CConstant<>( "MyConstInt", 123 ),
                     new CConstant<>( "MyConstString", "here is a test string" )
                 ) );

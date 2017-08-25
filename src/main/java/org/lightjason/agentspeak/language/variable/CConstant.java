@@ -27,6 +27,9 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 /**
  * constant definition
@@ -35,16 +38,10 @@ import org.lightjason.agentspeak.error.CIllegalStateException;
  */
 public final class CConstant<T> extends CVariable<T>
 {
-
     /**
-     * ctor
-     *
-     * @param p_functor name
+     * serial id
      */
-    public CConstant( final String p_functor )
-    {
-        super( p_functor );
-    }
+    private static final long serialVersionUID = -8207552612082585231L;
 
     /**
      * ctor
@@ -52,7 +49,7 @@ public final class CConstant<T> extends CVariable<T>
      * @param p_functor name
      * @param p_value value
      */
-    public CConstant( final String p_functor, final T p_value )
+    public CConstant( @Nonnull final String p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
@@ -61,42 +58,35 @@ public final class CConstant<T> extends CVariable<T>
      * ctor
      *
      * @param p_functor name
-     */
-    public CConstant( final IPath p_functor )
-    {
-        super( p_functor );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_functor name
      * @param p_value value
      */
-    public CConstant( final IPath p_functor, final T p_value )
+    public CConstant( @Nonnull final IPath p_functor, @Nullable final T p_value )
     {
         super( p_functor, p_value );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> set( final T p_value )
     {
         throw new CIllegalStateException( CCommon.languagestring( this, "set", m_functor ) );
     }
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopy( final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
-               ? new CConstant<T>( m_functor, m_value )
-               : new CConstant<T>( p_prefix[0].append( m_functor ), m_value );
+               ? new CConstant<>( m_functor, m_value )
+               : new CConstant<>( p_prefix[0].append( m_functor ), m_value );
     }
 
 
+    @Nonnull
     @Override
     public final IVariable<T> shallowcopysuffix()
     {
-        return new CConstant<T>( m_functor.getSuffix(), m_value );
+        return new CConstant<>( m_functor.suffix(), m_value );
     }
 
 }

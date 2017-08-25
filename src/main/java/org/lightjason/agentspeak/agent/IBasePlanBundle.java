@@ -28,6 +28,7 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 import org.lightjason.agentspeak.language.instantiable.rule.IRule;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 
 
@@ -55,25 +56,28 @@ public abstract class IBasePlanBundle implements IPlanBundle
      *
      * @param p_configuration configuration
      */
-    public IBasePlanBundle( final IPlanBundleConfiguration p_configuration )
+    public IBasePlanBundle( @Nonnull final IPlanBundleConfiguration p_configuration )
     {
         m_plans = p_configuration.plans();
         m_initialbeliefs = p_configuration.beliefs();
         m_rules = p_configuration.rules();
     }
 
+    @Nonnull
     @Override
     public final Set<ILiteral> initialbeliefs()
     {
         return m_initialbeliefs;
     }
 
+    @Nonnull
     @Override
     public final Set<IPlan> plans()
     {
         return m_plans;
     }
 
+    @Nonnull
     @Override
     public final Set<IRule> rules()
     {

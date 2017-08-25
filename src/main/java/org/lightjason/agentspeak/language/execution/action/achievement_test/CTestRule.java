@@ -26,9 +26,10 @@ package org.lightjason.agentspeak.language.execution.action.achievement_test;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -38,19 +39,24 @@ import java.util.List;
 public final class CTestRule extends ITest
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 5911658475527475288L;
+
+    /**
      * ctor
      *
      * @param p_value atom
      */
-    public CTestRule( final IPath p_value )
+    public CTestRule( @Nonnull final IPath p_value )
     {
         super( p_value );
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
-    )
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         return CFuzzyValue.from( p_context.agent().rules().asMap().containsKey( m_value ) );
     }

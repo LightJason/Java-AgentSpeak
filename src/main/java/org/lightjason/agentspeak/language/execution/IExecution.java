@@ -23,11 +23,12 @@
 
 package org.lightjason.agentspeak.language.execution;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -35,34 +36,28 @@ import java.util.stream.Stream;
 /**
  * internal execution interface
  */
-public interface IExecution
+public interface IExecution extends Serializable
 {
 
     /**
      * defines a plan-body operation
      *
-     * @param p_context current execution context
      * @param p_parallel parallel execution
+     * @param p_context current execution context
      * @param p_argument parameter of the action
      * @param p_return return values
-     * @param p_annotation annotation    @return fuzzy boolean
+     * @return fuzzy boolean
      */
-    IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                  final List<ITerm> p_annotation
+    @Nonnull
+    IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                  @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     );
-
-    /**
-     * returns the scoring value of the execution structure
-     *
-     * @param p_agent agent for which calculates the score value
-     * @return score value
-     */
-    double score( final IAgent<?> p_agent );
 
     /**
      * returns a stream with all used variables
      *
      * @return variable stream (variables will be cloned on instantiation)
      */
+    @Nonnull
     Stream<IVariable<?>> variables();
 }

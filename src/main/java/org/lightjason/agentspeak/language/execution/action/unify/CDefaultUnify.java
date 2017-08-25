@@ -29,9 +29,11 @@ import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.execution.expression.IExpression;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,10 @@ import java.util.stream.Stream;
  */
 public class CDefaultUnify extends IBaseExecution<ILiteral>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -2858968840990978860L;
     /**
      * parallel unification
      */
@@ -60,7 +66,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
      * @param p_parallel parallel execution
      * @param p_literal literal
      */
-    public CDefaultUnify( final boolean p_parallel, final ILiteral p_literal )
+    public CDefaultUnify( final boolean p_parallel,  @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
         m_parallel = p_parallel;
@@ -70,7 +76,7 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         if ( l_frequency.isEmpty() )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "novariable" ) );
 
-        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).filter( i -> i.getValue() > 1 ).findAny().isPresent() )
+        if ( l_frequency.entrySet().stream().filter( i -> !i.getKey().any() ).anyMatch( i -> i.getValue() > 1 ) )
             throw new CIllegalArgumentException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "uniquevariable" ) );
 
         // count variables
@@ -83,26 +89,27 @@ public class CDefaultUnify extends IBaseExecution<ILiteral>
         return MessageFormat.format( "{0}>>{1}", m_parallel ? "@" : "", m_value );
     }
 
+    @Nonnull
     @Override
-    public IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                         final List<ITerm> p_annotation
+    public IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                         @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         return p_context.agent().unifier().unify(
             p_context,
             m_value,
-            m_variablenumber
+            m_variablenumber,
+            IExpression.EMPTY,
+            m_parallel
         );
     }
 
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            CCommon.recursiveterm( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i ),
-            CCommon.recursiveliteral( m_value.annotations() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
-        );
+        return CCommon.flattenrecursive( m_value.values() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i );
     }
 
 }

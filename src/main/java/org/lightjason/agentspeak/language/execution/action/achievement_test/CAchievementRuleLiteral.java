@@ -23,17 +23,15 @@
 
 package org.lightjason.agentspeak.language.execution.action.achievement_test;
 
-import org.lightjason.agentspeak.agent.IAgent;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.execution.fuzzy.IFuzzyValue;
-import org.lightjason.agentspeak.language.instantiable.rule.IRule;
+import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -43,50 +41,40 @@ import java.util.stream.Stream;
  */
 public final class CAchievementRuleLiteral extends IAchievementRule<ILiteral>
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -1575197582635138960L;
 
     /**
      * ctor
      *
      * @param p_literal literal of the call
      */
-    public CAchievementRuleLiteral( final ILiteral p_literal )
+    public CAchievementRuleLiteral( @Nonnull final ILiteral p_literal )
     {
         super( p_literal );
     }
 
+    @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final IContext p_context, final boolean p_parallel, final List<ITerm> p_argument, final List<ITerm> p_return,
-                                               final List<ITerm> p_annotation
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        return CAchievementRuleLiteral.execute( p_context, m_value, m_value.hasAt() );
+        return CAchievementRuleLiteral.execute( m_value.hasAt(), p_context, m_value );
     }
 
-    @Override
-    public final double score( final IAgent<?> p_agent )
-    {
-        // rules can create a cyclic reference so on calculate the score value
-        // a cyclic reference must be ignored
-        final Collection<IRule> l_rules = p_agent.rules().get( m_value.fqnfunctor() );
-        return l_rules == null
-               ? p_agent.aggregation().error()
-               : l_rules.parallelStream()
-                        .filter( this::equals )
-                        .mapToDouble( i -> i.score( p_agent ) )
-                        .sum();
-    }
-
+    @Nonnull
     @Override
     @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
-        return Stream.concat(
-            CCommon.recursiveterm( m_value.orderedvalues() ),
-            CCommon.recursiveliteral( m_value.annotations() )
-        )
-                     .parallel()
-                     .filter( i -> i instanceof IVariable<?> )
-                     .map( i -> (IVariable<?>) i );
+        return m_value == null
+               ? Stream.empty()
+               : CCommon.flattenrecursive( m_value.orderedvalues() )
+                        .parallel()
+                        .filter( i -> i instanceof IVariable<?> )
+                        .map( i -> (IVariable<?>) i );
     }
 
     @Override

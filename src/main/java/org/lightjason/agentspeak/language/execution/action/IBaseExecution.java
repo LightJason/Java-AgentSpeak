@@ -23,13 +23,11 @@
 
 package org.lightjason.agentspeak.language.execution.action;
 
-import com.google.common.collect.ImmutableMultiset;
-import org.lightjason.agentspeak.agent.IAgent;
-import org.lightjason.agentspeak.common.CCommon;
-import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 
@@ -41,6 +39,10 @@ import java.util.stream.Stream;
 public abstract class IBaseExecution<T> implements IExecution
 {
     /**
+     * serial id
+     */
+    private static final long serialVersionUID = 2572294057575105363L;
+    /**
      * data
      */
     protected final T m_value;
@@ -50,10 +52,9 @@ public abstract class IBaseExecution<T> implements IExecution
      *
      * @param p_value data
      */
-    protected IBaseExecution( final T p_value )
+    @Nonnull
+    protected IBaseExecution( @Nullable final T p_value )
     {
-        if ( p_value == null )
-            throw new CIllegalArgumentException( CCommon.languagestring( IBaseExecution.class, "notnull" ) );
         m_value = p_value;
     }
 
@@ -65,7 +66,7 @@ public abstract class IBaseExecution<T> implements IExecution
      */
     public final boolean isValueAssignableTo( final Class<?> p_class )
     {
-        return ( m_value == null ) || p_class.isAssignableFrom( m_value.getClass() );
+        return ( m_value != null ) &&  p_class.isAssignableFrom( m_value.getClass() );
     }
 
     /**
@@ -73,21 +74,17 @@ public abstract class IBaseExecution<T> implements IExecution
      *
      * @return value
      */
+    @Nullable
     public final T getValue()
     {
         return m_value;
     }
 
-    @Override
-    public double score( final IAgent<?> p_agent )
-    {
-        return p_agent.aggregation().evaluate( p_agent, ImmutableMultiset.of() );
-    }
-
+    @Nonnull
     @Override
     public Stream<IVariable<?>> variables()
     {
-        return Stream.<IVariable<?>>empty();
+        return Stream.empty();
     }
 
     @Override
