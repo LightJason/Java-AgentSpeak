@@ -51,9 +51,11 @@ import org.lightjason.agentspeak.action.builtin.math.statistic.CCreateDistributi
 import org.lightjason.agentspeak.action.builtin.math.statistic.CCreateStatistic;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CClearStatistic;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CAddStatisticValue;
+import org.lightjason.agentspeak.action.builtin.math.statistic.CMultiplePercentile;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CRandomSample;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CRandomSimple;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CMultipleStatisticValue;
+import org.lightjason.agentspeak.action.builtin.math.statistic.CSinglePercentile;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CSingleStatisticValue;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CExponentialSelection;
 import org.lightjason.agentspeak.action.builtin.math.statistic.CLinearSelection;
@@ -126,6 +128,39 @@ public final class TestCActionMathStatistics extends IBaseTest
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof DescriptiveStatistics );
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof SummaryStatistics );
         Assert.assertTrue( l_return.get( 3 ).raw() instanceof DescriptiveStatistics );
+    }
+
+    /**
+     * test percentile
+     */
+    @Test
+    public final void percentile()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+        final DescriptiveStatistics l_statistic1 = new DescriptiveStatistics();
+        final DescriptiveStatistics l_statistic2 = new DescriptiveStatistics();
+
+        IntStream.range( 0, 100 ).peek( l_statistic1::addValue ).forEach( i -> l_statistic2.addValue( i * 10 ) );
+
+
+        new CSinglePercentile().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of( 50, l_statistic1, l_statistic2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
+        );
+
+        new CMultiplePercentile().execute(
+            false, IContext.EMPTYPLAN,
+            Stream.of( l_statistic1, 25, 75 ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            l_return
+        );
+
+
+        Assert.assertEquals( l_return.size(), 4 );
+        Assert.assertArrayEquals(
+            l_return.stream().map( i -> i.<Number>raw().doubleValue() ).toArray(),
+            Stream.of( 49.5, 495, 24.25, 74.75 ).mapToDouble( Number::doubleValue ).boxed().toArray()
+        );
     }
 
     /**
