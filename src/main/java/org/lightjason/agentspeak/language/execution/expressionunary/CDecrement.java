@@ -68,13 +68,12 @@ public final class CDecrement<T extends Number> implements IUnaryExpression<T>
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        final IVariable<T> l_variable = ( (IVariable<T>) CCommon.replaceFromContext( p_context, m_variable ) ).thrownotallocated();
+        final IVariable<Number> l_variable = CCommon.replaceFromContext( p_context, m_variable ).<IVariable<Number>>term().thrownotallocated();
         if ( l_variable.valueassignableto( Number.class ) )
-            l_variable.set( (T) Double.valueOf( l_variable.<Number>raw().doubleValue() - 1 ) );
+            l_variable.set( l_variable.<Number>raw().doubleValue() - 1 );
 
         return CFuzzyValue.from( true );
     }

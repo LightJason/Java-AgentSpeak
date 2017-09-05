@@ -265,7 +265,6 @@ public final class CProxyAction implements IExecution
          * @return ordered execution structure
          */
         @Nonnull
-        @SuppressWarnings( "unchecked" )
         private Map<Integer, IExecution> createSubExecutions( @Nonnull final Collection<? extends ITerm> p_elements,
                                                               @Nonnull final Map<IPath, IAction> p_actions )
         {
@@ -280,7 +279,7 @@ public final class CProxyAction implements IExecution
                                     {
                                         final ITerm l_term = l_elements.get( i );
                                         return l_term instanceof ILiteral
-                                               ? new CActionWrapper( (ILiteral) l_term, p_actions )
+                                               ? new CActionWrapper( l_term.term(), p_actions )
                                                : new CTermWrapper<>( l_term );
                                     }
                                 )
@@ -295,7 +294,6 @@ public final class CProxyAction implements IExecution
          * @return return arguments of execution (flat list)
          */
         @Nonnull
-        @SuppressWarnings( "unchecked" )
         private List<ITerm> subexecute( @Nonnull final IContext p_context, @Nonnull final Map<Integer, IExecution> p_execution )
         {
             return Collections.unmodifiableList( CCommon.replaceFromContext(

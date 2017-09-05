@@ -75,11 +75,10 @@ public final class COperatorAssign implements IBinaryExpression
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                          @Nonnull final List<ITerm> p_return )
     {
-        final IVariable<Number> l_lhs = (IVariable<Number>) CCommon.replaceFromContext( p_context, m_lhs );
+        final IVariable<Number> l_lhs = CCommon.replaceFromContext( p_context, m_lhs ).term();
         l_lhs.set( m_operator.apply( l_lhs.raw(), CCommon.replaceFromContext( p_context, m_rhs ).raw() ) );
 
         return CFuzzyValue.from( true );
@@ -93,13 +92,12 @@ public final class COperatorAssign implements IBinaryExpression
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_lhs ),
             m_rhs instanceof IVariable<?>
-            ? Stream.of( (IVariable<?>) m_rhs )
+            ? Stream.of( m_rhs.term() )
             : Stream.empty()
         );
     }

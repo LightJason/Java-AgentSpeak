@@ -109,7 +109,6 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
@@ -121,7 +120,7 @@ public final class CLambdaExpression extends IBaseExecution<IVariable<?>>
         // run lambda expression
         final List<?> l_return = m_parallel ? this.executeParallel( p_context, l_initialization ) : this.executeSequential( p_context, l_initialization );
         if ( m_return != null )
-            ( (IVariable<List<?>>) CCommon.replaceFromContext( p_context, m_return ) ).set( l_return );
+            CCommon.replaceFromContext( p_context, m_return ).<IVariable<List<?>>>term().set( l_return );
 
         return CFuzzyValue.from( true );
     }

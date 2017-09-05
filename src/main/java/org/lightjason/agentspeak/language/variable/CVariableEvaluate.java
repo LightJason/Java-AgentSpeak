@@ -87,10 +87,9 @@ public final class CVariableEvaluate implements IVariableEvaluate
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final ILiteral evaluate( final IContext p_context )
     {
-        final IVariable<?> l_variable = (IVariable<?>) CCommon.replaceFromContext( p_context, m_variable );
+        final IVariable<?> l_variable = CCommon.replaceFromContext( p_context, m_variable ).term();
         if ( !l_variable.allocated() )
             throw new CIllegalStateException();
 
@@ -106,14 +105,13 @@ public final class CVariableEvaluate implements IVariableEvaluate
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public Stream<IVariable<?>> variables()
     {
         return Stream.concat(
             Stream.of( m_variable ),
             m_parameter.parallelStream()
                        .filter( i -> i instanceof IVariable<?> )
-                       .map( i -> (IVariable<?>) i )
+                       .map( ITerm::term )
         );
     }
 

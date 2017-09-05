@@ -27,6 +27,7 @@ import com.google.common.collect.Multimap;
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.achievement_test.CAchievementRuleLiteral;
 import org.lightjason.agentspeak.language.instantiable.IBaseInstantiable;
@@ -99,13 +100,12 @@ public final class CRule extends IBaseInstantiable implements IRule
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final Stream<IVariable<?>> variables()
     {
         return CCommon.streamconcat(
             super.variables(),
             m_annotation.values().stream().flatMap( IAnnotation::variables ),
-            CCommon.flattenrecursive( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( i -> (IVariable<?>) i )
+            CCommon.flattenrecursive( m_id.orderedvalues() ).filter( i -> i instanceof IVariable<?> ).map( ITerm::term )
         );
     }
 

@@ -67,7 +67,6 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
@@ -77,7 +76,7 @@ public final class CSingleAssignment<M extends IExecution> extends IBaseExecutio
         if ( ( !l_rightreturn.value() ) || ( l_return.isEmpty() ) )
             return CFuzzyValue.from( false );
 
-        ( (IVariable<Object>) CCommon.replaceFromContext( p_context, m_value ) ).set( l_return.get( 0 ).raw() );
+        CCommon.replaceFromContext( p_context, m_value ).<IVariable<Object>>term().set( l_return.get( 0 ).raw() );
         return CFuzzyValue.from( true );
     }
 

@@ -174,7 +174,7 @@ public final class TestCActionBool extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         p_input.getMiddle().newInstance().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return
         );
@@ -194,7 +194,7 @@ public final class TestCActionBool extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CEqual().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_return, l_return, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -242,7 +242,7 @@ public final class TestCActionBool extends IBaseTest
         final List<ITerm> l_return = new ArrayList<>();
 
         new CNotEqual().execute(
-            false, null,
+            false, IContext.EMPTYPLAN,
             Stream.of( l_object, l_object, new Object() ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -258,7 +258,6 @@ public final class TestCActionBool extends IBaseTest
      *
      * @param p_args arguments
      */
-    @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
         new TestCActionBool().invoketest();

@@ -69,7 +69,6 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
@@ -85,12 +84,12 @@ public final class CMultiAssignment<M extends IExecution> extends IBaseExecution
 
         IntStream.range( 0, Math.min( l_assign.size(), l_flatresult.size() ) )
                  .boxed()
-                 .forEach( i -> ( (IVariable<Object>) l_assign.get( i ) ).set( l_flatresult.get( i ).raw() ) );
+                 .forEach( i -> l_assign.get( i ).<IVariable<Object>>term().set( l_flatresult.get( i ).raw() ) );
 
 
         // tail matching
         if ( l_assign.size() < l_flatresult.size() )
-            ( (IVariable<Object>) l_assign.get( l_assign.size() - 1 ) ).set( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) );
+            l_assign.get( l_assign.size() - 1 ).<IVariable<Object>>term().set( l_flatresult.subList( l_assign.size() - 1, l_flatresult.size() ) );
 
         return CFuzzyValue.from( true );
     }

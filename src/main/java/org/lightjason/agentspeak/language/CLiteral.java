@@ -323,7 +323,6 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final ILiteral unify( @Nonnull final IContext p_context )
     {
         return new CLiteral(
@@ -454,7 +453,6 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
         return ( p_prefix == null ) || ( p_prefix.length == 0 )
@@ -474,7 +472,6 @@ public final class CLiteral implements ILiteral
 
     @Nonnull
     @Override
-    @SuppressWarnings( "unchecked" )
     public final synchronized ITerm deepcopysuffix()
     {
         return new CLiteral(

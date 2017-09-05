@@ -40,7 +40,6 @@ public final class CHash implements IUnifier.IAlgorithm
 {
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final <T extends ITerm> boolean unify( final Set<IVariable<?>> p_variables, final Stream<T> p_source, final Stream<T> p_target )
     {
         return StreamUtils.zip(
@@ -53,8 +52,8 @@ public final class CHash implements IUnifier.IAlgorithm
                 {
                     p_variables.add(
                         ( (IVariable<?>) t ).mutex()
-                        ? new CRelocateMutexVariable<>( t.fqnfunctor(), (IVariable<?>) s )
-                        : new CRelocateVariable<>( t.fqnfunctor(), (IVariable<?>) s )
+                        ? new CRelocateMutexVariable<>( t.fqnfunctor(), s.term() )
+                        : new CRelocateVariable<>( t.fqnfunctor(), s.term() )
                     );
                     return true;
                 }
@@ -62,7 +61,7 @@ public final class CHash implements IUnifier.IAlgorithm
                 // if target type is a variable set the value
                 if ( t instanceof IVariable<?> )
                 {
-                    p_variables.add( ( (IVariable<Object>) t ).set( s ) );
+                    p_variables.add( t.<IVariable<Object>>term().set( s ) );
                     return true;
                 }
 
