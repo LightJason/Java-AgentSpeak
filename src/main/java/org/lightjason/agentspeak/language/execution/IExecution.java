@@ -61,12 +61,4 @@ public interface IExecution extends Serializable
     @Nonnull
     Stream<IVariable<?>> variables();
 
-    /**
-     * check if the expression contains only bounded variables
-     *
-     * @param p_context execution context
-     * @return only bounded variables exists
-     *
-    boolean boundvariables( @Nonnull final IContext p_context );
-    */
 }
