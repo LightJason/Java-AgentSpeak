@@ -61,14 +61,6 @@ public interface IAction extends IExecution
         return 0;
     }
 
-    /*
-    @Override
-    default boolean boundvariables( @Nonnull final IContext p_context )
-    {
-        return true;
-    }
-    */
-
     @Nonnull
     @Override
     default Stream<IVariable<?>> variables()
