@@ -25,9 +25,11 @@ package org.lightjason.agentspeak.action;
 
 import org.lightjason.agentspeak.common.IPath;
 import org.lightjason.agentspeak.language.execution.IExecution;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.stream.Stream;
 
 
 /**
@@ -59,4 +61,18 @@ public interface IAction extends IExecution
         return 0;
     }
 
+    /*
+    @Override
+    default boolean boundvariables( @Nonnull final IContext p_context )
+    {
+        return true;
+    }
+    */
+
+    @Nonnull
+    @Override
+    default Stream<IVariable<?>> variables()
+    {
+        return Stream.empty();
+    }
 }
