@@ -305,7 +305,7 @@ public final class TestCActionCollectionList extends IBaseTest
         );
 
         new CRange().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 1, 7 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -349,7 +349,7 @@ public final class TestCActionCollectionList extends IBaseTest
         );
 
         new CSubList().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( Stream.of( 8, 9, 10 ).collect( Collectors.toList() ), 1, 2 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
@@ -485,7 +485,7 @@ public final class TestCActionCollectionList extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), Stream.of( 1, 3, 4, 5 ).toArray() );
 
         new CUnique().execute(
-            true, null,
+            true, IContext.EMPTYPLAN,
             Stream.of( 1 ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );

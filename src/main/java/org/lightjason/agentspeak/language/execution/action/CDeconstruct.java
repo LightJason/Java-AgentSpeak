@@ -106,12 +106,11 @@ public final class CDeconstruct<M extends ITerm> extends IBaseExecution<List<IVa
      * @param p_assignment variable list
      * @param p_term term
      */
-    @SuppressWarnings( "unchecked" )
     private void set( @Nonnull final List<ITerm> p_assignment, @Nonnull final ILiteral p_term )
     {
         if ( p_assignment.size() >= 1 )
-            ( (IVariable<Object>) p_assignment.get( 0 ) ).set( p_term.fqnfunctor().toString() );
+            p_assignment.get( 0 ).<IVariable<Object>>term().set( p_term.fqnfunctor().toString() );
         if ( p_assignment.size() >= 2 )
-            ( (IVariable<Object>) p_assignment.get( 1 ) ).set( p_term.values().collect( Collectors.toList() ) );
+            p_assignment.get( 1 ).<IVariable<Object>>term().set( p_term.values().collect( Collectors.toList() ) );
     }
 }

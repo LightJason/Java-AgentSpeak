@@ -36,6 +36,11 @@ import java.io.Serializable;
 public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
 {
     /**
+     * serial id
+     */
+    long serialVersionUID = -3640918490398129717L;
+
+    /**
      * empty term
      */
     ITerm EMPTY = new ITerm()
@@ -140,5 +145,19 @@ public interface ITerm extends Serializable, IStructureHash, IDeepCopy<ITerm>
      */
     @Nullable
     <T> T raw();
+
+    /**
+     * casts the object to a term-type
+     *
+     * @return casted object
+     *
+     * @tparam T term type
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    default <T extends ITerm> T term()
+    {
+        return (T) this;
+    }
 
 }

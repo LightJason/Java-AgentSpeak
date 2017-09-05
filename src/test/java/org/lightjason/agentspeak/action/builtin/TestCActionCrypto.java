@@ -271,7 +271,6 @@ public final class TestCActionCrypto extends IBaseTest
      *
      * @param p_args commandline arguments
      */
-    @SuppressWarnings( "unchecked" )
     public static void main( final String[] p_args )
     {
         new TestCActionCrypto().invoketest();

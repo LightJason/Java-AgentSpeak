@@ -149,7 +149,6 @@ public final class CCommon
      * @return action stream
      */
     @Nonnull
-    @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromPackage( final String... p_package )
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
