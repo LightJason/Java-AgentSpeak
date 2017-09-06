@@ -149,7 +149,7 @@ public final class CCommon
      * @return action stream
      */
     @Nonnull
-    public static Stream<IAction> actionsFromPackage( final String... p_package )
+    public static Stream<IAction> actionsFromPackage( @Nullable final String... p_package )
     {
         return ( ( p_package == null ) || ( p_package.length == 0 )
                  ? Stream.of( MessageFormat.format( "{0}.{1}", PACKAGEROOT, "action.builtin" ) )
@@ -202,7 +202,7 @@ public final class CCommon
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    public static Stream<IAction> actionsFromAgentClass( final Class<?>... p_class )
+    public static Stream<IAction> actionsFromAgentClass( @Nonnull final Class<?>... p_class )
     {
         return p_class == null || p_class.length == 0
                ? Stream.empty()
