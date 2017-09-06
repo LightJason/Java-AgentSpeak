@@ -204,12 +204,12 @@ public final class CCommon
     @SuppressWarnings( "unchecked" )
     public static Stream<IAction> actionsFromAgentClass( @Nonnull final Class<?>... p_class )
     {
-        return p_class == null || p_class.length == 0
+        return p_class.length == 0
                ? Stream.empty()
                : Arrays.stream( p_class )
                        .parallel()
                        .filter( IAgent.class::isAssignableFrom )
-                       .flatMap( i -> CCommon.methods( i, i ) )
+                       .flatMap( CCommon::methods )
                        .map( i ->
                        {
                            try
@@ -256,12 +256,6 @@ public final class CCommon
             return false;
         }
 
-        if ( p_action.minimalArgumentNumber() < 0 )
-        {
-            LOGGER.warning( CCommon.languagestring( CCommon.class, "actionargumentsnumber", p_action ) );
-            return false;
-        }
-
         return true;
     }
 
@@ -271,21 +265,20 @@ public final class CCommon
      * for building agent-actions
      *
      * @param p_class class
-     * @param p_root root class
      * @return stream of all methods with inheritance
      */
     @Nonnull
-    private static Stream<Method> methods( final Class<?> p_class, final Class<?> p_root )
+    private static Stream<Method> methods( final Class<?> p_class )
     {
         final Pair<Boolean, IAgentAction.EAccess> l_classannotation = CCommon.isActionClass( p_class );
         if ( !l_classannotation.getLeft() )
             return p_class.getSuperclass() == null
                    ? Stream.of()
-                   : methods( p_class.getSuperclass(), p_root );
+                   : methods( p_class.getSuperclass() );
 
         final Predicate<Method> l_filter = IAgentAction.EAccess.WHITELIST.equals( l_classannotation.getRight() )
-                                           ? i -> !CCommon.isActionFiltered( i, p_root )
-                                           : i -> CCommon.isActionFiltered( i, p_root );
+                                           ? i -> !CCommon.isActionFiltered( i, p_class )
+                                           : i -> CCommon.isActionFiltered( i, p_class );
 
         return Stream.concat(
             Arrays.stream( p_class.getDeclaredMethods() )
@@ -296,7 +289,7 @@ public final class CCommon
                   .filter( i -> !Modifier.isNative( i.getModifiers() ) )
                   .filter( i -> !Modifier.isStatic( i.getModifiers() ) )
                   .filter( l_filter ),
-            methods( p_class.getSuperclass(), p_root )
+            methods( p_class.getSuperclass() )
         );
     }
 
@@ -327,17 +320,17 @@ public final class CCommon
      * class filter of an action to use it
      *
      * @param p_method method for checking
-     * @param p_root root class
+     * @param p_class class
      * @return boolean flag of check result
      */
-    private static boolean isActionFiltered( final Method p_method, final Class<?> p_root )
+    private static boolean isActionFiltered( final Method p_method, final Class<?> p_class )
     {
         return p_method.isAnnotationPresent( IAgentActionFilter.class )
                && (
                    ( p_method.getAnnotation( IAgentActionFilter.class ).classes().length == 0 )
                    || ( Arrays.stream( p_method.getAnnotation( IAgentActionFilter.class ).classes() )
                               .parallel()
-                              .anyMatch( p_root::equals )
+                              .anyMatch( p_class::equals )
                    )
                );
     }
