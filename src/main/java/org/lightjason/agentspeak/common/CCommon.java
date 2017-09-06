@@ -273,7 +273,7 @@ public final class CCommon
         final Pair<Boolean, IAgentAction.EAccess> l_classannotation = CCommon.isActionClass( p_class );
         if ( !l_classannotation.getLeft() )
             return p_class.getSuperclass() == null
-                   ? Stream.of()
+                   ? Stream.empty()
                    : methods( p_class.getSuperclass() );
 
         final Predicate<Method> l_filter = IAgentAction.EAccess.WHITELIST.equals( l_classannotation.getRight() )
