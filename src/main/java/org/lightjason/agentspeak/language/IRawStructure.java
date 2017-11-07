@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 /**
  * interface to define a structure with native data
  */
-public interface IRawStructure<T>
+public interface IRawStructure<T> extends IAssignable<T>
 {
     /**
      * returns allocated state
@@ -37,14 +37,6 @@ public interface IRawStructure<T>
      * @return boolean flag
      */
     boolean allocated();
-
-    /**
-     * checkes assignable of the value
-     *
-     * @param p_class class
-     * @return assignable (on null always true)
-     */
-    boolean valueassignableto( @Nonnull final Class<?>... p_class );
 
     /**
      * throws an illegal state exception
@@ -56,18 +48,5 @@ public interface IRawStructure<T>
      */
     @Nonnull
     T thrownotallocated() throws IllegalStateException;
-
-    /**
-     * throws an illegal argument exception
-     * iif the value is not assignable to the
-     * class
-     *
-     * @param p_class assignable class
-     * @return object itself
-     *
-     * @throws IllegalArgumentException on assignable error
-     */
-    @Nonnull
-    T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

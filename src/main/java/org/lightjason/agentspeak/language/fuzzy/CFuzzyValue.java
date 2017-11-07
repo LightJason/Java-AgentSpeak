@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.error.CIllegalArgumentException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
@@ -94,9 +95,19 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
     }
 
     @Override
-    public final boolean valueassignableto( final Class<?>... p_class )
+    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+    }
+
+    @Nullable
+    @Override
+    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    {
+        if ( !this.valueassignableto( p_class ) )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+
+        return m_value;
     }
 
     @Override
