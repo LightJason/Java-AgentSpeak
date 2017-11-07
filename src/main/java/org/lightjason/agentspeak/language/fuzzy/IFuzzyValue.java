@@ -55,6 +55,6 @@ public interface IFuzzyValue<T>
      * @param p_class class
      * @return assignable (on null always true)
      */
-    boolean valueAssignableTo( final Class<?>... p_class );
+    boolean valueassignableto( final Class<?>... p_class );
 
 }

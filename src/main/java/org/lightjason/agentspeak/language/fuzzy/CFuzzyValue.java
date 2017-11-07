@@ -94,7 +94,7 @@ public final class CFuzzyValue<T> implements IFuzzyValue<T>
     }
 
     @Override
-    public final boolean valueAssignableTo( final Class<?>... p_class )
+    public final boolean valueassignableto( final Class<?>... p_class )
     {
         return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
     }
