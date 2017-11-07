@@ -21,34 +21,37 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.language.fuzzy;
-
-
-import org.lightjason.agentspeak.language.IAssignable;
+package org.lightjason.agentspeak.language;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 /**
- * result for an immutable fuzzy value
- *
- * @tparam T fuzzy type
+ * interface of assignable structures
  */
-public interface IFuzzyValue<T> extends IAssignable<T>
+public interface IAssignable<T>
 {
-    /**
-     * returns the result
-     *
-     * @return value
-     */
-    @Nonnull
-    T value();
 
     /**
-     * returns the fuzziness
+     * checkes assignable of the value
      *
-     * @return fuzzy value in [0,1]
+     * @param p_class class
+     * @return assignable (on null always true)
      */
-    double fuzzy();
+    boolean valueassignableto( @Nonnull final Class<?>... p_class );
+
+    /**
+     * throws an illegal argument exception
+     * iif the value is not assignable to the
+     * class
+     *
+     * @param p_class assignable class
+     * @return object itself
+     *
+     * @throws IllegalArgumentException on assignable error
+     */
+    @Nullable
+    T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException;
 
 }

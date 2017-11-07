@@ -120,9 +120,19 @@ public final class CFuzzyValueMutable<T> implements IFuzzyValueMutable<T>
     }
 
     @Override
-    public final boolean valueAssignableTo( final Class<?>... p_class )
+    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+    }
+
+    @Nullable
+    @Override
+    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    {
+        if ( !this.valueassignableto( p_class ) )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+
+        return m_value;
     }
 
     /**

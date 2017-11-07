@@ -24,6 +24,7 @@
 package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
 
+import org.lightjason.agentspeak.language.IAssignable;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
  *
  * @tparam T annotation data type
  */
-public interface IAnnotation<T>
+public interface IAnnotation<T> extends IAssignable<T>
 {
     /**
      * returns the type of the annotation
@@ -53,14 +54,6 @@ public interface IAnnotation<T>
      */
     @Nullable
     <N> N value();
-
-    /**
-     * checkes assignable of the value
-     *
-     * @param p_class class
-     * @return assignable (on null always true)
-     */
-    boolean valueAssignableTo( final Class<?>... p_class );
 
     /**
      * returns a stream of variables

@@ -23,6 +23,9 @@
 
 package org.lightjason.agentspeak.language.instantiable.plan.annotation;
 
+import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -72,8 +75,18 @@ public abstract class IBaseAnnotation<T> implements IAnnotation<T>
     }
 
     @Override
-    public final boolean valueAssignableTo( final Class<?>... p_class )
+    public final boolean valueassignableto( @Nonnull final Class<?>... p_class )
     {
         return m_value == null || Arrays.stream( p_class ).anyMatch( i -> i.isAssignableFrom( m_value.getClass() ) );
+    }
+
+    @Nullable
+    @Override
+    public final T throwvaluenotassignableto( @Nonnull final Class<?>... p_class ) throws IllegalArgumentException
+    {
+        if ( !this.valueassignableto( p_class ) )
+            throw new CIllegalArgumentException( CCommon.languagestring( this, "notassignable", Arrays.asList( p_class ) ) );
+
+        return m_value;
     }
 }
