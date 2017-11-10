@@ -36,7 +36,7 @@ import Terminal;
 executable_term :
     string
     | number
-    | logicalvalue
+    | LOGICALVALUE
 
     | executable_action
     | executable_rule
@@ -51,7 +51,7 @@ executable_term :
 term :
     string
     | number
-    | logicalvalue
+    | LOGICALVALUE
 
     | literal
     | variable
@@ -140,7 +140,7 @@ expression_logical_xor :
  * logic element for expressions
  **/
 expression_logical_element :
-    logicalvalue
+    LOGICALVALUE
     | variable
     | executable_action
     | executable_rule
@@ -337,14 +337,6 @@ constant :
     | MAXIMUMVALUE
     | MINIMUMVALUE
     | NAN
-    ;
-
-/**
- * boolean values
- **/
-logicalvalue :
-    TRUE
-    | FALSE
     ;
 
 /**

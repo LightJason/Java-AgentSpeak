@@ -27,6 +27,15 @@
 lexer grammar Terminal;
 
 
+/**
+ * boolean values
+ **/
+LOGICALVALUE :
+    TRUE
+    | FALSE
+    ;
+
+
 // --- character structures --------------------------------------------------------------
 
 EXCLAMATIONMARK            : '!';
@@ -70,8 +79,8 @@ RIGHTANGULARBRACKET        : ']';
 LEFTCURVEDBRACKET          : '{';
 RIGHTCURVEDBRACKET         : '}';
 
-TRUE                       : 'true' | 'success';
-FALSE                      : 'false' | 'fail';
+fragment TRUE              : 'true' | 'success';
+fragment FALSE             : 'false' | 'fail';
 
 LEFTSHIFT                  : '<<';
 RIGHTSHIFT                 : '>>';
