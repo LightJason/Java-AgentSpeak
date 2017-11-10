@@ -293,6 +293,9 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     @Override
     public final Object visitNumber( final TypeParser.NumberContext p_context )
     {
+        if ( p_context.CONSTANTNUMBER() != null )
+            return numericonstant( p_context.CONSTANTNUMBER().getText() );
+
         final Number l_value = (Number) this.visitChildren( p_context );
         return p_context.MINUS() != null
                ? -1 * l_value.doubleValue()
@@ -303,16 +306,6 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     public final Object visitDigitsequence( final TypeParser.DigitsequenceContext p_context )
     {
         return Double.valueOf( p_context.getText() );
-    }
-
-    @Override
-    public final Object visitConstant( final TypeParser.ConstantContext p_context )
-    {
-        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_context.getText() );
-        if ( l_constant != null )
-            return l_constant;
-
-        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( this, "constantunknown", p_context.getText() ) );
     }
 
     @Override
@@ -610,6 +603,21 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
 
 
     // --- helper ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * returns the value of a numeric constant
+     *
+     * @param p_value constant name
+     * @return number value
+     */
+    private static Number numericonstant( @Nonnull final String p_value )
+    {
+        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_value );
+        if ( l_constant != null )
+            return l_constant;
+
+        throw new CSyntaxErrorException( org.lightjason.agentspeak.common.CCommon.languagestring( CASTVisitorType.class, "constantunknown", p_value ) );
+    }
 
     /**
      * converts a string token to the type

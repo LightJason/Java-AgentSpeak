@@ -35,6 +35,25 @@ LOGICALVALUE :
     | FALSE
     ;
 
+/**
+ * floating-point constants
+ **/
+CONSTANTNUMBER :
+    PI
+    | EULER
+    | GRAVITY
+    | AVOGADRO
+    | BOLTZMANN
+    | ELECTRON
+    | PROTON
+    | NEUTRON
+    | LIGHTSPEED
+    | POSITIVEINFINITY
+    | NEGATIVEINFINITY
+    | MAXIMUMVALUE
+    | MINIMUMVALUE
+    | NAN
+    ;
 
 // --- character structures --------------------------------------------------------------
 
@@ -57,20 +76,20 @@ DOT                        : '.';
 UNDERSCORE                 : '_';
 SLASH                      : '/';
 
-PI                         : 'pi';
-EULER                      : 'euler';
-GRAVITY                    : 'gravity';
-AVOGADRO                   : 'avogadro';
-BOLTZMANN                  : 'boltzmann';
-ELECTRON                   : 'electron';
-PROTON                     : 'proton';
-NEUTRON                    : 'neutron';
-LIGHTSPEED                 : 'lightspeed';
-POSITIVEINFINITY           : 'positiveinfinity';
-NEGATIVEINFINITY           : 'negativeinfinity';
-MAXIMUMVALUE               : 'maximumvalue';
-MINIMUMVALUE               : 'minimumvalue';
-NAN                        : 'notanumber';
+fragment PI                : 'pi';
+fragment EULER             : 'euler';
+fragment GRAVITY           : 'gravity';
+fragment AVOGADRO          : 'avogadro';
+fragment BOLTZMANN         : 'boltzmann';
+fragment ELECTRON          : 'electron';
+fragment PROTON            : 'proton';
+fragment NEUTRON           : 'neutron';
+fragment LIGHTSPEED        : 'lightspeed';
+fragment POSITIVEINFINITY  : 'positiveinfinity';
+fragment NEGATIVEINFINITY  : 'negativeinfinity';
+fragment MAXIMUMVALUE      : 'maximumvalue';
+fragment MINIMUMVALUE      : 'minimumvalue';
+fragment NAN               : 'notanumber';
 
 LEFTROUNDBRACKET           : '(';
 RIGHTROUNDBRACKET          : ')';

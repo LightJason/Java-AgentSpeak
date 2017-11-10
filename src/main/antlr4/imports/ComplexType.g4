@@ -309,7 +309,7 @@ binaryoperator :
  **/
 number :
     MINUS?
-    ( constant | digitsequence )
+    ( CONSTANTNUMBER | digitsequence )
     ;
 
 /**
@@ -317,26 +317,6 @@ number :
  **/
 digitsequence :
     DIGIT+ ( DOT DIGIT+ )?
-    ;
-
-/**
- * floating-point constants
- **/
-constant :
-    PI
-    | EULER
-    | GRAVITY
-    | AVOGADRO
-    | BOLTZMANN
-    | ELECTRON
-    | PROTON
-    | NEUTRON
-    | LIGHTSPEED
-    | POSITIVEINFINITY
-    | NEGATIVEINFINITY
-    | MAXIMUMVALUE
-    | MINIMUMVALUE
-    | NAN
     ;
 
 /**
