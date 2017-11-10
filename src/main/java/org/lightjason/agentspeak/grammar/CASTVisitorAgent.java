@@ -315,11 +315,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                 ( (Number) this.visitNumber( p_context.number() ) ).doubleValue()
             );
 
-        if ( p_context.string() != null )
+        if ( p_context.STRING() != null )
             return new CValueAnnotation<>(
                 IAnnotation.EType.CONSTANT,
                 (String) this.visitVariableatom( p_context.variableatom() ),
-                p_context.string().getText()
+                stringvalue( p_context.STRING().getText() )
             );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "valueannotation", p_context.getText() ) );
@@ -496,8 +496,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExecutable_term( final AgentParser.Executable_termContext p_context )
     {
-        if ( p_context.string() != null )
-            return new CRawAction<>( this.visitString( p_context.string() ) );
+        if ( p_context.STRING() != null )
+            return new CRawAction<>( stringvalue( p_context.STRING().getText() ) );
         if ( p_context.number() != null )
             return new CRawAction<>( this.visitNumber( p_context.number() ) );
         if ( p_context.LOGICALVALUE() != null )
@@ -689,8 +689,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTerm( final AgentParser.TermContext p_context )
     {
-        if ( p_context.string() != null )
-            return this.visitString( p_context.string() );
+        if ( p_context.STRING() != null )
+            return stringvalue( p_context.STRING().getText() );
         if ( p_context.number() != null )
             return this.visitNumber( p_context.number() );
         if ( p_context.LOGICALVALUE() != null )
@@ -751,14 +751,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitDigitsequence( final AgentParser.DigitsequenceContext p_context )
     {
         return Double.valueOf( p_context.getText() );
-    }
-
-    @Override
-    public final Object visitString( final AgentParser.StringContext p_context )
-    {
-        // remove quotes
-        final String l_text = p_context.getText();
-        return l_text.length() < 3 ? "" : l_text.substring( 1, l_text.length() - 1 );
     }
 
     @Override
@@ -1087,6 +1079,17 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     private static boolean logicalvalue( @Nonnull final String p_value )
     {
         return ( !p_value.isEmpty() ) && ( ( "true".equals( p_value ) ) || ( "success".equals( p_value ) ) );
+    }
+
+    /**
+     * create a string value without quotes
+     *
+     * @param p_value string
+     * @return string without quotes
+     */
+    private static String stringvalue( @Nonnull final String p_value )
+    {
+        return p_value.length() < 3 ? "" : p_value.substring( 1, p_value.length() - 1 );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

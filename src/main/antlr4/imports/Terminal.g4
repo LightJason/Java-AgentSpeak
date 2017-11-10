@@ -26,6 +26,13 @@
  **/
 lexer grammar Terminal;
 
+/**
+ * string define with single or double quotes
+ **/
+STRING :
+    SINGLEQUOTESTRING
+    | DOUBLEQUOTESTRING
+    ;
 
 /**
  * boolean values
@@ -162,8 +169,8 @@ MODULO                     : '%';
 /**
  * string can be definied in single- and double-quotes
  **/
-SINGLEQUOTESTRING          : '\'' ~('\'')* '\'';
-DOUBLEQUOTESTRING          : '"' ~('"')* '"';
+fragment SINGLEQUOTESTRING : '\'' ~('\'')* '\'';
+fragment DOUBLEQUOTESTRING : '"' ~('"')* '"';
 
 /**
  * char definitions

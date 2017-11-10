@@ -124,7 +124,7 @@ annotation_value_literal :
     LEFTROUNDBRACKET
     variableatom
     COMMA
-    ( number | string )
+    ( number | STRING )
     RIGHTROUNDBRACKET
     ;
 

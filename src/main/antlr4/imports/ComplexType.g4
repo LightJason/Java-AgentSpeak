@@ -34,7 +34,7 @@ import Terminal;
  * executable-terms are predictable structures
  **/
 executable_term :
-    string
+    STRING
     | number
     | LOGICALVALUE
 
@@ -49,7 +49,7 @@ executable_term :
  * terms are non-predictable structures
  **/
 term :
-    string
+    STRING
     | number
     | LOGICALVALUE
 
@@ -317,14 +317,6 @@ number :
  **/
 digitsequence :
     DIGIT+ ( DOT DIGIT+ )?
-    ;
-
-/**
- * string define with single or double quotes
- **/
-string :
-    SINGLEQUOTESTRING
-    | DOUBLEQUOTESTRING
     ;
 
 // ---------------------------------------------------------------------------------------
