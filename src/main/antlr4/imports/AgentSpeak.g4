@@ -124,7 +124,7 @@ annotation_value_literal :
     LEFTROUNDBRACKET
     variableatom
     COMMA
-    ( number | string )
+    ( number | STRING )
     RIGHTROUNDBRACKET
     ;
 
@@ -248,7 +248,7 @@ assignment_expression_multivariable :
  **/
 unary_expression :
     variable
-    unaryoperator
+    UNARYOPERATOR
     ;
 
 /**
@@ -256,7 +256,7 @@ unary_expression :
  **/
 binary_expression :
     variable
-    binaryoperator
+    BINARYOPERATOR
     ( variable | number )
     ;
 

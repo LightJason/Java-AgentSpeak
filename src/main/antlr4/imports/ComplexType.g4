@@ -34,9 +34,9 @@ import Terminal;
  * executable-terms are predictable structures
  **/
 executable_term :
-    string
+    STRING
     | number
-    | logicalvalue
+    | LOGICALVALUE
 
     | executable_action
     | executable_rule
@@ -49,9 +49,9 @@ executable_term :
  * terms are non-predictable structures
  **/
 term :
-    string
+    STRING
     | number
-    | logicalvalue
+    | LOGICALVALUE
 
     | literal
     | variable
@@ -140,7 +140,7 @@ expression_logical_xor :
  * logic element for expressions
  **/
 expression_logical_element :
-    logicalvalue
+    LOGICALVALUE
     | variable
     | executable_action
     | executable_rule
@@ -282,26 +282,6 @@ variableatom:
     ;
 
 /**
- * unary operator
- **/
-unaryoperator :
-    INCREMENT
-    | DECREMENT
-    ;
-
-/**
- * binary operator
- **/
-binaryoperator :
-    ASSIGNINCREMENT
-    | ASSIGNDECREMENT
-    | ASSIGNMULTIPLY
-    | ASSIGNDIVIDE
-    | ASSIGNMODULO
-    | ASSIGNPOW
-    ;
-
-/**
  * default behaviour in Jason is only a floating-point number (double)
  * but here exists the difference between floating and integral number
  * types within the grammar, the div-operator (integer division) is removed,
@@ -309,7 +289,7 @@ binaryoperator :
  **/
 number :
     MINUS?
-    ( constant | digitsequence )
+    ( CONSTANTNUMBER | digitsequence )
     ;
 
 /**
@@ -317,42 +297,6 @@ number :
  **/
 digitsequence :
     DIGIT+ ( DOT DIGIT+ )?
-    ;
-
-/**
- * floating-point constants
- **/
-constant :
-    PI
-    | EULER
-    | GRAVITY
-    | AVOGADRO
-    | BOLTZMANN
-    | ELECTRON
-    | PROTON
-    | NEUTRON
-    | LIGHTSPEED
-    | POSITIVEINFINITY
-    | NEGATIVEINFINITY
-    | MAXIMUMVALUE
-    | MINIMUMVALUE
-    | NAN
-    ;
-
-/**
- * boolean values
- **/
-logicalvalue :
-    TRUE
-    | FALSE
-    ;
-
-/**
- * string define with single or double quotes
- **/
-string :
-    SINGLEQUOTESTRING
-    | DOUBLEQUOTESTRING
     ;
 
 // ---------------------------------------------------------------------------------------

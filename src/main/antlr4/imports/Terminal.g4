@@ -26,6 +26,61 @@
  **/
 lexer grammar Terminal;
 
+/**
+ * binary operator
+ **/
+BINARYOPERATOR :
+    ASSIGNINCREMENT
+    | ASSIGNDECREMENT
+    | ASSIGNMULTIPLY
+    | ASSIGNDIVIDE
+    | ASSIGNMODULO
+    | ASSIGNPOW
+    ;
+
+/**
+ * unary operator
+ **/
+UNARYOPERATOR :
+    INCREMENT
+    | DECREMENT
+    ;
+
+/**
+ * string define with single or double quotes
+ **/
+STRING :
+    SINGLEQUOTESTRING
+    | DOUBLEQUOTESTRING
+    ;
+
+/**
+ * boolean values
+ **/
+LOGICALVALUE :
+    TRUE
+    | FALSE
+    ;
+
+/**
+ * floating-point constants
+ **/
+CONSTANTNUMBER :
+    PI
+    | EULER
+    | GRAVITY
+    | AVOGADRO
+    | BOLTZMANN
+    | ELECTRON
+    | PROTON
+    | NEUTRON
+    | LIGHTSPEED
+    | POSITIVEINFINITY
+    | NEGATIVEINFINITY
+    | MAXIMUMVALUE
+    | MINIMUMVALUE
+    | NAN
+    ;
 
 // --- character structures --------------------------------------------------------------
 
@@ -48,20 +103,20 @@ DOT                        : '.';
 UNDERSCORE                 : '_';
 SLASH                      : '/';
 
-PI                         : 'pi';
-EULER                      : 'euler';
-GRAVITY                    : 'gravity';
-AVOGADRO                   : 'avogadro';
-BOLTZMANN                  : 'boltzmann';
-ELECTRON                   : 'electron';
-PROTON                     : 'proton';
-NEUTRON                    : 'neutron';
-LIGHTSPEED                 : 'lightspeed';
-POSITIVEINFINITY           : 'positiveinfinity';
-NEGATIVEINFINITY           : 'negativeinfinity';
-MAXIMUMVALUE               : 'maximumvalue';
-MINIMUMVALUE               : 'minimumvalue';
-NAN                        : 'notanumber';
+fragment PI                : 'pi';
+fragment EULER             : 'euler';
+fragment GRAVITY           : 'gravity';
+fragment AVOGADRO          : 'avogadro';
+fragment BOLTZMANN         : 'boltzmann';
+fragment ELECTRON          : 'electron';
+fragment PROTON            : 'proton';
+fragment NEUTRON           : 'neutron';
+fragment LIGHTSPEED        : 'lightspeed';
+fragment POSITIVEINFINITY  : 'positiveinfinity';
+fragment NEGATIVEINFINITY  : 'negativeinfinity';
+fragment MAXIMUMVALUE      : 'maximumvalue';
+fragment MINIMUMVALUE      : 'minimumvalue';
+fragment NAN               : 'notanumber';
 
 LEFTROUNDBRACKET           : '(';
 RIGHTROUNDBRACKET          : ')';
@@ -70,8 +125,8 @@ RIGHTANGULARBRACKET        : ']';
 LEFTCURVEDBRACKET          : '{';
 RIGHTCURVEDBRACKET         : '}';
 
-TRUE                       : 'true' | 'success';
-FALSE                      : 'false' | 'fail';
+fragment TRUE              : 'true' | 'success';
+fragment FALSE             : 'false' | 'fail';
 
 LEFTSHIFT                  : '<<';
 RIGHTSHIFT                 : '>>';
@@ -105,16 +160,16 @@ XOR                        : '^';
 /**
  * variable operators
  **/
-INCREMENT                  : '++';
-DECREMENT                  : '--';
+fragment INCREMENT         : '++';
+fragment DECREMENT         : '--';
 ASSIGN                     : '=';
 DECONSTRUCT                : '=..';
-ASSIGNINCREMENT            : '+=';
-ASSIGNDECREMENT            : '-=';
-ASSIGNMULTIPLY             : '*=';
-ASSIGNDIVIDE               : '/=';
-ASSIGNMODULO               : '%=';
-ASSIGNPOW                  : '^=';
+fragment ASSIGNINCREMENT   : '+=';
+fragment ASSIGNDECREMENT   : '-=';
+fragment ASSIGNMULTIPLY    : '*=';
+fragment ASSIGNDIVIDE      : '/=';
+fragment ASSIGNMODULO      : '%=';
+fragment ASSIGNPOW         : '^=';
 
 /**
  * comparator types
@@ -134,8 +189,8 @@ MODULO                     : '%';
 /**
  * string can be definied in single- and double-quotes
  **/
-SINGLEQUOTESTRING          : '\'' ~('\'')* '\'';
-DOUBLEQUOTESTRING          : '"' ~('"')* '"';
+fragment SINGLEQUOTESTRING : '\'' ~('\'')* '\'';
+fragment DOUBLEQUOTESTRING : '"' ~('"')* '"';
 
 /**
  * char definitions
