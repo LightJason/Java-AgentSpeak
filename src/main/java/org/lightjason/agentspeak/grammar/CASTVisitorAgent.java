@@ -565,42 +565,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
                             ? (IVariable<Number>) this.visitVariable( p_context.variable( 1 ) )
                             : CRawTerm.from( this.visitNumber( p_context.number() ) );
 
-
-        switch ( p_context.binaryoperator().getText() )
-        {
-            case "+=":
-                return new COperatorAssign(
-                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNINCREMENT
-                );
-
-            case "-=":
-                return new COperatorAssign(
-                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNDECREMENT
-                );
-
-            case "*=":
-                return new COperatorAssign(
-                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNMULTIPLY
-                );
-
-            case "/=":
-                return new COperatorAssign(
-                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNDIVIDE
-                );
-
-            case "%=":
-                return new COperatorAssign(
-                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNMODULO
-                );
-
-            case "^=":
-                return new COperatorAssign(
-                    l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.ASSIGNPOW
-                );
-
-            default:
-                throw new CIllegalArgumentException( CCommon.languagestring( this, "binaryassignoperator", p_context.getText() ) );
-        }
+        return new COperatorAssign(
+            l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.from( p_context.BINARYOPERATOR().getText() )
+        );
     }
 
     @Override
@@ -1025,12 +992,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             (IVariable<?>) this.visitVariable( p_context.variable() ),
             (List<ITerm>) this.visitTermlist( p_context.termlist() )
         );
-    }
-
-    @Override
-    public final Object visitBinaryoperator( final AgentParser.BinaryoperatorContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

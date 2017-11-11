@@ -26,6 +26,17 @@
  **/
 lexer grammar Terminal;
 
+/**
+ * binary operator
+ **/
+BINARYOPERATOR :
+    ASSIGNINCREMENT
+    | ASSIGNDECREMENT
+    | ASSIGNMULTIPLY
+    | ASSIGNDIVIDE
+    | ASSIGNMODULO
+    | ASSIGNPOW
+    ;
 
 /**
  * unary operator
@@ -153,12 +164,12 @@ fragment INCREMENT         : '++';
 fragment DECREMENT         : '--';
 ASSIGN                     : '=';
 DECONSTRUCT                : '=..';
-ASSIGNINCREMENT            : '+=';
-ASSIGNDECREMENT            : '-=';
-ASSIGNMULTIPLY             : '*=';
-ASSIGNDIVIDE               : '/=';
-ASSIGNMODULO               : '%=';
-ASSIGNPOW                  : '^=';
+fragment ASSIGNINCREMENT   : '+=';
+fragment ASSIGNDECREMENT   : '-=';
+fragment ASSIGNMULTIPLY    : '*=';
+fragment ASSIGNDIVIDE      : '/=';
+fragment ASSIGNMODULO      : '%=';
+fragment ASSIGNPOW         : '^=';
 
 /**
  * comparator types

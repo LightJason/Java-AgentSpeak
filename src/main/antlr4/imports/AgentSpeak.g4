@@ -256,7 +256,7 @@ unary_expression :
  **/
 binary_expression :
     variable
-    binaryoperator
+    BINARYOPERATOR
     ( variable | number )
     ;
 

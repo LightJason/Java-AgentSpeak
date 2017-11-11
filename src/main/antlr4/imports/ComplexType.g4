@@ -282,18 +282,6 @@ variableatom:
     ;
 
 /**
- * binary operator
- **/
-binaryoperator :
-    ASSIGNINCREMENT
-    | ASSIGNDECREMENT
-    | ASSIGNMULTIPLY
-    | ASSIGNDIVIDE
-    | ASSIGNMODULO
-    | ASSIGNPOW
-    ;
-
-/**
  * default behaviour in Jason is only a floating-point number (double)
  * but here exists the difference between floating and integral number
  * types within the grammar, the div-operator (integer division) is removed,

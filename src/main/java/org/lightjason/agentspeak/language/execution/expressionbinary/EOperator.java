@@ -24,8 +24,10 @@
 package org.lightjason.agentspeak.language.execution.expressionbinary;
 
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CSyntaxErrorException;
 
+import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
 
 
@@ -88,5 +90,38 @@ public enum EOperator implements BiFunction<Number, Number, Number>
     public final String toString()
     {
         return m_operator;
+    }
+
+    /**
+     * returns operator from string
+     *
+     * @param p_value string
+     * @return operator
+     */
+    public static EOperator from( @Nonnull final String p_value )
+    {
+        switch ( p_value )
+        {
+            case "+=":
+                return ASSIGNINCREMENT;
+
+            case "-=":
+                return ASSIGNDECREMENT;
+
+            case "*=":
+                return ASSIGNMULTIPLY;
+
+            case "/=":
+                return ASSIGNDIVIDE;
+
+            case "%=":
+                return ASSIGNMODULO;
+
+            case "^=":
+                return ASSIGNPOW;
+
+            default:
+                throw new CIllegalArgumentException( CCommon.languagestring( EOperator.class, "notexist", p_value ) );
+        }
     }
 }
