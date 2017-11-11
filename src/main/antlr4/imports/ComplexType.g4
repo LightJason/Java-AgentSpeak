@@ -282,14 +282,6 @@ variableatom:
     ;
 
 /**
- * unary operator
- **/
-unaryoperator :
-    INCREMENT
-    | DECREMENT
-    ;
-
-/**
  * binary operator
  **/
 binaryoperator :

@@ -26,6 +26,15 @@
  **/
 lexer grammar Terminal;
 
+
+/**
+ * unary operator
+ **/
+UNARYOPERATOR :
+    INCREMENT
+    | DECREMENT
+    ;
+
 /**
  * string define with single or double quotes
  **/
@@ -140,8 +149,8 @@ XOR                        : '^';
 /**
  * variable operators
  **/
-INCREMENT                  : '++';
-DECREMENT                  : '--';
+fragment INCREMENT         : '++';
+fragment DECREMENT         : '--';
 ASSIGN                     : '=';
 DECONSTRUCT                : '=..';
 ASSIGNINCREMENT            : '+=';

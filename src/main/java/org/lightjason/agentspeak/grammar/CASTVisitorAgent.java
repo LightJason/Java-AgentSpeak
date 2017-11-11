@@ -544,7 +544,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitUnary_expression( final AgentParser.Unary_expressionContext p_context )
     {
-        switch ( p_context.unaryoperator().getText() )
+        switch ( p_context.UNARYOPERATOR().getText() )
         {
             case "++":
                 return new CIncrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
@@ -1025,12 +1025,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
             (IVariable<?>) this.visitVariable( p_context.variable() ),
             (List<ITerm>) this.visitTermlist( p_context.termlist() )
         );
-    }
-
-    @Override
-    public final Object visitUnaryoperator( final AgentParser.UnaryoperatorContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
     @Override

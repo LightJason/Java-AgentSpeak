@@ -248,7 +248,7 @@ assignment_expression_multivariable :
  **/
 unary_expression :
     variable
-    unaryoperator
+    UNARYOPERATOR
     ;
 
 /**

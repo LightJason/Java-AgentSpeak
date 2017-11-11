@@ -580,12 +580,6 @@ public final class CASTVisitorType extends AbstractParseTreeVisitor<Object> impl
     }
 
     @Override
-    public final Object visitUnaryoperator( final TypeParser.UnaryoperatorContext p_context )
-    {
-        return this.visitChildren( p_context );
-    }
-
-    @Override
     public final Object visitBinaryoperator( final TypeParser.BinaryoperatorContext p_context )
     {
         return this.visitChildren( p_context );

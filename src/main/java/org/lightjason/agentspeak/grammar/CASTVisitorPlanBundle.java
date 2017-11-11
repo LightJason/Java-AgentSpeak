@@ -517,7 +517,7 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
     @Override
     public final Object visitUnary_expression( final PlanBundleParser.Unary_expressionContext p_context )
     {
-        switch ( p_context.unaryoperator().getText() )
+        switch ( p_context.UNARYOPERATOR().getText() )
         {
             case "++":
                 return new CIncrement<>( (IVariable<Number>) this.visitVariable( p_context.variable() ) );
@@ -996,12 +996,6 @@ public final class CASTVisitorPlanBundle extends AbstractParseTreeVisitor<Object
             (IVariable<?>) this.visitVariable( p_context.variable() ),
             (List<ITerm>) this.visitTermlist( p_context.termlist() )
         );
-    }
-
-    @Override
-    public final Object visitUnaryoperator( final PlanBundleParser.UnaryoperatorContext p_context )
-    {
-        return this.visitChildren( p_context );
     }
 
     @Override
