@@ -74,12 +74,11 @@ public final class TestCActionRest extends IBaseTest
 
         new CJsonList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist" )
+            Stream.of( "https://api.github.com/repos/LightJason/Examples/commits", "testjsonlist" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
             l_return
         );
-
 
         Assert.assertFalse( l_return.isEmpty() );
         Assert.assertTrue( l_return.stream().map( ITerm::raw ).allMatch( i -> i instanceof ILiteral ) );
@@ -97,7 +96,7 @@ public final class TestCActionRest extends IBaseTest
 
         new CJsonList().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "https://api.github.com/repos/LightJason/SocialForce/commits", "testjsonlist", "item" )
+            Stream.of( "https://api.github.com/repos/LightJason/Examples/commits", "testjsonlist", "item" )
                   .map( CRawTerm::from )
                   .collect( Collectors.toList() ),
             l_return
