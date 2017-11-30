@@ -23,16 +23,17 @@
 
 package org.lightjason.agentspeak.consistency;
 
-import cern.colt.function.DoubleFunction;
-import cern.colt.matrix.DoubleFactory1D;
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.linalg.Algebra;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
-import cern.jet.math.Functions;
-import cern.jet.math.Mult;
+import cern.colt.function.tdouble.DoubleFunction;
+import cern.colt.matrix.tdouble.DoubleFactory1D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.algo.DenseDoubleAlgebra;
+import cern.colt.matrix.tdouble.algo.decomposition.DenseDoubleEigenvalueDecomposition;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.math.tdouble.DoubleMult;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.lightjason.agentspeak.agent.IAgent;
@@ -57,6 +58,10 @@ import java.util.stream.Stream;
  */
 public final class CConsistency implements IConsistency
 {
+    /**
+     * algebra
+     */
+    private static final DenseDoubleAlgebra ALGEBRA = DenseDoubleAlgebra.DEFAULT;
     /**
      * function for inverting probability
      */
@@ -158,9 +163,9 @@ public final class CConsistency implements IConsistency
                               } );
 
                      // row-wise normalization for getting probabilities
-                     final double l_norm = Algebra.DEFAULT.norm1( l_matrix.viewRow( i ) );
+                     final double l_norm = ALGEBRA.norm1( l_matrix.viewRow( i ) );
                      if ( l_norm != 0 )
-                        l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
+                        l_matrix.viewRow( i ).assign( DoubleMult.div( l_norm ) );
 
                      // set epsilon slope for preventing periodic markov chains
                      l_matrix.setQuick( i, i, m_epsilon );
@@ -173,7 +178,7 @@ public final class CConsistency implements IConsistency
 
         // calculate the inverted probability and normalize with 1-norm
         l_eigenvector.assign( PROBABILITYINVERT );
-        l_eigenvector.assign( Functions.div( Algebra.DEFAULT.norm1( l_eigenvector ) ) );
+        l_eigenvector.assign( DoubleFunctions.div( ALGEBRA.norm1( l_eigenvector ) ) );
 
         // set consistency value for each entry and update statistic
         m_statistic.clear();
@@ -344,8 +349,8 @@ public final class CConsistency implements IConsistency
             }
 
             // normalize eigenvector and create positiv oriantation
-            l_eigenvector.assign( Mult.div( Algebra.DEFAULT.norm1( l_eigenvector ) ) );
-            l_eigenvector.assign( Functions.abs );
+            l_eigenvector.assign( DoubleMult.div( ALGEBRA.norm1( l_eigenvector ) ) );
+            l_eigenvector.assign( DoubleFunctions.abs );
 
             return l_eigenvector;
         }
@@ -365,8 +370,8 @@ public final class CConsistency implements IConsistency
             IntStream.range( 0, p_iteration )
                      .forEach( i ->
                      {
-                         l_probability.assign( Algebra.DEFAULT.mult( p_matrix, l_probability ) );
-                         l_probability.assign( Mult.div( Algebra.DEFAULT.norm2( l_probability ) ) );
+                         l_probability.assign( ALGEBRA.mult( p_matrix, l_probability ) );
+                         l_probability.assign( DoubleMult.div( ALGEBRA.norm2( l_probability ) ) );
                      } );
             return l_probability;
         }
@@ -379,7 +384,7 @@ public final class CConsistency implements IConsistency
          */
         private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
         {
-            final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
+            final DenseDoubleEigenvalueDecomposition l_eigen = new DenseDoubleEigenvalueDecomposition( p_matrix );
 
             // gets the position of the largest eigenvalue in parallel and returns the eigenvector
             final double[] l_eigenvalues = l_eigen.getRealEigenvalues().toArray();

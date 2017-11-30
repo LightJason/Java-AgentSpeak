@@ -188,10 +188,18 @@
 
         <!-- math structures -->
         <dependency>
+            <groupId>net.sourceforge.parallelcolt</groupId>
+            <artifactId>parallelcolt</artifactId>
+            <version>0.10.1</version>
+        </dependency>
+
+        <!--
+        <dependency>
             <groupId>colt</groupId>
             <artifactId>colt</artifactId>
             <version>1.2.0</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.apache.commons</groupId>
