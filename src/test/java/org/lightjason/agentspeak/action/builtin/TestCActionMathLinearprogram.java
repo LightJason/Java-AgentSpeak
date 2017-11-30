@@ -32,15 +32,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.math.linearprogram.CCreate;
+import org.lightjason.agentspeak.action.builtin.math.linearprogram.CEquationConstraint;
 import org.lightjason.agentspeak.action.builtin.math.linearprogram.CSolve;
 import org.lightjason.agentspeak.action.builtin.math.linearprogram.CValueConstraint;
-import org.lightjason.agentspeak.action.builtin.math.linearprogram.CEquationConstraint;
-
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

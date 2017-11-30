@@ -26,11 +26,9 @@ package org.lightjason.agentspeak.action.builtin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-
 import org.lightjason.agentspeak.action.builtin.math.shape.CInCircle;
 import org.lightjason.agentspeak.action.builtin.math.shape.CInRectangle;
 import org.lightjason.agentspeak.action.builtin.math.shape.CInTriangle;
-
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;

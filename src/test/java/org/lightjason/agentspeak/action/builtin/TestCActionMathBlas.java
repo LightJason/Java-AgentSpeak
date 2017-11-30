@@ -23,19 +23,17 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-
 import org.lightjason.agentspeak.action.builtin.math.blas.CElementWise;
-import org.lightjason.agentspeak.action.builtin.math.blas.CSize;
 import org.lightjason.agentspeak.action.builtin.math.blas.CMultiply;
-
+import org.lightjason.agentspeak.action.builtin.math.blas.CSize;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;

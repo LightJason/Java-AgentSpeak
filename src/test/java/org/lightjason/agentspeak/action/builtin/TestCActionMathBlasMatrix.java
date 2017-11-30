@@ -23,11 +23,11 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -39,43 +39,41 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
-
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CAssign;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CColumn;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CColumnSum;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CColumns;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CCondition;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CCopy;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CCreate;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CDeterminant;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CDiagonal;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CDimension;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CEigen;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CGet;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CGraphLaplacian;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CIdentity;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CInfinityNorm;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CInvert;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CMatrixNorm;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CNonZero;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CNormalizedGraphLaplacian;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.COneNorm;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CParse;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CPower;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CRank;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CRow;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CRowSum;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CRows;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CNonZero;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CCondition;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CDeterminant;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CTwoNorm;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.COneNorm;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CMatrixNorm;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CInfinityNorm;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CRank;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CPower;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CSet;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CToList;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CSingularValue;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CSolve;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CSubMatrix;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CSingularValue;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CSum;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CTranspose;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CToList;
 import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CTrace;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CAssign;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CGet;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CParse;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CInvert;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CEigen;
-import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CGraphLaplacian;
-
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CTranspose;
+import org.lightjason.agentspeak.action.builtin.math.blas.matrix.CTwoNorm;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -140,9 +138,9 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                 Stream.of( 2D, 2D, 2D, 2D ),
                 Stream.of( 2D, 2D ),
                 Stream.of( 4D, 4D ),
-                Stream.of( 56.48229533707794, 4.265564437074639 ),
+                Stream.of( 56.48229533707812, 4.265564437074639 ),
                 Stream.of( -2.000000000000001, -4.0 ),
-                Stream.of( 10.628480167651258, 4.130648586880581 ),
+                Stream.of( 10.628480167651258, 4.130648586880582 ),
                 Stream.of( 14.0000, 5.0000 ),
                 Stream.of( 10.63014581273465, 4.242640687119285 ),
                 Stream.of( 11.0000, 4.0000 ),
@@ -539,18 +537,18 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
         Assert.assertEquals( l_return.size(), 3 );
         Assert.assertTrue( l_return.get( 0 ).raw() instanceof DenseDoubleMatrix1D );
         Assert.assertArrayEquals( l_return.get( 0 ).<DenseDoubleMatrix1D>raw().toArray(),
-                Stream.of(  4.130648586880581, 0.9683709267122022 ).mapToDouble( i -> i ).toArray(), 0 );
+                Stream.of(  4.130648586880582, 0.9683709267122025 ).mapToDouble( i -> i ).toArray(), 0 );
 
         Assert.assertTrue( l_return.get( 1 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
             l_return.get( 1 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{0.6618025632357398, 0.7496781758158658}, {0.7496781758158657, -0.66180256323574}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{-0.6618025632357403, -0.7496781758158657}, {-0.7496781758158659, 0.66180256323574}} ).toArray()
         );
 
         Assert.assertTrue( l_return.get( 2 ).raw() instanceof DoubleMatrix2D );
         Assert.assertArrayEquals(
             l_return.get( 2 ).<DoubleMatrix2D>raw().toArray(),
-            new DenseDoubleMatrix2D( new double[][]{{0.864910093118595, -0.501926818193233}, {0.501926818193233, 0.864910093118595}} ).toArray()
+            new DenseDoubleMatrix2D( new double[][]{{-0.8649100931185951, 0.5019268181932333}, {-0.5019268181932333, -0.8649100931185951}} ).toArray()
         );
     }
 
