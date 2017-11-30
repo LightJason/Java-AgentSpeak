@@ -28,13 +28,17 @@ import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.generic.CPrint;
 import org.lightjason.agentspeak.action.builtin.generic.CThrow;
+import org.lightjason.agentspeak.action.builtin.generic.CUuid;
 import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -133,6 +137,25 @@ public final class TestCActionGeneric extends IBaseTest
         );
 
         Assert.assertEquals( l_output.toString( "utf-8" ), "FOOBAR-1234-yes\n" );
+    }
+
+    /**
+     * test single uuid
+     */
+    @Test
+    public final void uuid()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        new CUuid().execute(
+            false, IContext.EMPTYPLAN,
+            Collections.emptyList(),
+            l_return
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertEquals( l_return.get( 0 ).raw().getClass(), String.class );
+        Assert.assertTrue( !l_return.get( 0 ).<String>raw().isEmpty() );
     }
 
     /**
