@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 
-import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;

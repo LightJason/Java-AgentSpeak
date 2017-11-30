@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
 import org.lightjason.agentspeak.error.CRuntimeException;

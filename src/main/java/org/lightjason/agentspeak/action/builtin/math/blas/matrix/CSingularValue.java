@@ -23,9 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.linalg.SingularValueDecomposition;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.algo.decomposition.DenseDoubleSingularValueDecomposition;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -77,7 +77,7 @@ public final class CSingularValue extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( SingularValueDecomposition::new )
+               .map( i -> new DenseDoubleSingularValueDecomposition( i, true, false ) )
                .forEach( i ->
                {
                    p_return.add( CRawTerm.from( new DenseDoubleMatrix1D( i.getSingularValues() ) ) );

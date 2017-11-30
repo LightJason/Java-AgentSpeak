@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.vector;
 
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.impl.SparseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
 import org.lightjason.agentspeak.language.CCommon;

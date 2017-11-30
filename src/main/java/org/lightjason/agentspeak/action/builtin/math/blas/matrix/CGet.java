@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;

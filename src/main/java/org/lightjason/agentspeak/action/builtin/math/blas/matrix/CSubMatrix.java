@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -77,7 +77,7 @@ public final class CSubMatrix extends IAlgebra
 
         l_arguments.stream()
                    .skip( 4 )
-                   .map( i -> ALGEBRA.subMatrix(
+                   .map( i -> DENSEALGEBRA.subMatrix(
                        i.<DoubleMatrix2D>raw(),
                        l_arguments.get( 0 ).<Number>raw().intValue(),
                        l_arguments.get( 1 ).<Number>raw().intValue(),

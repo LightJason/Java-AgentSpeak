@@ -33,7 +33,6 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.math.tdouble.DoubleMult;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.lightjason.agentspeak.agent.IAgent;

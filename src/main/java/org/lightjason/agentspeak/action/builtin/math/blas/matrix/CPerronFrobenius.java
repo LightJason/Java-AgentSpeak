@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import cern.jet.math.Mult;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.jet.math.tdouble.DoubleMult;
 import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -92,7 +92,7 @@ public final class CPerronFrobenius extends IAlgebra
             .boxed()
             .map( i -> new double[l_arguments.get( i ).<DoubleMatrix2D>raw().rows()] )
             .map( DenseDoubleMatrix1D::new )
-            .peek( i -> IntStream.range( 0, i.size() ).forEach( j -> i.setQuick( j, l_random.nextDouble() ) ) )
+            .peek( i -> IntStream.range( 0, Long.valueOf( i.size() ).intValue() ).forEach( j -> i.setQuick( j, l_random.nextDouble() ) ) )
             .collect( Collectors.toList() );
 
         // run iteration
@@ -103,8 +103,8 @@ public final class CPerronFrobenius extends IAlgebra
                      .parallel()
                      .forEach( j ->
                      {
-                         l_eigenvector.get( j ).assign( ALGEBRA.mult( l_arguments.get( j + 1 ).<DoubleMatrix2D>raw(), l_eigenvector.get( j ) ) );
-                         l_eigenvector.get( j ).assign( Mult.div( ALGEBRA.norm2( l_eigenvector.get( j ) ) ) );
+                         l_eigenvector.get( j ).assign( DENSEALGEBRA.mult( l_arguments.get( j + 1 ).<DoubleMatrix2D>raw(), l_eigenvector.get( j ) ) );
+                         l_eigenvector.get( j ).assign( DoubleMult.div( DENSEALGEBRA.norm2( l_eigenvector.get( j ) ) ) );
                      } ) );
 
         l_eigenvector.stream()

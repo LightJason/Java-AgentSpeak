@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas;
 
-import cern.colt.function.DoubleDoubleFunction;
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.jet.math.Functions;
+import cern.colt.function.tdouble.DoubleDoubleFunction;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.jet.math.tdouble.DoubleFunctions;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
@@ -81,19 +81,19 @@ public class CElementWise extends IBuiltinAction
                 switch ( i.get( 1 ).<String>raw().trim() )
                 {
                     case "+" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.plus, ( n, m ) -> n + m, p_return );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.plus, ( n, m ) -> n + m, p_return );
 
                     case "|+|" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ),  Functions.plusAbs, ( n, m ) -> Math.abs( n + m ), p_return );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ),  DoubleFunctions.plusAbs, ( n, m ) -> Math.abs( n + m ), p_return );
 
                     case "-" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.minus, ( n, m ) -> n - m, p_return );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.minus, ( n, m ) -> n - m, p_return );
 
                     case "*" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.mult, ( n, m ) -> n * m, p_return );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.mult, ( n, m ) -> n * m, p_return );
 
                     case "/" :
-                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), Functions.div, ( n, m ) -> n / m, p_return );
+                        return CElementWise.apply( i.get( 0 ), i.get( 2 ), DoubleFunctions.div, ( n, m ) -> n / m, p_return );
 
                     default:
                         return false;
@@ -155,7 +155,7 @@ public class CElementWise extends IBuiltinAction
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
-                l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
                 p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }

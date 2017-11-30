@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas;
 
-import cern.colt.matrix.doublealgo.Formatter;
+import cern.colt.matrix.tdouble.algo.DoubleFormatter;
 import org.lightjason.agentspeak.action.builtin.generic.CPrint;
 
 
@@ -35,7 +35,7 @@ public abstract class IFormat<T> extends CPrint.IFormatter<T>
     /**
      * formatter definition
      */
-    protected static final Formatter FORMATTER;
+    protected static final DoubleFormatter FORMATTER;
     /**
      * serial id
      */
@@ -43,7 +43,7 @@ public abstract class IFormat<T> extends CPrint.IFormatter<T>
 
     static
     {
-        FORMATTER = new Formatter();
+        FORMATTER = new DoubleFormatter();
         FORMATTER.setRowSeparator( "; " );
         FORMATTER.setColumnSeparator( "," );
         FORMATTER.setPrintShape( false );

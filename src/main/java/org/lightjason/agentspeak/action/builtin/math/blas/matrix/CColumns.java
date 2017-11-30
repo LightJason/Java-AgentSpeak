@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.AbstractMatrix2D;
+import cern.colt.matrix.AbstractMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;

@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.bit.vector;
 
-import cern.colt.bitvector.BitVector;
+import cern.colt.matrix.tbit.BitVector;
 
 import javax.annotation.Nonnull;
 
