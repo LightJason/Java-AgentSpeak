@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas;
 
-import cern.colt.matrix.linalg.Algebra;
+import cern.colt.matrix.tdouble.algo.DenseDoubleAlgebra;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 
 
@@ -34,9 +34,9 @@ public abstract class IAlgebra extends IBuiltinAction
 {
 
     /**
-     * algebra reference
+     * dense algebra
      */
-    public static final Algebra ALGEBRA = Algebra.DEFAULT;
+    public static final DenseDoubleAlgebra DENSEALGEBRA = DenseDoubleAlgebra.DEFAULT;
     /**
      * serial id
      */

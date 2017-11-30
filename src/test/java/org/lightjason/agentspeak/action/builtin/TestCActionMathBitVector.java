@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import cern.colt.bitvector.BitVector;
-import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.tbit.BitVector;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -37,31 +37,32 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
-
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CAnd;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CBoolValue;
+import org.lightjason.agentspeak.action.builtin.math.bit.vector.CClear;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CCopy;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CCreate;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CFalseCount;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CHammingDistance;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CNAnd;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CNot;
+import org.lightjason.agentspeak.action.builtin.math.bit.vector.CNumericValue;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.COr;
+import org.lightjason.agentspeak.action.builtin.math.bit.vector.CRange;
+import org.lightjason.agentspeak.action.builtin.math.bit.vector.CSet;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CSize;
+import org.lightjason.agentspeak.action.builtin.math.bit.vector.CToBlas;
+import org.lightjason.agentspeak.action.builtin.math.bit.vector.CToList;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CTrueCount;
 import org.lightjason.agentspeak.action.builtin.math.bit.vector.CXor;
-import org.lightjason.agentspeak.action.builtin.math.bit.vector.CSet;
-import org.lightjason.agentspeak.action.builtin.math.bit.vector.CClear;
-import org.lightjason.agentspeak.action.builtin.math.bit.vector.CRange;
-import org.lightjason.agentspeak.action.builtin.math.bit.vector.CNumericValue;
-import org.lightjason.agentspeak.action.builtin.math.bit.vector.CToList;
-import org.lightjason.agentspeak.action.builtin.math.bit.vector.CToBlas;
-
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.algo.decomposition.DenseDoubleEigenvalueDecomposition;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -76,7 +76,7 @@ public final class CEigen extends IBuiltinAction
     {
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( EigenvalueDecomposition::new )
+               .map( DenseDoubleEigenvalueDecomposition::new )
                .forEach( i ->
                {
                    p_return.add( CRawTerm.from( i.getRealEigenvalues() ) );

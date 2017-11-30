@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
 
-import cern.colt.bitvector.BitMatrix;
-import cern.colt.bitvector.BitVector;
+import cern.colt.matrix.tbit.BitMatrix;
+import cern.colt.matrix.tbit.BitVector;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;

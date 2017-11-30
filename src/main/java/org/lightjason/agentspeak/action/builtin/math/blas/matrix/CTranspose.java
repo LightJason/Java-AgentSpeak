@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -75,7 +75,7 @@ public final class CTranspose extends IAlgebra
         // arguments are matrix objects
         CCommon.flatten( p_argument )
                .map( ITerm::<DoubleMatrix2D>raw )
-               .map( ALGEBRA::transpose )
+               .map( DENSEALGEBRA::transpose )
                .map( CRawTerm::from )
                .forEach( p_return::add );
 

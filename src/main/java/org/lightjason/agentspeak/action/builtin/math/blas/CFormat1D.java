@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas;
 
-import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
 
 import java.text.MessageFormat;
 

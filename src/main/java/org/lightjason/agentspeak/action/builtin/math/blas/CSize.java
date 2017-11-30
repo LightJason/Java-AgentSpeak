@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas;
 
-import cern.colt.matrix.impl.AbstractMatrix;
+import cern.colt.matrix.AbstractMatrix;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;

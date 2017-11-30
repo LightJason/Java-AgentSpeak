@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.graph;
 
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
-import cern.jet.math.Functions;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
+import cern.jet.math.tdouble.DoubleFunctions;
 import com.codepoetics.protonpack.StreamUtils;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -183,7 +183,7 @@ public final class CAdjacencyMatrix extends IBuiltinAction
 
         // on undirected graphs, add the transposefor cost duplicating
         if ( p_graph instanceof UndirectedGraph<?, ?> )
-            l_matrix.assign( IAlgebra.ALGEBRA.transpose( l_matrix ).copy(), Functions.plus );
+            l_matrix.assign( IAlgebra.DENSEALGEBRA.transpose( l_matrix ).copy(), DoubleFunctions.plus );
 
         return new ImmutablePair<>( l_matrix, new ArrayList<>( l_index.keySet() ) );
     }

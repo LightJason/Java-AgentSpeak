@@ -23,9 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
 import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
@@ -74,7 +74,7 @@ public final class CSolve extends IAlgebra
             CCommon.flatten( p_argument ),
             2
         )
-            .map( i -> ALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
+            .map( i -> DENSEALGEBRA.solve( i.get( 0 ).<DoubleMatrix2D>raw(), CSolve.result( i.get( 1 ) ) ) )
             .map( CRawTerm::from )
             .forEach( p_return::add );
 
@@ -93,7 +93,7 @@ public final class CSolve extends IAlgebra
         if ( CCommon.rawvalueAssignableTo( p_term, DoubleMatrix2D.class ) )
             return p_term.<DoubleMatrix2D>raw();
 
-        final DoubleMatrix2D l_result = new DenseDoubleMatrix2D( p_term.<DoubleMatrix1D>raw().size(), 1 );
+        final DoubleMatrix2D l_result = new DenseDoubleMatrix2D( Long.valueOf( p_term.<DoubleMatrix1D>raw().size() ).intValue(), 1 );
         l_result.viewColumn( 0 ).assign( p_term.<DoubleMatrix1D>raw() );
         return l_result;
     }

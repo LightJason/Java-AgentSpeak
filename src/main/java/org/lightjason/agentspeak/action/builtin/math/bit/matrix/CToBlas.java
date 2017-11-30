@@ -23,10 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.math.bit.matrix;
 
-import cern.colt.bitvector.BitMatrix;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+import cern.colt.matrix.tbit.BitMatrix;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.action.builtin.math.blas.EType;
 import org.lightjason.agentspeak.language.CCommon;

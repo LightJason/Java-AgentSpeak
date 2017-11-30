@@ -23,8 +23,8 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import com.codepoetics.protonpack.StreamUtils;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
@@ -36,18 +36,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.IAction;
-import org.lightjason.agentspeak.action.builtin.math.blas.vector.CCopy;
 import org.lightjason.agentspeak.action.builtin.math.blas.vector.CAssign;
-import org.lightjason.agentspeak.action.builtin.math.blas.vector.CGet;
-import org.lightjason.agentspeak.action.builtin.math.blas.vector.CToList;
-import org.lightjason.agentspeak.action.builtin.math.blas.vector.CSet;
+import org.lightjason.agentspeak.action.builtin.math.blas.vector.CCopy;
 import org.lightjason.agentspeak.action.builtin.math.blas.vector.CCreate;
 import org.lightjason.agentspeak.action.builtin.math.blas.vector.CDotProduct;
-import org.lightjason.agentspeak.action.builtin.math.blas.vector.CNonZero;
-import org.lightjason.agentspeak.action.builtin.math.blas.vector.CSum;
 import org.lightjason.agentspeak.action.builtin.math.blas.vector.CFromList;
+import org.lightjason.agentspeak.action.builtin.math.blas.vector.CGet;
+import org.lightjason.agentspeak.action.builtin.math.blas.vector.CNonZero;
 import org.lightjason.agentspeak.action.builtin.math.blas.vector.CParse;
-
+import org.lightjason.agentspeak.action.builtin.math.blas.vector.CSet;
+import org.lightjason.agentspeak.action.builtin.math.blas.vector.CSum;
+import org.lightjason.agentspeak.action.builtin.math.blas.vector.CToList;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;

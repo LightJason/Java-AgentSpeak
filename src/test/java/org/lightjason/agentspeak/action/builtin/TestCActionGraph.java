@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import com.codepoetics.protonpack.StreamUtils;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;

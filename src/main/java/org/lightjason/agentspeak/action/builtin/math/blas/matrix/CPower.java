@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.blas.matrix;
 
-import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.lightjason.agentspeak.action.builtin.math.blas.IAlgebra;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -80,7 +80,7 @@ public final class CPower extends IAlgebra
         l_argument.stream()
                   .skip( 1 )
                   .map( ITerm::<DoubleMatrix2D>raw )
-                  .map( i -> ALGEBRA.pow( i, l_argument.get( 0 ).<Number>raw().intValue() ) )
+                  .map( i -> DENSEALGEBRA.pow( i, l_argument.get( 0 ).<Number>raw().intValue() ) )
                   .map( CRawTerm::from )
                   .forEach( p_return::add );
 
