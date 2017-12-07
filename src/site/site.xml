@@ -36,6 +36,7 @@
         <menu name="Source Documentation">
             <item name="Source Documentation" href="sources/"/>
             <item name="Repository" href="http://github.com/LightJason/AgentSpeak" />
+            <item name="Docker" href="https://hub.docker.com/r/lightjason/agentspeak" />
             <item name="OpenHub" href="http://www.openhub.net/p/LightJason-AgentSpeak"/>
             <item name="Coveralls.io" href="https://coveralls.io/github/LightJason/AgentSpeak"/>
             <item name="Libraries.io" href="https://libraries.io/github/LightJason/AgentSpeak"/>
