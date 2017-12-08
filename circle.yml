@@ -54,20 +54,8 @@ deployment:
     production:
         branch: master
         commands:
-            - export FILENAME=$(mvn -B help:evaluate -Dexpression=project.build.finalName | grep -vi info) && mv -f target/${FILENAME}.jar /tmp && mv -f target/${FILENAME}-sources.jar /tmp
-            - mv -f target/site /tmp
-            # binary deployment to binary
-            - export FILENAME=$(mvn -B help:evaluate -Dexpression=project.build.finalName | grep -vi info) && rm -Rf * && mv -f /tmp/${FILENAME}.jar . && mv -f /tmp/${FILENAME}-sources.jar .
-            - git push origin :jar-${CIRCLE_BRANCH} || true
-            - git brach -D jar-${CIRCLE_BRANCH} || true
-            - git checkout --orphan jar-${CIRCLE_BRANCH}
-            - echo -e "# "${CIRCLE_PROJECT_REPONAME} > readme.md
-            - echo -e 'general:\n    branches:\n        ignore:\n            - /.*/\n' > circle.yml
-            - echo -e '*.*\n!.gitignore\n!circle.yml\n!*.jar\n' > .gitignore
-            - git add --all .
-            - git commit -m "current binary"
-            - git push origin jar-${CIRCLE_BRANCH}
             # documentation deployment to gh-pages
+            - mv -f target/site /tmp
             - rm -Rf *
             - git push origin :gh-pages || true
             - git branch -D gh-pages || true

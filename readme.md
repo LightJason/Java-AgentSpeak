@@ -140,6 +140,6 @@ Based on the project [Jason](http://jason.sourceforge.net/) by Jomi F. Hübner a
     * ```>>foo(X) && X > 1 && Value > 0.5``` (unify ```foo(X)```, then test the following terms sequentially)
 
 
-## <a name="graphic">Graphical Representation</a> 
+## Graphical Representation
 
-![Structure](bdi.png)
+![Structure](https://raw.githubusercontent.com/LightJason/AgentSpeak/master/bdi.png)
