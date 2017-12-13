@@ -15,7 +15,7 @@ RUN wget -O /tmp/glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases
 RUN wget -O /tmp/glibc-bin.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$DOCKERIMAGE_GLIBC_VERSION/glibc-bin-$DOCKERIMAGE_GLIBC_VERSION.apk
 RUN wget -O /tmp/glibc-i18n.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$DOCKERIMAGE_GLIBC_VERSION/glibc-i18n-$DOCKERIMAGE_GLIBC_VERSION.apk
 
-RUN wget -O /tmp/maven.tar.gz http://archive.apache.org/dist/maven/maven-3/$DOCKERIMAGE_MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && mkdir -p /opt/maven && tar --strip 1 -zxvf /tmp/maven.tar.gz -C /opt/maven
+RUN wget -O /tmp/maven.tar.gz http://archive.apache.org/dist/maven/maven-3/$DOCKERIMAGE_MAVEN_VERSION/binaries/apache-maven-$DOCKERIMAGE_MAVEN_VERSION-bin.tar.gz && mkdir -p /opt/maven && tar --strip 1 -zxvf /tmp/maven.tar.gz -C /opt/maven
 RUN wget -O /tmp/java.tar.gz --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" $DOCKERIMAGE_JAVA_DOWNLOAD && mkdir -p /opt/java && tar --strip 1 -zxvf /tmp/java.tar.gz -C /opt/java
 
 RUN apk --no-cache update &&\
