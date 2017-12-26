@@ -20,7 +20,7 @@ RUN wget -O /tmp/java.tar.gz --no-check-certificate -c --header "Cookie: oraclel
 
 RUN apk --no-cache update &&\
     apk --no-cache upgrade &&\
-    apk --no-cache add git ca-certificates /tmp/glibc.apk /tmp/glibc-bin.apk /tmp/glibc-i18n.apk
+    apk --no-cache add git openssh-client ca-certificates /tmp/glibc.apk /tmp/glibc-bin.apk /tmp/glibc-i18n.apk
 RUN /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 en_US.UTF-8
 
 
