@@ -311,6 +311,7 @@
                 </configuration>
             </plugin>
 
+            <!-- @bug runs out of memory
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
@@ -323,6 +324,7 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
