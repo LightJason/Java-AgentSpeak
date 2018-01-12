@@ -21,60 +21,59 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.rest;
+package org.lightjason.agentspeak.action.builtin.web.graphql;
 
-import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 
 /**
- * action to call a restful webservice with XML data.
- * Creates a literal from an XML REST-webservice, first argument
- * is the URL of the webservice and second argument the functor of the literal
+ * action to run an synchronized graphql query.
+ * The calls the data of a graphql service and returns a literal
+ * based on the query result, the input argument is at the first
+ * position the graphql service url, all other arguments will used
+ * as literal which represent the query structure of the service
  *
- * @code W = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" ); @endcode
- * @see https://en.wikipedia.org/wiki/Representational_state_transfer
- * @see https://en.wikipedia.org/wiki/Web_service
- * @see https://en.wikipedia.org/wiki/XML
+ * @code
+
+ * @endcode
+ * @see http://graphql.org/
+ * @see https://github.com/graphql-java/graphql-java
  */
-public class CXMLObject extends IBaseRest
+public final class CSynchronizedQuery extends IBaseWeb
 {
+
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8156192343303737293L;
+    private static final long serialVersionUID = 1697770409712623281L;
+
+    /**
+     * ctor
+     */
+    public CSynchronizedQuery()
+    {
+        super( 3 );
+    }
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
+                                               @Nonnull final List<ITerm> p_return )
     {
-        try
-        {
-            final Map<String, ?> l_data = IBaseRest.xml( p_argument.get( 0 ).<String>raw() );
-            p_return.add(
-                p_argument.size() == 2
-                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
-                : IBaseRest.baseliteral(
-                    p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
-                    flatterm( l_data )
-                )
-            );
-
-            return CFuzzyValue.from( true );
-        }
-        catch ( final IOException l_exception )
-        {
-            return CFuzzyValue.from( false );
-        }
+        // http://graphql-java.readthedocs.io/en/v6/execution.html
+        return CFuzzyValue.from( true );
     }
 }

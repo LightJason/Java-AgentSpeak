@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.graphql;
+package org.lightjason.agentspeak.action.builtin.web.graphql;
 
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,6 +38,18 @@ import java.util.List;
  */
 public class CAsynchronizedQuery extends IBuiltinAction
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = 1557003556326474829L;
+
+    /**
+     * ctor
+     */
+    public CAsynchronizedQuery()
+    {
+        super( 3 );
+    }
 
     @Override
     public final int minimalArgumentNumber()

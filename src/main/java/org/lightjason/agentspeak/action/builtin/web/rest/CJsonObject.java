@@ -21,46 +21,74 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.graphql;
+package org.lightjason.agentspeak.action.builtin.web.rest;
 
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * action to run an synchronized graphql query.
- * The calls the data of a graphql service and returns a literal
- * based on the query result, the input argument is at the first
- * position the graphql service url, all other arguments will used
- * as literal which represent the query structure of the service
+ * action for calling a restful webservice with a JSON object.
+ * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
+ * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
  *
- * @code
-
- * @endcode
- * @see http://graphql.org/
- * @see https://github.com/graphql-java/graphql-java
+ * @code W = web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
+ * @see https://en.wikipedia.org/wiki/Representational_state_transfer
+ * @see https://en.wikipedia.org/wiki/Web_service
+ * @see https://en.wikipedia.org/wiki/JSON
  */
-public final class CSynchronizedQuery extends IBuiltinAction
+public final class CJsonObject extends IBaseRest
 {
+    /**
+     * serial id
+     */
+    private static final long serialVersionUID = -3741382638836440374L;
 
-    @Override
-    public final int minimalArgumentNumber()
+    /**
+     * ctor
+     */
+    public CJsonObject()
     {
-        return 1;
+        super( 3 );
     }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return )
+    @SuppressWarnings( "unchecked" )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
+    )
     {
-        // http://graphql-java.readthedocs.io/en/v6/execution.html
-        return CFuzzyValue.from( true );
+        try
+        {
+            final Map<String, ?> l_data = IBaseRest.json(
+                p_argument.get( 0 ).<String>raw(),
+                Map.class
+            );
+
+            p_return.add(
+                p_argument.size() == 2
+                ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
+                : IBaseRest.baseliteral(
+                    p_argument.stream().skip( 1 ).map( ITerm::<String>raw ),
+                    flatterm( l_data )
+                )
+            );
+
+            return CFuzzyValue.from( true );
+        }
+        catch ( final IOException l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
     }
+
 }

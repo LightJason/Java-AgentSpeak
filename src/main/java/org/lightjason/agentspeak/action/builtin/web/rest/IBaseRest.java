@@ -21,15 +21,11 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.rest;
+package org.lightjason.agentspeak.action.builtin.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
-import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -38,11 +34,6 @@ import org.lightjason.agentspeak.language.ITerm;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Stack;
@@ -56,12 +47,21 @@ import java.util.stream.Stream;
  * @note all action which inherits this class uses the system property "http.agent" for defining
  * the http user-agent
  */
-public abstract class IBaseRest extends IBuiltinAction
+public abstract class IBaseRest extends IBaseWeb
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -3713528201539676487L;
+
+    /**
+     * ctor
+     * @param p_length length
+     */
+    protected IBaseRest( final int p_length )
+    {
+        super( p_length );
+    }
 
     @Nonnegative
     @Override
@@ -137,44 +137,7 @@ public abstract class IBaseRest extends IBuiltinAction
                  : Stream.of( CRawTerm.from( p_object ) );
     }
 
-    /**
-     * creates a HTTP connection and reads the data
-     *
-     * @param p_url url
-     * @return url data
-     *
-     * @throws IOException is thrown on connection errors
-     */
-    @Nonnull
-    private static String httpdata( @Nonnull final String p_url ) throws IOException
-    {
-        final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
 
-        // follow HTTP redirects
-        l_connection.setInstanceFollowRedirects( true );
-
-        // set a HTTP-User-Agent if not exists
-        l_connection.setRequestProperty(
-            "User-Agent",
-            ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
-            ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
-            : System.getProperty( "http.agent" )
-        );
-
-        // read stream data
-        final InputStream l_stream = l_connection.getInputStream();
-        final String l_return = CharStreams.toString(
-            new InputStreamReader(
-                l_stream,
-                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
-                ? Charsets.UTF_8
-                : Charset.forName( l_connection.getContentEncoding() )
-            )
-        );
-        Closeables.closeQuietly( l_stream );
-
-        return l_return;
-    }
 
     /**
      * transformas a map into a literal

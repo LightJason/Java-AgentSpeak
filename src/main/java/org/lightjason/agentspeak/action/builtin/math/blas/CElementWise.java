@@ -51,12 +51,20 @@ import java.util.function.BiFunction;
  * @code [M1|M2|M3] = math/blas/elementwise( Matrix1, "+", 5, Matrix2, "|+|", Matrix3, Matrix4, "-", 3, [Matrix5, "*", 0.5], [Matrix6, "/", 100]); @endcode
  *
  */
-public class CElementWise extends IBuiltinAction
+public final class CElementWise extends IBuiltinAction
 {
     /**
      * serial id
      */
     private static final long serialVersionUID = -2655464156364927632L;
+
+    /**
+     * ctor
+     */
+    public CElementWise()
+    {
+        super( 3 );
+    }
 
     @Nonnegative
     @Override
