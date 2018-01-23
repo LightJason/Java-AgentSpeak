@@ -98,9 +98,9 @@ public final class TestCActionDateTime extends IBaseTest
     public static Object[] generateapplyplus()
     {
         return Stream.of(
-            testcaseapply( new CApplyYears(), "2010-05-04T10:17:13-05:00[America/New_York]", 12, "2022-05-04T10:17:13-04:00[America/New_York]" ),
+            testcaseapply( new CApplyYears(), "2010-05-04T10:17:13-05:00[America/New_York]", 12, "2022-05-04T10:17:13-05:00[America/New_York]" ),
             testcaseapply( new CApplyMonths(), "2009-05-04T10:17:13-05:00[America/New_York]", 8, "2010-01-04T10:17:13-05:00[America/New_York]" ),
-            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13-05:00[America/New_York]", 3, "2008-05-07T10:17:13-04:00[America/New_York]" ),
+            testcaseapply( new CApplyDays(), "2008-05-04T10:17:13-05:00[America/New_York]", 3, "2008-05-07T10:17:13-05:00[America/New_York]" ),
             testcaseapply( new CApplyHours(), "2009-01-15T10:16:13+00:00[Europe/London]", 120, "2009-01-20T10:16:13Z[Europe/London]" ),
             testcaseapply( new CApplyMinutes(), "2007-01-15T10:23:13+00:00[Europe/London]", 240, "2007-01-15T14:23:13Z[Europe/London]" ),
             testcaseapply( new CApplySeconds(), "2006-01-15T10:23:13+00:00[Europe/London]", 7205, "2006-01-15T12:23:18Z[Europe/London]" ),
@@ -286,7 +286,7 @@ public final class TestCActionDateTime extends IBaseTest
 
         new CTime().execute(
             false, IContext.EMPTYPLAN,
-            Stream.of( "2007-12-03T10:15:30+01:00[Europe/Moscow]" ).map( CRawTerm::from ).collect( Collectors.toList() ),
+            Stream.of( "2007-12-03T10:15:30+01:00+02:00[Europe/Moscow]" ).map( CRawTerm::from ).collect( Collectors.toList() ),
             l_return
         );
 

@@ -6,7 +6,7 @@ ENV DOCKERIMAGE_AGENTSPEAK_VERSION HEAD
 
 ENV DOCKERIMAGE_MAVEN_VERSION 3.5.2
 ENV DOCKERIMAGE_GLIBC_VERSION 2.26-r0
-ENV DOCKERIMAGE_JAVA_DOWNLOAD http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.tar.gz
+ENV DOCKERIMAGE_JAVA_DOWNLOAD http://download.oracle.com/otn-pub/java/jdk/9.0.4+11/c2514751926b4512b076cc82f959763f/jdk-9.0.4_linux-x64_bin.tar.gz
 
 
 # --- dependencies section -----------------------

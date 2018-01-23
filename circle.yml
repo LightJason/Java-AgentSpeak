@@ -17,6 +17,7 @@ machine:
         Europe/Berlin
 
     java:
+        # https://hub.docker.com/r/library/maven/
         version: oraclejdk9
 
 
