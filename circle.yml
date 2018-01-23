@@ -17,7 +17,7 @@ machine:
         Europe/Berlin
 
     java:
-        version: oraclejdk8
+        version: oraclejdk9
 
 
 dependencies:
