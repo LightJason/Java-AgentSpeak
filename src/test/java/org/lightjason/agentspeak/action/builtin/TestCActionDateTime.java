@@ -214,7 +214,7 @@ public final class TestCActionDateTime extends IBaseTest
     {
         Assert.assertFalse(
             new CCreate().execute(
-                false, null,
+                false, IContext.EMPTYPLAN,
                 Stream.of( "error" ).map( CRawTerm::from ).collect( Collectors.toList() ),
                 Collections.emptyList()
             ).value()
