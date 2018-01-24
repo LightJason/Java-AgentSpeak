@@ -20,6 +20,7 @@ jobs:
             DOXYGEN_VERSION: "1.8.14"
 
         steps:
+            -run: env
             - run:
                 name: System Update
                 command: apt-get -y update
