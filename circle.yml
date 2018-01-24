@@ -4,7 +4,7 @@ jobs:
     build:
         working_directory: ~/agentspeak
         docker:
-            - image: maven:3.5.2-jdk-9-slim
+            - image: maven:3.5.2-jdk-9
 
         branches:
             ignore:
