@@ -23,13 +23,13 @@ jobs:
         steps:
             - run:
                 name: Install Grapviz & XSLTProc & WGet
-                run: sudo apt-get install graphviz xsltproc
+                command: sudo apt-get install graphviz xsltproc
             - run:
                 name: Doxygen Download
-                run: wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
+                command: wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
             - run:
                 name: Download Saxon
-                run: wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/Saxon-HE/9.8/SaxonHE9-8-0-4J.zip/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
+                command: wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/Saxon-HE/9.8/SaxonHE9-8-0-4J.zip/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
             - checkout
             - run:
                 name: Git Clean
