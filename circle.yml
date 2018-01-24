@@ -19,13 +19,12 @@ jobs:
         environment:
             TZ: "/usr/share/zoneinfo/Europe/Berlin"
 
-
         steps:
             -run:
                 name: System Update
                 command: apt-get -y update
             - run:
-                name: Install Grapviz & XSLTProc & WGet
+                name: Install Toolchain
                 command: apt-get -y install graphviz xsltproc
             - run:
                 name: Doxygen Download
