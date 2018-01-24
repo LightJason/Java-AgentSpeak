@@ -20,7 +20,7 @@ jobs:
             TZ: "/usr/share/zoneinfo/Europe/Berlin"
 
         steps:
-            -run:
+            - run:
                 name: System Update
                 command: apt-get -y update
             - run:
