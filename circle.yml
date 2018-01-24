@@ -21,9 +21,12 @@ jobs:
 
 
         steps:
+            -run:
+                name: System Update
+                command: apt-get -y update
             - run:
                 name: Install Grapviz & XSLTProc & WGet
-                command: apt-get install graphviz xsltproc
+                command: apt-get -y install graphviz xsltproc
             - run:
                 name: Doxygen Download
                 command: wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
