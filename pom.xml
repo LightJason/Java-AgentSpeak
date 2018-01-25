@@ -247,12 +247,6 @@
         <plugins>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>taglist-maven-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.9</version>
@@ -270,9 +264,9 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.0-RC7</version>
                 <configuration>
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
@@ -287,6 +281,7 @@
                 <version>2.0</version>
             </plugin>
 
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -300,6 +295,7 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
             </plugin>
+            -->
 
             <!-- @bug runs out of memory
             <plugin>
@@ -316,6 +312,7 @@
             </plugin>
             -->
 
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -324,7 +321,9 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
             </plugin>
+            -->
 
+            <!-- @bug https://github.com/cobertura/cobertura/issues/271
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
@@ -336,6 +335,7 @@
                     </formats>
                 </configuration>
             </plugin>
+            -->
 
         </plugins>
 

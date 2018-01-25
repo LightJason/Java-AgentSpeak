@@ -25,15 +25,15 @@ jobs:
 
         steps:
             - checkout
-            #- run:
-            #    name: Git Clean
-            #    command: git clean -xdf && git fetch -p && git gc --prune=now
-            #- run:
-            #    name: Maven Clean
-            #    command: mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
+            - run:
+                name: Git Clean
+                command: git clean -xdf && git fetch -p && git gc --prune=now
+            - run:
+                name: Maven Clean
+                command: mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
             - run:
                 name: Build
-                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DskipTests
+                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
             - run:
                 name: Json Action List
                 command: |
