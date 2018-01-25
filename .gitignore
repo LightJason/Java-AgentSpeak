@@ -1,6 +1,7 @@
 *.*
 
 !.gitignore
+!.dockerignore
 !Dockerfile
 !circle.yml
 !pom.xml
@@ -12,15 +13,12 @@
 !*.properties
 
 !src/site/*.doxyfile
-!src/site/*.htm*
 !src/site/*.css
 !src/site/*.xml
 !src/site/*.xslt
-!src/site/*.graffle
 
 !src/analysis/**/*.xml
 !src/analysis/**/*.txt
-!src/analysis/**/*.md
 
 src/main/antlr4/org/lightjason/agentspeak/grammar/AgentSpeak.g4
 src/main/antlr4/org/lightjason/agentspeak/grammar/Terminal.g4

@@ -4,7 +4,7 @@ jobs:
     build:
         working_directory: ~/agentspeak
         docker:
-            - image: maven:3.5.2-jdk-9-slim
+            - image: lightjason/docker:jdk
 
         branches:
             ignore:
@@ -17,22 +17,8 @@ jobs:
 
         environment:
             TZ: "/usr/share/zoneinfo/Europe/Berlin"
-            DOXYGEN_VERSION: "1.8.14"
 
         steps:
-            - run: env
-            - run:
-                name: System Update
-                command: apt-get -y update
-            - run:
-                name: Install Toolchain
-                command: apt-get -y install apt-utils git graphviz xsltproc wget
-            - run:
-                name: Doxygen Download
-                command: wget -O /tmp/doxygen.tar.gz http://ftp.stack.nl/pub/users/dimitri/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz && tar xf /tmp/doxygen.tar.gz -C /tmp
-            - run:
-                name: Download Saxon
-                command: wget -O /tmp/saxon.zip https://sourceforge.net/projects/saxon/files/Saxon-HE/9.8/SaxonHE9-8-0-4J.zip/download && unzip -d /tmp /tmp/saxon.zip saxon9he.jar
             - checkout
             - run:
                 name: Git Clean
