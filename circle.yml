@@ -18,6 +18,11 @@ jobs:
         environment:
             TZ: "/usr/share/zoneinfo/Europe/Berlin"
 
+            GIT_AUTHOR_NAME: CircleCI
+            GIT_AUTHOR_EMAIL: info@lightjason.org
+            GIT_COMMITTER_NAME: CircleCI
+            GIT_COMMITTER_EMAIL: info@lightjason.org
+
         steps:
             - checkout
             - run:
