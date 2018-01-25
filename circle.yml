@@ -33,7 +33,7 @@ jobs:
                 command: mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
             - run:
                 name: Build
-                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -Djava.opts=${JAVAOPTS}
+                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
             - run:
                 name: Json Action List
                 command: |

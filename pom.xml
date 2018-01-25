@@ -118,7 +118,7 @@
         <build.number></build.number>
         <build.commit></build.commit>
         <coverall.token></coverall.token>
-        <java.opts></java.opts>
+        <java.opts>-Xms2048m -Xmx2048m</java.opts>
     </properties>
 
 
