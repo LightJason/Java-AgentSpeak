@@ -326,6 +326,14 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                            <report>report-integration</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
 
         </plugins>
@@ -644,8 +652,14 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.0</version>
-
-                <!-- https://prismoskills.appspot.com/lessons/Maven/Chapter_06_-_Jacoco_report_aggregation.jsp -->
+                <executions>
+                    <execution>
+                        <id>initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
