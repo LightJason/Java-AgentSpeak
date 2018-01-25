@@ -111,7 +111,7 @@ public final class TestCActionMath extends IBaseTest
                     CNextPrime.class
                 ),
 
-                ( i ) -> (double) Primes.nextPrime( i.intValue() )
+                i -> (double) Primes.nextPrime( i.intValue() )
             ),
 
             singlevaluetestcase(
@@ -142,27 +142,27 @@ public final class TestCActionMath extends IBaseTest
                     CTanh.class
                 ),
 
-                ( i ) -> Math.abs( i.doubleValue() ),
-                ( i ) -> Math.acos( i.doubleValue() ),
-                ( i ) -> Math.asin( i.doubleValue() ),
-                ( i ) -> Math.atan( i.doubleValue() ),
-                ( i ) -> Math.ceil( i.doubleValue() ),
-                ( i ) -> Math.cos( i.doubleValue() ),
-                ( i ) -> Math.cosh( i.doubleValue() ),
-                ( i ) -> Math.toDegrees( i.doubleValue() ),
-                ( i ) -> Math.exp( i.doubleValue() ),
-                ( i ) -> Primes.isPrime( i.intValue() ),
-                ( i ) -> Math.log( i.doubleValue() ),
-                ( i ) -> Math.log10( i.doubleValue() ),
-                ( i ) -> Math.floor( i.doubleValue() ),
-                ( i ) -> Math.toRadians( i.doubleValue() ),
-                ( i ) -> Math.round( i.doubleValue() ),
-                ( i ) -> Math.signum( i.doubleValue() ),
-                ( i ) -> Math.sin( i.doubleValue() ),
-                ( i ) -> Math.sinh( i.doubleValue() ),
-                ( i ) -> Math.sqrt( i.doubleValue() ),
-                ( i ) -> Math.tan( i.doubleValue() ),
-                ( i ) -> Math.tanh( i.doubleValue() )
+                i -> Math.abs( i.doubleValue() ),
+                i -> Math.acos( i.doubleValue() ),
+                i -> Math.asin( i.doubleValue() ),
+                i -> Math.atan( i.doubleValue() ),
+                i -> Math.ceil( i.doubleValue() ),
+                i -> Math.cos( i.doubleValue() ),
+                i -> Math.cosh( i.doubleValue() ),
+                i -> Math.toDegrees( i.doubleValue() ),
+                i -> Math.exp( i.doubleValue() ),
+                i -> Primes.isPrime( i.intValue() ),
+                i -> Math.log( i.doubleValue() ),
+                i -> Math.log10( i.doubleValue() ),
+                i -> Math.floor( i.doubleValue() ),
+                i -> Math.toRadians( i.doubleValue() ),
+                i -> Math.round( i.doubleValue() ),
+                i -> Math.signum( i.doubleValue() ),
+                i -> Math.sin( i.doubleValue() ),
+                i -> Math.sinh( i.doubleValue() ),
+                i -> Math.sqrt( i.doubleValue() ),
+                i -> Math.tan( i.doubleValue() ),
+                i -> Math.tanh( i.doubleValue() )
             )
 
         ).toArray();
@@ -189,10 +189,10 @@ public final class TestCActionMath extends IBaseTest
                 CMax.class
             ),
 
-            ( i ) -> i.mapToDouble( Number::doubleValue ).average().getAsDouble(),
-            ( i ) -> i.mapToDouble( Number::doubleValue ).sum(),
-            ( i ) -> i.mapToDouble( Number::doubleValue ).min().getAsDouble(),
-            ( i ) -> i.mapToDouble( Number::doubleValue ).max().getAsDouble()
+            i -> i.mapToDouble( Number::doubleValue ).average().getAsDouble(),
+            i -> i.mapToDouble( Number::doubleValue ).sum(),
+            i -> i.mapToDouble( Number::doubleValue ).min().getAsDouble(),
+            i -> i.mapToDouble( Number::doubleValue ).max().getAsDouble()
 
         ).toArray();
     }

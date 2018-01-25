@@ -33,12 +33,12 @@ jobs:
                 command: mvn -B -DreResolve=false -DactTransitively=true clean dependency:purge-local-repository
             - run:
                 name: Build
-                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1}
+                command: mvn package site -Dbuild.number=${CIRCLE_BUILD_NUM} -Dcoverall.token=${COVERALL_TOKEN} -Dbuild.commit=${CIRCLE_SHA1} -DskipTests
             - run:
                 name: Json Action List
                 command: |
                     xsltproc -o target/xml/documentation.xml target/xml/combine.xslt target/xml/index.xml
-                    java -jar /tmp/saxon9he.jar -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
+                    saxon -xsl:src/site/action.xslt target/xml/documentation.xml > target/site/sources/action.json
             - add_ssh_keys:
                 fingerprints:
                     - "4e:e9:25:14:ee:f6:17:42:69:13:b3:2a:55:7a:99:ec"

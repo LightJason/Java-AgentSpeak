@@ -89,7 +89,7 @@ public abstract class IApplyPathAlgorithm extends IBuiltinAction
                                                  .map( i -> i.get( 1 ).<Number>raw() )
                                                  .orElse( 0D );
 
-        final Function<Object, Number> l_weightfunction = ( e ) -> l_weights.getOrDefault( e, l_defaultvalue );
+        final Function<Object, Number> l_weightfunction = e -> l_weights.getOrDefault( e, l_defaultvalue );
 
         final List<ITerm> l_vertices = StreamUtils.windowed( l_arguments.stream(), 2 )
                                                    .filter( i -> !( CCommon.rawvalueAssignableTo( i.get( 0 ), String.class )
