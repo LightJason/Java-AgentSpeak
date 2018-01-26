@@ -21,7 +21,7 @@
 
 -->
 <project xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.lightjason</groupId>
@@ -89,23 +89,28 @@
             <email>malte@lightjason.org</email>
             <timezone>Europe/Berlin</timezone>
             <roles>
-                <role>tester</role>
+                <role>testing</role>
+            </roles>
+        </contributor>
+
+        <contributor>
+            <name>Sophie Denissen</name>
+            <email>sophie@lightjason.org</email>
+            <timezone>Europe/Berlin</timezone>
+            <roles>
+                <role>testing</role>
             </roles>
         </contributor>
     </contributors>
 
 
     <!-- project build configuration -->
-    <prerequisites>
-        <maven>3.1</maven>
-    </prerequisites>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.9</maven.compiler.source>
+        <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
         <gpg.skip>true</gpg.skip>
 
@@ -188,13 +193,13 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.3</version>
+            <version>2.9.4</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.9.3</version>
+            <version>2.9.4</version>
         </dependency>
 
 
@@ -243,7 +248,7 @@
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
-            <version>[3.2.6,)</version>
+            <version>[3.5.11,)</version>
             <scope>test</scope>
         </dependency>
 
@@ -263,12 +268,6 @@
         <plugins>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>taglist-maven-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.9</version>
@@ -286,9 +285,9 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.0-RC7</version>
                 <configuration>
                     <includeFilterFile>src/analysis/findbugs/includefiles.xml</includeFilterFile>
                     <effort>Max</effort>
@@ -303,6 +302,7 @@
                 <version>2.0</version>
             </plugin>
 
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -316,6 +316,7 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
             </plugin>
+            -->
 
             <!-- @bug runs out of memory
             <plugin>
@@ -333,24 +334,17 @@
             -->
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.20</version>
-                <configuration>
-                    <linkXRef>false</linkXRef>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                </configuration>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                            <report>report-integration</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
 
         </plugins>
@@ -435,26 +429,36 @@
                     </configuration>
                 </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.20</version>
-                    <!--
-                    <configuration>
-                        <parallel>classes</parallel>
-                        <threadCount>2</threadCount>
-                        <perCoreThreadCount>true</perCoreThreadCount>
-                        <forkCount>2.5C</forkCount>
-                        <reuseForks>true</reuseForks>
-                    </configuration>
-                    -->
-                </plugin>
-
             </plugins>
 
         </pluginManagement>
 
         <plugins>
+
+            <!-- enforce version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>defaults</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.5</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>${maven.compiler.source}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- Maven plugin generating -->
             <plugin>
@@ -622,7 +626,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>[7.8.2,8.1]</version>
+                        <version>[7.8.2,)</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -643,7 +647,32 @@
                 </configuration>
             </plugin>
 
-            <!-- coversall report plugin -->
+            <!-- code-coverage report plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
+                <configuration>
+                    <argLine>${argLine} -Xms1g -Xmx1g</argLine>
+                    <forkCount>1</forkCount>
+                    <runOrder>random</runOrder>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.0</version>
+                <executions>
+                    <execution>
+                        <id>initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>

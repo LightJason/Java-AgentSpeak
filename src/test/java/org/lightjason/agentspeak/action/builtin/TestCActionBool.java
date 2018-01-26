@@ -48,6 +48,7 @@ import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -165,15 +166,17 @@ public final class TestCActionBool extends IBaseTest
      * @param p_input test-case data
      * @throws IllegalAccessException is thrwon on instantiation error
      * @throws InstantiationException is thrwon on instantiation error
+     * @throws NoSuchMethodException is thrwon on instantiation error
+     * @throws InvocationTargetException is thrwon on instantiation error
      */
     @Test
     @UseDataProvider( "generate" )
     public final void execute( final Triple<List<ITerm>, Class<? extends IAction>, Stream<Object>> p_input )
-        throws IllegalAccessException, InstantiationException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        p_input.getMiddle().newInstance().execute(
+        p_input.getMiddle().getConstructor().newInstance().execute(
             false, IContext.EMPTYPLAN,
             p_input.getLeft(),
             l_return

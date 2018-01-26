@@ -87,7 +87,7 @@ public final class CSpanningTree extends IBuiltinAction
                                                 .map( ITerm::<Map<?, Number>>raw )
                                                 .orElseGet( Collections::emptyMap );
 
-        final Function<Object, Double> l_weightfunction = ( e ) -> l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();
+        final Function<Object, Double> l_weightfunction = e -> l_costmap.getOrDefault( e, l_defaultcost ).doubleValue();
         final PrimMinimumSpanningTree<Object, Object> l_treefactory = new PrimMinimumSpanningTree<>( DelegateTree.getFactory(), l_weightfunction );
 
         // --- filter graphs ---

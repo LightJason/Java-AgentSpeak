@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
@@ -128,8 +129,11 @@ public abstract class IBaseRest extends IBaseWeb
      */
     @Nonnull
     @SuppressWarnings( "unchecked" )
-    protected static Stream<ITerm> flatterm( @Nonnull final Object p_object )
+    protected static Stream<ITerm> flatterm( @Nullable final Object p_object )
     {
+        if ( ( p_object == null ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
+            return Stream.empty();
+
         return p_object instanceof Map
                ? flatmap( (Map<String, ?>) p_object )
                : p_object instanceof Collection
@@ -150,10 +154,11 @@ public abstract class IBaseRest extends IBaseWeb
     {
         return p_map.entrySet()
                     .stream()
-                    .map( i -> CLiteral.from(
-                        i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
-                        flatterm( i.getValue() )
-                          )
+                    .map( i ->
+                              CLiteral.from(
+                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
+                                  flatterm( i.getValue() )
+                              )
                     );
     }
 

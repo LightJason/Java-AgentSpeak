@@ -106,10 +106,12 @@
 
         <module name = "ArrayTypeStyle" />
 
+        <!--
         <module name = "AtclauseOrder">
             <property name = "tagOrder"
-                      value = " @param, @return, @exception, @throws, @bug, @todo, @see, @deprecated, @author, @version, @since, @serial, @serialField, @serialData" />
+                      value = "@param, @return, @exception, @throws, @bug, @todo, @see, @deprecated, @author, @version, @since, @serial, @serialField, @serialData" />
         </module>
+        -->
 
         <module name = "AvoidEscapedUnicodeCharacters" />
 
@@ -356,7 +358,7 @@
 
         <module name = "NoFinalizer" />
 
-        <module name = "NonEmptyAtclauseDescription" />
+        <!-- <module name = "NonEmptyAtclauseDescription" /> -->
 
         <module name = "NoLineWrap" />
 
@@ -422,7 +424,11 @@
             <property name = "option" value = "nl" />
         </module>
 
-        <module name = "SingleLineJavadoc" />
+        <!--
+        <module name = "SingleLineJavadoc">
+            <property name="ignoredTags" value="@see"/>
+        </module>
+        -->
 
         <module name = "SimplifyBooleanExpression" />
 

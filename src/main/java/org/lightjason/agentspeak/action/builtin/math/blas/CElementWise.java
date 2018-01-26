@@ -143,7 +143,7 @@ public final class CElementWise extends IBuiltinAction
 
             if ( CCommon.rawvalueAssignableTo( p_right, Number.class ) )
             {
-                l_assign.assign( ( i ) -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
+                l_assign.assign( i -> p_scalarfunction.apply( i, p_right.<Number>raw().doubleValue() ) );
                 p_return.add( CRawTerm.from( l_assign ) );
                 return true;
             }

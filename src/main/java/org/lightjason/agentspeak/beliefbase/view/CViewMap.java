@@ -144,8 +144,8 @@ public final class CViewMap implements IView
                     j.remove( i, l_data );
             },
             Map::clear,
-            ( i ) -> i.toLowerCase( Locale.ROOT ),
-            ( i ) -> i.toLowerCase( Locale.ROOT )
+            i -> i.toLowerCase( Locale.ROOT ),
+            i -> i.toLowerCase( Locale.ROOT )
         );
     }
 
