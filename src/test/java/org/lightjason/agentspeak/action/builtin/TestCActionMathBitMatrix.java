@@ -354,13 +354,4 @@ public class TestCActionMathBitMatrix extends IBaseTest
         Assert.assertArrayEquals( l_blas.toArray(), l_result );
     }
 
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathBitMatrix().invoketest();
-    }
 }

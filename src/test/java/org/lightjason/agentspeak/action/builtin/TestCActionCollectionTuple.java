@@ -127,15 +127,4 @@ public final class TestCActionCollectionTuple extends IBaseTest
         Assert.assertEquals( l_return.get( 3 ).<Number>raw(), 2 );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCollectionTuple().invoketest();
-    }
-
 }

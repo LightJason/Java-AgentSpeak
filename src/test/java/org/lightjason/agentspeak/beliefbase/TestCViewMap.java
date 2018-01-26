@@ -185,16 +185,6 @@ public final class TestCViewMap extends IBaseTest
         );
     }
 
-    /**
-     * manual test
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCViewMap().invoketest();
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**

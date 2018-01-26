@@ -190,15 +190,4 @@ public final class TestCActionCollection extends IBaseTest
         Assert.assertTrue( l_map.isEmpty() );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command line arguments
-     */
-    @SuppressWarnings( "unchecked" )
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCollection().invoketest();
-    }
 }

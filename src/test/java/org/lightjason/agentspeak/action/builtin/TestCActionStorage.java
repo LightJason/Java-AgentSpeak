@@ -422,19 +422,6 @@ public final class TestCActionStorage extends IBaseTest
 
 
     /**
-     * main test call
-     *
-     * @param p_args command line arguments
-     *
-     * @throws Exception on any error
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCActionStorage().invoketest();
-    }
-
-
-    /**
      * test agent
      */
     private static final class CAgent extends IBaseAgent<CAgent>

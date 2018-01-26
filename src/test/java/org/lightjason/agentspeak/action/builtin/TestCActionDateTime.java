@@ -381,16 +381,4 @@ public final class TestCActionDateTime extends IBaseTest
         );
     }
 
-
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionDateTime().invoketest();
-    }
-
 }

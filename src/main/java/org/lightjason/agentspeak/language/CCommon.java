@@ -25,6 +25,7 @@ package org.lightjason.agentspeak.language;
 
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+import com.rits.cloning.Cloner;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
@@ -39,10 +40,10 @@ import org.lightjason.agentspeak.error.CIllegalArgumentException;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 import org.lightjason.agentspeak.language.execution.CContext;
 import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.instantiable.IInstantiable;
 import org.lightjason.agentspeak.language.instantiable.plan.statistic.IPlanStatistic;
 import org.lightjason.agentspeak.language.instantiable.plan.trigger.ITrigger;
+import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
@@ -69,6 +70,11 @@ import java.util.stream.Stream;
  */
 public final class CCommon
 {
+    /**
+     * cloner
+     */
+    private static final Cloner CLONER = new Cloner();
+
     /**
      * private ctor - avoid instantiation
      */
@@ -318,6 +324,20 @@ public final class CCommon
     public static Hasher getTermHashing()
     {
         return Hashing.sipHash24().newHasher();
+    }
+
+    /**
+     * creates a deep-clone of an object
+     *
+     * @param p_object input object
+     * @tparam T object type
+     * @return deep-copy
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    public static <T> T deepclone( @Nonnull final T p_object )
+    {
+        return CLONER.deepClone( p_object );
     }
 
     // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------

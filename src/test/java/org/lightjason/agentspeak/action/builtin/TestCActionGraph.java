@@ -1803,16 +1803,4 @@ public final class TestCActionGraph extends IBaseTest
         Assert.assertArrayEquals( l_graph.getEdges().toArray(), Stream.of( "removeedgesingle1", "removeedgesingle4", "removeedgesingle3" ).toArray() );
     }
 
-
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionGraph().invoketest();
-    }
-
 }

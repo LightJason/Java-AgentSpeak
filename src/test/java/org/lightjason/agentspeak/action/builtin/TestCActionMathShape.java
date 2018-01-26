@@ -101,13 +101,4 @@ public final class TestCActionMathShape extends IBaseTest
         Assert.assertFalse( l_return.get( 1 ).<Boolean>raw() );
     }
 
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathShape().invoketest();
-    }
 }

@@ -25,7 +25,6 @@ package org.lightjason.agentspeak.action.builtin.web.graphql;
 
 import com.coxautodev.graphql.tools.SchemaParser;
 import graphql.GraphQL;
-import org.apache.http.client.utils.URIBuilder;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
@@ -36,8 +35,6 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;

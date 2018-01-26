@@ -256,15 +256,4 @@ public final class TestCActionCollectionMultimap extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 1 ).<List<?>>raw().toArray(), Stream.of( "foobar" ).toArray() );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCollectionMultimap().invoketest();
-    }
-
 }

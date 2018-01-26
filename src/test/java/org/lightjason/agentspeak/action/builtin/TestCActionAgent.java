@@ -329,16 +329,6 @@ public final class TestCActionAgent extends IBaseTest
         return m_context;
     }
 
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionAgent().invoketest();
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**

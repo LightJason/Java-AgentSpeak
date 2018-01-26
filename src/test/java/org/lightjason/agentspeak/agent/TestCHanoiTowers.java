@@ -199,17 +199,6 @@ public final class TestCHanoiTowers extends IBaseTest
         }
     }
 
-    /**
-     * main method for manual test
-     *
-     * @param p_args CLI arguments
-     * @throws Exception is thrown on any error
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCHanoiTowers().invoketest();
-    }
-
 
     /**
      * agent class

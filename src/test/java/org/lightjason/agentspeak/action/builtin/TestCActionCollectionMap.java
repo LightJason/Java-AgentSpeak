@@ -280,15 +280,4 @@ public final class TestCActionCollectionMap extends IBaseTest
         Assert.assertEquals( l_return.get( 1 ).raw(), "text" );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCollectionMap().invoketest();
-    }
-
 }
