@@ -158,16 +158,6 @@ public final class TestCActionGeneric extends IBaseTest
         Assert.assertTrue( !l_return.get( 0 ).<String>raw().isEmpty() );
     }
 
-    /**
-     * text call
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionGeneric().invoketest();
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**

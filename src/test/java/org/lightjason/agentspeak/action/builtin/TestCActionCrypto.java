@@ -263,18 +263,4 @@ public final class TestCActionCrypto extends IBaseTest
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 12345 );
     }
 
-
-
-
-    /**
-     * test call
-     *
-     * @param p_args commandline arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCrypto().invoketest();
-    }
-
-
 }

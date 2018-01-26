@@ -328,14 +328,4 @@ public final class TestCActionMathBitVector extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 0 ).<DoubleMatrix1D>raw().toArray(), Stream.of( 0, 0, 1 ).mapToDouble( i -> i ).toArray(), 0 );
     }
 
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathBitVector().invoketest();
-    }
-
 }

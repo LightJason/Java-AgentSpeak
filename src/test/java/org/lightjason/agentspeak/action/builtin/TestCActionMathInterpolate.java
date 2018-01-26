@@ -140,14 +140,4 @@ public final class TestCActionMathInterpolate extends IBaseTest
         Assert.assertEquals( l_return.get( 1 ).<Number>raw(), 16.400000000000002 );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathInterpolate().invoketest();
-    }
 }

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language.variable;
 
-import com.rits.cloning.Cloner;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -234,7 +233,7 @@ public class CVariable<T> implements IVariable<T>
             ( p_prefix == null ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
-            new Cloner().deepClone( m_value )
+            org.lightjason.agentspeak.language.CCommon.deepclone( m_value )
         );
     }
 
@@ -242,7 +241,7 @@ public class CVariable<T> implements IVariable<T>
     @Override
     public ITerm deepcopysuffix()
     {
-        return new CVariable<>( m_functor.suffix(), new Cloner().deepClone( m_value ) );
+        return new CVariable<>( m_functor.suffix(), org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
     }
 
     @Override

@@ -348,16 +348,4 @@ public final class TestCTermVariablesConstant extends IBaseTest
         Assert.assertEquals( l_variable.raw(), "relocated mutex foo" );
     }
 
-
-
-    /**
-     * main method for testing
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCTermVariablesConstant().invoketest();
-
-    }
 }

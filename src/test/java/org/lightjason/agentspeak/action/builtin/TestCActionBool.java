@@ -255,14 +255,4 @@ public final class TestCActionBool extends IBaseTest
         Assert.assertTrue( l_return.get( 1 ).<Boolean>raw() );
     }
 
-
-    /**
-     * main test call
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionBool().invoketest();
-    }
 }

@@ -242,14 +242,4 @@ public final class TestCActionRest extends IBaseTest
         );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionRest().invoketest();
-    }
 }

@@ -23,7 +23,6 @@
 
 package org.lightjason.agentspeak.language;
 
-import com.rits.cloning.Cloner;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.common.CPath;
@@ -205,7 +204,7 @@ public final class CRawTerm<T> implements IRawTerm<T>
     @Override
     public final ITerm deepcopy( final IPath... p_prefix )
     {
-        return CRawTerm.from( new Cloner().deepClone( m_value ) );
+        return CRawTerm.from( org.lightjason.agentspeak.language.CCommon.deepclone( m_value ) );
     }
 
     @Nonnull

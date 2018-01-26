@@ -160,21 +160,6 @@ public final class TestCAgentExecution extends IBaseTest
     }
 
 
-
-    /**
-     * main method for manual test
-     *
-     * @param p_args CLI arguments
-     * @throws Exception on any execution error
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCAgentExecution().invoketest();
-    }
-
-
-
-
     /**
      * agent generator
      */

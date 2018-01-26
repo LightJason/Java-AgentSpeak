@@ -67,15 +67,4 @@ public final class TestCPath extends IBaseTest
         Assert.assertNotEquals( CPath.from( "foo/bar" ), CPath.from( "bar/foo" ) );
     }
 
-
-    /**
-     * manual test
-     *
-     * @param p_args commandline arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCPath().invoketest();
-    }
-
 }

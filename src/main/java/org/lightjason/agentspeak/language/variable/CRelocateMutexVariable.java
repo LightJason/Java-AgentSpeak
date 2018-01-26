@@ -23,9 +23,9 @@
 
 package org.lightjason.agentspeak.language.variable;
 
-import com.rits.cloning.Cloner;
 import org.lightjason.agentspeak.common.CPath;
 import org.lightjason.agentspeak.common.IPath;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
@@ -107,7 +107,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     @Override
     public final ITerm deepcopysuffix()
     {
-        return new CRelocateMutexVariable<>( CPath.from( m_functor.suffix() ), m_relocate, new Cloner().deepClone( m_value ) );
+        return new CRelocateMutexVariable<>( CPath.from( m_functor.suffix() ), m_relocate, CCommon.deepclone( m_value ) );
     }
 
     @Nonnull
@@ -119,7 +119,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
             ? m_functor
             : m_functor.append( p_prefix[0] ),
             m_relocate,
-            new Cloner().deepClone( m_value )
+            CCommon.deepclone( m_value )
         );
     }
 
