@@ -23,7 +23,7 @@
 
 package org.lightjason.agentspeak.action.builtin.math.bit.vector;
 
-import jdk.nashorn.internal.runtime.BitVector;
+import cern.colt.matrix.tbit.BitVector;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;

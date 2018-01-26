@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
@@ -170,9 +171,9 @@ public final class CCommon
                                     {
                                         try
                                         {
-                                            return (IAction) i.newInstance();
+                                            return (IAction) i.getConstructor().newInstance();
                                         }
-                                        catch ( final IllegalAccessException | InstantiationException l_exception )
+                                        catch ( final NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException l_exception )
                                         {
                                             LOGGER.warning( CCommon.languagestring( CCommon.class, "actioninstantiate", i, l_exception ) );
                                             return null;
