@@ -89,17 +89,6 @@ public final class TestCView extends IBaseTest
 
 
     /**
-     * manuell running test
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCView().invoketest();
-    }
-
-
-    /**
      * test belief generator
      */
     private static final class CGenerator implements IViewGenerator

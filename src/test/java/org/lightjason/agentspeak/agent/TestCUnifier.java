@@ -129,16 +129,4 @@ public final class TestCUnifier extends IBaseTest
         );
     }
 
-
-    /**
-     * manuell running test
-     *
-     * @param p_args arguments
-     * @throws Exception parser exception
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCUnifier().invoketest();
-    }
-
 }

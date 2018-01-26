@@ -339,14 +339,4 @@ public final class TestCActionMathBlasVector extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 1 ).<DoubleMatrix1D>raw().toArray(), new double[]{4, 3, 4}, 0 );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathBlasVector().invoketest();
-    }
 }

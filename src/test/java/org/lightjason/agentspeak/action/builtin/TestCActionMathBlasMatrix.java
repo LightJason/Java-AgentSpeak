@@ -774,14 +774,4 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
                                          .forEach( j -> Assert.assertEquals( l_result.getQuick( i, j ), 0, 0  ) ) );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMathBlasMatrix().invoketest();
-    }
 }

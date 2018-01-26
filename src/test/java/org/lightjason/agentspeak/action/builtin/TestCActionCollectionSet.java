@@ -163,15 +163,4 @@ public final class TestCActionCollectionSet extends IBaseTest
         Assert.assertArrayEquals( l_return.get( 0 ).<List<?>>raw().toArray(), l_set.toArray() );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionCollectionSet().invoketest();
-    }
-
 }

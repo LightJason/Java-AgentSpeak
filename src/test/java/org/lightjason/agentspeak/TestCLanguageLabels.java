@@ -289,17 +289,6 @@ public final class TestCLanguageLabels extends IBaseTest
         } );
     }
 
-    /**
-     * main method
-     *
-     * @param p_args arguments
-     * @throws IOException in file error
-     */
-    public static void main( final String[] p_args ) throws IOException
-    {
-        new TestCLanguageLabels().invoketest();
-    }
-
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -24,8 +24,8 @@
 package org.lightjason.agentspeak.language.fuzzy.operator.bool;
 
 import org.lightjason.agentspeak.language.fuzzy.defuzzification.IDefuzzification;
-import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyBundle;
+import org.lightjason.agentspeak.language.fuzzy.operator.IFuzzyOperator;
 
 import javax.annotation.Nonnull;
 import java.util.AbstractMap;

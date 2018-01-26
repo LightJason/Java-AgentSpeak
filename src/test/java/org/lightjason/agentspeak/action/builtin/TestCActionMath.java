@@ -522,15 +522,4 @@ public final class TestCActionMath extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<Number>raw(), 3D );
     }
 
-
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionMath().invoketest();
-    }
-
 }

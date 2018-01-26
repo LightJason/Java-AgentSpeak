@@ -208,18 +208,6 @@ public final class TestCMetric extends IBaseTest
         return l_agent;
     }
 
-
-    /**
-     * manuell running test
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCMetric().invoketest();
-    }
-
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**

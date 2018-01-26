@@ -438,15 +438,4 @@ public final class TestCActionString extends IBaseTest
         );
     }
 
-
-    /**
-     * main test call
-     *
-     * @param p_args arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionString().invoketest();
-    }
-
 }

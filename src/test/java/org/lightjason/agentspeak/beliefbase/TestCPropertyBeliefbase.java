@@ -67,18 +67,6 @@ public final class TestCPropertyBeliefbase extends IBaseTest
         );
     }
 
-
-    /**
-     * manuell running test
-     *
-     * @param p_args arguments
-     * @throws Exception on parsing exception
-     */
-    public static void main( final String[] p_args ) throws Exception
-    {
-        new TestCPropertyBeliefbase().invoketest();
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
