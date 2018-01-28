@@ -41,8 +41,10 @@ import org.lightjason.agentspeak.consistency.filter.IFilter;
 import org.lightjason.agentspeak.consistency.metric.IMetric;
 import org.lightjason.agentspeak.error.CIllegalStateException;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.text.MessageFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,6 +60,10 @@ import java.util.stream.Stream;
 public final class CConsistency implements IConsistency
 {
     /**
+     * default value on non-existing objects
+     */
+    private static final Map.Entry<Double, Double> DEFAULTNONEXISTING = new AbstractMap.SimpleImmutableEntry<>( 1.0, 0.0 );
+    /**
      * algebra
      */
     private static final DenseDoubleAlgebra ALGEBRA = DenseDoubleAlgebra.DEFAULT;
@@ -70,9 +76,9 @@ public final class CConsistency implements IConsistency
      **/
     private final EAlgorithm m_algorithm;
     /**
-     * map with object and consistency value
+     * map with object and consistency & inconsistency value
      **/
-    private final Map<IAgent<?>, Double> m_data = new ConcurrentHashMap<>();
+    private final Map<IAgent<?>, Map.Entry<Double, Double>> m_data = new ConcurrentHashMap<>();
     /**
      * descriptive statistic
      */
@@ -82,11 +88,11 @@ public final class CConsistency implements IConsistency
      */
     private final IFilter m_filter;
     /**
-     * metric object to create the value of two objects
+     * metric object to create the consistency of two objects
      **/
     private final IMetric m_metric;
     /**
-     * epsilon value to create an aperiodic markow-chain
+     * epsilon consistency to create an aperiodic markow-chain
      **/
     private final double m_epsilon;
     /**
@@ -102,7 +108,7 @@ public final class CConsistency implements IConsistency
      * @param p_filter metric filter
      * @param p_metric object metric
      * @param p_iteration iterations
-     * @param p_epsilon epsilon value
+     * @param p_epsilon epsilon consistency
      */
     private CConsistency( @Nonnull final EAlgorithm p_algorithm, @Nonnull final IFilter p_filter, @Nonnull final IMetric p_metric,
                           final int p_iteration, final double p_epsilon )
@@ -114,12 +120,6 @@ public final class CConsistency implements IConsistency
         m_epsilon = p_epsilon;
     }
 
-    @Override
-    public final double value( final IAgent<?> p_object )
-    {
-        return m_data.getOrDefault( p_object, 0.0 );
-    }
-
     @Nonnull
     @Override
     public final DescriptiveStatistics statistic()
@@ -129,9 +129,9 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final IConsistency add( final IAgent<?> p_object )
+    public final IConsistency add( @Nonnull final IAgent<?> p_object )
     {
-        m_data.putIfAbsent( p_object, 0.0 );
+        m_data.putIfAbsent( p_object, DEFAULTNONEXISTING );
         return this;
     }
 
@@ -176,17 +176,18 @@ public final class CConsistency implements IConsistency
                                              : m_algorithm.getStationaryDistribution( m_iteration, l_matrix );
 
         // calculate the inverted probability and normalize with 1-norm
-        l_eigenvector.assign( PROBABILITYINVERT );
-        l_eigenvector.assign( DoubleFunctions.div( ALGEBRA.norm1( l_eigenvector ) ) );
+        final DoubleMatrix1D l_invertedeigenvector = new DenseDoubleMatrix1D( l_eigenvector.toArray() );
+        l_invertedeigenvector.assign( PROBABILITYINVERT );
+        l_invertedeigenvector.assign( DoubleFunctions.div( ALGEBRA.norm1( l_eigenvector ) ) );
 
-        // set consistency value for each entry and update statistic
+        // set consistency for each entry and update statistic
         m_statistic.clear();
         IntStream.range( 0, l_keys.size() )
                  .boxed()
                  .forEach( i ->
                  {
                      m_statistic.addValue( l_eigenvector.get( i ) );
-                     m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
+                     m_data.put( l_keys.get( i ), new AbstractMap.SimpleImmutableEntry<>( l_invertedeigenvector.get( i ), l_eigenvector.get( i ) ) );
                  } );
 
         return this;
@@ -194,7 +195,7 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final IConsistency remove( final IAgent<?> p_object )
+    public final IConsistency remove( @Nonnull final IAgent<?> p_object )
     {
         m_data.remove( p_object );
         return this;
@@ -225,9 +226,30 @@ public final class CConsistency implements IConsistency
 
     @Nonnull
     @Override
-    public final Stream<Map.Entry<IAgent<?>, Double>> stream()
+    public final Stream<Map.Entry<IAgent<?>, Double>> consistency()
     {
-        return m_data.entrySet().stream();
+        return m_data.entrySet().stream().map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), i.getValue().getKey() ) );
+    }
+
+    @Nonnegative
+    @Override
+    public final double consistency( @Nonnull final IAgent<?> p_object )
+    {
+        return m_data.getOrDefault( p_object, DEFAULTNONEXISTING ).getKey();
+    }
+
+    @Nonnegative
+    @Override
+    public final double inconsistency( @Nonnull final IAgent<?> p_object )
+    {
+        return m_data.getOrDefault( p_object, DEFAULTNONEXISTING ).getValue();
+    }
+
+    @Nonnull
+    @Override
+    public final Stream<Map.Entry<IAgent<?>, Double>> inconsistency()
+    {
+        return m_data.entrySet().stream().map( i -> new AbstractMap.SimpleImmutableEntry<>( i.getKey(), i.getValue().getValue() ) );
     }
 
     @Override
@@ -237,11 +259,11 @@ public final class CConsistency implements IConsistency
     }
 
     /**
-     * returns metric value
+     * returns metric consistency
      *
      * @param p_first first element
      * @param p_second secend element
-     * @return metric value
+     * @return metric consistency
      */
     private double getMetricValue( final IAgent<?> p_first, final IAgent<?> p_second )
     {
