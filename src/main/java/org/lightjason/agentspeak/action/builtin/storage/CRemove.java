@@ -56,6 +56,14 @@ public final class CRemove extends IStorage
 
     /**
      * ctor
+     */
+    public CRemove()
+    {
+        super();
+    }
+
+    /**
+     * ctor
      *
      * @param p_resolver resolver function
      */
