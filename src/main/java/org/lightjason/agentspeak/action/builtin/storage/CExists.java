@@ -54,6 +54,14 @@ public final class CExists extends IStorage
 
     /**
      * ctor
+     */
+    public CExists()
+    {
+        super();
+    }
+
+    /**
+     * ctor
      *
      * @param p_resolver resolver function
      */

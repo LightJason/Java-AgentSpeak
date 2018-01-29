@@ -51,6 +51,14 @@ public abstract class IStorage extends IBuiltinAction
 
     /**
      * ctor
+     */
+    protected IStorage()
+    {
+        this( i -> false );
+    }
+
+    /**
+     * ctor
      *
      * @param p_resolver resolver of forbidden keys
      * @warning resolver will be triggered in parallel
