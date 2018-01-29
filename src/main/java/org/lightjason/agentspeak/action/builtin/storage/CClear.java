@@ -52,6 +52,14 @@ public final class CClear extends IStorage
 
     /**
      * ctor
+     */
+    public CClear()
+    {
+        super();
+    }
+
+    /**
+     * ctor
      *
      * @param p_resolver resolver function
      */

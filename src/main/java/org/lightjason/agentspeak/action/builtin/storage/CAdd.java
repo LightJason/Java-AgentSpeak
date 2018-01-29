@@ -54,6 +54,14 @@ public final class CAdd extends IStorage
 
     /**
      * ctor
+     */
+    public CAdd()
+    {
+        super();
+    }
+
+    /**
+     * ctor
      *
      * @param p_resolver resolver function
      */
