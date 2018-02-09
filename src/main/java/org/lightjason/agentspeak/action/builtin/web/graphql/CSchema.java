@@ -74,6 +74,8 @@ public class CSchema extends IBaseWeb
                                          @Nonnull final List<ITerm> p_return )
     {
         // https://github.com/graphql-java/graphql-java-tools
+        // https://github.com/graphql-java/graphql-java-http-example
+        // https://stackoverflow.com/questions/42024158/how-to-access-github-graphql-api-using-java
 
         CCommon.flatten( p_argument )
                .map( ITerm::<String>raw )
