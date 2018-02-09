@@ -51,7 +51,8 @@ foo(blub(1),hello("test")).
     !testbool;
     !teststring;
     !testunification;
-    !testdeconstruct
+    !testdeconstruct;
+    !testlambda
 .
 
 
@@ -193,4 +194,24 @@ foo(blub(1),hello("test")).
         test/result( bool/equal( collection/list/get(D, 0), 3 ), "deconstruct second value has been failed" );
 
         generic/print("deconstruct executed completly")
+.
+
+/**
+ * test lambda expression
+ */
++!testlambda <-
+    L = collection/list/range(1, 20);
+    (L) -> Y : generic/print( "lambda value", Y);
+
+    @(L) -> Y | R : R = Y+1;
+    generic/print("lambda return", R);
+
+    BL = agent/belieflist( "hallo" );
+    (BL) -> Y : generic/print( "lambda belief items", Y);
+
+
+    PL = agent/planlist();
+    (PL) -> Y : generic/print( "lambda plan items", Y);
+
+    test/result( success )
 .
