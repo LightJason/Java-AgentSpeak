@@ -47,6 +47,7 @@ import org.lightjason.agentspeak.language.unify.IUnifier;
 import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -59,6 +60,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -333,11 +335,11 @@ public final class CCommon
      * @tparam T object type
      * @return deep-copy
      */
-    @Nonnull
+    @Nullable
     @SuppressWarnings( "unchecked" )
-    public static <T> T deepclone( @Nonnull final T p_object )
+    public static <T> T deepclone( @Nullable final T p_object )
     {
-        return CLONER.deepClone( p_object );
+        return Objects.isNull( p_object ) ? null : CLONER.deepClone( p_object );
     }
 
     // --- compression algorithm -------------------------------------------------------------------------------------------------------------------------------
