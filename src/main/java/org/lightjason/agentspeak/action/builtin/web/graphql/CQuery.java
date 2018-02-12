@@ -23,6 +23,9 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLScalarType;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -40,6 +43,8 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static graphql.Scalars.GraphQLString;
 
 
 /**
@@ -93,12 +98,19 @@ public final class CQuery extends IBaseWeb
         // http://graphql.org/learn/serving-over-http/
         // https://stackoverflow.com/questions/4205980/java-sending-http-parameters-via-post-method-easily
         // https://dev-blog.apollodata.com/4-simple-ways-to-call-a-graphql-api-a6807bcdb355
+        // http://graphql-java.readthedocs.io/en/v6/schema.html
+        // http://graphql.org/learn/schema/
+
 
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_arguments.size() < 2 )
             return CFuzzyValue.from( false );
 
 
+        System.out.println( l_arguments.get( 1 ) );
+        System.out.println( query( l_arguments.get( 1 ).raw() ) );
+
+        /*
         try
         {
             System.out.println(
@@ -121,16 +133,43 @@ public final class CQuery extends IBaseWeb
         {
             throw new UncheckedIOException( l_exception );
         }
+        */
 
         return CFuzzyValue.from( true );
     }
+
+    private static GraphQLObjectType query( final ILiteral p_literal )
+    {
+        final GraphQLObjectType.Builder l_schema = GraphQLObjectType.newObject()
+                                                                    .name( p_literal.functor() );
+
+        if ( p_literal.emptyValues() )
+            return l_schema.build();
+
+        field( p_literal.values() )
+            .forEach( l_schema::field );
+
+        return l_schema.build();
+    }
+
+    private static Stream<GraphQLFieldDefinition> field( final Stream<ITerm> p_stream )
+    {
+        return p_stream.filter( i -> i instanceof ILiteral )
+                       .map( ITerm::<ILiteral>raw )
+                       .collect( Collectors.toMap( i -> i.functor(), i -> i, ( i, j ) -> i ) )
+                       .values()
+                       .stream()
+                       .map( i -> GraphQLFieldDefinition.newFieldDefinition().name( i.functor() ).type( GraphQLString ).build() );
+    }
+
+
 
     /**
      * converts a literal to a map structure
      *
      * @param p_literal literal
      * @return query string
-     */
+     *
     private static String query( final ILiteral p_literal )
     {
         if ( p_literal.emptyValues() )
@@ -153,12 +192,12 @@ public final class CQuery extends IBaseWeb
         );
     }
 
-    /**
+    **
      * argument values
      *
      * @param p_stream term stream
      * @return string arguemnts
-     */
+     *
     private static String queryarguments( final Stream<ITerm> p_stream )
     {
         return p_stream.filter( i -> i instanceof ILiteral )
@@ -169,11 +208,11 @@ public final class CQuery extends IBaseWeb
                        .trim();
     }
 
-    /**
+    **
      * format query argument
      * @param p_literal literal
      * @return functor with value
-     */
+     *
     private static String formatqueryargument( final ILiteral p_literal )
     {
         return p_literal.orderedvalues()
@@ -184,5 +223,6 @@ public final class CQuery extends IBaseWeb
                         .map( i -> p_literal.functor() + " : " + i )
                         .orElse( "" );
     }
+    */
 
 }
