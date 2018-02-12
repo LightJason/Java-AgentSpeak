@@ -33,6 +33,9 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.ProtocolException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +53,6 @@ import java.util.stream.Stream;
 
  * @endcode
  * @see http://graphql.org/
- * @see https://github.com/graphql-java/graphql-java
  */
 public final class CQuery extends IBaseWeb
 {
@@ -78,8 +80,6 @@ public final class CQuery extends IBaseWeb
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-
         // https://github.com/graphql-java/graphql-java-tools
         // https://github.com/graphql-java/graphql-java-http-example
         // https://stackoverflow.com/questions/42024158/how-to-access-github-graphql-api-using-java
@@ -90,7 +90,38 @@ public final class CQuery extends IBaseWeb
         // https://github.com/k0kubun/graphql-query-builder
         // https://www.pluralsight.com/guides/java-and-j2ee/building-a-graphql-server-with-spring-boot
 
-        System.out.println( query( l_arguments.get( 1 ).raw() ) );
+        // http://graphql.org/learn/serving-over-http/
+        // https://stackoverflow.com/questions/4205980/java-sending-http-parameters-via-post-method-easily
+        // https://dev-blog.apollodata.com/4-simple-ways-to-call-a-graphql-api-a6807bcdb355
+
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 2 )
+            return CFuzzyValue.from( false );
+
+
+        try
+        {
+            System.out.println(
+                IBaseWeb.httpdata(
+                    l_arguments.get( 0 ).raw(),
+                    i -> {
+                        try
+                        {
+                            i.setRequestMethod( "POST" );
+                        }
+                        catch ( final ProtocolException l_exception )
+                        {
+                            throw new RuntimeException( l_exception );
+                        }
+                    }
+                )
+            );
+        }
+        catch ( final IOException l_exception )
+        {
+            throw new UncheckedIOException( l_exception );
+        }
+
         return CFuzzyValue.from( true );
     }
 
