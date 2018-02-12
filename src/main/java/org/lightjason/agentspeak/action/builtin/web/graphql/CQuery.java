@@ -23,21 +23,18 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
+import java.text.MessageFormat;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -57,10 +54,6 @@ import java.util.stream.Stream;
  */
 public final class CQuery extends IBaseWeb
 {
-    /**
-     * object mapper
-     */
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     /**
      * serial id
      */
@@ -93,44 +86,72 @@ public final class CQuery extends IBaseWeb
         // http://graphql-java.readthedocs.io/en/v6/execution.html
         // https://stackoverflow.com/questions/3324717/sending-http-post-request-in-java
         // https://github.com/graphql/graphql-js/blob/master/src/utilities/introspectionQuery.js
+        // https://stackoverflow.com/questions/36914918/sending-graphql-query-in-java
+        // https://github.com/k0kubun/graphql-query-builder
+        // https://www.pluralsight.com/guides/java-and-j2ee/building-a-graphql-server-with-spring-boot
 
+        System.out.println( query( l_arguments.get( 1 ).raw() ) );
         return CFuzzyValue.from( true );
-
     }
 
     /**
      * converts a literal to a map structure
      *
      * @param p_literal literal
-     * @return map
+     * @return query string
      */
-    private static Map<String, Object> literalmap( final ILiteral p_literal )
+    private static String query( final ILiteral p_literal )
     {
-        final Map<String, Object> l_structure = new HashMap<>();
-        l_structure.put(
-            p_literal.functor(),
-            literalvalues( p_literal )
-        );
+        if ( p_literal.emptyValues() )
+            return p_literal.functor();
 
-        return l_structure;
+        final String l_query = queryarguments( p_literal.values() );
+        final String l_fields = p_literal.values()
+                                         .filter( i -> i instanceof ILiteral )
+                                         .map( i -> i.<ILiteral>raw() )
+                                         .collect( Collectors.toMap( i -> i.functor(), i -> query( i ), ( i, j ) -> i ) )
+                                         .values()
+                                         .stream()
+                                         .collect( Collectors.joining( " " ) )
+                                         .trim();
+
+        return MessageFormat.format(
+            "{0}{1}{2}",
+            p_literal.functor(), l_query.isEmpty() ? "" : MessageFormat.format( "({0})", l_query ),
+            l_fields.isEmpty() ? "" : MessageFormat.format( "'{'{0}'}'", l_fields )
+        );
     }
 
     /**
-     * converts literal values to a map structure
+     * argument values
      *
-     * @param p_literal input literal
-     * @return map
+     * @param p_stream term stream
+     * @return string arguemnts
      */
-    private static Map<String, Object> literalvalues( final ILiteral p_literal )
+    private static String queryarguments( final Stream<ITerm> p_stream )
     {
-        return p_literal.values()
-                 .filter( i -> Objects.nonNull( i.raw() ) )
-                 .collect(
-                     Collectors.toMap(
-                         ITerm::functor,
-                         i -> i instanceof ILiteral ? literalvalues( i.raw() ) : i.raw()
-                     )
-                 );
+        return p_stream.filter( i -> i instanceof ILiteral )
+                       .collect( Collectors.toMap( i -> i.functor(), i -> formatqueryargument( i.raw() ), ( i, j ) -> i ) )
+                       .values()
+                       .stream()
+                       .collect( Collectors.joining( " " ) )
+                       .trim();
+    }
+
+    /**
+     * format query argument
+     * @param p_literal literal
+     * @return functor with value
+     */
+    private static String formatqueryargument( final ILiteral p_literal )
+    {
+        return p_literal.orderedvalues()
+                        .filter( i -> i instanceof IRawTerm<?> )
+                        .findFirst()
+                        .map( ITerm::raw )
+                        .map( i -> i instanceof String ? "\"" + i + "\"" : i )
+                        .map( i -> p_literal.functor() + " : " + i )
+                        .orElse( "" );
     }
 
 }
