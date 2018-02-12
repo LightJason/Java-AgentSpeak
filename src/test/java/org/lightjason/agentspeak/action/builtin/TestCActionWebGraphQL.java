@@ -2,10 +2,13 @@ package org.lightjason.agentspeak.action.builtin;
 
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
+import org.lightjason.agentspeak.action.builtin.web.graphql.CQuery;
 import org.lightjason.agentspeak.action.builtin.web.graphql.CSchema;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
+import org.lightjason.agentspeak.language.instantiable.plan.IPlan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,55 +21,28 @@ import java.util.stream.Stream;
  */
 public final class TestCActionWebGraphQL extends IBaseTest
 {
-    /**
-     * schema reading
-     */
+
     @Test
-    public final void schema()
+    public final void query()
     {
-        /**
-         {
-         github {
-         repo(name: "AgentSpeak", ownerUsername: "LightJason") {
-         id
-         name
-         commits {
-         sha
-         message
-         date
-         }
-         branches {
-         name
-         }
-         }
-         }
-         }
-         https://www.graphqlhub.com/playground
-
-         http://graphql.org/swapi-graphql/
-         */
-
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CSchema().execute(
-            false, IContext.EMPTYPLAN,
-            Stream.of( "https://www.graphqlhub.com/playground" )
-                  .map( CRawTerm::from )
-                  .collect( Collectors.toList() ),
+        new CQuery().execute(
+            false,
+            IContext.EMPTYPLAN,
+            Stream.of(
+                CRawTerm.from( "https://daimon-dataaccess.herokuapp.com/graphql" ),
+                CLiteral.from(
+                    "sources",
+                    CLiteral.from( "name" ),
+                    CLiteral.from( "description" )
+                )
+            ).collect( Collectors.toList() ),
             l_return
         );
 
-        System.out.println( l_return );
+
     }
 
 
-    /**
-     * test call
-     *
-     * @param p_args command-line arguments
-     */
-    public static void main( final String[] p_args )
-    {
-        new TestCActionWebGraphQL().invoketest();
-    }
 }

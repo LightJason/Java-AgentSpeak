@@ -23,14 +23,23 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -46,9 +55,12 @@ import java.util.List;
  * @see http://graphql.org/
  * @see https://github.com/graphql-java/graphql-java
  */
-public final class CSynchronizedQuery extends IBaseWeb
+public final class CQuery extends IBaseWeb
 {
-
+    /**
+     * object mapper
+     */
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     /**
      * serial id
      */
@@ -57,7 +69,7 @@ public final class CSynchronizedQuery extends IBaseWeb
     /**
      * ctor
      */
-    public CSynchronizedQuery()
+    public CQuery()
     {
         super( 3 );
     }
@@ -73,7 +85,52 @@ public final class CSynchronizedQuery extends IBaseWeb
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+
+        // https://github.com/graphql-java/graphql-java-tools
+        // https://github.com/graphql-java/graphql-java-http-example
+        // https://stackoverflow.com/questions/42024158/how-to-access-github-graphql-api-using-java
         // http://graphql-java.readthedocs.io/en/v6/execution.html
+        // https://stackoverflow.com/questions/3324717/sending-http-post-request-in-java
+        // https://github.com/graphql/graphql-js/blob/master/src/utilities/introspectionQuery.js
+
         return CFuzzyValue.from( true );
+
     }
+
+    /**
+     * converts a literal to a map structure
+     *
+     * @param p_literal literal
+     * @return map
+     */
+    private static Map<String, Object> literalmap( final ILiteral p_literal )
+    {
+        final Map<String, Object> l_structure = new HashMap<>();
+        l_structure.put(
+            p_literal.functor(),
+            literalvalues( p_literal )
+        );
+
+        return l_structure;
+    }
+
+    /**
+     * converts literal values to a map structure
+     *
+     * @param p_literal input literal
+     * @return map
+     */
+    private static Map<String, Object> literalvalues( final ILiteral p_literal )
+    {
+        return p_literal.values()
+                 .filter( i -> Objects.nonNull( i.raw() ) )
+                 .collect(
+                     Collectors.toMap(
+                         ITerm::functor,
+                         i -> i instanceof ILiteral ? literalvalues( i.raw() ) : i.raw()
+                     )
+                 );
+    }
+
 }
