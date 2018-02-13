@@ -33,6 +33,7 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
@@ -96,6 +97,7 @@ public final class CQuery extends IBaseWeb
         // https://dev-blog.apollodata.com/4-simple-ways-to-call-a-graphql-api-a6807bcdb355
         // http://graphql-java.readthedocs.io/en/v6/schema.html
         // http://graphql.org/learn/schema/
+        // https://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/
 
 
         final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
@@ -109,6 +111,12 @@ public final class CQuery extends IBaseWeb
         {
             final HttpURLConnection l_connection = httpconnection( l_arguments.get( 0 ).raw() );
             l_connection.setRequestMethod( "POST" );
+            l_connection.setDoOutput( true );
+
+            final DataOutputStream l_stream = new DataOutputStream( l_connection.getOutputStream() );
+            l_stream.writeBytes(  );
+            l_stream.flush();
+            l_stream.close();
 
             System.out.println();
         }
