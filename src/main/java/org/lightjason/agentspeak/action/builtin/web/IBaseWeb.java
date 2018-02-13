@@ -70,6 +70,8 @@ public abstract class IBaseWeb extends IBuiltinAction
      * @throws IOException is thrown on connection errors
      */
     @Nonnull
+    @SafeVarargs
+    @SuppressWarnings( "varargs" )
     protected static String httpdata( @Nonnull final String p_url, @Nullable final Consumer<HttpURLConnection>... p_onconnect ) throws IOException
     {
         final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();

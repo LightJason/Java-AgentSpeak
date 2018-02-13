@@ -141,16 +141,8 @@ public final class CQuery extends IBaseWeb
         if ( p_literal.emptyValues() )
             return p_literal.functor();
 
-        final String l_query = queryarguments( p_literal.values() );
-        final String l_fields = p_literal.values()
-                                         .filter( i -> i instanceof ILiteral )
-                                         .map( ITerm::<ILiteral>raw )
-                                         .filter( i -> i.values().noneMatch( j -> j instanceof IRawTerm ) )
-                                         .collect( Collectors.toMap( ITerm::functor, CQuery::query, ( i, j ) -> i ) )
-                                         .values()
-                                         .stream()
-                                         .collect( Collectors.joining( " " ) )
-                                         .trim();
+        final String l_query = values( p_literal.values() );
+        final String l_fields = fields( p_literal.values() );
 
         return MessageFormat.format(
             "{0}{1}{2}",
@@ -165,11 +157,29 @@ public final class CQuery extends IBaseWeb
      * @param p_stream term stream
      * @return string arguemnts
      */
-    private static String queryarguments( final Stream<ITerm> p_stream )
+    private static String values( final Stream<ITerm> p_stream )
     {
         return p_stream.filter( i -> i instanceof ILiteral )
                        .map( ITerm::<ILiteral>raw )
-                       .collect( Collectors.toMap( ITerm::functor, i -> formatqueryargument( i.raw() ), ( i, j ) -> i ) )
+                       .collect( Collectors.toMap( ITerm::functor, i -> valueformat( i.raw() ), ( i, j ) -> i ) )
+                       .values()
+                       .stream()
+                       .collect( Collectors.joining( " " ) )
+                       .trim();
+    }
+
+    /**
+     * creates the field list
+     *
+     * @param p_stream field stream
+     * @return string definition
+     */
+    private static String fields( final Stream<ITerm> p_stream )
+    {
+        return p_stream.filter( i -> i instanceof ILiteral )
+                       .map( ITerm::<ILiteral>raw )
+                       .filter( i -> i.values().noneMatch( j -> j instanceof IRawTerm ) )
+                       .collect( Collectors.toMap( ITerm::functor, CQuery::query, ( i, j ) -> i ) )
                        .values()
                        .stream()
                        .collect( Collectors.joining( " " ) )
@@ -181,13 +191,13 @@ public final class CQuery extends IBaseWeb
      * @param p_literal literal
      * @return functor with value
      */
-    private static String formatqueryargument( final ILiteral p_literal )
+    private static String valueformat( final ILiteral p_literal )
     {
-        return p_literal.orderedvalues()
+        return p_literal.values()
                         .filter( i -> i instanceof IRawTerm<?> )
                         .findFirst()
                         .map( ITerm::raw )
-                        .map( CQuery::typemap )
+                        .map( CQuery::typeformat )
                         .map( i -> p_literal.functor() + " : " + i )
                         .orElse( "" );
     }
@@ -198,7 +208,7 @@ public final class CQuery extends IBaseWeb
      * @param p_value any value
      * @return graphql string
      */
-    private static String typemap( final Object p_value )
+    private static String typeformat( final Object p_value )
     {
         if ( p_value instanceof String )
             return MessageFormat.format( "\"{0}\"", p_value );
@@ -206,7 +216,7 @@ public final class CQuery extends IBaseWeb
         if ( p_value instanceof Collection<?> )
             return MessageFormat.format(
                 "[{0}]",
-                ( (Collection<?>) p_value ).stream().map( CQuery::typemap ).collect( Collectors.joining( ", " ) )
+                ( (Collection<?>) p_value ).stream().map( CQuery::typeformat ).collect( Collectors.joining( ", " ) )
             );
 
         return p_value.toString();
