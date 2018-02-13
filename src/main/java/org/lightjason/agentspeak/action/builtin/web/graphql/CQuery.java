@@ -23,9 +23,6 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLScalarType;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -36,15 +33,11 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.ProtocolException;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static graphql.Scalars.GraphQLString;
 
 
 /**
@@ -106,7 +99,6 @@ public final class CQuery extends IBaseWeb
         if ( l_arguments.size() < 2 )
             return CFuzzyValue.from( false );
 
-
         System.out.println( l_arguments.get( 1 ) );
         System.out.println( query( l_arguments.get( 1 ).raw() ) );
 
@@ -138,38 +130,12 @@ public final class CQuery extends IBaseWeb
         return CFuzzyValue.from( true );
     }
 
-    private static GraphQLObjectType query( final ILiteral p_literal )
-    {
-        final GraphQLObjectType.Builder l_schema = GraphQLObjectType.newObject()
-                                                                    .name( p_literal.functor() );
-
-        if ( p_literal.emptyValues() )
-            return l_schema.build();
-
-        field( p_literal.values() )
-            .forEach( l_schema::field );
-
-        return l_schema.build();
-    }
-
-    private static Stream<GraphQLFieldDefinition> field( final Stream<ITerm> p_stream )
-    {
-        return p_stream.filter( i -> i instanceof ILiteral )
-                       .map( ITerm::<ILiteral>raw )
-                       .collect( Collectors.toMap( i -> i.functor(), i -> i, ( i, j ) -> i ) )
-                       .values()
-                       .stream()
-                       .map( i -> GraphQLFieldDefinition.newFieldDefinition().name( i.functor() ).type( GraphQLString ).build() );
-    }
-
-
-
     /**
      * converts a literal to a map structure
      *
      * @param p_literal literal
      * @return query string
-     *
+     */
     private static String query( final ILiteral p_literal )
     {
         if ( p_literal.emptyValues() )
@@ -178,8 +144,9 @@ public final class CQuery extends IBaseWeb
         final String l_query = queryarguments( p_literal.values() );
         final String l_fields = p_literal.values()
                                          .filter( i -> i instanceof ILiteral )
-                                         .map( i -> i.<ILiteral>raw() )
-                                         .collect( Collectors.toMap( i -> i.functor(), i -> query( i ), ( i, j ) -> i ) )
+                                         .map( ITerm::<ILiteral>raw )
+                                         .filter( i -> i.values().noneMatch( j -> j instanceof IRawTerm ) )
+                                         .collect( Collectors.toMap( ITerm::functor, CQuery::query, ( i, j ) -> i ) )
                                          .values()
                                          .stream()
                                          .collect( Collectors.joining( " " ) )
@@ -192,37 +159,57 @@ public final class CQuery extends IBaseWeb
         );
     }
 
-    **
+    /**
      * argument values
      *
      * @param p_stream term stream
      * @return string arguemnts
-     *
+     */
     private static String queryarguments( final Stream<ITerm> p_stream )
     {
         return p_stream.filter( i -> i instanceof ILiteral )
-                       .collect( Collectors.toMap( i -> i.functor(), i -> formatqueryargument( i.raw() ), ( i, j ) -> i ) )
+                       .map( ITerm::<ILiteral>raw )
+                       .collect( Collectors.toMap( ITerm::functor, i -> formatqueryargument( i.raw() ), ( i, j ) -> i ) )
                        .values()
                        .stream()
                        .collect( Collectors.joining( " " ) )
                        .trim();
     }
 
-    **
+    /**
      * format query argument
      * @param p_literal literal
      * @return functor with value
-     *
+     */
     private static String formatqueryargument( final ILiteral p_literal )
     {
         return p_literal.orderedvalues()
                         .filter( i -> i instanceof IRawTerm<?> )
                         .findFirst()
                         .map( ITerm::raw )
-                        .map( i -> i instanceof String ? "\"" + i + "\"" : i )
+                        .map( CQuery::typemap )
                         .map( i -> p_literal.functor() + " : " + i )
                         .orElse( "" );
     }
-    */
+
+    /**
+     * type mapping
+     *
+     * @param p_value any value
+     * @return graphql string
+     */
+    private static String typemap( final Object p_value )
+    {
+        if ( p_value instanceof String )
+            return MessageFormat.format( "\"{0}\"", p_value );
+
+        if ( p_value instanceof Collection<?> )
+            return MessageFormat.format(
+                "[{0}]",
+                ( (Collection<?>) p_value ).stream().map( CQuery::typemap ).collect( Collectors.joining( ", " ) )
+            );
+
+        return p_value.toString();
+    }
 
 }
