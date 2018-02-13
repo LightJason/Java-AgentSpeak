@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -62,17 +63,12 @@ public abstract class IBaseWeb extends IBuiltinAction
     }
 
     /**
-     * creates a HTTP connection and reads the data
+     * creates a http connection
      *
      * @param p_url url
-     * @return url data
-     *
-     * @throws IOException is thrown on connection errors
+     * @return http connection
      */
-    @Nonnull
-    @SafeVarargs
-    @SuppressWarnings( "varargs" )
-    protected static String httpdata( @Nonnull final String p_url, @Nullable final Consumer<HttpURLConnection>... p_onconnect ) throws IOException
+    protected static HttpURLConnection httpconnection( @Nonnull final String p_url ) throws IOException
     {
         final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
 
@@ -87,8 +83,21 @@ public abstract class IBaseWeb extends IBuiltinAction
             : System.getProperty( "http.agent" )
         );
 
-        if ( p_onconnect != null )
-            Arrays.stream( p_onconnect ).forEach( i -> i.accept( l_connection ) );
+        return l_connection;
+    }
+
+    /**
+     * creates a HTTP connection and reads the data
+     *
+     * @param p_url url
+     * @return url data
+     *
+     * @throws IOException is thrown on connection errors
+     */
+    @Nonnull
+    protected static String httpget( @Nonnull final String p_url ) throws IOException
+    {
+        final HttpURLConnection l_connection = httpconnection( p_url );
 
         // read stream data
         final InputStream l_stream = l_connection.getInputStream();

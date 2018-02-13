@@ -83,7 +83,7 @@ public abstract class IBaseRest extends IBaseWeb
     @Nonnull
     protected static <T> T json( @Nonnull final String p_url, @Nonnull final Class<T> p_class ) throws IOException
     {
-        return new ObjectMapper().readValue( IBaseRest.httpdata( p_url ), p_class );
+        return new ObjectMapper().readValue( IBaseRest.httpget( p_url ), p_class );
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class IBaseRest extends IBaseWeb
     @SuppressWarnings( "unchecked" )
     protected static Map<String, ?> xml( @Nonnull final String p_url ) throws IOException
     {
-        return new XmlMapper().readValue( IBaseRest.httpdata( p_url ), Map.class );
+        return new XmlMapper().readValue( IBaseRest.httpget( p_url ), Map.class );
     }
 
     /**

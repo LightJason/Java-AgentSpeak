@@ -33,6 +33,9 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.HttpURLConnection;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
@@ -75,8 +78,8 @@ public final class CQuery extends IBaseWeb
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                               @Nonnull final List<ITerm> p_return )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
         // https://github.com/graphql-java/graphql-java-tools
         // https://github.com/graphql-java/graphql-java-http-example
@@ -99,33 +102,20 @@ public final class CQuery extends IBaseWeb
         if ( l_arguments.size() < 2 )
             return CFuzzyValue.from( false );
 
-        System.out.println( l_arguments.get( 1 ) );
-        System.out.println( query( l_arguments.get( 1 ).raw() ) );
+        //System.out.println( l_arguments.get( 1 ) );
+        //System.out.println( query( l_arguments.get( 1 ).raw() ) );
 
-        /*
         try
         {
-            System.out.println(
-                IBaseWeb.httpdata(
-                    l_arguments.get( 0 ).raw(),
-                    i -> {
-                        try
-                        {
-                            i.setRequestMethod( "POST" );
-                        }
-                        catch ( final ProtocolException l_exception )
-                        {
-                            throw new RuntimeException( l_exception );
-                        }
-                    }
-                )
-            );
+            final HttpURLConnection l_connection = httpconnection( l_arguments.get( 0 ).raw() );
+            l_connection.setRequestMethod( "POST" );
+
+            System.out.println();
         }
         catch ( final IOException l_exception )
         {
             throw new UncheckedIOException( l_exception );
         }
-        */
 
         return CFuzzyValue.from( true );
     }
