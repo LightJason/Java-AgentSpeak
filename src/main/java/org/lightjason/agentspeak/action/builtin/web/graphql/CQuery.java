@@ -23,6 +23,11 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
 import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -110,18 +115,26 @@ public final class CQuery extends IBaseWeb
 
         try
         {
+            final HttpPost l_post = httppost( l_arguments.get( 0 ).raw() );
+            l_post.setHeader( "Content-Type", "application/json" );
+            l_post.setEntity( new StringEntity( query( l_arguments.get( 1 ).raw() ) ) );
+
+
+            System.out.println( httppostexecute( l_post ) );
+
+            /*
             final HttpURLConnection l_connection = httpconnection( l_arguments.get( 0 ).raw() );
             l_connection.setDoInput( true );
             l_connection.setRequestMethod( "POST" );
             l_connection.setRequestProperty( "Content-Type", "application/json" );
+            //l_connection.setRequestProperty( "Content-Length" );
 
             final DataOutputStream l_stream = new DataOutputStream( l_connection.getOutputStream() );
             for( final byte i : query( l_arguments.get( 1 ).raw() ).getBytes( "UTF-8" ) )
                 l_stream.write( i );
             l_stream.flush();
             l_stream.close();
-
-            System.out.println( httpoutput( l_connection ) );
+            */
         }
         catch ( final IOException l_exception )
         {

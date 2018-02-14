@@ -26,7 +26,6 @@ package org.lightjason.agentspeak.action.builtin.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
-import org.lightjason.agentspeak.error.CRuntimeException;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -85,22 +84,7 @@ public abstract class IBaseRest extends IBaseWeb
     @Nonnull
     protected static <T> T json( @Nonnull final String p_url, @Nonnull final Class<T> p_class ) throws IOException
     {
-        return new ObjectMapper().readValue(
-            IBaseRest.httpget(
-                p_url,
-                i -> {
-                    try
-                    {
-                        i.setRequestMethod( "GET" );
-                    }
-                    catch ( final ProtocolException l_exception )
-                    {
-                        throw new RuntimeException( l_exception );
-                    }
-                }
-            ),
-            p_class
-        );
+        return new ObjectMapper().readValue( IBaseRest.httpgetexecute( p_url ), p_class );
     }
 
     /**
@@ -115,22 +99,7 @@ public abstract class IBaseRest extends IBaseWeb
     @SuppressWarnings( "unchecked" )
     protected static Map<String, ?> xml( @Nonnull final String p_url ) throws IOException
     {
-        return new XmlMapper().readValue(
-            IBaseRest.httpget(
-                p_url,
-                i -> {
-                    try
-                    {
-                        i.setRequestMethod( "GET" );
-                    }
-                    catch ( final ProtocolException l_exception )
-                    {
-                        throw new RuntimeException( l_exception );
-                    }
-                }
-            ),
-            Map.class
-        );
+        return new XmlMapper().readValue( IBaseRest.httpgetexecute( p_url ), Map.class );
     }
 
     /**

@@ -26,6 +26,11 @@ package org.lightjason.agentspeak.action.builtin.web;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.common.CCommon;
 
@@ -62,58 +67,49 @@ public abstract class IBaseWeb extends IBuiltinAction
     }
 
     /**
-     * creates a http connection
+     * returns a http-post connection
      *
      * @param p_url url
-     * @return http connection
+     * @return request
      */
-    @Nonnull
-    protected static HttpURLConnection httpconnection( @Nonnull final String p_url ) throws IOException
+    protected static HttpPost httppost( @Nonnull final String p_url )
     {
-        final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
+        return header( new HttpPost( p_url ) );
+    }
 
-        // follow HTTP redirects
-        l_connection.setInstanceFollowRedirects( true );
-        l_connection.setDoOutput( true );
+    /**
+     * returns a http-get connection
+     *
+     * @param p_url url
+     * @return request
+     */
+    protected static HttpGet httpget( @Nonnull final String p_url )
+    {
+        return header( new HttpGet( p_url ) );
+    }
 
-        // set a HTTP-User-Agent if not exists
-        l_connection.setRequestProperty(
+    /**
+     * sets the default header definition
+     *
+     * @param p_request request
+     * @tparam T request type
+     * @return input request
+     */
+    private static <T extends HttpRequestBase> T header( @Nonnull final T p_request )
+    {
+        p_request.setHeader(
             "User-Agent",
             ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
             ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
             : System.getProperty( "http.agent" )
         );
 
-        return l_connection;
+        return p_request;
     }
 
-    /**
-     * read http out of a connection
-     *
-     * @param p_connection connection
-     * @return output as string
-     * @throws IOException on io exception
-     */
-    @Nonnull
-    protected static String httpoutput( @Nonnull final HttpURLConnection p_connection ) throws IOException
-    {
-        // read stream data
-        final InputStream l_stream = p_connection.getInputStream();
-        final String l_return = CharStreams.toString(
-            new InputStreamReader(
-                l_stream,
-                ( p_connection.getContentEncoding() == null ) || ( p_connection.getContentEncoding().isEmpty() )
-                ? Charsets.UTF_8
-                : Charset.forName( p_connection.getContentEncoding() )
-            )
-        );
-        Closeables.closeQuietly( l_stream );
-
-        return l_return;
-    }
 
     /**
-     * creates a HTTP connection and reads the data
+     * execute http-get request
      *
      * @param p_url url
      * @return url data
@@ -121,12 +117,33 @@ public abstract class IBaseWeb extends IBuiltinAction
      * @throws IOException is thrown on connection errors
      */
     @Nonnull
-    protected static String httpget( @Nonnull final String p_url, @Nullable final Consumer<HttpURLConnection>... p_connetion ) throws IOException
+    protected static String httpgetexecute( @Nonnull final String p_url ) throws IOException
     {
-        final HttpURLConnection l_connection = httpconnection( p_url );
-        if ( p_connetion != null )
-            Arrays.stream( p_connetion ).forEach( i -> i.accept( l_connection ) );
-        return httpoutput( l_connection );
+        return EntityUtils.toString( HttpClientBuilder.create().build().execute( httpget( p_url ) ).getEntity() );
+    }
+
+    /**
+     * execute http-get request
+     *
+     * @param p_get get request
+     * @return output data as string
+     * @throws IOException is thrown on connection errors
+     */
+    protected static String httpgetexecute( @Nonnull final HttpGet p_get ) throws IOException
+    {
+        return EntityUtils.toString( HttpClientBuilder.create().build().execute( p_get ).getEntity() );
+    }
+
+    /**
+     * execute http-post request
+     *
+     * @param p_post post request
+     * @return output data as string
+     * @throws IOException is thrown on connection errors
+     */
+    protected static String httppostexecute( @Nonnull final HttpPost p_post ) throws IOException
+    {
+        return EntityUtils.toString( HttpClientBuilder.create().build().execute( p_post ).getEntity() );
     }
 
 
