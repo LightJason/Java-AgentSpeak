@@ -116,7 +116,7 @@ public final class CQuery extends IBaseWeb
         try
         {
             final HttpPost l_post = httppost( l_arguments.get( 0 ).raw() );
-            l_post.setHeader( "Content-Type", "application/json" );
+            l_post.setHeader( "Content-Type", "application/graphql" );
             l_post.setEntity( new StringEntity( query( l_arguments.get( 1 ).raw() ) ) );
 
 
@@ -153,7 +153,11 @@ public final class CQuery extends IBaseWeb
     @Nonnull
     private static String query( @Nonnull final ILiteral p_literal )
     {
-        return MessageFormat.format( "'{'{0}'}'", root( p_literal ) );
+        // query must be encapsulate as string in a json object with key quer
+        return MessageFormat.format(
+            "'{'\"query\" : \"{0}\"'}'",
+            MessageFormat.format( "'{'{0}'}'", root( p_literal ) ).replace( "\"", "\\\"" )
+        );
     }
 
     /**
