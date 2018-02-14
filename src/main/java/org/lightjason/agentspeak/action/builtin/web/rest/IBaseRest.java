@@ -44,7 +44,7 @@ public abstract class IBaseRest extends IBaseWeb
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3713528201539676487L;
+    private static final long serialVersionUID = -6606643839066144835L;
     /**
      * json mapper
      */

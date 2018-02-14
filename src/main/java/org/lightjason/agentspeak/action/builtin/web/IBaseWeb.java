@@ -54,7 +54,7 @@ public abstract class IBaseWeb extends IBuiltinAction
     /**
      * serial id
      */
-    private static final long serialVersionUID = -334813846636762405L;
+    private static final long serialVersionUID = 4839156213009145751L;
 
     /**
      * ctor

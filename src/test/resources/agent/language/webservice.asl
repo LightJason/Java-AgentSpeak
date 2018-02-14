@@ -35,7 +35,8 @@
     !testxmlobject;
     !testjsonobject;
     !testjsonlist;
-    !testgraphql
+    !testgraphqlliteral;
+    !testgraphqlnative
 .
 
 
@@ -44,7 +45,7 @@
  **/
 +!testjsonlist <-
     GH = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
-    +webservice( GH )
+    +rest-service( GH )
 .
 
 
@@ -53,7 +54,7 @@
  **/
 +!testjsonobject <-
     GO = web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
-    +webservice( GO )
+    +rest-service( GO )
 .
 
 
@@ -62,23 +63,30 @@
  **/
 +!testxmlobject <-
     WP = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
-    +webservice( WP )
+    +rest-service( WP )
 .
 
 /**
- * test graphql service
+ * test graphql service with literals
  **/
-+!testgraphql <-
++!testgraphqlliteral <-
     L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" );
-    GQ = web/graphql/query( "https://fakerql.com/graphql", L, "graphql-fake" );
-    !GQ
+    GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql" );
+    +graphql-fake-literal(GQ)
 .
 
+/**
+ * test graphql service with native string query
+ **/
++!testgraphqlnative <-
+    GQ = web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql" );
+    +graphql-fake-native(GQ)
+.
 
 /**
  * check goal for webservice calls
  **/
-+webservice(X) <-
++rest-service(X) <-
     [_|D] =.. X;
     D = collection/list/get(D, 0);
     [N] =.. D;
@@ -87,11 +95,28 @@
 .
 
 /**
- * check goal for graphql-fake calls
+ * check goal for graphql-fake literal calls
  **/
-+!graphql-fake(X) <-
++graphql-fake-literal(X) <-
     [_|D] =.. X;
-    [F|U] =.. D;
+    D = collection/list/get(D, 0);
+    [N|M] =.. D;
+    M = collection/list/get(M, 0);
+    [L|_] =.. M;
 
-    test/result( bool/or( bool/equal( D, "graphql-fake" ), bool/equal( F, "data" ), bool/equal( U, "allusers" ) ) )
+    test/result( bool/and( bool/equal( N, "data" ), bool/equal( L, "allusers" ) ) )
+.
+
+/**
+ * check goal for graphql-fake native calls
+ **/
++graphql-fake-native(X) <-
+    generic/print(X);
+    [_|D] =.. X;
+    D = collection/list/get(D, 0);
+    [N|M] =.. D;
+    M = collection/list/get(M, 0);
+    [L|_] =.. M;
+
+    test/result( bool/and( bool/equal( N, "data" ), bool/equal( L, "product" ) ) )
 .

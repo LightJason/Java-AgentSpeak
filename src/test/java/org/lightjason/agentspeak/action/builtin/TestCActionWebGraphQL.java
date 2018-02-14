@@ -26,7 +26,8 @@ package org.lightjason.agentspeak.action.builtin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.web.graphql.CQuery;
+import org.lightjason.agentspeak.action.builtin.web.graphql.CQueryLiteral;
+import org.lightjason.agentspeak.action.builtin.web.graphql.CQueryNative;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
@@ -46,15 +47,15 @@ public final class TestCActionWebGraphQL extends IBaseTest
 {
 
     /**
-     * run graphql query test
+     * run graphql query test with literal
      */
     @Test
-    public final void query()
+    public final void queryliteral()
     {
         final List<ITerm> l_return = new ArrayList<>();
 
         Assert.assertTrue(
-            new CQuery().execute(
+            new CQueryLiteral().execute(
                 false,
                 IContext.EMPTYPLAN,
                 Stream.of(
@@ -76,5 +77,51 @@ public final class TestCActionWebGraphQL extends IBaseTest
         Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
     }
 
+
+    /**
+     * run graphql query test with native query
+     */
+    @Test
+    public final void querymanual()
+    {
+        final List<ITerm> l_return = new ArrayList<>();
+
+        Assert.assertTrue(
+            new CQueryNative().execute(
+                false,
+                IContext.EMPTYPLAN,
+                Stream.of(
+                    CRawTerm.from( "https://fakerql.com/graphql" ),
+                    CRawTerm.from( "{Product(id: \"cjdn6szou00dw25107gcuy114\") {id price name}}" ),
+                    CRawTerm.from( "graphql" )
+                ).collect( Collectors.toList() ),
+                l_return
+            ).value()
+        );
+
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ) instanceof ILiteral );
+        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
+
+        // test-case returns random datasets back
+        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().structurehash(), CLiteral.from(
+            "graphql", CLiteral.from(
+                "data", CLiteral.from(
+                    "product", CLiteral.from(
+                        "id",
+                        CRawTerm.from( "cjdn6szou00dw25107gcuy114" )
+                    ),
+                    CLiteral.from(
+                        "price",
+                        CRawTerm.from( 126D )
+                    ),
+                    CLiteral.from(
+                        "name",
+                        CRawTerm.from( "Handmade Granite Cheese" )
+                    )
+                )
+            )
+        ).structurehash() );
+    }
 
 }

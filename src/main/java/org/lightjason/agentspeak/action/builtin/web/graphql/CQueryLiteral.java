@@ -23,27 +23,13 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
-import org.lightjason.agentspeak.action.builtin.web.rest.IBaseRest;
-import org.lightjason.agentspeak.language.CCommon;
-import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
-import org.lightjason.agentspeak.language.execution.IContext;
-import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
-import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,80 +42,28 @@ import java.util.stream.Stream;
  * defines the query structure and all other arguments the literal functor structure.
  * The action fails on connection and parsing errors.
  *
- * @code L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" ); GQ = web/graphql/query( "https://fakerql.com/graphql", L, "graphql-fake" ); @endcode
+ * @code L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" ); GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql-fake" ); @endcode
  * @see http://graphql.org/
  */
-public final class CQuery extends IBaseWeb
+public final class CQueryLiteral extends IBaseGraphQL
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -1297247775003220187L;
-    /**
-     * json mapper
-     */
-    private static final ObjectMapper JSONMAPPER = new ObjectMapper();
+    private static final long serialVersionUID = -6514047475694739845L;
 
     /**
      * ctor
      */
-    public CQuery()
+    public CQueryLiteral()
     {
         super( 3 );
     }
 
     @Override
-    public final int minimalArgumentNumber()
+    protected final String argumentquery( @Nonnull final ITerm p_argument )
     {
-        return 1;
-    }
-
-    @Nonnull
-    @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
-                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
-    {
-        final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_argument.size() < 3 )
-            return CFuzzyValue.from( false );
-
-        try
-        {
-            final HttpPost l_post = httppost( l_argument.get( 0 ).raw() );
-            l_post.setHeader( "Content-Type", "application/json" );
-            l_post.setEntity( new StringEntity( query( l_argument.get( 1 ).raw() ) ) );
-
-            p_return.add(
-                p_argument.size() == 3
-                ? CLiteral.from( l_argument.get( l_argument.size() - 1 ).<String>raw(), flatterm( JSONMAPPER.readValue( httppostexecute( l_post ), Map.class ) ) )
-                : IBaseRest.baseliteral(
-                    l_argument.stream().skip( 2 ).map( ITerm::<String>raw ),
-                    flatterm( JSONMAPPER.readValue( httppostexecute( l_post ), Map.class ) )
-                )
-            );
-        }
-        catch ( final IOException l_exception )
-        {
-            throw new UncheckedIOException( l_exception );
-        }
-
-        return CFuzzyValue.from( true );
-    }
-
-    /**
-     * converts a literal to a query
-     *
-     * @param p_literal literal
-     * @return graphql query
-     * @note query must be encapsulate as string in a json object with key query
-     */
-    @Nonnull
-    private static String query( @Nonnull final ILiteral p_literal )
-    {
-        return MessageFormat.format(
-            "'{'\"query\" : \"{0}\"'}'",
-            MessageFormat.format( "'{'{0}'}'", root( p_literal ) ).replace( "\"", "\\\"" )
-        );
+        return MessageFormat.format( "'{'{0}'}'", root( p_argument.raw() ) );
     }
 
     /**
@@ -184,7 +118,7 @@ public final class CQuery extends IBaseWeb
         return p_stream.filter( i -> i instanceof ILiteral )
                        .map( ITerm::<ILiteral>raw )
                        .filter( i -> i.values().noneMatch( j -> j instanceof IRawTerm ) )
-                       .collect( Collectors.toMap( ITerm::functor, CQuery::root, ( i, j ) -> i ) )
+                       .collect( Collectors.toMap( ITerm::functor, CQueryLiteral::root, ( i, j ) -> i ) )
                        .values()
                        .stream()
                        .collect( Collectors.joining( " " ) )
@@ -203,7 +137,7 @@ public final class CQuery extends IBaseWeb
                         .filter( i -> i instanceof IRawTerm<?> )
                         .findFirst()
                         .map( ITerm::raw )
-                        .map( CQuery::typeformat )
+                        .map( CQueryLiteral::typeformat )
                         .map( i -> p_literal.functor() + " : " + i )
                         .orElse( "" );
     }
@@ -222,7 +156,7 @@ public final class CQuery extends IBaseWeb
         if ( p_value instanceof Collection<?> )
             return MessageFormat.format(
                 "[{0}]",
-                ( (Collection<?>) p_value ).stream().map( CQuery::typeformat ).collect( Collectors.joining( ", " ) )
+                ( (Collection<?>) p_value ).stream().map( CQueryLiteral::typeformat ).collect( Collectors.joining( ", " ) )
             );
 
         return p_value.toString();
