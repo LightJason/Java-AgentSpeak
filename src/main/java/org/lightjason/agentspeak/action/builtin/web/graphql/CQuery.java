@@ -52,12 +52,11 @@ import java.util.stream.Stream;
  * action to run an synchronized graphql query.
  * The calls the data of a graphql service and returns a literal
  * based on the query result, the input argument is at the first
- * position the graphql service url, all other arguments will used
- * as literal which represent the query structure of the service
+ * position the graphql service url, the second argument a literal, which
+ * defines the query structure and all other arguments the literal functor structure.
+ * The action fails on connection and parsing errors.
  *
- * @code
-
- * @endcode
+ * @code L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" ); GQ = web/graphql/query( "https://fakerql.com/graphql", L, "graphql-fake" ); @endcode
  * @see http://graphql.org/
  */
 public final class CQuery extends IBaseWeb
@@ -90,24 +89,6 @@ public final class CQuery extends IBaseWeb
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        // https://github.com/graphql-java/graphql-java-tools
-        // https://github.com/graphql-java/graphql-java-http-example
-        // https://stackoverflow.com/questions/42024158/how-to-access-github-graphql-api-using-java
-        // http://graphql-java.readthedocs.io/en/v6/execution.html
-        // https://stackoverflow.com/questions/3324717/sending-http-post-request-in-java
-        // https://github.com/graphql/graphql-js/blob/master/src/utilities/introspectionQuery.js
-        // https://stackoverflow.com/questions/36914918/sending-graphql-query-in-java
-        // https://github.com/k0kubun/graphql-query-builder
-        // https://www.pluralsight.com/guides/java-and-j2ee/building-a-graphql-server-with-spring-boot
-
-        // http://graphql.org/learn/serving-over-http/
-        // https://stackoverflow.com/questions/4205980/java-sending-http-parameters-via-post-method-easily
-        // https://dev-blog.apollodata.com/4-simple-ways-to-call-a-graphql-api-a6807bcdb355
-        // http://graphql-java.readthedocs.io/en/v6/schema.html
-        // http://graphql.org/learn/schema/
-        // https://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/
-
-
         final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
         if ( l_argument.size() < 3 )
             return CFuzzyValue.from( false );
