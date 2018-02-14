@@ -21,29 +21,24 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.rest;
+package org.lightjason.agentspeak.action.builtin.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.builtin.web.rest.IBaseRest;
 import org.lightjason.agentspeak.common.CCommon;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Stack;
@@ -52,53 +47,103 @@ import java.util.stream.Stream;
 
 
 /**
- * base class to read data from the restful service
- *
- * @note all action which inherits this class uses the system property "http.agent" for defining
- * the http user-agent
+ * web base action class
  */
-public abstract class IBaseRest extends IBuiltinAction
+public abstract class IBaseWeb extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = -3713528201539676487L;
+    private static final long serialVersionUID = 4839156213009145751L;
 
-    @Nonnegative
-    @Override
-    public final int minimalArgumentNumber()
+    /**
+     * ctor
+     *
+     * @param p_length length
+     */
+    protected IBaseWeb( final int p_length )
     {
-        return 2;
+        super( p_length );
     }
 
     /**
-     * reads a json structure from an url
+     * returns a http-post connection
      *
      * @param p_url url
-     * @param p_class convert class type
-     * @return data object
-     *
-     * @throws IOException is thrown on io errors
+     * @return request
      */
-    @Nonnull
-    protected static <T> T json( @Nonnull final String p_url, @Nonnull final Class<T> p_class ) throws IOException
+    protected static HttpPost httppost( @Nonnull final String p_url )
     {
-        return new ObjectMapper().readValue( IBaseRest.httpdata( p_url ), p_class );
+        return header( new HttpPost( p_url ) );
     }
 
     /**
-     * reads a xml structure from an url
+     * returns a http-get connection
      *
      * @param p_url url
-     * @return map with xml data
+     * @return request
+     */
+    protected static HttpGet httpget( @Nonnull final String p_url )
+    {
+        return header( new HttpGet( p_url ) );
+    }
+
+    /**
+     * sets the default header definition
      *
-     * @throws IOException is thrown on io errors
+     * @param p_request request
+     * @tparam T request type
+     * @return input request
+     */
+    private static <T extends HttpRequestBase> T header( @Nonnull final T p_request )
+    {
+        p_request.setHeader(
+            "User-Agent",
+            ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
+            ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
+            : System.getProperty( "http.agent" )
+        );
+
+        return p_request;
+    }
+
+
+    /**
+     * execute http-get request
+     *
+     * @param p_url url
+     * @return url data
+     *
+     * @throws IOException is thrown on connection errors
      */
     @Nonnull
-    @SuppressWarnings( "unchecked" )
-    protected static Map<String, ?> xml( @Nonnull final String p_url ) throws IOException
+    protected static String httpgetexecute( @Nonnull final String p_url ) throws IOException
     {
-        return new XmlMapper().readValue( IBaseRest.httpdata( p_url ), Map.class );
+        return EntityUtils.toString( HttpClientBuilder.create().build().execute( httpget( p_url ) ).getEntity() );
+    }
+
+    /**
+     * execute http-get request
+     *
+     * @param p_get get request
+     * @return output data as string
+     * @throws IOException is thrown on connection errors
+     */
+    protected static String httpgetexecute( @Nonnull final HttpGet p_get ) throws IOException
+    {
+        return EntityUtils.toString( HttpClientBuilder.create().build().execute( p_get ).getEntity() );
+    }
+
+    /**
+     * execute http-post request
+     *
+     * @param p_post post request
+     * @return output data as string
+     * @throws IOException is thrown on connection errors
+     */
+    protected static String httppostexecute( @Nonnull final HttpPost p_post ) throws IOException
+    {
+        return EntityUtils.toString( HttpClientBuilder.create().build().execute( p_post ).getEntity() );
     }
 
     /**
@@ -141,44 +186,7 @@ public abstract class IBaseRest extends IBuiltinAction
                  : Stream.of( CRawTerm.from( p_object ) );
     }
 
-    /**
-     * creates a HTTP connection and reads the data
-     *
-     * @param p_url url
-     * @return url data
-     *
-     * @throws IOException is thrown on connection errors
-     */
-    @Nonnull
-    private static String httpdata( @Nonnull final String p_url ) throws IOException
-    {
-        final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
 
-        // follow HTTP redirects
-        l_connection.setInstanceFollowRedirects( true );
-
-        // set a HTTP-User-Agent if not exists
-        l_connection.setRequestProperty(
-            "User-Agent",
-            ( System.getProperty( "http.agent" ) == null ) || ( System.getProperty( "http.agent" ).isEmpty() )
-            ? CCommon.PACKAGEROOT + CCommon.configuration().getString( "version" )
-            : System.getProperty( "http.agent" )
-        );
-
-        // read stream data
-        final InputStream l_stream = l_connection.getInputStream();
-        final String l_return = CharStreams.toString(
-            new InputStreamReader(
-                l_stream,
-                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
-                ? Charsets.UTF_8
-                : Charset.forName( l_connection.getContentEncoding() )
-            )
-        );
-        Closeables.closeQuietly( l_stream );
-
-        return l_return;
-    }
 
     /**
      * transformas a map into a literal

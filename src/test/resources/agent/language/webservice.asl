@@ -34,7 +34,9 @@
 +!test <-
     !testxmlobject;
     !testjsonobject;
-    !testjsonlist
+    !testjsonlist;
+    !testgraphqlliteral;
+    !testgraphqlnative
 .
 
 
@@ -42,8 +44,8 @@
  * test webservice via json list
  **/
 +!testjsonlist <-
-    GH = rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
-    +webservice( GH )
+    GH = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );
+    +rest-service( GH )
 .
 
 
@@ -51,8 +53,8 @@
  * test webservice via json object
  **/
 +!testjsonobject <-
-    GO = rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
-    +webservice( GO )
+    GO = web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" );
+    +rest-service( GO )
 .
 
 
@@ -60,18 +62,61 @@
  * test webservice via xml object
  **/
 +!testxmlobject <-
-    WP = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
-    +webservice( WP )
+    WP = web/rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" );
+    +rest-service( WP )
 .
 
+/**
+ * test graphql service with literals
+ **/
++!testgraphqlliteral <-
+    L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" );
+    GQ = web/graphql/queryliteral( "https://fakerql.com/graphql", L, "graphql" );
+    +graphql-fake-literal(GQ)
+.
 
 /**
- * add trigger
+ * test graphql service with native string query
  **/
-+webservice(X) <-
++!testgraphqlnative <-
+    GQ = web/graphql/querynative( "https://fakerql.com/graphql", '{Product(id: "cjdn6szou00dw25107gcuy114") {id price name}}', "graphql" );
+    +graphql-fake-native(GQ)
+.
+
+/**
+ * check goal for webservice calls
+ **/
++rest-service(X) <-
     [_|D] =.. X;
     D = collection/list/get(D, 0);
     [N] =.. D;
 
     test/result( bool/or( bool/equal( N, "elements" ), bool/equal( N, "schemalocation" ), bool/equal( N, "location" ) ) )
+.
+
+/**
+ * check goal for graphql-fake literal calls
+ **/
++graphql-fake-literal(X) <-
+    [_|D] =.. X;
+    D = collection/list/get(D, 0);
+    [N|M] =.. D;
+    M = collection/list/get(M, 0);
+    [L|_] =.. M;
+
+    test/result( bool/and( bool/equal( N, "data" ), bool/equal( L, "allusers" ) ) )
+.
+
+/**
+ * check goal for graphql-fake native calls
+ **/
++graphql-fake-native(X) <-
+    generic/print(X);
+    [_|D] =.. X;
+    D = collection/list/get(D, 0);
+    [N|M] =.. D;
+    M = collection/list/get(M, 0);
+    [L|_] =.. M;
+
+    test/result( bool/and( bool/equal( N, "data" ), bool/equal( L, "product" ) ) )
 .

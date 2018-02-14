@@ -26,9 +26,9 @@ package org.lightjason.agentspeak.action.builtin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.rest.CJsonList;
-import org.lightjason.agentspeak.action.builtin.rest.CJsonObject;
-import org.lightjason.agentspeak.action.builtin.rest.CXMLObject;
+import org.lightjason.agentspeak.action.builtin.web.rest.CJsonList;
+import org.lightjason.agentspeak.action.builtin.web.rest.CJsonObject;
+import org.lightjason.agentspeak.action.builtin.web.rest.CXMLObject;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -44,7 +44,7 @@ import java.util.stream.Stream;
 /**
  * REST-API test
  */
-public final class TestCActionRest extends IBaseTest
+public final class TestCActionWebRest extends IBaseTest
 {
 
     /**

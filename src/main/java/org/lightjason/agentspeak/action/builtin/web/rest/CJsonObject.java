@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package org.lightjason.agentspeak.action.builtin.rest;
+package org.lightjason.agentspeak.action.builtin.web.rest;
 
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ITerm;
@@ -36,31 +36,44 @@ import java.util.Map;
 
 
 /**
- * action to call a restful webservice with XML data.
- * Creates a literal from an XML REST-webservice, first argument
- * is the URL of the webservice and second argument the functor of the literal
+ * action for calling a restful webservice with a JSON object.
+ * Creates a literal based on an JSON webservice data, the first argument is the URL of the webservice,
+ * all other arguments are the literal elements of the returning literal, the webservice must return a JSON object
  *
- * @code W = rest/xmlobject( "https://en.wikipedia.org/wiki/Special:Export/AgentSpeak", "wikipedia" ); @endcode
+ * @code W = web/rest/jsonobject( "https://maps.googleapis.com/maps/api/geocode/json?address=Clausthal-Zellerfeld", "google", "location" ); @endcode
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
- * @see https://en.wikipedia.org/wiki/XML
+ * @see https://en.wikipedia.org/wiki/JSON
  */
-public class CXMLObject extends IBaseRest
+public final class CJsonObject extends IBaseRest
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 8156192343303737293L;
+    private static final long serialVersionUID = -3741382638836440374L;
+
+    /**
+     * ctor
+     */
+    public CJsonObject()
+    {
+        super( 3 );
+    }
 
     @Nonnull
     @Override
+    @SuppressWarnings( "unchecked" )
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
                                                @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return
     )
     {
         try
         {
-            final Map<String, ?> l_data = IBaseRest.xml( p_argument.get( 0 ).<String>raw() );
+            final Map<String, ?> l_data = IBaseRest.json(
+                p_argument.get( 0 ).<String>raw(),
+                Map.class
+            );
+
             p_return.add(
                 p_argument.size() == 2
                 ? CLiteral.from( p_argument.get( p_argument.size() - 1 ).<String>raw(), flatterm( l_data ) )
@@ -77,4 +90,5 @@ public class CXMLObject extends IBaseRest
             return CFuzzyValue.from( false );
         }
     }
+
 }
