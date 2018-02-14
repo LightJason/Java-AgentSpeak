@@ -34,7 +34,8 @@
 +!test <-
     !testxmlobject;
     !testjsonobject;
-    !testjsonlist
+    !testjsonlist;
+    !testgraphql
 .
 
 
@@ -64,9 +65,18 @@
     +webservice( WP )
 .
 
+/**
+ * test graphql service
+ **/
++!testgraphql <-
+    L = generic/type/parseliteral( "allUsers(id, firstName, lastName)" );
+    GQ = web/graphql/query( "https://fakerql.com/graphql", L, "graphql-fake" );
+    !GQ
+.
+
 
 /**
- * add trigger
+ * check goal for webservice calls
  **/
 +webservice(X) <-
     [_|D] =.. X;
@@ -74,4 +84,14 @@
     [N] =.. D;
 
     test/result( bool/or( bool/equal( N, "elements" ), bool/equal( N, "schemalocation" ), bool/equal( N, "location" ) ) )
+.
+
+/**
+ * check goal for graphql-fake calls
+ **/
++!graphql-fake(X) <-
+    [_|D] =.. X;
+    [F|U] =.. D;
+
+    test/result( bool/or( bool/equal( D, "graphql-fake" ), bool/equal( F, "data" ), bool/equal( U, "allusers" ) ) )
 .

@@ -26,21 +26,11 @@ package org.lightjason.agentspeak.action.builtin.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
-import org.lightjason.agentspeak.language.CLiteral;
-import org.lightjason.agentspeak.language.CRawTerm;
-import org.lightjason.agentspeak.language.ILiteral;
-import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
-import java.net.ProtocolException;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Stack;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -55,6 +45,14 @@ public abstract class IBaseRest extends IBaseWeb
      * serial id
      */
     private static final long serialVersionUID = -3713528201539676487L;
+    /**
+     * json mapper
+     */
+    private static final ObjectMapper JSONMAPPER = new ObjectMapper();
+    /**
+     * xml mapper
+     */
+    private static final XmlMapper XMLMAPPER = new XmlMapper();
 
     /**
      * ctor
@@ -84,7 +82,7 @@ public abstract class IBaseRest extends IBaseWeb
     @Nonnull
     protected static <T> T json( @Nonnull final String p_url, @Nonnull final Class<T> p_class ) throws IOException
     {
-        return new ObjectMapper().readValue( IBaseRest.httpgetexecute( p_url ), p_class );
+        return JSONMAPPER.readValue( IBaseRest.httpgetexecute( p_url ), p_class );
     }
 
     /**
@@ -99,80 +97,7 @@ public abstract class IBaseRest extends IBaseWeb
     @SuppressWarnings( "unchecked" )
     protected static Map<String, ?> xml( @Nonnull final String p_url ) throws IOException
     {
-        return new XmlMapper().readValue( IBaseRest.httpgetexecute( p_url ), Map.class );
-    }
-
-    /**
-     * creates a literal structure from a stream of string elements,
-     * the string stream will be build in a tree structure
-     *
-     * @param p_functor stream with functor strings
-     * @param p_values value stream
-     * @return term
-     */
-    @Nonnull
-    protected static ITerm baseliteral( @Nonnull final Stream<String> p_functor, @Nonnull final Stream<ITerm> p_values )
-    {
-        final Stack<String> l_tree = p_functor.collect( Collectors.toCollection( Stack::new ) );
-
-        ILiteral l_literal = CLiteral.from( l_tree.pop(), p_values );
-        while ( !l_tree.isEmpty() )
-            l_literal = CLiteral.from( l_tree.pop(), l_literal );
-
-        return l_literal;
-    }
-
-    /**
-     * converts an object into a term stream
-     *
-     * @param p_object object
-     * @return term stream
-     */
-    @Nonnull
-    @SuppressWarnings( "unchecked" )
-    protected static Stream<ITerm> flatterm( @Nullable final Object p_object )
-    {
-        if ( ( p_object == null ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
-            return Stream.empty();
-
-        return p_object instanceof Map
-               ? flatmap( (Map<String, ?>) p_object )
-               : p_object instanceof Collection
-                 ? flatcollection( (Collection) p_object )
-                 : Stream.of( CRawTerm.from( p_object ) );
-    }
-
-
-
-    /**
-     * transformas a map into a literal
-     *
-     * @param p_map input map
-     * @return term stream
-     */
-    @Nonnull
-    private static Stream<ITerm> flatmap( @Nonnull final Map<String, ?> p_map )
-    {
-        return p_map.entrySet()
-                    .stream()
-                    .map( i ->
-                              CLiteral.from(
-                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
-                                  flatterm( i.getValue() )
-                              )
-                    );
-    }
-
-    /**
-     * transforms a collection into a term stream
-     *
-     * @param p_collection collection
-     * @return term stream
-     */
-    @Nonnull
-    private static Stream<ITerm> flatcollection( @Nonnull final Collection<?> p_collection )
-    {
-        return p_collection.stream().flatMap( IBaseRest::flatterm );
+        return XMLMAPPER.readValue( IBaseRest.httpgetexecute( p_url ), Map.class );
     }
 
 }

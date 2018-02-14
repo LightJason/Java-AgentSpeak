@@ -23,11 +23,13 @@
 
 package org.lightjason.agentspeak.action.builtin;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
 import org.lightjason.agentspeak.action.builtin.web.graphql.CQuery;
 import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 
@@ -51,35 +53,27 @@ public final class TestCActionWebGraphQL extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        // curl -s -X POST -H "Content-Type:application/json" -d '{source(name : "helcom"){child(name : "all"){querywith(value : ["AIS/IMO_2008"])}}}' https://daimon-dataaccess.herokuapp.com/graphql
-
-        new CQuery().execute(
-            false,
-            IContext.EMPTYPLAN,
-            Stream.of(
-                CRawTerm.from( "http://daimon-dataaccess.herokuapp.com/graphql" ),
-                CLiteral.from(
-                    "source",
+        Assert.assertTrue(
+            new CQuery().execute(
+                false,
+                IContext.EMPTYPLAN,
+                Stream.of(
+                    CRawTerm.from( "https://fakerql.com/graphql" ),
                     CLiteral.from(
-                        "name",
-                        CRawTerm.from( "helcom" )
+                        "allUsers",
+                        CLiteral.from( "id" ),
+                        CLiteral.from( "firstName" ),
+                        CLiteral.from( "lastName" )
                     ),
-                    CLiteral.from(
-                        "child",
-                        CLiteral.from(
-                            "name", CRawTerm.from( "all" )
-                        ),
-                        CLiteral.from(
-                            "querywith",
-                            CLiteral.from( "value", CRawTerm.from( Stream.of( "AIS/IMO_2008" ).collect( Collectors.toList() ) ) )
-                        )
-                    )
-                )
-            ).collect( Collectors.toList() ),
-            l_return
+                    CRawTerm.from( "graphql" )
+                ).collect( Collectors.toList() ),
+                l_return
+            ).value()
         );
 
-
+        Assert.assertEquals( l_return.size(), 1 );
+        Assert.assertTrue( l_return.get( 0 ) instanceof ILiteral );
+        Assert.assertEquals( l_return.get( 0 ).<ILiteral>raw().functor(), "graphql" );
     }
 
 

@@ -23,27 +23,27 @@
 
 package org.lightjason.agentspeak.action.builtin.web;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.action.builtin.web.rest.IBaseRest;
 import org.lightjason.agentspeak.common.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
+import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -146,6 +146,77 @@ public abstract class IBaseWeb extends IBuiltinAction
         return EntityUtils.toString( HttpClientBuilder.create().build().execute( p_post ).getEntity() );
     }
 
+    /**
+     * creates a literal structure from a stream of string elements,
+     * the string stream will be build in a tree structure
+     *
+     * @param p_functor stream with functor strings
+     * @param p_values value stream
+     * @return term
+     */
+    @Nonnull
+    protected static ITerm baseliteral( @Nonnull final Stream<String> p_functor, @Nonnull final Stream<ITerm> p_values )
+    {
+        final Stack<String> l_tree = p_functor.collect( Collectors.toCollection( Stack::new ) );
 
+        ILiteral l_literal = CLiteral.from( l_tree.pop(), p_values );
+        while ( !l_tree.isEmpty() )
+            l_literal = CLiteral.from( l_tree.pop(), l_literal );
+
+        return l_literal;
+    }
+
+    /**
+     * converts an object into a term stream
+     *
+     * @param p_object object
+     * @return term stream
+     */
+    @Nonnull
+    @SuppressWarnings( "unchecked" )
+    protected static Stream<ITerm> flatterm( @Nullable final Object p_object )
+    {
+        if ( ( p_object == null ) || ( ( p_object instanceof Map ) && ( ( (Map<String, ?>) p_object ).isEmpty() ) ) )
+            return Stream.empty();
+
+        return p_object instanceof Map
+               ? flatmap( (Map<String, ?>) p_object )
+               : p_object instanceof Collection
+                 ? flatcollection( (Collection) p_object )
+                 : Stream.of( CRawTerm.from( p_object ) );
+    }
+
+
+
+    /**
+     * transformas a map into a literal
+     *
+     * @param p_map input map
+     * @return term stream
+     */
+    @Nonnull
+    private static Stream<ITerm> flatmap( @Nonnull final Map<String, ?> p_map )
+    {
+        return p_map.entrySet()
+                    .stream()
+                    .map( i ->
+                              CLiteral.from(
+                                  i.getKey().toLowerCase().replaceAll( "[^([a-z][0-9]\\-/_)]]", "_" ),
+                                  flatterm( i.getValue() )
+                              )
+                    );
+    }
+
+    /**
+     * transforms a collection into a term stream
+     *
+     * @param p_collection collection
+     * @return term stream
+     */
+    @Nonnull
+    private static Stream<ITerm> flatcollection( @Nonnull final Collection<?> p_collection )
+    {
+        return p_collection.stream().flatMap( IBaseRest::flatterm );
+    }
 
 }

@@ -23,13 +23,13 @@
 
 package org.lightjason.agentspeak.action.builtin.web.graphql;
 
-import org.apache.http.client.HttpClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.lightjason.agentspeak.action.builtin.web.IBaseWeb;
+import org.lightjason.agentspeak.action.builtin.web.rest.IBaseRest;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CLiteral;
 import org.lightjason.agentspeak.language.ILiteral;
 import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
@@ -38,14 +38,12 @@ import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.HttpURLConnection;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,7 +65,11 @@ public final class CQuery extends IBaseWeb
     /**
      * serial id
      */
-    private static final long serialVersionUID = 1697770409712623281L;
+    private static final long serialVersionUID = -1297247775003220187L;
+    /**
+     * json mapper
+     */
+    private static final ObjectMapper JSONMAPPER = new ObjectMapper();
 
     /**
      * ctor
@@ -106,35 +108,24 @@ public final class CQuery extends IBaseWeb
         // https://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/
 
 
-        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
-        if ( l_arguments.size() < 2 )
+        final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_argument.size() < 3 )
             return CFuzzyValue.from( false );
-
-        //System.out.println( l_arguments.get( 1 ) );
-        System.out.println( query( l_arguments.get( 1 ).raw() ) );
 
         try
         {
-            final HttpPost l_post = httppost( l_arguments.get( 0 ).raw() );
-            l_post.setHeader( "Content-Type", "application/graphql" );
-            l_post.setEntity( new StringEntity( query( l_arguments.get( 1 ).raw() ) ) );
+            final HttpPost l_post = httppost( l_argument.get( 0 ).raw() );
+            l_post.setHeader( "Content-Type", "application/json" );
+            l_post.setEntity( new StringEntity( query( l_argument.get( 1 ).raw() ) ) );
 
-
-            System.out.println( httppostexecute( l_post ) );
-
-            /*
-            final HttpURLConnection l_connection = httpconnection( l_arguments.get( 0 ).raw() );
-            l_connection.setDoInput( true );
-            l_connection.setRequestMethod( "POST" );
-            l_connection.setRequestProperty( "Content-Type", "application/json" );
-            //l_connection.setRequestProperty( "Content-Length" );
-
-            final DataOutputStream l_stream = new DataOutputStream( l_connection.getOutputStream() );
-            for( final byte i : query( l_arguments.get( 1 ).raw() ).getBytes( "UTF-8" ) )
-                l_stream.write( i );
-            l_stream.flush();
-            l_stream.close();
-            */
+            p_return.add(
+                p_argument.size() == 3
+                ? CLiteral.from( l_argument.get( l_argument.size() - 1 ).<String>raw(), flatterm( JSONMAPPER.readValue( httppostexecute( l_post ), Map.class ) ) )
+                : IBaseRest.baseliteral(
+                    l_argument.stream().skip( 2 ).map( ITerm::<String>raw ),
+                    flatterm( JSONMAPPER.readValue( httppostexecute( l_post ), Map.class ) )
+                )
+            );
         }
         catch ( final IOException l_exception )
         {
@@ -149,11 +140,11 @@ public final class CQuery extends IBaseWeb
      *
      * @param p_literal literal
      * @return graphql query
+     * @note query must be encapsulate as string in a json object with key query
      */
     @Nonnull
     private static String query( @Nonnull final ILiteral p_literal )
     {
-        // query must be encapsulate as string in a json object with key quer
         return MessageFormat.format(
             "'{'\"query\" : \"{0}\"'}'",
             MessageFormat.format( "'{'{0}'}'", root( p_literal ) ).replace( "\"", "\\\"" )
