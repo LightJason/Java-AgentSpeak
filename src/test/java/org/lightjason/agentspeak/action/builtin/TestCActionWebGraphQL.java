@@ -51,6 +51,8 @@ public final class TestCActionWebGraphQL extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
+        // curl -s -X POST -H "Content-Type:application/json" -d '{source(name : "helcom"){child(name : "all"){querywith(value : ["AIS/IMO_2008"])}}}' https://daimon-dataaccess.herokuapp.com/graphql
+
         new CQuery().execute(
             false,
             IContext.EMPTYPLAN,

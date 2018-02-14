@@ -111,9 +111,9 @@ public final class CQuery extends IBaseWeb
         try
         {
             final HttpURLConnection l_connection = httpconnection( l_arguments.get( 0 ).raw() );
-            l_connection.setDoOutput( true );
+            l_connection.setDoInput( true );
             l_connection.setRequestMethod( "POST" );
-            l_connection.setRequestProperty( "Content-Type", "Content-Type:application/json" );
+            l_connection.setRequestProperty( "Content-Type", "application/json" );
 
             final DataOutputStream l_stream = new DataOutputStream( l_connection.getOutputStream() );
             for( final byte i : query( l_arguments.get( 1 ).raw() ).getBytes( "UTF-8" ) )

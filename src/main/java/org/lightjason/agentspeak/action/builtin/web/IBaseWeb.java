@@ -30,12 +30,15 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 
 /**
@@ -71,6 +74,7 @@ public abstract class IBaseWeb extends IBuiltinAction
 
         // follow HTTP redirects
         l_connection.setInstanceFollowRedirects( true );
+        l_connection.setDoOutput( true );
 
         // set a HTTP-User-Agent if not exists
         l_connection.setRequestProperty(
@@ -117,9 +121,12 @@ public abstract class IBaseWeb extends IBuiltinAction
      * @throws IOException is thrown on connection errors
      */
     @Nonnull
-    protected static String httpget( @Nonnull final String p_url ) throws IOException
+    protected static String httpget( @Nonnull final String p_url, @Nullable final Consumer<HttpURLConnection>... p_connetion ) throws IOException
     {
-        return httpoutput( httpconnection( p_url ) );
+        final HttpURLConnection l_connection = httpconnection( p_url );
+        if ( p_connetion != null )
+            Arrays.stream( p_connetion ).forEach( i -> i.accept( l_connection ) );
+        return httpoutput( l_connection );
     }
 
 
