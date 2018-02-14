@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,20 +106,22 @@ public final class CQuery extends IBaseWeb
             return CFuzzyValue.from( false );
 
         //System.out.println( l_arguments.get( 1 ) );
-        //System.out.println( query( l_arguments.get( 1 ).raw() ) );
+        System.out.println( query( l_arguments.get( 1 ).raw() ) );
 
         try
         {
             final HttpURLConnection l_connection = httpconnection( l_arguments.get( 0 ).raw() );
-            l_connection.setRequestMethod( "POST" );
             l_connection.setDoOutput( true );
+            l_connection.setRequestMethod( "POST" );
+            l_connection.setRequestProperty( "Content-Type", "Content-Type:application/json" );
 
             final DataOutputStream l_stream = new DataOutputStream( l_connection.getOutputStream() );
-            l_stream.writeBytes(  );
+            for( final byte i : query( l_arguments.get( 1 ).raw() ).getBytes( "UTF-8" ) )
+                l_stream.write( i );
             l_stream.flush();
             l_stream.close();
 
-            System.out.println();
+            System.out.println( httpoutput( l_connection ) );
         }
         catch ( final IOException l_exception )
         {
@@ -129,12 +132,25 @@ public final class CQuery extends IBaseWeb
     }
 
     /**
-     * converts a literal to a map structure
+     * converts a literal to a query
+     *
+     * @param p_literal literal
+     * @return graphql query
+     */
+    @Nonnull
+    private static String query( @Nonnull final ILiteral p_literal )
+    {
+        return MessageFormat.format( "'{'{0}'}'", root( p_literal ) );
+    }
+
+    /**
+     * converts a literal query structure
      *
      * @param p_literal literal
      * @return query string
      */
-    private static String query( final ILiteral p_literal )
+    @Nonnull
+    private static String root( @Nonnull final ILiteral p_literal )
     {
         if ( p_literal.emptyValues() )
             return p_literal.functor();
@@ -155,7 +171,8 @@ public final class CQuery extends IBaseWeb
      * @param p_stream term stream
      * @return string arguemnts
      */
-    private static String values( final Stream<ITerm> p_stream )
+    @Nonnull
+    private static String values( @Nonnull final Stream<ITerm> p_stream )
     {
         return p_stream.filter( i -> i instanceof ILiteral )
                        .map( ITerm::<ILiteral>raw )
@@ -172,12 +189,13 @@ public final class CQuery extends IBaseWeb
      * @param p_stream field stream
      * @return string definition
      */
-    private static String fields( final Stream<ITerm> p_stream )
+    @Nonnull
+    private static String fields( @Nonnull final Stream<ITerm> p_stream )
     {
         return p_stream.filter( i -> i instanceof ILiteral )
                        .map( ITerm::<ILiteral>raw )
                        .filter( i -> i.values().noneMatch( j -> j instanceof IRawTerm ) )
-                       .collect( Collectors.toMap( ITerm::functor, CQuery::query, ( i, j ) -> i ) )
+                       .collect( Collectors.toMap( ITerm::functor, CQuery::root, ( i, j ) -> i ) )
                        .values()
                        .stream()
                        .collect( Collectors.joining( " " ) )
@@ -189,7 +207,8 @@ public final class CQuery extends IBaseWeb
      * @param p_literal literal
      * @return functor with value
      */
-    private static String valueformat( final ILiteral p_literal )
+    @Nonnull
+    private static String valueformat( @Nonnull final ILiteral p_literal )
     {
         return p_literal.values()
                         .filter( i -> i instanceof IRawTerm<?> )

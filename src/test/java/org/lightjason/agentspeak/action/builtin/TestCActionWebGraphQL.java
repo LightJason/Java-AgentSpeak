@@ -55,9 +55,9 @@ public final class TestCActionWebGraphQL extends IBaseTest
             false,
             IContext.EMPTYPLAN,
             Stream.of(
-                CRawTerm.from( "https://daimon-dataaccess.herokuapp.com/graphql" ),
+                CRawTerm.from( "http://daimon-dataaccess.herokuapp.com/graphql" ),
                 CLiteral.from(
-                    "sources",
+                    "source",
                     CLiteral.from(
                         "name",
                         CRawTerm.from( "helcom" )
@@ -68,7 +68,7 @@ public final class TestCActionWebGraphQL extends IBaseTest
                             "name", CRawTerm.from( "all" )
                         ),
                         CLiteral.from(
-                            "querywithvalue",
+                            "querywith",
                             CLiteral.from( "value", CRawTerm.from( Stream.of( "AIS/IMO_2008" ).collect( Collectors.toList() ) ) )
                         )
                     )

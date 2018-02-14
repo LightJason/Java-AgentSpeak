@@ -30,16 +30,12 @@ import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.common.CCommon;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.function.Consumer;
 
 
 /**
@@ -68,6 +64,7 @@ public abstract class IBaseWeb extends IBuiltinAction
      * @param p_url url
      * @return http connection
      */
+    @Nonnull
     protected static HttpURLConnection httpconnection( @Nonnull final String p_url ) throws IOException
     {
         final HttpURLConnection l_connection = (HttpURLConnection) new URL( p_url ).openConnection();
@@ -87,6 +84,31 @@ public abstract class IBaseWeb extends IBuiltinAction
     }
 
     /**
+     * read http out of a connection
+     *
+     * @param p_connection connection
+     * @return output as string
+     * @throws IOException on io exception
+     */
+    @Nonnull
+    protected static String httpoutput( @Nonnull final HttpURLConnection p_connection ) throws IOException
+    {
+        // read stream data
+        final InputStream l_stream = p_connection.getInputStream();
+        final String l_return = CharStreams.toString(
+            new InputStreamReader(
+                l_stream,
+                ( p_connection.getContentEncoding() == null ) || ( p_connection.getContentEncoding().isEmpty() )
+                ? Charsets.UTF_8
+                : Charset.forName( p_connection.getContentEncoding() )
+            )
+        );
+        Closeables.closeQuietly( l_stream );
+
+        return l_return;
+    }
+
+    /**
      * creates a HTTP connection and reads the data
      *
      * @param p_url url
@@ -97,20 +119,9 @@ public abstract class IBaseWeb extends IBuiltinAction
     @Nonnull
     protected static String httpget( @Nonnull final String p_url ) throws IOException
     {
-        final HttpURLConnection l_connection = httpconnection( p_url );
-
-        // read stream data
-        final InputStream l_stream = l_connection.getInputStream();
-        final String l_return = CharStreams.toString(
-            new InputStreamReader(
-                l_stream,
-                ( l_connection.getContentEncoding() == null ) || ( l_connection.getContentEncoding().isEmpty() )
-                ? Charsets.UTF_8
-                : Charset.forName( l_connection.getContentEncoding() )
-            )
-        );
-        Closeables.closeQuietly( l_stream );
-
-        return l_return;
+        return httpoutput( httpconnection( p_url ) );
     }
+
+
+
 }
