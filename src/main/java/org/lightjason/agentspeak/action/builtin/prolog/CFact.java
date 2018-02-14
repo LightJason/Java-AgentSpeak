@@ -24,8 +24,9 @@
 package org.lightjason.agentspeak.action.builtin.prolog;
 
 import alice.tuprolog.Prolog;
+import alice.tuprolog.Struct;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
-import org.lightjason.agentspeak.language.CRawTerm;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
@@ -33,43 +34,49 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 
 /**
- * creates a Prolog program instance.
- * The action creates a prolog program instance
- * and never fails
- *
- * @code
-   P = prolog/create();
-   [A|B|C] = prolog/create( 3 );
- * @endcode
- *
- * @see https://en.wikipedia.org/wiki/Prolog
- * @see https://en.wikipedia.org/wiki/TuProlog
- * @see http://apice.unibo.it/xwiki/bin/view/Tuprolog/
+ * adds a fact to prolog interpreter.
  */
-public final class CCreate extends IBuiltinAction
+public final class CFact extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7990126612530537888L;
+    private static final long serialVersionUID = -4583733245650639036L;
+
+    @Override
+    public final int minimalArgumentNumber()
+    {
+        return 1;
+    }
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        IntStream.range( 0, p_argument.isEmpty() ? 1 : p_argument.get( 0 ).<Number>raw().intValue() )
-                 .mapToObj( i -> new Prolog() )
-                 .peek( i -> i.setException( false ) )
-                 .peek( i -> i.setWarning( false ) )
-                 .map( CRawTerm::from )
-                 .forEach( p_return::add );
+        final List<ITerm> l_argument = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_argument.size() < 2 )
+            return CFuzzyValue.from( false );
+
+        // https://github.com/bolerio/hgdb/wiki/TuProlog
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/?at=master
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/Struct.java?at=master&fileviewer=file-view-default
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/Term.java?at=master&fileviewer=file-view-default
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/Theory.java?at=master&fileviewer=file-view-default
+        // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/Var.java?at=master&fileviewer=file-view-default
+
+        l_argument.stream()
+                  .skip( 1 )
+                  .map( ITerm::<Prolog>raw )
+                  .forEach( i -> new Struct(  ) );
+
 
         return CFuzzyValue.from( true );
     }
+
+
 }
