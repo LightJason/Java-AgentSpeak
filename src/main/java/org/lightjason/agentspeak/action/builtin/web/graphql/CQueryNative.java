@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 
 
 /**
- * action to run an synchronized graphql query.
+ * action to run a graphql query by a native graphql query.
  * The calls the data of a graphql service and returns a literal
  * based on the query result, the input argument is at the first
  * position the graphql service url, the second argument a string
