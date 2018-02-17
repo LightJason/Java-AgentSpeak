@@ -47,6 +47,14 @@ UNARYOPERATOR :
     ;
 
 /**
+ * using floating-point number (double) and constants are used
+ **/
+NUMBER :
+    MINUS?
+    ( CONSTANTNUMBER | DIGITSEQUENCE )
+    ;
+
+/**
  * string define with single or double quotes
  **/
 STRING :
@@ -198,6 +206,7 @@ fragment DOUBLEQUOTESTRING : '"' ~('"')* '"';
 LOWERCASELETTER            : [a-z];
 UPPERCASELETTER            : [A-Z];
 DIGIT                      : [0-9];
+DIGITSEQUENCE              : DIGIT+ ('.' DIGIT+)?;
 
 // ---------------------------------------------------------------------------------------
 

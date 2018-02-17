@@ -35,7 +35,7 @@ import Terminal;
  **/
 executable_term :
     STRING
-    | number
+    | NUMBER
     | LOGICALVALUE
 
     | executable_action
@@ -50,7 +50,7 @@ executable_term :
  **/
 term :
     STRING
-    | number
+    | NUMBER
     | LOGICALVALUE
 
     | literal
@@ -193,7 +193,7 @@ expression_numeric_power :
  * numeric element for expression
  **/
 expression_numeric_element :
-    number
+    NUMBER
     | variable
     | executable_action
     | executable_rule
@@ -279,24 +279,6 @@ variable :
 variableatom:
     ( UPPERCASELETTER | UNDERSCORE )
     ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH )*
-    ;
-
-/**
- * default behaviour in Jason is only a floating-point number (double)
- * but here exists the difference between floating and integral number
- * types within the grammar, the div-operator (integer division) is removed,
- * also definied constants are used
- **/
-number :
-    MINUS?
-    ( CONSTANTNUMBER | digitsequence )
-    ;
-
-/**
- * number definition
- **/
-digitsequence :
-    DIGIT+ ( DOT DIGIT+ )?
     ;
 
 // ---------------------------------------------------------------------------------------

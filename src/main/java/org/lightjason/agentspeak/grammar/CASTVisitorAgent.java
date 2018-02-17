@@ -26,6 +26,7 @@ package org.lightjason.agentspeak.grammar;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lightjason.agentspeak.action.IAction;
@@ -308,18 +309,18 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public Object visitAnnotation_value_literal( final AgentParser.Annotation_value_literalContext p_context )
     {
-        if ( p_context.number() != null )
+        if ( p_context.NUMBER() != null )
             return new CValueAnnotation<>(
                 IAnnotation.EType.CONSTANT,
                 (String) this.visitVariableatom( p_context.variableatom() ),
-                ( (Number) this.visitNumber( p_context.number() ) ).doubleValue()
+                ( (Number) numbervalue( p_context.NUMBER() ) ).doubleValue()
             );
 
         if ( p_context.STRING() != null )
             return new CValueAnnotation<>(
                 IAnnotation.EType.CONSTANT,
                 (String) this.visitVariableatom( p_context.variableatom() ),
-                stringvalue( p_context.STRING().getText() )
+                stringvalue( p_context.STRING() )
             );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "valueannotation", p_context.getText() ) );
@@ -497,11 +498,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitExecutable_term( final AgentParser.Executable_termContext p_context )
     {
         if ( p_context.STRING() != null )
-            return new CRawAction<>( stringvalue( p_context.STRING().getText() ) );
-        if ( p_context.number() != null )
-            return new CRawAction<>( this.visitNumber( p_context.number() ) );
+            return new CRawAction<>( stringvalue( p_context.STRING() ) );
+        if ( p_context.NUMBER() != null )
+            return new CRawAction<>( numbervalue( p_context.NUMBER() ) );
         if ( p_context.LOGICALVALUE() != null )
-            return new CRawAction<>( logicalvalue( p_context.LOGICALVALUE().getText() ) );
+            return new CRawAction<>( logicalvalue( p_context.LOGICALVALUE() ) );
 
         if ( p_context.executable_action() != null )
             return this.visitExecutable_action( p_context.executable_action() );
@@ -563,7 +564,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         final IVariable<Number> l_lhs = (IVariable<Number>) this.visitVariable( p_context.variable( 0 ) );
         final ITerm l_rhs = p_context.variable().size() == 2
                             ? (IVariable<Number>) this.visitVariable( p_context.variable( 1 ) )
-                            : CRawTerm.from( this.visitNumber( p_context.number() ) );
+                            : CRawTerm.from( numbervalue( p_context.NUMBER() ) );
 
         return new COperatorAssign(
             l_lhs, l_rhs, org.lightjason.agentspeak.language.execution.expressionbinary.EOperator.from( p_context.BINARYOPERATOR().getText() )
@@ -657,11 +658,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitTerm( final AgentParser.TermContext p_context )
     {
         if ( p_context.STRING() != null )
-            return stringvalue( p_context.STRING().getText() );
-        if ( p_context.number() != null )
-            return this.visitNumber( p_context.number() );
+            return stringvalue( p_context.STRING() );
+        if ( p_context.NUMBER() != null )
+            return numbervalue( p_context.NUMBER() );
         if ( p_context.LOGICALVALUE() != null )
-            return logicalvalue( p_context.LOGICALVALUE().getText() );
+            return logicalvalue( p_context.LOGICALVALUE() );
 
         if ( p_context.literal() != null )
             return this.visitLiteral( p_context.literal() );
@@ -701,24 +702,6 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
 
 
     // --- raw rules -------------------------------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public final Object visitNumber( final AgentParser.NumberContext p_context )
-    {
-        if ( p_context.CONSTANTNUMBER() != null )
-            return numericonstant( p_context.CONSTANTNUMBER().getText() );
-
-        final Number l_value = (Number) this.visitChildren( p_context );
-        return p_context.MINUS() != null
-               ? -1 * l_value.doubleValue()
-               : l_value.doubleValue();
-    }
-
-    @Override
-    public final Object visitDigitsequence( final AgentParser.DigitsequenceContext p_context )
-    {
-        return Double.valueOf( p_context.getText() );
-    }
 
     @Override
     public final Object visitAtom( final AgentParser.AtomContext p_context )
@@ -806,7 +789,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
     {
         if ( p_context.LOGICALVALUE() != null )
-            return new CAtom( logicalvalue( p_context.LOGICALVALUE().getText() ) );
+            return new CAtom( logicalvalue( p_context.LOGICALVALUE() ) );
 
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
@@ -952,8 +935,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric_element( final AgentParser.Expression_numeric_elementContext p_context )
     {
-        if ( p_context.number() != null )
-            return new CAtom( this.visitNumber( p_context.number() ) );
+        if ( p_context.NUMBER() != null )
+            return new CAtom( numbervalue( p_context.NUMBER() ) );
 
         if ( p_context.variable() != null )
             return new CAtom( this.visitVariable( p_context.variable() ) );
@@ -1011,18 +994,18 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     }
 
     /**
-     * returns the value of a numeric constant
+     * parsing number
      *
-     * @param p_value constant name
+     * @param p_number terminal number node
      * @return number value
      */
-    private static Number numericonstant( @Nonnull final String p_value )
+    private static Number numbervalue( final TerminalNode p_number )
     {
-        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_value );
+        final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_number.getText() );
         if ( l_constant != null )
             return l_constant;
 
-        throw new CSyntaxErrorException( CCommon.languagestring( CASTVisitorAgent.class, "constantunknown", p_value ) );
+        return Double.valueOf( p_number.getText() );
     }
 
     /**
@@ -1031,9 +1014,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
      * @param p_value string value
      * @return boolean value
      */
-    private static boolean logicalvalue( @Nonnull final String p_value )
+    private static boolean logicalvalue( @Nonnull final TerminalNode p_value )
     {
-        return ( !p_value.isEmpty() ) && ( ( "true".equals( p_value ) ) || ( "success".equals( p_value ) ) );
+        return ( !p_value.getText().isEmpty() ) && ( ( "true".equals( p_value.getText() ) ) || ( "success".equals( p_value.getText() ) ) );
     }
 
     /**
@@ -1042,9 +1025,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
      * @param p_value string
      * @return string without quotes
      */
-    private static String stringvalue( @Nonnull final String p_value )
+    private static String stringvalue( @Nonnull final TerminalNode p_value )
     {
-        return p_value.length() < 3 ? "" : p_value.substring( 1, p_value.length() - 1 );
+        return p_value.getText().length() < 3 ? "" : p_value.getText().substring( 1, p_value.getText().length() - 1 );
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
