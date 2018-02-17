@@ -47,6 +47,26 @@ UNARYOPERATOR :
     ;
 
 /**
+ * relational operator
+ **/
+RELATIONALOPERATOR :
+    LESSEQUAL
+    | GREATEREQUAL
+    | EQUAL
+    | NOTEQUAL
+    | LESS
+    | GREATER
+    ;
+
+/**
+ * annotation atom
+ **/
+ANNOTATIONATOM :
+    PARALLEL
+    | ATOMIC
+    ;
+
+/**
  * using floating-point number (double) and constants are used
  **/
 NUMBER :
@@ -142,8 +162,8 @@ RIGHTSHIFT                 : '>>';
 /**
  * plan annotation
  **/
-PARALLEL                   : 'parallel';
-ATOMIC                     : 'atomic';
+fragment PARALLEL          : 'parallel';
+fragment ATOMIC            : 'atomic';
 CONSTANT                   : 'constant';
 
 
@@ -182,12 +202,12 @@ fragment ASSIGNPOW         : '^=';
 /**
  * comparator types
  **/
-LESS                       : '<';
-LESSEQUAL                  : '<=';
-GREATER                    : '>';
-GREATEREQUAL               : '>=';
-EQUAL                      : '==';
-NOTEQUAL                   : '\\==' | '!=';
+fragment LESS              : '<';
+fragment LESSEQUAL         : '<=';
+fragment GREATER           : '>';
+fragment GREATEREQUAL      : '>=';
+fragment EQUAL             : '==';
+fragment NOTEQUAL          : '\\==' | '!=';
 
 
 POW                        : '**';

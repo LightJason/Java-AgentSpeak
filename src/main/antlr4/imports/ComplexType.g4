@@ -30,38 +30,7 @@ import Terminal;
 
 // --- expression context ----------------------------------------------------------------
 
-/**
- * executable-terms are predictable structures
- **/
-executable_term :
-    STRING
-    | NUMBER
-    | LOGICALVALUE
 
-    | executable_action
-    | executable_rule
-
-    | expression
-    | ternary_operation
-    ;
-
-/**
- * terms are non-predictable structures
- **/
-term :
-    STRING
-    | NUMBER
-    | LOGICALVALUE
-
-    | literal
-    | variable
-
-    | variablelist
-    | LEFTANGULARBRACKET termlist RIGHTANGULARBRACKET
-
-    | expression
-    | ternary_operation
-    ;
 
 /**
  * unification expression
@@ -107,126 +76,88 @@ ternary_operation_false :
     executable_term
     ;
 
-/**
- * logical & numeric entry rule for or-expression
- **/
+
+// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
+// http://www.gregbugaj.com/?p=251
+// http://meri-stuff.blogspot.de/2011/09/antlr-tutorial-expression-language.html
+
+
+equation :
+    expression
+    RELATIONALOPERATOR
+    expression
+    ;
+
 expression :
-    expression_bracket
-    | expression_logical_and ( OR expression )*
+    termx ( (PLUS | MINUS ) termx )*
     ;
 
-/**
- * bracket expression
- **/
-expression_bracket :
-    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
+termx :
+    factor ( ( MULTIPLY | SLASH | MODULO ) factor)*
     ;
 
-/**
- * logical and-expression
- **/
-expression_logical_and :
-    expression_logical_xor ( AND expression )*
+factor :
+    value ( POW value)*
     ;
 
-/**
- * logical xor-expression
- **/
-expression_logical_xor :
-    ( expression_logical_negation | expression_logical_element | expression_numeric ) ( XOR expression )*
-    ;
+value :
+       number
+       | variable
 
-/**
- * logic element for expressions
- **/
-expression_logical_element :
-    LOGICALVALUE
-    | variable
-    | executable_action
-    | executable_rule
-    | unification
-    ;
 
-/**
- * negated expression
- **/
-expression_logical_negation :
-    STRONGNEGATION expression
-    ;
-
-/**
- * numerical entry rule for equal expression
- **/
-expression_numeric :
-    expression_numeric_relation ( (EQUAL | NOTEQUAL) expression_numeric )?
-    ;
-
-/**
- * relation expression
- **/
-expression_numeric_relation :
-    expression_numeric_additive ( (LESS | LESSEQUAL | GREATER | GREATEREQUAL) expression_numeric )?
-    ;
-
-/**
- * numeric addition-expression
- **/
-expression_numeric_additive :
-    expression_numeric_multiplicative ( (PLUS | MINUS) expression_numeric )?
-    ;
-
-/**
- * numeric multiply-expression
- **/
-expression_numeric_multiplicative :
-    expression_numeric_power ( (SLASH | MODULO | MULTIPLY ) expression_numeric )?
-    ;
-
-/**
- * numeric pow-expression
- **/
-expression_numeric_power :
-    expression_numeric_element ( POW expression_numeric )?
-    ;
-
-/**
- * numeric element for expression
- **/
-expression_numeric_element :
-    NUMBER
-    | variable
-    | executable_action
-    | executable_rule
-    | LEFTROUNDBRACKET expression_numeric RIGHTROUNDBRACKET
-    ;
 
 // ---------------------------------------------------------------------------------------
 
-
-
-// --- complex-data-types ----------------------------------------------------------------
+// --- executable elements ---------------------------------------------------------------
 
 /**
  * rule for an action
  **/
-executable_action :
-    literal
-    ;
+execute_action :
+    DOT
+    literal;
 
 /**
  * rule for execute a logical-rule
  **/
-executable_rule :
-    DOLLAR ( literal | variable_evaluate )
+execute_rule :
+    DOLLAR ( literal | execute_variable )
     ;
 
 /**
  * variable-evaluation will be used for an executable call
  * like X(1,2,Y), it is possible for passing variables and parameters
  **/
-variable_evaluate :
+execute_variable :
     variable
     ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
+    ;
+
+
+
+
+
+
+
+
+
+
+
+// --- complex-data-types ----------------------------------------------------------------
+
+/**
+ * terms are non-predictable structures
+ **/
+term :
+    STRING
+    | NUMBER
+    | LOGICALVALUE
+
+    | literal
+    | variable
+
+    | variablelist
+    | LEFTANGULARBRACKET termlist RIGHTANGULARBRACKET
     ;
 
 /**

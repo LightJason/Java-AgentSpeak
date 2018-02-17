@@ -99,27 +99,13 @@ logicalruledefinition :
  * annotation for rules and plans
  **/
 annotations :
-    ( annotation_atom | annotation_literal )+
-    ;
-
-/**
- * atomic annotations (without parameter)
- **/
-annotation_atom :
-    AT (ATOMIC | PARALLEL)
+    AT ( ANNOTATIONATOM | annotation_literal )+
     ;
 
 /**
  * annotation (with parameter)
  **/
 annotation_literal :
-    AT annotation_value_literal
-    ;
-
-/**
- * annotations (with any parameter)
- **/
-annotation_value_literal :
     CONSTANT
     LEFTROUNDBRACKET
     variableatom
