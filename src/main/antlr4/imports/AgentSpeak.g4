@@ -154,7 +154,7 @@ body :
  * basic executable formula
  **/
 body_formula :
-    repair_formula
+    ternary_operation
     | belief_action
 
     | deconstruct_expression
@@ -162,8 +162,12 @@ body_formula :
     | unary_expression
     | binary_expression
 
+    | repair_formula
+    | expression
+    | unification
     | lambda
     ;
+
 
 /**
  * repairable formula
@@ -198,7 +202,7 @@ achievement_goal_action :
 
 
 
-// ---------------------------------------------------------------------------------------
+// --- assignment structures -------------------------------------------------------------
 
 /**
  * deconstruct expression (splitting clauses)
@@ -208,32 +212,6 @@ deconstruct_expression :
     DECONSTRUCT
     ( literal | variable )
     ;
-
-
-
-
-// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
-// http://www.gregbugaj.com/?p=251
-// http://meri-stuff.blogspot.de/2011/09/antlr-tutorial-expression-language.html
-
-equation :
-    expression
-    RELATIONALOPERATOR
-    expression
-    ;
-
-expression :
-    termx ( (PLUS | MINUS ) termx )*
-    ;
-
-termx :
-    factor ( ( MULTIPLY | SLASH | MODULO ) factor)*
-    ;
-
-factor :
-    term ( POW term )*
-    ;
-
 
 /**
  * assignment expression (for assignin a variable)
@@ -275,8 +253,26 @@ unary_expression :
 binary_expression :
     variable
     BINARYOPERATOR
-    ( variable | NUMBER )
+    expression
     ;
+
+// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
+
+/**
+ * expression rule
+ **/
+expression :
+    LEFTROUNDBRACKET expression RIGHTROUNDBRACKET
+    | STRONGNEGATION expression
+    | lhs=expression  operator=ARITHMETICOPERATOR1 rhs=expression
+    | lhs=expression  operator=ARITHMETICOPERATOR2 rhs=expression
+    | lhs=expression  operator=ARITHMETICOPERATOR3 rhs=expression
+    | lhs=expression operator=RELATIONALOPERATOR rhs=expression
+    | lhs=expression operator=LOGICALOPERATOR1 rhs=expression
+    | lhs=expression operator=LOGICALOPERATOR2 rhs=expression
+    | term
+    ;
+
 // ---------------------------------------------------------------------------------------
 
 
@@ -287,7 +283,7 @@ binary_expression :
  * ternary operation
  **/
 ternary_operation :
-    equation
+    expression
     ternary_operation_true
     ternary_operation_false
     ;

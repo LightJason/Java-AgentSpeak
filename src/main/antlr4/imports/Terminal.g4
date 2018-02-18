@@ -59,12 +59,42 @@ RELATIONALOPERATOR :
     ;
 
 /**
- * logical operator
+ * logical operator with precendece 1
  **/
-LOGICALOPERATOR :
+LOGICALOPERATOR1 :
     AND
-    | OR
     | XOR
+    ;
+
+/**
+ * logical operator with precendece 2
+ **/
+LOGICALOPERATOR2 :
+    OR
+    ;
+
+/**
+ * arithmetic operator with precendece 1
+ **/
+ARITHMETICOPERATOR1 :
+    POW
+    ;
+
+/**
+ * arithmetic operator with precendece 2
+ **/
+ARITHMETICOPERATOR2 :
+    MULTIPLY
+    | DIVIDE
+    | MODULO
+    ;
+
+/**
+ * arithmetic operator with precendece 3
+ **/
+ARITHMETICOPERATOR3 :
+    PLUS
+    | MINUS
     ;
 
 /**
@@ -73,6 +103,14 @@ LOGICALOPERATOR :
 ANNOTATIONATOM :
     PARALLEL
     | ATOMIC
+    ;
+
+/**
+ * boolean values
+ **/
+LOGICALVALUE :
+    TRUE
+    | FALSE
     ;
 
 /**
@@ -89,14 +127,6 @@ NUMBER :
 STRING :
     SINGLEQUOTESTRING
     | DOUBLEQUOTESTRING
-    ;
-
-/**
- * boolean values
- **/
-LOGICALVALUE :
-    TRUE
-    | FALSE
     ;
 
 /**
@@ -142,6 +172,7 @@ UNDERSCORE                 : '_';
 SLASH                      : '/';
 LEFTSHIFT                  : '<<';
 RIGHTSHIFT                 : '>>';
+DIVIDE                     : '//';
 
 LEFTROUNDBRACKET           : '(';
 RIGHTROUNDBRACKET          : ')';
