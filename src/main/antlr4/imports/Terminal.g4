@@ -59,6 +59,15 @@ RELATIONALOPERATOR :
     ;
 
 /**
+ * logical operator
+ **/
+LOGICALOPERATOR :
+    AND
+    | OR
+    | XOR
+    ;
+
+/**
  * annotation atom
  **/
 ANNOTATIONATOM :
@@ -120,6 +129,7 @@ MINUS                      : '-';
 DOUBLEEXCLAMATIONMARK      : '!!';
 QUESTIONMARK               : '?';
 DOLLAR                     : '$';
+VLINE                      : '|';
 
 LEFTARROW                  : '<-';
 RIGHTARROW                 : '->';
@@ -130,6 +140,16 @@ SEMICOLON                  : ';';
 DOT                        : '.';
 UNDERSCORE                 : '_';
 SLASH                      : '/';
+LEFTSHIFT                  : '<<';
+RIGHTSHIFT                 : '>>';
+
+LEFTROUNDBRACKET           : '(';
+RIGHTROUNDBRACKET          : ')';
+LEFTANGULARBRACKET         : '[';
+RIGHTANGULARBRACKET        : ']';
+LEFTCURVEDBRACKET          : '{';
+RIGHTCURVEDBRACKET         : '}';
+
 
 fragment PI                : 'pi';
 fragment EULER             : 'euler';
@@ -146,48 +166,21 @@ fragment MAXIMUMVALUE      : 'maximumvalue';
 fragment MINIMUMVALUE      : 'minimumvalue';
 fragment NAN               : 'notanumber';
 
-LEFTROUNDBRACKET           : '(';
-RIGHTROUNDBRACKET          : ')';
-LEFTANGULARBRACKET         : '[';
-RIGHTANGULARBRACKET        : ']';
-LEFTCURVEDBRACKET          : '{';
-RIGHTCURVEDBRACKET         : '}';
 
 fragment TRUE              : 'true' | 'success';
 fragment FALSE             : 'false' | 'fail';
 
-LEFTSHIFT                  : '<<';
-RIGHTSHIFT                 : '>>';
 
-/**
- * plan annotation
- **/
+CONSTANT                   : 'constant';
 fragment PARALLEL          : 'parallel';
 fragment ATOMIC            : 'atomic';
-CONSTANT                   : 'constant';
 
 
-/**
- * prolog list seperator for head-tail definition
- **/
-VLINE                      : '|';
+fragment AND               : '&&';
+fragment OR                : '||';
+fragment XOR               : '^';
 
-/**
- * logical and-concationation (c-style)
- **/
-AND                        : '&&';
-/**
- * logical or-concationation (c-style)
- **/
-OR                         : '||';
-/**
- * logical xor-concationation (c-style)
- **/
-XOR                        : '^';
 
-/**
- * variable operators
- **/
 fragment INCREMENT         : '++';
 fragment DECREMENT         : '--';
 ASSIGN                     : '=';
@@ -199,9 +192,7 @@ fragment ASSIGNDIVIDE      : '/=';
 fragment ASSIGNMODULO      : '%=';
 fragment ASSIGNPOW         : '^=';
 
-/**
- * comparator types
- **/
+
 fragment LESS              : '<';
 fragment LESSEQUAL         : '<=';
 fragment GREATER           : '>';

@@ -194,6 +194,12 @@ achievement_goal_action :
     ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | execute_variable )
     ;
 
+// ---------------------------------------------------------------------------------------
+
+
+
+// ---------------------------------------------------------------------------------------
+
 /**
  * deconstruct expression (splitting clauses)
  **/
@@ -202,6 +208,9 @@ deconstruct_expression :
     DECONSTRUCT
     ( literal | variable )
     ;
+
+
+
 
 // https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
 // http://www.gregbugaj.com/?p=251
@@ -224,6 +233,11 @@ termx :
 factor :
     term ( POW term )*
     ;
+
+
+
+
+
 
 /**
  * unification expression
@@ -313,6 +327,8 @@ binary_expression :
     ;
 
 // ---------------------------------------------------------------------------------------
+
+
 
 // --- lambda expression -----------------------------------------------------------------
 
