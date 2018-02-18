@@ -235,54 +235,6 @@ factor :
     ;
 
 
-
-
-
-
-/**
- * unification expression
- **/
-unification :
- AT? RIGHTSHIFT
- (
-   literal
-   | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
- )
- ;
-
-/*
- * unification constraint
- **/
-unification_constraint :
-    variable
-    | expression
-    ;
-
-/**
- * ternary operation
- **/
-ternary_operation :
-    equation
-    ternary_operation_true
-    ternary_operation_false
-    ;
-
-/**
- * ternary operation true-rule
- **/
-ternary_operation_true :
-    QUESTIONMARK
-    term
-    ;
-
-/**
- * ternary operation false-rule
- **/
-ternary_operation_false :
-    COLON
-    term
-    ;
-
 /**
  * assignment expression (for assignin a variable)
  **/
@@ -325,7 +277,60 @@ binary_expression :
     BINARYOPERATOR
     ( variable | NUMBER )
     ;
+// ---------------------------------------------------------------------------------------
 
+
+
+// --- ternary operator -------------------------------------------------------------------
+
+/**
+ * ternary operation
+ **/
+ternary_operation :
+    equation
+    ternary_operation_true
+    ternary_operation_false
+    ;
+
+/**
+ * ternary operation true-rule
+ **/
+ternary_operation_true :
+    QUESTIONMARK
+    term
+    ;
+
+/**
+ * ternary operation false-rule
+ **/
+ternary_operation_false :
+    COLON
+    term
+    ;
+
+// ---------------------------------------------------------------------------------------
+
+
+// --- unification -----------------------------------------------------------------------
+
+/**
+ * unification expression
+ **/
+unification :
+ AT? RIGHTSHIFT
+ (
+   literal
+   | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
+ )
+ ;
+
+/*
+ * unification constraint
+ **/
+unification_constraint :
+    variable
+    | expression
+    ;
 // ---------------------------------------------------------------------------------------
 
 
