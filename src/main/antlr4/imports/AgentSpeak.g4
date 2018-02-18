@@ -169,7 +169,7 @@ body_formula :
  * repairable formula
  **/
 repair_formula :
-    ( executable_term | test_action | achievement_goal_action )
+    ( term | test_action | achievement_goal_action )
     ( LEFTSHIFT repair_formula )?
     ;
 
@@ -191,7 +191,7 @@ test_action :
  * achivement-goal action
  **/
 achievement_goal_action :
-    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | variable_evaluate )
+    ( EXCLAMATIONMARK | DOUBLEEXCLAMATIONMARK ) ( literal | execute_variable )
     ;
 
 /**
@@ -201,6 +201,72 @@ deconstruct_expression :
     variablelist
     DECONSTRUCT
     ( literal | variable )
+    ;
+
+// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
+// http://www.gregbugaj.com/?p=251
+// http://meri-stuff.blogspot.de/2011/09/antlr-tutorial-expression-language.html
+
+equation :
+    expression
+    RELATIONALOPERATOR
+    expression
+    ;
+
+expression :
+    termx ( (PLUS | MINUS ) termx )*
+    ;
+
+termx :
+    factor ( ( MULTIPLY | SLASH | MODULO ) factor)*
+    ;
+
+factor :
+    term ( POW term )*
+    ;
+
+/**
+ * unification expression
+ **/
+unification :
+ AT? RIGHTSHIFT
+ (
+   literal
+   | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
+ )
+ ;
+
+/*
+ * unification constraint
+ **/
+unification_constraint :
+    variable
+    | expression
+    ;
+
+/**
+ * ternary operation
+ **/
+ternary_operation :
+    equation
+    ternary_operation_true
+    ternary_operation_false
+    ;
+
+/**
+ * ternary operation true-rule
+ **/
+ternary_operation_true :
+    QUESTIONMARK
+    term
+    ;
+
+/**
+ * ternary operation false-rule
+ **/
+ternary_operation_false :
+    COLON
+    term
     ;
 
 /**
@@ -217,7 +283,7 @@ assignment_expression :
 assignment_expression_singlevariable :
     variable
     ASSIGN
-    executable_term
+    term
     ;
 
 /**
@@ -226,7 +292,7 @@ assignment_expression_singlevariable :
 assignment_expression_multivariable :
     variablelist
     ASSIGN
-    executable_term
+    term
     ;
 
 /**
@@ -246,13 +312,9 @@ binary_expression :
     ( variable | NUMBER )
     ;
 
-/**
- * block-formula of subsection
- **/
-block_formula :
-    LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
-    | body_formula
-    ;
+// ---------------------------------------------------------------------------------------
+
+// --- lambda expression -----------------------------------------------------------------
 
 /**
  * lambda expression for iteration
@@ -265,12 +327,28 @@ lambda :
     ;
 
 /**
+ * block-formula of subsection
+ **/
+block_formula :
+    LEFTCURVEDBRACKET body RIGHTCURVEDBRACKET
+    | body_formula
+    ;
+
+/**
  * initialization of lambda expression
  **/
 lambda_initialization :
     LEFTROUNDBRACKET
-    ( variable | literal )
+    ( variable | lambda_range )
     RIGHTROUNDBRACKET
+    ;
+
+/**
+ * lambda range
+ **/
+lambda_range :
+    NUMBER
+    ( COMMA NUMBER )?
     ;
 
 /**

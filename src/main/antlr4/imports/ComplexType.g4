@@ -30,81 +30,24 @@ import Terminal;
 
 // --- expression context ----------------------------------------------------------------
 
-
-
 /**
- * unification expression
+ * terms are non-predictable structures
  **/
-unification :
- AT? RIGHTSHIFT
- (
-   literal
-   | LEFTROUNDBRACKET literal COMMA unification_constraint RIGHTROUNDBRACKET
- )
- ;
+term :
+    STRING
+    | NUMBER
+    | LOGICALVALUE
 
-/*
- * unification constraint
- **/
-unification_constraint :
-    variable
-    | expression
+    | execute_action
+    | execute_rule
+    | execute_variable
+
+    | literal
+    | variable
+
+    | variablelist
+    | LEFTANGULARBRACKET termlist RIGHTANGULARBRACKET
     ;
-
-/**
- * ternary operation
- **/
-ternary_operation :
-    expression
-    ternary_operation_true
-    ternary_operation_false
-    ;
-
-/**
- * ternary operation true-rule
- **/
-ternary_operation_true :
-    QUESTIONMARK
-    executable_term
-    ;
-
-/**
- * ternary operation false-rule
- **/
-ternary_operation_false :
-    COLON
-    executable_term
-    ;
-
-
-// https://stackoverflow.com/questions/30976962/nested-boolean-expression-parser-using-antlr
-// http://www.gregbugaj.com/?p=251
-// http://meri-stuff.blogspot.de/2011/09/antlr-tutorial-expression-language.html
-
-
-equation :
-    expression
-    RELATIONALOPERATOR
-    expression
-    ;
-
-expression :
-    termx ( (PLUS | MINUS ) termx )*
-    ;
-
-termx :
-    factor ( ( MULTIPLY | SLASH | MODULO ) factor)*
-    ;
-
-factor :
-    value ( POW value)*
-    ;
-
-value :
-       number
-       | variable
-
-
 
 // ---------------------------------------------------------------------------------------
 
@@ -133,32 +76,7 @@ execute_variable :
     ( LEFTROUNDBRACKET termlist RIGHTROUNDBRACKET )?
     ;
 
-
-
-
-
-
-
-
-
-
-
 // --- complex-data-types ----------------------------------------------------------------
-
-/**
- * terms are non-predictable structures
- **/
-term :
-    STRING
-    | NUMBER
-    | LOGICALVALUE
-
-    | literal
-    | variable
-
-    | variablelist
-    | LEFTANGULARBRACKET termlist RIGHTANGULARBRACKET
-    ;
 
 /**
  * clause represent a literal structure existing
