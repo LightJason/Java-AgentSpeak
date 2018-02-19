@@ -90,7 +90,7 @@ execute_variable :
  **/
 literal :
     ( AT | STRONGNEGATION )?
-    atom
+    ATOM
     ( LEFTROUNDBRACKET termlist? RIGHTROUNDBRACKET )?
     ;
 
@@ -111,29 +111,12 @@ variablelist :
     ;
 
 /**
- * atoms are defined like Prolog atoms
- * @note internal action in Jason can begin with a dot, but here it is removed
- **/
-atom :
-    LOWERCASELETTER
-    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH | MINUS )*
-    ;
-
-/**
  * variables are defined like Prolog variables,
  * @-prefix creates a thread-safe variable
  **/
 variable :
     AT?
-    variableatom
-    ;
-
-/**
- * name structure of a variable
- **/
-variableatom:
-    ( UPPERCASELETTER | UNDERSCORE )
-    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH )*
+    VARIABLEATOM
     ;
 
 // ---------------------------------------------------------------------------------------

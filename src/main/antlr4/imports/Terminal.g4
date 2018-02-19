@@ -27,6 +27,22 @@
 lexer grammar Terminal;
 
 /**
+ * name structure of a variable
+ **/
+VARIABLEATOM :
+    ( UPPERCASELETTER | UNDERSCORE )
+    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH )*
+    ;
+
+/**
+ * atoms are defined like Prolog atoms
+ **/
+ATOM :
+    LOWERCASELETTER
+    ( LOWERCASELETTER | UPPERCASELETTER | DIGIT | SLASH | MINUS )*
+    ;
+
+/**
  * binary operator
  **/
 BINARYOPERATOR :
@@ -219,7 +235,7 @@ DECONSTRUCT                : '=..';
 fragment ASSIGNINCREMENT   : '+=';
 fragment ASSIGNDECREMENT   : '-=';
 fragment ASSIGNMULTIPLY    : '*=';
-fragment ASSIGNDIVIDE      : '/=';
+fragment ASSIGNDIVIDE      : '//=';
 fragment ASSIGNMODULO      : '%=';
 fragment ASSIGNPOW         : '^=';
 

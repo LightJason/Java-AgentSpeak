@@ -56,7 +56,7 @@ initial_beliefs :
  **/
 initial_goal :
     EXCLAMATIONMARK
-    atom
+    ATOM
     DOT
     ;
 

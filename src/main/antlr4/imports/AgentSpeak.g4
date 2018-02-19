@@ -61,7 +61,7 @@ logicrules :
  */
 plan :
     annotations?
-    plan_trigger
+    //plan_trigger
     literal
     plandefinition*
     DOT
@@ -108,7 +108,7 @@ annotations :
 annotation_literal :
     CONSTANT
     LEFTROUNDBRACKET
-    variableatom
+    VARIABLEATOM
     COMMA
     ( NUMBER | STRING )
     RIGHTROUNDBRACKET
@@ -118,15 +118,7 @@ annotation_literal :
  * plan trigger which can match a goal or belief
  **/
 plan_trigger :
-    (plan_belief_trigger | plan_goal_trigger)
-    ;
-
-/**
- * plan trigger for a goal
- **/
-plan_goal_trigger :
-    (PLUS | MINUS)
-    EXCLAMATIONMARK
+    (PLUS | MINUS) EXCLAMATIONMARK?
     ;
 
 /**
@@ -188,7 +180,7 @@ belief_action :
  * test-goal / -rule action
  **/
 test_action :
-    QUESTIONMARK DOLLAR? atom
+    QUESTIONMARK DOLLAR? ATOM
     ;
 
 /**
@@ -227,7 +219,7 @@ assignment_expression :
 assignment_expression_singlevariable :
     variable
     ASSIGN
-    term
+    ( ternary_operation | expression )
     ;
 
 /**
@@ -236,7 +228,7 @@ assignment_expression_singlevariable :
 assignment_expression_multivariable :
     variablelist
     ASSIGN
-    term
+    ( ternary_operation | expression )
     ;
 
 /**
