@@ -27,7 +27,7 @@ import alice.tuprolog.interfaces.IProlog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lightjason.agentspeak.IBaseTest;
-import org.lightjason.agentspeak.action.builtin.prolog.CCreate;
+import org.lightjason.agentspeak.action.builtin.prolog.CCreateEngine;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -52,7 +52,7 @@ public final class TestCActionProlog extends IBaseTest
     {
         final List<ITerm> l_return = new ArrayList<>();
 
-        new CCreate().execute(
+        new CCreateEngine().execute(
             false,
             IContext.EMPTYPLAN,
             Collections.emptyList(),
@@ -62,7 +62,7 @@ public final class TestCActionProlog extends IBaseTest
         Assert.assertEquals( l_return.size(), 1 );
 
 
-        new CCreate().execute(
+        new CCreateEngine().execute(
             false,
             IContext.EMPTYPLAN,
             Stream.of( 3 ).map( CRawTerm::from ).collect( Collectors.toList() ),

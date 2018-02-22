@@ -23,14 +23,25 @@
 
 package org.lightjason.agentspeak.action.builtin.prolog;
 
+import alice.tuprolog.InvalidTheoryException;
+import alice.tuprolog.MalformedGoalException;
+import alice.tuprolog.Prolog;
+import alice.tuprolog.SolveInfo;
+import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -39,7 +50,7 @@ import java.util.List;
  * returns the boolean of the execution, the action never
  * fails
  *
- * @code [A|B|C] = prolog/solve( P1, [P2, P3]); @endcode
+ * @code [A|B|C] = prolog/solve( Theory, ["Test1", "test2", "test3"] ); @endcode
  */
 public final class CSolve extends IBuiltinAction
 {
@@ -59,6 +70,44 @@ public final class CSolve extends IBuiltinAction
     public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
                                                @Nonnull final List<ITerm> p_return )
     {
-        return CFuzzyValue.from( true );
+        final List<ITerm> l_arguments = CCommon.flatten( p_argument ).collect( Collectors.toList() );
+        if ( l_arguments.size() < 2 )
+            return CFuzzyValue.from( false );
+
+        final Prolog l_prolog = new Prolog();
+        l_prolog.setException( true );
+        l_prolog.setWarning( false );
+        try
+        {
+            l_prolog.setTheory( l_arguments.get( 0 ).raw() );
+
+            final SolveInfo[] l_result = l_arguments.stream()
+                                                    .skip( 1 )
+                                                    .map( i -> solve( l_prolog, i.<String>raw() ) )
+                                                    .toArray( SolveInfo[]::new );
+
+            if ( Arrays.stream( l_result ).anyMatch( i -> !i.isSuccess() ) )
+                return CFuzzyValue.from( false );
+
+            Arrays.stream( l_result )
+                  .map( i -> i.getSolution(). )
+            return CFuzzyValue.from( true );
+        }
+        catch ( final Exception l_exception )
+        {
+            return CFuzzyValue.from( false );
+        }
+    }
+
+    private static SolveInfo solve( @Nonnull final Prolog p_prolog, @Nonnull final String p_query )
+    {
+        try
+        {
+            return p_prolog.solve( p_query );
+        }
+        catch ( final MalformedGoalException l_exception )
+        {
+            throw new RuntimeException( l_exception );
+        }
     }
 }

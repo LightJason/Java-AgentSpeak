@@ -23,8 +23,10 @@
 
 package org.lightjason.agentspeak.action.builtin.prolog;
 
-import alice.tuprolog.Prolog;
+import alice.tuprolog.InvalidTheoryException;
+import alice.tuprolog.Theory;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
+import org.lightjason.agentspeak.language.CCommon;
 import org.lightjason.agentspeak.language.CRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
@@ -33,43 +35,51 @@ import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.stream.IntStream;
 
 
 /**
- * creates a Prolog program instance.
- * The action creates a prolog program instance
- * and never fails
+ * creates theory objects by string input.
+ * The action creates for each argument a theory object.
+ * The action fail on theory errors
  *
- * @code
-   P = prolog/create();
-   [A|B|C] = prolog/create( 3 );
- * @endcode
- *
- * @see https://en.wikipedia.org/wiki/Prolog
- * @see https://en.wikipedia.org/wiki/TuProlog
- * @see http://apice.unibo.it/xwiki/bin/view/Tuprolog/
+ * @code T = prolog/createtheory( "dosomethin(X) :- X is 5" ); @endcode
  */
-public final class CCreate extends IBuiltinAction
+public final class CTheory extends IBuiltinAction
 {
     /**
      * serial id
      */
-    private static final long serialVersionUID = 7990126612530537888L;
+    private static final long serialVersionUID = -5362284489249927608L;
 
     @Nonnull
     @Override
-    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context, @Nonnull final List<ITerm> p_argument,
-                                         @Nonnull final List<ITerm> p_return
-    )
+    public final IFuzzyValue<Boolean> execute( final boolean p_parallel, @Nonnull final IContext p_context,
+                                               @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
     {
-        IntStream.range( 0, p_argument.isEmpty() ? 1 : p_argument.get( 0 ).<Number>raw().intValue() )
-                 .mapToObj( i -> new Prolog() )
-                 .peek( i -> i.setException( false ) )
-                 .peek( i -> i.setWarning( false ) )
-                 .map( CRawTerm::from )
-                 .forEach( p_return::add );
+        CCommon.flatten( p_argument )
+               .map( ITerm::<String>raw )
+               .map( CTheory::theory )
+               .map( CRawTerm::from )
+               .forEach( p_return::add );
 
         return CFuzzyValue.from( true );
+    }
+
+    /**
+     * create theory object and catch exception
+     *
+     * @param p_theory string theory
+     * @return theory object
+     */
+    private static Theory theory( @Nonnull final String p_theory )
+    {
+        try
+        {
+            return new Theory( p_theory );
+        }
+        catch ( final InvalidTheoryException l_exception )
+        {
+            throw new RuntimeException( l_exception );
+        }
     }
 }

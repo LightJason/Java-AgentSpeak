@@ -23,14 +23,21 @@
 
 package org.lightjason.agentspeak.action.builtin.prolog;
 
+import alice.tuprolog.Number;
 import alice.tuprolog.Prolog;
 import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
+import alice.tuprolog.Theory;
+import alice.tuprolog.Var;
 import org.lightjason.agentspeak.action.builtin.IBuiltinAction;
 import org.lightjason.agentspeak.language.CCommon;
+import org.lightjason.agentspeak.language.ILiteral;
+import org.lightjason.agentspeak.language.IRawTerm;
 import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IContext;
 import org.lightjason.agentspeak.language.fuzzy.CFuzzyValue;
 import org.lightjason.agentspeak.language.fuzzy.IFuzzyValue;
+import org.lightjason.agentspeak.language.variable.IVariable;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -38,9 +45,11 @@ import java.util.stream.Collectors;
 
 
 /**
- * adds a fact to prolog interpreter.
+ * adds a fact to prolog interpreters.
+ * First argument is a literal which is added to each
+ *
  */
-public final class CFact extends IBuiltinAction
+public final class CSingleFact extends IBuiltinAction
 {
     /**
      * serial id
@@ -69,13 +78,39 @@ public final class CFact extends IBuiltinAction
         // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/Theory.java?at=master&fileviewer=file-view-default
         // https://bitbucket.org/tuprologteam/tuprolog/src/b025eb748c235c9c340d22b6ae3678adfe93c205/tuProlog-3.2.1-mvn/src/alice/tuprolog/Var.java?at=master&fileviewer=file-view-default
 
+        new Theory(  )
+
         l_argument.stream()
                   .skip( 1 )
                   .map( ITerm::<Prolog>raw )
-                  .forEach( i -> new Struct(  ) );
+                  .forEach( i -> i.getEngineManager(). );
 
 
         return CFuzzyValue.from( true );
+    }
+
+
+    private static Term toprologterm( @Nonnull final ITerm p_term )
+    {
+        if ( p_term instanceof IVariable<?> )
+            return new Var( p_term.functor() );
+
+        if ( p_term instanceof ILiteral )
+            return new Struct( p_term.functor(), p_term.<ILiteral>term().orderedvalues().map( CSingleFact::toprologterm ).toArray( Term[]::new ) );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Double.class ) ) )
+            return new alice.tuprolog.Double( p_term.<Number>raw().doubleValue() );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Float.class ) ) )
+            return new alice.tuprolog.Float( p_term.<Number>raw().floatValue() );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Long.class ) ) )
+            return new alice.tuprolog.Long( p_term.<Number>raw().longValue() );
+
+        if ( ( p_term instanceof IRawTerm<?> ) && ( p_term.<IRawTerm<?>>raw().valueassignableto( Integer.class ) ) )
+            return new alice.tuprolog.Int( p_term.<Number>raw().intValue() );
+
+        new Atom()
     }
 
 
