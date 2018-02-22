@@ -112,8 +112,6 @@
         <maven.compiler.source>1.9</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
-        <gpg.skip>true</gpg.skip>
-
         <!-- will be set outside (build parameter) -->
         <build.number></build.number>
         <build.commit></build.commit>
@@ -454,22 +452,25 @@
                 </executions>
             </plugin>
 
-            <!-- Maven plugin generating -->
+            <!-- Maven release -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.9.0</version>
                 <configuration>
-                    <tagNameFormat>v@{project.version}</tagNameFormat>
-                </configuration>
-            </plugin>
+                    <installProject>false</installProject>
+                    <verbose>true</verbose>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <configuration>
-                    <failOnError>false</failOnError>
+                    <gitFlowConfig>
+                        <productionBranch>master</productionBranch>
+                        <developmentBranch>developing</developmentBranch>
+                        <featureBranchPrefix>feature/</featureBranchPrefix>
+                        <releaseBranchPrefix>release/</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                        <supportBranchPrefix>support/</supportBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
                 </configuration>
             </plugin>
 
@@ -554,26 +555,6 @@
                     <showDeprecation>true</showDeprecation>
                     <failOnWarning>true</failOnWarning>
                 </configuration>
-            </plugin>
-
-            <!-- sources & jar build -->
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- Clean -->
