@@ -457,6 +457,21 @@
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
                 <version>1.9.0</version>
+                <configuration>
+                    <installProject>false</installProject>
+                    <verbose>true</verbose>
+
+                    <gitFlowConfig>
+                        <productionBranch>master</productionBranch>
+                        <developmentBranch>developing</developmentBranch>
+                        <featureBranchPrefix>feature/</featureBranchPrefix>
+                        <releaseBranchPrefix>release/</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                        <supportBranchPrefix>support/</supportBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
+                </configuration>
             </plugin>
 
             <!-- License -->
