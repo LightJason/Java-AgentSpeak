@@ -27,8 +27,6 @@
     <groupId>org.lightjason</groupId>
     <artifactId>agentspeak</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L++)</name>
@@ -444,7 +442,7 @@
                                     <version>[3.1,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>${maven.compiler.source}</version>
+                                    <version>[${maven.compiler.source},)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -453,6 +451,15 @@
             </plugin>
 
             <!-- Maven release -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
@@ -468,7 +475,7 @@
                         <releaseBranchPrefix>release/</releaseBranchPrefix>
                         <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
                         <supportBranchPrefix>support/</supportBranchPrefix>
-                        <versionTagPrefix>v</versionTagPrefix>
+                        <versionTagPrefix>pre</versionTagPrefix>
                         <origin>origin</origin>
                     </gitFlowConfig>
                 </configuration>
