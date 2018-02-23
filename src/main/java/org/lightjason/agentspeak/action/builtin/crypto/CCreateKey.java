@@ -41,10 +41,9 @@ import java.util.List;
 /**
  * creates an encrypting / decrypting key pair.
  * The argument is a string with the cryptographic algorithm AES, DES or RSA and the action return a key pair,
- * the action fails if the key cannot generated
+ * the action fails if the key cannot generated. The private key is set on RSA algorithm only
  *
- * @code [PublicKey, PrivateKey] = cypto/createkey( "AES | DES | RSA" ); @endcode
- * @note The private key is set on RSA algorithm only
+ * {@code [PublicKey, PrivateKey] = cypto/createkey( "AES | DES | RSA" );}
  * @see https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/Data_Encryption_Standard
  * @see https://en.wikipedia.org/wiki/RSA_(cryptosystem)

@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for any vertex argument the number of predecessors on
  * a single graph instance, the action never fails
  *
- * @code [C1|C2] = graph/predecessorcountmultiple( Graph, Vertex1, Vertex2 ); @endcode
+ * {@code [C1|C2] = graph/predecessorcountmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CPredecessorCountMultiple extends IApplyMultiple
 {

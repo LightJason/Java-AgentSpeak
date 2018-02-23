@@ -38,7 +38,7 @@ import java.util.List;
  * The action return for a single graph instance all outgoing edges
  * of each vertex, the action never fails
  *
- * @code [OE1|OE2] = graph/outedgesmultiple( Graph, Vertex1, Vertex2 ); @endcode
+ * {@code [OE1|OE2] = graph/outedgesmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class COutEdgesMultiple extends IApplyMultiple
 {

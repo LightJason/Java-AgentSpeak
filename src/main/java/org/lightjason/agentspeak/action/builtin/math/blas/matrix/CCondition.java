@@ -42,7 +42,7 @@ import java.util.List;
  * Calculates for each input matrix the condition number
  * and returns the value, the action never fails
  *
- * @code [C1|C2] = math/blas/matrix/condition(M1,M2); @endcode
+ * {@code [C1|C2] = math/blas/matrix/condition(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Condition_number
  */
 public final class CCondition extends IAlgebra

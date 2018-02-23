@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * All arguments are collections and the action removes nested
  * structures and returns a list with unique elements, the action fails never
  *
- * @code U = collection/list/unique( L ); @endcode
+ * {@code U = collection/list/unique( L );}
  */
 public final class CUnique extends IBuiltinAction
 {

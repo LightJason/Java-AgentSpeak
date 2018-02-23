@@ -42,7 +42,7 @@ import java.util.List;
  * returned in single instances, the action
  * never fails never
  *
- * @code [A|B|C] = collections/list/flat( 1, [2,[3,4]] ); @endcode
+ * {@code [A|B|C] = collections/list/flat( 1, [2,[3,4]] );}
  */
 public final class CFlat extends IBuiltinAction
 {

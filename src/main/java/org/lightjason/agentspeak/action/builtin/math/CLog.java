@@ -41,7 +41,7 @@ import java.util.List;
  * Calculates the natural logarithm \f$ log( x_i ) \f$
  * for each unflatten argument
  *
- * @code [A|B|C] = math/log( [1,2], 3 ); @endcode
+ * {@code [A|B|C] = math/log( [1,2], 3 );}
  * @see https://en.wikipedia.org/wiki/Natural_logarithm
  * @see https://en.wikipedia.org/wiki/Logarithm
  */

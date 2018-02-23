@@ -43,7 +43,7 @@ import java.util.List;
  * all other arguments will be used for the literal
  * values
  *
- * @code L = generic/type/createliteral( "literal/functor/with/path", 123, "value" ); @endcode
+ * {@code L = generic/type/createliteral( "literal/functor/with/path", 123, "value" );}
  */
 public final class CCreateLiteral extends IBuiltinAction
 {

@@ -43,7 +43,7 @@ import java.util.List;
  * The action returns the number of vertices
  * within a graph and never fails
  *
- * @code [V1|V2] = graph/vertexcount( Graph1, Graph2 ); @endcode
+ * {@code [V1|V2] = graph/vertexcount( Graph1, Graph2 );}
  */
 public final class CVertexCount extends IBuiltinAction
 {

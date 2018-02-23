@@ -121,7 +121,7 @@ import java.util.stream.IntStream;
  * + well44497b
  * + synchronizedwell44497b
  *
- * @code [D1|D2] = math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] ); @endcode
+ * {@code [D1|D2] = math/statistic/createdistribution( "normal", 20, 10, ["beta", "isaac", [8, 12]] );}
  * @see https://en.wikipedia.org/wiki/Beta_distribution
  * @see https://en.wikipedia.org/wiki/Cauchy_distribution
  * @see https://en.wikipedia.org/wiki/Chi-squared_distribution

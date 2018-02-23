@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
  * UNDIRECTEDSPARSEMULTI ) on a wrong name,
  * a sparse graph is created, the action never fails
  *
- * @code [G1|G2] = graph/create( "sparse", "directedsparse" ); @endcode
+ * {@code [G1|G2] = graph/create( "sparse", "directedsparse" );}
  *
  * @see https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
  */

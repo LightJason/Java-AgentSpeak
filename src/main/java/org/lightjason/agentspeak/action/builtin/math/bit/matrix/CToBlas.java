@@ -50,7 +50,7 @@ import java.util.stream.IntStream;
  * other arguments are bit matrices and the actions
  * never fails
  *
- * @code [A|B] = math/bit/matrix/toblas( BitMatrix1, BitMatrix2, "dense | sparse" ); @endcode
+ * {@code [A|B] = math/bit/matrix/toblas( BitMatrix1, BitMatrix2, "dense | sparse" );}
  */
 public final class CToBlas extends IBuiltinAction
 {

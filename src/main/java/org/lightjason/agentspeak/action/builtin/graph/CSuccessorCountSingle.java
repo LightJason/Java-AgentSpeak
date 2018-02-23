@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for the first vertex argument the number
  * of successors of all graph instances, the action never fails
  *
- * @code [C1|C2] = graph/successorcountsingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [C1|C2] = graph/successorcountsingle( Vertex, Graph1, Graph2 );}
  */
 public final class CSuccessorCountSingle extends IApplySingle
 {

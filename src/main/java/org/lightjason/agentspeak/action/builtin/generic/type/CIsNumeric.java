@@ -41,7 +41,7 @@ import java.util.List;
  * values, the action fails if one of the
  * arguments is not a numeric value
  *
- * @code generic/type/isnumeric( X, 3.5 ); @endcode
+ * {@code generic/type/isnumeric( X, 3.5 );}
  */
 public final class CIsNumeric extends IBuiltinAction
 {

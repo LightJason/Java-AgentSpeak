@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns for a vertex as first argument the
  * out-degree on each graph instance, the action never fails
  *
- * @code [D1|D2] = graph/outdegreesingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [D1|D2] = graph/outdegreesingle( Vertex, Graph1, Graph2 );}
  */
 public final class COutDegreeSingle extends IApplySingle
 {

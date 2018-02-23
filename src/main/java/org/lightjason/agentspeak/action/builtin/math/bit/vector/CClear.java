@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * in each bit vector the given bit positions are set
  * to false, the action never fails
  *
- * @code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] ); @endcode
+ * {@code math/bit/vector/clear( BitVector1, 0, 1, BitVector2, [3, 5] );}
  */
 public final class CClear extends IBuiltinAction
 {

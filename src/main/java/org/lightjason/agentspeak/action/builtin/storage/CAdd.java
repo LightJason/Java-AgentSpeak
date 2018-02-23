@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * The action adds all tuples into the storage, the arguments
  * are tuples of a name and any value, the action never fails
  *
- * @code storage/add( "foo", X, "bar", Y ); @endcode
+ * {@code storage/add( "foo", X, "bar", Y );}
  */
 public final class CAdd extends IStorage
 {

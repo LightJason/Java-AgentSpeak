@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * arguments are index tuples and the action never
  * fails
  *
- * @code [A|B] = math/blas/matrix( Matrix, 3,4, [Row,Column] ); @endcode
+ * {@code [A|B] = math/blas/matrix( Matrix, 3,4, [Row,Column] );}
  */
 public final class CGet extends IBuiltinAction
 {

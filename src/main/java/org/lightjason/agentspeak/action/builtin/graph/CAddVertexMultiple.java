@@ -36,7 +36,7 @@ import java.util.List;
  * all other arguments are vertices, the action never
  * fails
  *
- * @code graph/addvertexmultiple( Graph, Vertex1, Vertex2, [ Vertex3, Vertex4 ] ); @endcode
+ * {@code graph/addvertexmultiple( Graph, Vertex1, Vertex2, [ Vertex3, Vertex4 ] );}
  */
 public final class CAddVertexMultiple extends IApplyMultiple
 {

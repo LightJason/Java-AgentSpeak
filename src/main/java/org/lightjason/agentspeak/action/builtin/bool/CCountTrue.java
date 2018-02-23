@@ -40,7 +40,7 @@ import java.util.List;
  * counts the number of true values.
  * This actioncounts the number of true values and fails never
  *
- * @code C = generic/bool/counttrue( Logical1, [Logical2, Logical3], Logical4 ); @endcode
+ * {@code C = generic/bool/counttrue( Logical1, [Logical2, Logical3], Logical4 );}
  */
 public final class CCountTrue extends IBuiltinAction
 {

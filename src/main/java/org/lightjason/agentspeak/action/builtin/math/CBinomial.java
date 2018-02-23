@@ -44,7 +44,7 @@ import java.util.List;
  * first argument and k the second of each given input
  * tupel, the action fails never
  *
- * @code [B1|B2] = math/binomial( 49, 6,  30, 5 ); @endcode
+ * {@code [B1|B2] = math/binomial( 49, 6,  30, 5 );}
  * @see https://en.wikipedia.org/wiki/Binomial_coefficient
  */
 public final class CBinomial extends IBuiltinAction

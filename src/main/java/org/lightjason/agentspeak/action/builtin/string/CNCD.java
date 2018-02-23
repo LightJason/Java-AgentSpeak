@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * the next string argument will be the input string and the distances will be
  * calculated between the second and all other arguments, the action fails on wrong input
  *
- * @code [A|B] = string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" ); @endcode
+ * {@code [A|B] = string/ncd( "BZIP|GZIP|DEFLATE|PACK200|XZ", "foo bar", "test foo", "bar foo" );}
  * @see https://en.wikipedia.org/wiki/Normalized_compression_distance
  */
 public final class CNCD extends IBuiltinAction

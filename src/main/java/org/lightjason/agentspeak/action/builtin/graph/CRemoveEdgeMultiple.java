@@ -37,7 +37,7 @@ import java.util.List;
  * graph all other arguments are edges, the
  * action never fails
  *
- * @code graph/removeedgemultiple( Graph, Edge1, Edge2 ); @endcode
+ * {@code graph/removeedgemultiple( Graph, Edge1, Edge2 );}
  */
 public final class CRemoveEdgeMultiple extends IApplyMultiple
 {

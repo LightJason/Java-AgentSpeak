@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the first vertex argument that the second vertex
  * argument is predecessor within the given graph instances, the action never fails
  *
- * @code [B1|B2|B3] = graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
+ * {@code [B1|B2|B3] = graph/ispredecessorsingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
 public final class CIsPredecessorSingle extends IApplySingle
 {

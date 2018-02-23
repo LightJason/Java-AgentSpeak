@@ -48,10 +48,10 @@ import java.util.List;
  * a sparse or dense matrix (default sparse),
  * the action fails never
  *
- * @code
+ * {@code
       [D1|D2] = math/blas/matrix/diagonal( Vector1, Vector2 );
       [D3|D4] = math/blas/matrix/diagonal( Vector1, Vector2, "dense" );
- * @endcode
+ * }
  */
 public final class CDiagonal extends IAlgebra
 {

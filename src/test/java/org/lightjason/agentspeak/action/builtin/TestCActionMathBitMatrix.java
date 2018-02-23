@@ -175,6 +175,7 @@ public class TestCActionMathBitMatrix extends IBaseTest
     /**
      * test all input actions
      *
+     * @param p_input tripel with input, actions classes and results
      * @throws IllegalAccessException is thrwon on instantiation error
      * @throws InstantiationException is thrwon on instantiation error
      * @throws NoSuchMethodException is thrwon on instantiation error

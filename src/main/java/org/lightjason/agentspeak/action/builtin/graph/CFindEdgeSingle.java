@@ -38,7 +38,7 @@ import java.util.List;
  * are graphs, returning values are edges of each graph instance,
  * the action never fails
  *
- * @code [E1|E2|E3] = graph/findedgesingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 ); @endcode
+ * {@code [E1|E2|E3] = graph/findedgesingle( Vertex1, Vertex2, Graph1, Graph2, Graph3 );}
  */
 public final class CFindEdgeSingle extends IApplySingle
 {

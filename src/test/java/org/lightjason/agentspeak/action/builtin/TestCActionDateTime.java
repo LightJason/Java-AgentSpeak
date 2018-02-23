@@ -324,6 +324,8 @@ public final class TestCActionDateTime extends IBaseTest
 
     /**
      * test apply-days minus
+     *
+     * @param p_value tripel action, input data and result
      */
     @Test
     @UseDataProvider( "generateapplyminus" )
@@ -343,6 +345,8 @@ public final class TestCActionDateTime extends IBaseTest
 
     /**
      * test apply-days plus
+     *
+     * @param p_value tripel action, input data and result
      */
     @Test
     @UseDataProvider( "generateapplyplus" )
@@ -362,6 +366,8 @@ public final class TestCActionDateTime extends IBaseTest
 
     /**
      * test between
+     *
+     * @param p_value tripel action, input data and result
      */
     @Test
     @UseDataProvider( "generatebetween" )

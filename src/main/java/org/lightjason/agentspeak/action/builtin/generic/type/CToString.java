@@ -35,7 +35,7 @@ import java.util.List;
  * The action converts any argument into the string
  * represenation, the action never fails
  *
- * @code @endcode
+ * {@code [A|B] = generic/type/tostring( 1, "foo" );}
  */
 public final class CToString extends ICast
 {

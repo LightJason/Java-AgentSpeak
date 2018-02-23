@@ -40,7 +40,7 @@ import java.util.List;
  * argument is the vertex, all other graphs,
  * the action never fails
  *
- * @code [OE1|OE2] = graph/outedgessingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code [OE1|OE2] = graph/outedgessingle( Vertex, Graph1, Graph2 );}
  */
 public final class COutEdgesSingle extends IApplySingle
 {

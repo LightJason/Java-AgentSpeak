@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
  * Prints a set of messages to the commandline / output-stream, the command
  * can be used with a variable set of arguments and fails never
  *
- * @code generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y); @endcode
+ * {@code generic/print("string A=", A, "-- B=", B, "-- C=", C, "-- D=", D, "-- X=", X, "-- Y=", Y);}
  */
 public final class CPrint extends IBuiltinAction
 {

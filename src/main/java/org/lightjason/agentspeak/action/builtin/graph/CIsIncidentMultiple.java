@@ -36,7 +36,7 @@ import java.util.List;
  * The first argument is a graph instance and each tuple of vertex and edge
  * will be checked for incident, the action never fails
  *
- * @code [B1|B2] = graph/isincidentmultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] ); @endcode
+ * {@code [B1|B2] = graph/isincidentmultiple( Graph, Vertex1, Edge1, [Vertex2, Edge2] );}
  */
 public final class CIsIncidentMultiple extends IApplyMultiple
 {

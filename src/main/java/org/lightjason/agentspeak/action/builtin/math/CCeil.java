@@ -41,7 +41,7 @@ import java.util.List;
  * Ceils any argument values with \f$ \lceil x_i \rceil \f$ and returns
  * all values, the action never fails
  *
- * @code [A|B|C] = math/ceil(1.3, 2.8, 9.7); @endcode
+ * {@code [A|B|C] = math/ceil(1.3, 2.8, 9.7);}
  * @see https://en.wikipedia.org/wiki/Floor_and_ceiling_functions
  */
 public final class CCeil extends IBuiltinAction

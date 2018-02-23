@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * within the bit vector will be set to the given value,
  * the action never fails
  *
- * @code math/bit/vector/set( BitVector, true, 1, [3, 7]); @endcode
+ * {@code math/bit/vector/set( BitVector, true, 1, [3, 7]);}
  */
 public final class CSet extends IBuiltinAction
 {

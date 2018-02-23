@@ -42,7 +42,7 @@ import java.util.Objects;
  * values, the action fails if one of the
  * arguments is not null
  *
- * @code generic/type(X,Y); @endcode
+ * {@code generic/type(X,Y);}
  */
 public final class CIsNull extends IBuiltinAction
 {

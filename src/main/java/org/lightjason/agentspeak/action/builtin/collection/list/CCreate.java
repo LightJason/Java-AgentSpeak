@@ -43,9 +43,10 @@ import java.util.stream.Collectors;
  * Creates a list of the arguments, so each argument of the action is put to the list,
  * is the argument empty an empty-list object will be returned, the action fails never
  *
- * @code L1 = collection/list/create("a", 1, ["b", 2]);
- * L2 = collection/list/create();
- * @endcode
+ * {@code
+    L1 = collection/list/create("a", 1, ["b", 2]);
+    L2 = collection/list/create();
+ * }
  */
 public final class CCreate extends IBuiltinAction
 {

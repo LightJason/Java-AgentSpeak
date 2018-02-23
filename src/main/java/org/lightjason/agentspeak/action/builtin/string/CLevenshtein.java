@@ -47,7 +47,7 @@ import java.util.stream.IntStream;
  * for the inserting weight, second replace weight and third
  * for the delete weight, the action fails on wrong input
  *
- * @code [A|B] = string/levenshtein( 1,1.5,3, "start", "end", "starting" ); @endcode
+ * {@code [A|B] = string/levenshtein( 1,1.5,3, "start", "end", "starting" );}
  * @see https://en.wikipedia.org/wiki/Levenshtein_distance
  */
 public final class CLevenshtein extends IBuiltinAction

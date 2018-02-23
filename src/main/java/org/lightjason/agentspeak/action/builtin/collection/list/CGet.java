@@ -42,7 +42,7 @@ import java.util.List;
  * arguments are index values, so the action returns
  * the elements, the action fails never
  *
- * @code [V1|V2] = collection/list/get( L, 2, 7 ); @endcode
+ * {@code [V1|V2] = collection/list/get( L, 2, 7 );}
  */
 public final class CGet extends IBuiltinAction
 {

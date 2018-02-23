@@ -42,7 +42,7 @@ import java.util.List;
  * The actions returnf for each input matrix the
  * number of true values, the action never fails
  *
- * @code [A|B] = math/bit/matrix/truecount( BitMatrix1, BitMatrix2 ); @endcode
+ * {@code [A|B] = math/bit/matrix/truecount( BitMatrix1, BitMatrix2 );}
  */
 public final class CTrueCount extends IBuiltinAction
 {

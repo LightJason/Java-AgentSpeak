@@ -48,7 +48,7 @@ import java.util.List;
  * matrix or vector, for each tuple the action returns \f$ X \f$,
  * the action never fails
  *
- * @code [R1|R2] = math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] ); @endcode
+ * {@code [R1|R2] = math/blas/matrix( Matrix1, Matrix2, [Matrix3, Vector1] );}
  */
 public final class CSolve extends IAlgebra
 {

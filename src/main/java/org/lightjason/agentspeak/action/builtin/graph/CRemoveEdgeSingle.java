@@ -35,7 +35,7 @@ import java.util.List;
  * The action removes an edge aas first argument from
  * all graph arguments, the action never fails
  *
- * @code graph/removeedgesingle( Edge, Graph1, Graph2 ); @endcode
+ * {@code graph/removeedgesingle( Edge, Graph1, Graph2 );}
  */
 public final class CRemoveEdgeSingle extends IApplySingle
 {

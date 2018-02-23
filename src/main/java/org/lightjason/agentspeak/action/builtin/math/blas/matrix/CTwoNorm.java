@@ -43,7 +43,7 @@ import java.util.List;
  * two-norm and returns the value, the action never
  * fails
  *
- * @code [N1|N2] = math/blas/matrix/twonorm(M1,M2); @endcode
+ * {@code [N1|N2] = math/blas/matrix/twonorm(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Matrix_norm
  */
 public final class CTwoNorm extends IAlgebra

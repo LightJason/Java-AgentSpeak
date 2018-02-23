@@ -36,7 +36,7 @@ import java.util.List;
  * The action returns the number of verticies that are incident to a single edge
  * for each graph object, the action never fails
  *
- * @code [C1|C2] = graph/incidentcountsingle( Edge, Graph1, Graph2 ); @endcode
+ * {@code [C1|C2] = graph/incidentcountsingle( Edge, Graph1, Graph2 );}
  */
 public final class CIncidentCountSingle extends IApplySingle
 {

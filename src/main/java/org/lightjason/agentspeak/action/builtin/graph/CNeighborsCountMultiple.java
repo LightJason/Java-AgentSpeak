@@ -37,7 +37,7 @@ import java.util.List;
  * graph, the first argument is the graph, all other arguments are vertices,
  * the action never fails
  *
- * @code [C1|C2] = graph/neighborscountmultiple( Graph, Vertex1, Vertex2 ); @endcode
+ * {@code [C1|C2] = graph/neighborscountmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CNeighborsCountMultiple extends IApplyMultiple
 {

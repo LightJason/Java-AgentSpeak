@@ -49,8 +49,8 @@ import java.util.stream.Stream;
 
 
 /**
- * action for binding a method
- * @note action uses agent for object binding
+ * action for binding a method.
+ * action uses agent for object binding
  */
 public final class CMethodAction extends IBaseAction
 {
@@ -98,6 +98,7 @@ public final class CMethodAction extends IBaseAction
      * serialize call
      *
      * @param p_stream object stream
+     * @throws IOException error on writing object data
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {

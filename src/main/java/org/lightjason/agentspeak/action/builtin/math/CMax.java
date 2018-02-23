@@ -43,7 +43,7 @@ import java.util.OptionalDouble;
  * the maxmimum with \f$ max( x_0, x_1, \ldots, x_i ) \f$,
  * the action fails on wrong input
  *
- * @code Max = math/max( 2, 5, 7, [3, 2] ); @endcode
+ * {@code Max = math/max( 2, 5, 7, [3, 2] );}
  */
 public final class CMax extends IBuiltinAction
 {

@@ -64,9 +64,8 @@ import java.util.stream.Stream;
 
 
 /**
- * test agent structure
- *
- * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
+ * test agent structure.
+ * If a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 @RunWith( DataProviderRunner.class )
 public final class TestCAgent extends IBaseTest
@@ -113,6 +112,7 @@ public final class TestCAgent extends IBaseTest
     /**
      * test for default generators and configuration
      *
+     * @param p_asl tripel of asl code, cycles and expected success calls
      * @throws Exception on any error
      */
     @Test

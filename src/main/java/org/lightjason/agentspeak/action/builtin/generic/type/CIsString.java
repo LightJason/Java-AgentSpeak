@@ -40,7 +40,7 @@ import java.util.List;
  * All arguments are checked if all are string values,
  * the action fails if one of the arguments is not a string
  *
- * @code generic/type/isstring( "foo", "bar", 123 ); @endcode
+ * {@code generic/type/isstring( "foo", "bar", 123 );}
  */
 public final class CIsString extends IBuiltinAction
 {

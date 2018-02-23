@@ -41,7 +41,7 @@ import java.util.List;
  * are graphs and return values are lists,
  * the action never fails
  *
- * @code [L1|L2] = graph/edgelist( Vertex1, Vertex2, Graph1, Graph2 ); @endcode
+ * {@code [L1|L2] = graph/edgelist( Vertex1, Vertex2, Graph1, Graph2 );}
  */
 public final class CEdgeListSingle extends IApplySingle
 {

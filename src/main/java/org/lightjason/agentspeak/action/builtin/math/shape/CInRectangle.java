@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * as tuples with x- / y-position and will be checked
  * to the rectangle, the action fail on wrong input
  *
- * @code [In1|In2] = math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 ); @endcode
+ * {@code [In1|In2] = math/shape/inrectangle( 10,100,  110,10,  40,55,  120,110 );}
  */
 public final class CInRectangle extends IBuiltinAction
 {

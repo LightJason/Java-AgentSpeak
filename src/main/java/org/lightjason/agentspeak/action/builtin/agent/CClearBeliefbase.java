@@ -41,7 +41,7 @@ import java.util.List;
  * The action clear th beliefbase, the arguments
  * are optional and can be string paths to beliefbases
  *
- * @code agent/clearbeliefbase( "env", "foo" ); @endcode
+ * {@code agent/clearbeliefbase( "env", "foo" );}
  */
 public final class CClearBeliefbase extends IBuiltinAction
 {

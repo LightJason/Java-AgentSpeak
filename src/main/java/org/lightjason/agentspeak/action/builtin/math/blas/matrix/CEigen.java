@@ -44,7 +44,7 @@ import java.util.List;
  * is executed and two elements eigenvalues (as vector) and
  * eigenvectors (as matrix) are returned, the action never fails.
  *
- * @code [Values1|Vectors1|Values2|Vectors2] = math/blas/matrix/eigen( Matrix1, Matrix2 ); @endcode
+ * {@code [Values1|Vectors1|Values2|Vectors2] = math/blas/matrix/eigen( Matrix1, Matrix2 );}
  * @see https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
  */
 public final class CEigen extends IBuiltinAction

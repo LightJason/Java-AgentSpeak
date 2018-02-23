@@ -42,10 +42,10 @@ import java.util.stream.Collectors;
  * The action assign the first argument to all
  * other arguments which must be vectors
  *
- * @code
+ * {@code
     math/blas/vector/assign(2, Vector1, [Vector2, Vector3] );
     math/blas/vector/assign( AssignVector, Vector1, [Vector2, Vector3] );
- * @endcode
+ * }
  *
  */
 public final class CAssign extends IBuiltinAction

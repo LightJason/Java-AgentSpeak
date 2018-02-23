@@ -38,7 +38,7 @@ import java.util.List;
  * the connected vertices of each graph instance,
  * the action never fails
  *
- * @code [V1|V2|V3|V4] = graph/endpointsingle( Edge, Graph1, Graph2 ); @endcode
+ * {@code [V1|V2|V3|V4] = graph/endpointsingle( Edge, Graph1, Graph2 );}
  */
 public final class CEndPointSingle extends IApplySingle
 {
