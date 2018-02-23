@@ -4,7 +4,7 @@
     # LGPL License                                                                       #
     #                                                                                    #
     # This file is part of the LightJason AgentSpeak(L++)                                #
-    # Copyright (c) 2015-17, LightJason (info@lightjason.org)                            #
+    # Copyright (c) 2015-19, LightJason (info@lightjason.org)                            #
     # This program is free software: you can redistribute it and/or modify               #
     # it under the terms of the GNU Lesser General Public License as                     #
     # published by the Free Software Foundation, either version 3 of the                 #
@@ -26,9 +26,7 @@
 
     <groupId>org.lightjason</groupId>
     <artifactId>agentspeak</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
+    <version>0.0.2-SNAPSHOT</version>
 
     <!-- project meta information -->
     <name>LightJason AgentSpeak(L++)</name>
@@ -450,7 +448,7 @@
                                     <version>[3.1,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>${maven.compiler.source}</version>
+                                    <version>[${maven.compiler.source},)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -460,12 +458,21 @@
 
             <!-- Maven release -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+            
+            <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
                 <version>1.9.0</version>
                 <configuration>
                     <installProject>false</installProject>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
 
                     <gitFlowConfig>
                         <productionBranch>master</productionBranch>
@@ -474,7 +481,7 @@
                         <releaseBranchPrefix>release/</releaseBranchPrefix>
                         <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
                         <supportBranchPrefix>support/</supportBranchPrefix>
-                        <versionTagPrefix>v</versionTagPrefix>
+                        <versionTagPrefix>pre</versionTagPrefix>
                         <origin>origin</origin>
                     </gitFlowConfig>
                 </configuration>
@@ -492,6 +499,7 @@
                         <headerDefinition>src/analysis/license/style.xml</headerDefinition>
                     </headerDefinitions>
                     <excludes>
+                        <exclude>.dockerignore</exclude>
                         <exclude>**/*.tokens</exclude>
                         <exclude>**/*.txt</exclude>
                         <exclude>**/*.yml</exclude>
