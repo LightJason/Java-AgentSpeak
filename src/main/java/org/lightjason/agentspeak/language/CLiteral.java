@@ -162,7 +162,7 @@ public final class CLiteral implements ILiteral
     {
         return from(
             p_functor,
-            ( p_values == null ) || ( p_values.length == 0 )
+            ( Objects.isNull( p_values ) ) || ( p_values.length == 0 )
             ? Collections.emptySet()
             : Arrays.stream( p_values ).collect( Collectors.toList() )
         );
@@ -230,7 +230,7 @@ public final class CLiteral implements ILiteral
      */
     public static ILiteral from( final boolean p_at, final boolean p_negated, @Nonnull final IPath p_functor, @Nullable final ITerm... p_values )
     {
-        return from( p_at, p_negated, p_functor, ( p_values == null ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
+        return from( p_at, p_negated, p_functor, ( Objects.isNull( p_values ) ) || ( p_values.length == 0 ) ? Stream.empty() : Arrays.stream( p_values ) );
     }
 
     /**
@@ -265,7 +265,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final Stream<ITerm> values( @Nullable final IPath... p_path )
     {
-        return ( p_path == null ) || ( p_path.length < 1 )
+        return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_values.values().stream()
                : p_path.length == 1
                  ? m_values.asMap().get( p_path[0] ).stream()
@@ -278,7 +278,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final Stream<ITerm> orderedvalues( @Nullable final IPath... p_path )
     {
-        return ( p_path == null ) || ( p_path.length < 1 )
+        return ( Objects.isNull( p_path ) ) || ( p_path.length < 1 )
                ? m_orderedvalues.stream().sequential()
                : p_path.length == 1
                  ? m_orderedvalues.stream()
@@ -335,7 +335,7 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return ( l_variable == null ) || ( l_variable.allocated() ) ? CRawTerm.from( l_variable ) : l_variable;
+                                   return ( Objects.isNull( l_variable ) ) || ( l_variable.allocated() ) ? CRawTerm.from( l_variable ) : l_variable;
                                }
                                if ( i instanceof ILiteral )
                                    return ( (ILiteral) i ).unify( p_context );
@@ -359,7 +359,7 @@ public final class CLiteral implements ILiteral
                                if ( i instanceof IVariable<?> )
                                {
                                    final IVariable<?> l_variable = p_context.instancevariables().get( i.fqnfunctor() );
-                                   return l_variable == null
+                                   return Objects.isNull( l_variable )
                                           ? CRawTerm.EMPTY
                                           : l_variable;
                                }
@@ -409,14 +409,14 @@ public final class CLiteral implements ILiteral
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof ILiteral ) && ( this.hashCode() == p_object.hashCode() );
     }
 
     @Nonnull
     @Override
     public final ILiteral shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
                ? new CLiteral(
                    m_at, m_negated, m_functor,
@@ -455,7 +455,7 @@ public final class CLiteral implements ILiteral
     @Override
     public final synchronized ITerm deepcopy( @Nullable final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
 
                ?
                new CLiteral(

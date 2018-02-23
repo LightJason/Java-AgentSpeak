@@ -42,7 +42,7 @@ import java.util.List;
  * Returns for each matrix input argument the
  * trace, the action never fails
  *
- * @code [T1|T2] = math/blas/matrix/trace(M1,M2); @endcode
+ * {@code [T1|T2] = math/blas/matrix/trace(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Trace_(linear_algebra)
  */
 public final class CTrace extends IAlgebra

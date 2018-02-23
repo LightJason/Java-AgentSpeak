@@ -178,6 +178,7 @@ public final class TestCActionMathBlasMatrix extends IBaseTest
     /**
      * test all input actions
      *
+     * @param p_input tripel of input data, actions and results
      * @throws IllegalAccessException is thrwon on instantiation error
      * @throws InstantiationException is thrwon on instantiation error
      * @throws NoSuchMethodException is thrwon on instantiation error

@@ -47,10 +47,10 @@ import java.util.List;
  * type dense or space (default sparse), the
  * action never fails
  *
- * @code
+ * {@code
      [E1|E2] = math/blas/matrix/identity( 2, 3 );
      [E3|E4] = math/blas/matrix/identity( 2, 3, "dense" );
- * @endcode
+ * }
  */
 public final class CIdentity extends IAlgebra
 {

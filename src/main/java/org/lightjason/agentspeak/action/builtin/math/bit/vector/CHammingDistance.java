@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * the distance will be calculated between the first
  * and all other arguments, the action never fails
  *
- * @code [A|B] = math/bit/vector/hammingdistance( Vector1, Vector2, Vector3 ); @endcode
+ * {@code [A|B] = math/bit/vector/hammingdistance( Vector1, Vector2, Vector3 );}
  * @see https://en.wikipedia.org/wiki/Hamming_distance
  */
 public final class CHammingDistance extends IBuiltinAction

@@ -43,7 +43,7 @@ import java.util.Set;
  * and returns boolean values of the object could be removed, the
  * action never fails
  *
- * @code [V1|V2] = collection/set/remove( Set, [1, "foo"]); @endcode
+ * {@code [V1|V2] = collection/set/remove( Set, [1, "foo"]);}
  */
 public final class CRemove extends IBuiltinAction
 {

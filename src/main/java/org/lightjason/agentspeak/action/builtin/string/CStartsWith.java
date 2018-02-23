@@ -42,7 +42,7 @@ import java.util.List;
  * with each other arguments for the operation starts-with,
  * the action never fails
  *
- * @code [L1|L2] = string/startswith("this is a long string", "long string", "string"); @endcode
+ * {@code [L1|L2] = string/startswith("this is a long string", "long string", "string");}
  */
 public final class CStartsWith extends IBuiltinAction
 {

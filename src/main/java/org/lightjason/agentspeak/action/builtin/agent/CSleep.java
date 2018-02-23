@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * optional argument can be a sleeping
  * time (in agent cycles)
  *
- * @code agent/sleep(3); @endcode
+ * {@code agent/sleep(3);}
  */
 public final class CSleep extends IBuiltinAction
 {

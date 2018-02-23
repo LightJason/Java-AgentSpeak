@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * first item as an edge, the action fails on
  * wrong input
  *
- * @code [B1|B2] = graph/containsedge( Element, Graph1, Graph2 ); @endcode
+ * {@code [B1|B2] = graph/containsedge( Element, Graph1, Graph2 );}
  */
 public final class CContainsEdge extends IBuiltinAction
 {

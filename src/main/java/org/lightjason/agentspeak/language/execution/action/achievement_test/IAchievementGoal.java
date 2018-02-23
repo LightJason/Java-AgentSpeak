@@ -27,6 +27,8 @@ import org.lightjason.agentspeak.language.ITerm;
 import org.lightjason.agentspeak.language.execution.IExecution;
 import org.lightjason.agentspeak.language.execution.action.IBaseExecution;
 
+import java.util.Objects;
+
 
 /**
  * abstract achievement-goal class for goal execution
@@ -57,13 +59,13 @@ abstract class IAchievementGoal<T extends ITerm> extends IBaseExecution<T>
     @Override
     public final int hashCode()
     {
-        return m_value == null ? 0 : m_value.hashCode();
+        return Objects.isNull( m_value ) ? 0 : m_value.hashCode();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        return ( p_object != null ) && ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
+        return ( p_object instanceof IExecution ) && ( this.hashCode() == p_object.hashCode() );
     }
 
 }

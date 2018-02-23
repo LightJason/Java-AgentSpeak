@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * value is returned, is the number greater than 1 a list
  * of values is returned
  *
- * @code [V1|L1|V2|L2] = math/statistic/randomsimple( 1, 5, 1, 10 ); @endcode
+ * {@code [V1|L1|V2|L2] = math/statistic/randomsimple( 1, 5, 1, 10 );}
  */
 public final class CRandomSimple extends IBuiltinAction
 {

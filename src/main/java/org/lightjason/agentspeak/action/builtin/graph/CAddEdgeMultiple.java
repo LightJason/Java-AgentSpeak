@@ -38,7 +38,7 @@ import java.util.List;
  * edge identifier, the second the start vertex, and the third
  * the end vertex, the action never fails
  *
- * @code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 ); @endcode
+ * {@code graph/addedgemultiple( Graph, [ "edgeid1", StartVertex1, EndVertex1 ], "edgeid2", StartVertex2, EndVertex2 );}
  */
 public final class CAddEdgeMultiple extends IApplyMultiple
 {

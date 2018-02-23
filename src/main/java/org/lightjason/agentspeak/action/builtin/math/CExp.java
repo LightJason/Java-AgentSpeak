@@ -41,7 +41,7 @@ import java.util.List;
  * Calculate the exponential function \f$ e^{x_i} \f$
  * for each argument, the action never fails
  *
- * @code [X|Y] = math/exp(1,8); @endcode
+ * {@code [X|Y] = math/exp(1,8);}
  * @see https://en.wikipedia.org/wiki/Exponential_function
  */
 public final class CExp extends IBuiltinAction

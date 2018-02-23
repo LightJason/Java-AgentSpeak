@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * will be extract into two variables, the
  * action never fails
  *
- * @code [A|B|C|D] = collection/tupel/flat( Tupel1, Tupel2 ); @endcode
+ * {@code [A|B|C|D] = collection/tupel/flat( Tupel1, Tupel2 );}
  */
 public final class CFlat extends IBuiltinAction
 {

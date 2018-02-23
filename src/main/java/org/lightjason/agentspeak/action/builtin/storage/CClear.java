@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * except the elements wich are forbidden, the action
  * never fails
  *
- * @code storage/clear(); @endcode
+ * {@code storage/clear();}
  */
 public final class CClear extends IStorage
 {

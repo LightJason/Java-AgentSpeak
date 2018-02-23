@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
  * For each input adjacency matrix, the normalized graph
  * ´laplacian is calculated and returned, the action never fails
  *
- * @code [L1|L2] = math/blas/matrix/normalizedgraphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 ); @endcode
+ * {@code [L1|L2] = math/blas/matrix/normalizedgraphlaplacian( AdjacencyMatrix1, AdjacencyMatrix2 );}
  * @see https://en.wikipedia.org/wiki/Laplacian_matrix
  */
 public final class CNormalizedGraphLaplacian extends IAlgebra

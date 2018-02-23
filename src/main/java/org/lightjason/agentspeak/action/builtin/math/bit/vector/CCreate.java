@@ -43,7 +43,7 @@ import java.util.List;
  * for each input argument a bit vector will be created and
  * returned, the action never fails
  *
- * @code [A|B|C|D] = math/bit/vector/create( 3, [2, [1, 12]] ); @endcode
+ * {@code [A|B|C|D] = math/bit/vector/create( 3, [2, [1, 12]] );}
  */
 public final class CCreate extends IBuiltinAction
 {

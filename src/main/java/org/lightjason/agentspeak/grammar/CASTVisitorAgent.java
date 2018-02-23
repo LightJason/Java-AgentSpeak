@@ -95,6 +95,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -192,7 +193,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitPlans( final AgentParser.PlansContext p_context )
     {
-        if ( p_context.plan() == null )
+        if ( Objects.isNull( p_context.plan() ) )
             return null;
 
         p_context.plan().stream().forEach( i -> ( (List<IPlan>) this.visitPlan( i ) ).stream().forEach( j -> m_plans.add( j ) ) );
@@ -263,8 +264,9 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitPlandefinition( final AgentParser.PlandefinitionContext p_context )
     {
         return new ImmutablePair<IExpression, List<IExecution>>(
-            p_context.expression() == null ? IExpression.EMPTY
-                                           : (IExpression) this.visitExpression( p_context.expression() ),
+            Objects.isNull( p_context.expression() )
+            ? IExpression.EMPTY
+            : (IExpression) this.visitExpression( p_context.expression() ),
             (List<IExecution>) this.visitBody( p_context.body() )
         );
     }
@@ -272,16 +274,16 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAnnotations( final AgentParser.AnnotationsContext p_context )
     {
-        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )
             return Collections.emptySet();
 
 
         final Set<IAnnotation<?>> l_annotation = new HashSet<>();
 
-        if ( p_context.annotation_atom() != null )
+        if ( Objects.nonNull( p_context.annotation_atom() ) )
             p_context.annotation_atom().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_atom( i ) ).forEach( l_annotation::add );
 
-        if ( p_context.annotation_literal() != null )
+        if ( Objects.nonNull( p_context.annotation_literal() ) )
             p_context.annotation_literal().stream().map( i -> (IAnnotation<?>) this.visitAnnotation_literal( i ) ).forEach( l_annotation::add );
 
         return l_annotation.isEmpty() ? Collections.emptySet() : l_annotation;
@@ -290,10 +292,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAnnotation_atom( final AgentParser.Annotation_atomContext p_context )
     {
-        if ( p_context.ATOMIC() != null )
+        if ( Objects.nonNull( p_context.ATOMIC() ) )
             return new CAtomAnnotation<>( IAnnotation.EType.ATOMIC );
 
-        if ( p_context.PARALLEL() != null )
+        if ( Objects.nonNull( p_context.PARALLEL() ) )
             return new CAtomAnnotation<>( IAnnotation.EType.PARALLEL );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "atomannotation", p_context.getText() ) );
@@ -308,14 +310,14 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public Object visitAnnotation_value_literal( final AgentParser.Annotation_value_literalContext p_context )
     {
-        if ( p_context.number() != null )
+        if ( Objects.nonNull( p_context.number() ) )
             return new CValueAnnotation<>(
                 IAnnotation.EType.CONSTANT,
                 (String) this.visitVariableatom( p_context.variableatom() ),
                 ( (Number) this.visitNumber( p_context.number() ) ).doubleValue()
             );
 
-        if ( p_context.STRING() != null )
+        if ( Objects.nonNull( p_context.STRING() ) )
             return new CValueAnnotation<>(
                 IAnnotation.EType.CONSTANT,
                 (String) this.visitVariableatom( p_context.variableatom() ),
@@ -360,7 +362,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         // filter null values of the body formular, because blank lines adds a null value, body-formula rule return an executable call everytime
         return p_context.body_formula().stream()
-                        .filter( i -> i != null )
+                        .filter( i -> Objects.nonNull( i ) )
                         .map( i -> this.visitBody_formula( i ) )
                         .filter( i -> i instanceof IExecution )
                         // expression are encapsulate to get result
@@ -379,24 +381,24 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         // a non-existing repair formula can return any object-item, so convert it
         // to executable structure, because the grammar rule must return an executable item
-        if ( p_context.repair_formula() == null )
+        if ( Objects.isNull( p_context.repair_formula() ) )
             return this.visitChildren( p_context );
 
 
         // if there exists any repair element, build a sequential hierarchie of repair calls
-        if ( p_context.executable_term() != null )
+        if ( Objects.nonNull( p_context.executable_term() ) )
             return new CRepair(
                 (IExecution) this.visitExecutable_term( p_context.executable_term() ),
                 (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
-        if ( p_context.test_action() != null )
+        if ( Objects.nonNull( p_context.test_action() ) )
             return new CRepair(
                 (IExecution) this.visitTest_action( p_context.test_action() ),
                 (IExecution) this.visitRepair_formula( p_context.repair_formula() )
             );
 
-        if ( p_context.achievement_goal_action() != null )
+        if ( Objects.nonNull( p_context.achievement_goal_action() ) )
             return new CRepair(
                 (IExecution) this.visitAchievement_goal_action( p_context.achievement_goal_action() ),
                 (IExecution) this.visitRepair_formula( p_context.repair_formula() )
@@ -430,13 +432,13 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitUnification_constraint( final AgentParser.Unification_constraintContext p_context )
     {
-        if ( p_context == null )
+        if ( Objects.isNull( p_context ) )
             return null;
 
-        if ( p_context.expression() != null )
+        if ( Objects.nonNull( p_context.expression() ) )
             return this.visitExpression( p_context.expression() );
 
-        if ( p_context.variable() != null )
+        if ( Objects.nonNull( p_context.variable() ) )
             return this.visitVariable( p_context.variable() );
 
         return null;
@@ -445,7 +447,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBlock_formula( final AgentParser.Block_formulaContext p_context )
     {
-        if ( p_context.body_formula() != null )
+        if ( Objects.nonNull( p_context.body_formula() ) )
         {
             final LinkedList<IExecution> l_statement = new LinkedList<>();
             l_statement.add( (IExecution) this.visitBody_formula( p_context.body_formula() ) );
@@ -458,7 +460,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLambda( final AgentParser.LambdaContext p_context )
     {
-        if ( p_context.lambda_return() != null )
+        if ( Objects.nonNull( p_context.lambda_return() ) )
             return new CLambdaExpression(
                 p_context.AT() != null,
                 (IExecution) this.visitLambda_initialization( p_context.lambda_initialization() ),
@@ -478,10 +480,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitLambda_initialization( final AgentParser.Lambda_initializationContext p_context )
     {
-        if ( p_context.variable() != null )
+        if ( Objects.nonNull( p_context.variable() ) )
             return new CRawAction<>( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.literal() != null )
+        if ( Objects.nonNull( p_context.literal() ) )
             return new CProxyAction( m_actions, (ILiteral) this.visitLiteral( p_context.literal() ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( this, "lambdainitialization", p_context.getText() ) );
@@ -496,21 +498,21 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExecutable_term( final AgentParser.Executable_termContext p_context )
     {
-        if ( p_context.STRING() != null )
+        if ( Objects.nonNull( p_context.STRING() ) )
             return new CRawAction<>( stringvalue( p_context.STRING().getText() ) );
-        if ( p_context.number() != null )
+        if ( Objects.nonNull( p_context.number() ) )
             return new CRawAction<>( this.visitNumber( p_context.number() ) );
-        if ( p_context.LOGICALVALUE() != null )
+        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
             return new CRawAction<>( logicalvalue( p_context.LOGICALVALUE().getText() ) );
 
-        if ( p_context.executable_action() != null )
+        if ( Objects.nonNull( p_context.executable_action() ) )
             return this.visitExecutable_action( p_context.executable_action() );
-        if ( p_context.executable_rule() != null )
+        if ( Objects.nonNull( p_context.executable_rule() ) )
             return this.visitExecutable_rule( p_context.executable_rule() );
 
-        if ( p_context.expression() != null )
+        if ( Objects.nonNull( p_context.expression() ) )
             return this.visitExpression( p_context.expression() );
-        if ( p_context.ternary_operation() != null )
+        if ( Objects.nonNull( p_context.ternary_operation() ) )
             return this.visitTernary_operation( p_context.ternary_operation() );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
@@ -573,13 +575,13 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitAchievement_goal_action( final AgentParser.Achievement_goal_actionContext p_context )
     {
-        if ( p_context.literal() != null )
-            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), p_context.DOUBLEEXCLAMATIONMARK() != null );
+        if ( Objects.nonNull( p_context.literal() ) )
+            return new CAchievementGoalLiteral( (ILiteral) this.visitLiteral( p_context.literal() ), Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() ) );
 
-        if ( p_context.variable_evaluate() != null )
+        if ( Objects.nonNull( p_context.variable_evaluate() ) )
             return new CAchievementGoalVariable(
                 (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ),
-                p_context.DOUBLEEXCLAMATIONMARK() != null
+                Objects.nonNull( p_context.DOUBLEEXCLAMATIONMARK() )
             );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "achievmentgoal", p_context.getText() ) );
@@ -611,7 +613,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitTest_action( final AgentParser.Test_actionContext p_context )
     {
         // dollar sign is used to recognize a rule
-        return p_context.DOLLAR() != null
+        return Objects.nonNull( p_context.DOLLAR() )
                ? new CTestRule( CPath.from( (String) this.visitAtom( p_context.atom() ) ) )
                : new CTestGoal( CPath.from( (String) this.visitAtom( p_context.atom() ) ) );
     }
@@ -619,10 +621,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitBelief_action( final AgentParser.Belief_actionContext p_context )
     {
-        if ( p_context.PLUS() != null )
+        if ( Objects.nonNull( p_context.PLUS() ) )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.ADD );
 
-        if ( p_context.MINUS() != null )
+        if ( Objects.nonNull( p_context.MINUS() ) )
             return new CBeliefAction( (ILiteral) this.visitLiteral( p_context.literal() ), CBeliefAction.EAction.DELETE );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "beliefaction", p_context.getText() ) );
@@ -633,7 +635,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     {
         return new CDeconstruct<>(
             p_context.variablelist().variable().stream().map( i -> (IVariable<?>) this.visitVariable( i ) ).collect( Collectors.toList() ),
-            (ITerm) ( p_context.literal() != null ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
+            (ITerm) ( Objects.nonNull( p_context.literal() ) ? this.visitLiteral( p_context.literal() ) : this.visitVariable( p_context.variable() ) )
         );
     }
 
@@ -646,8 +648,8 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitLiteral( final AgentParser.LiteralContext p_context )
     {
         return new CLiteral(
-            p_context.AT() != null,
-            p_context.STRONGNEGATION() != null,
+            Objects.nonNull( p_context.AT() ),
+            Objects.nonNull( p_context.STRONGNEGATION() ),
             CPath.from( this.visitAtom( p_context.atom() ).toString() ),
             (Collection<ITerm>) this.visitTermlist( p_context.termlist() )
         );
@@ -656,23 +658,23 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTerm( final AgentParser.TermContext p_context )
     {
-        if ( p_context.STRING() != null )
+        if ( Objects.nonNull( p_context.STRING() ) )
             return stringvalue( p_context.STRING().getText() );
-        if ( p_context.number() != null )
+        if ( Objects.nonNull( p_context.number() ) )
             return this.visitNumber( p_context.number() );
-        if ( p_context.LOGICALVALUE() != null )
+        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
             return logicalvalue( p_context.LOGICALVALUE().getText() );
 
-        if ( p_context.literal() != null )
+        if ( Objects.nonNull( p_context.literal() ) )
             return this.visitLiteral( p_context.literal() );
-        if ( p_context.variable() != null )
+        if ( Objects.nonNull( p_context.variable() ) )
             return this.visitVariable( p_context.variable() );
 
-        if ( p_context.termlist() != null )
+        if ( Objects.nonNull( p_context.termlist() ) )
             return this.visitTermlist( p_context.termlist() );
-        if ( p_context.expression() != null )
+        if ( Objects.nonNull( p_context.expression() ) )
             return this.visitExpression( p_context.expression() );
-        if ( p_context.ternary_operation() != null )
+        if ( Objects.nonNull( p_context.ternary_operation() ) )
             return this.visitTernary_operation( p_context.ternary_operation() );
 
         throw new CIllegalArgumentException( CCommon.languagestring( this, "termunknown", p_context.getText() ) );
@@ -681,12 +683,12 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitTermlist( final AgentParser.TermlistContext p_context )
     {
-        if ( ( p_context == null ) || ( p_context.isEmpty() ) )
+        if ( ( Objects.isNull( p_context ) ) || ( p_context.isEmpty() ) )
             return Collections.<ITerm>emptyList();
 
         return p_context.term().stream()
                         .map( i -> this.visitTerm( i ) )
-                        .filter( i -> i != null )
+                        .filter( i -> Objects.nonNull( i ) )
                         .map( i -> i instanceof ITerm ? (ITerm) i : CRawTerm.from( i ) )
                         .collect( Collectors.toList() );
     }
@@ -705,11 +707,11 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitNumber( final AgentParser.NumberContext p_context )
     {
-        if ( p_context.CONSTANTNUMBER() != null )
+        if ( Objects.nonNull( p_context.CONSTANTNUMBER() ) )
             return numericonstant( p_context.CONSTANTNUMBER().getText() );
 
         final Number l_value = (Number) this.visitChildren( p_context );
-        return p_context.MINUS() != null
+        return Objects.nonNull( p_context.MINUS() )
                ? -1 * l_value.doubleValue()
                : l_value.doubleValue();
     }
@@ -729,7 +731,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitVariable( final AgentParser.VariableContext p_context )
     {
-        return p_context.AT() == null
+        return Objects.isNull( p_context.AT() )
                ? new CVariable<>( (String) this.visitVariableatom( p_context.variableatom() ) )
                : new CMutexVariable<>( (String) this.visitVariableatom( p_context.variableatom() ) );
     }
@@ -744,14 +746,14 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     public final Object visitExpression( final AgentParser.ExpressionContext p_context )
     {
         // bracket expression
-        if ( p_context.expression_bracket() != null )
+        if ( Objects.nonNull( p_context.expression_bracket() ) )
             return this.visitExpression_bracket( p_context.expression_bracket() );
 
         // or-expression
         return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(
             EOperator.OR,
             (IExpression) this.visitExpression_logical_and( p_context.expression_logical_and() ),
-            p_context.expression() != null
+            Objects.nonNull( p_context.expression() )
             ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
             : Collections.emptyList()
         );
@@ -769,7 +771,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
         return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(
             EOperator.AND,
             (IExpression) this.visitExpression_logical_xor( p_context.expression_logical_xor() ),
-            p_context.expression() != null
+            Objects.nonNull( p_context.expression() )
             ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
             : Collections.emptyList()
         );
@@ -778,19 +780,19 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_logical_xor( final AgentParser.Expression_logical_xorContext p_context )
     {
-        if ( p_context.expression_logical_element() != null )
+        if ( Objects.nonNull( p_context.expression_logical_element() ) )
             return org.lightjason.agentspeak.grammar.CCommon.createLogicalBinaryExpression(
                 EOperator.XOR,
                 (IExpression) this.visitExpression_logical_element( p_context.expression_logical_element() ),
-                p_context.expression() != null
+                Objects.nonNull( p_context.expression() )
                 ? p_context.expression().stream().map( i -> (IExpression) this.visitExpression( i ) ).collect( Collectors.toList() )
                 : Collections.emptyList()
             );
 
-        if ( p_context.expression_logical_negation() != null )
+        if ( Objects.nonNull( p_context.expression_logical_negation() ) )
             return this.visitExpression_logical_negation( p_context.expression_logical_negation() );
 
-        if ( p_context.expression_numeric() != null )
+        if ( Objects.nonNull( p_context.expression_numeric() ) )
             return this.visitExpression_numeric( p_context.expression_numeric() );
 
         throw new CSyntaxErrorException( CCommon.languagestring( this, "logicallefthandside", p_context.getText() ) );
@@ -805,19 +807,19 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_logical_element( final AgentParser.Expression_logical_elementContext p_context )
     {
-        if ( p_context.LOGICALVALUE() != null )
+        if ( Objects.nonNull( p_context.LOGICALVALUE() ) )
             return new CAtom( logicalvalue( p_context.LOGICALVALUE().getText() ) );
 
-        if ( p_context.variable() != null )
+        if ( Objects.nonNull( p_context.variable() ) )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.unification() != null )
+        if ( Objects.nonNull( p_context.unification() ) )
             return new CProxyReturnExpression<>( (IExecution) this.visitUnification( p_context.unification() ) );
 
-        if ( p_context.executable_action() != null )
+        if ( Objects.nonNull( p_context.executable_action() ) )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );
 
-        if ( p_context.executable_rule() != null )
+        if ( Objects.nonNull( p_context.executable_rule() ) )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( this, "logicalelement", p_context.getText() ) );
@@ -826,17 +828,17 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric( final AgentParser.Expression_numericContext p_context )
     {
-        if ( p_context.expression_numeric() == null )
+        if ( Objects.isNull( p_context.expression_numeric() ) )
             return this.visitExpression_numeric_relation( p_context.expression_numeric_relation() );
 
-        if ( p_context.EQUAL() != null )
+        if ( Objects.nonNull( p_context.EQUAL() ) )
             return new CComparable(
                 EOperator.EQUAL,
                 (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.NOTEQUAL() != null )
+        if ( Objects.nonNull( p_context.NOTEQUAL() ) )
             return new CComparable(
                 EOperator.NOTEQUAL,
                 (IExpression) this.visitExpression_numeric_relation( p_context.expression_numeric_relation() ),
@@ -849,31 +851,31 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric_relation( final AgentParser.Expression_numeric_relationContext p_context )
     {
-        if ( p_context.expression_numeric() == null )
+        if ( Objects.isNull( p_context.expression_numeric() ) )
             return this.visitExpression_numeric_additive( p_context.expression_numeric_additive() );
 
-        if ( p_context.GREATER() != null )
+        if ( Objects.nonNull( p_context.GREATER() ) )
             return new CRelational(
                 EOperator.GREATER,
                 (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.GREATEREQUAL() != null )
+        if ( Objects.nonNull( p_context.GREATEREQUAL() ) )
             return new CRelational(
                 EOperator.GREATEREQUAL,
                 (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.LESS() != null )
+        if ( Objects.nonNull( p_context.LESS() ) )
             return new CRelational(
                 EOperator.LESS,
                 (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.LESSEQUAL() != null )
+        if ( Objects.nonNull( p_context.LESSEQUAL() ) )
             return new CRelational(
                 EOperator.LESSEQUAL,
                 (IExpression) this.visitExpression_numeric_additive( p_context.expression_numeric_additive() ),
@@ -886,17 +888,17 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric_additive( final AgentParser.Expression_numeric_additiveContext p_context )
     {
-        if ( p_context.expression_numeric() == null )
+        if ( Objects.isNull( p_context.expression_numeric() ) )
             return this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() );
 
-        if ( p_context.PLUS() != null )
+        if ( Objects.nonNull( p_context.PLUS() ) )
             return new CAdditive(
                 EOperator.PLUS,
                 (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.MINUS() != null )
+        if ( Objects.nonNull( p_context.MINUS() ) )
             return new CAdditive(
                 EOperator.MINUS,
                 (IExpression) this.visitExpression_numeric_multiplicative( p_context.expression_numeric_multiplicative() ),
@@ -909,24 +911,24 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric_multiplicative( final AgentParser.Expression_numeric_multiplicativeContext p_context )
     {
-        if ( p_context.expression_numeric() == null )
+        if ( Objects.isNull( p_context.expression_numeric() ) )
             return this.visitExpression_numeric_power( p_context.expression_numeric_power() );
 
-        if ( p_context.MULTIPLY() != null )
+        if ( Objects.nonNull( p_context.MULTIPLY() ) )
             return new CMultiplicative(
                 EOperator.MULTIPLY,
                 (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.SLASH() != null )
+        if ( Objects.nonNull( p_context.SLASH() ) )
             return new CMultiplicative(
                 EOperator.DIVIDE,
                 (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
                 (IExpression) this.visitExpression_numeric( p_context.expression_numeric() )
             );
 
-        if ( p_context.MODULO() != null )
+        if ( Objects.nonNull( p_context.MODULO() ) )
             return new CMultiplicative(
                 EOperator.MODULO,
                 (IExpression) this.visitExpression_numeric_power( p_context.expression_numeric_power() ),
@@ -939,7 +941,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric_power( final AgentParser.Expression_numeric_powerContext p_context )
     {
-        if ( p_context.expression_numeric() == null )
+        if ( Objects.isNull( p_context.expression_numeric() ) )
             return this.visitExpression_numeric_element( p_context.expression_numeric_element() );
 
         return new CPower(
@@ -952,16 +954,16 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExpression_numeric_element( final AgentParser.Expression_numeric_elementContext p_context )
     {
-        if ( p_context.number() != null )
+        if ( Objects.nonNull( p_context.number() ) )
             return new CAtom( this.visitNumber( p_context.number() ) );
 
-        if ( p_context.variable() != null )
+        if ( Objects.nonNull( p_context.variable() ) )
             return new CAtom( this.visitVariable( p_context.variable() ) );
 
-        if ( p_context.executable_action() != null )
+        if ( Objects.nonNull( p_context.executable_action() ) )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_action( p_context.executable_action() ) );
 
-        if ( p_context.executable_rule() != null )
+        if ( Objects.nonNull( p_context.executable_rule() ) )
             return new CProxyReturnExpression<>( (IExecution) this.visitExecutable_rule( p_context.executable_rule() ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( this, "numericelement", p_context.getText() ) );
@@ -976,10 +978,10 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     @Override
     public final Object visitExecutable_rule( final AgentParser.Executable_ruleContext p_context )
     {
-        if ( p_context.literal() != null )
+        if ( Objects.nonNull( p_context.literal() ) )
             return new CAchievementRuleLiteral( (ILiteral) this.visitLiteral( p_context.literal() ) );
 
-        if ( p_context.variable_evaluate() != null )
+        if ( Objects.nonNull( p_context.variable_evaluate() ) )
             return new CAchievementRuleVariable( (IVariableEvaluate) this.visitVariable_evaluate( p_context.variable_evaluate() ) );
 
         throw new CSyntaxErrorException( CCommon.languagestring( this, "executablerule", p_context.getText() ) );
@@ -1019,7 +1021,7 @@ public final class CASTVisitorAgent extends AbstractParseTreeVisitor<Object> imp
     private static Number numericonstant( @Nonnull final String p_value )
     {
         final Double l_constant = org.lightjason.agentspeak.grammar.CCommon.NUMERICCONSTANT.get( p_value );
-        if ( l_constant != null )
+        if ( Objects.nonNull( l_constant ) )
             return l_constant;
 
         throw new CSyntaxErrorException( CCommon.languagestring( CASTVisitorAgent.class, "constantunknown", p_value ) );

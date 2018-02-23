@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * if one of the arguments are not an instance of this
  * class or the class does not exist
  *
- * @code generic/type( "java.lang.String", X, Y, Z ); @endcode
+ * {@code generic/type( "java.lang.String", X, Y, Z );}
  */
 public final class CIs extends IBuiltinAction
 {

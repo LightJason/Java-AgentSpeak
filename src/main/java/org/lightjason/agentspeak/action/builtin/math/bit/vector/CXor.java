@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  * all other bit vectors, so \f$ v_i = v_i \text{ ^ } v_1 \f$
  * is performed, the action never fails
  *
- * @code math/bit/vector/xor( Vector, Vector1, Vector2 ); @endcode
+ * {@code math/bit/vector/xor( Vector, Vector1, Vector2 );}
  */
 public final class CXor extends IOperator
 {

@@ -41,7 +41,7 @@ import java.util.Map;
  * all other arguments are the literal elements of the returning literal, the webservice must return a JSON list and
  * the last argument will used to encapsulate the list elements
  *
- * @code W = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" ); @endcode
+ * {@code W = web/rest/jsonlist( "https://api.github.com/repos/LightJason/AgentSpeak/commits", "github", "elements" );}
  * @see https://en.wikipedia.org/wiki/Representational_state_transfer
  * @see https://en.wikipedia.org/wiki/Web_service
  * @see https://en.wikipedia.org/wiki/JSON

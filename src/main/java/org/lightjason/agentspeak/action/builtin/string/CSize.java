@@ -41,7 +41,7 @@ import java.util.List;
  * For each argument the string length will be returned
  * and the action never fails
  *
- * @code [A|B|C] = string/size("A", ["CC", "XYZ"]); @endcode
+ * {@code [A|B|C] = string/size("A", ["CC", "XYZ"]);}
  */
 public final class CSize extends IBuiltinAction
 {

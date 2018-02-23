@@ -129,6 +129,7 @@ public final class TestCActionMathBlasVector extends IBaseTest
     /**
      * test all input actions
      *
+     * @param p_input tripel input data, actions and results
      * @throws IllegalAccessException is thrwon on instantiation error
      * @throws InstantiationException is thrwon on instantiation error
      * @throws NoSuchMethodException is thrwon on instantiation error

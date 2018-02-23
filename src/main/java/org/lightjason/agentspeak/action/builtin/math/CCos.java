@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates \f$ cos( x_i ) \f$ for
  * each argument in radians and returns the values
  *
- * @code [A | B] = math/cos(3, 4); @endcode
+ * {@code [A | B] = math/cos(3, 4);}
  */
 public final class CCos extends IBuiltinAction
 {

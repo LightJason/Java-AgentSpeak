@@ -35,7 +35,7 @@ import java.util.List;
  * The action removes from the first graph argument all vertices,
  * the action never fails
  *
- * @code graph/removevertexmultiple( Graph, Vertex1, Vertex2 ); @endcode
+ * {@code graph/removevertexmultiple( Graph, Vertex1, Vertex2 );}
  */
 public final class CRemoveVertexMultiple extends IApplyMultiple
 {

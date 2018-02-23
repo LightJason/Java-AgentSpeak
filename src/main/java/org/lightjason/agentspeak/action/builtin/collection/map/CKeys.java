@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * Returns a unique list with all key values of the argument
  * maps and fails never, all arguments must be maps
  *
- * @code L = collection/map/keys( Map1, Map2, Map3 ); @endcode
+ * {@code L = collection/map/keys( Map1, Map2, Map3 );}
  */
 public final class CKeys extends IBuiltinAction
 {

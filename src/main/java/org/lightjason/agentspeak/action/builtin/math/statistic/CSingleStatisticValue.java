@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * standarddeviation, sum, sumlog, sumsquare, variance, mean, kurtiosis)
  * all other arguments are statistic objects
  *
- * @code [V1|V2|V3] = math/statistic/getstatisticvalue( "mean|min|max|...", Statistic1, [Statistic2, Statistic3] ); @endcode
+ * {@code [V1|V2|V3] = math/statistic/getstatisticvalue( "mean|min|max|...", Statistic1, [Statistic2, Statistic3] );}
  */
 public final class CSingleStatisticValue extends IBuiltinAction
 {

@@ -52,6 +52,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,10 +65,8 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * abstract test for playing towers of hanoi
- *
- * @note if a file agentprintin.conf exists on the main directory alls print statements will be shown
- * @see https://en.wikipedia.org/wiki/Tower_of_Hanoi
+ * abstract test for playing <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">towers of hanoi</a>
+ * If a file agentprintin.conf exists on the main directory alls print statements will be shown
  */
 public final class TestCHanoiTowers extends IBaseTest
 {
@@ -398,7 +397,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( l_tower == null )
+            if ( Objects.isNull( l_tower ) )
                 return CFuzzyValue.from( false );
 
             p_return.add( CRawTerm.from( l_tower.size() ) );
@@ -451,7 +450,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( ( l_tower == null ) || ( Math.random() < m_failprobability ) )
+            if ( ( Objects.isNull( l_tower ) ) || ( Math.random() < m_failprobability ) )
                 return CFuzzyValue.from( false );
 
             try
@@ -496,7 +495,7 @@ public final class TestCHanoiTowers extends IBaseTest
                                                    @Nonnull final List<ITerm> p_argument, @Nonnull final List<ITerm> p_return )
         {
             final CTower l_tower = m_tower.get( p_argument.get( 0 ).<Number>raw().intValue() );
-            if ( l_tower == null )
+            if ( Objects.isNull( l_tower ) )
                 return CFuzzyValue.from( false );
 
             try

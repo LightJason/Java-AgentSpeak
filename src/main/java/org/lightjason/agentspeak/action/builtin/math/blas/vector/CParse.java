@@ -45,10 +45,10 @@ import java.util.stream.Collectors;
  * creates a dense- or sparse-vector from as string.
  * The action creates for each input argument a vector
  * by parsing the string, the last string can be "dense | sparse"
- * to defining a sparse / dense vector, the action never fails
+ * to defining a sparse / dense vector, the action never fails.
+ * Seperator is comma, semicolon or space
  *
- * @code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" ); @endcode
- * @note seperator is comma, semicolon or space
+ * {@code [V1|V2] = math/blas/vector/parse( "1,2,3", "7,8,9,10,12", "dense|dense" );}
  */
 public final class CParse extends IBuiltinAction
 {

@@ -48,7 +48,7 @@ import java.util.List;
  * input trigger arguments, the action fails
  * on wrong input
  *
- * @code agent/removeplan( "+!", "myplan(X)", "-!", Literal ); @endcode
+ * {@code agent/removeplan( "+!", "myplan(X)", "-!", Literal );}
  */
 @SuppressFBWarnings( "GC_UNRELATED_TYPES" )
 public final class CRemovePlan extends IBuiltinAction

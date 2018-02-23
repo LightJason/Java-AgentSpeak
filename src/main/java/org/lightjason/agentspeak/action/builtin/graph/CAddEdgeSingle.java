@@ -37,7 +37,7 @@ import java.util.List;
  * to all other arguments are graphs, the action
  * never fails
  *
- * @code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 ); @endcode
+ * {@code graph/addedge( Edge, StartVertex, EndVertex, Graph1, Graph2, Graph3 );}
  */
 public final class CAddEdgeSingle extends IApplySingle
 {

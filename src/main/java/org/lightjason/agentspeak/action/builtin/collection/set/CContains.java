@@ -44,7 +44,7 @@ import java.util.Set;
  * that all other arguments are contained, the action never
  * fails
  *
- * @code [E1|E2|E3] = collection/set/contains( Set, "1", [1, 2] ); @endcode
+ * {@code [E1|E2|E3] = collection/set/contains( Set, "1", [1, 2] );}
  */
 public final class CContains extends IBuiltinAction
 {

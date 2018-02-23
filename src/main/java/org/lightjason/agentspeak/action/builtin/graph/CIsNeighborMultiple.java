@@ -36,7 +36,7 @@ import java.util.List;
  * The action checks for the graph instance, that the first part of each vertex tuple is the neighbor
  * of the second part of the tuple, the action never fails
  *
- * @code [B1|B2|B3] = graph/isneighbormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, vertex6]] ); @endcode
+ * {@code [B1|B2|B3] = graph/isneighbormultiple( Graph, Vertex1, Vertex2, [Vertex3, Vertex4, [Vertex5, vertex6]] );}
  */
 public final class CIsNeighborMultiple extends IApplyMultiple
 {

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * other interpolating functions, the action never fails
  * interpolation
  *
- * @code [A|B|C] = math/interpolate/multipleinterpolate( 5, InterpolatingFunction1, [InterpolatingFunction2, [InterpolatingFunction3]] ); @endcode
+ * {@code [A|B|C] = math/interpolate/multipleinterpolate( 5, InterpolatingFunction1, [InterpolatingFunction2, [InterpolatingFunction3]] );}
  * @see https://en.wikipedia.org/wiki/Polynomial_interpolation
  */
 public final class CMultipleInterpolate extends IBuiltinAction

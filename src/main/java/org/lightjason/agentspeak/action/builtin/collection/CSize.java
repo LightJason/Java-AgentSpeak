@@ -42,10 +42,10 @@ import java.util.Map;
 /**
  * returns the size of the collection.
  * All arguments must be collections and the action returns
- * the size of each collection, the action never fails
+ * the size of each collection, the action never fails.
+ * On non-collection type the action returns a zero value
  *
- * @code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel ); @endcode
- * @note on non-collection type the action returns a zero value
+ * {@code [A|B|C|D] = collection/size( Collection, Map, MultiMap, Tupel );}
  */
 public final class CSize extends IBuiltinAction
 {

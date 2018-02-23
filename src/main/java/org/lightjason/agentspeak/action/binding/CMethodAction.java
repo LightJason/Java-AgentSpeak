@@ -44,13 +44,14 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 /**
- * action for binding a method
- * @note action uses agent for object binding
+ * action for binding a method.
+ * action uses agent for object binding
  */
 public final class CMethodAction extends IBaseAction
 {
@@ -98,6 +99,7 @@ public final class CMethodAction extends IBaseAction
      * serialize call
      *
      * @param p_stream object stream
+     * @throws IOException error on writing object data
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
@@ -185,7 +187,7 @@ public final class CMethodAction extends IBaseAction
     private static IFuzzyValue<Boolean> returnvalues( @Nullable final Object p_result, @Nonnull final List<ITerm> p_return )
     {
         // void result of the execution
-        if ( ( p_result == null ) || ( void.class.equals( p_result.getClass() ) ) )
+        if ( ( Objects.isNull( p_result ) ) || ( void.class.equals( p_result.getClass() ) ) )
             return CFuzzyValue.from( true );
 
         // otherwise object is returned

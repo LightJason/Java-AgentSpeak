@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * and returns this values as result of the action,
  * the action fails on wrong input
  *
- * @code generic/type/fuzzyreturn( true, 0.4); @endcode
+ * {@code generic/type/fuzzyreturn( true, 0.4);}
  */
 public class CFuzzyReturn extends IBuiltinAction
 {

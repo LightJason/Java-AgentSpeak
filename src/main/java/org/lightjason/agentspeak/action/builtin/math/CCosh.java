@@ -41,7 +41,7 @@ import java.util.List;
  * The action calculates for all arguments \f$ cosh( x_i ) \f$
  * and fails never, the arguments must be in radians.
  *
- * @code [A|B] = math/cosh( 3, 4 ); @endcode
+ * {@code [A|B] = math/cosh( 3, 4 );}
  * @see https://en.wikipedia.org/wiki/Hyperbolic_function
  */
 public final class CCosh extends IBuiltinAction

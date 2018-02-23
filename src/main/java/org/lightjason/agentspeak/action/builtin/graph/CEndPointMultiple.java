@@ -37,7 +37,7 @@ import java.util.List;
  * of a single graph instance,
  * the action never fails
  *
- * @code [V1|V2|V3|V4] = graph/endpointmultiple( Graph, Edge1, Edge2 ); @endcode
+ * {@code [V1|V2|V3|V4] = graph/endpointmultiple( Graph, Edge1, Edge2 );}
  */
 public final class CEndPointMultiple extends IApplyMultiple
 {

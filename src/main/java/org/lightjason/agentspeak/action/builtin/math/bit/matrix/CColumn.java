@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
  * the first argument is the index of the column, all
  * other a matrix objects, the action never fails
  *
- * @code [V1|V2] = math/bit/matrix/column(3, Matrix1, [Matrix2]); @endcode
+ * {@code [V1|V2] = math/bit/matrix/column(3, Matrix1, [Matrix2]);}
  */
 public final class CColumn extends IRowColumn
 {

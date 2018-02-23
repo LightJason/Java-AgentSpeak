@@ -41,7 +41,7 @@ import java.util.List;
  * All arguments of the action will change
  * to a lower-case string and the action never fails
  *
- * @code [A|B|C|D] = string/lower("AbC", "Ef", ["de", "XyZ"]); @endcode
+ * {@code [A|B|C|D] = string/lower("AbC", "Ef", ["de", "XyZ"]);}
  */
 public final class CLower extends IBuiltinAction
 {

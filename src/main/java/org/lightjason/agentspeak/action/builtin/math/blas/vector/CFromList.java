@@ -47,7 +47,7 @@ import java.util.List;
  * with "dense | sparse" to create dense or sparse structures,
  * the action never fails
  *
- * @code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" ); @endcode
+ * {@code [V1|V2] = math/blas/vector( [1,2,3], [4,5,6], "dense | sparse" );}
  */
 public final class CFromList extends IBuiltinAction
 {

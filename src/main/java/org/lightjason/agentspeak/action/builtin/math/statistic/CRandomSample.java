@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  * is the distirbution and all other arguments defines
  * the size of the samples
  *
- * @code [R1|R2] = math/statistic/randomsample( Distribution, 1, 5 ); @endcode
+ * {@code [R1|R2] = math/statistic/randomsample( Distribution, 1, 5 );}
  */
 public final class CRandomSample extends IBuiltinAction
 {

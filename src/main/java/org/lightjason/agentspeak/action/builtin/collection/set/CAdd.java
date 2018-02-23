@@ -41,7 +41,7 @@ import java.util.Set;
  * The action adds all arguments to the set (overwrites existing),
  * the action never fails
  *
- * @code collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]); @endcode
+ * {@code collection/set/add( Set, "X", "Y", [1, 2, 3, "A", "b"]);}
  */
 public final class CAdd extends IBuiltinAction
 {

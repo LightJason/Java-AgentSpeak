@@ -35,7 +35,7 @@ import java.util.List;
  * The action removes of all graph instances the given
  * vertex, the action never fails
  *
- * @code graph/removevertexsingle( Vertex, Graph1, Graph2 ); @endcode
+ * {@code graph/removevertexsingle( Vertex, Graph1, Graph2 );}
  */
 public final class CRemoveVertexSingle extends IApplySingle
 {

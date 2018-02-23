@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * gets percentile value in $[0,100]$ from the statistic,
  * the action fails on wrong input
  *
- * @code [V1|V2|V3] = math/statistic/multiplepercentile( Statistic, 50, [25, 75] )  @endcode
+ * {@code [V1|V2|V3] = math/statistic/multiplepercentile( Statistic, 50, [25, 75] );}
  */
 public final class CMultiplePercentile extends IBuiltinAction
 {

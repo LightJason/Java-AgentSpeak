@@ -64,16 +64,15 @@ import java.util.stream.Stream;
  * the arguments is completly independed, for each
  * graph two arguments will be returned, the
  * adjacency matrix and the node names and the action
- * never fails
+ * never fails. The cost-map does not need an entry for each edge
+ * non-existing edges have got on default zero costs with 1
  *
- * @code
+ * {@code
     [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, "dense|sparse", Graph2 );
     [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2 );
     [M1|N1|M2|N2] = graph/adjacencymatrix( Graph1, 1, Graph2 );
     [M1|N1|M2|N2] = graph/adjacencymatrix( CostMap, Graph1, Graph2, "dense|sparse", );
- * @endcode
- * @note the cost-map does not need an entry for each edge
- * non-existing edges have got on default zero costs with 1
+ * }
  * @see https://en.wikipedia.org/wiki/Adjacency_matrix
  */
 public final class CAdjacencyMatrix extends IBuiltinAction

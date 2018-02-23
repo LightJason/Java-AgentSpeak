@@ -27,6 +27,7 @@ import org.lightjason.agentspeak.common.IPath;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -132,7 +133,7 @@ public class CMutexVariable<T> extends CVariable<T>
     @Override
     public IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CMutexVariable<>( m_functor, m_value )
                : new CMutexVariable<>( p_prefix[0].append( m_functor ), m_value );
     }

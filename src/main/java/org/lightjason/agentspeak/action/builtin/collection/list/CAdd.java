@@ -39,7 +39,7 @@ import java.util.List;
  * The action adds the first argument to all
  * other list arguments, the action never fails
  *
- * @code collection/list/add( Value, L1, L2, L3 ); @endcode
+ * {@code collection/list/add( Value, L1, L2, L3 );}
  */
 public final class CAdd extends IBuiltinAction
 {

@@ -40,7 +40,7 @@ import java.util.List;
  * arguments are multimap references, the key will be
  * returned from each multimap, the action fails never,
  *
- * @code [A|B|C] = collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 ); @endcode
+ * {@code [A|B|C] = collection/multimap/getsingle( "key", MultiMap1, MultiMap2, MultiMap3 );}
  */
 public final class CGetSingle extends IMapGetSingle<Multimap<Object, Object>>
 {

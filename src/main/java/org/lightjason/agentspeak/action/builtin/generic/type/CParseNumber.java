@@ -37,7 +37,7 @@ import java.util.Map;
  * and returns the value, the action fails on
  * parsing errors
  *
- * @code [X|Y|Z] = generic/type/parsenumber( "1.45", ["8.88", "9"] ); @endcode
+ * {@code [X|Y|Z] = generic/type/parsenumber( "1.45", ["8.88", "9"] );}
  */
 public final class CParseNumber extends IParse
 {

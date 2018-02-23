@@ -41,7 +41,7 @@ import java.util.List;
  * The action reverse each argument string and returns
  * the reversed string, the action never fails
  *
- * @code [A|B|C] = string/reverse("Foo Bar", ["ABBA", "Eevee"]); @endcode
+ * {@code [A|B|C] = string/reverse("Foo Bar", ["ABBA", "Eevee"]);}
  */
 public final class CReverse extends IBuiltinAction
 {

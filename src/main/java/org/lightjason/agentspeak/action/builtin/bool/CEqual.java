@@ -46,11 +46,11 @@ import java.util.stream.Stream;
  * The actions checks the first argument
  * to all others arguments of equality,
  * list structures won't be unflaten, but
- * elementwise compared, the action never fails
- *
- * @code [E1|E2] = bool/equal( "this is equal", "this is equal", [123, "test"] ); @endcode
- * @note on number arguments not the value must equal, also the type (double / integral) must be equal,
+ * elementwise compared, the action never fails.
+ * On number arguments not the value must equal, also the type (double / integral) must be equal,
  * so keep in mind, that you use the correct number type on the argument input
+ *
+ * {@code [E1|E2] = bool/equal( "this is equal", "this is equal", [123, "test"] );}
  */
 public class CEqual extends IBuiltinAction
 {

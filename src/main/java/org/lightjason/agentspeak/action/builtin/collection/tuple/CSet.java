@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * The action sets the value within the first argument
  * in each tuple argument, the action never fails
  *
- * @code collection/tuple/set( "value", T1, T2, T3 ); @endcode
+ * {@code collection/tuple/set( "value", T1, T2, T3 );}
  */
 public final class CSet extends IBuiltinAction
 {

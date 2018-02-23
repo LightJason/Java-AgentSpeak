@@ -51,7 +51,7 @@ import java.util.List;
  * is the encrypting key and all other arguments are datasets, the action returns all encypted
  * datasets and fails if one encryption fails or on a wrong algorithm
  *
- * @code [Encypt1 | Encrypt2 | Encypt3] = crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 ); @endcode
+ * {@code [Encypt1 | Encrypt2 | Encypt3] = crypto/encrypt( Key, Dataset1, Dataset2, Dataset3 );}
  */
 public final class CEncrypt extends IBuiltinAction
 {

@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * (x- / y-position) which defines the point, the action fails
  * on wrong input
  *
- * @code [In1|In2] = math/shape/incircle( 1,1,1,  2,2.5, [3,4] ); @endcode
+ * {@code [In1|In2] = math/shape/incircle( 1,1,1,  2,2.5, [3,4] );}
  */
 public final class CInCircle extends IBuiltinAction
 {

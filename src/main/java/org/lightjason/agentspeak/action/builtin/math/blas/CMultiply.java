@@ -45,7 +45,7 @@ import java.util.function.BiFunction;
  * the action fails iif the multiply cannot executed e.g. on wrong
  * input
  *
- * @code [M1|M2|M3] = math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] ); @endcode
+ * {@code [M1|M2|M3] = math/blas/multiply( Vector1, Vector2, [[Matrix1, Matrix2], Matrix3, Vector3] );}
  */
 public final class CMultiply extends IAlgebra
 {

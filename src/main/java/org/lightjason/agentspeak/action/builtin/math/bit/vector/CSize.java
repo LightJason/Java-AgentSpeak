@@ -43,7 +43,7 @@ import java.util.List;
  * their size (number of bits), the action
  * never fails
  *
- * @code [A|B] = math/bit/vector/size( Vector1, Vector2 ); @endcode
+ * {@code [A|B] = math/bit/vector/size( Vector1, Vector2 );}
  */
 public final class CSize extends IBuiltinAction
 {

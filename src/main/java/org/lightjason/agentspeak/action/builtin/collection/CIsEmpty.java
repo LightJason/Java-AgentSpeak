@@ -45,7 +45,7 @@ import java.util.Map;
  * a boolean flag for empty is returned, on all non-collection
  * types empty is always false, the action never fails
  *
- * @code [A|B|C] = collection/list/isempty(List, Map, MultiMap); @endcode
+ * {@code [A|B|C] = collection/list/isempty(List, Map, MultiMap);}
  */
 public final class CIsEmpty extends IBuiltinAction
 {

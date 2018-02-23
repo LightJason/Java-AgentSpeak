@@ -132,6 +132,13 @@ public abstract class IBaseAgentGenerator<T extends IAgent<?>> implements IAgent
     /**
      * builds the configuraion, configuration runs cloning of objects if needed
      *
+     * @param p_fuzzy fuzzy component
+     * @param p_initalbeliefs initial beliefs
+     * @param p_plans plans
+     * @param p_rules rules
+     * @param p_initialgoal intial goal
+     * @param p_unifier unifier component
+     * @param p_variablebuilder variable builder
      * @return configuration object
      */
     protected IAgentConfiguration<T> configuration( @Nonnull final IFuzzyBundle<Boolean> p_fuzzy, @Nonnull final Collection<ILiteral> p_initalbeliefs,

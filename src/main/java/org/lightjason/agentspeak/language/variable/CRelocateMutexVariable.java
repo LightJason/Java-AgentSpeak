@@ -30,6 +30,7 @@ import org.lightjason.agentspeak.language.ITerm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 
 /**
@@ -98,7 +99,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     @Override
     public final IVariable<T> shallowcopy( @Nullable final IPath... p_prefix )
     {
-        return ( p_prefix == null ) || ( p_prefix.length == 0 )
+        return ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
                ? new CRelocateMutexVariable<>( m_functor, m_relocate, m_value )
                : new CRelocateMutexVariable<>( p_prefix[0].append( m_functor ), m_relocate, m_value );
     }
@@ -115,7 +116,7 @@ public final class CRelocateMutexVariable<T> extends CMutexVariable<T> implement
     public final ITerm deepcopy( final IPath... p_prefix )
     {
         return new CRelocateMutexVariable<>(
-            ( p_prefix == null ) || ( p_prefix.length == 0 )
+            ( Objects.isNull( p_prefix ) ) || ( p_prefix.length == 0 )
             ? m_functor
             : m_functor.append( p_prefix[0] ),
             m_relocate,

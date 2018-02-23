@@ -42,7 +42,7 @@ import java.util.List;
  * Inverts each input matrix and returns
  * it, the action never fails
  *
- * @code [I1|I2] = math/blas/matrix/invert(M1,M2); @endcode
+ * {@code [I1|I2] = math/blas/matrix/invert(M1,M2);}
  * @see https://en.wikipedia.org/wiki/Invertible_matrix
  */
 public final class CInvert extends IAlgebra

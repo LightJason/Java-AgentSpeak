@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * the column index, the third value, the new value,
  * all other arguments are matrix objects
  *
- * @code math/blas/matrix/set(2,2, 0.33, Matrix1, [Matrix2, Matrix3] ); @endcode
+ * {@code math/blas/matrix/set(2,2, 0.33, Matrix1, [Matrix2, Matrix3] );}
  */
 public final class CSet extends IBuiltinAction
 {

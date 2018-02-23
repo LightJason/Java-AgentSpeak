@@ -42,7 +42,7 @@ import java.util.List;
  * Checks for all unflatten arguments if the number is a prime number
  * and returns a boolean of this check, the actions never fails
  *
- * @code [P1|P2] = math/isprime(3, 4); @endcode
+ * {@code [P1|P2] = math/isprime(3, 4);}
  * @see https://en.wikipedia.org/wiki/Prime_number
  * @see https://en.wikipedia.org/wiki/Primality_test
  */

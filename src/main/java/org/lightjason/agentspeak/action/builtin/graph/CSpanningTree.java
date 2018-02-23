@@ -50,10 +50,10 @@ import java.util.Map;
  * defines the default weight value of the weight-map
  * (the default value is zero), the action never fails
  *
- * @code
+ * {@code
     [SP1|SP2] = graph/spanningtree( Graph1, Graph2 );
     [SP3|SP4] = graph/spanningtree( "defaultweight", 3, WeightMap, Graph3, Graph4 );
- * @endcode
+ * }
  */
 public final class CSpanningTree extends IBuiltinAction
 {
